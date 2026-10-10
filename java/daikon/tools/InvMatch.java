@@ -33,6 +33,11 @@ import org.checkerframework.dataflow.qual.Pure;
  */
 public class InvMatch {
 
+  /** Do not instantiate. */
+  private InvMatch() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   /**
    * Main program for testing purposes.
    *

@@ -1,0 +1,138 @@
+// Declarations for ncalc
+// Declarations written by Chicory 2025-07-20T14:18:41.141212
+
+decl-version 2.0
+var-comparability implicit
+
+ppt ncalc.ncalc():::ENTER
+ppt-type enter
+
+ppt ncalc.ncalc():::EXIT1
+ppt-type subexit
+parent parent ncalc:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type ncalc
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent ncalc:::OBJECT 1
+
+ppt ncalc.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt ncalc.main(java.lang.String[]):::EXIT14
+ppt-type subexit
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt ncalc:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type ncalc
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ncalc.main(java.lang.String[]):::ENTER
+this_invocation_nonce
+0
+args
+2131670196
+1
+args.getClass().getName()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+
+ncalc.ncalc():::ENTER
+this_invocation_nonce
+1
+
+ncalc.ncalc():::EXIT1
+this_invocation_nonce
+1
+this
+1546908073
+1
+
+ncalc.main(java.lang.String[]):::EXIT14
+this_invocation_nonce
+0
+args
+2131670196
+1
+args.getClass().getName()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+

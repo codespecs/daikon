@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class MultiDiff {
   private MultiDiff() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   public static void main(String[] args)
@@ -33,7 +33,7 @@ public class MultiDiff {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    */
   public static void mainHelper(final String[] args)
       throws IOException,

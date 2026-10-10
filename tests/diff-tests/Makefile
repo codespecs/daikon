@@ -25,12 +25,12 @@ default:
 
 # The regression tests seem to break if the "@" is omitted from this line.
 %:
-	@for dir in $(SUBDIRS); \
+	@for dir in ${SUBDIRS}; \
 	  do echo "Entering diff-tests subdirectory: $$dir"; \
-	     $(MAKE) -C $$dir $*; \
+	     ${MAKE} -C $$dir $*; \
 	done
 
 showvars:
 	echo "SUBDIRS = ${SUBDIRS}"
-	echo "CLASSPATH = $(CLASSPATH)"
-	echo "DAIKON_CLASSPATH = $(DAIKON_CLASSPATH)"
+	echo "CLASSPATH = ${CLASSPATH}"
+	echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"

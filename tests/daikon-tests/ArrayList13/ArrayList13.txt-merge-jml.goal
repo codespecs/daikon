@@ -1095,10 +1095,10 @@ class SubList extends AbstractList13 {
  * @(#)ArrayList.java	1.25 00/02/02
  *
  * Copyright 1997-2000 Sun Microsystems, Inc. All Rights Reserved.
- * 
- * This software is the proprietary information of Sun Microsystems, Inc.  
+ *
+ * This software is the proprietary information of Sun Microsystems, Inc.
  * Use is subject to license terms.
- * 
+ *
  */
 
 package javautil;
@@ -1123,7 +1123,7 @@ package javautil;
  * at least as large as the list size.  As elements are added an ArrayList,
  * its capacity grows automatically.  The details of the growth policy are not
  * specified beyond the fact that adding an element has constant amortized
- * time cost.<p> 
+ * time cost.<p>
  *
  * An application can increase the capacity of an <tt>ArrayList</tt> instance
  * before adding a large number of elements using the <tt>ensureCapacity</tt>
@@ -1261,7 +1261,7 @@ public class ArrayList13 extends AbstractList13 implements List13, Cloneable,
     /**
      * Increases the capacity of this <tt>ArrayList</tt> instance, if
      * necessary, to ensure  that it can hold at least the number of elements
-     * specified by the minimum capacity argument. 
+     * specified by the minimum capacity argument.
      *
      * @param   minCapacity   the desired minimum capacity.
      */
@@ -1327,8 +1327,8 @@ public class ArrayList13 extends AbstractList13 implements List13, Cloneable,
     @ requires true;
     @*/
     /**
-     * Searches for the first occurence of the given argument, testing 
-     * for equality using the <tt>equals</tt> method. 
+     * Searches for the first occurence of the given argument, testing
+     * for equality using the <tt>equals</tt> method.
      *
      * @param   elem   an object.
      * @return  the index of the first occurrence of the argument in this
@@ -1386,13 +1386,13 @@ public class ArrayList13 extends AbstractList13 implements List13, Cloneable,
      * @return  a clone of this <tt>ArrayList</tt> instance.
      */
     public Object clone() {
-	try { 
+	try {
 	    ArrayList13 v = (ArrayList13)super.clone();
 	    v.elementData = new Object[size];
 	    System.arraycopy(elementData, 0, v.elementData, 0, size);
 	    v.modCount = 0;
 	    return v;
-	} catch (CloneNotSupportedException e) { 
+	} catch (CloneNotSupportedException e) {
 	    // this shouldn't happen, since we are Cloneable
 	    throw new InternalError();
 	}

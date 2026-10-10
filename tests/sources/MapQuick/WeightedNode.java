@@ -2,7 +2,7 @@ package MapQuick;
 
 /**
  * A WeightedNode class is a simple record type which contains a name
- * and a cost 
+ * and a cost
  */
 
 public class WeightedNode implements Comparable {
@@ -20,7 +20,7 @@ public class WeightedNode implements Comparable {
     this.name = name;
     this.cost = cost;
   }
-  
+
   /**
    * @return this.name
    */
@@ -43,7 +43,7 @@ public class WeightedNode implements Comparable {
     }
     return false;
   }
-  
+
   // Specified by the Object superclass
   public int hashCode() {
     return name.hashCode();

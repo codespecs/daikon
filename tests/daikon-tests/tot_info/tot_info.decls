@@ -13,7 +13,7 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -33,12 +33,12 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable argv
     var-kind variable
     rep-type hashcode
     dec-type char**
-    flags is_param 
+    flags is_param
   variable argv[..]
     var-kind array
     enclosing-var argv
@@ -57,7 +57,7 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -77,12 +77,12 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable argv
     var-kind variable
     rep-type hashcode
     dec-type char**
-    flags is_param 
+    flags is_param
   variable argv[..]
     var-kind array
     enclosing-var argv
@@ -100,7 +100,7 @@ ppt ..LGamma():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type double*
-    flags non_null 
+    flags non_null
   variable ::cof[..]
     var-kind array
     enclosing-var ::cof
@@ -117,7 +117,7 @@ ppt ..LGamma():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -137,7 +137,7 @@ ppt ..LGamma():::ENTER
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
 
 ppt ..LGamma():::EXIT0
   ppt-type subexit
@@ -145,7 +145,7 @@ ppt ..LGamma():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type double*
-    flags non_null 
+    flags non_null
   variable ::cof[..]
     var-kind array
     enclosing-var ::cof
@@ -162,7 +162,7 @@ ppt ..LGamma():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -182,7 +182,7 @@ ppt ..LGamma():::EXIT0
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type double
@@ -199,7 +199,7 @@ ppt tot_info.c.gser():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -219,12 +219,12 @@ ppt tot_info.c.gser():::ENTER
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable x
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
 
 ppt tot_info.c.gser():::EXIT0
   ppt-type subexit
@@ -237,7 +237,7 @@ ppt tot_info.c.gser():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -257,12 +257,12 @@ ppt tot_info.c.gser():::EXIT0
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable x
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type double
@@ -279,7 +279,7 @@ ppt tot_info.c.gcf():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -299,12 +299,12 @@ ppt tot_info.c.gcf():::ENTER
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable x
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
 
 ppt tot_info.c.gcf():::EXIT0
   ppt-type subexit
@@ -317,7 +317,7 @@ ppt tot_info.c.gcf():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -337,12 +337,12 @@ ppt tot_info.c.gcf():::EXIT0
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable x
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type double
@@ -359,7 +359,7 @@ ppt ..QGamma():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -379,12 +379,12 @@ ppt ..QGamma():::ENTER
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable x
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
 
 ppt ..QGamma():::EXIT0
   ppt-type subexit
@@ -397,7 +397,7 @@ ppt ..QGamma():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -417,12 +417,12 @@ ppt ..QGamma():::EXIT0
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable x
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type double
@@ -439,7 +439,7 @@ ppt ..QChiSq():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -459,12 +459,12 @@ ppt ..QChiSq():::ENTER
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable df
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
 
 ppt ..QChiSq():::EXIT0
   ppt-type subexit
@@ -477,7 +477,7 @@ ppt ..QChiSq():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -497,12 +497,12 @@ ppt ..QChiSq():::EXIT0
     var-kind variable
     rep-type double
     dec-type double
-    flags is_param 
+    flags is_param
   variable df
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type double
@@ -519,7 +519,7 @@ ppt ..InfoTbl():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -539,17 +539,17 @@ ppt ..InfoTbl():::ENTER
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable c
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable f
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags is_param 
+    flags is_param
   variable f[..]
     var-kind array
     enclosing-var f
@@ -560,7 +560,7 @@ ppt ..InfoTbl():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags is_param 
+    flags is_param
   variable pdf[..]
     var-kind array
     enclosing-var pdf
@@ -579,7 +579,7 @@ ppt ..InfoTbl():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags non_null 
+    flags non_null
   variable ::f[..]
     var-kind array
     enclosing-var ::f
@@ -599,17 +599,17 @@ ppt ..InfoTbl():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable c
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable f
     var-kind variable
     rep-type hashcode
     dec-type long*
-    flags is_param 
+    flags is_param
   variable f[..]
     var-kind array
     enclosing-var f
@@ -620,7 +620,7 @@ ppt ..InfoTbl():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags is_param 
+    flags is_param
   variable pdf[..]
     var-kind array
     enclosing-var pdf
@@ -631,4 +631,3 @@ ppt ..InfoTbl():::EXIT0
     var-kind variable
     rep-type double
     dec-type double
-

@@ -21,5 +21,5 @@ public abstract class ImmIterator implements Iterator {
   public void remove() {
     throw new UnsupportedOperationException();
   }
-    
+
 } // ImmIterator

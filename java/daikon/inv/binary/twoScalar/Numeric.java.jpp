@@ -211,6 +211,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return false;
     }
 
+    #if defined(SEQ)
+      // Don't instantiate if the variables can't have order
+      if (!vis[0].aux.hasOrder() || !vis[1].aux.hasOrder()) {
+        return false;
+      }
+    #endif
+
     return true;
   }
 
@@ -504,7 +511,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Check for invariant specific obvious checks.  The obvious_checks
     // method returns an array of arrays of antecedents.  If all of the
-    // antecedents in an array are true, then the invariant is obvoius.
+    // antecedents in an array are true, then the invariant is obvious.
     InvDef[][] obvious_arr = obvious_checks(vis);
     obvious_loop:
     for (int i = 0; i < obvious_arr.length; i++) {
@@ -612,7 +619,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #endif
 
   /**
-   * Return a format string for the specified output format. Each instance of %varN% will be
+   * Returns a format string for the specified output format. Each instance of %varN% will be
    * replaced by the correct name for varN.
    */
   public abstract String get_format_str(@GuardSatisfied CLASSNAME this, OutputFormat format);
@@ -735,8 +742,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str(@GuardSatisfied Divides this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ 0 (MOD %var1% %var2%))";
-      } else if (format == OutputFormat.CSHARPCONTRACT) {
-        return "%var1% % %var2% == 0";
       #if defined(TYPEDOUBLE)
       } else if (format.isJavaFamily()) {
         return "daikon.Quant.fuzzy.eq(%var1% % %var2%, 0)";
@@ -1114,8 +1119,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str(@GuardSatisfied BitwiseComplement this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ %var1% (~ %var2%))";
-      } else if (format == OutputFormat.CSHARPCONTRACT) {
-        return "%var1% == ~%var2%";
       #if defined(TYPEDOUBLE)
       } else if (format.isJavaFamily()) {
         return "daikon.Quant.fuzzy.eq(%var1%, ~%var2%)";
@@ -1184,8 +1187,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return "(EQ %var1% (|java-bitwise-or| %var2% %var1%))";
       } else if (format == OutputFormat.DAIKON) {
         return "%var2% is a bitwise subset of %var1%";
-      } else if (format == OutputFormat.CSHARPCONTRACT) {
-        return "%var1% == (%var2% | %var1%)";
       #if defined(TYPEDOUBLE)
       } else if (format.isJavaFamily()) {
         return "daikon.Quant.fuzzy.eq(%var1%, %var2% | %var1%)";
@@ -1293,8 +1294,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str(@GuardSatisfied BitwiseAndZero this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ (|java-&| %var1% %var2%) 0)";
-      } else if (format == OutputFormat.CSHARPCONTRACT) {
-        return "(%var1% & %var2%) == 0";
       #if defined(TYPEDOUBLE)
       } else if (format.isJavaFamily()) {
         return "daikon.Quant.fuzzy.eq(%var1% & %var2%, 0)";
@@ -1390,8 +1389,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str(@GuardSatisfied ShiftZero this, OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return "(EQ (|java->>| %var1% %var2%) 0)";
-      } else if (format == OutputFormat.CSHARPCONTRACT) {
-        return "(%var1% >> %var2% == 0)";
       #if defined(TYPEDOUBLE)
       } else if (format.isJavaFamily()) {
         return "daikon.Quant.fuzzy.eq(%var1% >> %var2%, 0)";

@@ -19,7 +19,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,9 +34,6 @@ import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signature.qual.BinaryName;
-import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.checkerframework.checker.signature.qual.FieldDescriptor;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
@@ -47,7 +43,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 @SuppressWarnings({
   "JavaLangClash" // same class name as one in java.lang.
 })
-public class Runtime {
+public final class Runtime {
   /** Unique id for method entry/exit (so they can be matched up) */
   public static AtomicInteger nonce = new AtomicInteger();
 
@@ -84,7 +80,7 @@ public class Runtime {
   // Setups that control what information is written
   //
 
-  /** Depth to wich to examine structure components. */
+  /** Depth to which to examine structure components. */
   static int nesting_depth = 2;
 
   //
@@ -142,7 +138,7 @@ public class Runtime {
     boolean captured;
 
     @Holding("Runtime.class")
-    public CallInfo(int nonce, boolean captured) {
+    CallInfo(int nonce, boolean captured) {
       this.nonce = nonce;
       this.captured = captured;
     }
@@ -370,7 +366,7 @@ public class Runtime {
         }
       }
 
-      // Write out the infromation for this method
+      // Write out the information for this method
       synchronized (SharedData.methods) {
         mi = SharedData.methods.get(mi_index);
       }
@@ -407,7 +403,7 @@ public class Runtime {
   }
 
   /**
-   * Return true iff the class with fully qualified name className has been initialized.
+   * Returns true iff the class with fully qualified name className has been initialized.
    *
    * @param className fully qualified class name
    */
@@ -430,7 +426,7 @@ public class Runtime {
       // Get the first class in the list (if any)
       ClassInfo class_info = null;
       synchronized (SharedData.new_classes) {
-        if (SharedData.new_classes.size() > 0) {
+        if (!SharedData.new_classes.isEmpty()) {
           class_info = SharedData.new_classes.removeFirst();
         }
       }
@@ -532,12 +528,12 @@ public class Runtime {
       // System.out.println("Attempting to connect to Daikon on port --- " + port);
       daikonSocket.connect(new InetSocketAddress(InetAddress.getLocalHost(), port), 5000);
     } catch (UnknownHostException e) {
-      System.out.println(
+      System.err.println(
           "UnknownHostException connecting to Daikon : " + e.getMessage() + ". Exiting");
       System.exit(1);
       throw new Error("Unreachable control flow");
     } catch (IOException e) {
-      System.out.println(
+      System.err.println(
           "IOException, could not connect to Daikon : " + e.getMessage() + ". Exiting");
       System.exit(1);
       throw new Error("Unreachable control flow");
@@ -548,7 +544,7 @@ public class Runtime {
           new PrintWriter(
               new BufferedWriter(new OutputStreamWriter(daikonSocket.getOutputStream(), UTF_8)));
     } catch (IOException e) {
-      System.out.println("IOException connecting to Daikon : " + e.getMessage() + ". Exiting");
+      System.err.println("IOException connecting to Daikon : " + e.getMessage() + ". Exiting");
       System.exit(1);
     }
 
@@ -563,7 +559,7 @@ public class Runtime {
    * Specify the dtrace file to which to write.
    *
    * @param filename to use as the data trace file
-   * @param append whether to open dtrace file in append mode
+   * @param append if true, open dtrace file in append mode
    */
   @EnsuresNonNull("dtrace")
   public static void setDtrace(String filename, boolean append) {
@@ -679,7 +675,7 @@ public class Runtime {
 
                 if (chicoryLoaderInstantiationError) {
                   // Warning messages have already been printed.
-                } else if (SharedData.all_classes.size() == 0) {
+                } else if (SharedData.all_classes.isEmpty()) {
                   System.out.println("Chicory warning: No methods were instrumented.");
                   if (!ppt_select_pattern.isEmpty() || !ppt_omit_pattern.isEmpty()) {
                     System.out.println(
@@ -726,7 +722,7 @@ public class Runtime {
   // Used to distinguish wrappers created by user code
   // from wrappers created by Chicory.
 
-  /** A wrapper for a pritive class. */
+  /** A wrapper for a primitive class. */
   public static interface PrimitiveWrapper {
     // returns corresponding java.lang wrapper
     public Object getJavaWrapper();
@@ -935,124 +931,69 @@ public class Runtime {
     }
   }
 
-  // ///////////////////////////////////////////////////////////////////////////
-  // Copied code
-  //
-
-  // Lifted directly from plume/UtilPlume.java, where it is called
-  // escapeJava(), but repeated here to make this class self-contained.
-  /** Quote \, ", \n, and \r characters in the target; return a new string. */
-  public static String quote(String orig) {
-    StringBuilder sb = new StringBuilder();
-    // The previous escape (or escaped) character was seen right before
-    // this position.  Alternately:  from this character forward, the string
-    // should be copied out verbatim (until the next escaped character).
-    int post_esc = 0;
-    int orig_len = orig.length();
-    for (int i = 0; i < orig_len; i++) {
-      char c = orig.charAt(i);
-      switch (c) {
-        case '\"':
-        case '\\':
-          if (post_esc < i) {
-            sb.append(orig.substring(post_esc, i));
-          }
-          sb.append('\\');
-          post_esc = i;
-          break;
-        case '\n': // not lineSep
-          if (post_esc < i) {
-            sb.append(orig.substring(post_esc, i));
-          }
-          sb.append("\\n"); // not lineSep
-          post_esc = i + 1;
-          break;
-        case '\r':
-          if (post_esc < i) {
-            sb.append(orig.substring(post_esc, i));
-          }
-          sb.append("\\r");
-          post_esc = i + 1;
-          break;
-        default:
-          // Do nothing; i gets incremented.
-      }
-    }
-    if (sb.length() == 0) {
-      return orig;
-    }
-    sb.append(orig.substring(post_esc));
-    return sb.toString();
-  }
-
-  private static HashMap<String, String> primitiveClassesFromJvm = new HashMap<>(8);
-
-  static {
-    primitiveClassesFromJvm.put("Z", "boolean");
-    primitiveClassesFromJvm.put("B", "byte");
-    primitiveClassesFromJvm.put("C", "char");
-    primitiveClassesFromJvm.put("D", "double");
-    primitiveClassesFromJvm.put("F", "float");
-    primitiveClassesFromJvm.put("I", "int");
-    primitiveClassesFromJvm.put("J", "long");
-    primitiveClassesFromJvm.put("S", "short");
-  }
+  /** The major version of the running JVM: 8 for Java 8, 24 for Java 24, and so on. */
+  private static final int javaMajorVersion = javaMajorVersion(System.getProperty("java.version"));
 
   /**
-   * Convert a classname from JVML format to Java format. For example, convert "[Ljava/lang/Object;"
-   * to "java.lang.Object[]".
+   * Returns the major version that the given {@code java.version} string encodes: 8 for Java 8, 24
+   * for Java 24, and so on. The string need not come from the running JVM.
    *
-   * <p>If the argument is not a field descriptor, returns it as is. This enables this method to be
-   * used on the output of {@link Class#getName()}.
+   * <p>Both version schemes are accepted: the pre-Java-9 {@code "1.8.0_432"} form, whose major
+   * version is its second component, and the Java 9 and later {@code "24"}, {@code "24.0.1"}, and
+   * {@code "24-ea"} forms, whose major version is the first.
+   *
+   * <p>The major version is the leading run of digits (after optional "1."). Anything after them is
+   * ignored, so {@code "9foo"} yields 9. Thus, this method is robust against an unanticipated
+   * vendor suffix.
+   *
+   * <p>This never throws an exception, so it can be called from a static initializer.
+   *
+   * @param version the value of a {@code java.version} system property, or null
+   * @return the major version it encodes, or 9 if it encodes none
    */
-  @SuppressWarnings("signature") // conversion routine
-  public static String fieldDescriptorToBinaryName(@FieldDescriptor String classname) {
-
-    // System.out.println(classname);
-
-    int dims = 0;
-    while (classname.startsWith("[")) {
-      dims++;
-      classname = classname.substring(1);
-    }
-
-    String result;
-    // array of reference type
-    if (classname.startsWith("L") && classname.endsWith(";")) {
-      result = classname.substring(1, classname.length() - 1);
-      result = result.replace('/', '.');
-    } else {
-      if (dims > 0) { // array of primitives
-        result = primitiveClassesFromJvm.get(classname);
-      } else {
-        // just a primitive
-        result = classname;
+  // Package-private rather than private so that RuntimeTest can exercise it directly; the value
+  // derived from the running JVM is fixed at class-initialization time and cannot be varied.
+  static int javaMajorVersion(@Nullable String version) {
+    if (version != null) {
+      // Java 8 and earlier report "1.N..."; the major version is the second component.
+      String rest = version.startsWith("1.") ? version.substring(2) : version;
+      int end = 0;
+      while (end < rest.length() && Character.isDigit(rest.charAt(end))) {
+        end++;
       }
-
-      if (result == null) {
-        // As a failsafe, use the input; perhaps it is in Java, not JVML,
-        // format.
-        result = classname;
-        // throw new Error("Malformed base class: " + classname);
+      if (end != 0) {
+        try {
+          return Integer.parseInt(rest.substring(0, end));
+        } catch (NumberFormatException e) {
+          // The run of digits does not fit in an int, so it is not a major version.  Fall through.
+        }
       }
     }
-    for (int i = 0; i < dims; i++) {
-      result += "[]";
-    }
-    return result;
+
+    return 9;
   }
 
-  @SuppressWarnings("signature") // conversion method
-  public static final @BinaryName String classGetNameToBinaryName(@ClassGetName String cgn) {
-    if (cgn.startsWith("[")) {
-      return fieldDescriptorToBinaryName(cgn);
-    } else {
-      return cgn;
-    }
+  /** True if the running JVM is for Java 9 or later. */
+  private static final boolean isJava9orLater = javaMajorVersion >= 9;
+
+  /**
+   * Returns true if the running JVM is for Java 9 or later.
+   *
+   * @return true if the running JVM is for Java 9 or later
+   */
+  public static boolean isJava9orLater() {
+    return isJava9orLater;
   }
 
-  // ///////////////////////////////////////////////////////////////////////////
-  // end of copied code
-  //
+  /** True if the running JVM is for Java 24 or later. */
+  private static final boolean isJava24orLater = javaMajorVersion >= 24;
 
+  /**
+   * Returns true if the running JVM is for Java 24 or later.
+   *
+   * @return true if the running JVM is for Java 24 or later
+   */
+  public static boolean isJava24orLater() {
+    return isJava24orLater;
+  }
 }

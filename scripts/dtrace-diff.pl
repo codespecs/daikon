@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 # dtrace-diff.pl
-# arguments:  dtrace-diff declsfile dtrace1 dtrace2
+# How to invoke:  declsfile dtrace1 dtrace2
 # Outputs differences that aren't hashcodes.
 # Optionally also ignores differences in exit ppt numbers.
 

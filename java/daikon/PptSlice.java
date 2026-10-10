@@ -143,7 +143,7 @@ public abstract class PptSlice extends Ppt {
     boolean removed = invs.remove(inv);
     assert removed : "inv " + inv + " not in ppt " + name();
     Global.falsified_invariants++;
-    if (invs.size() == 0) {
+    if (invs.isEmpty()) {
       if (Debug.logDetail()) {
         log("last invariant removed");
       }
@@ -163,7 +163,7 @@ public abstract class PptSlice extends Ppt {
       invs.removeAll(to_remove);
       assert old_invs_size - invs.size() == to_remove.size();
       Global.falsified_invariants += to_remove.size();
-      if (invs.size() == 0) {
+      if (invs.isEmpty()) {
         if (Debug.logDetail()) {
           log("last invariant removed");
         }
@@ -194,10 +194,10 @@ public abstract class PptSlice extends Ppt {
     }
   }
 
-  /** Return an approximation of the number of samples seen on this slice. */
+  /** Returns an approximation of the number of samples seen on this slice. */
   public abstract int num_samples(@UnknownInitialization @GuardSatisfied PptSlice this);
 
-  /** Return an approximation of the number of distinct values seen on this slice. */
+  /** Returns an approximation of the number of distinct values seen on this slice. */
   public abstract int num_values();
 
   /** Instantiate invariants on the VarInfos this slice contains. */
@@ -267,7 +267,7 @@ public abstract class PptSlice extends Ppt {
 
   /** Remove the invariants noted in omitTypes. */
   public void processOmissions(boolean[] omitTypes) {
-    if (invs.size() == 0) {
+    if (invs.isEmpty()) {
       return;
     }
     List<Invariant> toRemove = new ArrayList<>();
@@ -347,9 +347,9 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Returns whether or not this slice already contains the specified invariant. Whether not
-   * invariants match is determine by Invariant.match() This will return true for invariants of the
-   * same kind with different formulas (eg, one_of, bound, linearbinary).
+   * Returns true if this slice already contains the specified invariant. Whether not invariants
+   * match is determine by Invariant.match() This will return true for invariants of the same kind
+   * with different formulas (eg, one_of, bound, linearbinary).
    */
   public boolean contains_inv(Invariant inv) {
 
@@ -362,8 +362,8 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Returns whether or not this slice contains an exact match for the specified invariant. An exact
-   * match requires that the invariants be of the same class and have the same formula.
+   * Returns true if this slice contains an exact match for the specified invariant. An exact match
+   * requires that the invariants be of the same class and have the same formula.
    */
   @EnsuresNonNullIf(result = true, expression = "find_inv_exact(#1)")
   public boolean contains_inv_exact(Invariant inv) {

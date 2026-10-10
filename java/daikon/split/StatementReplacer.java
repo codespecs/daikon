@@ -153,11 +153,11 @@ class StatementReplacer extends DepthFirstVisitor {
    * @param params the MethodParameters' whose names are desired
    */
   private List<String> getParameterNames(ReplaceStatement.MethodParameter[] params) {
-    List<String> args = new ArrayList<>();
+    List<String> paramNames = new ArrayList<>();
     for (int i = 0; i < params.length; i++) {
-      args.add(params[i].name);
+      paramNames.add(params[i].name);
     }
-    return args;
+    return paramNames;
   }
 
   /**
@@ -196,7 +196,7 @@ class StatementReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Returns whether n represents a "non-this" call to a method. "Non-this" methods calls are not
+   * Returns true if n represents a "non-this" call to a method. "Non-this" methods calls are not
    * prefixed with "this.". For example "get(5)" and "Collections.sort(new ArrayList())" are
    * "non-this" method calls.
    */
@@ -209,7 +209,7 @@ class StatementReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Returns whether n represents a "this" call to a method. "This" methods calls are prefixed with
+   * Returns true if n represents a "this" call to a method. "This" methods calls are prefixed with
    * "this.". For example "this.get(5)" is a "this" method call.
    */
   @Pure
@@ -274,7 +274,7 @@ class StatementReplacer extends DepthFirstVisitor {
 
   /**
    * Returns the argument with parens placed around it unless there are already parens the argument.
-   * For example, "x" would yield "(x)", "x + 1" would yeild "(x + 1)", and "(x+1)" would yield no
+   * For example, "x" would yield "(x)", "x + 1" would yield "(x + 1)", and "(x+1)" would yield no
    * change.
    */
   public static String addParens(String arg) {

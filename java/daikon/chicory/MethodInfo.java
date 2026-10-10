@@ -6,10 +6,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringJoiner;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -34,7 +36,7 @@ public class MethodInfo {
   /**
    * Method name. For example: "public static void sort(int[] arr)" would have method_name "sort".
    */
-  public String method_name;
+  public @Identifier String method_name;
 
   /** Array of argument names for this method. */
   public String[] arg_names;
@@ -48,11 +50,27 @@ public class MethodInfo {
   /** Array of argument types as classes for this method. */
   public Class<?>[] arg_types;
 
-  /** Exit locations for this method. */
+  /**
+   * Exit locations for this method.
+   *
+   * <p>Chicory and DynComp treat this field differently. Chicory only adds an exit location if the
+   * corresponding entry in exit_location_is_included is true. (Based on the ppt omit/select
+   * patterns.) DynComp adds all exit locations and sets every exit_location_is_included value to
+   * true. Thus:
+   *
+   * <ul>
+   *   <li>there is always an exit_location_is_included boolean for every return instruction
+   *   <li>exit_locations contains only those exits whose corresponding boolean is true
+   * </ul>
+   */
   public List<Integer> exit_locations;
 
-  /** Tells whether each exit point in method is instrumented, based on filters. */
-  public List<Boolean> is_included;
+  /**
+   * Tells whether each exit point in the method is instrumented, based on filters. Note: that
+   * exit_locations and exit_location_is_included are not index-aligned; exit_locations is a
+   * filtered subset.
+   */
+  public List<Boolean> exit_location_is_included;
 
   /**
    * The root of the variable tree for the method entry program point.
@@ -75,7 +93,7 @@ public class MethodInfo {
   public int capture_cnt = 0;
 
   /**
-   * Whether or not the method is pure (has no side-effects). Will only be set to true if the {@code
+   * True if the method is pure (has no side-effects). Will only be set to true if the {@code
    * --purity-analysis} command-line option is given to Chicory, and the method returns some value.
    * Only set during initViaReflection() method.
    */
@@ -84,18 +102,18 @@ public class MethodInfo {
   /** Creates a MethodInfo with the specified class, arg_names, and exit locations. */
   public MethodInfo(
       ClassInfo class_info,
-      String method_name,
+      @Identifier String method_name,
       String[] arg_names,
       @ClassGetName String[] arg_type_strings,
       List<Integer> exit_locations,
-      List<Boolean> is_included) {
+      List<Boolean> exit_location_is_included) {
 
     this.class_info = class_info;
     this.method_name = method_name;
     this.arg_names = arg_names;
     this.arg_type_strings = arg_type_strings;
     this.exit_locations = exit_locations;
-    this.is_included = is_included;
+    this.exit_location_is_included = exit_location_is_included;
   }
 
   // Use reserved keyword for basic type rather than signature to
@@ -149,7 +167,7 @@ public class MethodInfo {
       if (is_class_initializer()) {
         member = null;
         // This case DOES occur at run time.  -MDE 1/22/2010
-      } else if (is_constructor()) {
+      } else if (isConstructor()) {
         member = class_info.clazz.getDeclaredConstructor(arg_types);
       } else {
         member = class_info.clazz.getDeclaredMethod(method_name, arg_types);
@@ -180,7 +198,7 @@ public class MethodInfo {
    * @return true iff this method is a constructor
    */
   @Pure
-  public boolean is_constructor() {
+  public boolean isConstructor() {
     return method_name.equals("<init>") || method_name.equals("");
   }
 
@@ -213,14 +231,17 @@ public class MethodInfo {
   public void init_traversal(int depth) {
 
     traversalEnter = RootInfo.enter_process(this, depth);
-    // System.out.printf("Method %s.%s: %n ", class_info.clazz.getName(),
-    //                    this);
-    // System.out.printf("Enter daikon variable tree%n%s%n",
-    //                    traversalEnter.treeString());
+
+    if (false) {
+      System.out.printf("Method %s.%s: %n ", class_info.clazz.getName(), this);
+      System.out.printf("Enter daikon variable tree%n%s%n", traversalEnter.treeString());
+    }
 
     traversalExit = RootInfo.exit_process(this, depth);
-    // System.out.printf("Exit daikon variable tree%n%s%n",
-    //                    traversalExit.treeString());
+
+    if (false) {
+      System.out.printf("Exit daikon variable tree%n%s%n", traversalExit.treeString());
+    }
   }
 
   @SideEffectFree
@@ -230,14 +251,11 @@ public class MethodInfo {
     if (class_info != null) {
       out = class_info.class_name + ".";
     }
-    out += method_name + "(";
+    StringJoiner args = new StringJoiner(", ", "(", ")");
     for (int ii = 0; ii < arg_names.length; ii++) {
-      if (ii > 0) {
-        out += ", ";
-      }
-      out += arg_type_strings[ii] + " " + arg_names[ii];
+      args.add(arg_type_strings[ii] + " " + arg_names[ii]);
     }
-    return (out + ")");
+    return out + method_name + args;
   }
 
   public boolean isPure() {

@@ -224,7 +224,7 @@ int main (int argc, char *argv [])
         infile,
         algorithm,
         asctime (localtime (&tp))
-    ); 
+    );
     fprintf (fp_out, "# table size\n%i\n", vec_n);
     fprintf (fp_out, "# labels\n");
     for (i = 0; i < vec_n; i++)

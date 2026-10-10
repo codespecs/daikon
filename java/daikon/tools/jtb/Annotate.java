@@ -29,6 +29,11 @@ import org.plumelib.util.StringsPlume;
  */
 public class Annotate {
 
+  /** Do not instantiate. */
+  private Annotate() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   // ESC format: Invariants are inserted as follows:
   //  * invariants at method entry become "requires"
   //  * invariants at method exit become "ensures".
@@ -115,7 +120,7 @@ public class Annotate {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    */
   public static void mainHelper(final String[] args) throws Exception {
     boolean slashslash = false;
@@ -185,13 +190,13 @@ public class Annotate {
         case 'i':
           insert_inexpressible = true;
           break;
-          // case 'r':
-          //   // Should do this witout calling out to the system.  (There must be
-          //   // an easy way to do this in Java.)
-          //   Process p = System.exec("find . -type f -name '*.java' -print");
-          //   p.waitFor();
-          //   StringBuilderInputStream sbis
-          //   break;
+        // case 'r':
+        //   // Should do this without calling out to the system.  (There must be
+        //   // an easy way to do this in Java.)
+        //   Process p = System.exec("find . -type f -name '*.java' -print");
+        //   p.waitFor();
+        //   StringBuilderInputStream sbis
+        //   break;
         case 's':
           slashslash = true;
           break;
@@ -444,9 +449,9 @@ public class Annotate {
 // the contract violation. Jcontract provides several Runtime Handlers, the
 // default one uses a GUI Monitor that shows the program progress and what
 // contracts are violated. The user can also write its own RuntimeHandlers,
-// for more information see {isntalldir}\docs\runtime.txt.
+// for more information see {installdir}\docs\runtime.txt.
 //
-//    With the Moninor Runtime Handlers provided by Jcontract program execution
+//    With the Monitor Runtime Handlers provided by Jcontract program execution
 // continues as if nothing had happened when a contract is violated, i.e. even
 // if a @pre contract is violated, the method will still be executed.
 //    This option makes the DbC enabled and non DbC enabled versions of the
@@ -556,11 +561,11 @@ public class Annotate {
 //    To enforce this:
 //
 // - When checking the @pre condition, the pre-condition contract is assumed to
-//   succeed if any of the @pre conditions of the chain of overridded methods
+//   succeed if any of the @pre conditions of the chain of overridden methods
 //   succeeds. I.e. the preconditions are ORed.
 //
 // - When checking the @post condition, the post-condition contract is assumed
-//   to succeed if all the @post conditions of the chain of overridded methods
+//   to succeed if all the @post conditions of the chain of overridden methods
 //   succeed. I.e. the postconditions are ANDed.
 //
 //    Note that if there are multiple @pre conditions for a given method, the
@@ -658,7 +663,7 @@ public class Annotate {
 //    method's class.
 //
 // 7) Contracts that appear in the body of a method should be thought of as
-//    normal statements.  Thus the following example would have undesireable
+//    normal statements.  Thus the following example would have undesirable
 //    behavior:
 //
 //        if (a) /** @assert (a) */

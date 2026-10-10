@@ -93,7 +93,7 @@
             for( int k = 0; k < rhs.theTrees.length; k++ )
                 rhs.theTrees[ k ] = null;
             rhs.currentSize = 0;
-        }        
+        }
 
         /**
          * Return the result of merging equal-sized t1 and t2.
@@ -135,7 +135,7 @@
             return theTrees[ findMinIndex( ) ].element;
         }
 
-    
+
         /**
          * Find index of tree containing the smallest item in the priority queue.
          * The priority queue must not be empty.
@@ -222,7 +222,7 @@
 
         private int currentSize;            // # items in priority queue
         private BinomialNode [ ] theTrees;  // An array of tree roots
-    
+
 
         /**
          * Return the capacity.
@@ -253,7 +253,7 @@
                     if( ((MyInteger)( h.deleteMin( ) )).intValue( ) != i )
                         System.out.println( "Oops! " + i );
             }
-            catch( Overflow e ) { System.out.println( "Unexpected overflow" ); } 
+            catch( Overflow e ) { System.out.println( "Unexpected overflow" ); }
             System.out.println( "Check done." );
         }
     }

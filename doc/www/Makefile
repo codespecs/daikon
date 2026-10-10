@@ -7,8 +7,10 @@ default:
 pubs:
 	mkdir -p pubs
 	/bin/rm -f pubs/*
-	cd pubs && $(MAKE) -f ../pubs-sources/Makefile html
+	${MAKE} -C pubs -f ../pubs-sources/Makefile html
 
 .PHONY: pubs
+
+.PHONY: all test clean
 
 ###########################################################################

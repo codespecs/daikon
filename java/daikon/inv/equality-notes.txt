@@ -41,7 +41,7 @@ see if its members are still equal.  If not, new equality sets are
 budded off by the values seen at the sample.  Each new equality set
 has a leader (who could be its sole member), and the invariants of the
 old leader are copied to each of the new leaders\footnote{Where do I
-talk about pivoting, to ensure that hte PptSliceNs are still sorted by
+talk about pivoting, to ensure that the PptSliceNs are still sorted by
 index order}.
 
 \item
@@ -74,7 +74,7 @@ copy invariants from the old leader onto the new leaders, for this
 would leave out some invariants.  Each of the new leaders and the old
 leader also have to instantiate invariants between themselves.  Figure
 X shows this need.  $a$ is the old leader, while $b$ and $c$ are two
-new leaders.  $d$ is a variable that was not in the origial equality
+new leaders.  $d$ is a variable that was not in the original equality
 set ${a, b, c}$ (but is a leader of its own equality set).  The
 invariants are $f$ (unary), $g$ (binary) and $h$ (ternary).  Assume
 the invariants are reflexive for their variables (i.e. $g(a, b)
@@ -103,7 +103,7 @@ invariants.  We do the subtraction of the invariants on $X$ alone
 because these invariants should already exist.  Let $I$ be the set we
 want to generate.
 
-In implementation, this set can be itereated in $k$ nested loops,
+In implementation, this set can be iterated in $k$ nested loops,
 where $k$ is the maximum arity of the invariants.  We optimize
 this process by realizing the following property:
 

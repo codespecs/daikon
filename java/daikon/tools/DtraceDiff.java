@@ -36,6 +36,11 @@ import org.plumelib.util.StringsPlume;
  */
 public class DtraceDiff {
 
+  /** Do not instantiate. */
+  private DtraceDiff() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
@@ -97,7 +102,7 @@ public class DtraceDiff {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
    */
@@ -124,7 +129,7 @@ public class DtraceDiff {
     while ((c = g.getopt()) != -1) {
       switch (c) {
 
-          // long option
+        // long option
         case 0:
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
@@ -222,7 +227,7 @@ public class DtraceDiff {
             throw new RuntimeException("Unknown long option received: " + option_name);
           }
 
-          // short options
+        // short options
         case 'h':
           System.out.println(usage);
           throw new Daikon.NormalTermination();
@@ -422,7 +427,7 @@ public class DtraceDiff {
 
   /**
    * Compare two VarInfos for equality. Note there are many fields not compared: comparability,
-   * constant, exclosing-var and parent, for example.
+   * constant, enclosing-var and parent, for example.
    *
    * @param vi1 a VarInfo to compare
    * @param vi2 a VarInfo to compare
@@ -452,7 +457,7 @@ public class DtraceDiff {
 
   /**
    * Used for debugging -- prints some of a VarInfo fields. Note there are many fields not printed:
-   * comparability, constant, exclosing-var and parent, for example.
+   * comparability, constant, enclosing-var and parent, for example.
    *
    * @param vi the VarInfo to print
    */

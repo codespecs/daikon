@@ -34,7 +34,7 @@ public class StreetSegIterator
    * @requires files != null &&
    *           elements of files are of type java.io.File &&
    *           elements of files are .zip files
-   * 
+   *
    * @effects creates a new iterator over which produces segments read
    *          in from the given files
    */
@@ -45,7 +45,7 @@ public class StreetSegIterator
   }
 
   private boolean initialized = false;
-    
+
   private StreetSegmentFilter filter; // filter which lets call provide a way to filter results
   private Iterator files;     // .zip files to be read, elements are java.io.File
   private Iterator chains;    // chains from the current file, elements are tigerdb.GeoChain
@@ -208,7 +208,7 @@ public class StreetSegIterator
 
   private static StreetClassification getStreetClass(GeoChain gc) {
     String s = gc.rt1.cfc.toLowerCase();
-	
+
     if (s.charAt(0) == 'a' || s.charAt(0) == 'A') {
       switch (s.charAt(1)) {
       case '1':
@@ -231,7 +231,7 @@ public class StreetSegIterator
 	gc.rt1.rgtRange.size() > 1)
       if (!gc.rt1.lftRange.sameDir(gc.rt1.rgtRange)) {
 	// this is too harsh
-	if (false) 
+	if (false)
 	  throw new RuntimeException("inconsistent address deltas "+
 				     "tlid:"+gc.rt1.tlid+" "+
 				     gc.rt1.lftRange+" "+gc.rt1.rgtRange);
@@ -239,7 +239,7 @@ public class StreetSegIterator
 	  System.out.println
 	    ("ambiguous address direction for "+gc.rt1.primaryName());
       }
-	
+
     return gc.rt1.lftRange.couldBeLowToHigh();
   }
 }

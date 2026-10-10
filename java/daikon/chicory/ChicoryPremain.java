@@ -38,6 +38,11 @@ import org.checkerframework.checker.signature.qual.BinaryName;
  */
 public class ChicoryPremain {
 
+  /** Do not instantiate. */
+  private ChicoryPremain() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   // These command-line options cannot be accessed from Chicory.  These are internal debugging
   // options that may be used when ChicoryPremain is invoked directly from the command line.
 
@@ -81,6 +86,11 @@ public class ChicoryPremain {
       System.exit(1);
     }
 
+    // Turn on dumping of instrumented classes if debug was selected
+    if (Chicory.debug) {
+      Chicory.dump = true;
+    }
+
     verbose = Chicory.verbose || Chicory.debug;
     if (debug_runtime) {
       Runtime.debug = true;
@@ -88,7 +98,7 @@ public class ChicoryPremain {
 
     if (verbose) {
       System.out.printf(
-          "In Chicory premain, agentargs ='%s', Instrumentation = '%s'", agentArgs, inst);
+          "In Chicory premain, agentargs ='%s', Instrumentation = '%s'%n", agentArgs, inst);
       System.out.printf("Options settings: %n%s%n", options.settings());
     }
 
@@ -137,6 +147,13 @@ public class ChicoryPremain {
 
     initializeDeclAndDTraceWriters();
 
+    String instrumenter;
+    if (Runtime.isJava24orLater()) {
+      instrumenter = "daikon.chicory.Instrument24";
+    } else {
+      instrumenter = "daikon.chicory.Instrument";
+    }
+
     // Setup the transformer
     ClassFileTransformer transformer;
     // use a special classloader to ensure correct version of BCEL is used
@@ -144,9 +161,9 @@ public class ChicoryPremain {
     try {
       transformer =
           (ClassFileTransformer)
-              loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
+              loader.loadClass(instrumenter).getDeclaredConstructor().newInstance();
     } catch (Exception e) {
-      throw new RuntimeException("Unexpected error loading Instrument", e);
+      throw new RuntimeException("Error loading " + instrumenter, e);
     }
     if (Chicory.debug) {
       System.out.printf(
@@ -206,13 +223,30 @@ public class ChicoryPremain {
    * @param pathLoc the relative path; interpret {@code purityFileName} with respect to it
    */
   private static void readPurityFile(File purityFileName, @Nullable File pathLoc) {
-    pureMethods = new HashSet<String>();
+    pureMethods = new HashSet<>();
     File purityFile = new File(pathLoc, purityFileName.getPath());
     String purityFileAbsolutePath = purityFile.getAbsolutePath();
 
-    BufferedReader reader;
-    try {
-      reader = FilesPlume.newBufferedFileReader(purityFile);
+    try (BufferedReader reader = FilesPlume.newBufferedFileReader(purityFile)) {
+      if (verbose) {
+        System.out.printf("Reading '%s' for pure methods %n", purityFileName);
+      }
+
+      String line = null;
+      do {
+        try {
+          line = reader.readLine();
+        } catch (IOException e) {
+          throw new UncheckedIOException(
+              "Error reading file " + purityFileName + " = " + purityFileAbsolutePath, e);
+        }
+
+        if (line != null) {
+          pureMethods.add(line.trim());
+          // System.out.printf("Adding '%s' to list of pure methods%n",
+          //                   line);
+        }
+      } while (line != null);
     } catch (FileNotFoundException e) {
       System.err.printf(
           "%nCould not find purity file %s = %s%n", purityFileName, purityFileAbsolutePath);
@@ -224,45 +258,12 @@ public class ChicoryPremain {
           "Problem reading purity file " + purityFileName + " = " + purityFileAbsolutePath, e);
     }
 
-    if (verbose) {
-      System.out.printf("Reading '%s' for pure methods %n", purityFileName);
-    }
-
-    String line = null;
-    do {
-      try {
-        line = reader.readLine();
-      } catch (IOException e) {
-        try {
-          reader.close();
-        } catch (IOException e2) {
-          // Do nothing
-        }
-        throw new UncheckedIOException(
-            "Error reading file " + purityFileName + " = " + purityFileAbsolutePath, e);
-      }
-
-      if (line != null) {
-        pureMethods.add(line.trim());
-        // System.out.printf("Adding '%s' to list of pure methods%n",
-        //                   line);
-      }
-    } while (line != null);
-
-    try {
-      reader.close();
-    } catch (IOException e) {
-      System.err.println("Error while closing " + purityFileName + " after reading.");
-      System.exit(1);
-    }
-
     // System.out.printf("leaving purify file%n");
 
   }
 
-  /** Return true iff Chicory has run a purity analysis or read a {@code *.pure} file. */
+  /** Returns true iff Chicory has run a purity analysis or read a {@code *.pure} file. */
   @SuppressWarnings("nullness") // dependent:  pureMethods is non-null if doPurity is true
-  // @EnsuresNonNullIf(result=true, expression="ChicoryPremain.pureMethods")
   @EnsuresNonNullIf(result = true, expression = "pureMethods")
   public static boolean shouldDoPurity() {
     return doPurity;
@@ -289,7 +290,7 @@ public class ChicoryPremain {
     return false;
   }
 
-  /** Return an unmodifiable Set of the pure methods. */
+  /** Returns an unmodifiable Set of the pure methods. */
   // @RequiresNonNull("ChicoryPremain.pureMethods")
   @RequiresNonNull("pureMethods")
   public static Set<String> getPureMethods() {
@@ -308,13 +309,13 @@ public class ChicoryPremain {
    * <ul>
    *   <li>the original 5.2 version
    *   <li>an interim 6.0 version
-   *   <li>the offical 6.0 release version
-   *   <li>the offical 6.1 release version
+   *   <li>the official 6.0 release version
+   *   <li>the official 6.1 release version
    *   <li>the PLSE 6.1 release version (includes LocalVariableGen fix)
-   *   <li>the offical 6.2 release version (includes LocalVariableGen fix)
-   *   <li>the offical 6.3 release version
-   *   <li>the offical 6.3.1 release version
-   *   <li>the offical 6.4.1 release version
+   *   <li>the official 6.2 release version (includes LocalVariableGen fix)
+   *   <li>the official 6.3 release version
+   *   <li>the official 6.3.1 release version
+   *   <li>the official 6.4.1 release version
    *   <li>the PLSE 6.4.1.1 release version (includes JDK 11 support)
    * </ul>
    *
@@ -335,7 +336,7 @@ public class ChicoryPremain {
   public static class ChicoryLoader extends ClassLoader {
 
     /** Log file if verbose is enabled. */
-    public static final SimpleLog debug = new SimpleLog(ChicoryPremain.verbose);
+    public static final SimpleLog debug = new SimpleLog(verbose);
 
     /**
      * Constructor for special BCEL class loader.
@@ -351,7 +352,7 @@ public class ChicoryPremain {
       List<URL> bcel_urls = get_resource_list(bcel_classname);
       List<URL> plse_urls = get_resource_list(plse_marker_classname);
 
-      if (plse_urls.size() == 0) {
+      if (plse_urls.isEmpty()) {
         System.err.printf(
             "%nBCEL 6.1 or newer must be on the classpath.  Normally it is found in daikon.jar.%n");
         Runtime.chicoryLoaderInstantiationError = true;
@@ -388,8 +389,8 @@ public class ChicoryPremain {
     }
 
     /**
-     * Returns whether or not the two URL represent the same location for org.apache.bcel. Two
-     * locations match if they refer to the same jar file or the same directory in the filesystem.
+     * Returns true if the two URL represent the same location for org.apache.bcel. Two locations
+     * match if they refer to the same jar file or the same directory in the filesystem.
      */
     private static boolean same_location(URL url1, URL url2) {
       if (!url1.getProtocol().equals(url2.getProtocol())) {
@@ -422,7 +423,7 @@ public class ChicoryPremain {
     private static String extract_jar_path(URL url) {
       assert url.getProtocol().equals("jar") : url.toString();
 
-      // Remove the preceeding 'file:' and trailing '!filename'
+      // Remove the preceding 'file:' and trailing '!filename'
       String path = url.getFile();
       path = path.replaceFirst("^[^:]*:", "");
       path = path.replaceFirst("![^!]*$", "");
@@ -431,7 +432,7 @@ public class ChicoryPremain {
     }
 
     /**
-     * Get all of the URLs that match the specified name in the classpath. The name should be in
+     * Returns all of the URLs that match the specified name in the classpath. The name should be in
      * normal classname format (eg, org.apache.bcel.Const). An empty list is returned if no names
      * match.
      */
@@ -439,7 +440,7 @@ public class ChicoryPremain {
     static List<URL> get_resource_list(String classname) throws IOException {
 
       String name = classname_to_resource_name(classname);
-      Enumeration<URL> enum_urls = ClassLoader.getSystemResources(name);
+      Enumeration<URL> enum_urls = getSystemResources(name);
       List<URL> urls = new ArrayList<>();
       while (enum_urls.hasMoreElements()) {
         urls.add(enum_urls.nextElement());
@@ -457,7 +458,7 @@ public class ChicoryPremain {
 
     @Override
     protected Class<?> loadClass(@BinaryName String name, boolean resolve)
-        throws java.lang.ClassNotFoundException {
+        throws ClassNotFoundException {
 
       return super.loadClass(name, resolve);
     }

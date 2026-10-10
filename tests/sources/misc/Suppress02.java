@@ -4,7 +4,7 @@ import java.util.*;
 /**
  * Suppression testing.  This tests the suppressors:
  * <br>
- *   0<=i<=j  ==>  b[i] in b[0..j]         
+ *   0<=i<=j  ==>  b[i] in b[0..j]
  *
  */
 
@@ -15,7 +15,7 @@ class Suppress02 extends Object {
 
   public static void main(String[] args) {
     Suppress02 p = new Suppress02();
-    
+
     for (int n = 0; n < 250; n++) {
       p.f(n);
     }
@@ -37,4 +37,3 @@ class Suppress02 extends Object {
   }
 
 }
-

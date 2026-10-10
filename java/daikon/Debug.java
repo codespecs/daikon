@@ -4,6 +4,7 @@ import daikon.inv.Invariant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -193,7 +194,7 @@ public final class Debug {
     VarInfo v = visTracked(vis);
     if (v != null) {
       set(c, ppt, new VarInfo[] {v});
-    } else if (vis.size() > 0) {
+    } else if (!vis.isEmpty()) {
       set(c, ppt, new VarInfo[] {vis.get(0)});
     } else {
       set(c, ppt, null);
@@ -289,14 +290,14 @@ public final class Debug {
   public static boolean dkconfig_show_stack_trace = false;
 
   /**
-   * Determines whether or not traceback information is printed for each call to log.
+   * Returns true if traceback information is printed for each call to log.
    *
    * @see #log(Logger, Class, Ppt, String)
    */
   public static boolean dkconfig_showTraceback = false;
 
   /**
-   * Determines whether or not detailed info (such as from {@code add_modified}) is printed.
+   * Returns true if detailed info (such as from {@code add_modified}) is printed.
    *
    * @see #log(Logger, Class, Ppt, String)
    * @see #logDetail()
@@ -304,7 +305,7 @@ public final class Debug {
   public static boolean dkconfig_logDetail = false;
 
   /**
-   * Returns whether or not detailed logging is on. Note that this check is not performed inside the
+   * Returns true if detailed logging is on. Note that this check is not performed inside the
    * logging calls themselves, it must be performed by the caller.
    *
    * @see #log(Logger, Class, Ppt, String)
@@ -315,7 +316,7 @@ public final class Debug {
   }
 
   /**
-   * Returns whether or not logging is on.
+   * Returns true if logging is on.
    *
    * @see #log(Logger, Class, Ppt, String)
    */
@@ -444,7 +445,7 @@ public final class Debug {
    * Logs a description of the cached class, ppt, and variables and the specified msg via the logger
    * as described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}
    *
-   * @return whether or not it logged anything
+   * @return true if it logged anything
    */
   public boolean log(String msg) {
     if (!logOn()) {
@@ -457,7 +458,7 @@ public final class Debug {
    * Logs a description of the class, ppt, ppt variables and the specified msg via the logger as
    * described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}.
    *
-   * @return whether or not it logged anything
+   * @return true if it logged anything
    */
   // 3-argument form
   public static boolean log(
@@ -556,7 +557,7 @@ public final class Debug {
     return true;
   }
 
-  /** Returns whether or not the specified class matches the classes being tracked. */
+  /** Returns true if the specified class matches the classes being tracked. */
   public static boolean class_match(@Nullable Class<?> inv_class) {
 
     if ((debugTrackClass.length > 0) && (inv_class != null)) {
@@ -565,7 +566,7 @@ public final class Debug {
     return true;
   }
 
-  /** Returns whether or not the specified ppt matches the ppts being tracked. */
+  /** Returns true if the specified ppt matches the ppts being tracked. */
   public static boolean ppt_match(
       @Nullable @UnknownInitialization(daikon.PptTopLevel.class) Ppt ppt) {
 
@@ -576,9 +577,8 @@ public final class Debug {
   }
 
   /**
-   * Returns whether or not the specified vars match the ones being tracked. Also, sets
-   * Debug.ourvars with the names of the variables matched if they are not the leader of their
-   * equality sets.
+   * Returns true if the specified vars match the ones being tracked. Also, sets Debug.ourvars with
+   * the names of the variables matched if they are not the leader of their equality sets.
    */
   public static boolean var_match(VarInfo @Nullable [] vis) {
 
@@ -826,7 +826,7 @@ public final class Debug {
    * <pre>{@code class|class|...<var,var,var>@ppt}</pre>
    *
    * As shown, multiple class arguments can be specified separated by pipe symbols (|). The
-   * variables are specified in angle brackets ({@code <>}) and the program point is preceeded by an
+   * variables are specified in angle brackets ({@code <>}) and the program point is preceded by an
    * at sign (@). Each is optional and can be left out. The add_track routine can be called multiple
    * times. An invariant that matches any of the specifications will be tracked.
    */
@@ -838,7 +838,7 @@ public final class Debug {
 
     // Get the classes, vars, and ppt
     int var_start = def.indexOf('<');
-    int ppt_start = def.indexOf("@");
+    int ppt_start = def.indexOf('@');
     if ((var_start == -1) && (ppt_start == -1)) {
       classes = def;
     } else if (var_start != -1) {
@@ -884,9 +884,9 @@ public final class Debug {
     System.out.println();
     debugTrack.fine("After --track: " + def);
     debugTrack.fine("Track Classes: " + ArraysPlume.toString(debugTrackClass, false));
-    String vars_out = "";
-    for (int ii = 0; ii < debugTrackVars.length; ii++) {
-      vars_out += Arrays.toString(debugTrackVars[ii]) + " ";
+    StringJoiner vars_out = new StringJoiner(" ");
+    for (String[] cv : debugTrackVars) {
+      vars_out.add(Arrays.toString(cv));
     }
     debugTrack.fine("Track Vars: " + vars_out);
     debugTrack.fine("Track Ppts: " + ArraysPlume.toString(debugTrackPpt, false));

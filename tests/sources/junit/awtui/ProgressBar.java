@@ -12,18 +12,18 @@ public class ProgressBar extends Canvas {
 		super();
 		setSize(20, 30);
 	}
-	
+
 	private Color getStatusColor() {
 		if (fError)
 			return Color.red;
 		return Color.green;
 	}
-	
+
 	public void paint(Graphics g) {
 		paintBackground(g);
 		paintStatus(g);
 	}
-	
+
 	public void paintBackground(Graphics g) {
 		g.setColor(SystemColor.control);
 		Rectangle r= getBounds();
@@ -35,40 +35,40 @@ public class ProgressBar extends Canvas {
 		g.drawLine(r.width-1, 0, r.width-1, r.height-1);
 		g.drawLine(0, r.height-1, r.width-1, r.height-1);
 	}
-	
+
 	public void paintStatus(Graphics g) {
 		g.setColor(getStatusColor());
 		Rectangle r= new Rectangle(0, 0, fProgressX, getBounds().height);
 		g.fillRect(1, 1, r.width-1, r.height-2);
 	}
-	
+
 	private void paintStep(int startX, int endX) {
 		repaint(startX, 1, endX-startX, getBounds().height-2);
 	}
-	
+
 	public void reset() {
 		fProgressX= 1;
 		fProgress= 0;
 		fError= false;
 		paint(getGraphics());
 	}
-	
+
 	public int scale(int value) {
 		if (fTotal > 0)
 			return Math.max(1, value*(getBounds().width-1)/fTotal);
-		return value; 
+		return value;
 	}
-	
+
 	public void setBounds(int x, int y, int w, int h) {
 		super.setBounds(x, y, w, h);
 		fProgressX= scale(fProgress);
 	}
-	
+
 	public void start(int total) {
 		fTotal= total;
 		reset();
 	}
-	
+
 	public void step(boolean successful) {
 		fProgress++;
 		int x= fProgressX;

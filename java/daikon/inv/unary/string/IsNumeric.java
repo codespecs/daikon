@@ -45,9 +45,9 @@ public class IsNumeric extends SingleString {
   /** Boolean. True iff IsNumeric invariants should be considered. */
   public static boolean dkconfig_enabled = true;
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
   /**
    * Creates a new IsNumeric.

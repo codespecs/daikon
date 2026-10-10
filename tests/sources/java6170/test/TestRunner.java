@@ -86,7 +86,7 @@ public class TestRunner extends BaseTestRunner
 	    else if (getTest() != null)
 		printUsage("Unexpected token \""+args[i]+"\""
 			   + " (only one test is class allowed)");
-	    else 
+	    else
 		loadTest(args[i]);
 	}
 	if (getTest() == null)
@@ -118,7 +118,7 @@ public class TestRunner extends BaseTestRunner
     {
 	loadTestOrTimeout(testClassName);
 	wrapTestWithTimeout(testClassName);
-    }    
+    }
     /**
        Load a Test from a class or timeout trying.
      */
@@ -139,7 +139,7 @@ public class TestRunner extends BaseTestRunner
 	} catch (InterruptedException e) {
 	    exit(1, "Loading test "+testClassName+" interrupted: "+e);
 	}
-	
+
 	if (thread.isAlive())
 	    thread.setPriority(Thread.MIN_PRIORITY);
 

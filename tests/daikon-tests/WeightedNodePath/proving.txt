@@ -5,4 +5,3 @@ some reason being suppressed by Simplify (I think).
 The owner annotations should not be set if the field might be null,
 because they cause a null dereference error.  Also, presumably the
 invariants should say that fld == null || fld.owner == this.
-

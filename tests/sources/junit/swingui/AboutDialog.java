@@ -12,7 +12,7 @@ import junit.runner.*;
 class AboutDialog extends JDialog {
 	public AboutDialog(JFrame parent) {
 		super(parent, true);
-		 
+
 		setResizable(false);
 		getContentPane().setLayout(new GridBagLayout());
 		setSize(330, 138);
@@ -35,10 +35,10 @@ class AboutDialog extends JDialog {
 		getRootPane().setDefaultButton(close);
 		JLabel label1= new JLabel("JUnit");
 		label1.setFont(new Font("dialog", Font.PLAIN, 36));
-		
+
 		JLabel label2= new JLabel("JUnit "+Version.id()+" by Kent Beck and Erich Gamma");
 		label2.setFont(new Font("dialog", Font.PLAIN, 14));
-		
+
 		JLabel logo= createLogo();
 
 		GridBagConstraints constraintsLabel1= new GridBagConstraints();

@@ -118,4 +118,3 @@ public class WeightedNodePath implements Path {
     return node.hashCode() + (this.path==null ? 0 : 13 * path.hashCode());
   }
 }
-

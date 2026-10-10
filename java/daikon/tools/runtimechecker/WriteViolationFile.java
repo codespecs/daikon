@@ -21,6 +21,11 @@ import org.checkerframework.checker.signature.qual.BinaryName;
  */
 class WriteViolationFile {
 
+  /** Do not instantiate. */
+  private WriteViolationFile() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   public static void usage() {
     System.out.println("Usage:  java WriteViolationFile CLASS ARGS");
     System.out.println("  CLASS and ARGS are just as they would be when being run directly,");
@@ -109,7 +114,7 @@ class WriteViolationFile {
                 + daikon.Global.lineSep
                 + "# Violations: ");
 
-        if (vios.size() == 0) {
+        if (vios.isEmpty()) {
           writer.write("none." + daikon.Global.lineSep);
         } else {
           writer.write(daikon.Global.lineSep);

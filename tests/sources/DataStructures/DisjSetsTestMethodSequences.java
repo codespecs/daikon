@@ -51,8 +51,8 @@ public class DisjSetsTestMethodSequences {
     static public boolean printExceptions = false;
 
     // Test all possible sequences of constructors and methods.
-    static public void testMethodSequences(Set constructors, 
-					   Set methods, 
+    static public void testMethodSequences(Set constructors,
+					   Set methods,
 					   int length) {
 	Set[] sets = new Set[length];
 	sets[0] = constructors;
@@ -118,8 +118,8 @@ public class DisjSetsTestMethodSequences {
     // Get the first method with the given name from the given class.
     static public Method getFirstMethod(Class claz, String name) {
 	Method[] m = claz.getDeclaredMethods();
-	for (int i = 0; i < m.length; i++) 
-	    if (m[i].getName().equals(name)) 
+	for (int i = 0; i < m.length; i++)
+	    if (m[i].getName().equals(name))
 		return m[i];
 	return null;
     }
@@ -133,7 +133,7 @@ public class DisjSetsTestMethodSequences {
 	    params = p;
 	}
 	public String toString() {
-	    return "<" + constr.toString() + "," + 
+	    return "<" + constr.toString() + "," +
 		Arrays.asList(params).toString() + ">";
 	}
     }
@@ -147,7 +147,7 @@ public class DisjSetsTestMethodSequences {
 	    params = p;
 	}
 	public String toString() {
-	    return "<" + method.toString() + "," + 
+	    return "<" + method.toString() + "," +
 		Arrays.asList(params).toString() + ">";
 	}
     }

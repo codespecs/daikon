@@ -28,6 +28,12 @@ import org.checkerframework.dataflow.qual.Pure;
  * contains 99-100%.
  */
 public final class SplitDtrace {
+
+  /** Do not instantiate. */
+  private SplitDtrace() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   /**
    * Entry point for SplitDtrace, which splits a trace file into 100 parts.
    *
@@ -56,7 +62,7 @@ public final class SplitDtrace {
       }
       while (true) {
         readRec(reader, rec);
-        if (rec.size() == 0) {
+        if (rec.isEmpty()) {
           break;
         }
         if (isDeclare(rec)) {
@@ -99,7 +105,7 @@ public final class SplitDtrace {
       }
       while (true) {
         readRec(reader, rec);
-        if (rec.size() == 0) {
+        if (rec.isEmpty()) {
           break;
         }
         boolean isDecl = isDeclare(rec);
@@ -168,7 +174,7 @@ public final class SplitDtrace {
   }
 
   /**
-   * Returns true if the given line starts a program point declaration
+   * Returns true if the given line starts a program point declaration.
    *
    * @param res a line from a .decls or .dtrace file
    * @return true if the given line starts a program point declaration

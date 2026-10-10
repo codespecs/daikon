@@ -50,7 +50,7 @@ public class LinkedListTest
     }
     ls.makeEmpty();
     observe();
-    
+
     System.out.println("run loop 3");
     theItr = ls.zeroth();
     for(int i = 0; i < 20; i += 1) {
@@ -81,7 +81,7 @@ public class LinkedListTest
       ls.findPrevious(item()).retrieve();
     }
   }
-    
+
   public static void original_main() {
     LinkedList    theList = new LinkedList( );
     LinkedListItr theItr;
@@ -109,4 +109,3 @@ public class LinkedListTest
   }
 
 }
-

@@ -15,7 +15,7 @@ Class name  Declared in     Implemented in  Description of purpose
 Point       point.h         point.cpp       Stores a single point and some
                                             extra information about it.
 Cluster     cluster.h       cluster.cpp     Stores sufficient statistics
-                                            about a cluster. Has functions 
+                                            about a cluster. Has functions
 					    to compute distances etc.
 KMeans      kmeans.h        kmeans.cpp      An implementation of the
                                             regular K-means algorithm.

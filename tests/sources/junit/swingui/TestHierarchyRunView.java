@@ -15,7 +15,7 @@ import junit.framework.*;
 public class TestHierarchyRunView implements TestRunView {
 	TestSuitePanel fTreeBrowser;
 	TestRunContext fTestContext;
-	
+
 	public TestHierarchyRunView(TestRunContext context) {
 		fTestContext= context;
 		fTreeBrowser= new TestSuitePanel();
@@ -27,20 +27,20 @@ public class TestHierarchyRunView implements TestRunView {
 			}
 		);
 	}
-	
-	public void addTab(JTabbedPane pane) { 
+
+	public void addTab(JTabbedPane pane) {
 		Icon treeIcon= TestRunner.getIconResource(getClass(), "icons/hierarchy.gif");
 		pane.addTab("Test Hierarchy", treeIcon, fTreeBrowser, "The test hierarchy");
 	}
-	
+
 	public Test getSelectedTest() {
 		return fTreeBrowser.getSelectedTest();
 	}
-	
+
 	public void activate() {
 		testSelected();
 	}
-	
+
 	public void revealFailure(Test failure) {
 		JTree tree= fTreeBrowser.getTree();
 		TestTreeModel model= (TestTreeModel)tree.getModel();
@@ -56,7 +56,7 @@ public class TestHierarchyRunView implements TestRunView {
 			tree.makeVisible(selectionPath);
 		}
 	}
-	
+
 	public void aboutToStart(Test suite, TestResult result) {
 		fTreeBrowser.showTestTree(suite);
 		result.addListener(fTreeBrowser);

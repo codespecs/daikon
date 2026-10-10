@@ -33,7 +33,7 @@ import org.plumelib.util.StringsPlume;
  */
 public final class MergeInvariants {
   private MergeInvariants() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /** Debug logger. */
@@ -78,7 +78,7 @@ public final class MergeInvariants {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args the command-line arguments
    * @throws FileNotFoundException if a file cannot be found
@@ -111,7 +111,7 @@ public final class MergeInvariants {
     while ((c = g.getopt()) != -1) {
       switch (c) {
 
-          // long option
+        // long option
         case 0:
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
@@ -183,14 +183,15 @@ public final class MergeInvariants {
       if (!file.exists()) {
         throw new Daikon.UserError("File " + file + " not found.");
       }
-      if (file.toString().indexOf(".inv") != -1) {
+      String fileString = file.toString();
+      if (fileString.indexOf(".inv") != -1) {
         inv_files.add(file);
-      } else if (file.toString().indexOf(".decls") != -1) {
+      } else if (fileString.indexOf(".decls") != -1) {
         if (decl_file != null) {
           throw new Daikon.UserError("Only one decl file may be specified");
         }
         decl_file = file;
-      } else if (file.toString().indexOf(".spinfo") != -1) {
+      } else if (fileString.indexOf(".spinfo") != -1) {
         splitter_files.add(file);
       } else {
         throw new Daikon.UserError("Unrecognized file type: " + file);
@@ -201,7 +202,7 @@ public final class MergeInvariants {
     if (inv_files.size() < 2) {
       throw new Daikon.UserError(
           "Provided "
-              + StringsPlume.nplural(inv_files.size(), "inv file")
+              + StringsPlume.nPlural(inv_files.size(), "inv file")
               + " but needs at least two");
     }
 
@@ -227,7 +228,7 @@ public final class MergeInvariants {
 
     // if no decls file was specified
     if (decl_file == null) {
-      if (splitter_files.size() > 0) {
+      if (!splitter_files.isEmpty()) {
         throw new Daikon.UserError(".spinfo files may only be specified along with a .decls file");
       }
 
@@ -307,11 +308,11 @@ public final class MergeInvariants {
 
       // Skip everything that is not a final exit point
       if (!ppt.ppt_name.isExitPoint()) {
-        assert ppt.children.size() > 0 : ppt;
+        assert !ppt.children.isEmpty() : ppt;
         continue;
       }
       if (ppt.ppt_name.isCombinedExitPoint()) {
-        assert ppt.children.size() > 0 : ppt;
+        assert !ppt.children.isEmpty() : ppt;
         continue;
       }
 
@@ -324,7 +325,7 @@ public final class MergeInvariants {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
-            assert p.children.size() == 0 : p;
+            assert p.children.isEmpty() : p;
           }
         }
       }
@@ -383,12 +384,12 @@ public final class MergeInvariants {
       }
 
       // Make sure at least one child was found
-      assert ppt.children.size() > 0 : ppt;
+      assert !ppt.children.isEmpty() : ppt;
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
-            assert p.children.size() > 0 : p;
+            assert !p.children.isEmpty() : p;
           }
         }
       }
@@ -401,7 +402,7 @@ public final class MergeInvariants {
     if (debug.isLoggable(FINE)) {
       debug.fine("PPT Hierarchy");
       for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-        if (ppt.parents.size() == 0) {
+        if (ppt.parents.isEmpty()) {
           ppt.debug_print_tree(debug, 0, null);
         }
       }
@@ -476,7 +477,7 @@ public final class MergeInvariants {
   }
 
   /**
-   * Ses up the specified relation beteween each of the conditionals in ppt and the matching
+   * Sets up the specified relation between each of the conditionals in ppt and the matching
    * conditionals in child. Each must have the same number of splitters setup in the same order. The
    * splitter match can't be checked because splitters can't be read back in.
    */

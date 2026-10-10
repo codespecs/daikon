@@ -282,6 +282,15 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
       }
     #endif
 
+    // Don't instantiate if the variables can't have order
+    if (!vis[0].aux.hasOrder() || !vis[1].aux.hasOrder()) {
+      if (debug.isLoggable(Level.FINE)) {
+        debug.fine("Not instantiating because order has no meaning: "
+                     + vis[0].name() + " and " + vis[1].name());
+      }
+      return false;
+    }
+
     return true;
   }
 
@@ -316,15 +325,6 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     if (di != null) {
       Global.implied_noninstantiated_invariants++;
       return di;
-    }
-
-    // Don't instantiate if the variables can't have order
-    if (!var1.aux.hasOrder() || !var2.aux.hasOrder()) {
-      if (debug.isLoggable(Level.FINE)) {
-        debug.fine("Not instantitating for because order has no meaning: "
-                     + var1.name() + " and " + var2.name());
-      }
-      return new DiscardInfo(this, DiscardCode.obvious, "Obvious statically since order has no meaning");
     }
 
     return super.isObviousStatically(vis);

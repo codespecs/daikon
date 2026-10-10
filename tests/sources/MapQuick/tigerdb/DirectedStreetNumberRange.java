@@ -2,10 +2,10 @@ package MapQuick.tigerdb;
 
 public class DirectedStreetNumberRange {
   public final IntSet s;
-    
+
   private final int isLowToHigh; // 0 means false, 1 means true, -1 means don't know
 
-  public DirectedStreetNumberRange(IntSet s, 
+  public DirectedStreetNumberRange(IntSet s,
 				   boolean isLowToHigh) {
     this.s = s;
     if (isLowToHigh) {

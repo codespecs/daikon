@@ -25,6 +25,12 @@ import org.plumelib.util.EntryReader;
  * the caller (i.e., which static callgraph edge was taken).
  */
 public class ContextSplitterFactory {
+
+  /** Do not instantiate. */
+  private ContextSplitterFactory() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.split.ContextSplitterFactory");
 
@@ -136,9 +142,15 @@ public class ContextSplitterFactory {
         // 0x85c2e8c PC.RPStack get [PC/RPStack.java:156:29] -> "getCons" [(I)LPC/Cons;] PC.RP meth
         // where this ^ is a tab and the rest are single spaces
         long id;
-        String fromclass, frommeth, fromfile;
-        long fromline, fromcol;
-        String toexpr, toargs, toclass, tometh;
+        String fromclass;
+        String frommeth;
+        String fromfile;
+        long fromline;
+        long fromcol;
+        String toexpr;
+        String toargs;
+        String toclass;
+        String tometh;
 
         int tab = line.indexOf('\t');
         int arrow = line.indexOf(" -> ");
@@ -198,7 +210,7 @@ public class ContextSplitterFactory {
    */
   public static PptNameAndSplitters[] make_context_splitters(MapfileEntry[] entries, int grain) {
     // Use a 2-deep map structure.  First key is an identifier
-    // (~pptname) for the callee.  Second key is an idenfier for the
+    // (~pptname) for the callee.  Second key is an identifier for the
     // caller (based on granularity).  The value is a set of Integers
     // giving the ids that are associated with that callgraph edge.
     Map<String, Map<String, Set<Long>>> callee2caller2ids = new HashMap<>();

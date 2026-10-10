@@ -81,7 +81,7 @@ public class InvariantDoclet implements Doclet {
   /** If true, then output format is Texinfo. */
   private boolean formatTexinfo = false;
 
-  /** The DocTrees instance assocated with the DocletEnvironment. */
+  /** The DocTrees instance associated with the DocletEnvironment. */
   private DocTrees docTrees;
 
   /** Used to report errors. */
@@ -93,8 +93,8 @@ public class InvariantDoclet implements Doclet {
   /**
    * This method mimics the JDK 8 com.sun.javadoc.Doc.name() method. It returned a 'non-qualified
    * name' which differs from JDK 11+ javax.lang.model.element.TypeElement.getSimpleName() for a
-   * nested class. name() would return 'Outer$Inner' while getSimpleName() returns 'Inner'. Note
-   * that this version returns 'Outer.Inner'.
+   * nested class. name() would return "Outer$Inner" while getSimpleName() returns "Inner". Note
+   * that this version returns "Outer.Inner".
    *
    * @param te a class TypeElement
    * @return the class's 'partially' qualified name
@@ -648,7 +648,7 @@ public class InvariantDoclet implements Doclet {
     }
 
     /**
-     * Creates a new DocletOption with an aliased name
+     * Creates a new DocletOption with an aliased name.
      *
      * @param name the option's name, starting with "-" or "--"
      * @param alias the option's alias, starting with "-" or "--"

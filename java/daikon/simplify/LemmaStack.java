@@ -220,7 +220,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /**
-   * Return true if all the invariants in invs[i] in invs[] not between min and max (inclusive) for
+   * Returns true if all the invariants in invs[i] in invs[] not between min and max (inclusive) for
    * which excluded[i] is false, together imply the formula conseq.
    */
   private boolean allExceptImply(Lemma[] invs, boolean[] excluded, int min, int max, String conseq)
@@ -239,7 +239,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     return valid;
   }
 
-  /** Return true if all the elements of bools between min and max (inclusive) are true. */
+  /** Returns true if all the elements of bools between min and max (inclusive) are true. */
   private static boolean allTrue(boolean[] bools, int min, int max) {
     for (int i = min; i <= max; i++) {
       if (!bools[i]) {
@@ -376,7 +376,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /**
-   * Return a minimal set of assumptions from the stack that imply a given string.
+   * Returns a minimal set of assumptions from the stack that imply a given string.
    *
    * @param str the expression to make true
    * @return a minimal set of assumptions from the stack that imply the given string
@@ -392,7 +392,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
       result = minimizeAssumptions(lemmaAry, str);
       assumeAll(lemmas);
     } catch (TimeoutException e) {
-      System.err.println("Minimzation timed out");
+      System.err.println("Minimization timed out");
       restartProver();
       return lemmas;
     }
@@ -400,7 +400,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /**
-   * Return a set of contradictory assumptions from the stack (as a vector of Lemmas) which are
+   * Returns a set of contradictory assumptions from the stack (as a vector of Lemmas) which are
    * minimal in the sense that no proper subset of them are contradictory as far as Simplify can
    * tell.
    */
@@ -409,7 +409,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /**
-   * Return a set of assumptions from the stack (as a vector of Lemmas) that imply the given Lemma
+   * Returns a set of assumptions from the stack (as a vector of Lemmas) that imply the given Lemma
    * and which are minimal in the sense that no proper subset of them imply it as far as Simplify
    * can tell.
    */
@@ -425,7 +425,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   public void removeContradiction() throws SimplifyError {
     do {
       List<Lemma> problems = minimizeContradiction();
-      if (problems.size() == 0) {
+      if (problems.isEmpty()) {
         throw new SimplifyError("Minimization failed");
       }
       Lemma bad = problems.get(problems.size() - 1);
@@ -466,7 +466,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /**
-   * Return a reference to the current position on the lemma stack. If, after pushing some stuff,
+   * Returns a reference to the current position on the lemma stack. If, after pushing some stuff,
    * you want to get back here, pass the mark to popToMark(). This will only work if you use these
    * routines in a stack-disciplined way, of course. In particular, beware that
    * removeContradiction() invalidates marks, since it can remove a lemma from anywhere on the
@@ -540,7 +540,8 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /** Releases resources held by this. */
-  @SuppressWarnings("builder:contracts.postcondition") // performed on a local alias, not the field
+  @SuppressWarnings(
+      "calledmethods:contracts.postcondition") // performed on a local alias, not the field
   @EnsuresCalledMethods(value = "session", methods = "close")
   @Override
   public void close(@GuardSatisfied LemmaStack this) {

@@ -3,7 +3,10 @@ all-except-pdf: config-options.texinfo invariants-doc.texinfo html-chap html
 
 TEXI2HTML ?= makeinfo --html
 
-HTMLTOOLS ?= ../utils/html-tools
+HTMLTOOLS ?= ../.utils/html-tools
+PLUME_SCRIPTS ?= ../.utils/plume-scripts
+# `cronic` suppresses output unless the wrapped command fails.
+CRONIC ?= ${PLUME_SCRIPTS}/cronic
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 # Large split size fixes an apparent bug in makeinfo 4.11:
@@ -26,13 +29,13 @@ config-options.texinfo:
 invariants-doc.texinfo:
 else
 config-options.texinfo:
-	cd ../java && $(MAKE) ../doc/config-options.texinfo
+	${MAKE} -C ../java ../doc/config-options.texinfo
 
 invariants-doc.texinfo:
-	cd ../java && $(MAKE) ../doc/invariants-doc.texinfo
+	${MAKE} -C ../java ../doc/invariants-doc.texinfo
 
 # Always remake config-options.texinfo
-# (We delegate to ../java/Makefile, which is more discerning)
+# (We delegate to ../java/Makefile, which is more discerning.)
 .PHONY : config-options.texinfo
 .PHONY : invariants-doc.texinfo
 endif
@@ -55,29 +58,30 @@ images/%.pdf: images/%.eps
 html: daikon.html developer.html
 
 daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
-	$(MAKE) daikon-html
+	${MAKE} daikon-html
 
 # Just builds .html from .texinfo.
 # Much faster than rebuilding the .texinfo files from Javadoc.
 daikon-fast: daikon.texinfo
-	$(MAKE) daikon-html
+	${MAKE} daikon-html
 
 ## These two rules create the directories if absent but don't update them.
-../utils/html-tools:
-	make -C .. update-html-tools
+../.utils/html-tools:
+	${MAKE} -C .. update-html-tools
 
-../utils/plume-scripts:
-	make -C .. update-plume-scripts
+${CRONIC}: ${PLUME_SCRIPTS}
+${PLUME_SCRIPTS}:
+	${MAKE} -C .. update-plume-scripts
 
 .PHONY: daikon-html
 # Does the actual work
-daikon-html: ../utils/html-tools
+daikon-html: ../.utils/html-tools
 	${TEXI2HTML} --no-split daikon.texinfo
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' daikon.html
 	${HTMLTOOLS}/html-add-favicon . daikon-favicon.png
 
-developer.html: developer.texinfo ../utils/html-tools
+developer.html: developer.texinfo ../.utils/html-tools
 	${TEXI2HTML} --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' $@
@@ -87,9 +91,9 @@ html-chap: daikon/index.html developer/index.html
 
 # The "subdir" flag does not copy over images, so the
 # pathnames become incorrect.  We need to copy them over ourselves.
-daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg ../utils/html-tools
+daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg ../.utils/html-tools ${CRONIC}
 	rm -rf daikon/*
-	${TEXI2HTML} --split=chapter -o daikon $<
+	${CRONIC} ${TEXI2HTML} --split=chapter -o daikon $<
 	# Fixup 'bad' href(s) inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' daikon/index.html
 	perl -pi -e 's|href="CHANGELOG.md"|href="../CHANGELOG.md"|;' daikon/*.html
@@ -98,9 +102,9 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	cp images/*.jpg daikon/images
 	cd daikon && ../${HTMLTOOLS}/html-add-favicon . ../daikon-favicon.png
 
-developer/index.html: developer.texinfo ../utils/html-tools
+developer/index.html: developer.texinfo ../.utils/html-tools ${CRONIC}
 	rm -rf developer/*
-	${TEXI2HTML} --split=chapter -o developer $<
+	${CRONIC} ${TEXI2HTML} --split=chapter -o developer $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' developer/index.html
 	mkdir developer/images
@@ -110,28 +114,26 @@ developer/index.html: developer.texinfo ../utils/html-tools
 
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
-daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo
-	makeinfo --pdf $<
+daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo ${CRONIC}
+	${CRONIC} makeinfo --pdf $<
 
-developer.pdf: developer.texinfo
-	makeinfo --pdf $<
+developer.pdf: developer.texinfo ${CRONIC}
+	${CRONIC} makeinfo --pdf $<
 
 # Note that the clean target does not remove invariants-doc.texinfo or
 # config-options.texinfo.
 
 clean: texi-clean
+	rm -rf daikon/*
 	rm -f daikon.tmp \
 		daikon.info daikon.info-[0-9] \
 		daikon.log daikon.dvi daikon.pdf daikon.html
-	rm -f *.bak
-	rm -rf daikon/*
+	rm -rf developer/*
 	rm -f developer.tmp \
 		developer.info developer.info-[0-9] \
 		developer.log developer.dvi developer.pdf developer.html
-	rm -rf developer/*
 	rm -f images/dfepl-flow.{eps,pdf,jpg}
-# Obsolete files
-	rm -f daikon.ps developer.ps
+	rm -f *.bak
 
 texi-clean:
 	rm -rf daikon.aux daikon.cp daikon.cps daikon.fn daikon.fns \
@@ -145,12 +147,12 @@ very-clean: clean
 
 # Remakes entire distribution; use with caution.
 dist:
-	cd .. && $(MAKE) dist
+	${MAKE} -C .. dist
 
 # "www" target wouldn't work from here, because "www" is an (existing)
 # directory; but go to the parent directory and run the rule from there.
 # www:
-# 	cd .. && $(MAKE) www
+# 	${MAKE} -C .. www
 
 .PHONY: find-changes spell-check
 find-changes:
@@ -165,3 +167,5 @@ spell-check:
 # 4+ spaces (assumed to be literal code or commands.  Permit some failures.
 	@echo "The following command is allowed to have some failures not in daikon.dict"
 	head -100 CHANGELOG.md | sed 's/^    .*/ /' | hunspell -u -p daikon.dict
+
+.PHONY: all test clean

@@ -63,7 +63,7 @@ public class TestTimeout extends TestDecorator implements TestListener
        Runs the underlying Test for up to _millis ms.  If the Test times
        out, adds an error to the given TestResult. */
     public void run(final TestResult result)
-    {   
+    {
         _numRun = 0;
         result.addListener(this);
         runUntilTimeout(result);
@@ -103,7 +103,7 @@ public class TestTimeout extends TestDecorator implements TestListener
     {
 	return super.getTest();
     }
-  
+
     /**
        Checks that all the TestCases in the underlying Test were run.  If
        not, adds an error to the given TestResult.  */

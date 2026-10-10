@@ -5,8 +5,8 @@ import java.io.*;
 import java.util.*;
 
 public class TextUI {
-  
-  public static void main(String[] args) 
+
+  public static void main(String[] args)
   {
     /** effects:
      *  A user runs TextUI by typing the following command at the command
@@ -69,9 +69,9 @@ public class TextUI {
      *                        No such number: <i>number street zipcode </i>
      *
      */
-    
+
     //Vector to store the zipcodes given as arguments
-    Vector zc = new Vector(); 
+    Vector zc = new Vector();
     BufferedReader In = new BufferedReader(new InputStreamReader(System.in));
     DirectionsFinder df = null;
     final String askForStartingNum = "starting number? ";
@@ -81,10 +81,10 @@ public class TextUI {
     final String askForDestinationStreet = "destination street? ";
     final String askForDestinationZc = "destination zipcode? ";
 
-	
+
     // check that the user has specified the databse directory
     if(args.length == 0){
-      System.err.println("error, wrong number of arguments:\n Java ps6.TextUI database-directory <zipcode1> ... <zipcodeN>");  
+      System.err.println("error, wrong number of arguments:\n Java ps6.TextUI database-directory <zipcode1> ... <zipcodeN>");
     }
     else{
 
@@ -106,19 +106,19 @@ public class TextUI {
 	System.exit(-1);
       }
 
-	
+
       boolean stepAsk = true;
 
-      
+
       while(stepAsk){
-	
+
 	// Strings to store the user input
 	String snInput, ssInput, szInput;
 	String dnInput, dsInput, dzInput;
 
 	// 1. ask for starting number
-	
-	System.out.print(askForStartingNum);	
+
+	System.out.print(askForStartingNum);
 	try{
 	  snInput = In.readLine();
 	  //check to make sure that the starting number is not 0
@@ -133,19 +133,19 @@ public class TextUI {
 	  }
 
 	  // 2. ask for starting street
-	  
-	  System.out.print(askForStartingStreet);	
+
+	  System.out.print(askForStartingStreet);
 	  ssInput = In.readLine();
-	
+
 	  // 3. ask for starting zipcode
-	  
-	  System.out.print(askForStartingZc);	
+
+	  System.out.print(askForStartingZc);
 	  szInput = In.readLine();
 
 	  // 4. ask for destination number
-	
-	  System.out.print(askForDestinationNum);	
-	  
+
+	  System.out.print(askForDestinationNum);
+
 	  dnInput = In.readLine();
 	  //check to make sure that the starting number is not 0
 	  try{
@@ -157,28 +157,28 @@ public class TextUI {
 	  }catch(NumberFormatException e){
 	    // will be handled later in getDirections()
 	  }
-	  
+
 	  // 5. ask for destination street
-	  
-	  System.out.print(askForDestinationStreet);	
+
+	  System.out.print(askForDestinationStreet);
 	  dsInput = In.readLine();
-	  
+
 	  // 6. ask for destination zipcode
-	  
-	  System.out.print(askForDestinationZc);	
+
+	  System.out.print(askForDestinationZc);
 	  dzInput = In.readLine();
-	    
+
 	  // 7. Output the directions or error messages
-	  
-	  
+
+
 	  String directions = df.getDirections(snInput,ssInput,szInput,                                                       dnInput,dsInput,dzInput);
 	  System.out.print(directions);
-	  
+
 	  continue;
-	
+
 	}catch(IOException e){
 	  System.err.println("there was an I/O problem while reading your input. Please try again");
-	  
+
 	}
       }
     }

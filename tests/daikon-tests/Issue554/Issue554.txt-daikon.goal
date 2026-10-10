@@ -1,0 +1,97 @@
+===========================================================================
+misc.Issue554:::CLASS
+misc.Issue554.ZERO_MAG has only one value
+misc.Issue554.ZERO_MAG != null
+misc.Issue554.ZERO_MAG[] == []
+misc.Issue554.ZERO has only one value
+misc.Issue554.ZERO != null
+misc.Issue554.ZERO.mag has only one value
+misc.Issue554.ZERO.mag != null
+misc.Issue554.ZERO.mag[] == []
+misc.Issue554.ZERO.bitLength one of { -1, 0 }
+===========================================================================
+misc.Issue554:::OBJECT
+this.mag[] elements one of { 1, 2, 3 }
+this.mag[] one of { [], [1, 2], [3] }
+this.mag[] sorted by <
+this.bitLength one of { -1, 0 }
+size(this.mag[]) one of { 0, 1, 2 }
+this.bitLength <= size(this.mag[])
+(size(this.mag[]) & size(this.mag[])-1) == 0
+===========================================================================
+misc.Issue554.Issue554(int[]):::ENTER
+mag[] elements one of { 1, 2, 3 }
+mag[] one of { [], [1, 2], [3] }
+size(mag[]) one of { 0, 1, 2 }
+===========================================================================
+misc.Issue554.Issue554(int[]):::EXIT
+this.mag == orig(mag)
+this.mag[] == mag[]
+this.bitLength == size(misc.Issue554.ZERO_MAG[])-1
+mag[] == orig(mag[])
+misc.Issue554.ZERO.bitLength == -1
+this.bitLength == -1
+mag[] elements one of { 1, 2, 3 }
+mag[] one of { [], [1, 2], [3] }
+mag[0..this.bitLength] == []
+===========================================================================
+misc.Issue554.bitLength():::ENTER
+this.bitLength == size(misc.Issue554.ZERO_MAG[])-1
+misc.Issue554.ZERO.bitLength == -1
+this.mag[0..this.bitLength] == []
+===========================================================================
+misc.Issue554.bitLength():::EXIT
+misc.Issue554.ZERO_MAG == orig(misc.Issue554.ZERO_MAG)
+misc.Issue554.ZERO_MAG[] == orig(misc.Issue554.ZERO_MAG[])
+misc.Issue554.ZERO == orig(misc.Issue554.ZERO)
+misc.Issue554.ZERO.mag == orig(misc.Issue554.ZERO.mag)
+misc.Issue554.ZERO.mag[] == orig(misc.Issue554.ZERO.mag[])
+this.mag == orig(this.mag)
+this.mag[] == orig(this.mag[])
+this.bitLength == return
+return == size(misc.Issue554.ZERO_MAG[])
+return == orig(size(misc.Issue554.ZERO_MAG[]))
+orig(this.bitLength) == size(misc.Issue554.ZERO_MAG[])-1
+this.mag[0..return-1] == []
+===========================================================================
+misc.Issue554.calcBitLength(int, int[]):::ENTER
+start == size(misc.Issue554.ZERO_MAG[])
+misc.Issue554.ZERO.bitLength == -1
+mag[] elements one of { 1, 2, 3 }
+mag[] one of { [], [1, 2], [3] }
+size(mag[]) one of { 0, 1, 2 }
+mag[0..start-1] == []
+===========================================================================
+misc.Issue554.calcBitLength(int, int[]):::EXIT
+misc.Issue554.ZERO_MAG == orig(misc.Issue554.ZERO_MAG)
+misc.Issue554.ZERO_MAG[] == orig(misc.Issue554.ZERO_MAG[])
+misc.Issue554.ZERO == orig(misc.Issue554.ZERO)
+misc.Issue554.ZERO.mag == orig(misc.Issue554.ZERO.mag)
+misc.Issue554.ZERO.mag[] == orig(misc.Issue554.ZERO.mag[])
+misc.Issue554.ZERO.bitLength == orig(misc.Issue554.ZERO.bitLength)
+mag[] == orig(mag[])
+return == orig(start)
+return == size(misc.Issue554.ZERO_MAG[])
+return == orig(size(misc.Issue554.ZERO_MAG[]))
+misc.Issue554.ZERO.bitLength == -1
+mag[] elements one of { 1, 2, 3 }
+mag[] one of { [], [1, 2], [3] }
+mag[0..return-1] == []
+===========================================================================
+misc.Issue554.main(java.lang.String[]):::ENTER
+misc.Issue554.ZERO.bitLength == -1
+args has only one value
+args.getClass().getName() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+misc.Issue554.main(java.lang.String[]):::EXIT
+misc.Issue554.ZERO_MAG == orig(misc.Issue554.ZERO_MAG)
+misc.Issue554.ZERO_MAG[] == orig(misc.Issue554.ZERO_MAG[])
+misc.Issue554.ZERO == orig(misc.Issue554.ZERO)
+misc.Issue554.ZERO.mag == orig(misc.Issue554.ZERO.mag)
+misc.Issue554.ZERO.mag[] == orig(misc.Issue554.ZERO.mag[])
+args[] == orig(args[])
+misc.Issue554.ZERO.bitLength == 0
+args[] == []
+args[].toString == []

@@ -667,9 +667,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * requires: condition is a string representation of a conditional
    *
-   * @return a list of all possible variable variable names in condition. This attempts not to
-   *     return method names nor the base names of qualified names (why not the latter?). Arrays
-   *     appear with "[]" at the end if their elements or accessed in the condition.
+   * @return a list of all possible variable names in condition. This attempts not to return method
+   *     names nor the base names of qualified names (why not the latter?). Arrays appear with "[]"
+   *     at the end if their elements or accessed in the condition.
    */
   private static List<String> findPossibleClassVariables(String condition) throws ParseException {
 
@@ -699,11 +699,11 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Returns type converted to index type if needed. A index type variable in java splitter file has
-   * type "int" or "int[]" instead of "long" or "long[]". This is needed if the variable or the an
-   * element of the variable is used as an index to an array. This method converts the type of the
-   * variable to "int_index" or "index[]" if it is used as an index to an array or an element of it
-   * is used as an index to an array.
+   * Returns type converted to index type if needed. An index type variable in java splitter file
+   * has type "int" or "int[]" instead of "long" or "long[]". This is needed if the variable or the
+   * an element of the variable is used as an index to an array. This method converts the type of
+   * the variable to "int_index" or "index[]" if it is used as an index to an array or an element of
+   * it is used as an index to an array.
    *
    * @param type the original type of the variable
    * @param name the name of the variable

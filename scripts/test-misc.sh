@@ -2,26 +2,34 @@
 
 # This is the "misc" job of the pull request.
 
+# Halt on error
 set -e
+
 set -o pipefail
-set -o verbose
-set -o xtrace
 export SHELLOPTS
+
+## Useful for debugging and sometimes for interpreting the script.
+# # Output lines of this script as they are read.
+# set -o verbose
+# # Output expanded lines of this script as they are executed.
+# set -o xtrace
+
+echo "HEAD=$(git rev-parse HEAD)"
+
+# Gradle requires Java 17.
+JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
+if [ "$JAVA_VER" -ge "17" ]; then
+  (cd java/lib && gradle shadowJar)
+fi
 
 make compile daikon.jar
 
-if [ -d "/tmp/$USER/plume-scripts" ] ; then
-  (cd "/tmp/$USER/plume-scripts" && git pull -q) > /dev/null 2>&1
-else
-  mkdir -p "/tmp/$USER"
-  (cd "/tmp/$USER" && (git clone --depth=1 --depth 1 -q https://github.com/plume-lib/plume-scripts.git || (sleep 1m && git clone --depth=1 --depth 1 -q https://github.com/plume-lib/plume-scripts.git)))
-fi
-
 # Code style & quality
 make -C java error-prone
+make -C java check-format || (make -C java reformat && git --no-pager diff && /bin/false)
 
-# Code formatting
-make -C java check-format
+PLUME_SCRIPTS="${PLUME_SCRIPTS:-.utils/plume-scripts}"
+make plume-scripts-update || true
 
 # Documentation
 if java -version 2>&1 | grep -q '"1.8'; then
@@ -51,18 +59,18 @@ else
     reason=""
     # The `grep -v` prevents the make target failure from throwing off prefix guessing.
     (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > "/tmp/$USER/ap-warnings.txt") || true
-    if ! "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"; then
+    if ! "${PLUME_SCRIPTS}/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"; then
       status=1
       reason="$reason
 target 'api-private' failed"
     fi
     (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" > "/tmp/$USER/rj-warnings.txt") || true
-    if ! "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt" ; then
+    if ! "${PLUME_SCRIPTS}/ci-lint-diff" "/tmp/$USER/rj-warnings.txt"; then
       status=1
       reason="$reason
 target 'requireJavadoc' failed"
     fi
-    if [ $status -ne 0 ] ; then
+    if [ $status -ne 0 ]; then
       echo "$reason"
       echo "See output above"
       exit 1

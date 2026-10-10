@@ -8,4 +8,3 @@ public class InvalidDatabaseException extends Exception {
         super (dbname);
     }
 }
-     

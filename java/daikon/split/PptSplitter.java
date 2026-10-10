@@ -34,7 +34,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
-import org.plumelib.util.MPair;
+import org.plumelib.util.IPair;
 import org.plumelib.util.OrderedPairIterator;
 
 /**
@@ -96,8 +96,8 @@ public class PptSplitter implements Serializable {
   private static final Comparator<Invariant> icfp = new Invariant.InvariantComparatorForPrinting();
 
   /**
-   * Create a binary PptSplitter with the specied splitter for the specified PptTopLevel parent. The
-   * parent should be a leaf (i.e., a numbered exit point).
+   * Create a binary PptSplitter with the specified splitter for the specified PptTopLevel parent.
+   * The parent should be a leaf (i.e., a numbered exit point).
    */
   public PptSplitter(PptTopLevel parent, Splitter splitter) {
 
@@ -247,7 +247,7 @@ public class PptSplitter implements Serializable {
    *   <li>the "different" invariants: all other invariants.
    * </ol>
    *
-   * The "exclusive" invariants (a subset of the "different" inviariants) are true at one program
+   * The "exclusive" invariants (a subset of the "different" invariants) are true at one program
    * point, and their negation is true at the other program point.
    *
    * <p>At the first program point, for each exclusive invariant and each different invariant,
@@ -429,14 +429,14 @@ public class PptSplitter implements Serializable {
       invs = castNonNullDeep(invs); // https://tinyurl.com/cfissue/986
 
       // If neither child slice has invariants there is nothing to do
-      if ((invs[0].size() == 0) && (invs[1].size() == 0)) {
-        if (pslice.invs.size() == 0) {
+      if (invs[0].isEmpty() && invs[1].isEmpty()) {
+        if (pslice.invs.isEmpty()) {
           parent.removeSlice(pslice);
         }
         continue;
       }
 
-      if (pslice.invs.size() == 0) {
+      if (pslice.invs.isEmpty()) {
         debug.fine("PptSplitter: created new slice " + Arrays.toString(vis) + " @" + parent.name);
       }
 
@@ -475,7 +475,7 @@ public class PptSplitter implements Serializable {
 
     // Add the splitting condition as an exclusive condition if requested
     if ((splitter != null) && dkconfig_dummy_invariant_level > 0) {
-      if (exclusive_invs_vec.size() == 0 || dkconfig_dummy_invariant_level >= 2) {
+      if (exclusive_invs_vec.isEmpty() || dkconfig_dummy_invariant_level >= 2) {
         // As a last resort, try using the user's supplied DummyInvariant
         debug.fine("addImplications: resorting to dummy");
         PptConditional cond1 = (PptConditional) ppt1;
@@ -503,7 +503,7 @@ public class PptSplitter implements Serializable {
     }
 
     // If there are no exclusive conditions, we can do nothing here
-    if (exclusive_invs_vec.size() == 0) {
+    if (exclusive_invs_vec.isEmpty()) {
       debug.fine("addImplications: no exclusive conditions");
       return;
     }
@@ -643,8 +643,7 @@ public class PptSplitter implements Serializable {
   @SuppressWarnings("UnusedMethod")
   private boolean at_same_ppt(List<Invariant> invs1, List<Invariant> invs2) {
     PptSlice ppt = null;
-    Iterator<Invariant> itor =
-        new CollectionsPlume.MergedIterator2<Invariant>(invs1.iterator(), invs2.iterator());
+    Iterator<Invariant> itor = CollectionsPlume.mergedIterator2(invs1.iterator(), invs2.iterator());
     for (; itor.hasNext(); ) {
       Invariant inv = itor.next();
       if (ppt == null) {
@@ -709,7 +708,7 @@ public class PptSplitter implements Serializable {
     for (OrderedPairIterator<Invariant> opi =
             new OrderedPairIterator<Invariant>(ss1.iterator(), ss2.iterator(), icfp);
         opi.hasNext(); ) {
-      MPair<@Nullable Invariant, @Nullable Invariant> pair = opi.next();
+      IPair<@Nullable Invariant, @Nullable Invariant> pair = opi.next();
       if ((pair.first == null) || (pair.second == null)
       // || (icfp.compare(pair.a, pair.b) != 0)
       ) {

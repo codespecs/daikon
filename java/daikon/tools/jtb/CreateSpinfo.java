@@ -21,6 +21,7 @@ import jtb.syntaxtree.*;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.MapsP;
 import org.plumelib.util.StringsPlume;
 
 /**
@@ -47,6 +48,11 @@ public class CreateSpinfo {
   //  The method printSpinfoFile prints out these expressions and
   //  replace statements in splitter info file format.
 
+  /** Do not instantiate. */
+  private CreateSpinfo() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   /** Debug logger. */
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
 
@@ -67,7 +73,7 @@ public class CreateSpinfo {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    */
   public static void mainHelper(final String[] args) throws IOException {
 
@@ -157,7 +163,7 @@ public class CreateSpinfo {
         "Warning: CreateSpinfo input file " + javaFileName + "does not end in .java.");
 
     // change the file extension to .spinfo
-    int dotPos = javaFileName.indexOf(".");
+    int dotPos = javaFileName.indexOf('.');
     if (dotPos == -1) {
       return javaFileName + ".spinfo";
     } else {
@@ -247,17 +253,17 @@ public class CreateSpinfo {
     if (!replaceStatements.values().isEmpty()) {
       output.println("REPLACE");
       for (
-      @KeyFor("replaceStatements") String declaration : CollectionsPlume.sortedKeySet(replaceStatements)) {
+      @KeyFor("replaceStatements") String declaration : MapsP.sortedKeySet(replaceStatements)) {
         output.println(declaration);
         String replacement = replaceStatements.get(declaration);
         output.println(removeNewlines(replacement));
       }
       output.println();
     }
-    for (@KeyFor("conditions") String method : CollectionsPlume.sortedKeySet(conditions)) {
+    for (@KeyFor("conditions") String method : MapsP.sortedKeySet(conditions)) {
       List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
-      if (method_conds.size() > 0) {
+      if (!method_conds.isEmpty()) {
         String qualifiedMethod = (packageName == null) ? method : packageName + "." + method;
         output.println("PPT_NAME " + qualifiedMethod);
         for (int i = 0; i < method_conds.size(); i++) {

@@ -31,9 +31,9 @@ public class IsTimeOfDayWithSeconds extends SingleString {
   public static final Pattern PATTERN =
       Pattern.compile("^" + H + ":" + MINUTES + ":" + SECONDS + "$");
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
   /**
    * Creates a new IsTimeOfDayWithSeconds.

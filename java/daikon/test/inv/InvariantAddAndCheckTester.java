@@ -38,10 +38,10 @@ import org.junit.Test;
 import typequals.prototype.qual.Prototype;
 
 /**
- * This is a tester for the results of adding or checking an sample to an invariant. It can test
- * practically any invariant in the Daikon system given the appropriate commands. The test are
+ * This is a tester for the results of adding or checking a sample to an invariant. It can test
+ * practically any invariant in the Daikon system given the appropriate commands. The tests are
  * configured from the {@code InvariantTest.commands} file and errors that occur are written to the
- * InvariantTest.diffs file. For conveince a partcailly complete file InvariantTest.input can be
+ * InvariantTest.diffs file. For convenience a partially complete file InvariantTest.input can be
  * used to generate a complete commands file. To generate InvariantTest.commands from
  * InvariantTest.input run this class's main method with option "--generate_goals".
  *
@@ -105,7 +105,7 @@ public class InvariantAddAndCheckTester {
   private static final String lineSep = Global.lineSep;
 
   /**
-   * This function produces the format list for intialization of the static format list variable.
+   * This function produces the format list for initialization of the static format list variable.
    */
   static List<String> getTestFormatList() {
     List<String> result = new ArrayList<>();
@@ -272,7 +272,7 @@ public class InvariantAddAndCheckTester {
    * Determines whether a line is a comment or not.
    *
    * @param line the line in question
-   * @return true if the line is a comment (that is, not to be interpretted as a command); false
+   * @return true if the line is a comment (that is, not to be interpreted as a command); false
    *     otherwise
    */
   @Pure
@@ -281,7 +281,7 @@ public class InvariantAddAndCheckTester {
   }
 
   /**
-   * Determines whether a given line is made only of whitespcae.
+   * Determines whether a given line is made only of whitespace.
    *
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise
@@ -329,7 +329,7 @@ public class InvariantAddAndCheckTester {
      *
      * @return a string containing error messages for any failed cases
      */
-    public static @Nullable String runTest(LineNumberReader commands) {
+    static @Nullable String runTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, false);
       if (endOfFile) {
         return null;
@@ -338,7 +338,7 @@ public class InvariantAddAndCheckTester {
         String commandLine = getNextRealLine(commands);
         int lineNumber = commands.getLineNumber();
         if (InvariantAddAndCheckTester.isComment(commandLine)) {
-          continue;
+          // continue;
         } else if (isTestTerminator(commandLine)) {
           break;
         } else if (isAddCommand(commandLine) || isCheckCommand(commandLine)) {
@@ -359,7 +359,7 @@ public class InvariantAddAndCheckTester {
      *     test case
      */
     @SuppressWarnings("UnusedMethod")
-    public static @Nullable String generateTest(LineNumberReader commands) {
+    static @Nullable String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
       if (endOfFile) {
         return null;
@@ -448,7 +448,7 @@ public class InvariantAddAndCheckTester {
     private static void executeCheckOrAddCommand(String command, int lineNumber) {
 
       // remove the command
-      String args = command.substring(command.indexOf(":") + 1);
+      String args = command.substring(command.indexOf(':') + 1);
 
       StringTokenizer tokens = new StringTokenizer(args, argDivider);
       if (tokens.countTokens() != types.length + 2) {
@@ -495,7 +495,7 @@ public class InvariantAddAndCheckTester {
     /** Given a line from an input file, generates appropriate check or add command. */
     private static void generateCheckOrAddCommand(String command, int lineNumber) {
       // remove the command
-      String args = command.substring(command.indexOf(":") + 1);
+      String args = command.substring(command.indexOf(':') + 1);
 
       StringTokenizer tokens = new StringTokenizer(args, argDivider);
       if (tokens.countTokens() != types.length) {

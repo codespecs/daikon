@@ -49,5 +49,3 @@ AddEdge fun belong to
 
 FindPath fun All -> us
 FindPath fun You -> time
-
-

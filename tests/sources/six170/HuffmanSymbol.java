@@ -8,7 +8,7 @@ package six170;
  */
 
 public class HuffmanSymbol {
-  
+
   private Object symbol;
   private int frequency;
 

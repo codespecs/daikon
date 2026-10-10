@@ -41,6 +41,7 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.Unused;
@@ -140,7 +141,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * The probability that this could have happened by chance alone. <br>
    * 1 = could never have happened by chance; that is, we are fully confident that this invariant is
-   * a real invariant
+   * a real invariant.
    */
   public static final double CONFIDENCE_JUSTIFIED = 1;
 
@@ -156,7 +157,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * The probability that this could have happened by chance alone. <br>
    * 0 = could never have happened by chance; that is, we are fully confident that this invariant is
-   * a real invariant
+   * a real invariant.
    */
   public static final double PROBABILITY_JUSTIFIED = 0;
 
@@ -170,7 +171,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public static final double PROBABILITY_NEVER = 3;
 
   /**
-   * Return Invariant.CONFIDENCE_JUSTIFIED if x&ge;goal. Return Invariant.CONFIDENCE_UNJUSTIFIED if
+   * Returns Invariant.CONFIDENCE_JUSTIFIED if x&ge;goal. Return Invariant.CONFIDENCE_UNJUSTIFIED if
    * x&le;1. For intermediate inputs, the result gives confidence that grades between the two
    * extremes. See the discussion of gradual vs. sudden confidence transitions.
    *
@@ -193,7 +194,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return Invariant.PROBABILITY_JUSTIFIED if x&ge;goal. Return Invariant.PROBABILITY_UNJUSTIFIED
+   * Returns Invariant.PROBABILITY_JUSTIFIED if x&ge;goal. Return Invariant.PROBABILITY_UNJUSTIFIED
    * if x&le;1. For intermediate inputs, the result gives probability that grades between the two
    * extremes. See the discussion of gradual vs. sudden probability transitions.
    *
@@ -216,7 +217,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return the "and" of the given confidences. This is the confidence that multiple conditions
+   * Returns the "and" of the given confidences. This is the confidence that multiple conditions
    * (whose confidences are given) are all satisfied.
    *
    * @param c1 the confidence of the first condition
@@ -234,7 +235,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return the "and" of the given confidences. This is the confidence that multiple conditions
+   * Returns the "and" of the given confidences. This is the confidence that multiple conditions
    * (whose confidences are given) are all satisfied.
    *
    * @param c1 the confidence of the first condition
@@ -254,7 +255,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return the "or" of the given confidences. This is the confidence that at least one of multiple
+   * Returns the "or" of the given confidences. This is the confidence that at least one of multiple
    * conditions (whose confidences are given) is satisfied.
    *
    * @param c1 the confidence of the first condition
@@ -268,7 +269,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return the "and" of the given probabilities. This is the probability that multiple conditions
+   * Returns the "and" of the given probabilities. This is the probability that multiple conditions
    * (whose probabilities are given) are all satisfied.
    *
    * @param p1 the probability of the first condition
@@ -287,7 +288,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return the "and" of the given probabilities. This is the probability that multiple conditions
+   * Returns the "and" of the given probabilities. This is the probability that multiple conditions
    * (whose probabilities are given) are all satisfied.
    *
    * @param p1 the probability of the first condition
@@ -307,7 +308,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return the "or" of the given probabilities. This is the probability that at least one of
+   * Returns the "or" of the given probabilities. This is the probability that at least one of
    * multiple conditions (whose probabilities are given) is satisfied.
    *
    * @param p1 the probability of the first condition
@@ -497,7 +498,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Returns whether or not this invariant has been falsified.
+   * Returns true if this invariant has been falsified.
    *
    * @return true if this invariant has been falsified
    */
@@ -662,7 +663,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Merge the invariants in invs to form a new invariant. This implementation merely returns a
    * clone of the first invariant in the list. This is correct for simple invariants whose equation
-   * or statistics don't depend on the actual samples seen. It should be overriden for more complex
+   * or statistics don't depend on the actual samples seen. It should be overridden for more complex
    * invariants (eg, bound, oneof, linearbinary, etc).
    *
    * @param invs list of invariants to merge. The invariants must all be of the same type and should
@@ -671,6 +672,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @param parent_ppt slice that will contain the new invariant
    * @return the merged invariant or null if the invariants didn't represent the same invariant
    */
+  @SuppressWarnings("AssignmentExpression") // for "assert (assert_enabled = true);"
   public @Nullable @NonPrototype Invariant merge(
       @Prototype Invariant this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
 
@@ -719,17 +721,17 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // // itself on the PptSlice, and that's what really matters (right?).
   // public static abstract Invariant instantiate(PptSlice ppt);
 
-  /** Return true if this invariant uses the given variable. */
+  /** Returns true if this invariant uses the given variable. */
   public boolean usesVar(@NonPrototype Invariant this, VarInfo vi) {
     return ppt.usesVar(vi);
   }
 
-  /** Return true if this invariant uses the given variable. */
+  /** Returns true if this invariant uses the given variable. */
   public boolean usesVar(@NonPrototype Invariant this, String name) {
     return ppt.usesVar(name);
   }
 
-  /** Return true if this invariant uses the given variable or any variable derived from it. */
+  /** Returns true if this invariant uses the given variable or any variable derived from it. */
   public boolean usesVarDerived(@NonPrototype Invariant this, String name) {
     return ppt.usesVarDerived(name);
   }
@@ -743,7 +745,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // }
 
   /**
-   * Return a string representation of the variable names.
+   * Returns a string representation of the variable names.
    *
    * @return a string representation of the variable names
    */
@@ -808,17 +810,17 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return " [" + classname + "]";
   }
 
-  /** Return a printed representation of this invariant, in the given format. */
+  /** Returns a printed representation of this invariant, in the given format. */
   @SideEffectFree
   public abstract String format_using(
       @GuardSatisfied @NonPrototype Invariant this, OutputFormat format);
 
   /**
-   * Returns a conjuction of mapping the same function of our expresssions's VarInfos, in general.
+   * Returns a conjunction of mapping the same function of our expresssions's VarInfos, in general.
    * Subclasses may override if they are able to handle generally-inexpressible properties in
    * special-case ways.
    *
-   * @return conjuction of mapping the same function of our expresssions's VarInfos
+   * @return conjunction of mapping the same function of our expresssions's VarInfos
    * @see VarInfo#isValidEscExpression
    */
   @Pure
@@ -942,7 +944,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Conver a long integer value into a format that Simplify can use. If the value is too big, we
+   * Convert a long integer value into a format that Simplify can use. If the value is too big, we
    * have to print it in a weird way, then tell Simplify about its properties specially.
    *
    * @param l the number to print
@@ -976,7 +978,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       // be that there's no bound that would work with arbitrary
       // formulas, but this one seems to work OK for formulas
       // generated by Daikon.
-      return "" + l;
+      return Long.toString(l);
     } else {
       return SimpUtil.formatInteger(l);
     }
@@ -1141,12 +1143,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @param other the invariant to compare to this one
    * @return true iff the two invariants represent the same mathematical formula. Does not consider
-   * @exception RuntimeException if other.getClass() != this.getClass()
+   * @throws RuntimeException if other.getClass() != this.getClass()
    */
   public abstract boolean isSameFormula(@Prototype Invariant this, Invariant other);
 
   /**
-   * Returns whether or not it is possible to merge invariants of the same class but with different
+   * Returns true if it is possible to merge invariants of the same class but with different
    * formulas when combining invariants from lower ppts to build invariants at upper program points.
    * Invariants that have this characteristic (eg, bound, oneof) should override this function. Note
    * that invariants that can do this, normally need special merge code as well (to merge the
@@ -1243,7 +1245,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Returns whether or not this invariant is ni-suppressed.
+   * Returns true if this invariant is ni-suppressed.
    *
    * @return true if this invariant is ni-suppressed
    */
@@ -1283,9 +1285,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // Static and dynamic checks for obviousness
 
   /**
-   * Return true if this invariant is necessarily true from a fact that can be determined statically
-   * from the decls files. (An example is being from a certain derivation.) Intended to be
-   * overridden by subclasses.
+   * Returns true if this invariant is necessarily true from a fact that can be determined
+   * statically from the decls files. (An example is being from a certain derivation.) Intended to
+   * be overridden by subclasses.
    *
    * <p>This method is final because children of Invariant should be extending
    * isObviousStatically(VarInfo[]) because it is more general.
@@ -1296,10 +1298,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return true if this invariant is necessarily true from a fact that can be determined statically
-   * -- for the given varInfos rather than the varInfos of this. Conceptually, this means "is this
-   * invariant statically obvious if its VarInfos were switched with vis?" Intended to be overridden
-   * by subclasses. Should only do static checking.
+   * Returns true if this invariant is necessarily true from a fact that can be determined
+   * statically -- for the given varInfos rather than the varInfos of this. Conceptually, this means
+   * "is this invariant statically obvious if its VarInfos were switched with vis?" Intended to be
+   * overridden by subclasses. Should only do static checking.
    *
    * <p>Precondition: vis.length == this.ppt.var_infos.length
    *
@@ -1312,7 +1314,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return true if this invariant and all equality combinations of its member variables are
+   * Returns true if this invariant and all equality combinations of its member variables are
    * necessarily true from a fact that can be determined statically (i.e., the decls files). For
    * example, a == b, and f(a) is obvious, but f(b) is not. In that case, this method on f(a) would
    * return false. If f(b) is also obvious, then this method would return true.
@@ -1342,10 +1344,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return true if this invariant and some equality combinations of its member variables are
+   * Returns true if this invariant and some equality combinations of its member variables are
    * statically obvious. For example, if a == b, and f(a) is obvious, then so is f(b). We use the
    * someInEquality (or least interesting) method during printing so we only print an invariant if
-   * all its variables are interesting, since a single, static, non interesting occurance means all
+   * all its variables are interesting, since a single, static, non interesting occurrence means all
    * the equality combinations aren't interesting.
    *
    * @return the VarInfo array that contains the VarInfos that showed this invariant to be obvious.
@@ -1372,12 +1374,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       int position) {
     if (position == vis.length) {
       if (debugIsObvious.isLoggable(Level.FINE)) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("  isObviousStatically_SomeInEquality: ");
+        StringJoiner sj = new StringJoiner(" ", "  isObviousStatically_SomeInEquality: ", "");
         for (int i = 0; i < vis.length; i++) {
-          sb.append(assigned[i].name() + " ");
+          sj.add(assigned[i].name());
         }
-        debugIsObvious.fine(sb.toString());
+        debugIsObvious.fine(sj.toString());
       }
 
       assigned = castNonNullDeep(assigned); // https://tinyurl.com/cfissue/986
@@ -1395,10 +1396,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return true if this invariant is necessarily true from a fact that can be determined statically
-   * (i.e., the decls files) or dynamically (after checking data). Intended not to be overriden,
-   * because sub-classes should override isObviousStatically or isObviousDynamically. Wherever
-   * possible, suppression, rather than this, should do the dynamic checking.
+   * Returns true if this invariant is necessarily true from a fact that can be determined
+   * statically (i.e., the decls files) or dynamically (after checking data). Intended not to be
+   * overridden, because sub-classes should override isObviousStatically or isObviousDynamically.
+   * Wherever possible, suppression, rather than this, should do the dynamic checking.
    */
   @Pure
   public final @Nullable DiscardInfo isObvious(@NonPrototype Invariant this) {
@@ -1430,12 +1431,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return non-null if this invariant is necessarily true from a fact that can be determined
+   * Returns non-null if this invariant is necessarily true from a fact that can be determined
    * dynamically (after checking data) -- for the given varInfos rather than the varInfos of this.
    * Conceptually, this means, "Is this invariant dynamically obvious if its VarInfos were switched
-   * with vis?" Intended to be overriden by subclasses so they can filter invariants after checking;
-   * the overriding method should first call "super.isObviousDynamically(vis)". Since this method is
-   * dynamic, it should only be called after all processing.
+   * with vis?" Intended to be overridden by subclasses so they can filter invariants after
+   * checking; the overriding method should first call "super.isObviousDynamically(vis)". Since this
+   * method is dynamic, it should only be called after all processing.
    */
   public @Nullable DiscardInfo isObviousDynamically(@NonPrototype Invariant this, VarInfo[] vis) {
     assert !Daikon.isInferencing;
@@ -1449,8 +1450,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return true if more than one of the variables in the invariant are the same variable. We create
-   * such invariants for the purpose of equality set processing, but they aren't intended for
+   * Returns true if more than one of the variables in the invariant are the same variable. We
+   * create such invariants for the purpose of equality set processing, but they aren't intended for
    * printing; there should be invariants with the same meaning but lower arity instead. For
    * instance, we don't need "x = x + x" because we have "x = 0" instead.
    *
@@ -1465,7 +1466,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return true if this invariant is necessarily true from a fact that can be determined
+   * Returns true if this invariant is necessarily true from a fact that can be determined
    * dynamically (after checking data, based on other invariants that were inferred). Since this
    * method is dynamic, it should only be called after all processing.
    *
@@ -1482,11 +1483,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return true if this invariant and some equality combinations of its member variables are
+   * Returns true if this invariant and some equality combinations of its member variables are
    * dynamically obvious. For example, a == b, and f(a) is obvious, so is f(b). We use the
    * someInEquality (or least interesting) method during printing so we only print an invariant if
-   * all its variables are interesting, since a single, dynamic, non interesting occurance means all
-   * the equality combinations aren't interesting.
+   * all its variables are interesting, since a single, dynamic, non interesting occurrence means
+   * all the equality combinations aren't interesting.
    *
    * @return the VarInfo array that contains the VarInfos that showed this invariant to be obvious.
    *     The contains variables that are elementwise in the same equality set as this.ppt.var_infos.
@@ -1513,12 +1514,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     if (position == vis.length) {
       // base case
       if (debugIsObvious.isLoggable(Level.FINE)) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("  isObviousDynamically_SomeInEquality: ");
+        StringJoiner sj = new StringJoiner(" ", "  isObviousDynamically_SomeInEquality: ", "");
         for (int i = 0; i < vis.length; i++) {
-          sb.append(assigned[i].name() + " ");
+          sj.add(assigned[i].name());
         }
-        debugIsObvious.fine(sb.toString());
+        debugIsObvious.fine(sj.toString());
       }
       return isObviousDynamically(assigned);
     } else {
@@ -1711,8 +1711,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Returns whether or not two invariants are of the same type. To be of the same type, invariants
-   * must be of the same class. Some invariant classes represent multiple invariants (such as
+   * Returns true if two invariants are of the same type. To be of the same type, invariants must be
+   * of the same class. Some invariant classes represent multiple invariants (such as
    * FunctionBinary). They must also be the same formula. Note that invariants with different
    * formulas based on their samples (LinearBinary, Bounds, etc) will still match as long as the
    * mergeFormulaOk() method returns true.
@@ -1727,8 +1727,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Returns whether or not the invariant matches the specified state. Must be overriden by
-   * subclasses that support this. Otherwise, it returns true only if the state is null.
+   * Returns true if the invariant matches the specified state. Must be overridden by subclasses
+   * that support this. Otherwise, it returns true only if the state is null.
    */
   public boolean state_match(@NonPrototype Invariant this, Object state) {
     return (state == null);
@@ -1782,7 +1782,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return a list of all the variables that must be non-null in order for this invariant to be
+   * Returns a list of all the variables that must be non-null in order for this invariant to be
    * evaluated. For instance, it this invariant is "a.b.c &gt; d.e" (where c and e are of integer
    * type), then it doesn't make sense to evaluate the invariant unless "a" is non-null, "a.b" is
    * non-null, and "d" is non-null. So, another way to write the invariant (in "guarded" form) would
@@ -1868,15 +1868,15 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       @Prototype Invariant this, PptSlice slice);
 
   /**
-   * Returns whether or not this class of invariants is currently enabled.
+   * Returns true if this class of invariants is currently enabled.
    *
    * <p>Its implementation is almost always {@code return dkconfig_enabled;}.
    */
   public abstract boolean enabled(@Prototype Invariant this);
 
   /**
-   * Returns whether or not the invariant is valid over the basic types in vis. This only checks
-   * basic types (scalar, string, array, etc) and should match the basic superclasses of invariant
+   * Returns true if the invariant is valid over the basic types in vis. This only checks basic
+   * types (scalar, string, array, etc) and should match the basic superclasses of invariant
    * (SingleFloat, SingleScalarSequence, ThreeScalar, etc). More complex checks that depend on
    * variable details can be implemented in instantiate_ok().
    *
@@ -1996,11 +1996,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public void repCheck(@Prototype Invariant this) {}
 
   /**
-   * Returns whether or not the invariant is currently active. This is used to identify those
-   * invariants that require a certain number of points before they actually do computation (eg,
-   * LinearBinary)
+   * Returns true if the invariant is currently active. This is used to identify those invariants
+   * that require a certain number of points before they actually do computation (eg, LinearBinary)
    *
-   * <p>This is used during suppresion. Any invariant that is not active cannot suppress another
+   * <p>This is used during suppression. Any invariant that is not active cannot suppress another
    * invariant.
    *
    * @return true if this invariant is currently active
@@ -2029,7 +2028,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Returns whether or not logging is on.
+   * Returns true if logging is on.
    *
    * @see daikon.Debug#logOn()
    */
@@ -2063,8 +2062,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}.
    *
    * @param format a format string
-   * @param args the argumnts to the format string
-   * @return whether or not it logged anything
+   * @param args the arguments to the format string
+   * @return true if it logged anything
    */
   @FormatMethod
   public boolean log(
@@ -2090,7 +2089,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Return a string representation of the given invariants.
+   * Returns a string representation of the given invariants.
    *
    * @param invs the invariants to get a string representation of
    * @return a string representation of the given invariants
@@ -2119,7 +2118,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * format.
    */
   // [[ This method doesn't belong here. But where? ]]
-  public static String formatFuzzy(String method, VarInfo v1, VarInfo v2, OutputFormat format) {
+  public static String formatFuzzy(
+      @Identifier String method, VarInfo v1, VarInfo v2, OutputFormat format) {
 
     StringBuilder results = new StringBuilder();
     return results
@@ -2161,7 +2161,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Throws an exception if this object is invalid.
    *
-   * @exception RuntimeException if representation invariant on this is broken
+   * @throws RuntimeException if representation invariant on this is broken
    */
   public void checkRep() {
     // very partial initial implementation

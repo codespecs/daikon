@@ -12,4 +12,3 @@ we downcast out of them, this would be important to have.
 Daikon is very slow - symbol():::EXIT takes >1000 seconds to run,
 mostly in the conditional ppt phase (the initial_processing isn't too
 bad).
-

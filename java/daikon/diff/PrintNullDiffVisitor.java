@@ -6,7 +6,7 @@ import daikon.inv.Invariant;
 import java.io.PrintStream;
 
 /**
- * <B>PrintNullDiffVIsitor</B> is a NodeVisitor that only reports an invariant as different when its
+ * <B>PrintNullDiffVisitor</B> is a NodeVisitor that only reports an invariant as different when its
  * existence in one set is not in another set. This avoids reported differences simply in confidence
  * changes and other extra-sensitive reports.
  */

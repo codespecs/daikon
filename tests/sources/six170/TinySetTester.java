@@ -5,7 +5,7 @@ import java.util.Random;
 // This class is identical to TinySetTester.
 // If you change one, be sure to change the other.
 public class TinySetTester {
-  
+
   public static void main(String[] args) {
     (new TinySetTester()).run();
   }
@@ -53,7 +53,7 @@ public class TinySetTester {
       s.add(n);
       observe(s);
     }
-    
+
     for (int x=0; x<50; x++) {
       t = make();
       s = make();

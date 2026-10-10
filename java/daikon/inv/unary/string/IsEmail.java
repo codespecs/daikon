@@ -52,9 +52,9 @@ public class IsEmail extends SingleString {
                   + ")")
               + "$");
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
   /**
    * Creates a new IsEmail.

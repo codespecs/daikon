@@ -1,8 +1,8 @@
-/** 
- * A simple kmeans algorithm implementation. The only input is a filename 's', 
+/**
+ * A simple kmeans algorithm implementation. The only input is a filename 's',
  * where the data points are stored. An example input file is shown below. Note
  * that there are no blank lines (can be easily changed to make more flexible).
- * 
+ *
  * number of dimensions
  * point 1 id
  * point 1 dimension 1
@@ -13,11 +13,11 @@
  * point 1 dimension N
  * point 2 id
  * point 2 dimension 1
- * point 2 dimention 2
+ * point 2 dimension 2
  *       .
  *       .
  *       .
- * 
+ *
  */
 
 #include <math.h>
@@ -32,12 +32,12 @@
 // Doubles/floats must be initialized in source (not header) file
 const float KMeans::convergenceThreshold = 0.00001;
 
-KMeans::KMeans(char* s ) : s(s) { 
+KMeans::KMeans(char* s ) : s(s) {
   DataFp = NULL;
   srand(seed);
   numIters = 0;
   numPoints = 0;
-  
+
   // Reads the first line of the input file, which denotes the
   // number of dimensions of each point
   if ((DataFp = fopen( s, "r")) == NULL) {
@@ -45,31 +45,31 @@ KMeans::KMeans(char* s ) : s(s) {
     std::cout << s << std::endl;
     exit(1);
   }
-  
+
   fscanf(DataFp, "%i", &dimensions);
   //the first thing in data is the point's unique id or name
   data = new float[dimensions];
   means = new float[dimensions];
   stdev = new float[dimensions];
- 
+
   for(int i = 0; i < dimensions; i++) {
     means[i] = 0;
     stdev[i] = 0;
   }
-  
+
   readPoints();
 }
 
 /**
- * Initializes the clusters by choosing random points from the vector 
+ * Initializes the clusters by choosing random points from the vector
  * of points for the initial means.
  */
 void KMeans::initClusters (void) {
   //choose the random points
   clusters.clear();
-  
+
   int *randNums = new int[numClusters];
-  
+
   for(int i = 0; i < numClusters; i++) {
     int random  = rand()%numPoints;
     for (int j = 0; j < i; j++) {
@@ -90,9 +90,9 @@ void KMeans::initClusters (void) {
  * 'points'
  */
 void KMeans::readPoints (void) {
-  
+
    Point *p;
-   
+
    while ((p = getPoint()) != NULL) {
      numPoints++;
      points.push_back(p);
@@ -155,11 +155,11 @@ int KMeans::closestCluster(Point *p) {
     } else if (dist < lowestDist) {
       lowestDist = dist;
       closestCluster = i;
-    }       
+    }
   }
   return closestCluster;
 }
-  
+
 
 
 KMeans::~KMeans() {
@@ -176,15 +176,15 @@ std::vector<Point*> KMeans::getPoints(void) {
 }
 
 /**
- * Perform one iteration of the kmeans algorithm. 
+ * Perform one iteration of the kmeans algorithm.
  */
 void KMeans::iterate (void) {
   numChanges = 0; //the number of cluster membership changes in this iteration
-  
+
   for(int i = 0; i < numClusters; i++) {
     clusters[i]->refresh();
   }
-  
+
   for (int i = 0; i < numPoints; i++) {
     Point *curpoint = points[i];
     int clusterNum = closestCluster(curpoint);
@@ -194,7 +194,7 @@ void KMeans::iterate (void) {
     }
     clusters[clusterNum]->addPoint(curpoint);
   }
-  
+
   for(int i = 0; i < numClusters; i++) {
     clusters[i]->calculateMeans();
   }
@@ -221,42 +221,42 @@ void KMeans::outputPoints (void) {
  * perform a k-clustering of the points.
  */
 void KMeans::doCluster(int k) {
-  
+
   numClusters = k;
   float minError = -1;
   int *clusterInfo = new int[numPoints];
-  
+
   if (numPoints <= numClusters)
     numClusters = numPoints;
 
   //perform numKMeans operations of KMeans and return the optimal one
   for(int j = 0; j < numKMeans; j++) {
-    
+
     initClusters();
-    
+
     //each kmeans iteration should be performed maxIters times or until
     //it converges. Convergence results when there is no change in cluster
-    //membership or if the change in error between the current and the 
+    //membership or if the change in error between the current and the
     //previous iteration was less than convergenceThreshold
-    
+
     float prevError = -1; //the error sum of squares in the previous iteration
     for (numIters = 0; numIters < maxIters; numIters++) {
 	iterate();
-	
-	if (prevError == -1) 
+
+	if (prevError == -1)
 	  prevError = sumErrors();
-	else if ( getNumChanges() == 0 || 
+	else if ( getNumChanges() == 0 ||
 		  prevError - sumErrors() < convergenceThreshold) {
 	  break;
 	}
-    } 
-    
+    }
+
     //store the cluster info of the best clustering so far
     float sum = sumErrors();
-    
+
     //printf("number of changes is %i\n", getNumChanges());
     //printf("number of iterations is %i\n", numIters);
-    
+
     if (minError == -1 || sum < minError) {
       minError = sum;
       for(int i = 0; i < numPoints; i++) {
@@ -264,29 +264,29 @@ void KMeans::doCluster(int k) {
       }
     }
   }
-  
+
   //now reconstruct the best clustering
   for (int i = 0; i < numClusters; i++) {
     clusters[i]->refresh();
   }
-  
+
   for( int i = 0; i < numPoints; i++) {
     clusters[clusterInfo[i]]->addPoint(points[i]);
   }
-  
+
   for( int i = 0; i < numClusters; i++) {
     clusters[i]->print();
     printf ("\n");
   }
 }
-  
+
 /**
  * calculate the total sum of square errors for this clustering
  */
 float KMeans::sumErrors(void) {
   float sumError = 0;
-  for (int i = 0;  i < numClusters; i++) 
-    sumError += clusters[i]->calculateError(); 
+  for (int i = 0;  i < numClusters; i++)
+    sumError += clusters[i]->calculateError();
   return sumError;
 }
 
@@ -294,20 +294,20 @@ float KMeans::sumErrors(void) {
 float KMeans::absolute(float x) {
   if (x < 0 )
     return -x;
-  else 
+  else
     return x;
 }
 
 /**
- * perform a standardization of the points 
+ * perform a standardization of the points
  */
 void KMeans::standardizePoints() {
-  
+
   //calculate the means
   for (int i = 0; i < dimensions; i++) {
     means[i] = means[i]/numPoints;
   }
-  
+
   //calculate the standard deviation (actually the mean absolute
   //deviation which is sum(Xi - Mi)/n
   float *tmpdata;
@@ -338,6 +338,6 @@ void KMeans::standardizePoints() {
     }
   }
 
-  
+
 }
 /* End of file kmeans.cpp */

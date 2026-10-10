@@ -419,8 +419,8 @@ void set_sizes ()
 int getx (float x)
 {
     return (int) ( ((float) x1) +
-                   ((float) spanwidth) / 
-                   (maxvalue - minvalue) * 
+                   ((float) spanwidth) /
+                   (maxvalue - minvalue) *
                    (x - minvalue) );
 }
 
@@ -475,7 +475,7 @@ void show_it ()
         setlinestyle (LineSolid);
     }
     XFlush (display);
-} 
+}
 
 POINT draw_node (int n)
 {

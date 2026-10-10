@@ -2,10 +2,10 @@
  * @(#)Collection.java	1.31 00/02/02
  *
  * Copyright 1997-2000 Sun Microsystems, Inc. All Rights Reserved.
- * 
- * This software is the proprietary information of Sun Microsystems, Inc.  
+ *
+ * This software is the proprietary information of Sun Microsystems, Inc.
  * Use is subject to license terms.
- * 
+ *
  */
 
 package javautil;
@@ -60,7 +60,7 @@ public interface Collection13 {
      * Returns the number of elements in this collection.  If this collection
      * contains more than <tt>Integer.MAX_VALUE</tt> elements, returns
      * <tt>Integer.MAX_VALUE</tt>.
-     * 
+     *
      * @return the number of elements in this collection
      */
     int size();
@@ -89,7 +89,7 @@ public interface Collection13 {
      * guarantees concerning the order in which the elements are returned
      * (unless this collection is an instance of some class that provides a
      * guarantee).
-     * 
+     *
      * @return an <tt>Iterator</tt> over the elements in this collection
      */
     Iterator13 iterator();
@@ -150,12 +150,12 @@ public interface Collection13 {
      *        stored, if it is big enough; otherwise, a new array of the same
      *        runtime type is allocated for this purpose.
      * @return an array containing the elements of this collection
-     * 
+     *
      * @throws ArrayStoreException the runtime type of the specified array is
      *         not a supertype of the runtime type of every element in this
      *         collection.
      */
-    
+
     Object[] toArray(Object a[]);
 
     // Modification Operations
@@ -182,7 +182,7 @@ public interface Collection13 {
      * @param o element whose presence in this collection is to be ensured.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
-     * 
+     *
      * @throws UnsupportedOperationException add is not supported by this
      *         collection.
      * @throws ClassCastException class of the specified element prevents it
@@ -204,7 +204,7 @@ public interface Collection13 {
      * @param o element to be removed from this collection, if present.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
-     * 
+     *
      * @throws UnsupportedOperationException remove is not supported by this
      *         collection.
      */
@@ -235,7 +235,7 @@ public interface Collection13 {
      * @param c elements to be inserted into this collection.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
-     * 
+     *
      * @throws UnsupportedOperationException if this collection does not
      *         support the <tt>addAll</tt> method.
      * @throws ClassCastException if the class of an element of the specified
@@ -243,13 +243,13 @@ public interface Collection13 {
      * @throws IllegalArgumentException some aspect of an element of the
      *	       specified collection prevents it from being added to this
      *	       collection.
-     * 
+     *
      * @see #add(Object)
      */
     boolean addAll(Collection13 c);
 
     /**
-     * 
+     *
      * Removes all this collection's elements that are also contained in the
      * specified collection (optional operation).  After this call returns,
      * this collection will contain no elements in common with the specified
@@ -258,10 +258,10 @@ public interface Collection13 {
      * @param c elements to be removed from this collection.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>removeAll</tt> method
      * 	       is not supported by this collection.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -276,10 +276,10 @@ public interface Collection13 {
      * @param c elements to be retained in this collection.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>retainAll</tt> method
      * 	       is not supported by this Collection.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -326,7 +326,7 @@ public interface Collection13 {
      * @param o Object to be compared for equality with this collection.
      * @return <tt>true</tt> if the specified object is equal to this
      * collection
-     * 
+     *
      * @see Object#equals(Object)
      * @see Set#equals(Object)
      * @see List#equals(Object)
@@ -334,7 +334,7 @@ public interface Collection13 {
     boolean equals(Object o);
 
     /**
-     * 
+     *
      * Returns the hash code value for this collection.  While the
      * <tt>Collection</tt> interface adds no stipulations to the general
      * contract for the <tt>Object.hashCode</tt> method, programmers should
@@ -345,7 +345,7 @@ public interface Collection13 {
      * <tt>c1.hashCode()==c2.hashCode()</tt>.
      *
      * @return the hash code value for this collection
-     * 
+     *
      * @see Object#hashCode()
      * @see Object#equals(Object)
      */

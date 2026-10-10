@@ -4,9 +4,9 @@ import java.util.*;
 /**
  * For testing of static checks for whether something is interesting.
  * If behavior is incorrect, the following should be reported:
- * 
+ *
  * <p>
- * this.inner[this.x] in this.outer[]  
+ * this.inner[this.x] in this.outer[]
  *
  * <p>
  * Why is this code so complicated?  Because we want
@@ -84,7 +84,7 @@ public class StaticInteresting {
     // Now break the equality
     for (int i = 0; i < 100; i++) {
       s.inner[s.x] = s.outer[s.y - 1];
-      
+
       // Still true that s.inner[s.x] is in s.outer[]
       s.work ();
     }
@@ -146,7 +146,7 @@ public class StaticInteresting {
     for (int i = 0; i < outer.length; i++) {
       outer[i] = i*i + rand.nextInt();
     }
-    inner[x] = outer[y];    
+    inner[x] = outer[y];
   }
 }
 
@@ -244,7 +244,6 @@ class StaticInteresting2 {
     for (int i = 0; i < outer.length; i++) {
       outer[i] = i*i + rand.nextInt();
     }
-    inner[x] = outer[y];    
+    inner[x] = outer[y];
   }
 }
-

@@ -1,7 +1,6 @@
 package daikon.tools.jtb;
 
 import daikon.*;
-import daikon.SignaturesUtil;
 import daikon.inv.Equality;
 import daikon.inv.Invariant;
 import daikon.inv.filter.*;
@@ -27,11 +26,18 @@ import jtb.visitor.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.Identifier;
+import org.plumelib.reflection.Signatures;
 import org.plumelib.util.StringsPlume;
 
 /** Static methods for manipulating the AST. */
 @SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
 public class Ast {
+
+  /** Do not instantiate. */
+  private Ast() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
 
   /** The line separator. */
   private static final String lineSep = System.lineSeparator();
@@ -47,17 +53,17 @@ public class Ast {
       String javafilename, Node root, Writer output, AnnotateVisitor visitor) {
     root.accept(visitor);
     root.accept(new InsertCommentFormatter(visitor.addedComments));
-    PrintWriter writer = new PrintWriter(output, true);
-    for (int i = 0; i < visitor.javaFileLines.size(); i++) {
-      writer.println(visitor.javaFileLines.get(i));
+    try (PrintWriter writer = new PrintWriter(output, true)) {
+      for (int i = 0; i < visitor.javaFileLines.size(); i++) {
+        writer.println(visitor.javaFileLines.get(i));
+      }
     }
-    writer.close();
 
     // root.accept(new TreeDumper(output));
   }
 
   // Reads an AST from the input stream, applies the visitor to the AST,
-  // completely reformats the Ast (losing previous formating), and writes
+  // completely reformats the Ast (losing previous formatting), and writes
   // the resulting AST to the output stream.
   public static void applyVisitorReformat(Reader input, Writer output, Visitor visitor) {
     JavaParser parser = new JavaParser(input);
@@ -106,7 +112,7 @@ public class Ast {
   }
 
   /**
-   * This method translates a line like
+   * This method translates a line like.
    *
    * <pre>{@code
    * a statement; // a comment
@@ -186,8 +192,15 @@ public class Ast {
     return s.equals("public") || s.equals("protected") || s.equals("private");
   }
 
+  /**
+   * Returns the name of the formal parameter.
+   *
+   * @param p a formal parameter
+   * @return the name of the formal parameter
+   */
   // f4 -> VariableDeclaratorId()
-  public static String getName(FormalParameter p) {
+  @SuppressWarnings("signature:return") // string manipulation
+  public static @Identifier String getName(FormalParameter p) {
     String name = format(p.f4);
     int startBrackets = name.indexOf('[');
     if (startBrackets == -1) {
@@ -220,13 +233,27 @@ public class Ast {
     return type;
   }
 
+  /**
+   * Returns the name of the method.
+   *
+   * @param m a method
+   * @return the name of the method
+   */
   // f2 -> MethodDeclarator()
-  public static String getName(MethodDeclaration m) {
+  @SuppressWarnings("signature:return") // JTB is not annotated
+  public static @Identifier String getName(MethodDeclaration m) {
     return m.f2.f0.tokenImage;
   }
 
+  /**
+   * Returns the name of the constructor.
+   *
+   * @param m a constructor
+   * @return the name of the constructor
+   */
   // f1 -> <IDENTIFIER>
-  public static String getName(ConstructorDeclaration m) {
+  @SuppressWarnings("signature:return") // JTB is not annotated
+  public static @Identifier String getName(ConstructorDeclaration m) {
     return m.f1.tokenImage;
   }
 
@@ -288,7 +315,7 @@ public class Ast {
     }
   }
 
-  /** Return the fully qualified name of the class containing the node. */
+  /** Returns the fully qualified name of the class containing the node. */
   public static @BinaryName String getClassName(Node d) {
 
     ClassOrInterfaceDeclaration n =
@@ -490,7 +517,7 @@ public class Ast {
       private final NodeToken comment;
       private final boolean first;
 
-      public AddCommentVisitor(NodeToken comment, boolean first) {
+      AddCommentVisitor(NodeToken comment, boolean first) {
         this.comment = comment;
         this.first = first;
       }
@@ -551,7 +578,7 @@ public class Ast {
       private final NodeToken comment;
       private final boolean first;
 
-      public AddCommentVisitor(NodeToken comment, boolean first) {
+      AddCommentVisitor(NodeToken comment, boolean first) {
         this.comment = comment;
         this.first = first;
       }
@@ -614,7 +641,7 @@ public class Ast {
     // After the traversal, the "lastNodeToken" slot contains the
     // last NodeToken visited.
     class LastNodeTokenVisitor extends DepthFirstVisitor {
-      public NodeToken lastNodeToken = null;
+      NodeToken lastNodeToken = null;
 
       @Override
       public void visit(NodeToken node) {
@@ -623,13 +650,13 @@ public class Ast {
     }
     // After the traversal, the "nextNodeToken" slot contains the token
     // visited immediately after "predecessor".  ("predecessor" should be a
-    // descendant of the token from whcih traversal starts.)
+    // descendant of the token from which traversal starts.)
     class NextNodeTokenVisitor extends DepthFirstVisitor {
       private boolean seenPredecessor = false;
-      public NodeToken nextNodeToken;
+      NodeToken nextNodeToken;
       private final NodeToken predecessor;
 
-      public NextNodeTokenVisitor(NodeToken predecessor) {
+      NextNodeTokenVisitor(NodeToken predecessor) {
         this.predecessor = predecessor;
       }
 
@@ -718,7 +745,7 @@ public class Ast {
   //
 
   /**
-   * Returns the class corresponding to the given node
+   * Returns the class corresponding to the given node.
    *
    * @param n a node
    * @return the class corresponding to the given node
@@ -1001,10 +1028,10 @@ public class Ast {
   // returns true if, for some node in the tree, node.tokenImage.equals(s)
   public static boolean contains(Node n, String s) {
     class ContainsVisitor extends DepthFirstVisitor {
-      public boolean found = false;
+      boolean found = false;
       private final String s;
 
-      public ContainsVisitor(String s) {
+      ContainsVisitor(String s) {
         this.s = s;
       }
 
@@ -1043,7 +1070,7 @@ public class Ast {
   // parameters.
   public static List<FormalParameter> getParameters(MethodDeclaration m) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List<FormalParameter> parameters = new ArrayList<>();
+      List<FormalParameter> parameters = new ArrayList<>();
 
       @Override
       public void visit(FormalParameter p) {
@@ -1061,7 +1088,7 @@ public class Ast {
   // inner classes.
   public static List<FormalParameter> getParametersNoImplicit(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List<FormalParameter> parameters = new ArrayList<>();
+      List<FormalParameter> parameters = new ArrayList<>();
 
       @Override
       public void visit(FormalParameter p) {
@@ -1079,7 +1106,7 @@ public class Ast {
   // parameters.
   public static List<FormalParameter> getParameters(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List<FormalParameter> parameters = new ArrayList<>();
+      List<FormalParameter> parameters = new ArrayList<>();
 
       @Override
       public void visit(FormalParameter p) {
@@ -1147,7 +1174,7 @@ public class Ast {
   public static Set<String> getVariableNames(Node expr) {
 
     class GetSymbolNamesVisitor extends DepthFirstVisitor {
-      public Set<String> symbolNames = new HashSet<>();
+      Set<String> symbolNames = new HashSet<>();
 
       @Override
       public void visit(Name n) {
@@ -1193,7 +1220,7 @@ public class Ast {
     return false;
   }
 
-  /** Return true if this is the main method for this class. */
+  /** Returns true if this is the main method for this class. */
   public static boolean isMain(MethodDeclaration md) {
     if (Ast.getName(md).equals("main")) {
       List<FormalParameter> params = Ast.getParameters(md);
@@ -1402,7 +1429,7 @@ public class Ast {
     if (c.isPrimitive()) {
       return c.getName();
     } else if (c.isArray()) {
-      return SignaturesUtil.classGetNameToBinaryName(c.getName());
+      return Signatures.classGetNameToBinaryName(c.getName());
     } else {
       return c.getName();
     }

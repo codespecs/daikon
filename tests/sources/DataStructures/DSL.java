@@ -178,7 +178,7 @@ public class DSL
   private Comparable infinity;
   private SkipNode bottom = null;
   private SkipNode tail   = null;
-       
+
 
   // Test program
   public static void main( String [ ] args )

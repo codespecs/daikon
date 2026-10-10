@@ -72,7 +72,7 @@ public class IntSet
     if (parity != parity(high)) {
       throw new IllegalArgumentException("Mismatched parity");
     }
-    
+
     int size = span[parity] = 1 + ((high - low) / 2);
     int[] elements = elts[parity] = new int[size];
 
@@ -128,7 +128,7 @@ public class IntSet
 	result.span[parity] = anum;
 	continue;
       }
-      
+
       // merge a + b into r
       // remove duplicates along the way
       int[] r = new int[anum + bnum];
@@ -232,7 +232,7 @@ public class IntSet
    *         number '-' number
    *
    * number := [0-9]+
-   * 
+   *
    * </pre>
    *
    * The na-nb productions in the result will have na, nb having the

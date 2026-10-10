@@ -235,7 +235,7 @@ import typequals.prototype.qual.Prototype;
 public final class Daikon {
 
   private Daikon() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /**
@@ -245,10 +245,10 @@ public final class Daikon {
   public static int dkconfig_progress_delay = 1000;
 
   /** The current version of Daikon. */
-  public static final String release_version = "5.8.21";
+  public static final String release_version = "5.9.1";
 
   /** The date for the current version of Daikon. */
-  public static final String release_date = "May 14, 2024";
+  public static final String release_date = "September 1, 2026";
 
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
@@ -325,7 +325,7 @@ public final class Daikon {
   public static boolean show_progress = false;
 
   /**
-   * Whether to use the "new" equality set mechanism for handling equality, using canonicals to have
+   * If true, use the "new" equality set mechanism for handling equality, using canonicals to have
    * instantiation of invariants only over equality sets.
    */
   public static boolean use_equality_optimization = true;
@@ -369,13 +369,13 @@ public final class Daikon {
   public static @Interned String dkconfig_guardNulls = "default";
 
   /**
-   * Whether to associate the program points in a dataflow hierarchy, as via Nimmer's thesis.
+   * If true, associate the program points in a dataflow hierarchy, as via Nimmer's thesis.
    * Deactivate only for languages and analyses where flow relation is nonsensical.
    */
   public static boolean use_dataflow_hierarchy = true;
 
   /**
-   * Whether to use the bottom up implementation of the dataflow hierarchy. This mechanism builds
+   * If true, use the bottom up implementation of the dataflow hierarchy. This mechanism builds
    * invariants initially only at the leaves of the partial order. Upper points are calculated by
    * joining the invariants from each of their children points.
    */
@@ -412,10 +412,10 @@ public final class Daikon {
   // Whether we want the memory monitor activated
   private static boolean use_mem_monitor = false;
 
-  /** Whether Daikon should print its version number and date. */
+  /** True if Daikon should print its version number and date. */
   public static boolean noversion_output = false;
 
-  /** Whether Daikon is in its inferencing loop. Used only for assertion checks. */
+  /** True if Daikon is in its inferencing loop. Used only for assertion checks. */
   public static boolean isInferencing = false;
 
   /**
@@ -730,18 +730,18 @@ public final class Daikon {
       System.err.println("Bug in Daikon.  Please report.");
       System.exit(2);
     } else {
-      // This caes should never be executed.
+      // This case should never be executed.
       System.err.println();
-      System.err.println("Bug in Daikon.  Please report.");
+      System.err.println("Unknown problem in Daikon.  Please report.");
       e.printStackTrace(System.err);
-      System.err.println("Bug in Daikon.  Please report.");
+      System.err.println("Unknown problem in Daikon.  Please report.");
       System.exit(2);
     }
   }
 
   /**
    * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
-   * called progrmmatically.
+   * called programmatically.
    *
    * @param args the command-line arguments
    */
@@ -762,7 +762,7 @@ public final class Daikon {
     Set<String> dtrace_files = files.dtrace;
     Set<File> spinfo_files = files.spinfo;
     Set<File> map_files = files.map;
-    if (server_dir == null && (decls_files.size() == 0) && (dtrace_files.size() == 0)) {
+    if (server_dir == null && decls_files.isEmpty() && dtrace_files.isEmpty()) {
       System.out.println("No .decls or .dtrace files specified");
       throw new Daikon.UserError("No .decls or .dtrace files specified");
     }
@@ -1412,12 +1412,12 @@ public final class Daikon {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
-          //
+        //
         case '?':
           // break; // getopt() already printed an error
           System.out.println(usage);
           throw new Daikon.NormalTermination();
-          //
+        //
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
@@ -1579,9 +1579,9 @@ public final class Daikon {
       proto_invs.add(IsTimeOfDayAMPM.get_proto());
       proto_invs.add(IsTimestampYYYYMMHHThhmmssmm.get_proto());
 
-      // Positive (x > 0) (Postive.java).  Positive is a sample invariant
+      // Positive (x > 0) (Positive.java).  Positive is a sample invariant
       // that is only included as an example.
-      // proto_invs.add (Postive.get_proto());
+      // proto_invs.add (Positive.get_proto());
     }
 
     // Unary sequence invariants
@@ -1859,7 +1859,7 @@ public final class Daikon {
     // Process each ppt that doesn't have a parent
     // (mergeInvs is called on a root, and recursively processes children)
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.parents.size() == 0) {
+      if (ppt.parents.isEmpty()) {
         boolean debug =
             ppt.name()
                 .startsWith(
@@ -2137,9 +2137,9 @@ public final class Daikon {
         debugTrace.fine("Initializing partial order");
       }
       fileio_progress.clear();
-      if (!Daikon.dkconfig_quiet && decl_files.size() > 0) {
+      if (!Daikon.dkconfig_quiet && !decl_files.isEmpty()) {
         System.out.print("\r(read ");
-        System.out.print(StringsPlume.nplural(decl_files.size(), "decls file"));
+        System.out.print(StringsPlume.nPlural(decl_files.size(), "decls file"));
         System.out.println(")");
       }
       return all_ppts;
@@ -2163,10 +2163,10 @@ public final class Daikon {
       System.out.print("Reading splitter info files ");
       create_splitters(spinfo_files);
       System.out.print("\r(read ");
-      System.out.print(StringsPlume.nplural(spinfo_files.size(), "spinfo file"));
+      System.out.print(StringsPlume.nPlural(spinfo_files.size(), "spinfo file"));
       System.out.print(", ");
       System.out.print(
-          StringsPlume.nplural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
+          StringsPlume.nPlural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
       System.out.println(")");
     } catch (IOException e) {
       System.out.println();
@@ -2186,12 +2186,12 @@ public final class Daikon {
    */
   private static void load_map_files(Set<File> map_files) {
     long startTime = System.nanoTime();
-    if (!PptSplitter.dkconfig_disable_splitting && map_files.size() > 0) {
+    if (!PptSplitter.dkconfig_disable_splitting && !map_files.isEmpty()) {
       System.out.print("Reading map (context) files ");
       ContextSplitterFactory.load_mapfiles_into_splitterlist(
           map_files, ContextSplitterFactory.dkconfig_granularity);
       System.out.print("\r(read ");
-      System.out.print(StringsPlume.nplural(map_files.size(), "map (context) file"));
+      System.out.print(StringsPlume.nPlural(map_files.size(), "map (context) file"));
       System.out.println(")");
       long duration = System.nanoTime() - startTime;
       debugProgress.fine(
@@ -2224,7 +2224,7 @@ public final class Daikon {
     }
     if (pconds != null) {
       Global.debugSplit.fine(
-          "Got " + StringsPlume.nplural(pconds.length, "splitter") + " for " + ppt.name());
+          "Got " + StringsPlume.nPlural(pconds.length, "splitter") + " for " + ppt.name());
       ppt.addConditions(pconds);
     }
 
@@ -2288,7 +2288,7 @@ public final class Daikon {
       if (dkconfig_progress_delay == -1) {
         return;
       }
-      // "display("");" is wrong becuase it leaves the timestamp and writes
+      // "display("");" is wrong because it leaves the timestamp and writes
       // spaces across the screen.
       String status = StringsPlume.rpad("", dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
@@ -2378,7 +2378,7 @@ public final class Daikon {
       if (!Daikon.dkconfig_quiet) {
         System.out.println(
             "Processing trace data; reading "
-                + StringsPlume.nplural(dtrace_files.size(), "dtrace file")
+                + StringsPlume.nPlural(dtrace_files.size(), "dtrace file")
                 + ":");
       }
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
@@ -2415,7 +2415,7 @@ public final class Daikon {
           String.format("Finished reading %d samples", FileIO.samples_processed));
     }
 
-    if (all_ppts.size() == 0) {
+    if (all_ppts.isEmpty()) {
       String message = "No program point declarations were found.";
       if (FileIO.omitted_declarations != 0) {
         message +=
@@ -2435,7 +2435,7 @@ public final class Daikon {
     if ((use_dataflow_hierarchy && FileIO.samples_processed == unmatched_count)
         || (FileIO.samples_processed == 0)) {
       throw new Daikon.UserError(
-          "No samples found for any of " + StringsPlume.nplural(all_ppts.size(), "program point"));
+          "No samples found for any of " + StringsPlume.nPlural(all_ppts.size(), "program point"));
     }
 
     // ppt_stats (all_ppts);
@@ -2553,7 +2553,7 @@ public final class Daikon {
   }
 
   private static class Count {
-    public int val;
+    int val;
 
     Count(int val) {
       this.val = val;
@@ -2644,7 +2644,7 @@ public final class Daikon {
       // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
       // exit), we define them as everything except
       // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT
-      //  and :::CLASS program points.  This scheme ensures that arbitrarly
+      //  and :::CLASS program points.  This scheme ensures that arbitrarily
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
       if (p.ppt_name.isCombinedExitPoint()
@@ -2820,7 +2820,7 @@ public final class Daikon {
           }
         }
 
-        if (vars.size() > 0) {
+        if (!vars.isEmpty()) {
 
           // Create new equality sets for all of the non-equal vars
           List<Equality> newInvs = sliceEquality.createEqualityInvs(vars, eq);

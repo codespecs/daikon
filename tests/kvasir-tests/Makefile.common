@@ -2,6 +2,9 @@
 
 # DAIKONDIR is the clone of the 'daikon' project.
 DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+DAIKON_JAR := ${DAIKONDIR}/daikon.jar
+# Fails when running "clean".
+# $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
 
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64
@@ -9,9 +12,17 @@ else
 VALGRIND_ARCH := x86
 endif
 
+CC := clang
 CC := gcc
+
+CXX := clang++
 CXX := g++
-CFLAGS += -gdwarf-2
+
+# CFLAGS += -gdwarf-2
+CFLAGS += -gdwarf-3
+
+# clang sets -Wreturn-mismatch
+CFLAGS += -Wno-return-mismatch
 
 # Ubuntu sets -fstack-protector-strong on by default
 # we turn if back off to get baseline results to match Fedora.
@@ -33,7 +44,6 @@ REMOVE_TIMING := ../remove-timing.pl
 REMOVE_VARIABLE_COUNT := ../remove-variable-count.pl
 DECLS_2_COMP ?= ${DAIKONDIR}/scripts/decls2comp.py
 RUN_MANY := ../run-many.pl
-DTRACE_DIFF ?= dtrace-diff.pl
 SORT_DTRACE_INPLACE := perl -Si ${DAIKONDIR}/scripts/sort-dtrace.pl
 SORT_DECLS := ${DAIKONDIR}/scripts/sort-decls-2.py
 INCLUDES ?=
@@ -43,20 +53,15 @@ DIFF_NAME ?= $(shell basename `pwd`)
 BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
-ifeq (i386, $(shell uname -i))
-DAIKON := java -Xmx3600m -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := java -Xmx3600m -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
-else
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := java -ea -Xmx3600M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := java -Xmx3600M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
-endif
+DAIKON := java -ea -Xmx7g -cp ${DAIKON_JAR} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
+PRINT_INV := java -Xmx7g -cp ${DAIKON_JAR} daikon.PrintInvariants
 
 default: summary-w-daikon
 
 # Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
-OS_ID := $(shell ${DAIKONDIR}/scripts/lsb_release -si)
-OS_REL := $(shell ${DAIKONDIR}/scripts/lsb_release -sr)
+OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release | cut -d " " -f1)
+OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 # bogus goal to force goal_name to try all paths
 GOAL := DUMMY
 
@@ -78,6 +83,15 @@ ifeq ($(OS_ID),Rocky)
 endif
 
 ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),26.04)
+	GOAL := goal-Ubuntu2604
+endif
+ifeq ($(OS_REL),25.10)
+	GOAL := goal-Ubuntu2510
+endif
+ifeq ($(OS_REL),25.04)
+	GOAL := goal-Ubuntu2504
+endif
 ifeq ($(OS_REL),24.10)
 	GOAL := goal-Ubuntu2410
 endif
@@ -136,9 +150,13 @@ goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 				) \
 			)
 
+# Define the strict whitelist
+SUPPORTED_OS := Fedora Rocky Ubuntu
+
 show-os:
 	@echo OS_ID=$(OS_ID) OS_REL=$(OS_REL)
 
+# currently unused
 ifdef COMPRESS_DTRACE
 export DTRACEGZIP := 1
 DTRACE_EXT := .dtrace.gz

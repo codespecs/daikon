@@ -434,7 +434,7 @@ public class TestRunner extends BaseTestRunner implements TestRunContext {
 		c.fill= fill;
 		if (fill == GridBagConstraints.BOTH || fill == GridBagConstraints.VERTICAL)
 			c.weighty= 1.0;
-		c.insets= new Insets(y == 0 ? 10 : 0, x == 0 ? 10 : GAP, GAP, GAP); 
+		c.insets= new Insets(y == 0 ? 10 : 0, x == 0 ? 10 : GAP, GAP, GAP);
 		p.add(co, c);
 	}
 
@@ -548,7 +548,7 @@ public class TestRunner extends BaseTestRunner implements TestRunContext {
 		TestCase rerunTest= (TestCase)test;
 
 		try {
-			Class reloadedTestClass= getLoader().reload(test.getClass()); 
+			Class reloadedTestClass= getLoader().reload(test.getClass());
 			reloadedTest= TestSuite.createTest(reloadedTestClass, rerunTest.getName());
 		} catch(Exception e) {
 			showInfo("Could not reload "+ test.toString());

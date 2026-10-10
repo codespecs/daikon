@@ -677,8 +677,4 @@ ppt print_tokens2.c.unget_error():::EXIT0
     array 1
     rep-type hashcode[]
     dec-type void[]
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type int
 

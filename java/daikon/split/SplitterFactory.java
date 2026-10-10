@@ -25,7 +25,7 @@ import org.plumelib.util.FilesPlume;
  */
 public class SplitterFactory {
   private SplitterFactory() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   public static final Logger debug = Logger.getLogger("daikon.split.SplitterFactory");
@@ -130,7 +130,7 @@ public class SplitterFactory {
             }
             System.out.printf(
                 "%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
-            if (sp.size() >= 1) {
+            if (!sp.isEmpty()) {
               SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
             }
             // delete this entry in the splitter array to prevent it from
@@ -243,7 +243,7 @@ public class SplitterFactory {
     return fileCompiler.compileFiles(fileNames);
   }
 
-  /** Determine whether a Ppt's name matches the given pattern. */
+  /** Returns true if a Ppt's name matches the given pattern. */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
     if (ppt.name.equals(ppt_name)) {
       return true;
@@ -289,7 +289,7 @@ public class SplitterFactory {
    * "myPackage.myClass.someMethod" and guid = 12, then the following would be returned:
    * "myPackage_myClass_someMethod_12".
    *
-   * @param ppt_name the name of the Ppt that the splitter Java file wil be used with
+   * @param ppt_name the name of the Ppt that the splitter Java file will be used with
    */
   private static String getFileName(String ppt_name) {
     String splitterName = clean(ppt_name);
@@ -299,10 +299,10 @@ public class SplitterFactory {
   }
 
   /**
-   * Cleans str by replacing all characters that are not valid java indentifier parts with "_".
+   * Cleans str by replacing all characters that are not valid java identifier parts with "_".
    *
    * @param str the string to be cleaned
-   * @return str with all non-Java-indentifier parts replaced with "_"
+   * @return str with all non-Java-identifier parts replaced with "_"
    */
   private static String clean(String str) {
     char[] cleaned = str.toCharArray();
@@ -317,7 +317,7 @@ public class SplitterFactory {
 
   /**
    * Creates the temporary directory in which splitter files will be stored. The return value
-   * includes a trailing file separtor (e.g., "/"), unless the return value is "".
+   * includes a trailing file separator (e.g., "/"), unless the return value is "".
    *
    * @return the name of the temporary directory. This is where the Splitters are created.
    */

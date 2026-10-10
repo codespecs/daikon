@@ -1,3 +1,5 @@
+#!/bin/sh
+
 ./schedule2.exe 7 1 9  < inputs/input/inp.58 > /dev/null
 ./schedule2.exe 2 3 5  < inputs/input/inp.46 > /dev/null
 ./schedule2.exe 4 8 8  < inputs/input/inp.18 > /dev/null

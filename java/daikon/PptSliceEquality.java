@@ -91,7 +91,7 @@ public class PptSliceEquality extends PptSlice {
    * VarComparability.comparable() to each other.
    */
   private static class VarInfoAndComparability {
-    public VarInfo vi;
+    final VarInfo vi;
 
     @Pure
     @Override
@@ -115,12 +115,12 @@ public class PptSliceEquality extends PptSlice {
     }
 
     /**
-     * Whether two VarInfos can be set to be equal to each other is whether they are comparableNWay.
+     * True if two VarInfos can be set to be equal to each other is whether they are comparableNWay.
      * Since we do not yet handle inheritance, we require that the comparability go both ways.
      */
     @EnsuresNonNullIf(result = true, expression = "#1")
     @Pure
-    public boolean equalsVarInfoAndComparability(
+    boolean equalsVarInfoAndComparability(
         @GuardSatisfied VarInfoAndComparability this, @GuardSatisfied VarInfoAndComparability o) {
 
       return (vi.comparableNWay(o.vi)
@@ -128,7 +128,7 @@ public class PptSliceEquality extends PptSlice {
           && vi.aux.equals_for_instantiation(o.vi.aux));
     }
 
-    public VarInfoAndComparability(VarInfo vi) {
+    VarInfoAndComparability(VarInfo vi) {
       this.vi = vi;
     }
   }
@@ -230,7 +230,10 @@ public class PptSliceEquality extends PptSlice {
       if (v.equalitySet != null) {
         continue;
       }
-      List<VarInfo> vlist = varmap.computeIfAbsent(v, Collections::singletonList);
+      List<VarInfo> vlist = varmap.get(v);
+      if (vlist == null) {
+        vlist = Collections.singletonList(v);
+      }
       Equality eq = new Equality(vlist, this);
       Integer sample_cnt = sample_cnt_map.get(v);
       if (sample_cnt != null) {
@@ -270,7 +273,7 @@ public class PptSliceEquality extends PptSlice {
       List<VarInfo> nonEqualVis = inv.add(vt, count);
 
       // If some vars fell out
-      if (nonEqualVis.size() > 0) {
+      if (!nonEqualVis.isEmpty()) {
 
         // Create new equality sets for all of the non-equal vars
         List<Equality> newInvs = createEqualityInvs(nonEqualVis, vt, inv, count);
@@ -314,7 +317,7 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Dummy value that's incomparable to everything else to indicate missings in createEqualityInvs.
+   * Dummy value that's incomparable to everything else to indicate missing in createEqualityInvs.
    */
   private static final Object dummyMissing = new Object();
 
@@ -337,7 +340,7 @@ public class PptSliceEquality extends PptSlice {
    */
   private List<Equality> createEqualityInvs(
       List<VarInfo> vis, ValueTuple vt, Equality leader, int count) {
-    assert vis.size() > 0;
+    assert !vis.isEmpty();
     HashMap<Object, List<VarInfo>> multiMap = new HashMap<>(); /* key is a value */
     List<VarInfo> out_of_bounds = new ArrayList<>();
     for (VarInfo vi : vis) {
@@ -365,7 +368,7 @@ public class PptSliceEquality extends PptSlice {
     for (Map.Entry<@KeyFor("multiMap") Object, List<VarInfo>> entry : multiMap.entrySet()) {
       Object key = entry.getKey();
       List<VarInfo> list = entry.getValue();
-      assert list.size() > 0;
+      assert !list.isEmpty();
       Equality eq = new Equality(list, this);
       @SuppressWarnings("interning") // special value
       boolean isMissing = (key == dummyMissing);
@@ -390,7 +393,7 @@ public class PptSliceEquality extends PptSlice {
     // Sort for determinism
     Arrays.sort(resultArray, EqualityComparator.theInstance);
     List<Equality> result = Arrays.<Equality>asList(resultArray);
-    assert result.size() > 0;
+    assert !result.isEmpty();
     return result;
   }
 
@@ -407,7 +410,7 @@ public class PptSliceEquality extends PptSlice {
    * @return a List of Equality invariants bundling together same values from vis
    */
   public List<Equality> createEqualityInvs(List<VarInfo> vis, Equality leader) {
-    assert vis.size() > 0;
+    assert !vis.isEmpty();
 
     // Why use an array?  Because we'll be sorting shortly
     /*NNC:@MonotonicNonNull*/ Equality[] resultArray = new Equality[vis.size()];
@@ -424,7 +427,7 @@ public class PptSliceEquality extends PptSlice {
     // Sort for determinism
     Arrays.sort(resultArray, PptSliceEquality.EqualityComparator.theInstance);
     List<Equality> result = Arrays.<Equality>asList(resultArray);
-    assert result.size() > 0;
+    assert !result.isEmpty();
     return result;
   }
 
@@ -507,7 +510,7 @@ public class PptSliceEquality extends PptSlice {
             }
           }
         }
-        if (slice.invs.size() == 0) {
+        if (slice.invs.isEmpty()) {
           i.remove();
         }
       }
@@ -515,7 +518,7 @@ public class PptSliceEquality extends PptSlice {
 
     // Add each new slice with invariants
     for (PptSlice slice : newSlices) {
-      if (slice.invs.size() == 0) {
+      if (slice.invs.isEmpty()) {
         continue;
       }
       assert (parent.findSlice(slice.var_infos) == null) : parent.findSlice(slice.var_infos);
@@ -594,7 +597,7 @@ public class PptSliceEquality extends PptSlice {
               }
             }
           }
-          if (newSlice.invs.size() == 0) {
+          if (newSlice.invs.isEmpty()) {
             Debug.log(debug, getClass(), newSlice, soFar, "slice not added because 0 invs");
           } else {
             newSlices.add(newSlice);

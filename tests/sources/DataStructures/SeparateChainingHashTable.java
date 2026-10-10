@@ -105,7 +105,7 @@
         private static final int DEFAULT_TABLE_SIZE = 101;
 
             /** The array of Lists. */
-        private LinkedList [ ] theLists; 
+        private LinkedList [ ] theLists;
 
         /**
          * Internal method to find a prime number at least as large as n.
@@ -172,4 +172,3 @@
     }
 
 }
-

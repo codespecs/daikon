@@ -99,7 +99,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     List<String> dim_reps = new ArrayList<>();
     // handle array types
     while (rep.endsWith("]")) {
-      int openpos = rep.lastIndexOf("[");
+      int openpos = rep.lastIndexOf('[');
       dim_reps.add(0, rep.substring(openpos + 1, rep.length() - 1));
       rep = rep.substring(0, openpos);
     }
@@ -217,7 +217,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied VarComparabilityImplicit this) {
-    String result = "" + base;
+    String result = Integer.toString(base);
     for (int i = 0; i < dimensions; i++) {
       result += "[" + indexType(i) + "]";
     }

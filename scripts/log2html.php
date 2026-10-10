@@ -265,7 +265,7 @@ function get_line ($fp) {
     if (!is_array ($lines) || ($pos >= count($lines))) {
         $line = fgets ($fp, 10*1024);
         // echo "Read line '$line'<br>\n";
-        $lines = explode ("", $line);
+        $lines = explode ("\r", $line);
         $pos = 0;
         // echo "line count = " + count($lines) + "<br>\n";
     }

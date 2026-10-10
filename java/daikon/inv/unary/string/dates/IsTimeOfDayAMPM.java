@@ -32,9 +32,9 @@ public class IsTimeOfDayAMPM extends SingleString {
    */
   public static final Pattern PATTERN = Pattern.compile("^" + H12 + ":" + MINUTES + AMPM + "$");
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
   /**
    * Creates a new IsTimeOfDayAMPM.

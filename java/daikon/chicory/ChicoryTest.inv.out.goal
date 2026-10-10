@@ -21,7 +21,7 @@ this has only one value
 this.t1 == 5
 myint == 0
 ===========================================================================
-daikon.chicory.ChicoryTest.sample(int):::EXIT42
+daikon.chicory.ChicoryTest.sample(int):::EXIT51
 ===========================================================================
 daikon.chicory.ChicoryTest.sample(int):::EXIT
 this.t1 == orig(this.t1)
@@ -42,12 +42,28 @@ daikon.chicory.ChicoryTest.sample2():::ENTER
 this has only one value
 this.t1 == 32
 ===========================================================================
-daikon.chicory.ChicoryTest.sample2():::EXIT58
+daikon.chicory.ChicoryTest.sample2():::EXIT67
 ===========================================================================
 daikon.chicory.ChicoryTest.sample2():::EXIT
 this.t1 == orig(this.t1)
 this.t1 == 32
 return == 62.4
+===========================================================================
+daikon.chicory.ChicoryTest.test_array(java.util.List):::ENTER
+this has only one value
+this.t1 == 32
+list has only one value
+list[] == []
+list[].getClass().getName() == []
+list.getClass().getName() == java.util.Arrays$ArrayList.class
+===========================================================================
+daikon.chicory.ChicoryTest.test_array(java.util.List):::EXIT
+this.t1 == orig(this.t1)
+list[] == orig(list[])
+this.t1 == 32
+list[] == []
+list[].getClass().getName() == []
+return == null
 ===========================================================================
 daikon.chicory.ChicoryTest.test_d(double, double):::ENTER
 this has only one value

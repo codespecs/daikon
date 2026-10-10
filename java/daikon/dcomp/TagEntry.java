@@ -186,7 +186,7 @@ class TagEntry extends WeakReference<Object> {
   //
 
   /**
-   * Return information about where the given object interacted with some other object in its set.
+   * Returns information about where the given object interacted with some other object in its set.
    *
    * @param obj an object in the union-find data structure
    * @return information about where the given object interacted with some other object in its set
@@ -196,7 +196,7 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /**
-   * Return the canonical member of this object's set, based on tracers. Returns null if this
+   * Returns the canonical member of this object's set, based on tracers. Returns null if this
    * object's interactions were not recorded.
    *
    * @param obj an object that might be in the union-find data structure
@@ -275,7 +275,7 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /**
-   * Return a description of where an interaction occurred. Is essentially a stack trace of depth
+   * Returns a description of where an interaction occurred. Is essentially a stack trace of depth
    * {@link DynComp#trace_line_depth}.
    *
    * @return a description of where an interaction occurred
@@ -312,13 +312,16 @@ class TagEntry extends WeakReference<Object> {
    * Returns a description of the given StackTraceElement.
    *
    * @param ste a StackTraceElement to describe
-   * @param abbreviate if true, omit package name
+   * @param abbreviate if true, use simple name (omit package name)
    * @return a description of the given StackTraceElement
    */
   private static String traceLineToString(StackTraceElement ste, boolean abbreviate) {
     String className = ste.getClassName();
     if (abbreviate) {
-      className = className.substring(className.lastIndexOf("."));
+      int dotPos = className.lastIndexOf('.');
+      if (dotPos != -1) {
+        className = className.substring(dotPos + 1);
+      }
     }
     return className + ":" + ste.getMethodName() + "(), " + ste.getLineNumber();
   }
@@ -336,7 +339,7 @@ class TagEntry extends WeakReference<Object> {
 
     LinkedHashMap<Object, List<Object>> sets = new LinkedHashMap<>();
 
-    // Fill sets from object_map by placing every object in an ArrayList
+    // Fill `sets` from `object_map` by placing every object in an ArrayList
     // whose key is its root.
     for (Object obj : object_map.keySet()) {
       Object rep = find(obj);
@@ -346,17 +349,16 @@ class TagEntry extends WeakReference<Object> {
 
     StringJoiner result = new StringJoiner(System.lineSeparator());
     result.add(String.format("%d objects in object_map", object_map.size()));
-    for (Object rep : sets.keySet()) {
-      List<Object> set = sets.get(rep);
+    for (List<Object> set : sets.values()) {
       StringJoiner line = new StringJoiner(", ");
-      for (Object entry : set) {
-        if (entry instanceof DaikonVariableInfo) {
-          line.add(String.format("%s ", ((DaikonVariableInfo) entry).getName()));
+      for (Object setElt : set) {
+        if (setElt instanceof DaikonVariableInfo) {
+          line.add(String.format("%s ", ((DaikonVariableInfo) setElt).getName()));
         } else {
-          line.add(String.format("%s [%s]", entry.getClass(), entry));
+          line.add(String.format("%s [%s]", setElt.getClass(), setElt));
         }
       }
-      result.add(String.format("%s%n", line));
+      result.add(line.toString());
     }
     return result.toString();
   }

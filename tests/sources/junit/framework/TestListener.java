@@ -11,11 +11,11 @@ public interface TestListener {
 	/**
  	 * A failure occurred.
  	 */
- 	public void addFailure(Test test, AssertionFailedError t);  
+ 	public void addFailure(Test test, AssertionFailedError t);
 	/**
 	 * A test ended.
 	 */
- 	public void endTest(Test test); 
+ 	public void endTest(Test test);
 	/**
 	 * A test started.
 	 */

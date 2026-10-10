@@ -129,8 +129,8 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Returns the difference in the probabilites of the two invariants. Confidence values less than 0
-   * (i.e. CONFIDENCE_NEVER) are rounded up to 0.
+   * Returns the difference in the probabilities of the two invariants. Confidence values less than
+   * 0 (i.e. CONFIDENCE_NEVER) are rounded up to 0.
    */
   private static double calculateConfidenceDifference(Invariant inv1, Invariant inv2) {
     assert inv1 != null && inv2 != null;

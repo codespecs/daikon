@@ -113,5 +113,5 @@
 
             while( !s.isEmpty( ) )
                 System.out.println( s.topAndPop( ) );
-        }        
+        }
     }

@@ -110,7 +110,7 @@ import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Base class for each of the CLASSNAME functions and permutatons. Most of the work is done
+ * Base class for each of the CLASSNAME functions and permutations. Most of the work is done
  * here. The subclasses basically define the function and return information describing the function
  * and permutation to these methods.
  */

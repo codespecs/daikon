@@ -1,17 +1,25 @@
 default:
-	cd .. && $(MAKE) default
+	${MAKE} -C .. default
 
 .PHONY: chicory
 chicory:
-	cd .. && $(MAKE) chicory
+	${MAKE} -C .. chicory
 
 .PHONY: dcomp
 dcomp:
-	cd .. && $(MAKE) dcomp
+	${MAKE} -C .. dcomp
 
 .PHONY: quick-test
 quick-test:
-	cd ../.. && $(MAKE) quick-test
+	${MAKE} -C ../.. quick-test
 
 %:
-	cd .. && $(MAKE) $@
+	${MAKE} -C .. $@
+
+.PHONY: all test clean
+all:
+	${MAKE} -C .. all
+test:
+	${MAKE} -C .. test
+clean:
+	${MAKE} -C .. clean

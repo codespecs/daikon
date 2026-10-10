@@ -6,7 +6,7 @@
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
 
 # The input is one or more source files produced by merge-esc.pl, and
-# possibly edited by hand.  Output is a table of statictics with
+# possibly edited by hand.  Output is a table of statistics with
 # invariant counts, precision and recall
 
 use Carp;

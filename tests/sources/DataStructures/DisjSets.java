@@ -19,7 +19,7 @@ package DataStructures;
  */
 class DisjSets
 {
-  
+
   /**
    * Construct the disjoint sets object.
    * @param numElements the initial number of disjoint sets.
@@ -34,7 +34,7 @@ class DisjSets
   /**
    * Union two disjoint sets.  For simplicity, we assume root1 and
    * root2 are distinct and represent set names.
-   * 
+   *
    * @param root1 the root of set 1.
    * @param root2 the root of set 2.
    */
@@ -55,7 +55,7 @@ class DisjSets
     if (root1 != root2)
       unionDisjoint(root1, root2);
   }
-  
+
   /**
    * Perform a find.
    * Error checks omitted again for simplicity.

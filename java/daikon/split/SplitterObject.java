@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.NoSuchFileException;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -59,7 +60,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
-   * Return a Java Class corresponding to the {@code .class} file, or null.
+   * Returns a Java Class corresponding to the {@code .class} file, or null.
    *
    * @param fileName the pathname of a {@code .class} file
    * @return a Java Class corresponding to the {@code .class} file, or null
@@ -67,7 +68,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   static @Nullable Class<?> defineSplitterClass(@BinaryName String className, String fileName) {
     try {
       return ReflectionPlume.defineClassFromFile(className, fileName);
-    } catch (FileNotFoundException e) {
+    } catch (FileNotFoundException | NoSuchFileException e) {
       if (!PptSplitter.dkconfig_suppressSplitterErrors) {
         System.out.println(
             "File " + fileName.substring(0, fileName.length() - 6) + ".java did not compile");
@@ -162,9 +163,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.splitter;
   }
 
-  /**
-   * Set the error message of this this SplitterObject. This indicates the status of the Splitter.
-   */
+  /** Set the error message of this SplitterObject. This indicates the status of the Splitter. */
   public void setError(String errorMessage) {
     this.errorMessage = errorMessage;
   }
@@ -179,7 +178,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
     this.guid = ID;
   }
 
-  /** Return the unique ID of this splitterObject. */
+  /** Returns the unique ID of this splitterObject. */
   public int getGUID() {
     return this.guid;
   }

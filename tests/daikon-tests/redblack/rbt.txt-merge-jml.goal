@@ -902,7 +902,7 @@
             {
                 if( x.compareTo( current.element ) < 0 )
                     current = current.left;
-                else if( x.compareTo( current.element ) > 0 ) 
+                else if( x.compareTo( current.element ) > 0 )
                     current = current.right;
                 else if( current != nullNode )
                     return current.element;

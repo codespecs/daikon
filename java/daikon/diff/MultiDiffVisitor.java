@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.MapsP;
 
 /**
  * <B>MultiDiffVisitor</B> is a state-storing NodeVisitor that works across multiple files
@@ -97,7 +97,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     int unjustifiedKill = 0;
     ArrayList<String> bigList = new ArrayList<>();
 
-    // New historgram stuff
+    // New histogram stuff
     System.out.println("Histogram**************");
 
     // This gets all of the output in the format:
@@ -149,7 +149,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
       String key = entry.getKey();
       ArrayList<String> al = entry.getValue();
       // don't print anything if there are no selective invariants
-      if (al.size() == 0) {
+      if (al.isEmpty()) {
         continue;
       }
       System.out.println();
@@ -208,11 +208,11 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     String lastPpt = "";
     // sort them so that multiple exits will end up being adjacent
     // to each other when they are from the same method
-    for (@KeyFor("lastMap") String key : CollectionsPlume.sortedKeySet(lastMap)) {
+    for (@KeyFor("lastMap") String key : MapsP.sortedKeySet(lastMap)) {
       ArrayList<String> al = lastMap.get(key);
       // don't print anything if there are no selective invariants
 
-      if (al.size() == 0) {
+      if (al.isEmpty()) {
         continue;
       }
 
@@ -248,7 +248,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
   @Override
   protected boolean shouldPrint(@Nullable Invariant inv1, @Nullable Invariant inv2) {
     return true; // super.shouldPrint (inv1, inv2) &&
-    //    inv1.format().toString().indexOf(">") == -1 &&
+    //    inv1.format().toString().indexOf('>') == -1 &&
     // inv1.format().toString().indexOf("orig") == -1;
   }
 }

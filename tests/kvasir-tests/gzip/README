@@ -1,0 +1,5 @@
+This test will always fail the dtrace compare due to program variables
+containing elapsed time. So we ignore the dtrace file diff.
+
+Similarly, the invs output contains timing values.
+Hence, we ignore the invs file diff.

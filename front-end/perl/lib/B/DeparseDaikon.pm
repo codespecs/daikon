@@ -440,7 +440,7 @@ sub deparse_sub {
             $body = $self->lineseq(undef, @ops).";";
         }
         if ($self->{'returns_count'} == 0) {
-            # If all else faills, add a trace of an empty
+            # If all else fails, add a trace of an empty
             # return. This can happen, for instance, if the last
             # statement in the subroutine is a loop.
             $body .= "\n" . $self->make_trace_return("()", $cv->ROOT);
@@ -614,7 +614,7 @@ sub lineseq {
                         || "unknown";
                     $type = unparse_type($type);
                     # Escape all the backslashes used for reference
-                    # type constuctors
+                    # type constructors
                     $type =~ s/\\/\\\\/g;
                     $expr .= "['$arg', \\$arg, '$type'], ";
                 }

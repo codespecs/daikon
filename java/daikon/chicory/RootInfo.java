@@ -10,9 +10,11 @@ import java.util.Arrays;
  * It contains no variable information other than what is stored in its children.
  */
 @SuppressWarnings("nullness") // to do
-public class RootInfo extends DaikonVariableInfo {
+public final class RootInfo extends DaikonVariableInfo {
+
+  /** Creates a RootInfo object. */
   private RootInfo() {
-    // the root needs no name, etc. but set them to preserve nullness property
+    // The root needs no name, etc., but set them to preserve nullness property.
     super(" RootInfo Object ", " RootInfo Object type ", " RootInfo Object reptype ");
   }
 
@@ -110,7 +112,7 @@ public class RootInfo extends DaikonVariableInfo {
    *
    * @param cinfo information about the class
    * @param depth the depth to which to nest variables, as in "a.b.field"
-   * @return a a new RootInfo object for an object program point
+   * @return a new RootInfo object for an object program point
    */
   public static RootInfo getObjectPpt(ClassInfo cinfo, int depth) {
     // debug_vars.clear("enter getObjectPpt: %s%n", cinfo);

@@ -182,7 +182,7 @@ public class Violation implements Serializable {
   /** String representation. */
   @SideEffectFree
   public String toStringWithMethod(@GuardSatisfied Violation this) {
-    return time.toString() + "of " + property.method() + " : " + property.toString();
+    return time.toString() + "of " + property.methodSignature() + " : " + property.toString();
   }
 
   /** Two violations are equal if their properties and times are equal. */

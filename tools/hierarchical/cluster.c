@@ -166,7 +166,7 @@ int main (int argc, char *argv [])
     struct timeb
 	tb;
 #endif
- 
+
     no_mem_buffer = (char *) malloc (1024);
 
     get_programname (argv [0]);
@@ -337,7 +337,7 @@ int main (int argc, char *argv [])
 				k++;
 			if (k)
 			    update_cp (binary ? (k / (float) n_total) : (k * d / (float) n_total), p1, p2);
-		    } else 
+		    } else
 			update_cp (binary ? (1.0 / (float) n_total) : (d / (float) n_total), p1, p2);
 		}
 
@@ -374,9 +374,9 @@ int main (int argc, char *argv [])
 	infile,
 	name_update
     );
-    if (cophenetic && ! binary) 
+    if (cophenetic && ! binary)
 	fprintf (fp_out, "# Cophenetic differences\n");
-    if (cophenetic && binary) 
+    if (cophenetic && binary)
 	fprintf (fp_out, "# Binary differences\n");
     if (n_noise) {
 	fputs ("# Noise:", fp_out);
@@ -770,7 +770,7 @@ void process_args ()
 	    } else {
 		i1 = i2 = atoi (s);
 		if (i1 < 2)
-		    errit ("Illegal value for -m: %i", i1);		    
+		    errit ("Illegal value for -m: %i", i1);
 	    }
 	    for (i = i1; i <= i2; i += ii) {
 		if (n_maxcl == max_maxcl) {

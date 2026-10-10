@@ -108,7 +108,7 @@ public class SUBSET extends TWOSEQUENCE {
 
     #if 0
       // JHP: This code is removed because these sorts of static checks
-      // can't be reliability performed with equality sets (just because
+      // can't be reliably performed with equality sets (just because
       // the leaders are obvious subsets, does not imply that all members
       // are.  Eventually this should be moved to isObviousStatically()
 
@@ -304,6 +304,9 @@ public class SUBSET extends TWOSEQUENCE {
 
   @Override
   protected double computeConfidence() {
+    if (ppt.num_samples() == 0) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    }
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
@@ -328,7 +331,8 @@ public class SUBSET extends TWOSEQUENCE {
       return di;
     }
 
-    VarInfo subvar, supervar;
+    VarInfo subvar;
+    VarInfo supervar;
     #if (defined(SUB) || defined(SUBFLOAT))
     subvar = var1;
     supervar = var2;

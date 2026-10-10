@@ -44,7 +44,7 @@ public class PptRelation implements Serializable {
   public enum PptRelationType {
     /** Acyclic relationship to a parent, eg, method to its object. */
     PARENT,
-    /** Possibly cyclic relationship, eg. nested object instances */
+    /** Possibly cyclic relationship, eg, nested object instances. */
     USER,
     /** Entrance of method to exit of method. */
     ENTER_EXIT,
@@ -54,8 +54,9 @@ public class PptRelation implements Serializable {
     MERGE_CHILD,
     /** Relation from a program point to its conditional ppts. */
     PPT_PPTCOND
-  };
+  }
 
+  /** The logger for daikon.PptRelation. */
   private static final Logger debug = Logger.getLogger("daikon.PptRelation");
 
   /** Description of type of parent-child relationship (debug output only). */
@@ -113,13 +114,23 @@ public class PptRelation implements Serializable {
     return parent_to_child_map.size();
   }
 
+  /**
+   * Returns true if this PptRelation is empty.
+   *
+   * @return true if this PptRelation is empty
+   */
+  @Pure
+  public boolean isEmpty() {
+    return parent_to_child_map.isEmpty();
+  }
+
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied PptRelation this) {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 
-  /** Return a string containing all of the parent&rarr;child var relations. */
+  /** Returns a string containing all of the parent&rarr;child var relations. */
   public String parent_to_child_var_string() {
 
     StringJoiner var_str = new StringJoiner(", ");
@@ -158,8 +169,8 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns whether or not this relation is a primary relation. This used to simplify debug prints
-   * of the PPt tree (so that extra relations don't result in duplicative information).
+   * Returns true if this relation is a primary relation. This used to simplify debug prints of the
+   * PPt tree (so that extra relations don't result in duplicative information).
    *
    * <p>Somewhat arbitrarily, Object&rarr;User and Enter&rarr;Exit are not considered primary while
    * all others are. The remaining relations (class&rarr;object, object&rarr;method,and
@@ -212,9 +223,9 @@ public class PptRelation implements Serializable {
     return parent_to_child_map.get(parentVar);
   }
 
-  /** Returns whether or not this relation's child has children of its own. */
+  /** Returns true if this relation's child has children of its own. */
   public boolean hasChildren() {
-    return (child.children.size() > 0);
+    return !child.children.isEmpty();
   }
 
   /**
@@ -349,8 +360,10 @@ public class PptRelation implements Serializable {
 
   /**
    * Creates a USER or PARENT relation from child to parent. The variable relationships are
-   * specified in the declaration record and stored in the VarInfo for each variable.
-   * RuntimeException will be thrown if any of the parent variables cannot be found.
+   * specified in the declaration record and stored in the VarInfo for each variable. A derived
+   * child variable with no counterpart in the parent is omitted from the relation, because whether
+   * a variable is derived depends on per-ppt information such as comparability. RuntimeException
+   * will be thrown if the parent variable of any non-derived child variable cannot be found.
    */
   public static PptRelation newParentRelation(
       ParentRelation pr, PptTopLevel parent, PptTopLevel child) {
@@ -380,6 +393,17 @@ public class PptRelation implements Serializable {
 
         // System.out.printf("---parent name %s%n", parent_name);
         VarInfo vp = parent.find_var_by_name(parent_name);
+        if (vp == null && vc.derived != null) {
+          // Whether a variable is derived depends on per-ppt information such as comparability,
+          // so a variable that is derived in the child need not be derived in the parent.
+          if (debug.isLoggable(Level.FINE)) {
+            debug.fine(
+                String.format(
+                    "No parent variable '%s' in ppt '%s' for derived var '%s' in ppt '%s'",
+                    parent_name, pi.parent_ppt, vc.name(), child.name()));
+          }
+          continue;
+        }
         if (vp == null) {
           throw new RuntimeException(
               String.format(
@@ -408,7 +432,7 @@ public class PptRelation implements Serializable {
 
     PptRelation rel = new PptRelation(parent, child, PptRelationType.USER);
 
-    // Connect each each field in arg between parent and child.  Do this
+    // Connect each field in arg between parent and child.  Do this
     // by substituting args name for this in the parent and then looking
     // for a name match in the child
     for (VarInfo vp : parent.var_infos) {
@@ -570,7 +594,7 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns a an artificial relation in the Program point hierarchy between the same ppt in two
+   * Returns an artificial relation in the Program point hierarchy between the same ppt in two
    * different PptMaps. Used to merge invariants between different data sets. The parent and the
    * child should have exactly the same variables.
    */
@@ -627,10 +651,10 @@ public class PptRelation implements Serializable {
 
   // used by init_hierarchy below
   private static class SplitChild {
-    public PptRelation rel;
-    public PptSplitter ppt_split;
+    PptRelation rel;
+    PptSplitter ppt_split;
 
-    public SplitChild(PptRelation rel, PptSplitter ppt_split) {
+    SplitChild(PptRelation rel, PptSplitter ppt_split) {
       this.rel = rel;
       this.ppt_split = ppt_split;
     }
@@ -727,7 +751,7 @@ public class PptRelation implements Serializable {
       // variables.
       //
       // For example, consider class A with fields x and y and method
-      // B.foo (A arg1, A arg2).  We will setup two relations to this
+      // B.foo (A arg1, A arg2).  We will set up two relations to this
       // ppt -- one from A to b.foo.arg1 and one from A to b.foo.arg2.
       // in each we will equate A.x with arg.x and A.y with arg.y.
       //
@@ -858,7 +882,7 @@ public class PptRelation implements Serializable {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
       for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        if (ppt.parents.size() == 0) {
+        if (ppt.parents.isEmpty()) {
           ppt.debug_print_tree(debug, 0, null);
         }
       }
@@ -1018,7 +1042,7 @@ public class PptRelation implements Serializable {
     // happen when there are ppts such as OBJECT or CLASS that don't end up
     // with any children (due to the program source or because of ppt filtering).
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if ((ppt.children.size() == 0) && (ppt.equality_view == null)) {
+      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
         assert ppt.is_object() || ppt.is_class() || ppt.is_enter() : ppt;
         ppt.equality_view = new PptSliceEquality(ppt);
         ppt.equality_view.instantiate_invariants();
@@ -1029,7 +1053,7 @@ public class PptRelation implements Serializable {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
       for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        if (ppt.parents.size() == 0) {
+        if (ppt.parents.isEmpty()) {
           ppt.debug_print_tree(debug, 0, null);
         }
       }

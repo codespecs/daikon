@@ -1,6 +1,6 @@
 package junit.runner;
 
-import java.awt.Component; 
+import java.awt.Component;
 
 import junit.framework.*;
 

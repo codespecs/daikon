@@ -32,7 +32,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
-import org.plumelib.util.MPair;
+import org.plumelib.util.IPair;
 import org.plumelib.util.OrderedPairIterator;
 import org.plumelib.util.StringsPlume;
 
@@ -82,7 +82,7 @@ public final class Diff {
 
   /**
    * Comparators to sort the sets of invs, and to combine the two sets into the pair tree. Can be
-   * overriden by command-line options.
+   * overridden by command-line options.
    */
   private Comparator<Invariant> invSortComparator1;
 
@@ -153,7 +153,7 @@ public final class Diff {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException,
@@ -369,7 +369,7 @@ public final class Diff {
             .equals(diff.invPairComparator.getClass().toString())) {
       System.out.println("You are using different comparators to sort or pair up invariants.");
       System.out.println("This may cause misalignment of invariants and may cause Diff to");
-      System.out.println("work incorectly.  Make sure you know what you are doing!");
+      System.out.println("work incorrectly.  Make sure you know what you are doing!");
     }
 
     // The index of the first non-option argument -- the name of the
@@ -544,13 +544,13 @@ public final class Diff {
       }
 
       // List<Invariant> invs = ppt.getInvariants();
-      List<Invariant> invs = CollectionsPlume.sortList(ppt.getInvariants(), PptTopLevel.icfp);
+      List<Invariant> invs = CollectionsPlume.sorted(ppt.getInvariants(), PptTopLevel.icfp);
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
         for (PptConditional pptCond : ppt.cond_iterable()) {
           List<Invariant> invsCond =
-              CollectionsPlume.sortList(pptCond.getInvariants(), PptTopLevel.icfp);
+              CollectionsPlume.sorted(pptCond.getInvariants(), PptTopLevel.icfp);
           // List<Invariant> invsCond = pptCond.getInvariants();
           map.put(pptCond, invsCond);
         }
@@ -577,13 +577,13 @@ public final class Diff {
   public RootNode diffInvMap(InvMap map1, InvMap map2, boolean includeUnjustified) {
     RootNode root = new RootNode();
 
-    Iterator<MPair<@Nullable PptTopLevel, @Nullable PptTopLevel>> opi =
+    Iterator<IPair<@Nullable PptTopLevel, @Nullable PptTopLevel>> opi =
         new OrderedPairIterator<PptTopLevel>(
             map1.pptSortedIterator(PPT_COMPARATOR),
             map2.pptSortedIterator(PPT_COMPARATOR),
             PPT_COMPARATOR);
     while (opi.hasNext()) {
-      MPair<@Nullable PptTopLevel, @Nullable PptTopLevel> ppts = opi.next();
+      IPair<@Nullable PptTopLevel, @Nullable PptTopLevel> ppts = opi.next();
       PptTopLevel ppt1 = ppts.first;
       PptTopLevel ppt2 = ppts.second;
       if (shouldAdd(ppt1) || shouldAdd(ppt2)) {
@@ -596,7 +596,7 @@ public final class Diff {
   }
 
   /**
-   * Diffs two PptMaps by converting them to InvMaps. Provided for compatibiliy with legacy code.
+   * Diffs two PptMaps by converting them to InvMaps. Provided for compatibility with legacy code.
    * Calls diffPptMap and asks to include all invariants.
    */
   public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2) {
@@ -604,8 +604,8 @@ public final class Diff {
   }
 
   /**
-   * Diffs two PptMaps by converting them to InvMaps. Provided for compatibiliy with legacy code. If
-   * includeUnjustified is true, the unjustified invariants are included.
+   * Diffs two PptMaps by converting them to InvMaps. Provided for compatibility with legacy code.
+   * If includeUnjustified is true, the unjustified invariants are included.
    */
   public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2, boolean includeUnjustified) {
     InvMap map1 = convertToInvMap(pptMap1);
@@ -632,7 +632,7 @@ public final class Diff {
 
   /**
    * Takes a pair of corresponding top-level program points and maps, and returns a tree of the
-   * corresponding invariants. Either of the program points may be null. If includeUnjustied is
+   * corresponding invariants. Either of the program points may be null. If includeUnjustified is
    * true, the unjustified invariants are included.
    */
   private PptNode diffPptTopLevel(
@@ -662,10 +662,10 @@ public final class Diff {
       invs2 = new ArrayList<Invariant>();
     }
 
-    Iterator<MPair<@Nullable Invariant, @Nullable Invariant>> opi =
+    Iterator<IPair<@Nullable Invariant, @Nullable Invariant>> opi =
         new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(), invPairComparator);
     while (opi.hasNext()) {
-      MPair<@Nullable Invariant, @Nullable Invariant> invariants = opi.next();
+      IPair<@Nullable Invariant, @Nullable Invariant> invariants = opi.next();
       Invariant inv1 = invariants.first;
       Invariant inv2 = invariants.second;
       if (!includeUnjustified) {

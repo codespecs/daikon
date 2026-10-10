@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -21,17 +22,22 @@ public class ClassInfo {
   /** binary name of the class. */
   public @BinaryName String class_name;
 
+  /** True if the class has a class initializer. */
+  public boolean hasClinit;
+
+  /** True if the class is a JUnit test class. */
+  public boolean isJunitTestClass;
+
   // set by initViaReflection()
   /** reflection object for this class. */
   public @MonotonicNonNull Class<?> clazz;
 
-  // Does not include class initializers, so each element's .member field
-  // is non-null.
+  // Does not include class initializers, so each element's .member field is non-null.
   /** list of methods in the class. */
   public List<MethodInfo> method_infos = new ArrayList<>();
 
   /** This class's classloader. */
-  private ClassLoader loader;
+  private @Nullable ClassLoader loader;
 
   // traversalClass and traversalObject are set by init_traversal().
   /** DaikonVariables for the object program point (instance and static variables). */
@@ -40,18 +46,18 @@ public class ClassInfo {
   /** DaikonVariables for the class program point (static variables only). */
   public @MonotonicNonNull RootInfo traversalClass;
 
-  /** Whether or not any methods in this class were instrumented. */
+  /** True if any methods in this class were instrumented. */
   public boolean shouldInclude = false;
 
-  /** Mapping from field name to string representation of its value* */
-  // only for static final primitives
-  // which are declared by a CONSTANT VALUE in the code
+  /** Mapping from field name to string representation of its value. */
+  // Only for static final primitives which are declared by a CONSTANT VALUE in the code.
   public Map<String, String> staticMap = new HashMap<>();
 
   /** Create ClassInfo with specified name. */
-  public ClassInfo(@BinaryName String class_name, ClassLoader theLoader) {
+  public ClassInfo(@BinaryName String class_name, @Nullable ClassLoader theLoader) {
     this.class_name = class_name;
     loader = theLoader;
+    hasClinit = false;
   }
 
   /** Set the list of methods. */
@@ -113,15 +119,15 @@ public class ClassInfo {
   }
 
   /**
-   * Determines if fully qualified method name is in this class. Example methodName:
+   * Determines if fully qualified method signature is in this class. Example methodSignature:
    *
    * <pre>public static String mypackage.MyClass.doStuff(int, java.lang.Object)</pre>
    */
-  private boolean isInThisClass(String methodName) {
+  private boolean isInThisClass(String methodSignature) {
     // A heuristical way to determine if the method is in this class.
     // Match anything of the form: ____class_name.____(____
     // Where ____ corresponds to any sequence of characters
-    return methodName.matches(".*" + Pattern.quote(class_name) + "\\..*\\(.*");
+    return methodSignature.matches(".*" + Pattern.quote(class_name) + "\\..*\\(.*");
   }
 
   /**

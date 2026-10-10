@@ -15,11 +15,11 @@ import junit.runner.BaseTestRunner;
 public class ResultPrinter implements TestListener {
 	PrintStream fWriter;
 	int fColumn= 0;
-	
+
 	public ResultPrinter(PrintStream writer) {
 		fWriter= writer;
 	}
-	
+
 	/* API for use by textui.TestRunner
 	 */
 
@@ -34,23 +34,23 @@ public class ResultPrinter implements TestListener {
 		getWriter().println();
 		getWriter().println("<RETURN> to continue");
 	}
-	
-	/* Internal methods 
+
+	/* Internal methods
 	 */
 
 	protected void printHeader(long runTime) {
 		getWriter().println();
 		getWriter().println("Time: "+elapsedTimeAsString(runTime));
 	}
-	
+
 	protected void printErrors(TestResult result) {
 		printDefects(result.errors(), result.errorCount(), "error");
 	}
-	
+
 	protected void printFailures(TestResult result) {
 		printDefects(result.failures(), result.failureCount(), "failure");
 	}
-	
+
 	protected void printDefects(Enumeration booBoos, int count, String type) {
 		if (count == 0) return;
 		if (count == 1)
@@ -61,7 +61,7 @@ public class ResultPrinter implements TestListener {
 			printDefect((TestFailure) booBoos.nextElement(), i);
 		}
 	}
-	
+
 	public void printDefect(TestFailure booBoo, int count) { // only public for testing purposes
 		printDefectHeader(booBoo, count);
 		printDefectTrace(booBoo);
@@ -86,7 +86,7 @@ public class ResultPrinter implements TestListener {
 		} else {
 			getWriter().println();
 			getWriter().println("FAILURES!!!");
-			getWriter().println("Tests run: "+result.runCount()+ 
+			getWriter().println("Tests run: "+result.runCount()+
 				         ",  Failures: "+result.failureCount()+
 				         ",  Errors: "+result.errorCount());
 		}

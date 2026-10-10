@@ -11,8 +11,8 @@ package MapQuick.tigerdb;
 
 public class TigerRwTLID extends TigerRecord {
   public final int tlid;
-    
-  public TigerRwTLID(String s, int size, int tlidStart) 
+
+  public TigerRwTLID(String s, int size, int tlidStart)
     throws BadRecordException {
     super(s, size);
     try {
@@ -25,5 +25,5 @@ public class TigerRwTLID extends TigerRecord {
   public TigerRwTLID(String s, int size) throws BadRecordException {
     this(s, size, 5);
   }
-    
+
 } // TigerRwTLID

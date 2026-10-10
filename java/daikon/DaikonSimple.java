@@ -40,6 +40,11 @@ import org.checkerframework.dataflow.qual.Pure;
 @SuppressWarnings("nullness") // not actively maintained
 public class DaikonSimple {
 
+  /** Do not instantiate. */
+  private DaikonSimple() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   // logging information
   public static final Logger debug = Logger.getLogger("daikon.DaikonSimple");
 
@@ -81,8 +86,8 @@ public class DaikonSimple {
    * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
    * called programmatically.
    *
-   * <p>Difference from {@link daikon.Daikon#mainHelper(String[])}Helper: turn off optimization
-   * flags (equality, dynamic constants, NIS suppression).
+   * <p>Difference from {@link daikon.Daikon#mainHelper(String[])}: turn off optimization flags
+   * (equality, dynamic constants, NIS suppression).
    */
   public static void mainHelper(final String[] args) throws IOException, FileNotFoundException {
 
@@ -108,7 +113,7 @@ public class DaikonSimple {
     Set<File> decls_files = files.decls;
     Set<String> dtrace_files = files.dtrace;
 
-    if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
+    if (decls_files.isEmpty() && dtrace_files.isEmpty()) {
       throw new Daikon.UserError("No .decls or .dtrace files specified");
     }
 
@@ -142,7 +147,7 @@ public class DaikonSimple {
       // DaikonSimple
       // and Daikon's output. The second kind of printing is used for
       // debugging. Since the names of the program points are the same for both
-      // Daikon and DaikonSimple, diffing the two output will result in
+      // Daikon and DaikonSimple, diffing the two outputs will result in
       // only differences in the invariants, but we can not see at which program
       // points these differing invariants appear. Using the second kind of
       // printing,
@@ -208,7 +213,7 @@ public class DaikonSimple {
     // Unary slices/invariants.
     // Currently, there are no constraints on the unary
     // slices. Since we are trying to create all of the invariants, the
-    // variables does not have to be a leader and can be a constant.
+    // variables do not have to be a leader and can be a constant.
     // Note that the always missing check is only applicable when the
     // dynamic constants optimization is turned on (so we do not do the
     // check here).
@@ -311,8 +316,8 @@ public class DaikonSimple {
   }
 
   /**
-   * Returns whether or not the specified binary slice should be created. The slice should not be
-   * created if the vars are not compatible.
+   * Returns true if the specified binary slice should be created. The slice should not be created
+   * if the vars are not compatible.
    *
    * <p>Since we are trying to create all of the invariants, the variables does not have to be a
    * leader and can be a constant. Note that the always missing check is only applicable when the
@@ -327,8 +332,8 @@ public class DaikonSimple {
   }
 
   /**
-   * Returns whether or not the specified ternary slice should be created. The slice should not be
-   * created if any of the following are true
+   * Returns true if the specified ternary slice should be created. The slice should not be created
+   * if any of the following are true
    *
    * <ul>
    *   <li>Any var is an array
@@ -336,7 +341,7 @@ public class DaikonSimple {
    *   <li>Any var is not (integral or float)
    * </ul>
    *
-   * Since we are trying to create all of the invariants, the variables does not have to be a leader
+   * Since we are trying to create all of the invariants, the variables do not have to be a leader
    * and can be a constant. Note that the always missing check is only applicable when the dynamic
    * constants optimization is turned on (so we do not do the check here). In addition, we do want
    * to create the reflexive ones and partially reflexive invariants.
@@ -594,7 +599,7 @@ public class DaikonSimple {
         // DaikonSimple will not do this to be consistent.
         // The better idea is for Daikon to assert that these valuetuples are
         // empty and then skip the sample.
-        assert vt.size() == 0;
+        assert vt.isEmpty();
         return;
       }
 

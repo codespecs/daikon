@@ -39,9 +39,9 @@ public class IsDateMMDDYYYY extends SingleString {
               + "|"
               + ("^" + MONTH_NUMBER + "[.]" + DAY_OF_MONTH + "[.]" + YYYY2050 + "$"));
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
   /**
    * Creates a new IsDateMMDDYYYY.
