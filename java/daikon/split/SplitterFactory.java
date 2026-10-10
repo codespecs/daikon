@@ -6,12 +6,16 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jtb.ParseException;
+import jtb.TokenMgrError;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
@@ -131,7 +135,7 @@ public class SplitterFactory {
             System.out.printf(
                 "%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
             if (!sp.isEmpty()) {
-              SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
+              SplitterList.put(ppt_name, sp.toArray(new Splitter[0]), statementReplacer);
             }
             // delete this entry in the splitter array to prevent it from
             // matching any other Ppts, since the documented behavior is that
@@ -170,6 +174,9 @@ public class SplitterFactory {
     if (splitterObjects.length == 0) {
       return;
     }
+    // The splitters whose source files were written successfully.
+    // Splitters that were not written must not be compiled or loaded.
+    List<SplitterObject> writtenSplitters = new ArrayList<>();
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
       String fileName = getFileName(splitObj.getPptName());
@@ -179,34 +186,62 @@ public class SplitterFactory {
             new SplitterJavaSource(
                 splitObj, splitObj.getPptName(), fileName, ppt.var_infos, statementReplacer);
         fileContents = splitterWriter.getFileText();
-      } catch (ParseException e) {
-        System.out.println("Error in SplitterFactory while writing splitter java file for: ");
-        System.out.println(splitObj.condition() + " cannot be parsed.");
+      } catch (ParseException | TokenMgrError e) {
+        // TokenMgrError indicates a lexical error in the condition.
+        // load_splitters prints the error.
+        splitObj.setError(
+            String.join(
+                System.lineSeparator(),
+                "Error in SplitterFactory while writing splitter java file for:",
+                splitObj.condition() + " cannot be parsed or translated:",
+                e.toString()));
         continue;
       }
-      String fileAddress = tempdir + fileName;
       @SuppressWarnings("signature") // safe, has been quoted
       @BinaryName String fileName_bn = fileName;
       splitObj.setClassName(fileName_bn);
-      try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(fileAddress + ".java")) {
-        if (dkconfig_delete_splitters_on_exit) {
-          new File(fileAddress + ".java").deleteOnExit();
-          new File(fileAddress + ".class").deleteOnExit();
-        }
+      String sourcePath = splitObj.getFullSourcePath();
+      String classPath = splitObj.getFullClassPath();
+      try {
+        // A class file left over from an earlier run must not be loaded if compilation fails.
+        Files.deleteIfExists(Path.of(classPath));
+      } catch (IOException | InvalidPathException ioe) {
+        debug.fine(ioe.toString());
+        splitObj.setError("Cannot delete old splitter class file " + classPath + ": " + ioe);
+        continue;
+      }
+      if (dkconfig_delete_splitters_on_exit) {
+        // Registered before the source file is opened, so that a partially-written file is deleted
+        // even if deleting it below fails.
+        new File(sourcePath).deleteOnExit();
+        new File(classPath).deleteOnExit();
+      }
+      try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(sourcePath)) {
         writer.write(fileContents.toString());
         writer.flush();
       } catch (IOException ioe) {
-        System.out.println("Error while writing Splitter file: " + fileAddress);
         debug.fine(ioe.toString());
+        splitObj.setError("Error while writing splitter file " + sourcePath + ": " + ioe);
+        try {
+          Files.deleteIfExists(Path.of(sourcePath));
+        } catch (IOException | InvalidPathException ioe2) {
+          debug.fine(ioe2.toString());
+        }
+        continue;
       }
+      writtenSplitters.add(splitObj);
     }
-    List<String> fileNames = new ArrayList<>();
-    for (int i = 0; i < splitterObjects.length; i++) {
-      fileNames.add(splitterObjects[i].getFullSourcePath());
+    if (writtenSplitters.isEmpty()) {
+      Global.debugSplit.fine("<<exit>>  loadSplitters: no splitters were written");
+      return;
+    }
+    List<String> writtenSourcePaths = new ArrayList<>(writtenSplitters.size());
+    for (SplitterObject splitObj : writtenSplitters) {
+      writtenSourcePaths.add(splitObj.getFullSourcePath());
     }
     String errorOutput = null;
     try {
-      errorOutput = compileFiles(fileNames);
+      errorOutput = compileFiles(writtenSourcePaths);
     } catch (IOException ioe) {
       System.out.println("Error while compiling Splitter files (Daikon will continue):");
       debug.fine(ioe.toString());
@@ -218,8 +253,8 @@ public class SplitterFactory {
           "Errors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
-    for (int i = 0; i < splitterObjects.length; i++) {
-      splitterObjects[i].load();
+    for (SplitterObject splitObj : writtenSplitters) {
+      splitObj.load();
     }
 
     Global.debugSplit.fine("<<exit>>  loadSplitters");
@@ -243,16 +278,19 @@ public class SplitterFactory {
     return fileCompiler.compileFiles(fileNames);
   }
 
-  /** Returns true if a Ppt's name matches the given pattern. */
+  /**
+   * Returns true if a Ppt's name matches the given name from a {@code .spinfo} file.
+   *
+   * @param ppt_name a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param ppt a program point
+   * @return true if the program point's name matches {@code ppt_name}
+   */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
+    if (SplitterList.isComplete(ppt_name)) {
+      return SplitterList.matches(ppt_name, ppt.name);
+    }
     if (ppt.name.equals(ppt_name)) {
       return true;
-    }
-    if (ppt_name.endsWith(":::EXIT")) {
-      String regex = Pattern.quote(ppt_name) + "[0-9]+";
-      if (matchPptRegex(regex, ppt)) {
-        return true;
-      }
     }
 
     // Look for corresponding EXIT ppt. This is because the exit ppt usually has
@@ -283,19 +321,52 @@ public class SplitterFactory {
   }
 
   /**
+   * The maximum length, in UTF-8 bytes, of the part of a splitter file name that comes from the
+   * program point name. Many file systems limit a file name to 255 bytes, which must also
+   * accommodate the guid and the ".class" suffix.
+   */
+  private static final int MAX_FILE_NAME_PREFIX_BYTES = 200;
+
+  /**
    * Returns a file name for a splitter file to be used with a Ppt with the name, ppt_name. The file
    * name is ppt_name with all characters which are invalid for use in a java file name (such as
    * ".") replaced with "_". Then "_guid" is append to the end. For example if ppt_name is
    * "myPackage.myClass.someMethod" and guid = 12, then the following would be returned:
-   * "myPackage_myClass_someMethod_12".
+   * "myPackage_myClass_someMethod_12". If ppt_name is long, only a prefix of it is used, so that
+   * the file name does not exceed the file system's limit; the guid makes the file name unique.
    *
    * @param ppt_name the name of the Ppt that the splitter Java file will be used with
    */
   private static String getFileName(String ppt_name) {
-    String splitterName = clean(ppt_name);
+    String splitterName = truncateToUtf8Bytes(clean(ppt_name), MAX_FILE_NAME_PREFIX_BYTES);
     splitterName = splitterName + "_" + guid;
     guid++;
     return splitterName;
+  }
+
+  /**
+   * Returns the longest prefix of the given string whose UTF-8 encoding is at most the given number
+   * of bytes. The prefix does not end in the middle of a surrogate pair.
+   *
+   * @param str a string
+   * @param maxBytes the maximum length of the result's UTF-8 encoding
+   * @return the longest prefix of {@code str} whose UTF-8 encoding is at most {@code maxBytes}
+   *     bytes
+   */
+  static String truncateToUtf8Bytes(String str, int maxBytes) {
+    int bytes = 0;
+    int end = 0;
+    while (end < str.length()) {
+      int codePoint = str.codePointAt(end);
+      int codePointBytes =
+          codePoint < 0x80 ? 1 : codePoint < 0x800 ? 2 : codePoint < 0x10000 ? 3 : 4;
+      if (bytes + codePointBytes > maxBytes) {
+        break;
+      }
+      bytes += codePointBytes;
+      end += Character.charCount(codePoint);
+    }
+    return str.substring(0, end);
   }
 
   /**

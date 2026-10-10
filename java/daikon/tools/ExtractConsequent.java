@@ -5,15 +5,20 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
-import daikon.Ppt;
 import daikon.PptMap;
 import daikon.PptTopLevel;
+import daikon.ProglangType;
 import daikon.VarInfo;
 import daikon.inv.Implication;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
+import daikon.inv.binary.twoScalar.IntEqual;
+import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.unary.scalar.OneOfScalar;
+import daikon.split.SplitterList;
 import gnu.getopt.*;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,11 +27,12 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +47,10 @@ import org.plumelib.util.StringsPlume;
  * <em>NUM</em>) &rArr; consequent". The consequent is only true in certain clusters, but is not
  * generally true for all executions of the program point to which the Implication belongs. These
  * resulting implications are written to standard output in the format of a splitter info file.
+ *
+ * <p>Each PPT_NAME in the output is a complete program point name. To make Daikon use each
+ * condition only at the program points that its PPT_NAME designates, disable indiscriminate
+ * splitting via {@code --config_option daikon.split.SplitterList.all_splitters=false}.
  */
 public class ExtractConsequent {
 
@@ -73,12 +83,15 @@ public class ExtractConsequent {
     }
   }
 
-  /* A HashMap whose keys are PPT names (Strings) and whose values are
-  HashMaps whose keys are predicate names (Strings) and whose values are
-   HashMaps whose keys are Strings (normalized java-format invariants)
-     and whose values are HashedConsequent objects. */
+  /**
+   * Maps a program point name to a map whose keys are cluster keys (see {@link #clusterKey}) and
+   * whose values are maps whose keys are Strings (normalized Java-format invariants) and whose
+   * values are HashedConsequent objects. Each program point has its own clustering, so conditions
+   * from different program points are never combined. The maps are sorted, for deterministic
+   * output.
+   */
   private static Map<String, Map<String, Map<String, HashedConsequent>>> pptname_to_conditions =
-      new HashMap<>();
+      new TreeMap<>();
 
   /** The usage message for this program. */
   private static String usage =
@@ -118,17 +131,14 @@ public class ExtractConsequent {
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.ExtractConsequent", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
         case 0:
           // got a long option
           String option_name = longopts[g.getLongind()].getName();
-          if (Daikon.help_SWITCH.equals(option_name)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-          } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
+          if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
             Daikon.suppress_redundant_invariants_with_simplify = true;
           } else if (Daikon.config_option_SWITCH.equals(option_name)) {
             String item = Daikon.getOptarg(g);
@@ -139,17 +149,11 @@ public class ExtractConsequent {
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
             daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
-            throw new RuntimeException("Unknown long option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
-        case '?':
-          break; // getopt() already printed an error
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
     // The index of the first non-option argument -- the name of the file
@@ -166,89 +170,227 @@ public class ExtractConsequent {
   }
 
   public static void extract_consequent(PptMap ppts) {
-    // Retrieve Ppt objects in sorted order.
-    // Use a custom comparator for a specific ordering
-    Comparator<PptTopLevel> comparator = new Ppt.NameComparator();
-    TreeSet<PptTopLevel> ppts_sorted = new TreeSet<>(comparator);
-    ppts_sorted.addAll(ppts.asCollection());
-
-    for (PptTopLevel ppt : ppts_sorted) {
+    pptname_to_conditions.clear();
+    for (PptTopLevel ppt : ppts.asCollection()) {
       extract_consequent_maybe(ppt, ppts);
+    }
+
+    // Maps a program point name to the conditions to write for it.  Sorted, for deterministic
+    // output.
+    Map<String, TreeSet<String>> pptname_to_output = new TreeMap<>();
+    for (Map.Entry<String, Map<String, Map<String, HashedConsequent>>> entry :
+        pptname_to_conditions.entrySet()) {
+      String pptname = entry.getKey();
+      Set<String> allConds = conditions(entry.getValue(), inv -> true);
+      if (allConds.isEmpty()) {
+        continue;
+      }
+      pptname_to_output.computeIfAbsent(pptname, k -> new TreeSet<>()).addAll(allConds);
+      // A condition at an entry point also splits the method's exit points, if the method does not
+      // modify the condition's variables.  At an exit point, a variable's name denotes its
+      // post-state value, and a splitter cannot use a pre-state value such as "orig(x)".
+      if (pptname.endsWith(FileIO.enter_tag)) {
+        for (PptTopLevel exitPpt : exitPoints(pptname, ppts)) {
+          Set<String> exitConds = conditions(entry.getValue(), inv -> isUnmodified(inv, exitPpt));
+          if (!exitConds.isEmpty()) {
+            pptname_to_output
+                .computeIfAbsent(exitPpt.name(), k -> new TreeSet<>())
+                .addAll(exitConds);
+          }
+        }
+      }
     }
 
     PrintWriter pw =
         new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out, UTF_8)), true);
-
-    // All conditions at a program point.  A TreeSet to enable
-    // deterministic output.
-    TreeSet<String> allConds = new TreeSet<>();
-    for (String pptname : pptname_to_conditions.keySet()) {
-      Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
-          pptname_to_conditions.get(pptname);
-      for (Map.Entry<@KeyFor("cluster_to_conditions") String, Map<String, HashedConsequent>> entry :
-          cluster_to_conditions.entrySet()) {
-        Map<String, HashedConsequent> conditions = entry.getValue();
-        StringBuilder conjunctionJava = new StringBuilder();
-        StringBuilder conjunctionDaikon = new StringBuilder();
-        StringBuilder conjunctionESC = new StringBuilder();
-        StringBuilder conjunctionSimplify = new StringBuilder("(AND ");
-        int count = 0;
-        for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
-            conditions.entrySet()) {
-          count++;
-          String condIndex = entry2.getKey();
-          HashedConsequent cond = entry2.getValue();
-          if (cond.fakeFor != null) {
-            count--;
-            continue;
-          }
-          String javaStr = cond.inv.format_using(OutputFormat.JAVA);
-          String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
-          String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
-          String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
-          allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
-          //           allConds.add(condIndex);
-          if (count > 0) {
-            conjunctionJava.append(" && ");
-            conjunctionDaikon.append(" and ");
-            conjunctionESC.append(" && ");
-            conjunctionSimplify.append(" ");
-          }
-          conjunctionJava.append(javaStr);
-          conjunctionDaikon.append(daikonStr);
-          conjunctionESC.append(escStr);
-          conjunctionSimplify.append(simplifyStr);
-        }
-        conjunctionSimplify.append(")");
-        String conj = conjunctionJava.toString();
-        // Avoid inserting self-contradictory conditions such as "x == 1 &&
-        // x == 2", or conjunctions of only a single condition.
-        if (count < 2
-            || contradict_inv_pattern.matcher(conj).find()
-            || useless_inv_pattern_1.matcher(conj).find()
-            || useless_inv_pattern_2.matcher(conj).find()) {
-          // System.out.println("Suppressing: " + conj);
-        } else {
-          allConds.add(
-              combineDummy(
-                  conjunctionJava.toString(),
-                  conjunctionDaikon.toString(),
-                  conjunctionESC.toString(),
-                  conjunctionSimplify.toString()));
-        }
+    for (Map.Entry<String, TreeSet<String>> entry : pptname_to_output.entrySet()) {
+      pw.println();
+      pw.println("PPT_NAME " + entry.getKey());
+      for (String s : entry.getValue()) {
+        pw.println(s);
       }
-
-      if (!allConds.isEmpty()) {
-        pw.println();
-        pw.println("PPT_NAME " + pptname);
-        for (String s : allConds) {
-          pw.println(s);
-        }
-      }
-      allConds.clear();
     }
-
     pw.flush();
+  }
+
+  /**
+   * Returns the exit points to which the conditions at the given entry point should be copied. If
+   * the combined exit point exists, the result is just it, because its name also designates the
+   * numbered exit points (see {@link SplitterList#matches}). Otherwise, the result is the numbered
+   * exit points.
+   *
+   * @param enterName the name of an entry point
+   * @param ppts all the program points
+   * @return the exit points of the method whose entry point is {@code enterName}
+   */
+  private static List<PptTopLevel> exitPoints(String enterName, PptMap ppts) {
+    String exitName =
+        enterName.substring(0, enterName.length() - FileIO.enter_tag.length()) + FileIO.exit_tag;
+    List<PptTopLevel> result = new ArrayList<>();
+    PptTopLevel combinedExit = ppts.get(exitName);
+    if (combinedExit != null) {
+      result.add(combinedExit);
+      return result;
+    }
+    for (PptTopLevel ppt : ppts.asCollection()) {
+      if (SplitterList.matches(exitName, ppt.name())) {
+        result.add(ppt);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Returns true if the invariant, which is at an entry point, means the same thing at the given
+   * exit point: that is, if every variable of the invariant is unmodified at the exit point.
+   *
+   * @param inv an invariant at an entry point
+   * @param exitPpt an exit point of the same method
+   * @return true if no variable of the invariant is modified at {@code exitPpt}
+   */
+  static boolean isUnmodified(Invariant inv, PptTopLevel exitPpt) {
+    for (VarInfo vi : inv.ppt.var_infos) {
+      VarInfo post = exitPpt.find_var_by_name(vi.name());
+      VarInfo orig = exitPpt.find_var_by_name(vi.prestate_name());
+      if (post == null || orig == null) {
+        return false;
+      }
+      // A variable's equalitySet is null if Daikon did not compute equality sets at the ppt.
+      if (post.equalitySet == null || orig.equalitySet == null) {
+        return false;
+      }
+      // Equal variables are usually in the same equality set, but undoOpts replaces equality sets
+      // by equality invariants.
+      if (!(post.isEqualTo(orig) || exitPpt.is_equal(post, orig))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Returns the splitting conditions for one program point: each condition, and the conjunction of
+   * the conditions for each cluster.
+   *
+   * @param cluster_to_conditions maps a cluster key to the conditions for that cluster, as in a
+   *     value of {@link #pptname_to_conditions}
+   * @param filter which invariants to use as conditions
+   * @return the splitting conditions, each formatted by {@link #combineDummy}
+   */
+  private static Set<String> conditions(
+      Map<String, Map<String, HashedConsequent>> cluster_to_conditions,
+      Predicate<Invariant> filter) {
+    // A TreeSet, for deterministic output.
+    TreeSet<String> allConds = new TreeSet<>();
+    for (Map<String, HashedConsequent> conditions : cluster_to_conditions.values()) {
+      StringBuilder conjunctionJava = new StringBuilder();
+      StringBuilder conjunctionDaikon = new StringBuilder();
+      StringBuilder conjunctionESC = new StringBuilder();
+      StringBuilder conjunctionSimplify = new StringBuilder("(AND ");
+      int count = 0;
+      for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
+          conditions.entrySet()) {
+        String condIndex = entry2.getKey();
+        HashedConsequent cond = entry2.getValue();
+        if (cond.fakeFor != null || !filter.test(cond.inv)) {
+          continue;
+        }
+        String javaStr = javaFormat(cond.inv);
+        String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
+        String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
+        String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
+        allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
+        if (count > 0) {
+          conjunctionJava.append(" && ");
+          conjunctionDaikon.append(" and ");
+          conjunctionESC.append(" && ");
+          conjunctionSimplify.append(" ");
+        }
+        count++;
+        conjunctionJava.append(parenthesizeIfNeeded(javaStr));
+        conjunctionDaikon.append(parenthesizeIfNeeded(daikonStr));
+        conjunctionESC.append(parenthesizeIfNeeded(escStr));
+        conjunctionSimplify.append(simplifyStr);
+      }
+      conjunctionSimplify.append(")");
+      String conj = conjunctionJava.toString();
+      // Avoid inserting self-contradictory conditions such as "x == 1 &&
+      // x == 2", or conjunctions of only a single condition.
+      if (count >= 2
+          && !contradict_inv_pattern.matcher(conj).find()
+          && !useless_inv_pattern_1.matcher(conj).find()
+          && !useless_inv_pattern_2.matcher(conj).find()) {
+        allConds.add(
+            combineDummy(
+                conj,
+                conjunctionDaikon.toString(),
+                conjunctionESC.toString(),
+                conjunctionSimplify.toString()));
+      }
+    }
+    return allConds;
+  }
+
+  /**
+   * Returns the invariant formatted as a splitting condition: in Java format, but with the return
+   * value written as "return", which is how a .spinfo file refers to it.
+   *
+   * @param inv an invariant
+   * @return the invariant formatted as a splitting condition
+   */
+  static String javaFormat(Invariant inv) {
+    return result_pattern.matcher(inv.format_using(OutputFormat.JAVA)).replaceAll("return");
+  }
+
+  /**
+   * Returns the given expression, parenthesized if it may contain an operator whose precedence is
+   * lower than that of conjunction, such as "||", " or ", "?:", or the ESC/JML "==&gt;", "&lt;==",
+   * "&lt;==&gt;", and "&lt;=!=&gt;". Such an expression must be parenthesized when it is a
+   * conjunct. Operators within string and character literals are ignored.
+   *
+   * @param expr a Java, ESC, or Daikon expression
+   * @return the expression, parenthesized if necessary to be used as a conjunct
+   */
+  static String parenthesizeIfNeeded(String expr) {
+    String withoutLiterals = literal_pattern.matcher(expr).replaceAll("\"\"");
+    return low_precedence_pattern.matcher(withoutLiterals).find() ? "(" + expr + ")" : expr;
+  }
+
+  /**
+   * Returns true if the invariant is legal Java when its variables are booleans. Daikon represents
+   * a boolean as an int, so it may infer numeric invariants, such as "b != 0" or "b1 < b2", that
+   * are not legal Java over booleans.
+   *
+   * @param inv an invariant
+   * @return true if the invariant uses no boolean variable, or is legal Java over booleans
+   */
+  static boolean isLegalForBooleans(Invariant inv) {
+    // OneOfScalar is the only scalar invariant that formats a boolean specially, as "b == true".
+    if (inv instanceof OneOfScalar) {
+      return true;
+    }
+    VarInfo[] vis = inv.ppt.var_infos;
+    if (inv instanceof IntEqual || inv instanceof IntNonEqual) {
+      // "b == i" is not legal Java if exactly one of the operands is a boolean.
+      return isBoolean(vis[0]) == isBoolean(vis[1]);
+    }
+    for (VarInfo vi : vis) {
+      if (isBoolean(vi)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Returns true if the variable is a boolean. A splitter declares such a variable as a Java
+   * boolean; see {@code SplitterJavaSource.getVarType}.
+   *
+   * @param vi a variable
+   * @return true if the variable is a boolean
+   */
+  private static boolean isBoolean(VarInfo vi) {
+    return vi.type == ProglangType.BOOLEAN;
   }
 
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
@@ -267,8 +409,6 @@ public class ExtractConsequent {
    * top-level program points because Implications are produced only at those points.
    */
   public static void extract_consequent_maybe(PptTopLevel ppt, PptMap all_ppts) {
-    ppt.simplify_variable_names();
-
     List<Invariant> invs = new ArrayList<>();
     // Collect Implication invariants at this program point.
     for (Invariant inv : ppt.invariants_vector()) {
@@ -277,7 +417,8 @@ public class ExtractConsequent {
       }
     }
     if (!invs.isEmpty()) {
-      String pptname = cleanup_pptname(ppt.name());
+      // The full name, which SplitterList.matches matches only to this program point.
+      String pptname = ppt.name();
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
 
@@ -356,28 +497,49 @@ public class ExtractConsequent {
           continue;
         }
 
-        String inv_string = inv.format_using(OutputFormat.JAVA);
+        // 2) Numeric invariants over booleans, such as "b != 0", which are not legal Java
+        if (!isLegalForBooleans(inv)) {
+          if (debug.isLoggable(FINE)) {
+            debug.fine("Not legal Java over booleans: " + inv.format_using(OutputFormat.JAVA));
+          }
+          continue;
+        }
+
+        String inv_string = javaFormat(inv);
         if (orig_pattern.matcher(inv_string).find()
             || dot_class_pattern.matcher(inv_string).find()) {
           continue;
         }
+        String cluster_key = clusterKey(cluster_inv);
         String fake_inv_string = simplify_inequalities(inv_string);
         HashedConsequent real = new HashedConsequent(inv, null);
         if (!fake_inv_string.equals(inv_string)) {
           // For instance, inv_string is "x != y", fake_inv_string is "x == y"
           HashedConsequent fake = new HashedConsequent(inv, inv_string);
-          boolean added =
-              store_invariant(
-                  cluster_inv.format_using(OutputFormat.JAVA), fake_inv_string, fake, pptname);
+          boolean added = store_invariant(cluster_key, fake_inv_string, fake, pptname);
           if (!added) {
             // We couldn't add "x == y", (when we're "x != y") because
             // it already exists; so don't add "x == y" either.
             continue;
           }
         }
-        store_invariant(cluster_inv.format_using(OutputFormat.JAVA), inv_string, real, pptname);
+        store_invariant(cluster_key, inv_string, real, pptname);
       }
     }
+  }
+
+  /**
+   * Returns a key that identifies the cluster that the given invariant describes. The pre-state
+   * value "orig(cluster)" and the post-state value "cluster" are equal, so the key for an invariant
+   * over one is the same as the key for the same invariant over the other.
+   *
+   * @param cluster_inv an invariant over the "cluster" variable, such as "cluster == 1"
+   * @return a key that identifies the cluster
+   */
+  static String clusterKey(Invariant cluster_inv) {
+    return orig_cluster_pattern
+        .matcher(cluster_inv.format_using(OutputFormat.DAIKON))
+        .replaceAll("cluster");
   }
 
   // Store the invariant for later printing. Ignore duplicate
@@ -385,13 +547,13 @@ public class ExtractConsequent {
   private static boolean store_invariant(
       String predicate, String index, HashedConsequent consequent, String pptname) {
     if (!pptname_to_conditions.containsKey(pptname)) {
-      pptname_to_conditions.put(pptname, new HashMap<>());
+      pptname_to_conditions.put(pptname, new TreeMap<>());
     }
 
     Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
         pptname_to_conditions.get(pptname);
     if (!cluster_to_conditions.containsKey(predicate)) {
-      cluster_to_conditions.put(predicate, new HashMap<>());
+      cluster_to_conditions.put(predicate, new TreeMap<>());
     }
 
     Map<String, HashedConsequent> conditions = cluster_to_conditions.get(predicate);
@@ -412,8 +574,8 @@ public class ExtractConsequent {
   }
 
   private static boolean contains_constant_non_012(Invariant inv) {
-    if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
-      daikon.inv.unary.scalar.OneOfScalar oneof = (daikon.inv.unary.scalar.OneOfScalar) inv;
+    if (inv instanceof OneOfScalar) {
+      OneOfScalar oneof = (OneOfScalar) inv;
       // TODO: isInteresting has been removed.  Do we need to deal with it specially here?
       // OneOf invariants that indicate a small set ( > 1 element) of
       // possible values are not interesting, and have already been
@@ -425,27 +587,6 @@ public class ExtractConsequent {
     }
 
     return false;
-  }
-
-  /**
-   * Remove non-word characters and everything after "(" (which includes everything after ":::")
-   * from the program point name, leaving "PackageName.ClassName.MethodName".
-   *
-   * @param pptname a program point name
-   * @return the argument, without non-word characters and without parens or ":::" suffix
-   */
-  private static String cleanup_pptname(String pptname) {
-    int index;
-    if ((index = pptname.indexOf('(')) > 0) {
-      pptname = pptname.substring(0, index);
-    }
-
-    if (pptname.endsWith(".")) {
-      pptname = pptname.substring(0, pptname.length() - 2);
-    }
-
-    Matcher m = non_word_pattern.matcher(pptname);
-    return m.replaceAll(".");
   }
 
   /**
@@ -479,9 +620,26 @@ public class ExtractConsequent {
     return m.find() && !m.find();
   }
 
+  /** Matches a pre-state or post-state value, which a splitter cannot use. */
   static Pattern orig_pattern;
+
+  /** Matches the return value in Java format. */
+  static Pattern result_pattern;
+
+  /** Matches the pre-state value of the "cluster" variable, in Daikon format. */
+  static Pattern orig_cluster_pattern;
+
+  /**
+   * Matches an operator whose precedence is lower than that of conjunction. "&lt;==" is needed for
+   * reverse implication, and "&lt;=!=&gt;" contains neither "==&gt;" nor "&lt;==". A "?" matches
+   * only if a ":" follows it, as in a conditional expression.
+   */
+  static Pattern low_precedence_pattern;
+
+  /** Matches a string or character literal. */
+  static Pattern literal_pattern;
+
   static Pattern dot_class_pattern;
-  static Pattern non_word_pattern;
   static Pattern gteq_pattern;
   static Pattern lteq_pattern;
   static Pattern neq_pattern;
@@ -492,8 +650,11 @@ public class ExtractConsequent {
 
   static {
     try {
-      non_word_pattern = Pattern.compile("\\W+");
-      orig_pattern = Pattern.compile("orig\\s*\\(");
+      orig_pattern = Pattern.compile("\\borig\\s*\\(|\\\\(old|new)\\s*\\(");
+      result_pattern = Pattern.compile("\\\\result\\b");
+      orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
+      low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?.*:");
+      literal_pattern = Pattern.compile("\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'");
       dot_class_pattern = Pattern.compile("\\.class");
       inequality_pattern = Pattern.compile("[\\!<>]=");
       gteq_pattern = Pattern.compile(">=");

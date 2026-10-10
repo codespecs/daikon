@@ -7,6 +7,11 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   daikon.chicory.RuntimeTest.class,
+  daikon.test.BadOptionTest.class,
+  daikon.tools.ExtractConsequentTest.class,
+  daikon.split.SplitterFactoryFileNameTest.class,
+  daikon.split.SplitterListTest.class,
+  daikon.test.TraceSelectTest.class,
   daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
   daikon.test.TestAst.class,
   daikon.test.config.ConfigurationTest.class,
@@ -34,6 +39,9 @@ import org.junit.runners.Suite;
   daikon.test.TestQuant.class,
   daikon.test.TestAnnotate.class,
   daikon.test.DtraceDiffTester.class,
+  daikon.test.DtraceNonceFixerTest.class,
+  daikon.test.split.QuantCallsSplitterTest.class,
+  daikon.test.split.SplitterLoadTest.class,
   //       ,
   //       // I'm having trouble with this; need to fix, reinstate, and not call
   //       // specially from Makefile.  -MDE 7/8/2005

@@ -1,0 +1,70 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class misc_QuantCalls_m_59 extends Splitter {
+
+  public String condition() {
+    return "daikon.Quant.getElement_Object(this.objs, i) != null && this.objs[0] == null";
+  }
+
+  VarInfo i_varinfo; // i
+  VarInfo this_objs_array_varinfo; // this.objs[..]
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public misc_QuantCalls_m_59() { }
+  public misc_QuantCalls_m_59(Ppt ppt) {
+    i_varinfo = ppt.find_var_by_name("i");
+    this_objs_array_varinfo = ppt.find_var_by_name("this.objs[..]");
+  }
+
+  public Splitter instantiateSplitter(Ppt ppt) {
+    return new misc_QuantCalls_m_59(ppt);
+  }
+
+  public boolean valid() {
+    return (i_varinfo != null) && (this_objs_array_varinfo != null);
+  }
+
+  public boolean test(ValueTuple vt) {
+    /* writeTestBody: 2 declarations */
+    long i = i_varinfo.getIntValue(vt);
+    long[] this_objs_array = this_objs_array_varinfo.getIntArrayValue(vt);
+    return(getElement_Object(this_objs_array,i)!=0&&this_objs_array[0]==0);
+  }
+
+  public String repr() {
+    return "misc_QuantCalls_m_59: "
+      + "i_varinfo = " + i_varinfo.repr() + " "
+      + "this_objs_array_varinfo = " + this_objs_array_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariantFactory(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo i_vi = ppt.find_var_by_name("i");
+    VarInfo this_objs_array_vi = ppt.find_var_by_name("this.objs[..]");
+    if (i_vi != null && this_objs_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {i_vi, this_objs_array_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+
+  public int[] getIntArray(long[] longArray) {
+    int[] intArray = new int[longArray.length];
+    for (int i = 0; i < intArray.length; i++) {
+      intArray[i] = (int) longArray[i];
+    }
+    return intArray;
+  }
+
+}

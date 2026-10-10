@@ -1,6 +1,5 @@
 package daikon;
 
-import daikon.PptTopLevel.PptType;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,12 +63,24 @@ public class AnnotateNullable {
   @Option("-n Insert NonNull as well as Nullable annotations")
   public static boolean nonnull_annotations = false;
 
+  /** If true, print a usage message and exit. */
+  @Option("-h Display usage information")
+  public static boolean help = false;
+
   public static void main(String[] args) throws IOException {
 
     Options options =
-        new Options("plume.AnnotateNullable [options] <inv_file>", AnnotateNullable.class);
+        new Options("daikon.AnnotateNullable [options] <inv_file>", AnnotateNullable.class);
     String[] inv_files = options.parse(true, args);
-    assert inv_files.length == 1;
+    if (help) {
+      options.printUsage();
+      System.exit(0);
+    }
+    if (inv_files.length != 1) {
+      System.err.println("must specify exactly one invariant file");
+      options.printUsage(System.err);
+      System.exit(1);
+    }
 
     // Read the serialized invariant file
     File inv_file = new File(inv_files[0]);
@@ -149,8 +160,8 @@ public class AnnotateNullable {
         for (int i = 0; i < ppt.children.size(); i++) {
           PptRelation child_rel = ppt.children.get(i);
           PptTopLevel child = child_rel.child;
-          // Skip enter ppts, all of the info is at the exit.
-          if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
+          // Skip enter ppts and others; all the info is at the combined exit.
+          if (!child.is_combined_exit()) {
             continue;
           }
           child_cnt++;
@@ -236,8 +247,8 @@ public class AnnotateNullable {
     if (class_ppt != null) {
       for (PptRelation child_rel : class_ppt.children) {
         PptTopLevel child = child_rel.child;
-        // Skip enter ppts, all of the info is at the exit.
-        if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
+        // Skip enter ppts and others; all the info is at the combined exit.
+        if (!child.is_combined_exit()) {
           continue;
         }
         // debug.log("processing static method %s, type %s", child, child.type);
@@ -257,8 +268,8 @@ public class AnnotateNullable {
     // Process member (non-static) methods
     for (PptRelation child_rel : object_ppt.children) {
       PptTopLevel child = child_rel.child;
-      // Skip enter ppts, all of the info is at the exit.
-      if (child.type == PptType.ENTER) {
+      // Skip enter ppts and others; all the info is at the combined exit.
+      if (!child.is_combined_exit()) {
         continue;
       }
       // debug.log("processing method %s, type %s", child, child.type);
@@ -299,7 +310,7 @@ public class AnnotateNullable {
   /** Print out the annotations for the specified method. */
   public static void process_method(PptTopLevel ppt) {
 
-    assert ppt.type == PptType.EXIT : ppt;
+    assert ppt.is_combined_exit() : ppt;
 
     // Get all of the parameters to the method and the return value
     List<VarInfo> params = new ArrayList<>();

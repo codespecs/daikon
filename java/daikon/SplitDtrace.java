@@ -29,6 +29,9 @@ import org.checkerframework.dataflow.qual.Pure;
  */
 public final class SplitDtrace {
 
+  /** The usage message for this program. */
+  private static final String usage = "Usage: java daikon.SplitDtrace file.dtrace[.gz]";
+
   /** Do not instantiate. */
   private SplitDtrace() {
     throw new UnsupportedOperationException("Do not instantiate");
@@ -40,26 +43,35 @@ public final class SplitDtrace {
    * @param args one argument, the name of the .dtrace or .dtrace.gz file
    */
   public static void main(String[] args) throws IOException {
-    if (args.length != 1) {
-      throw new RuntimeException(
-          "You must supply one argument which is the filename of the dtrace file");
+    try {
+      mainHelper(args);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    String filename = args[0].trim();
+  }
+
+  /**
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called programmatically.
+   *
+   * @param args command-line arguments, like those of {@link #main}
+   * @throws IOException if there is a problem reading or writing a file
+   */
+  public static void mainHelper(String[] args) throws IOException {
+    String[] files = DaikonGetopt.nonOptionArgs(args, usage);
+    if (files.length != 1) {
+      throw new Daikon.UserError(usage);
+    }
+    String filename = files[0].trim();
     boolean isGz = filename.endsWith(".dtrace.gz");
     if (!filename.endsWith(".dtrace") && !isGz) {
-      throw new RuntimeException(
+      throw new Daikon.UserError(
           "Filename must end with .dtrace or .dtrace.gz: filename=" + filename);
     }
-    int declNum = 1;
+    int declNum = 0;
     int recNum = 0;
     try (BufferedReader reader = getStream(filename)) {
       ArrayList<String> rec = new ArrayList<>();
-      while (true) {
-        readRec(reader, rec);
-        if (isDeclare(rec)) {
-          break;
-        }
-      }
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
@@ -67,14 +79,14 @@ public final class SplitDtrace {
         }
         if (isDeclare(rec)) {
           declNum++;
-        } else {
+        } else if (!isHeader(rec)) {
           recNum++;
         }
       }
     }
 
     System.out.println(
-        "Number of DECLARE statements: " + declNum + " and number of records is: " + recNum);
+        "Number of declarations: " + declNum + " and number of records is: " + recNum);
 
     // DecimalFormat formatter = new DecimalFormat("000");
     // for (int i = 1; i<=100; i++) writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
@@ -95,18 +107,12 @@ public final class SplitDtrace {
       ArrayList<String> rec = new ArrayList<>();
       while (true) {
         readRec(reader, rec);
-        if (isDeclare(rec)) {
-          writer.newLine();
-        }
-        writeRec(writer, rec);
-        if (isDeclare(rec)) {
-          break;
-        }
-      }
-      while (true) {
-        readRec(reader, rec);
         if (rec.isEmpty()) {
           break;
+        }
+        if (isHeader(rec)) {
+          writeRec(writer, rec);
+          continue;
         }
         boolean isDecl = isDeclare(rec);
         if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
@@ -181,7 +187,19 @@ public final class SplitDtrace {
    */
   @Pure
   static boolean isDeclare(List<String> res) {
-    return res.get(0).equals("DECLARE");
+    return FileIO.is_declaration_header(res.get(0));
+  }
+
+  /**
+   * Returns true if the given record is a file header record, such as a comment or "decl-version",
+   * rather than a declaration or a sample.
+   *
+   * @param res the lines of a record from a .decls or .dtrace file
+   * @return true if the given record is a file header record
+   */
+  @Pure
+  static boolean isHeader(List<String> res) {
+    return FileIO.is_header_record(res.get(0));
   }
 
   /**

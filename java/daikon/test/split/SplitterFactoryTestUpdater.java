@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import org.plumelib.util.FilesPlume;
 
@@ -58,6 +59,7 @@ public class SplitterFactoryTestUpdater {
     generateSplitters("Fib.spinfo", "Fib.decls");
     generateSplitters("QueueAr.spinfo", "QueueAr.decls");
     generateSplitters("BigFloat.spinfo", "BigFloat.decls");
+    generateSplitters("QuantCalls.spinfo", "QuantCalls.decls");
     moveFiles();
     writeTestClass();
   }
@@ -82,7 +84,7 @@ public class SplitterFactoryTestUpdater {
    * @param decls the decls files that should be used in generating the splitter java files
    */
   private static void generateSplitters(List<String> spinfos, List<String> decls) {
-    HashSet<File> declsFileSet = new HashSet<>();
+    LinkedHashSet<File> declsFileSet = new LinkedHashSet<>();
     HashSet<File> spinfoFiles = new HashSet<>();
     PptMap allPpts = new PptMap();
     for (String spinfoFile : spinfos) {
@@ -91,20 +93,14 @@ public class SplitterFactoryTestUpdater {
     }
     spinfoFileLists.add(new ArrayList<File>(spinfoFiles));
     for (String declsFile : decls) {
-      declsFile = targetDir + declsFile;
-      declsFileSet.add(new File(declsFile));
+      declsFileSet.add(new File(targetDir + declsFile));
     }
     declsFileLists.add(new ArrayList<File>(declsFileSet));
     try {
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
-      // calling read_data_trace_file in a loop instead of calling
-      // read_data_trace_files allows us to mix version 1 and
-      // version 2 decls file formats.
-      for (String declsFile : decls) {
-        // This reset allows current format to differ from previous.
-        FileIO.resetNewDeclFormat();
-        FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
+      for (File declsFile : declsFileSet) {
+        FileIO.read_data_trace_file(declsFile.toString(), allPpts);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -195,7 +191,11 @@ public class SplitterFactoryTestUpdater {
     ps.println("import java.io.*;");
     ps.println("import java.util.*;");
     ps.println("import junit.framework.*;");
+    ps.println("import org.junit.BeforeClass;");
     ps.println("import org.junit.Test;");
+    ps.println("import org.junit.runner.JUnitCore;");
+    ps.println("import org.junit.runner.Result;");
+    ps.println("import org.junit.runner.notification.Failure;");
     ps.println("import org.plumelib.util.FilesPlume;");
     ps.println("import org.plumelib.util.StringsPlume;");
     ps.println("import org.plumelib.util.UtilPlume;");
@@ -229,11 +229,6 @@ public class SplitterFactoryTestUpdater {
     ps.println("  // java files it produces, changing the order that the setUpTests");
     ps.println("  // commands are run will cause the tests to fail.");
     ps.println();
-    ps.println("  /** Do not instantiate. */");
-    ps.println("  private SplitterFactoryTest() {");
-    ps.println("    throw new Error(\"Do not instantiate\");");
-    ps.println("  }");
-    ps.println();
     ps.println("  private static String targetDir = \"" + targetDir + "\";");
     ps.println();
     ps.println("  private static @Nullable String tempDir = null;");
@@ -242,30 +237,40 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     ps.println("  private static String usage =");
     ps.println("    StringsPlume.joinLines(");
-    ps.println("      \"Usage:  java daikon.tools.CreateSpinfo FILE.java ...\",");
+    ps.println("      \"Usage:  java daikon.test.split.SplitterFactoryTest [OPTION]...\",");
     ps.println(
-        "      \"  -s       Save (do not delete) the splitter java files in the temp directory\",");
-    ps.println("      \"  -h       Display this usage message\");");
+        "      \"  -s          Save (do not delete) the splitter java files in the temp"
+            + " directory\",");
+    ps.println("      \"  -h, --help  Display this usage message\");");
     ps.println();
     ps.println("  public static void main(String[] args) {");
-    ps.println(
-        "    Getopt g = new Getopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\");");
+    ps.println("    try {");
+    ps.println("      mainHelper(args);");
+    ps.println("    } catch (Daikon.DaikonTerminationException e) {");
+    ps.println("      Daikon.handleDaikonTerminationException(e);");
+    ps.println("    }");
+    ps.println("  }");
+    ps.println();
+    ps.println("  public static void mainHelper(String[] args) {");
+    ps.println("    DaikonGetopt g = new DaikonGetopt(args, \"s\", new LongOpt[0], usage);");
     ps.println("    int c;");
     ps.println("    while ((c = g.getopt()) != -1) {");
     ps.println("      switch (c) {");
     ps.println("        case 's':");
     ps.println("          saveFiles = true;");
     ps.println("          break;");
-    ps.println("        case 'h':");
-    ps.println("          System.out.println(usage);");
-    ps.println("          System.exit(1);");
-    ps.println("          break;");
-    ps.println("        case '?':");
-    ps.println("          break;");
     ps.println("        default:");
-    ps.println("          System.out.println(\"getopt() returned \" + c);");
-    ps.println("          break;");
+    ps.println("          throw new Daikon.BugInDaikon(\"getopt() returned \" + c);");
     ps.println("      }");
+    ps.println("    }");
+    ps.println("    Result result = JUnitCore.runClasses(SplitterFactoryTest.class);");
+    ps.println("    for (Failure failure : result.getFailures()) {");
+    ps.println("      System.err.println(failure.getTrace());");
+    ps.println("    }");
+    ps.println("    if (!result.wasSuccessful()) {");
+    ps.println(
+        "      throw new Daikon.UserError(StringsPlume.nPlural(result.getFailureCount(), \"test\")"
+            + " + \" failed\");");
     ps.println("    }");
     ps.println("  }");
     ps.println();
@@ -295,8 +300,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("      }");
     ps.println("      PptSplitter.dkconfig_suppressSplitterErrors = true;");
     ps.println("      Daikon.create_splitters(spFiles);");
-    ps.println("      for (String declsFile : decls) {");
-    ps.println("        FileIO.resetNewDeclFormat();");
+    ps.println("      for (String declsFile : new LinkedHashSet<>(decls)) {");
     ps.println(
         "        FileIO.read_data_trace_file(declsFile, allPpts);"); // invoked for side effects
     ps.println("      }");
@@ -320,7 +324,8 @@ public class SplitterFactoryTestUpdater {
    * SplitterFactoryTest to set up the needed files to run the tests on.
    */
   public static void appendSetUpTest(PrintStream ps) {
-    ps.println("  private static void setUpTests() {");
+    ps.println("  @BeforeClass");
+    ps.println("  public static void setUpTests() {");
     ps.println("    List<String> spinfoFiles;");
     ps.println("    List<String> declsFiles;");
     for (int i = 0; i < spinfoFileLists.size(); i++) {
@@ -350,7 +355,7 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     for (String className : classNames) {
       ps.println("  @Test");
-      ps.println("  public static void test" + className + "() {");
+      ps.println("  public void test" + className + "() {");
       ps.println("    assertEqualFiles(\"" + className + ".java\");");
       ps.println("  }");
       ps.println();
