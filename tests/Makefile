@@ -34,6 +34,12 @@ else
   MPARG ?=
 endif
 
+# DAIKONDIR is the clone of the 'daikon' project.
+# TESTS_MAKEFILE_DIR is simply expanded (":=") so that it is not affected by later
+# includes, which change MAKEFILE_LIST.
+TESTS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+DAIKONDIR ?= $(realpath ${TESTS_MAKEFILE_DIR}..)
+
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
 all diffs: txt-diff non-txt-diff dyncomp-tests results
