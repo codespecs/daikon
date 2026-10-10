@@ -58,10 +58,10 @@ TS_InputEventHandlerTests.inv.gz: ${DAIKON} TS_InputEventHandlerTests.dtrace.gz
 #     TS_InputEventHandlerTests.txt TS_InputEventHandlerTests.txt-all
 
 %.txt: %.inv.gz
-	java -cp $d/daikon.jar daikon.PrintInvariants $< > $@
+	java -cp ${DAIKON_CLASSPATH} daikon.PrintInvariants $< > $@
 
 %.txt-all: %.inv.gz
-	java -cp $d/daikon.jar daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
+	java -cp ${DAIKON_CLASSPATH} daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
 
 #
 # Test targets
