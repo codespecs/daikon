@@ -20,13 +20,17 @@ else
   MPARG ?=
 endif
 
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+endif
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
 default: summary-w-daikon
 
 .PHONY: regression-tests
 regression-tests:
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	@test -x "${PLUME_SCRIPTS}"/is-ci.sh || { echo "Not found: ${PLUME_SCRIPTS}/is-ci.sh ; running 'make' in ${DAIKONDIR} clones it" >&2; exit 1; }
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
 	else \
 	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
@@ -80,7 +84,8 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	@test -x "${PLUME_SCRIPTS}"/is-ci.sh || { echo "Not found: ${PLUME_SCRIPTS}/is-ci.sh ; running 'make' in ${DAIKONDIR} clones it" >&2; exit 1; }
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
 	else \
 	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \

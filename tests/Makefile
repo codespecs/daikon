@@ -34,6 +34,9 @@ else
   MPARG ?=
 endif
 
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+endif
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
 all diffs: txt-diff non-txt-diff dyncomp-tests results
@@ -52,6 +55,7 @@ txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	${MAKE} pat-daikon-tests-$@
 pat-daikon-tests-%:
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
+	@test -x "${PLUME_SCRIPTS}"/is-ci.sh || { echo "Not found: ${PLUME_SCRIPTS}/is-ci.sh ; running 'make' in ${DAIKONDIR} clones it" >&2; exit 1; }
 	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $*; \
 	else \
