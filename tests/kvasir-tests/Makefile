@@ -25,14 +25,19 @@ PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 default: summary-w-daikon
 
 .PHONY: regression-tests
+# -k keeps one failing test from preventing the others from running.
+# The summary is skipped if a test failed, because it would re-run that test.
+# The results are always printed.
 regression-tests:
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
-	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
+	status=0; \
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	  ${MAKE} -k --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working || status=$$?; \
 	else \
-	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
-	fi
-	${MAKE} nightly-summary-only-w-daikon
-	@${MAKE} --no-print-directory results
+	  ${MAKE} -k --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working || status=$$?; \
+	fi; \
+	if [ $$status -eq 0 ]; then ${MAKE} nightly-summary-only-w-daikon || status=$$?; fi; \
+	${MAKE} --no-print-directory results || status=$$?; \
+	exit $$status
 
 summary: default-projects__diffs
 	${MAKE} summary-only
@@ -80,7 +85,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
 	else \
 	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
