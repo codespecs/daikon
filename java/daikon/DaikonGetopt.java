@@ -29,14 +29,8 @@ public class DaikonGetopt extends Getopt {
    */
   private final @Nullable Supplier<String> usage;
 
-  /**
-   * Text that is appended to the description of a bad command-line option, for programs that handle
-   * {@code -h}.
-   */
-  public static final String USAGE_HINT = "run with -h for usage";
-
   /** Text appended to the description of a bad command-line option, or null to append nothing. */
-  private @Nullable String usageHint = USAGE_HINT;
+  private @Nullable String usageHint = "run with -h for usage";
 
   /**
    * Creates a command-line option processor that recognizes short and long options. Its description

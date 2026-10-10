@@ -21,8 +21,9 @@ import org.junit.function.ThrowingRunnable;
 /**
  * Tests that Daikon tools reject bad command-line options with a UserError.
  *
- * <p>These tests do not call {@code Daikon.mainHelper}, because it resets Daikon's global state,
- * which other tests in the same JVM depend on.
+ * <p>These tests do not call {@code Daikon.mainHelper} or {@code Daikon.cleanup}, because they
+ * reset Daikon's global state, which other tests in the same JVM depend on. TraceSelect checks its
+ * Daikon arguments without calling either of them.
  */
 public class BadOptionTest {
 
@@ -153,18 +154,35 @@ public class BadOptionTest {
   /** Tests that TraceSelect rejects bad arguments before doing any sampling. */
   @Test
   public void testTraceSelectBadArguments() {
-    assertThrows(
-        Daikon.UserError.class, () -> TraceSelect.mainHelper(new String[] {"0", "10", "x.dtrace"}));
-    assertThrows(
-        Daikon.UserError.class,
+    assertBadOption(
+        "num_reps must be a positive integer, not 0",
+        () -> TraceSelect.mainHelper(new String[] {"0", "10", "x.dtrace"}));
+    assertBadOption(
+        "num_reps must be a positive integer, not -5",
+        () -> TraceSelect.mainHelper(new String[] {"-5", "10", "x.dtrace"}));
+    assertBadOption(
+        "sample_size must be a positive integer, not -5",
         () -> TraceSelect.mainHelper(new String[] {"20", "-5", "x.dtrace"}));
-    assertThrows(
-        Daikon.UserError.class,
+    assertBadOption(
+        "sample_size must be a positive integer, not ten",
         () -> TraceSelect.mainHelper(new String[] {"20", "ten", "x.dtrace"}));
-    // A misspelled TraceSelect option is a bad Daikon argument.
-    assertThrows(
-        Daikon.UserError.class,
-        () -> TraceSelect.mainHelper(new String[] {"20", "10", "-NOCLAEN", "x.dtrace"}));
+    Daikon.UserError e =
+        assertThrows(
+            Daikon.UserError.class,
+            () -> TraceSelect.mainHelper(new String[] {"20", "10", "-NOCLAEN", "x.dtrace"}));
+    assertEquals(
+        "Unrecognized TraceSelect option -NOCLAEN; the options are -SEED, -NOCLEAN,"
+            + " -INCLUDE_UNRETURNED, and -DO_DIFFS",
+        String.valueOf(e.getMessage()));
+    // Daikon would read a compressed trace in full, in every sample run.
+    e =
+        assertThrows(
+            Daikon.UserError.class,
+            () -> TraceSelect.mainHelper(new String[] {"20", "10", "x.dtrace", "y.dtrace.gz"}));
+    assertEquals(
+        "TraceSelect cannot sample y.dtrace.gz; the trace file must be uncompressed and its name"
+            + " must end with \".dtrace\"",
+        String.valueOf(e.getMessage()));
   }
 
   /** Tests that tools accept the {@code --help} option that their usage messages document. */
@@ -175,6 +193,7 @@ public class BadOptionTest {
     assertPrintsUsage(() -> SplitDtrace.mainHelper(new String[] {"-h", "x"}));
     assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"--help"}));
     assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"20", "10", "-h", "x.dtrace"}));
+    assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"20", "10", "--help"}));
     assertPrintsUsage(
         () -> TraceSelect.mainHelper(new String[] {"20", "10", "-NOCLEAN", "x.dtrace", "--he"}));
   }

@@ -11,6 +11,7 @@ import org.junit.runners.Suite;
   daikon.tools.ExtractConsequentTest.class,
   daikon.split.SplitterFactoryFileNameTest.class,
   daikon.split.SplitterListTest.class,
+  daikon.test.TraceSelectTest.class,
   daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
   daikon.test.TestAst.class,
   daikon.test.config.ConfigurationTest.class,
