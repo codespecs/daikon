@@ -185,10 +185,15 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 CP_PARENTS := rsync -aR
 
 # This follows the Makefile.user includes, so that a JAVA_HOME set there takes precedence.
-include ${MAKEFILE_COMMON_DIR}/../scripts/java-home.mak
+include ${DAIKONDIR}/scripts/java-home.mak
 JAVA  := ${JAVA_HOME}/bin/java
 JUNIT_CLASSPATH ?=
-JAVAC ?= ${JAVA_HOME}/bin/javac$(if ${JUNIT_CLASSPATH}, -cp .:${JUNIT_CLASSPATH})
+ifneq (,${JUNIT_CLASSPATH})
+  # The JUnit tests require JUNIT_CLASSPATH, even if the environment sets JAVAC.
+  JAVAC := ${JAVA_HOME}/bin/javac -cp .:${JUNIT_CLASSPATH}
+else
+  JAVAC ?= ${JAVA_HOME}/bin/javac
+endif
 
 JAVALIB_CLASSPATH := ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 
