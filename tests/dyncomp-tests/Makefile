@@ -18,10 +18,20 @@
 
 # Forked from $DAIKONDIR/tests/kvasir-tests/Makefile
 
+ifeq (4.0,$(firstword $(sort ${MAKE_VERSION} 4.0)))
+  # Version 4.0 or higher
+  MPARG ?= -Orecurse
+else
+  MPARG ?=
+endif
+
 ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 endif
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+# Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
+# If is-ci.sh is absent, assume the run is not under CI.
+TEST_JOBS := $(if $(shell "${PLUME_SCRIPTS}/is-ci.sh" 2>/dev/null),1,4)
 
 default: summary
 
@@ -67,12 +77,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	@test -x "${PLUME_SCRIPTS}"/is-ci.sh || { echo "Not found: ${PLUME_SCRIPTS}/is-ci.sh ; running 'make' in ${DAIKONDIR} clones it" >&2; exit 1; }
-	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
-	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
-	else \
-	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
-	fi
+	${MAKE} --jobs=${TEST_JOBS} ${MPARG} nightly-tests__clean
 
 
 default-projects__%: pgbovine-tests__%

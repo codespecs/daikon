@@ -186,15 +186,21 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
+# Use ":=" so that the shell commands run only once.
+ifeq ($(origin JAVA_HOME), undefined)
 ifeq ($(shell uname), Darwin)
-  JAVA_HOME ?= $(shell /usr/libexec/java_home)
+  JAVA_HOME := $(shell /usr/libexec/java_home)
+  ifeq (${JAVA_HOME},)
+    $(error /usr/libexec/java_home did not find a JDK; set JAVA_HOME)
+  endif
 else
 ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
-  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
+  JAVA_HOME := $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
 else
   $(info Failure: Here is the output of: which javac)
   $(info $(shell which javac))
   $(error 'which javac' had exit status 1)
+endif
 endif
 endif
 JAVA  := ${JAVA_HOME}/bin/java
