@@ -389,6 +389,17 @@ jobs:
           fetch-depth: 25
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
+      - name: upload Kvasir test outputs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: kvasir-outputs-ubuntu-jdk11
+          path: |
+            tests/*-tests/**/*.out
+            tests/*-tests/**/*.diff
+            tests/*-tests/**/daikon-output/
+            tests/*-tests/**/vgcore.*
+          if-no-files-found: ignore
 
   kvasir_ubuntu_jdk25:
     runs-on: ubuntu-latest
@@ -402,6 +413,17 @@ jobs:
           fetch-depth: 25
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
+      - name: upload Kvasir test outputs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: kvasir-outputs-ubuntu-jdk25
+          path: |
+            tests/*-tests/**/*.out
+            tests/*-tests/**/*.diff
+            tests/*-tests/**/daikon-output/
+            tests/*-tests/**/vgcore.*
+          if-no-files-found: ignore
 
   kvasir_ubuntu_jdk27:
     needs:
@@ -418,6 +440,17 @@ jobs:
           fetch-depth: 25
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
+      - name: upload Kvasir test outputs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: kvasir-outputs-ubuntu-jdk27
+          path: |
+            tests/*-tests/**/*.out
+            tests/*-tests/**/*.diff
+            tests/*-tests/**/daikon-output/
+            tests/*-tests/**/vgcore.*
+          if-no-files-found: ignore
 
   ## The Checker Framework cannot be run under Java 8 or 11.
   ## Thus, there is no typecheck_bundled_ubuntu_jdk{8,11} job.
@@ -888,6 +921,17 @@ jobs:
           fetch-depth: 25
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
+      - name: upload Kvasir test outputs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: kvasir-outputs-rockylinux-jdk25
+          path: |
+            tests/*-tests/**/*.out
+            tests/*-tests/**/*.diff
+            tests/*-tests/**/daikon-output/
+            tests/*-tests/**/vgcore.*
+          if-no-files-found: ignore
 
   kvasir_rockylinux_jdk27:
     needs:
@@ -905,3 +949,14 @@ jobs:
           fetch-depth: 25
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
+      - name: upload Kvasir test outputs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: kvasir-outputs-rockylinux-jdk27
+          path: |
+            tests/*-tests/**/*.out
+            tests/*-tests/**/*.diff
+            tests/*-tests/**/daikon-output/
+            tests/*-tests/**/vgcore.*
+          if-no-files-found: ignore

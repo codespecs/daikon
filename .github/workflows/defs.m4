@@ -85,6 +85,17 @@ ifelse($1,canary_os,,[      - kvasir_[]canary_os[]_jdk$2
 ])dnl
 ])dnl
 boilerplate($1, $2, test-kvasir.sh, scripts/test-kvasir.sh)[]dnl
+      - name: upload Kvasir test outputs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: kvasir-outputs-$1-jdk$2
+          path: |
+            tests/*-tests/**/*.out
+            tests/*-tests/**/*.diff
+            tests/*-tests/**/daikon-output/
+            tests/*-tests/**/vgcore.*
+          if-no-files-found: ignore
 ])dnl
 dnl
 ifelse([argument 3 is "latest" or "bundled"])dnl
