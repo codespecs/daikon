@@ -1,9 +1,7 @@
 # This is a -*- makefile -*-, Emacs
 
 # DAIKONDIR is the clone of the 'daikon' project.
-ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
-endif
+DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 # Fails when running "clean".
 # $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))

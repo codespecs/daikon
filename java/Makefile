@@ -25,16 +25,16 @@ JAR ?= jar
 
 BuildJDKTool = BuildJDK
 
-# Use ":=" so that the shell commands run only once.
-ifeq ($(origin JAVA_HOME), undefined)
-  ifeq ($(shell uname), Darwin)
-    JAVA_HOME := $(shell /usr/libexec/java_home)
-  else
-    JAVA_HOME := $(shell javac=$$(command -v javac) && readlink -f "$$javac" | sed 's:/bin/javac$$::')
-  endif
-  ifeq (${JAVA_HOME},)
-    $(error No JDK found; set JAVA_HOME or put javac on the PATH)
-  endif
+ifeq ($(shell uname), Darwin)
+  JAVA_HOME ?= $(shell /usr/libexec/java_home)
+else
+ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
+  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
+else
+  $(info Failure: Here is the output of: which javac)
+  $(info $(shell which javac))
+  $(error 'which javac' had exit status 1)
+endif
 endif
 
 # The "JAVANN" variables mean "at least version NN", except JAVA8.

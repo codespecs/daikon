@@ -9,9 +9,7 @@
 # files are in drawlet_src.zip in this directory
 
 # DAIKONDIR is the clone of the 'daikon' project.
-ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
-endif
+DAIKONDIR ?= $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
 
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
 DAIKON = ${DAIKONDIR}/java/daikon/Daikon.class
