@@ -4694,20 +4694,20 @@ interactions between values.  Thus, DynComp only tracks dataflow. (@option{=none
 @item --dyncomp-unhandled-ops=panic
 @item --dyncomp-unhandled-ops=warn
 
-Kvasir translates the target program into Valgrind's VEX intermediate
-representation.  By default, DynComp stops with an error if the program
-uses a binary, ternary, or quaternary VEX operator that DynComp does not
-handle.  (@option{=panic})
+By default, if DynComp encounters a binary, ternary, or quaternary
+Valgrind VEX IR operator that it does not handle, it prints the name of
+the operator and stops.  (@option{=panic})  Please report such a failure
+(@pxref{Reporting problems}).
 
-You may instead have DynComp print a warning, once per unhandled operator,
-and approximate the operator.  (@option{=warn})  The approximation
-ignores operands that appear to be rounding modes, shift amounts, or lane
-indices.  It treats an operator that produces a boolean as a comparison
-of its other operands.  It treats any other operator as an interaction
-among its other operands, unless @option{--dyncomp-interactions} is
-@option{units} or @option{comparisons}, in which case it treats the
-operator as a non-interaction.  The resulting comparability sets may be
-imprecise.
+Alternatively, DynComp can print a warning the first time it encounters
+each such operator and continue, approximating the operator.
+(@option{=warn})  The approximation ignores operands that appear to be
+rounding modes, shift amounts, or lane indices.  It treats an operator
+that produces a boolean as a comparison of its other operands.  It
+treats any other operator as an interaction among its other operands,
+unless @option{--dyncomp-interactions} is @option{units} or
+@option{comparisons}, in which case it treats the operator as a
+non-interaction.  The resulting comparability sets may be imprecise.
 
 @item --dyncomp-approximate-literals
 
