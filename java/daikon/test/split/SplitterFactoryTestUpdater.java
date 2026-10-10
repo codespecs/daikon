@@ -13,7 +13,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import org.plumelib.util.FilesPlume;
 
@@ -83,7 +82,7 @@ public class SplitterFactoryTestUpdater {
    * @param decls the decls files that should be used in generating the splitter java files
    */
   private static void generateSplitters(List<String> spinfos, List<String> decls) {
-    LinkedHashSet<File> declsFileSet = new LinkedHashSet<>();
+    HashSet<File> declsFileSet = new HashSet<>();
     HashSet<File> spinfoFiles = new HashSet<>();
     PptMap allPpts = new PptMap();
     for (String spinfoFile : spinfos) {
@@ -98,8 +97,10 @@ public class SplitterFactoryTestUpdater {
     try {
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
-      for (File declsFile : declsFileSet) {
-        FileIO.read_data_trace_file(declsFile.toString(), allPpts);
+      // An earlier read in this JVM may have set the decl format.
+      FileIO.resetNewDeclFormat();
+      for (String declsFile : decls) {
+        FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -290,7 +291,9 @@ public class SplitterFactoryTestUpdater {
     ps.println("      }");
     ps.println("      PptSplitter.dkconfig_suppressSplitterErrors = true;");
     ps.println("      Daikon.create_splitters(spFiles);");
-    ps.println("      for (String declsFile : new LinkedHashSet<>(decls)) {");
+    ps.println("      // An earlier read in this JVM may have set the decl format.");
+    ps.println("      FileIO.resetNewDeclFormat();");
+    ps.println("      for (String declsFile : decls) {");
     ps.println(
         "        FileIO.read_data_trace_file(declsFile, allPpts);"); // invoked for side effects
     ps.println("      }");

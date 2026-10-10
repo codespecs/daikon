@@ -19,12 +19,8 @@ DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 INV_FILES := $(PROGRAM)-1.inv.gz $(PROGRAM)-2.inv.gz
 # An output file must satisfy the pattern program%.txt, where the % is
 # the options passed to Diff
-## Must reinstate -a and -ap and -p in V3 as soon as possible.  -MDE 6/10/2003
-# OUTPUT := $(PROGRAM).txt $(PROGRAM)-u.txt $(PROGRAM)-a.txt $(PROGRAM)-p.txt \
-# 	  $(PROGRAM)-e.txt $(PROGRAM)-ap.txt $(PROGRAM)-t.txt \
-# 	  $(PROGRAM)-jt.txt
-OUTPUT := $(PROGRAM).txt $(PROGRAM)-u.txt \
-	  $(PROGRAM)-e.txt $(PROGRAM)-t.txt \
+OUTPUT := $(PROGRAM).txt $(PROGRAM)-u.txt $(PROGRAM)-a.txt $(PROGRAM)-p.txt \
+	  $(PROGRAM)-e.txt $(PROGRAM)-ap.txt $(PROGRAM)-t.txt \
 	  $(PROGRAM)-jt.txt
 # Must be handled differently than OUTPUT, because map files are
 # written instead of textual output

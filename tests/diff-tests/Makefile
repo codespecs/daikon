@@ -18,10 +18,14 @@
 
 # 6. Check the directory and remaining files into the repository.
 
-SUBDIRS = $(patsubst %/,%,$(wildcard */))
+# A test directory is one that contains a .decls file.  A test directory without a
+# Makefile makes the run fail rather than being skipped.
+SUBDIRS = $(patsubst %/,%,$(sort $(dir $(wildcard */*.decls))))
 
 default:
 
+# A goal mismatch does not make this target fail; it leaves a non-empty .diff file,
+# which `make -C .. results` reports and treats as a failure.
 # The regression tests seem to break if the "@" is omitted from this line.
 %:
 	@for dir in ${SUBDIRS}; \
