@@ -1,0 +1,70 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class misc_QuantCalls_m_54 extends Splitter {
+
+  public String condition() {
+    return "this.a[this.sh[0]] > 0 && daikon.Quant.getElement_short(this.sh, 1) > 0";
+  }
+
+  VarInfo this_a_array_varinfo; // this.a[..]
+  VarInfo this_sh_array_varinfo; // this.sh[..]
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public misc_QuantCalls_m_54() { }
+  public misc_QuantCalls_m_54(Ppt ppt) {
+    this_a_array_varinfo = ppt.find_var_by_name("this.a[..]");
+    this_sh_array_varinfo = ppt.find_var_by_name("this.sh[..]");
+  }
+
+  public Splitter instantiateSplitter(Ppt ppt) {
+    return new misc_QuantCalls_m_54(ppt);
+  }
+
+  public boolean valid() {
+    return (this_a_array_varinfo != null) && (this_sh_array_varinfo != null);
+  }
+
+  public boolean test(ValueTuple vt) {
+    /* writeTestBody: 2 declarations */
+    long[] this_a_array = this_a_array_varinfo.getIntArrayValue(vt);
+    int[] this_sh_array = getIntArray(this_sh_array_varinfo.getIntArrayValue(vt));
+    return(this_a_array[this_sh_array[0]]>0&&getElement_short(this_sh_array,1)>0);
+  }
+
+  public String repr() {
+    return "misc_QuantCalls_m_54: "
+      + "this_a_array_varinfo = " + this_a_array_varinfo.repr() + " "
+      + "this_sh_array_varinfo = " + this_sh_array_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariantFactory(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo this_a_array_vi = ppt.find_var_by_name("this.a[..]");
+    VarInfo this_sh_array_vi = ppt.find_var_by_name("this.sh[..]");
+    if (this_a_array_vi != null && this_sh_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_a_array_vi, this_sh_array_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+
+  public int[] getIntArray(long[] longArray) {
+    int[] intArray = new int[longArray.length];
+    for (int i = 0; i < intArray.length; i++) {
+      intArray[i] = (int) longArray[i];
+    }
+    return intArray;
+  }
+
+}

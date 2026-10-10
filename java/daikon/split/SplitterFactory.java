@@ -6,12 +6,16 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jtb.ParseException;
+import jtb.TokenMgrError;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
@@ -170,6 +174,9 @@ public class SplitterFactory {
     if (splitterObjects.length == 0) {
       return;
     }
+    // The splitters whose source files were written successfully.
+    // Splitters that were not written must not be compiled or loaded.
+    List<SplitterObject> writtenSplitters = new ArrayList<>();
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
       String fileName = getFileName(splitObj.getPptName());
@@ -179,34 +186,62 @@ public class SplitterFactory {
             new SplitterJavaSource(
                 splitObj, splitObj.getPptName(), fileName, ppt.var_infos, statementReplacer);
         fileContents = splitterWriter.getFileText();
-      } catch (ParseException e) {
-        System.out.println("Error in SplitterFactory while writing splitter java file for: ");
-        System.out.println(splitObj.condition() + " cannot be parsed.");
+      } catch (ParseException | TokenMgrError e) {
+        // TokenMgrError indicates a lexical error in the condition.
+        // load_splitters prints the error.
+        splitObj.setError(
+            String.join(
+                System.lineSeparator(),
+                "Error in SplitterFactory while writing splitter java file for:",
+                splitObj.condition() + " cannot be parsed or translated:",
+                e.toString()));
         continue;
       }
-      String fileAddress = tempdir + fileName;
       @SuppressWarnings("signature") // safe, has been quoted
       @BinaryName String fileName_bn = fileName;
       splitObj.setClassName(fileName_bn);
-      try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(fileAddress + ".java")) {
-        if (dkconfig_delete_splitters_on_exit) {
-          new File(fileAddress + ".java").deleteOnExit();
-          new File(fileAddress + ".class").deleteOnExit();
-        }
+      String sourcePath = splitObj.getFullSourcePath();
+      String classPath = splitObj.getFullClassPath();
+      try {
+        // A class file left over from an earlier run must not be loaded if compilation fails.
+        Files.deleteIfExists(Path.of(classPath));
+      } catch (IOException | InvalidPathException ioe) {
+        debug.fine(ioe.toString());
+        splitObj.setError("Cannot delete old splitter class file " + classPath + ": " + ioe);
+        continue;
+      }
+      if (dkconfig_delete_splitters_on_exit) {
+        // Registered before the source file is opened, so that a partially-written file is deleted
+        // even if deleting it below fails.
+        new File(sourcePath).deleteOnExit();
+        new File(classPath).deleteOnExit();
+      }
+      try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(sourcePath)) {
         writer.write(fileContents.toString());
         writer.flush();
       } catch (IOException ioe) {
-        System.out.println("Error while writing Splitter file: " + fileAddress);
         debug.fine(ioe.toString());
+        splitObj.setError("Error while writing splitter file " + sourcePath + ": " + ioe);
+        try {
+          Files.deleteIfExists(Path.of(sourcePath));
+        } catch (IOException | InvalidPathException ioe2) {
+          debug.fine(ioe2.toString());
+        }
+        continue;
       }
+      writtenSplitters.add(splitObj);
     }
-    List<String> fileNames = new ArrayList<>();
-    for (int i = 0; i < splitterObjects.length; i++) {
-      fileNames.add(splitterObjects[i].getFullSourcePath());
+    if (writtenSplitters.isEmpty()) {
+      Global.debugSplit.fine("<<exit>>  loadSplitters: no splitters were written");
+      return;
+    }
+    List<String> writtenSourcePaths = new ArrayList<>(writtenSplitters.size());
+    for (SplitterObject splitObj : writtenSplitters) {
+      writtenSourcePaths.add(splitObj.getFullSourcePath());
     }
     String errorOutput = null;
     try {
-      errorOutput = compileFiles(fileNames);
+      errorOutput = compileFiles(writtenSourcePaths);
     } catch (IOException ioe) {
       System.out.println("Error while compiling Splitter files (Daikon will continue):");
       debug.fine(ioe.toString());
@@ -218,8 +253,8 @@ public class SplitterFactory {
           "Errors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
-    for (int i = 0; i < splitterObjects.length; i++) {
-      splitterObjects[i].load();
+    for (SplitterObject splitObj : writtenSplitters) {
+      splitObj.load();
     }
 
     Global.debugSplit.fine("<<exit>>  loadSplitters");

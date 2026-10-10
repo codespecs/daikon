@@ -8,6 +8,7 @@ public final class DataStructures_QueueAr_enqueue_29 extends Splitter {
     return "++back == theArray.length";
   }
 
+  VarInfo this_theArray_array_varinfo; // this.theArray[]
   VarInfo this_back_varinfo; // this.back
 
   static DummyInvariant dummyInvFactory;
@@ -15,6 +16,7 @@ public final class DataStructures_QueueAr_enqueue_29 extends Splitter {
 
   public DataStructures_QueueAr_enqueue_29() { }
   public DataStructures_QueueAr_enqueue_29(Ppt ppt) {
+    this_theArray_array_varinfo = ppt.find_var_by_name("this.theArray[]");
     this_back_varinfo = ppt.find_var_by_name("this.back");
   }
 
@@ -23,17 +25,19 @@ public final class DataStructures_QueueAr_enqueue_29 extends Splitter {
   }
 
   public boolean valid() {
-    return (this_back_varinfo != null);
+    return (this_theArray_array_varinfo != null) && (this_back_varinfo != null);
   }
 
   public boolean test(ValueTuple vt) {
-    /* writeTestBody: 1 declarations */
+    /* writeTestBody: 2 declarations */
+    long[] this_theArray_array = this_theArray_array_varinfo.getIntArrayValue(vt);
     long this_back = this_back_varinfo.getIntValue(vt);
-    return(++this_back==this_theArray.length);
+    return(++this_back==this_theArray_array.length);
   }
 
   public String repr() {
     return "DataStructures_QueueAr_enqueue_29: "
+      + "this_theArray_array_varinfo = " + this_theArray_array_varinfo.repr() + " "
       + "this_back_varinfo = " + this_back_varinfo.repr() + " "
       ;
   }
@@ -44,9 +48,10 @@ public final class DataStructures_QueueAr_enqueue_29 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
+    VarInfo this_theArray_array_vi = ppt.find_var_by_name("this.theArray[]");
     VarInfo this_back_vi = ppt.find_var_by_name("this.back");
-    if (this_back_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_back_vi});
+    if (this_theArray_array_vi != null && this_back_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_theArray_array_vi, this_back_vi});
     }
   }
 
