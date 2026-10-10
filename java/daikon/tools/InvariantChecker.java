@@ -4,6 +4,7 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.Debug;
 import daikon.FileIO;
 import daikon.Global;
@@ -135,20 +136,16 @@ public class InvariantChecker {
           new LongOpt(verbose_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-          new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.tools.InvariantChecker", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
         case 0:
           // got a long option
           String option_name = longopts[g.getLongind()].getName();
-          if (Daikon.help_SWITCH.equals(option_name)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-          } else if (conf_SWITCH.equals(option_name)) {
+          if (conf_SWITCH.equals(option_name)) {
             doConf = true;
           } else if (filter_SWITCH.equals(option_name)) {
             doFilter = true;
@@ -179,17 +176,11 @@ public class InvariantChecker {
                   "Error parsing track argument '" + Daikon.getOptarg(g) + "' - " + error);
             }
           } else {
-            throw new RuntimeException("Unknown long option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
-        case '?':
-          break; // getopt() already printed an error
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
 

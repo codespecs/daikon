@@ -7,6 +7,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   daikon.chicory.RuntimeTest.class,
+  daikon.test.BadOptionTest.class,
+  daikon.test.TraceSelectTest.class,
   daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
   daikon.test.TestAst.class,
   daikon.test.config.ConfigurationTest.class,
