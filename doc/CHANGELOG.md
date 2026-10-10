@@ -21,6 +21,14 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
+## Version 5.9.1 (???, 2026)
+
+Fjalar/Kvasir:
+
+* New command-line option `--dyncomp-unhandled-ops=warn` makes DynComp
+  print a warning and continue, rather than stop, when it encounters a VEX IR
+  operation that it does not handle.
+
 ## Version 5.9.0 (September 1, 2026)
 
 * All Daikon tools now work with Java 8-26.
