@@ -28,9 +28,7 @@ Further documentation can be found in:
    status.  Previously, Daikon printed its usage message and exited with
    status 0, and most other tools ignored the bad option and continued.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
-   no effect.  When run with no invariant files, it reports an error and exits
-   with a non-zero status, rather than printing its usage message and exiting
-   with status 0.
+   no effect.
 * `daikon.tools.TraceSelect` checks all its arguments before sampling.  Its
    `-SEED` option now takes effect.  Its options must precede the arguments
    that it passes to Daikon.
