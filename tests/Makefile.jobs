@@ -2,7 +2,8 @@
 #
 # Settings shared by the Makefiles that drive a whole test suite:
 # tests/Makefile, tests/kvasir-tests/Makefile, and tests/dyncomp-tests/Makefile.
-# Include it before any other include, so that MAKEFILE_LIST ends with this file.
+# The including Makefile locates this file via $(lastword $(MAKEFILE_LIST)),
+# so its include line must precede any other include in that Makefile.
 
 # To produce incremental output, invoke make as: make MPARG=-Otarget ...
 # To not run in parallel, invoke make as: make MPARG=-j1 ...
@@ -13,20 +14,15 @@ else
   MPARG ?=
 endif
 
-# DAIKONDIR is the clone of the 'daikon' project.
-ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+ifndef PLUME_SCRIPTS
+  PLUME_SCRIPTS := $(or ${DAIKONDIR},$(realpath $(dir $(lastword $(MAKEFILE_LIST)))..))/.utils/plume-scripts
 endif
-PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
-# TEST_JOBS is the number of tests to run in parallel.
-# Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-# The value is exported, so recursive invocations of make do not recompute it.
-# To override it, set TEST_JOBS on the command line or in the environment.
-ifeq ($(origin TEST_JOBS), undefined)
-  ifeq ($(wildcard ${PLUME_SCRIPTS}/is-ci.sh),)
-    $(error ${PLUME_SCRIPTS}/is-ci.sh not found; run "make" in ${DAIKONDIR} to clone plume-scripts, or set TEST_JOBS)
-  endif
-  TEST_JOBS := $(if $(shell sh "${PLUME_SCRIPTS}/is-ci.sh"),1,4)
+# DAIKON_TEST_JOBS is the number of tests to run in parallel.
+# Under CI, limit to 1 to avoid out-of-memory errors.
+# To override it, set DAIKON_TEST_JOBS on the command line or in the environment.
+# The default is computed only when a recipe uses it, so targets such as
+# "clean" and "help" work even if plume-scripts has not been cloned.
+ifeq ($(strip ${DAIKON_TEST_JOBS}),)
+  override DAIKON_TEST_JOBS = $(if $(wildcard ${PLUME_SCRIPTS}/is-ci.sh),$(if $(shell sh "${PLUME_SCRIPTS}/is-ci.sh"),1,4),$(error ${PLUME_SCRIPTS}/is-ci.sh not found; clone plume-scripts there, or set DAIKON_TEST_JOBS))
 endif
-export TEST_JOBS

@@ -64,7 +64,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	${MAKE} --jobs=${TEST_JOBS} ${MPARG} nightly-tests__clean
+	${MAKE} --jobs=${DAIKON_TEST_JOBS} ${MPARG} nightly-tests__clean
 
 
 default-projects__%: pgbovine-tests__%

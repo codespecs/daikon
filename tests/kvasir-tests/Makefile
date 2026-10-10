@@ -19,7 +19,7 @@ default: summary-w-daikon
 
 .PHONY: regression-tests
 regression-tests:
-	${MAKE} --jobs=${TEST_JOBS} ${MPARG} nightly-tests__diffs-w-daikon-if-working
+	${MAKE} --jobs=${DAIKON_TEST_JOBS} ${MPARG} nightly-tests__diffs-w-daikon-if-working
 	${MAKE} nightly-summary-only-w-daikon
 	@${MAKE} --no-print-directory results
 
@@ -69,7 +69,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	${MAKE} --jobs=${TEST_JOBS} ${MPARG} nightly-tests__clean
+	${MAKE} --jobs=${DAIKON_TEST_JOBS} ${MPARG} nightly-tests__clean
 
 default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
 	@
