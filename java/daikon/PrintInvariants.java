@@ -55,6 +55,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.plumelib.util.RegexUtil;
@@ -260,19 +261,19 @@ public final class PrintInvariants {
   // even in that case, which means to output a discard-reason for every
   // invariant.
   /** Output discard reasons for this class. If null, output discard reasons for all classes. */
-  private static @Nullable String discClass = null;
+  private static @MonotonicNonNull String discClass = null;
 
   /**
    * Comma-separated variable names. Output discard reasons if those are the variables. If null,
    * output discard reasons for all variable tuples.
    */
-  private static @Nullable String discVars = null;
+  private static @MonotonicNonNull String discVars = null;
 
   /**
    * Output discard reasons for this program point. If null, output discard reasons for all program
    * points.
    */
-  private static @Nullable String discPpt = null;
+  private static @MonotonicNonNull String discPpt = null;
 
   /** The usage message for this program. */
   private static String usage =
@@ -320,69 +321,6 @@ public final class PrintInvariants {
    * appropriate to be called programmatically.
    */
   public static void mainHelper(String[] args)
-      throws FileNotFoundException,
-          StreamCorruptedException,
-          OptionalDataException,
-          IOException,
-          ClassNotFoundException {
-    // Cleanup from any previous runs.  This also calls PrintInvariants.cleanup().
-    Daikon.cleanup();
-
-    Throwable failure = null;
-    try {
-      printInvariantsFromArgs(args);
-    } catch (Throwable t) {
-      failure = t;
-      throw t;
-    } finally {
-      closeOutputStream(failure);
-    }
-  }
-
-  /**
-   * Resets the static variables that are set by command-line options, so that {@link #mainHelper}
-   * can be called more than once. Does not close the output stream; {@link #mainHelper} does that.
-   */
-  public static void cleanup() {
-    ppt_regexp = null;
-    print_discarded_invariants = false;
-    wrap_xml = false;
-    print_csharp_metadata = false;
-    discClass = null;
-    discVars = null;
-    discPpt = null;
-  }
-
-  /**
-   * Closes the output stream, if --output was specified.
-   *
-   * @param failure the exception that is propagating out of {@link #mainHelper}, or null if none.
-   *     An exception thrown while closing is added to it as a suppressed exception, rather than
-   *     replacing it.
-   * @throws IOException if closing fails and {@code failure} is null
-   */
-  private static void closeOutputStream(@Nullable Throwable failure) throws IOException {
-    if (out_stream == null) {
-      return;
-    }
-    OutputStream os = out_stream;
-    out_stream = null;
-    try {
-      os.close();
-    } catch (IOException e) {
-      if (failure == null) {
-        throw e;
-      }
-      failure.addSuppressed(e);
-    }
-  }
-
-  /**
-   * Does the work of {@link #mainHelper}, except closing the output stream.
-   *
-   * @param args command-line arguments, like those of {@link #main}
-   */
-  private static void printInvariantsFromArgs(String[] args)
       throws FileNotFoundException,
           StreamCorruptedException,
           OptionalDataException,
@@ -466,12 +404,6 @@ public final class PrintInvariants {
             }
             break;
           } else if (PrintInvariants.output_SWITCH.equals(option_name)) {
-            if (out_stream != null) {
-              throw new Daikon.UserError(
-                  "multiple --"
-                      + PrintInvariants.output_SWITCH
-                      + " options supplied on command line");
-            }
             String output_file = Daikon.getOptarg(g);
             try {
               out_stream = new FileOutputStream(output_file);
@@ -560,6 +492,14 @@ public final class PrintInvariants {
     }
 
     print_invariants(ppts);
+
+    // Close the output stream if --output was specified.
+    if (out_stream != null) {
+      out_stream.flush();
+      assert out_stream != null
+          : "@AssumeAssertion(nullness): flush() does not affect any global variables";
+      out_stream.close();
+    }
   }
 
   /**
@@ -806,8 +746,11 @@ public final class PrintInvariants {
   @RequiresNonNull("FileIO.new_decl_format")
   public static void print_invariants(PptMap all_ppts) {
 
-    OutputStream os = (out_stream != null) ? out_stream : System.out;
-    PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(os, UTF_8)), true);
+    if (out_stream == null) {
+      out_stream = System.out;
+    }
+    PrintWriter pw =
+        new PrintWriter(new BufferedWriter(new OutputStreamWriter(out_stream, UTF_8)), true);
     if (wrap_xml) {
       pw.println("<INVARIANTS>");
     }

@@ -985,8 +985,6 @@ public final class Daikon {
     spinfoFiles.clear();
 
     proto_invs.clear();
-
-    PrintInvariants.cleanup();
   }
 
   // Structure for return value of read_options.
@@ -1509,12 +1507,10 @@ public final class Daikon {
       new ArrayList<@ClassGetName String>();
 
   /**
-   * Creates the list of prototype invariants for all Daikon invariants, replacing any previous
-   * contents of {@link #proto_invs}. New invariants must be added to this list.
+   * Creates the list of prototype invariants for all Daikon invariants. New invariants must be
+   * added to this list.
    */
   public static void setup_proto_invs() {
-
-    proto_invs.clear();
 
     // Unary scalar invariants
     {
