@@ -1,4 +1,4 @@
-# This is a -*- makefile -*-, Emacs
+# This is a -*- makefile -*-, Emacs.
 
 # DAIKONDIR is the clone of the 'daikon' project.
 ifeq ($(origin DAIKONDIR), undefined)

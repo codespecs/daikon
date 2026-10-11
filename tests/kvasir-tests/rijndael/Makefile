@@ -5,19 +5,24 @@ SOURCES := rijndaeltest-ref.c rijndael-api-ref.c rijndael-alg-ref.c
 EXTRA_OUTPUTS := cbc_d_m.txt cbc_e_m.txt ecb_d_m.txt ecb_e_m.txt ecb_iv.txt \
                  ecb_tbl.txt ecb_vk.txt ecb_vt.txt
 
+# DAIKONDIR is the clone of the 'daikon' project.
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
+endif
+include ${DAIKONDIR}/tests/Makefile.jdk
+
 # This test seems to be non-deterministic on Ubuntu 22.10 with JDK 19.
 
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-JAVA_RELEASE_NUMBER := $(shell echo $JAVA_VERSION_STRING | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
-ifeq ($(shell expr $JAVA_RELEASE_NUMBER \>= 19),1)
+JAVA_VERSION_STRING := $(shell ${JAVAC} -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
+JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
+ifeq ($(shell expr ${JAVA_RELEASE_NUMBER} \>= 19),1)
   JAVA19_OR_NEWER := 1
 else
   JAVA19_OR_NEWER := 0
 endif
 
-LDAIKONDIR ?= $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
 OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release | cut -d " " -f1)
-OS_REL := $(shell sed -n -e 's/^VERSION_ID="(.*)"/\1/' /etc/os-release)
+OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 ifeq (${OS_ID},Ubuntu)
 ifeq (${OS_REL},22.10)
 ifeq (${JAVA19_OR_NEWER},1)
