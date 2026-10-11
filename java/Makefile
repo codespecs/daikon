@@ -37,6 +37,7 @@ JAVA21 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
 # JDK 24 isn't an LTS version, but we need it to know whether to compile Instrument24.java.
 JAVA24 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 24)
 JAVA25 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 25)
+JAVA26 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 26)
 JAVA27 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 27)
 ifeq (${JAVA24},1)
   BuildJDKTool = BuildJDK24
@@ -46,14 +47,14 @@ ifeq (${JAVA_RELEASE_NUMBER},25)
     JAVA25_HOME := ${JAVA_HOME}
   endif
 endif
-# Use -ge 26, not -ge 27, so that JDK 26 has a value for the --system flag below.
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 26; echo $$?),0)
+# Use JAVA26, not JAVA27, so that JDK 26 has a value for the --system flag below.
+ifeq (${JAVA26},1)
   ifndef JAVA27_HOME
     JAVA27_HOME := ${JAVA_HOME}
   endif
 endif
 
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
+ifeq (${JAVA21},1)
   LINT_THIS_ESCAPE=-Xlint:-this-escape
 endif
 
@@ -858,14 +859,15 @@ audit:
 
 .PHONY: reformat check-format
 
-# google-java-format requires JDK 21 or later.
+# google-java-format requires JDK 21 or later.  The scripts run the java on the
+# PATH, so put the JDK at JAVA_HOME (which determines JAVA21) first on the PATH.
 format: reformat
 reformat:
 ifeq (${JAVA21}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
-	@../.utils/run-google-java-format/run-google-java-format.py \
+	@PATH=${JAVA_HOME}/bin:$${PATH} ../.utils/run-google-java-format/run-google-java-format.py \
 	  ${JAVA_FILES_FOR_FORMAT}
 endif
 
@@ -874,7 +876,7 @@ ifeq (${JAVA21}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
-	@../.utils/run-google-java-format/check-google-java-format.py \
+	@PATH=${JAVA_HOME}/bin:$${PATH} ../.utils/run-google-java-format/check-google-java-format.py \
 	  ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
 endif
 
@@ -1302,7 +1304,7 @@ endif
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ${PLUME_SCRIPTS} ${AUTO_GENERATED_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 8; echo $$?),0)
+ifeq (${JAVA8},1)
 	@echo "Skipping api-private target under Java 8"
 else
 	mkdir -p ${JAVADOC_DEST}

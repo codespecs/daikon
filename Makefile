@@ -20,6 +20,9 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER := sort
 endif
 
+# Use the JDK at JAVA_HOME if it is set, as java/Makefile does; otherwise use the PATH.
+JAVA_BIN := $(if $(strip ${JAVA_HOME}),${JAVA_HOME}/bin/)
+
 
 ##########################################################################
 ### Variables
@@ -299,15 +302,15 @@ junit:
 # are working properly.
 quick-test:
 	cd examples/java-examples/StackAr; \
-	javac -g DataStructures/*.java
+	${JAVA_BIN}javac -g DataStructures/*.java
 	@echo "Running Chicory/Daikon"
 	cd examples/java-examples/StackAr; \
-	java -cp ${QT_PATH} daikon.Chicory --daikon DataStructures.StackArTester
+	${JAVA_BIN}java -cp ${QT_PATH} daikon.Chicory --daikon DataStructures.StackArTester
 	@echo "Running DynComp/Chicory/Daikon"
 	cd examples/java-examples/StackAr; \
-	java -cp ${QT_PATH} daikon.DynComp DataStructures.StackArTester; \
-	java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
-	java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
+	${JAVA_BIN}java -cp ${QT_PATH} daikon.DynComp DataStructures.StackArTester; \
+	${JAVA_BIN}java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
+	${JAVA_BIN}java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
 
 # Sanity check, suitable for continuous integration.
 nightly-test:
@@ -604,11 +607,11 @@ daikon.jar: ${DAIKON_JAVA_FILES} $(patsubst %,java/%,${DAIKON_RESOURCE_FILES})
 		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
 
 	# make hamcrest and junit4 overwrite junit5 to get our special versions
-	for filename in ${JAR_DIR}/java/lib/*.jar ${JAR_DIR}/java/lib/hamcrest*.jar ${JAR_DIR}/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; jar xf $$filename ; done
+	for filename in ${JAR_DIR}/java/lib/*.jar ${JAR_DIR}/java/lib/hamcrest*.jar ${JAR_DIR}/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; ${JAVA_BIN}jar xf $$filename ; done
 	(cd java; ${RSYNC_AR} ${DAIKON_RESOURCE_FILES} ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
-	  jar cfm $@ ${JAR_DIR}/java/daikon/chicory/manifest.txt *
+	  ${JAVA_BIN}jar cfm $@ ${JAR_DIR}/java/daikon/chicory/manifest.txt *
 	mv ${TMPDIR}/daikon-jar/$@ $@
 	#rm -rf ${TMPDIR}/daikon-jar
 

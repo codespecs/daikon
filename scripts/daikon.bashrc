@@ -14,9 +14,7 @@
 # A failed detection does not modify JAVA_HOME in the user's shell.
 daikon_java_home="$JAVA_HOME"
 if [ -z "$daikon_java_home" ] ; then
-  if [ "$(uname):$(command -v javac)" = "Darwin:/usr/bin/javac" ] ; then
-    daikon_java_home=$(/usr/libexec/java_home 2> /dev/null)
-  elif command -v javac > /dev/null 2>&1 ; then
+  if command -v javac > /dev/null 2>&1 ; then
     daikon_java_home=$(javac -J-XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$::;p;}')
   else
     daikon_java_home=$(java -XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$::;p;}')
