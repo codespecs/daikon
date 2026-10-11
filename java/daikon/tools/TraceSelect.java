@@ -248,9 +248,7 @@ public class TraceSelect {
         }
       }
 
-    } catch (daikon.Daikon.DaikonTerminationException e) {
-      throw e;
-    } catch (Exception e) {
+    } catch (IOException | ReflectiveOperationException e) {
       throw new Error(e);
     }
   }
