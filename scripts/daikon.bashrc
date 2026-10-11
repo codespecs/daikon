@@ -8,10 +8,17 @@
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
 
-if [ "$(uname)" = "Darwin" ] ; then
-  export JAVA_HOME=${JAVA_HOME:-$(/usr/libexec/java_home)}
-else
-  export JAVA_HOME=${JAVA_HOME:-$(dirname $(dirname $(readlink -f $(which javac))))}
+# This logic is the same as in java/java-home.mk:  ask the JVM that runs javac
+# for its home directory, or else (on macOS) use /usr/libexec/java_home.
+# "command" bypasses any alias for javac.
+if [ -z "$JAVA_HOME" ] ; then
+  if command -v javac > /dev/null 2>&1 ; then
+    JAVA_HOME=$(command javac -J-XshowSettings:properties -version 2>&1 | sed -n 's:^ *java\.home = ::p' | sed 's:/jre$::')
+  fi
+  if [ -z "$JAVA_HOME" ] && [ "$(uname)" = "Darwin" ] ; then
+    JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
+  fi
+  export JAVA_HOME
 fi
 if [ ! -d "$JAVA_HOME" ]; then
   echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
