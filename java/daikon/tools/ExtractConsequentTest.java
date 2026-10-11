@@ -159,10 +159,32 @@ public class ExtractConsequentTest {
     assertFalse(
         ExtractConsequent.isLegalForBooleans(binaryInvariant(IntGreaterThan.get_proto(), b1, b2)));
 
-    // OneOfScalar formats a boolean as "b1 == true" or "b1 == false".
-    PptTopLevel ppt = Common.makePptTopLevel("Foo.bar(int):::ENTER", new VarInfo[] {b1});
-    Invariant oneOf = instantiate(OneOfScalar.get_proto(), new PptSlice1(ppt, new VarInfo[] {b1}));
-    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf));
+    // OneOfScalar formats a boolean whose file representation type is boolean as "b3 == true" or
+    // "b3 == false".
+    @SuppressWarnings("interning") // newly-created VarInfo
+    VarInfo b3 =
+        new VarInfo(
+            "b3",
+            ProglangType.BOOLEAN,
+            ProglangType.BOOLEAN,
+            VarComparabilityNone.it,
+            VarInfoAux.getDefault());
+    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b3)));
+    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(i1)));
+
+    // OneOfScalar formats a boolean whose file representation type is int as "b1 == 1".
+    assertFalse(ExtractConsequent.isLegalForBooleans(oneOf(b1)));
+  }
+
+  /**
+   * Returns a OneOfScalar invariant over the given variable.
+   *
+   * @param var a variable
+   * @return a OneOfScalar invariant over {@code var}
+   */
+  private static Invariant oneOf(VarInfo var) {
+    PptTopLevel ppt = Common.makePptTopLevel("Foo.bar(int):::ENTER", new VarInfo[] {var});
+    return instantiate(OneOfScalar.get_proto(), new PptSlice1(ppt, new VarInfo[] {var}));
   }
 
   /**

@@ -198,8 +198,22 @@ public class ExtractConsequent {
       // modify the condition's variables.  At an exit point, a variable's name denotes its
       // post-state value, and a splitter cannot use a pre-state value such as "orig(x)".
       if (pptname.endsWith(FileIO.enter_tag)) {
-        for (PptTopLevel exitPpt : exitPoints(pptname, ppts)) {
+        String exitName =
+            pptname.substring(0, pptname.length() - FileIO.enter_tag.length()) + FileIO.exit_tag;
+        // A condition at the combined exit point also splits the numbered exit points (see
+        // SplitterList#matches), so it is not repeated for them.  A condition that is rejected at
+        // the combined exit point may still be acceptable at some numbered exit points.
+        Set<String> combinedConds = new TreeSet<>();
+        PptTopLevel combinedExit = ppts.get(exitName);
+        if (combinedExit != null) {
+          combinedConds = conditions(entry.getValue(), inv -> isUnmodified(inv, combinedExit));
+          if (!combinedConds.isEmpty()) {
+            pptname_to_output.computeIfAbsent(exitName, k -> new TreeSet<>()).addAll(combinedConds);
+          }
+        }
+        for (PptTopLevel exitPpt : numberedExitPoints(exitName, ppts)) {
           Set<String> exitConds = conditions(entry.getValue(), inv -> isUnmodified(inv, exitPpt));
+          exitConds.removeAll(combinedConds);
           if (!exitConds.isEmpty()) {
             pptname_to_output
                 .computeIfAbsent(exitPpt.name(), k -> new TreeSet<>())
@@ -222,26 +236,16 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the exit points to which the conditions at the given entry point should be copied. If
-   * the combined exit point exists, the result is just it, because its name also designates the
-   * numbered exit points (see {@link SplitterList#matches}). Otherwise, the result is the numbered
-   * exit points.
+   * Returns the numbered exit points of a method, such as "pkg.Foo.bar(int):::EXIT12".
    *
-   * @param enterName the name of an entry point
+   * @param exitName the name of the method's combined exit point
    * @param ppts all the program points
-   * @return the exit points of the method whose entry point is {@code enterName}
+   * @return the numbered exit points of the method whose combined exit point is {@code exitName}
    */
-  private static List<PptTopLevel> exitPoints(String enterName, PptMap ppts) {
-    String exitName =
-        enterName.substring(0, enterName.length() - FileIO.enter_tag.length()) + FileIO.exit_tag;
+  private static List<PptTopLevel> numberedExitPoints(String exitName, PptMap ppts) {
     List<PptTopLevel> result = new ArrayList<>();
-    PptTopLevel combinedExit = ppts.get(exitName);
-    if (combinedExit != null) {
-      result.add(combinedExit);
-      return result;
-    }
     for (PptTopLevel ppt : ppts.asCollection()) {
-      if (SplitterList.matches(exitName, ppt.name())) {
+      if (!ppt.name().equals(exitName) && SplitterList.matches(exitName, ppt.name())) {
         result.add(ppt);
       }
     }
@@ -373,11 +377,13 @@ public class ExtractConsequent {
    * @return true if the invariant uses no boolean variable, or is legal Java over booleans
    */
   static boolean isLegalForBooleans(Invariant inv) {
-    // OneOfScalar is the only scalar invariant that formats a boolean specially, as "b == true".
-    if (inv instanceof OneOfScalar) {
-      return true;
-    }
     VarInfo[] vis = inv.ppt.var_infos;
+    // OneOfScalar is the only scalar invariant that formats a boolean specially, as "b == true".
+    // It decides whether its variable is a boolean from the file representation type, which may
+    // differ from the declared type that a splitter uses.
+    if (inv instanceof OneOfScalar) {
+      return ((OneOfScalar) inv).is_boolean() == isBoolean(vis[0]);
+    }
     if (inv instanceof IntEqual || inv instanceof IntNonEqual) {
       // "b == i" is not legal Java if exactly one of the operands is a boolean.
       return isBoolean(vis[0]) == isBoolean(vis[1]);
