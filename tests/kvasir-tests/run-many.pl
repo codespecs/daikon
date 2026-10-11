@@ -26,9 +26,12 @@ while (<STDIN>) {
     my $status = $rv >> 8;
     # A run fails if it cannot be started ($rv == -1), if it is killed by a
     # signal ($rv & 127), or if it exits with status greater than 1.
-    # Exit status 1 is not a failure, because some tests deliberately give a
-    # program bad input, and the program exits with status 1.
-    if ($rv == -1 || ($rv & 127) || $status > 1) {
+    # Exit status 1 alone is not a failure, because some programs (such as
+    # tot_info) exit with status 1 on their test inputs.  But Valgrind and
+    # Kvasir also exit with status 1 on fatal errors, so exit status 1 is a
+    # failure if the output contains one of their fatal error messages.
+    my $fatal_error = $output =~ /^valgrind: |^Valgrind: FATAL|^Exiting\.$|^Terminating program\.$|^dwarf\.c: out of memory|excessive number of elements|^Kvasir is not (installed|built)/m;
+    if ($rv == -1 || ($rv & 127) || $status > 1 || ($status == 1 && $fatal_error)) {
         printf STDERR "run-many.pl: line %d failed (exit status %d, signal %d): %s %s\n", $., $status, $rv & 127, $kvasir_short, $_;
         print STDERR "run-many.pl: output of line $. follows:\n", $output;
         $failures++;
