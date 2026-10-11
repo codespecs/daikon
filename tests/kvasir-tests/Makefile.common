@@ -1,11 +1,7 @@
 # This is a -*- makefile -*-, Emacs
 
 # DAIKONDIR is the clone of the 'daikon' project.
-# DAIKONDIR is computed immediately (with ":="), because including another
-# file changes MAKEFILE_LIST.
-ifndef DAIKONDIR
-DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
-endif
+DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 # Fails when running "clean".
 # $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
@@ -48,6 +44,7 @@ REMOVE_TIMING := ../remove-timing.pl
 REMOVE_VARIABLE_COUNT := ../remove-variable-count.pl
 DECLS_2_COMP ?= ${DAIKONDIR}/scripts/decls2comp.py
 RUN_MANY := ../run-many.pl
+RUN_KVASIR := sh ../run-kvasir.sh
 SORT_DTRACE_INPLACE := perl -Si ${DAIKONDIR}/scripts/sort-dtrace.pl
 SORT_DECLS := ${DAIKONDIR}/scripts/sort-decls-2.py
 INCLUDES ?=
@@ -56,11 +53,6 @@ LIBFLAGS ?=
 DIFF_NAME ?= $(shell basename `pwd`)
 BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
-
-include ${DAIKONDIR}/tests/kvasir-tests/Makefile.show-output
-
-# Some recipes use "set -o pipefail".
-SHELL := /bin/bash
 
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
 DAIKON := java -ea -Xmx7g -cp ${DAIKON_JAR} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
@@ -258,11 +250,11 @@ else
 ifdef DTRACE_APPEND
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1 $(call show_output_on_failure,$(NAME).out)
+	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls --dtrace-file=daikon-output/$(NAME).dtrace --dtrace-append ./$(NAME) $(PROGRAM_ARGS) >>$(NAME).out 2>&1 $(call show_output_on_failure,$(NAME).out)
+	$(RUN_KVASIR) --append $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls --dtrace-file=daikon-output/$(NAME).dtrace --dtrace-append ./$(NAME) $(PROGRAM_ARGS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).dyncomp.out 2>&1 $(call show_output_on_failure,$(NAME).dyncomp.out)
+	$(RUN_KVASIR) $(NAME).dyncomp.out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -280,9 +272,9 @@ else
 ifeq ($(COUNTS_ONLY),)
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1 $(call show_output_on_failure,$(NAME).out)
+	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).dyncomp.out 2>&1 $(call show_output_on_failure,$(NAME).dyncomp.out)
+	$(RUN_KVASIR) $(NAME).dyncomp.out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -299,14 +291,13 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 else
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-# Without pipefail, a pipeline's exit status is that of its last command, so a Kvasir failure would go unnoticed.
-	set -o pipefail; $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out | ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts $(call show_output_on_failure,$(NAME).out)
+	$(RUN_KVASIR) --counts $(NAME).counts $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
 	perl -i $(CLEAN_DECLS) $(NAME).counts
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dyncomp --decls-only --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).dyncomp.out 2>&1 $(call show_output_on_failure,$(NAME).dyncomp.out)
+	$(RUN_KVASIR) $(NAME).dyncomp.out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dyncomp --decls-only --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS)
 	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).dyncomp.decls
 	$(DECLS_2_COMP) daikon-output/$(NAME).dyncomp.decls > $(NAME).comp
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
