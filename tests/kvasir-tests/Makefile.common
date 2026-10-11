@@ -1,7 +1,11 @@
 # This is a -*- makefile -*-, Emacs
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+# DAIKONDIR is computed immediately (with ":="), because including another
+# file changes MAKEFILE_LIST.
+ifndef DAIKONDIR
+DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+endif
 DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 # Fails when running "clean".
 # $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
@@ -233,7 +237,7 @@ ifdef TESTS_SCRIPT
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(TESTS_SCRIPT) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	rm -f daikon-output/$(NAME)$(DTRACE_EXT)
 	$(BEFORE_RUN)
-	DTRACEAPPEND=1 perl $(RUN_MANY) $(KVASIR_SCRIPT) <$(TESTS_SCRIPT) >$(NAME).out $(call show_output_on_failure,$(NAME).out)
+	DTRACEAPPEND=1 perl $(RUN_MANY) $(KVASIR_SCRIPT) <$(TESTS_SCRIPT) >$(NAME).out
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -294,7 +298,7 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 	$(BEFORE_RUN)
 	rm -f $(NAME).kvasir-status
 # A pipeline's exit status is that of its last command, so Kvasir's exit status is saved in a file.
-	{ $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out || echo $$? >$(NAME).kvasir-status; } | ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts $(call show_output_on_failure,$(NAME).out)
+	{ $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out || echo $$? >$(NAME).kvasir-status; } | ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts
 	$(call fail_if_status_file,$(NAME).kvasir-status) $(call show_output_on_failure,$(NAME).out)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
