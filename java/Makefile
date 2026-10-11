@@ -1227,14 +1227,9 @@ ifeq (${JAVA24}, 1)
 	@# under versions of Java that do not have java.lang.classfile.
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite24
 endif
-
-## TODO:  This target is never used!!!
-junit-all: junit
-	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
-	@# but I'm having trouble with that, apparently due to hard-coded
-	@# directory paths.  And these tests are slow, so we want them to
-	@# be separate anyway.
-	${JAVA_COMMAND} daikon.test.split.SplitterFactoryTest
+	@# SplitterFactoryTest is not in AllTestsSuite, because it must run in its
+	@# own JVM:  it depends on the sequential numbering of splitter files.
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTest
 
 ###
 ### Clover (code coverage)

@@ -72,6 +72,8 @@ public class SampleTester {
           "      Display this usage message",
           "  --" + Daikon.config_option_SWITCH,
           "      Specify a configuration option ",
+          "  --" + Daikon.debugAll_SWITCH,
+          "      Turn on all debug flags (voluminous output)",
           "  --" + Daikon.debug_SWITCH,
           "      Specify a logger to enable",
           "  --" + Daikon.track_SWITCH,
@@ -81,7 +83,7 @@ public class SampleTester {
   /**
    * Runs the tests without JUnit.
    *
-   * @param args command-line arguments, like those of {@link #mainHelper}
+   * @param args command-line arguments; see {@link #usage}
    * @throws IOException if there is a problem reading a test file
    */
   public static void main(String[] args) throws IOException {
@@ -96,7 +98,7 @@ public class SampleTester {
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called programmatically.
    *
-   * @param args command-line arguments, like those of {@link #main}
+   * @param args command-line arguments; see {@link #usage}
    * @throws IOException if there is a problem reading a test file
    */
   @SuppressWarnings("JUnitMethodInvoked") // mainHelper() runs the tests without JUnit
@@ -150,7 +152,8 @@ public class SampleTester {
           throw new Daikon.NormalTermination();
 
         case '?':
-          break; // getopt() already printed an error
+          // getopt() already printed an error
+          throw new Daikon.UserError("Run with -h for usage");
 
         default:
           System.out.println("getopt() returned " + c);

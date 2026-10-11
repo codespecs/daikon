@@ -249,13 +249,23 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     ps.println("  public static void main(String[] args) {");
     ps.println("    try {");
-    ps.println("      mainHelper(args);");
+    ps.println("      if (!mainHelper(args)) {");
+    ps.println("        System.exit(1);");
+    ps.println("      }");
     ps.println("    } catch (Daikon.DaikonTerminationException e) {");
     ps.println("      Daikon.handleDaikonTerminationException(e);");
     ps.println("    }");
     ps.println("  }");
     ps.println();
-    ps.println("  public static void mainHelper(String[] args) {");
+    ps.println("  /**");
+    ps.println("   * This does the work of {@link #main(String[])}, but it never calls System.exit.");
+    ps.println("   * It may be called only once per JVM, because SplitterFactory numbers the files it");
+    ps.println("   * produces sequentially and setUpTests sets static state.");
+    ps.println("   *");
+    ps.println("   * @param args the command-line arguments; see {@link #usage}");
+    ps.println("   * @return true if all the tests passed");
+    ps.println("   */");
+    ps.println("  private static boolean mainHelper(String[] args) {");
     ps.println(
         "    Getopt g = new Getopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\");");
     ps.println("    int c;");
@@ -268,7 +278,8 @@ public class SplitterFactoryTestUpdater {
     ps.println("          System.out.println(usage);");
     ps.println("          throw new Daikon.NormalTermination();");
     ps.println("        case '?':");
-    ps.println("          break;");
+    ps.println("          // getopt() already printed an error");
+    ps.println("          throw new Daikon.UserError(\"Run with -h for usage\");");
     ps.println("        default:");
     ps.println("          System.out.println(\"getopt() returned \" + c);");
     ps.println("          break;");
@@ -287,9 +298,10 @@ public class SplitterFactoryTestUpdater {
     ps.println("    }");
     ps.println("    if (!result.wasSuccessful()) {");
     ps.println(
-        "      throw new Daikon.UserError(StringsPlume.nPlural(result.getFailureCount(),"
-            + " \"failure\"));");
+        "      System.err.println(\"SplitterFactoryTest: \" +"
+            + " StringsPlume.nPlural(result.getFailureCount(), \"failure\"));");
     ps.println("    }");
+    ps.println("    return result.wasSuccessful();");
     ps.println("  }");
     ps.println();
 
@@ -339,8 +351,8 @@ public class SplitterFactoryTestUpdater {
   }
 
   /**
-   * Appends the code to write the static block of code to code. This code is used by the
-   * SplitterFactoryTest to set up the needed files to run the tests on.
+   * Writes the {@code @BeforeClass} method setUpTests to {@code ps}. SplitterFactoryTest uses
+   * setUpTests to generate the splitter files that its tests check.
    */
   public static void appendSetUpTest(PrintStream ps) {
     ps.println("  @BeforeClass");
