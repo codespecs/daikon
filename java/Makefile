@@ -16,21 +16,21 @@ HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 
 USER ?= daikonbuild
 
-JAVA ?= java -ea
+# These use the JDK at JAVA_HOME, which is set by java-home.mk (included below).
+JAVA ?= ${CHECKED_JAVA_HOME}/bin/java -ea
 # For debugging, add -verbose flag to javac command
-# JAVAC ?= javac -g -Xlint:unchecked
-JAVAC ?= javac
-JAVADOC ?= javadoc
-JAR ?= jar
+# JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac -g -Xlint:unchecked
+JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac
+JAVADOC ?= ${CHECKED_JAVA_HOME}/bin/javadoc
+JAR ?= ${CHECKED_JAVA_HOME}/bin/jar
 
 BuildJDKTool = BuildJDK
 
 include ${DAIKONDIR}/java/java-home.mk
-ifeq (,$(call is_jdk,${JAVA_HOME}))
-  $(error No JDK found at JAVA_HOME="${JAVA_HOME}"; set JAVA_HOME or put javac on the PATH)
-endif
 
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
+# Without a JDK, they are all 0, so that targets that do not run Java (such as
+# "clean") work.
 JAVA8 := $(if $(filter 8,${JAVA_RELEASE_NUMBER}),1,0)
 JAVA17 := $(if $(call java_at_least,17),1,0)
 JAVA21 := $(if $(call java_at_least,21),1,0)
@@ -43,13 +43,13 @@ JAVA25 := $(if $(call java_at_least,25),1,0)
 JAVA27 := $(if $(call java_at_least,27),1,0)
 ifeq (${JAVA_RELEASE_NUMBER},25)
   ifndef JAVA25_HOME
-    JAVA25_HOME := ${JAVA_HOME}
+    JAVA25_HOME := ${DAIKON_JAVA_HOME}
   endif
 endif
 # Use 26, not 27, so that JDK 26 has a value for the --system flag below.
 ifeq ($(call java_at_least,26),1)
   ifndef JAVA27_HOME
-    JAVA27_HOME := ${JAVA_HOME}
+    JAVA27_HOME := ${DAIKON_JAVA_HOME}
   endif
 endif
 
@@ -137,16 +137,17 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/junit-4.13.2-Daikon.jar:${DAIKONDIR}/java/lib/hamcrest-core-1.3-Daikon.jar:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
 
 ## Add tools.jar and rt.jar, if they exist
-ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
-  DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/lib/tools.jar
+ifneq "$(wildcard ${DAIKON_JAVA_HOME}/lib/tools.jar)" ""
+  DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${DAIKON_JAVA_HOME}/lib/tools.jar
 endif
-ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
-  DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar
+ifneq "$(wildcard ${DAIKON_JAVA_HOME}/jre/lib/rt.jar)" ""
+  DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${DAIKON_JAVA_HOME}/jre/lib/rt.jar
 endif
 
-JAVADOC_COMMAND := ${JAVADOC} -cp ${DAIKON_CLASSPATH}
-JAVAC_COMMAND := ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
-JAVA_COMMAND := ${JAVA} -cp ${DAIKON_CLASSPATH}
+# Use "=", not ":=", so that a missing JDK is reported only when a command is used.
+JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
+JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
+JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 
 DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
@@ -1208,7 +1209,7 @@ junit-all: junit
 ###
 
 CLOVER := ${HOME}/clover
-CLOVER_CMD := ${JAVA_COMMAND} -cp ${CLOVER}/clover-1.3.1/lib/clover.jar \
+CLOVER_CMD = ${JAVA_COMMAND} -cp ${CLOVER}/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
 CLOVER_CP := $(subst ${DAIKONDIR}/java,${CLOVER}/java,${DAIKON_CLASSPATH})
 CLOVER_CP := ${CLOVER_CP}:${CLOVER}/clover-1.3.1/lib/clover.jar

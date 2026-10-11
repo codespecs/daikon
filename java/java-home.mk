@@ -22,6 +22,17 @@ endif
 # Commands run by make, including recursive invocations of make, use this value.
 export JAVA_HOME
 
+# DAIKON_JAVA_HOME is the value of JAVA_HOME when this file is included.  It
+# does not change if a Makefile later reassigns JAVA_HOME, so the commands that
+# use it agree with the version variables below.
+DAIKON_JAVA_HOME := ${JAVA_HOME}
+
+# CHECKED_JAVA_HOME is DAIKON_JAVA_HOME, but expanding it fails if
+# DAIKON_JAVA_HOME does not contain a JDK.  The check happens only when a
+# variable that uses it is expanded, so targets that do not run Java (such as
+# "clean") work without a JDK.
+CHECKED_JAVA_HOME = $(if $(call is_jdk,${DAIKON_JAVA_HOME}),${DAIKON_JAVA_HOME},$(error No JDK found at JAVA_HOME="${DAIKON_JAVA_HOME}"; set JAVA_HOME or put javac on the PATH))
+
 # The version of the JDK at JAVA_HOME, such as "1.8.0_462", "25.0.1", or
 # "27-ea".  It is empty if JAVA_HOME does not contain a JDK.
 JAVA_VERSION_STRING :=
