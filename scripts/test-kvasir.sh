@@ -49,6 +49,9 @@ make -f tests/kvasir-tests/Makefile.common show-os
 
 make kvasir
 
-make -C tests/dyncomp-tests regression-tests
-#make -C tests/kvasir-tests regression-tests
-make MPARG=-j1 -C tests/kvasir-tests regression-tests
+# Run the Kvasir tests even if a DynComp test fails.
+status=0
+make -C tests/dyncomp-tests regression-tests || status=$?
+#make -C tests/kvasir-tests regression-tests || status=$?
+make MPARG=-j1 -C tests/kvasir-tests regression-tests || status=$?
+exit $status

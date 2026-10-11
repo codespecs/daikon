@@ -1,0 +1,11 @@
+# This is a -*- makefile -*-, Emacs
+# Included by tests/kvasir-tests/Makefile.common and tests/dyncomp-tests/Makefile.common.
+
+# Append this to a command that writes its output to file $(1).  If the
+# command fails, this prints the contents of $(1) and exits with the
+# command's status.
+show_output_on_failure = || { status=$$?; echo "Command failed with exit status $$status; contents of $(1) follow:"; cat $(1); exit $$status; }
+
+# A command that fails if file $(1) exists, with the exit status that the file contains.
+# Use it with show_output_on_failure.
+fail_if_status_file = if [ -f $(1) ]; then (exit $$(cat $(1))); fi

@@ -93,7 +93,10 @@ boilerplate($1, $2, test-kvasir.sh, scripts/test-kvasir.sh)[]dnl
           path: |
             tests/*-tests/**/*.out
             tests/*-tests/**/*.diff
+            tests/*-tests/**/*.counts
+            tests/*-tests/**/*.comp
             tests/*-tests/**/daikon-output/*.decls
+            tests/*-tests/**/daikon-output/*.dtrace
           if-no-files-found: ignore
           retention-days: 14
 ])dnl

@@ -28,7 +28,9 @@ default: summary-w-daikon
 # -k keeps one failing test from preventing the others from running.
 # The summary is skipped if a test failed, because it would re-run that test.
 # The results are always printed.
+# Old .diff files are removed so that the results do not report them.
 regression-tests:
+	@find . -name '*.diff' -delete; \
 	status=0; \
 	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} -k --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working || status=$$?; \
@@ -155,8 +157,13 @@ medium-crypto-tests__%: do-rijndael__%
 do-%__quietly:
 	@${MAKE} --jobs=1 --no-print-directory -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
 
+# If the sub-make fails, this writes a .diff file so that the "results" target reports the failure.
+# (A failed test might produce no .diff file.)
 do-%:
-	@${MAKE} --jobs=1 -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
+	@dir=`echo $* | perl -pe 's/__.*//;'`; \
+	rm -f $$dir/$$dir.make-failure.diff; \
+	${MAKE} --jobs=1 -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'` \
+	  || { status=$$?; echo "\"make -C $$dir\" failed with exit status $$status; see the log above." >$$dir/$$dir.make-failure.diff; exit $$status; }
 
 # removes fields before the size (ie, permissions, owner, group).
 PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; if ($$1 > 0) { $$failure++; print "$$1\t$$2\t$$3\n";} END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
