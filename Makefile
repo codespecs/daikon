@@ -57,6 +57,7 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 # compiling Daikon' in the Daikon Developer manual; which is in turn referenced
 # from the 'Installation' section of the Daikon manual.
 SCRIPT_FILES := Makefile \
+	check-daikondir.mk plume-scripts.mk \
 	daikon.bashrc \
 	dfepl dtrace-perl dtype-perl \
 	java-cpp \
