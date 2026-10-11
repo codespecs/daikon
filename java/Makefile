@@ -31,36 +31,20 @@ include ${DAIKONDIR}/java/java-home.mk
 
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
 # java-home.mk sets JAVA_RELEASE_NUMBER.
-JAVA8 := 0
-JAVA17 := 0
-JAVA21 := 0
-JAVA24 := 0
-JAVA25 := 0
-JAVA27 := 0
-ifeq (${JAVA_RELEASE_NUMBER},8)
-  JAVA8 := 1
-endif
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
-  JAVA17 := 1
-endif
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 21; echo $$?),0)
-  JAVA21 := 1
-endif
+JAVA8 := $(shell expr ${JAVA_RELEASE_NUMBER} = 8)
+JAVA17 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 17)
+JAVA21 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
 # JDK 24 isn't an LTS version, but we need it to know whether to compile Instrument24.java.
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
-  JAVA24 := 1
+JAVA24 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 24)
+JAVA25 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 25)
+JAVA27 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 27)
+ifeq (${JAVA24},1)
   BuildJDKTool = BuildJDK24
 endif
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 25; echo $$?),0)
-  JAVA25 := 1
-endif
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 25; echo $$?),0)
+ifeq (${JAVA_RELEASE_NUMBER},25)
   ifndef JAVA25_HOME
     JAVA25_HOME := ${JAVA_HOME}
   endif
-endif
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 27; echo $$?),0)
-  JAVA27 := 1
 endif
 # Use -ge 26, not -ge 27, so that JDK 26 has a value for the --system flag below.
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 26; echo $$?),0)

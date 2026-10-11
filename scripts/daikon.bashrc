@@ -9,8 +9,7 @@
 ## You should not need to edit this file.
 
 # This logic is the same as in java/java-home.mk:  on macOS, use
-# /usr/libexec/java_home; otherwise, ask the javac on the PATH which JDK it is
-# in, falling back to resolving symbolic links to javac.
+# /usr/libexec/java_home; otherwise, ask the javac on the PATH which JDK it is in.
 # For JDK 8, java.home is the jre/ subdirectory of the JDK.
 # A failed detection does not modify JAVA_HOME in the user's shell.
 daikon_java_home="$JAVA_HOME"
@@ -19,26 +18,17 @@ if [ -z "$daikon_java_home" ] ; then
     daikon_java_home=$(/usr/libexec/java_home 2> /dev/null)
   else
     daikon_java_home=$(javac -J-XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$::;p;}')
-    if [ -z "$daikon_java_home" ] ; then
-      daikon_java_home=$(readlink -f "$(command -v javac)" 2> /dev/null | sed -e 's:/bin/javac$::')
-    fi
   fi
 fi
-# JDK 9 and later contain lib/jrt-fs.jar; JDK 8 contains jre/lib/rt.jar.
-if [ -z "$daikon_java_home" ] ; then
-  unset daikon_java_home
-  echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
-  return 2
-elif [ ! -x "$daikon_java_home/bin/javac" ] \
-     || { [ ! -f "$daikon_java_home/lib/jrt-fs.jar" ] && [ ! -f "$daikon_java_home/jre/lib/rt.jar" ]; } ; then
-  echo "No JDK found at JAVA_HOME=$daikon_java_home; please fix it.  Aborting daikon.bashrc ."
+if [ -z "$daikon_java_home" ] || [ ! -x "$daikon_java_home/bin/javac" ] ; then
+  echo "No JDK found at JAVA_HOME=$daikon_java_home; set JAVA_HOME or put javac on the PATH.  Aborting daikon.bashrc ."
   unset daikon_java_home
   return 2
 fi
 export JAVA_HOME="$daikon_java_home"
 unset daikon_java_home
 
-if [ -z "${BASH_SOURCE:-}" ]; then
+if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
   # Cannot infer DAIKONDIR.
   if [ -z ${DAIKONDIR+x} ]; then
     echo "Please set DAIKONDIR environment variable.  Aborting daikon.bashrc ."
@@ -51,9 +41,9 @@ if [ -z "${BASH_SOURCE:-}" ]; then
 else
   ## Note that this overrides any previous setting.
   # Mac OS does not have "-e" argument to readlink
-  # export DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE}" )/..")"
+  # export DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
   # Code from: https://stackoverflow.com/q/59895/173852
-  export DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE}" )/.." >/dev/null && pwd )"
+  export DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
 fi
 
 if [ -z "$DAIKONSCRIPTS" ]; then
