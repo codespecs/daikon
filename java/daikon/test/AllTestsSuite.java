@@ -34,9 +34,8 @@ import org.junit.runners.Suite;
   daikon.test.TestQuant.class,
   daikon.test.TestAnnotate.class,
   daikon.test.DtraceDiffTester.class,
-  //       ,
-  //       // I'm having trouble with this; need to fix, reinstate, and not call
-  //       // specially from Makefile.  -MDE 7/8/2005
-  //       daikon.test.split.SplitterFactoryTest.class
+  // daikon.test.split.SplitterFactoryTest is run separately by the Makefile's
+  // "junit" target, because SplitterFactoryTest.java is generated after
+  // everything else is compiled.
 })
 public final class AllTestsSuite {}
