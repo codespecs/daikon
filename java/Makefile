@@ -26,13 +26,10 @@ JAR ?= jar
 BuildJDKTool = BuildJDK
 
 include ${DAIKONDIR}/java/java-home.mk
-ifeq (,$(call is_jdk,${JAVA_HOME}))
-  $(error No JDK found at JAVA_HOME="${JAVA_HOME}"; set JAVA_HOME or put javac on the PATH)
-endif
 
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
-JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
+JAVA_VERSION_STRING_WITH_EA := $(shell "${JAVA_HOME}/bin/javac" -version 2>&1 | head -1 | cut "-d " -f2)
+JAVA_VERSION_STRING := $(shell "${JAVA_HOME}/bin/javac" -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
 ifneq (,$(findstring start1.8,start${JAVA_VERSION_STRING}))
   JAVA8 := 1
   JAVA17 := 0
@@ -90,15 +87,11 @@ OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Use "--source 25 --target 25" because Java 25 is an LTS version.
 ifeq (${JAVA25}, 1)
+  # JAVA25_HOME or JAVA27_HOME is set, because JAVA_HOME is non-empty.
   ifdef JAVA25_HOME
     JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}
   else
-  ifdef JAVA27_HOME
     JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA27_HOME}
-  else
-    # If this happens, $JAVA_HOME must also be empty.
-    $(error JAVA25_HOME and JAVA27_HOME are not set; JAVA_HOME=${JAVA_HOME})
-  endif
   endif
 else
   JAVAC_TARGET_FLAGS ?= -source 8 -target 8

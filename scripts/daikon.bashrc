@@ -8,21 +8,14 @@
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
 
-# This logic is the same as in java/java-home.mk:  if javac on the PATH is (a
-# symbolic link to) a file in a JDK, use that JDK; otherwise, on macOS, use
-# /usr/libexec/java_home.  If javac is a wrapper script (as used by jenv, asdf,
-# or mise), set JAVA_HOME instead.
+# This logic is the same as in java/java-home.mk:  ask the javac on the PATH
+# which JDK it is in; otherwise, on macOS, use /usr/libexec/java_home.
+# For JDK 8, java.home is the jre/ subdirectory of the JDK.
 if [ -z "$JAVA_HOME" ] ; then
-  javac_realpath=$(realpath "$(type -P javac)" 2> /dev/null)
-  javac_jdk=${javac_realpath%/bin/javac}
-  # JDK 9 and later contain lib/jrt-fs.jar; JDK 8 contains jre/lib/rt.jar.
-  if [ "$javac_jdk" != "$javac_realpath" ] && [ -x "$javac_jdk/bin/javac" ] \
-     && { [ -f "$javac_jdk/lib/jrt-fs.jar" ] || [ -f "$javac_jdk/jre/lib/rt.jar" ]; } ; then
-    JAVA_HOME=$javac_jdk
-  elif [ "$(uname)" = "Darwin" ] ; then
+  JAVA_HOME=$(javac -J-XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$::;p;}')
+  if [ -z "$JAVA_HOME" ] && [ "$(uname)" = "Darwin" ] ; then
     JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
   fi
-  unset javac_realpath javac_jdk
 fi
 export JAVA_HOME
 if [ ! -d "$JAVA_HOME" ]; then
@@ -30,7 +23,7 @@ if [ ! -d "$JAVA_HOME" ]; then
   return 2
 fi
 
-if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
+if [ -z "${BASH_SOURCE:-}" ]; then
   # Cannot infer DAIKONDIR.
   if [ -z ${DAIKONDIR+x} ]; then
     echo "Please set DAIKONDIR environment variable.  Aborting daikon.bashrc ."
@@ -43,9 +36,9 @@ if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
 else
   ## Note that this overrides any previous setting.
   # Mac OS does not have "-e" argument to readlink
-  # export DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
+  # export DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE}" )/..")"
   # Code from: https://stackoverflow.com/q/59895/173852
-  export DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
+  export DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE}" )/.." >/dev/null && pwd )"
 fi
 
 if [ -z "$DAIKONSCRIPTS" ]; then

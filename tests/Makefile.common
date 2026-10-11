@@ -158,9 +158,6 @@ endif
 
 # This is included after Makefile.user, so that Makefile.user can set JAVA_HOME.
 include ${DAIKONDIR}/java/java-home.mk
-ifeq (,$(call is_jdk,${JAVA_HOME}))
-  $(error No JDK found at JAVA_HOME="${JAVA_HOME}"; set JAVA_HOME or put javac on the PATH)
-endif
 
 # SOURCES is where all of the source code to be examined is located
 SOURCES?=$(COMMON_HERE)/sources
@@ -230,7 +227,7 @@ default: help
 # Note that version 11 (or 21 or ...) requires the 'start' anchor below
 # to make the old vs. new test work properly.
 
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
+JAVA_VERSION_STRING := $(shell "${JAVA_HOME}/bin/javac" -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
 startJVS := $(shell echo start${JAVA_VERSION_STRING})
 ifneq (,$(findstring start1.8,$(startJVS)))
   JAVA_RELEASE_NUMBER := 8

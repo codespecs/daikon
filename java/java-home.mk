@@ -1,23 +1,26 @@
 # Makefile fragment that sets JAVA_HOME, if it is not already set to a non-empty
-# value, and defines the function is_jdk.
+# value, and checks it.
 # It is included by java/Makefile and tests/Makefile.common.
 # scripts/daikon.bashrc finds JAVA_HOME in the same way.
 
-# $(call is_jdk,DIR) is non-empty if DIR contains a JDK.
-# JDK 9 and later contain lib/jrt-fs.jar; JDK 8 contains jre/lib/rt.jar.
-is_jdk = $(and $(strip $(1)),$(wildcard $(1)/bin/javac),$(wildcard $(1)/lib/jrt-fs.jar $(1)/jre/lib/rt.jar))
-
-# If the javac on the PATH is (a symbolic link to) a file in a JDK, use that
-# JDK.  If javac is a wrapper script (as used by jenv, asdf, or mise), set
-# JAVA_HOME instead.
+# Ask the javac on the PATH which JDK it is in.  This works even if javac is a
+# symbolic link or a wrapper script (as used by jenv, asdf, or mise).
+# For JDK 8, java.home is the jre/ subdirectory of the JDK.
 ifeq ($(strip ${JAVA_HOME}),)
-  JAVAC_ON_PATH_JDK := $(patsubst %/bin/javac,%,$(filter %/bin/javac,$(realpath $(shell command -v javac 2> /dev/null))))
-  JAVA_HOME := $(if $(call is_jdk,${JAVAC_ON_PATH_JDK}),${JAVAC_ON_PATH_JDK})
+  JAVA_HOME := $(shell javac -J-XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$$::;p;}')
 endif
 ifeq ($(strip ${JAVA_HOME}),)
   ifeq ($(shell uname), Darwin)
     JAVA_HOME := $(shell /usr/libexec/java_home 2> /dev/null)
   endif
+endif
+ifeq ($(strip ${JAVA_HOME}),)
+  $(error Cannot infer JAVA_HOME; set JAVA_HOME or put javac on the PATH)
+endif
+# JDK 9 and later contain lib/jrt-fs.jar; JDK 8 contains jre/lib/rt.jar.
+# This uses the shell rather than $(wildcard ...), which does not handle spaces.
+ifneq ($(shell [ -x '${JAVA_HOME}/bin/javac' ] && { [ -f '${JAVA_HOME}/lib/jrt-fs.jar' ] || [ -f '${JAVA_HOME}/jre/lib/rt.jar' ]; } && echo yes),yes)
+  $(warning No JDK found at JAVA_HOME="${JAVA_HOME}")
 endif
 # Commands run by make, including recursive invocations of make, use this value.
 export JAVA_HOME
