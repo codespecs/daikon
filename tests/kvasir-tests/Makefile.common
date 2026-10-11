@@ -72,7 +72,7 @@ $(info OS_ID="$(OS_ID)")
 $(info OS_REL="$(OS_REL)")
 
 ifeq ($(OS_ID),CentOS)
-($warning !!Daikon no longer tests on CentOS!!)
+$(warning !!Daikon no longer tests on CentOS!!)
 endif
 
 ifeq ($(OS_ID),Fedora)
