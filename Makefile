@@ -2,19 +2,15 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
+# Don't let the user override this; it should refer to the current directory.
+# Export it so that sub-makes use this clone rather than a DAIKONDIR from the environment.
+export DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
 include $(dir $(lastword ${MAKEFILE_LIST}))scripts/check-daikondir.mk
 
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
 
-PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
-
-ifndef NONETWORK
-ifeq (,$(wildcard ${PLUME_SCRIPTS}))
-  dummy := $(shell mkdir -p "$(dir ${PLUME_SCRIPTS})" && git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git "${PLUME_SCRIPTS}")
-endif
-endif
+include ${DAIKONDIR}/scripts/plume-scripts.mk
 SORT_DIRECTORY_ORDER := ${PLUME_SCRIPTS}/sort-directory-order
 ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   # The clone above did not happen or did not succeed, so sort-directory-order is not available.
