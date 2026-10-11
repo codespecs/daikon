@@ -282,12 +282,13 @@ public class SplitterFactoryTestUpdater {
     ps.println("    }");
     ps.println("    Result result = JUnitCore.runClasses(SplitterFactoryTest.class);");
     ps.println("    for (Failure failure : result.getFailures()) {");
+    ps.println("      System.err.println(\"Failure in \" + failure.getTestHeader() + \":\");");
     ps.println("      System.err.println(failure.getTrace());");
     ps.println("    }");
     ps.println("    if (!result.wasSuccessful()) {");
     ps.println(
-        "      throw new Daikon.UserError(StringsPlume.nPlural(result.getFailureCount(), \"test\")"
-            + " + \" failed\");");
+        "      throw new Daikon.UserError(StringsPlume.nPlural(result.getFailureCount(),"
+            + " \"failure\"));");
     ps.println("    }");
     ps.println("  }");
     ps.println();
@@ -344,8 +345,6 @@ public class SplitterFactoryTestUpdater {
   public static void appendSetUpTest(PrintStream ps) {
     ps.println("  @BeforeClass");
     ps.println("  public static void setUpTests() {");
-    ps.println("    List<String> spinfoFiles;");
-    ps.println("    List<String> declsFiles;");
     for (int i = 0; i < spinfoFileLists.size(); i++) {
       ps.println("    createSplitterFiles(");
       ps.println(
