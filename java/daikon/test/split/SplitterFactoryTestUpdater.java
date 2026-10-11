@@ -17,15 +17,13 @@ import java.util.List;
 import org.plumelib.util.FilesPlume;
 
 /**
- * This class's main method can be used to update both the target files of SplitterFactoryTest and
- * the code of the SplitterFactoryTest itself.
+ * This class's main method writes the code of SplitterFactoryTest. When passed {@code
+ * --update-goals}, it also overwrites the goal files of SplitterFactoryTest with the splitter files
+ * that the current SplitterFactory produces.
  *
- * <p>To use this program to update SplitterFactoryTest and the target files, run
- *
- * <pre>    \rm -f targets/*.java.goal SplitterFactoryTest.java</pre>
- *
- * Then simply run the main method without any arguments in the daikon/java directory, and then
- * re-compile the SplitterFactoryTest.
+ * <p>To update the goal files, run {@code make update-splitter-goals} in the daikon/java directory,
+ * then examine the differences in the goal files (for example, with {@code git diff}) before
+ * committing them.
  *
  * <p>To add additional tests to this test program, place the .spinfo and decls files into the
  * "targets" directory then add a call to generateSplitters with the new files. generateSplitters is
@@ -43,14 +41,29 @@ public class SplitterFactoryTestUpdater {
   private SplitterFactoryTestUpdater() {} // blocks public constructor
 
   /**
-   * If one has changed the test cases used below, for best results run {@code rm *.java.goal} while
-   * in the targets directory before running this method. Creates new splitter java files, moves the
-   * new files into target directory, rewrites the code of SplitterFactoryTest to use the new files.
-   * One should recompile SplitterFactoryTest after running this method.
+   * Creates new splitter java files and writes the code of SplitterFactoryTest, which compares
+   * splitter files against the goal files. One should recompile SplitterFactoryTest after running
+   * this method.
    *
-   * @param args are ignored
+   * <p>If one has changed the test cases used below, for best results run {@code rm *.java.goal}
+   * while in the targets directory before running this method with {@code --update-goals}.
+   *
+   * @param args either empty, or {@code --update-goals} to also move the new splitter java files
+   *     into the target directory as goal files
    */
   public static void main(String[] args) {
+    boolean updateGoals;
+    if (args.length == 0) {
+      updateGoals = false;
+    } else if (args.length == 1 && args[0].equals("--update-goals")) {
+      updateGoals = true;
+    } else {
+      System.err.println(
+          "Usage:  java daikon.test.split.SplitterFactoryTestUpdater [--update-goals]");
+      System.exit(1);
+      return;
+    }
+
     // For debugging
     // SplitterFactory.dkconfig_delete_splitters_on_exit = false;
 
@@ -58,7 +71,7 @@ public class SplitterFactoryTestUpdater {
     generateSplitters("Fib.spinfo", "Fib.decls");
     generateSplitters("QueueAr.spinfo", "QueueAr.decls");
     generateSplitters("BigFloat.spinfo", "BigFloat.decls");
-    moveFiles();
+    processFiles(updateGoals);
     writeTestClass();
   }
 
@@ -111,8 +124,13 @@ public class SplitterFactoryTestUpdater {
     }
   }
 
-  /** Moves the generated splitter files from the tempDir to the target Dir. */
-  private static void moveFiles() {
+  /**
+   * Records the class names of the generated splitter files, which are in the tempDir.
+   *
+   * @param updateGoals if true, also move the generated splitter files to the target directory as
+   *     goal files
+   */
+  private static void processFiles(boolean updateGoals) {
     File tempDir = new File(SplitterFactory.getTempDir());
     String[] fileNames = tempDir.list();
     if (fileNames == null) {
@@ -121,16 +139,18 @@ public class SplitterFactoryTestUpdater {
     for (int i = 0; i < fileNames.length; i++) {
       if (fileNames[i].endsWith(".java")) {
         String fileName = fileNames[i];
-        String fromName = tempDir.getPath() + File.separator + fileName;
-        String toName = targetDir + fileName + ".goal";
-        try {
-          moveFile(fromName, toName);
-        } catch (Error e) {
-          System.out.printf("Failed to move %s to %s%n", fromName, toName);
-          throw e;
-        } catch (RuntimeException e) {
-          System.out.printf("Failed to move %s to %s%n", fromName, toName);
-          throw e;
+        if (updateGoals) {
+          String fromName = tempDir.getPath() + File.separator + fileName;
+          String toName = targetDir + fileName + ".goal";
+          try {
+            moveFile(fromName, toName);
+          } catch (Error e) {
+            System.out.printf("Failed to move %s to %s%n", fromName, toName);
+            throw e;
+          } catch (RuntimeException e) {
+            System.out.printf("Failed to move %s to %s%n", fromName, toName);
+            throw e;
+          }
         }
         String javaFileName = new File(fileName).getName();
         String className = javaFileName.substring(0, javaFileName.length() - ".java".length());
@@ -256,7 +276,9 @@ public class SplitterFactoryTestUpdater {
     ps.println("  }");
     ps.println();
     ps.println("  /**");
-    ps.println("   * This does the work of {@link #main(String[])}, but it never calls System.exit, so");
+    ps.println(
+        "   * This does the work of {@link #main(String[])}, but it never calls System.exit,"
+            + " so");
     ps.println("   * it is appropriate to be called programmatically.");
     ps.println("   *");
     ps.println("   * @param args the command-line arguments; see {@link #usage}");
@@ -361,7 +383,8 @@ public class SplitterFactoryTestUpdater {
 
   /** Appends the code that executes the test in SplitterFactoryTest to code. */
   private static void appendTests(PrintStream ps) {
-    ps.println("  /** Returns true iff files are the same (ignoring extra white space). */");
+    ps.println(
+        "  /** Fails the test unless the files are the same (ignoring extra white space). */");
     ps.println("  public static void assertEqualFiles(String f1, String f2) {");
     ps.println("    if (!FilesPlume.equalFiles(f1, f2)) {");
     ps.println("      fail(\"Files \" + f1 + \" and \" + f2 + \" differ.\");");

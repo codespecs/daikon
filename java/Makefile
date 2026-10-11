@@ -1219,7 +1219,10 @@ check-serialize:
 
 
 .PHONY: junit
-junit: daikon/Daikon.class ${AUTO_GENERATED_CLASSES_2}
+junit: daikon/Daikon.class
+	@# This is not a prerequisite, so that "make -j" does not run it concurrently
+	@# with compiling Daikon, whose classes the SplitterFactoryTest rules use.
+	${MAKE} ${AUTO_GENERATED_CLASSES_2}
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
 ifeq (${JAVA24}, 1)
@@ -1473,6 +1476,16 @@ daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTes
 
 ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
 	${JAVAC_COMMAND} ${AUTO_GENERATED_FILES_2}
+
+# Overwrites SplitterFactoryTest's goal files with the current SplitterFactory output.
+# Examine the differences (e.g., with "git diff") before committing them.
+.PHONY: update-splitter-goals
+update-splitter-goals: daikon/Daikon.class
+	rm -f daikon/test/split/SplitterFactoryTest.java
+	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater --update-goals > /dev/null 2>&1) \
+	  || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater --update-goals
+	chmod a-w daikon/test/split/SplitterFactoryTest.java
+	${MAKE} ${AUTO_GENERATED_CLASSES_2}
 
 # Create the auto-generated files with jpp
 .PHONY: jpp
