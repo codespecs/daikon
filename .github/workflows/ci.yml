@@ -389,19 +389,17 @@ jobs:
           fetch-depth: 25
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
+      - name: collect Kvasir test outputs
+        if: failure()
+        run: scripts/collect-kvasir-outputs.sh kvasir-outputs
       - name: upload Kvasir test outputs
-        if: failure() || cancelled()
+        if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: kvasir-outputs-ubuntu-jdk11
-          path: |
-            tests/*-tests/**/*.out
-            tests/*-tests/**/*.diff
-            tests/*-tests/**/*.counts
-            tests/*-tests/**/*.comp
-            tests/*-tests/**/daikon-output/*.decls
-            tests/*-tests/**/daikon-output/*.dtrace
-          if-no-files-found: ignore
+          path: kvasir-outputs
+          if-no-files-found: warn
+          overwrite: true
           retention-days: 14
 
   kvasir_ubuntu_jdk25:
@@ -416,19 +414,17 @@ jobs:
           fetch-depth: 25
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
+      - name: collect Kvasir test outputs
+        if: failure()
+        run: scripts/collect-kvasir-outputs.sh kvasir-outputs
       - name: upload Kvasir test outputs
-        if: failure() || cancelled()
+        if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: kvasir-outputs-ubuntu-jdk25
-          path: |
-            tests/*-tests/**/*.out
-            tests/*-tests/**/*.diff
-            tests/*-tests/**/*.counts
-            tests/*-tests/**/*.comp
-            tests/*-tests/**/daikon-output/*.decls
-            tests/*-tests/**/daikon-output/*.dtrace
-          if-no-files-found: ignore
+          path: kvasir-outputs
+          if-no-files-found: warn
+          overwrite: true
           retention-days: 14
 
   kvasir_ubuntu_jdk27:
@@ -446,19 +442,17 @@ jobs:
           fetch-depth: 25
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
+      - name: collect Kvasir test outputs
+        if: failure()
+        run: scripts/collect-kvasir-outputs.sh kvasir-outputs
       - name: upload Kvasir test outputs
-        if: failure() || cancelled()
+        if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: kvasir-outputs-ubuntu-jdk27
-          path: |
-            tests/*-tests/**/*.out
-            tests/*-tests/**/*.diff
-            tests/*-tests/**/*.counts
-            tests/*-tests/**/*.comp
-            tests/*-tests/**/daikon-output/*.decls
-            tests/*-tests/**/daikon-output/*.dtrace
-          if-no-files-found: ignore
+          path: kvasir-outputs
+          if-no-files-found: warn
+          overwrite: true
           retention-days: 14
 
   ## The Checker Framework cannot be run under Java 8 or 11.
@@ -930,19 +924,17 @@ jobs:
           fetch-depth: 25
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
+      - name: collect Kvasir test outputs
+        if: failure()
+        run: scripts/collect-kvasir-outputs.sh kvasir-outputs
       - name: upload Kvasir test outputs
-        if: failure() || cancelled()
+        if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: kvasir-outputs-rockylinux-jdk25
-          path: |
-            tests/*-tests/**/*.out
-            tests/*-tests/**/*.diff
-            tests/*-tests/**/*.counts
-            tests/*-tests/**/*.comp
-            tests/*-tests/**/daikon-output/*.decls
-            tests/*-tests/**/daikon-output/*.dtrace
-          if-no-files-found: ignore
+          path: kvasir-outputs
+          if-no-files-found: warn
+          overwrite: true
           retention-days: 14
 
   kvasir_rockylinux_jdk27:
@@ -961,17 +953,15 @@ jobs:
           fetch-depth: 25
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
+      - name: collect Kvasir test outputs
+        if: failure()
+        run: scripts/collect-kvasir-outputs.sh kvasir-outputs
       - name: upload Kvasir test outputs
-        if: failure() || cancelled()
+        if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: kvasir-outputs-rockylinux-jdk27
-          path: |
-            tests/*-tests/**/*.out
-            tests/*-tests/**/*.diff
-            tests/*-tests/**/*.counts
-            tests/*-tests/**/*.comp
-            tests/*-tests/**/daikon-output/*.decls
-            tests/*-tests/**/daikon-output/*.dtrace
-          if-no-files-found: ignore
+          path: kvasir-outputs
+          if-no-files-found: warn
+          overwrite: true
           retention-days: 14

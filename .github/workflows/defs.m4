@@ -85,19 +85,17 @@ ifelse($1,canary_os,,[      - kvasir_[]canary_os[]_jdk$2
 ])dnl
 ])dnl
 boilerplate($1, $2, test-kvasir.sh, scripts/test-kvasir.sh)[]dnl
+      - name: collect Kvasir test outputs
+        if: failure()
+        run: scripts/collect-kvasir-outputs.sh kvasir-outputs
       - name: upload Kvasir test outputs
-        if: failure() || cancelled()
+        if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: kvasir-outputs-$1-jdk$2
-          path: |
-            tests/*-tests/**/*.out
-            tests/*-tests/**/*.diff
-            tests/*-tests/**/*.counts
-            tests/*-tests/**/*.comp
-            tests/*-tests/**/daikon-output/*.decls
-            tests/*-tests/**/daikon-output/*.dtrace
-          if-no-files-found: ignore
+          path: kvasir-outputs
+          if-no-files-found: warn
+          overwrite: true
           retention-days: 14
 ])dnl
 dnl
