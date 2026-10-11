@@ -8,15 +8,26 @@
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
 
-if [ "$(uname)" = "Darwin" ] ; then
-  export JAVA_HOME=${JAVA_HOME:-$(/usr/libexec/java_home)}
-else
-  export JAVA_HOME=${JAVA_HOME:-$(dirname $(dirname $(readlink -f $(which javac))))}
+# Ask the javac on the PATH which JDK it is in.  This works even if javac is a
+# wrapper script (as used by jenv, asdf, or mise) or the macOS /usr/bin/javac stub.
+# Running Daikon requires only a JRE, so use the java on the PATH if there is no javac.
+# For JDK 8, java.home is the jre/ subdirectory of the JDK.
+# A failed detection does not modify JAVA_HOME in the user's shell.
+daikon_java_home="$JAVA_HOME"
+if [ -z "$daikon_java_home" ] ; then
+  if command -v javac > /dev/null 2>&1 ; then
+    daikon_java_home=$(javac -J-XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$::;p;}')
+  else
+    daikon_java_home=$(java -XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$::;p;}')
+  fi
 fi
-if [ ! -d "$JAVA_HOME" ]; then
-  echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
+if [ -z "$daikon_java_home" ] || [ ! -x "$daikon_java_home/bin/java" ] ; then
+  echo "No Java found at JAVA_HOME=$daikon_java_home; set JAVA_HOME or put java on the PATH.  Aborting daikon.bashrc ."
+  unset daikon_java_home
   return 2
 fi
+export JAVA_HOME="$daikon_java_home"
+unset daikon_java_home
 
 if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
   # Cannot infer DAIKONDIR.
