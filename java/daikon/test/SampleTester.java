@@ -144,6 +144,10 @@ public class SampleTester {
           throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
+    if (g.getOptind() < args.length) {
+      throw new Daikon.UserError(
+          "Unexpected argument " + args[g.getOptind()] + "; run with -h for usage");
+    }
 
     daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 

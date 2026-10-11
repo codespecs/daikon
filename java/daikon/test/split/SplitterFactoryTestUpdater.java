@@ -267,6 +267,12 @@ public class SplitterFactoryTestUpdater {
     ps.println("          throw new Daikon.BugInDaikon(\"getopt() returned \" + c);");
     ps.println("      }");
     ps.println("    }");
+    ps.println("    if (g.getOptind() < args.length) {");
+    ps.println("      throw new Daikon.UserError(");
+    ps.println(
+        "          \"Unexpected argument \" + args[g.getOptind()] + \"; run with -h for"
+            + " usage\");");
+    ps.println("    }");
     ps.println("    Result result = JUnitCore.runClasses(SplitterFactoryTest.class);");
     ps.println("    for (Failure failure : result.getFailures()) {");
     ps.println("      System.err.println(failure.getTrace());");
