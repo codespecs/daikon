@@ -28,16 +28,26 @@ my @decls;
 # blank lines between them, and a blank line follows the last of them.
 my $after_header = 0;
 
+# The line ending of the current file, "\n" or "\r\n".
+my $newline = "\n";
+
+# Prints the arguments, using the line ending of the current file.
+sub output {
+    my $text = join("", @_);
+    $text =~ s/\n/\r\n/g if $newline ne "\n";
+    print $text;
+}
+
 sub end_headers {
     if ($after_header) {
-	print "\n";
+	output "\n";
 	$after_header = 0;
     }
 }
 
 sub flush_decls {
     foreach my $decl (sort { $a->[1] cmp $b->[1] } @decls) {
-	print $decl->[0], $decl->[1], "\n";
+	output $decl->[0], $decl->[1], "\n";
     }
     @decls = ();
 }
@@ -83,10 +93,11 @@ for_each_record(\&process_record, sub { end_headers(); flush_decls(); });
 
 sub process_record {
     my ($record) = @_;
+    $newline = $record->{newline};
     my $kind = $record->{kind};
     if ($kind eq "header") {
 	flush_decls();
-	print $record->{comments}, $record->{text};
+	output $record->{comments}, $record->{text};
 	$after_header = 1;
 	return;
     }
@@ -98,9 +109,9 @@ sub process_record {
 	return;
     }
     flush_decls();
-    print $record->{comments};
+    output $record->{comments};
     if ($kind eq "list-implementors") {
-	print $record->{text}, "\n";
+	output $record->{text}, "\n";
     } elsif ($kind eq "data") {
 	my @lines = split(/\n/, $record->{text});
 	my @header;
@@ -115,6 +126,6 @@ sub process_record {
 	    push @vars, join("\n", splice(@lines, 0, 3));
 	}
 	@vars = sort @vars;
-	print join("\n", @header, @vars), "\n\n";
+	output join("\n", @header, @vars), "\n\n";
     }
 }

@@ -25,11 +25,15 @@ my %long_names;
 for_each_record(sub {
   my ($record) = @_;
   # Skip headers and declarations
-  count_record($record->{text}) if $record->{kind} eq "data";
+  count_record($record) if $record->{kind} eq "data";
 });
 
 sub count_record {
-    local $_ = shift;
+    my ($record) = @_;
+    local $_ = $record->{text};
+    # A truncated record is marked by a "// EOF" line, which may be among
+    # the comment lines that precede the record.
+    my $truncated = ($record->{comments} =~ m{^// EOF}m || $_ =~ "// EOF");
     return if /^Begin/ or /^Done/; # Skip processing program point comments
     # This script assumes that each program point name contains ":::".
     /^(.*):::(.+)$/m or die "Can't parse PPT name from <$_>";
@@ -47,7 +51,7 @@ sub count_record {
 	die "Mismatched line count (expected $ppt_count{$name}[1], found $line_count)".
 	  " for $name in $_"
 	    unless (($ppt_count{$name}[1] == $line_count)
-                    || ($_ =~ "// EOF") || ($name=~m/std::allocator<testing::/));
+                    || $truncated || ($name=~m/std::allocator<testing::/));
     } else {
 	$ppt_count{$name}[0] = 1;
 	$ppt_count{$name}[1] = $line_count;

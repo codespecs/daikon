@@ -5,9 +5,11 @@
 # Outputs differences that aren't hashcodes.
 # The program point declarations are those in declsfile, if it is given,
 # plus those in the dtrace files.  declsfile may be a .decls file or a
-# .dtrace file that contains declarations.
+# .dtrace file that contains declarations.  The first declaration of a
+# program point is used; any later declaration whose variables differ from
+# it is reported as a difference.
 
-use English;
+use English qw(-no_match_vars);
 use strict;
 $WARNING = 1;
 
@@ -50,18 +52,57 @@ sub gzopen ( $$ ) {
 }
 
 
-sub add_ppt_decl ( $$$$ ) {
-# Adds the program point declaration whose text is $2, which appears at
-# line $4 of the file named $3, to the decls hash $1, unless the hash
-# already contains a declaration of the program point.
+sub decl_difference ( $$ ) {
+# Returns a description of how the variables of the two program point
+# declarations $1 and $2 (as returned by parse_ppt_decl) differ, or undef
+# if they do not differ.
+    my ($ppta, $pptb) = @_;
+    my @varsa = @{$$ppta{vars}};
+    my @varsb = @{$$pptb{vars}};
+    for (my $i = 0; $i < @varsa && $i < @varsb; $i++) {
+	my ($vara, $varb) = ($varsa[$i], $varsb[$i]);
+	if ($$vara{name} ne $$varb{name}) {
+	    return "variable " . ($i + 1) . " is " . escape_decl($$vara{name})
+		. " in one and " . escape_decl($$varb{name}) . " in the other";
+	}
+	my $varname = escape_decl($$vara{name});
+	foreach my $key (qw( dec_type rep_type comparability constant )) {
+	    my $vala = defined($$vara{$key}) ? $$vara{$key} : "(none)";
+	    my $valb = defined($$varb{$key}) ? $$varb{$key} : "(none)";
+	    if ($vala ne $valb) {
+		(my $item = $key) =~ s/_/-/;
+		return "$item of $varname is \"$vala\" in one and \"$valb\" in the other";
+	    }
+	}
+    }
+    if (@varsa != @varsb) {
+	return "one declares " . scalar(@varsa) . " variables and the other "
+	    . scalar(@varsb);
+    }
+    return undef;
+}
+
+sub add_ppt_decl ( $$ ) {
+# Adds the program point declaration $2 (as returned by parse_ppt_decl) to
+# the decls hash $1.  If the hash already contains a declaration of the
+# program point, it is retained, and a difference is reported if the two
+# declarations' variables differ.
 # The decls hash maps from ppt name to the hash returned by parse_ppt_decl,
 # augmented with two keys:
 #   "var by name":  map from varname to the variable's hash
 #   "variable order":  the names of the non-constant variables, in order.
 #     These are the variables whose values appear in data trace records.
-    my ($declshash, $text, $filename, $line) = @_;
-    my $ppt = parse_ppt_decl($text, $filename, $line);
-    return if exists $$declshash{$$ppt{name}};
+    my ($declshash, $ppt) = @_;
+    my $old = $$declshash{$$ppt{name}};
+    if (defined $old) {
+	my $difference = decl_difference($old, $ppt);
+	if (defined $difference) {
+	    print "declaration difference for ppt " . escape_decl($$ppt{name})
+		. " ($$old{file} line $$old{line}, $$ppt{file} line $$ppt{line}): $difference\n";
+	    $differences_found++;
+	}
+	return;
+    }
     my $by_name = {};
     my @varorder = ();
     foreach my $var (@{$$ppt{vars}}) {
@@ -79,16 +120,10 @@ sub load_decls ( $$ ) {
 # Adds the program point declarations in the file named $2 to the decls
 # hash $1 (see add_ppt_decl).  Data trace records in the file are ignored.
     my ($declshash, $mydeclsname) = @_;
-    my $reader = record_reader(gzopen(\*DECLS, $mydeclsname), $mydeclsname);
-    my $found = 0;
-    while (defined(my $record = $reader->())) {
-	if ($record->{kind} eq "ppt") {
-	    add_ppt_decl($declshash, $record->{text}, $mydeclsname, $record->{line});
-	    $found = 1;
-	}
+    foreach my $ppt (read_ppt_decls(gzopen(\*DECLS, $mydeclsname), $mydeclsname, 1)) {
+	add_ppt_decl($declshash, $ppt);
     }
     close \*DECLS;
-    $found or die "No program point declarations in $mydeclsname\n";
 }
 
 sub load_ppt ( $$$ ) {
@@ -107,7 +142,8 @@ sub load_ppt ( $$$ ) {
 	    or return undef;
 	last if $record->{kind} eq "data";
 	if ($record->{kind} eq "ppt") {
-	    add_ppt_decl($declshash, $record->{text}, $dtfhname, $record->{line});
+	    add_ppt_decl($declshash,
+			 parse_ppt_decl($record->{text}, $dtfhname, $record->{line}));
 	}
     }
     my $text = $record->{text};

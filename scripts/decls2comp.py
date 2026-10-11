@@ -144,6 +144,7 @@ for ppt_name in sorted_ppt_keys:
 
     cur_var = None
     hashcode_vars = set()  # Variables whose rep. type is a hashcode
+    array_vars = set()  # Variables whose rep. type is an array
     for line in v:
         stripped_line = line.strip()
 
@@ -154,6 +155,8 @@ for ppt_name in sorted_ppt_keys:
             cur_rep = stripped_line[len(REP_START) :]
             if hashcode_re.match(cur_rep):
                 hashcode_vars.add(cur_var)
+            if cur_rep.endswith("[]"):
+                array_vars.add(cur_var)
         elif stripped_line[0 : len(COMP_START)] == COMP_START:
             assert (
                 cur_var  # There should have been a variable entry before comparability
@@ -171,7 +174,7 @@ for ppt_name in sorted_ppt_keys:
     always_comparable = []  # Variables that are comparable to every variable
     for var_name in sorted(var2comp.keys()):
         comp = var2comp[var_name]
-        if comp.startswith("-") and "[" not in comp:
+        if comp.startswith("-") and var_name not in array_vars:
             always_comparable.append(var_name)
         else:
             groups.setdefault(comp, []).append(var_name)
