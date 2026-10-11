@@ -20,7 +20,8 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER := sort
 endif
 
-JAVA_RELEASE_NUMBER := $(shell java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
+# This sets JAVA_HOME and JAVA_RELEASE_NUMBER.
+include ${DAIKONDIR}/java/java-home.mk
 
 
 ##########################################################################
@@ -454,7 +455,8 @@ staging:
 	@echo "]2;Building Javadoc"
 	mkdir ${STAGING_DIR}/download/api
 	# Javadoc is skipped on Java 8.  Hard-coded JAVA_HOME path is a hack.
-	(export PATH=/usr/lib/jvm/java-11/bin:${PATH}; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
+	# java/Makefile uses the JDK at JAVA_HOME, not the one on the PATH.
+	(export JAVA_HOME=/usr/lib/jvm/java-11; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	mkdir ${STAGING_DIR}/download/doc

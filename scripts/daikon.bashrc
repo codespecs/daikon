@@ -8,20 +8,35 @@
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
 
-# This logic is the same as in java/java-home.mk:  ask the javac on the PATH
-# which JDK it is in; otherwise, on macOS, use /usr/libexec/java_home.
+# This logic is the same as in java/java-home.mk:  on macOS, use
+# /usr/libexec/java_home; otherwise, ask the javac on the PATH which JDK it is
+# in, falling back to resolving symbolic links to javac.
 # For JDK 8, java.home is the jre/ subdirectory of the JDK.
-if [ -z "$JAVA_HOME" ] ; then
-  JAVA_HOME=$(javac -J-XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$::;p;}')
-  if [ -z "$JAVA_HOME" ] && [ "$(uname)" = "Darwin" ] ; then
-    JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
+# A failed detection does not modify JAVA_HOME in the user's shell.
+daikon_java_home="$JAVA_HOME"
+if [ -z "$daikon_java_home" ] ; then
+  if [ "$(uname)" = "Darwin" ] ; then
+    daikon_java_home=$(/usr/libexec/java_home 2> /dev/null)
+  else
+    daikon_java_home=$(javac -J-XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$::;p;}')
+    if [ -z "$daikon_java_home" ] ; then
+      daikon_java_home=$(readlink -f "$(command -v javac)" 2> /dev/null | sed -e 's:/bin/javac$::')
+    fi
   fi
 fi
-export JAVA_HOME
-if [ ! -d "$JAVA_HOME" ]; then
+# JDK 9 and later contain lib/jrt-fs.jar; JDK 8 contains jre/lib/rt.jar.
+if [ -z "$daikon_java_home" ] ; then
+  unset daikon_java_home
   echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
   return 2
+elif [ ! -x "$daikon_java_home/bin/javac" ] \
+     || { [ ! -f "$daikon_java_home/lib/jrt-fs.jar" ] && [ ! -f "$daikon_java_home/jre/lib/rt.jar" ]; } ; then
+  echo "No JDK found at JAVA_HOME=$daikon_java_home; please fix it.  Aborting daikon.bashrc ."
+  unset daikon_java_home
+  return 2
 fi
+export JAVA_HOME="$daikon_java_home"
+unset daikon_java_home
 
 if [ -z "${BASH_SOURCE:-}" ]; then
   # Cannot infer DAIKONDIR.

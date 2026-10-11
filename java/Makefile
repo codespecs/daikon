@@ -16,36 +16,29 @@ HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 
 USER ?= daikonbuild
 
-JAVA ?= java -ea
+# These use the JDK at JAVA_HOME, which java-home.mk sets, so that they agree
+# with JAVA_RELEASE_NUMBER.  ("?=" defines a recursively expanded variable.)
+JAVA ?= ${JAVA_HOME}/bin/java -ea
 # For debugging, add -verbose flag to javac command
-# JAVAC ?= javac -g -Xlint:unchecked
-JAVAC ?= javac
-JAVADOC ?= javadoc
-JAR ?= jar
+# JAVAC ?= ${JAVA_HOME}/bin/javac -g -Xlint:unchecked
+JAVAC ?= ${JAVA_HOME}/bin/javac
+JAVADOC ?= ${JAVA_HOME}/bin/javadoc
+JAR ?= ${JAVA_HOME}/bin/jar
 
 BuildJDKTool = BuildJDK
 
 include ${DAIKONDIR}/java/java-home.mk
 
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
-JAVA_VERSION_STRING_WITH_EA := $(shell "${JAVA_HOME}/bin/javac" -version 2>&1 | head -1 | cut "-d " -f2)
-JAVA_VERSION_STRING := $(shell "${JAVA_HOME}/bin/javac" -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-ifneq (,$(findstring start1.8,start${JAVA_VERSION_STRING}))
+# java-home.mk sets JAVA_RELEASE_NUMBER.
+JAVA8 := 0
+JAVA17 := 0
+JAVA21 := 0
+JAVA24 := 0
+JAVA25 := 0
+JAVA27 := 0
+ifeq (${JAVA_RELEASE_NUMBER},8)
   JAVA8 := 1
-  JAVA17 := 0
-  JAVA21 := 0
-  JAVA24 := 0
-  JAVA25 := 0
-  JAVA27 := 0
-  JAVA_RELEASE_NUMBER := 8
-else
-  JAVA8 := 0
-  JAVA17 := 0
-  JAVA21 := 0
-  JAVA24 := 0
-  JAVA25 := 0
-  JAVA27 := 0
-  JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]*\)\..*/\1/')
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
   JAVA17 := 1
@@ -823,7 +816,7 @@ ifneq (${JAVA21}, 1)
 else
 	@echo "Using Error Prone version ${error-prone-version}"
 ## MutablePublicArray is off because it suggests a dependency on Google Guava.
-	javac -cp ${DAIKON_CLASSPATH} \
+	${JAVAC} -cp ${DAIKON_CLASSPATH} \
 	  ${JAVAC_ANNOTATION_PROCESSOR_ARGS} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF -Xep:PatternMatchingInstanceof:OFF -Xep:StatementSwitchToExpressionSwitch:OFF -Xep:StringConcatToTextBlock:OFF' \
@@ -836,7 +829,7 @@ endif
 # THIS IS BROKEN - IS IT EVER USED?
 # Create an `error-prone.patch` file.
 errorprone-replacements:
-	javac -cp ${DAIKON_CLASSPATH} \
+	${JAVAC} -cp ${DAIKON_CLASSPATH} \
 	  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
 	  --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
@@ -914,7 +907,7 @@ endif
 # version 8 rather than version 9, and so typecheck jobs can be run in parallel).
 # JAVACHECK_EXTRA_ARGS is set only by the user.
 CHECKER_ARGS_ALL_JDK_VERSIONS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -Aversion -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -AwarnRedundantAnnotations -XDignore.symbol.file -Xlint:deprecation -proc:only -processorpath ${CHECKERFRAMEWORK_JAR} ${JAVACHECK_EXTRA_ARGS}
-ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
+ifeq (${JAVA8},1)
   CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC}
 else
   CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} \
@@ -1293,7 +1286,7 @@ javadoc: api
 .PHONY: api
 api: ${PLUME_SCRIPTS} ../.utils/html-tools ${AUTO_GENERATED_FILES}
 ifeq (${SKIP_JAVADOC},1)
-	java -version
+	${JAVA_HOME}/bin/java -version
 	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
 	@echo Skipping javadoc on JDK 1.8 because of https://bugs.openjdk.java.net/browse/JDK-8215542
 else
@@ -1312,7 +1305,7 @@ endif
 # Then, you need to do binary search on that file.
 api-test-each: ${PLUME_SCRIPTS} ../.utils/html-tools ${AUTO_GENERATED_FILES}
 ifeq (${SKIP_JAVADOC},1)
-	java -version
+	${JAVA_HOME}/bin/java -version
 	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
 	@echo Skipping javadoc on JDK 1.8 because of https://bugs.openjdk.java.net/browse/JDK-8215542
 else
@@ -1398,6 +1391,7 @@ showvars:
 	java -version 2>&1
 	which javac
 	javac -version
+	${JAVA_HOME}/bin/javac -version
 	@echo JAVA = ${JAVA}
 	@echo JAVA_COMMAND = ${JAVA_COMMAND}
 	@echo JAVAC = ${JAVAC}
