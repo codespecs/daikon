@@ -6,13 +6,16 @@
 # of Diff.
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+endif
+include ${DAIKONDIR}/tests/Makefile.jdk
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 PROGRAM := $(notdir $(shell pwd))
-DAIKON := java -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
-INV_DIFF := java -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
+DAIKON := ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
+INV_DIFF := ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 
