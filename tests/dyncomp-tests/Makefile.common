@@ -22,7 +22,6 @@ KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/libexec/valgrind/fjalar-$(VALGRI
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
 # --dyncomp is now the default; turn back off to minimize changes to this Makefile
 KVASIR_OPTIONS := $(KVASIR_OPTIONS) --no-dyncomp
-KVASIR_DECLS_2 := $(KVASIR_DECLS_@)
 CLEAN_OUTPUT := ../../kvasir-tests/clean-output.pl
 CLEAN_DECLS := ../../kvasir-tests/clean-decls.pl
 REMOVE_TIMING := ../../kvasir-tests/remove-timing.pl
