@@ -3,7 +3,6 @@
 # (e.g., "27-ea"), JAVA_VERSION_STRING (e.g., "27" or "1.8.0_402"), and
 # JAVA_RELEASE_NUMBER (e.g., "27" or "8"), all for the JDK at JAVA_HOME.
 # It is included by java/Makefile and tests/Makefile.common.
-# scripts/daikon.bashrc finds JAVA_HOME in nearly the same way.
 
 # Ask the javac on the PATH which JDK it is in.  This works even if javac is a
 # wrapper script (as used by jenv, asdf, or mise) or the macOS /usr/bin/javac stub.

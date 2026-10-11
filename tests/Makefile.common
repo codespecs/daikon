@@ -685,7 +685,7 @@ ${PROJECT_FILE}.txt-chicory.diff: $(call goal_name,${PROJECT_FILE}.txt-chicory) 
 	@echo
 ifeq ($(SKIP_DTRACE_DIFF),)
 	-rm -f $@
-	-${JAVA} -cp "${DAIKON_TESTS_CLASSPATH}" -ea daikon.tools.DtraceDiff \
+	-java -cp "${DAIKON_TESTS_CLASSPATH}" -ea daikon.tools.DtraceDiff \
 		$(call goal_name,${PROJECT_FILE}.txt-chicory) \
 	    ${PROJECT_FILE}.txt-chicory.dtrace > $@ 2>&1
 	cat $@
@@ -1270,7 +1270,7 @@ $(RTC_SCRATCH)/violations.txt: $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
 	@echo
 	@echo "### run runtime-check tool (${PROJECT_FILE})"
 	@echo
-	cd scratch && ${JAVA} -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.tools.runtimechecker.Main instrument --directory $(RTC_SCRATCH) \
+	cd scratch && java -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.tools.runtimechecker.Main instrument --directory $(RTC_SCRATCH) \
 		--make_all_fields_public ${INV_FILE} `cat $(INST_LIST_FILE)`
 	cd $(RTC_SCRATCH) && ${JAVAC} -g `find . $(FINDARGS) -name '*.java'`
 	cd $(RTC_SCRATCH) && ${JAVA} -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.tools.runtimechecker.WriteViolationFile $(RTC_USER_FLAGS) \
