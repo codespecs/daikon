@@ -1219,7 +1219,7 @@ check-serialize:
 
 
 .PHONY: junit
-junit: daikon/Daikon.class
+junit: daikon/Daikon.class ${AUTO_GENERATED_CLASSES_2}
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
 ifeq (${JAVA24}, 1)
@@ -1227,9 +1227,9 @@ ifeq (${JAVA24}, 1)
 	@# under versions of Java that do not have java.lang.classfile.
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite24
 endif
-	@# SplitterFactoryTest is not in AllTestsSuite, because it must run in its
-	@# own JVM:  it depends on the sequential numbering of splitter files.
-	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTest
+	@# SplitterFactoryTest is not in AllTestsSuite, because SplitterFactoryTest
+	@# is generated after the rest of Daikon (including AllTestsSuite) is compiled.
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.split.SplitterFactoryTest
 
 ###
 ### Clover (code coverage)
@@ -1463,7 +1463,8 @@ daikon/test/split/SplitterFactoryTestUpdater.class: daikon/test/split/SplitterFa
 	${JAVAC_COMMAND} $<
 
 ## First, a file not generated via java-cpp.
-daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.class
+daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.class \
+		$(wildcard daikon/test/split/targets/*.spinfo daikon/test/split/targets/*.decls)
 	rm -f $@
 # Has expected errors while compiling splitter files.
 # Suppress output unless whole command fails.

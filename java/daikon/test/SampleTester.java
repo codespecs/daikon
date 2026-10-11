@@ -70,15 +70,14 @@ public class SampleTester {
           "Usage: java daikon.test.SampleTester [OPTION]...",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
-          "  --" + Daikon.config_option_SWITCH,
-          "      Specify a configuration option ",
+          "  --" + Daikon.config_option_SWITCH + " config_var=val",
+          "      Set the specified configuration variable",
           "  --" + Daikon.debugAll_SWITCH,
           "      Turn on all debug flags (voluminous output)",
-          "  --" + Daikon.debug_SWITCH,
-          "      Specify a logger to enable",
-          "  --" + Daikon.track_SWITCH,
-          "      Specify a class, varinfos, and ppt to debug track.",
-          "      Format is class<var1,var2,var3>@ppt");
+          "  --" + Daikon.debug_SWITCH + " logger",
+          "      Turn on the specified debug logger",
+          "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
+          "      Print debug info on the specified invariant class, vars, and ppt");
 
   /**
    * Runs the tests without JUnit.

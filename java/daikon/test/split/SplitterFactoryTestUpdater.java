@@ -194,12 +194,10 @@ public class SplitterFactoryTestUpdater {
     ps.println("import gnu.getopt.*;");
     ps.println("import java.io.*;");
     ps.println("import java.util.*;");
-    ps.println("import junit.framework.*;");
     ps.println("import org.junit.BeforeClass;");
     ps.println("import org.junit.Test;");
+    ps.println("import org.junit.internal.TextListener;");
     ps.println("import org.junit.runner.JUnitCore;");
-    ps.println("import org.junit.runner.Result;");
-    ps.println("import org.junit.runner.notification.Failure;");
     ps.println("import org.plumelib.util.FilesPlume;");
     ps.println("import org.plumelib.util.StringsPlume;");
     ps.println("import org.plumelib.util.UtilPlume;");
@@ -258,14 +256,13 @@ public class SplitterFactoryTestUpdater {
     ps.println("  }");
     ps.println();
     ps.println("  /**");
-    ps.println("   * This does the work of {@link #main(String[])}, but it never calls System.exit.");
-    ps.println("   * It may be called only once per JVM, because SplitterFactory numbers the files it");
-    ps.println("   * produces sequentially and setUpTests sets static state.");
+    ps.println("   * This does the work of {@link #main(String[])}, but it never calls System.exit, so");
+    ps.println("   * it is appropriate to be called programmatically.");
     ps.println("   *");
     ps.println("   * @param args the command-line arguments; see {@link #usage}");
     ps.println("   * @return true if all the tests passed");
     ps.println("   */");
-    ps.println("  private static boolean mainHelper(String[] args) {");
+    ps.println("  public static boolean mainHelper(String[] args) {");
     ps.println(
         "    Getopt g = new Getopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\");");
     ps.println("    int c;");
@@ -291,17 +288,9 @@ public class SplitterFactoryTestUpdater {
         "          \"Unexpected argument \" + args[g.getOptind()] + \"; run with -h for"
             + " usage\");");
     ps.println("    }");
-    ps.println("    Result result = JUnitCore.runClasses(SplitterFactoryTest.class);");
-    ps.println("    for (Failure failure : result.getFailures()) {");
-    ps.println("      System.err.println(\"Failure in \" + failure.getTestHeader() + \":\");");
-    ps.println("      System.err.println(failure.getTrace());");
-    ps.println("    }");
-    ps.println("    if (!result.wasSuccessful()) {");
-    ps.println(
-        "      System.err.println(\"SplitterFactoryTest: \" +"
-            + " StringsPlume.nPlural(result.getFailureCount(), \"failure\"));");
-    ps.println("    }");
-    ps.println("    return result.wasSuccessful();");
+    ps.println("    JUnitCore junit = new JUnitCore();");
+    ps.println("    junit.addListener(new TextListener(System.out));");
+    ps.println("    return junit.run(SplitterFactoryTest.class).wasSuccessful();");
     ps.println("  }");
     ps.println();
 
@@ -357,6 +346,7 @@ public class SplitterFactoryTestUpdater {
   public static void appendSetUpTest(PrintStream ps) {
     ps.println("  @BeforeClass");
     ps.println("  public static void setUpTests() {");
+    ps.println("    SplitterFactory.resetGuid();");
     for (int i = 0; i < spinfoFileLists.size(); i++) {
       ps.println("    createSplitterFiles(");
       ps.println(
