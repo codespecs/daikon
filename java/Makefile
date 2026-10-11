@@ -25,17 +25,8 @@ JAR ?= jar
 
 BuildJDKTool = BuildJDK
 
-# Use ":=" so that the shell commands run only once.
-ifeq ($(origin JAVA_HOME), undefined)
-  ifeq ($(shell uname), Darwin)
-    JAVA_HOME := $(shell /usr/libexec/java_home)
-  else
-    JAVA_HOME := $(shell javac=$$(command -v javac) && readlink -f "$$javac" | sed 's:/bin/javac$$::')
-  endif
-  ifeq (${JAVA_HOME},)
-    $(error No JDK found; set JAVA_HOME or put javac on the PATH)
-  endif
-endif
+include ${DAIKONDIR}/java/java-home.mk
+CHECKED_JAVA_HOME := $(call checked_java_home,${JAVA_HOME})
 
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
 JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
