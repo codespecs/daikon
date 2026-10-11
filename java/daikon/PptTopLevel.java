@@ -4685,9 +4685,11 @@ public class PptTopLevel extends Ppt {
    * Returns true if this ppt is a leaf of the dataflow hierarchy: that is, its invariants are
    * computed from samples (possibly by way of its conditional ppts) rather than by merging the
    * invariants of other ppts. Every ppt is a leaf if {@link Daikon#use_dataflow_hierarchy} is
-   * false. Otherwise, the non-leaves are combined exit, enter, throws, OBJECT, and CLASS ppts (and
-   * the conditional ppts of such ppts). Defining the leaves this way ensures that arbitrarily named
-   * ppts, such as {@code :::POINT} (used by convertcsv.pl), are leaves.
+   * false. Otherwise, if the ppt's type is known, the leaves are POINT and SUBEXIT ppts (and the
+   * conditional ppts of such ppts). If the type is not known, the non-leaves are combined exit,
+   * enter, throws, OBJECT, and CLASS ppts (and the conditional ppts of such ppts); defining the
+   * leaves this way ensures that arbitrarily named ppts, such as {@code :::POINT} (used by
+   * convertcsv.pl), are leaves.
    *
    * <p>A leaf need not be childless: for example, a numbered exit point is the parent of its
    * conditional ppts.
@@ -4699,8 +4701,11 @@ public class PptTopLevel extends Ppt {
     if (!Daikon.use_dataflow_hierarchy) {
       return true;
     }
-    PptName pname =
-        (this instanceof PptConditional) ? ((PptConditional) this).parent.ppt_name : ppt_name;
+    PptTopLevel ppt = (this instanceof PptConditional) ? ((PptConditional) this).parent : this;
+    if (ppt.type != null) {
+      return (ppt.type == PptType.POINT) || (ppt.type == PptType.SUBEXIT);
+    }
+    PptName pname = ppt.ppt_name;
     return !(pname.isCombinedExitPoint()
         || pname.isEnterPoint()
         || pname.isThrowsPoint()
