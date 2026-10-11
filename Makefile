@@ -453,8 +453,9 @@ staging:
 	# Build javadoc
 	@echo "]2;Building Javadoc"
 	mkdir ${STAGING_DIR}/download/api
-	# Javadoc is skipped on Java 8.  Hard-coded JAVA_HOME path is a hack.
-	(if [ -d /usr/lib/jvm/java-11 ]; then export JAVA_HOME=/usr/lib/jvm/java-11 PATH=/usr/lib/jvm/java-11/bin:$${PATH}; fi; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
+	# java/Makefile skips javadoc on Java 8, so the test below fails on Java 8.
+	# Hard-coded JAVA_HOME path is a hack.
+	(if [ -x /usr/lib/jvm/java-11/bin/javadoc ]; then export JAVA_HOME=/usr/lib/jvm/java-11 PATH=/usr/lib/jvm/java-11/bin:$${PATH}; fi; cd java; ${MAKE} 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
 	@test -f ${STAGING_DIR}/download/api/index.html || (echo "Javadoc was not built; use Java 11 or later" && false)
 	# Copy the documentation
 	@echo "]2;Copying documentation"

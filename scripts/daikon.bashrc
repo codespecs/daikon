@@ -11,15 +11,15 @@
 if [ "$(uname)" = "Darwin" ] ; then
   export JAVA_HOME=${JAVA_HOME:-$(/usr/libexec/java_home)}
 else
-  export JAVA_HOME=${JAVA_HOME:-$(dirname $(dirname $(readlink -f $(which javac))))}
+  export JAVA_HOME=${JAVA_HOME:-$(dirname $(dirname $(readlink -f $(which javac || which java))))}
 fi
 if [ ! -d "$JAVA_HOME" ]; then
   echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
   return 2
 fi
 # Running Daikon needs only a JRE, but building Daikon needs a JDK.
-if [ ! -x "$JAVA_HOME/bin/javac" ]; then
-  echo "Warning: JAVA_HOME=$JAVA_HOME is not a JDK (it has no bin/javac); building Daikon requires a JDK."
+if [[ $- == *i* ]] && [ ! -x "$JAVA_HOME/bin/javac" ]; then
+  echo >&2 "Warning: JAVA_HOME=$JAVA_HOME is not a JDK (it has no bin/javac); building Daikon requires a JDK."
 fi
 
 if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
