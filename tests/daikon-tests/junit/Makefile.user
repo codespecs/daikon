@@ -3,4 +3,4 @@
 # need junit.jar on classpath to compile all junit references
 JUNIT_CLASSPATH := ${DAIKONDIR}/java/lib/*
 # "=", not ":=", because JAVA_HOME is set after this file is included.
-JAVAC = ${CHECKED_JAVA_HOME}/bin/javac -cp .:$(JUNIT_CLASSPATH)
+JAVAC = ${JAVA_HOME}/bin/javac -cp .:$(JUNIT_CLASSPATH)

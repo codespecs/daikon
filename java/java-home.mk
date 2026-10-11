@@ -1,50 +1,41 @@
 # Makefile fragment that sets JAVA_HOME, if it is not already set to a non-empty
-# value, and defines variables and functions about the JDK there.
-# It is included by the top-level Makefile, java/Makefile, and tests/Makefile.common.
-# scripts/daikon.bashrc finds JAVA_HOME in the same way.
+# value, and checks that it is a JDK.  It also sets JAVA_VERSION_STRING_WITH_EA
+# (e.g., "27-ea"), JAVA_VERSION_STRING (e.g., "27" or "1.8.0_402"), and
+# JAVA_RELEASE_NUMBER (e.g., "27" or "8"), all for the JDK at JAVA_HOME.
+# It is included by java/Makefile and tests/Makefile.common.
 
-# $(call is_jdk,DIR) is non-empty if DIR contains a JDK.
-# JDK 9 and later contain lib/jrt-fs.jar; JDK 8 contains jre/lib/rt.jar.
-is_jdk = $(and $(strip $(1)),$(wildcard $(1)/bin/javac),$(wildcard $(1)/lib/jrt-fs.jar $(1)/jre/lib/rt.jar))
-
-# If the javac on the PATH is (a symbolic link to) a file in a JDK, use that
-# JDK.  If javac is a wrapper script (as used by jenv, asdf, or mise), set
-# JAVA_HOME instead.
+# Ask the javac on the PATH which JDK it is in.  This works even if javac is a
+# wrapper script (as used by jenv, asdf, or mise) or the macOS /usr/bin/javac stub.
 ifeq ($(strip ${JAVA_HOME}),)
-  JAVAC_ON_PATH_JDK := $(patsubst %/bin/javac,%,$(filter %/bin/javac,$(realpath $(shell command -v javac 2> /dev/null))))
-  JAVA_HOME := $(if $(call is_jdk,${JAVAC_ON_PATH_JDK}),${JAVAC_ON_PATH_JDK})
+  JAVA_HOME := $(shell javac -J-XshowSettings:properties -version 2>&1 | sed -n -e 's/^ *java\.home = //p')
 endif
-ifeq ($(strip ${JAVA_HOME}),)
-  ifeq ($(shell uname), Darwin)
-    JAVA_HOME := $(shell /usr/libexec/java_home 2> /dev/null)
-  endif
+# For JDK 8, java.home is the jre/ subdirectory of the JDK, and a user's
+# JAVA_HOME may be too.  "override" applies this to "make JAVA_HOME=...".
+override JAVA_HOME := $(patsubst %/jre,%,$(patsubst %/,%,${JAVA_HOME}))
+ifneq ($(shell [ -n '${JAVA_HOME}' ] && [ -x '${JAVA_HOME}/bin/javac' ] && echo yes),yes)
+  $(error No JDK found at JAVA_HOME="${JAVA_HOME}"; set JAVA_HOME or put javac on the PATH)
 endif
 # Commands run by make, including recursive invocations of make, use this value.
 export JAVA_HOME
 
-# DAIKON_JAVA_HOME is the value of JAVA_HOME when this file is included.  It
-# does not change if a Makefile later reassigns JAVA_HOME, so the commands that
-# use it agree with the version variables below.
-DAIKON_JAVA_HOME := ${JAVA_HOME}
-
-# CHECKED_JAVA_HOME is DAIKON_JAVA_HOME, but expanding it fails if
-# DAIKON_JAVA_HOME does not contain a JDK.  The check happens only when a
-# variable that uses it is expanded, so targets that do not run Java (such as
-# "clean") work without a JDK.
-CHECKED_JAVA_HOME = $(if $(call is_jdk,${DAIKON_JAVA_HOME}),${DAIKON_JAVA_HOME},$(error No JDK found at JAVA_HOME="${DAIKON_JAVA_HOME}"; set JAVA_HOME or put javac on the PATH))
-
-# The version of the JDK at JAVA_HOME, such as "1.8.0_462", "25.0.1", or
-# "27-ea".  It is empty if JAVA_HOME does not contain a JDK.
-JAVA_VERSION_STRING :=
-ifneq (,$(call is_jdk,${JAVA_HOME}))
-  JAVA_VERSION_STRING := $(shell '${JAVA_HOME}/bin/java' -version 2>&1 | sed -n 's/^.* version "\([^"]*\)".*/\1/p' | head -1)
-  ifeq (,${JAVA_VERSION_STRING})
-    $(error Cannot determine the Java version of JAVA_HOME="${JAVA_HOME}")
-  endif
+# The output of `javac -version` is like "javac 27-ea", "javac 25.0.1", or
+# "javac 1.8.0_402".  It may be preceded by lines such as
+# "Picked up JAVA_TOOL_OPTIONS: ...".
+# Running javac is slow, so recursive invocations of make reuse the version
+# string if JAVA_HOME is unchanged.
+ifneq (${DAIKON_JAVA_VERSION_HOME},${JAVA_HOME})
+  JAVA_VERSION_STRING_WITH_EA :=
 endif
-# The major version, such as "8" or "25".  It is empty if JAVA_VERSION_STRING is.
-JAVA_RELEASE_NUMBER := $(firstword $(subst ., ,$(subst -, ,$(subst +, ,$(subst _, ,$(patsubst 1.%,%,${JAVA_VERSION_STRING}))))))
-
-# $(call java_at_least,NN) is "1" if the JDK at JAVA_HOME is version NN or
-# later, and is empty otherwise (including if there is no JDK).
-java_at_least = $(shell test 0${JAVA_RELEASE_NUMBER} -ge $(1) && echo 1)
+ifeq (${JAVA_VERSION_STRING_WITH_EA},)
+  JAVA_VERSION_STRING_WITH_EA := $(shell '${JAVA_HOME}/bin/javac' -version 2>&1 | sed -n -e 's/^javac //p')
+endif
+export DAIKON_JAVA_VERSION_HOME := ${JAVA_HOME}
+export JAVA_VERSION_STRING_WITH_EA
+JAVA_VERSION_STRING := $(subst -ea,,${JAVA_VERSION_STRING_WITH_EA})
+# The release number is the first component, or the second if the first is "1".
+JAVA_VERSION_COMPONENTS := $(subst ., ,$(subst -, ,${JAVA_VERSION_STRING}))
+ifeq ($(firstword ${JAVA_VERSION_COMPONENTS}),1)
+  JAVA_RELEASE_NUMBER := $(word 2,${JAVA_VERSION_COMPONENTS})
+else
+  JAVA_RELEASE_NUMBER := $(firstword ${JAVA_VERSION_COMPONENTS})
+endif

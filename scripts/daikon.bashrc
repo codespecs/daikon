@@ -8,23 +8,11 @@
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
 
-# This logic is the same as in java/java-home.mk:  if javac on the PATH is (a
-# symbolic link to) a file in a JDK, use that JDK; otherwise, on macOS, use
-# /usr/libexec/java_home.  If javac is a wrapper script (as used by jenv, asdf,
-# or mise), set JAVA_HOME instead.
-if [ -z "$JAVA_HOME" ] ; then
-  javac_realpath=$(realpath "$(type -P javac)" 2> /dev/null)
-  javac_jdk=${javac_realpath%/bin/javac}
-  # JDK 9 and later contain lib/jrt-fs.jar; JDK 8 contains jre/lib/rt.jar.
-  if [ "$javac_jdk" != "$javac_realpath" ] && [ -x "$javac_jdk/bin/javac" ] \
-     && { [ -f "$javac_jdk/lib/jrt-fs.jar" ] || [ -f "$javac_jdk/jre/lib/rt.jar" ]; } ; then
-    JAVA_HOME=$javac_jdk
-  elif [ "$(uname)" = "Darwin" ] ; then
-    JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
-  fi
-  unset javac_realpath javac_jdk
+if [ "$(uname)" = "Darwin" ] ; then
+  export JAVA_HOME=${JAVA_HOME:-$(/usr/libexec/java_home)}
+else
+  export JAVA_HOME=${JAVA_HOME:-$(dirname $(dirname $(readlink -f $(which javac))))}
 fi
-export JAVA_HOME
 if [ ! -d "$JAVA_HOME" ]; then
   echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
   return 2
