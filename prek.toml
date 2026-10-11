@@ -155,6 +155,16 @@ hooks = [
   ] } },
 ]
 
+[[repos]]
+repo = "local"
+hooks = [
+  { id = "check-makefile-dollar", name = "malformed Makefile variable references", language = "unsupported", entry = "scripts/check-makefile-dollar.py", files = { glob = [
+    "**/{GNUmakefile,Makefile,makefile,Makefile.*,makefile.*,*.mak,*.mk}",
+  ] }, exclude = { glob = [
+    "**/Makefile.{am,in}",
+  ] } },
+]
+
 ## Markdown
 
 [[repos]]
