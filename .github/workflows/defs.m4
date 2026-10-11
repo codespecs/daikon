@@ -96,7 +96,7 @@ boilerplate($1, $2, test-kvasir.sh, scripts/test-kvasir.sh)[]dnl
           path: kvasir-outputs
           if-no-files-found: warn
           overwrite: true
-          retention-days: 14
+          retention-days: 7
 ])dnl
 dnl
 ifelse([argument 3 is "latest" or "bundled"])dnl

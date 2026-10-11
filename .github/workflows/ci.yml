@@ -400,7 +400,7 @@ jobs:
           path: kvasir-outputs
           if-no-files-found: warn
           overwrite: true
-          retention-days: 14
+          retention-days: 7
 
   kvasir_ubuntu_jdk25:
     runs-on: ubuntu-latest
@@ -425,7 +425,7 @@ jobs:
           path: kvasir-outputs
           if-no-files-found: warn
           overwrite: true
-          retention-days: 14
+          retention-days: 7
 
   kvasir_ubuntu_jdk27:
     needs:
@@ -453,7 +453,7 @@ jobs:
           path: kvasir-outputs
           if-no-files-found: warn
           overwrite: true
-          retention-days: 14
+          retention-days: 7
 
   ## The Checker Framework cannot be run under Java 8 or 11.
   ## Thus, there is no typecheck_bundled_ubuntu_jdk{8,11} job.
@@ -935,7 +935,7 @@ jobs:
           path: kvasir-outputs
           if-no-files-found: warn
           overwrite: true
-          retention-days: 14
+          retention-days: 7
 
   kvasir_rockylinux_jdk27:
     needs:
@@ -964,4 +964,4 @@ jobs:
           path: kvasir-outputs
           if-no-files-found: warn
           overwrite: true
-          retention-days: 14
+          retention-days: 7
