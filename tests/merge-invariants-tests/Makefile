@@ -6,9 +6,6 @@ update-goals:
 	${MAKE} -C drawlet update-goals
 
 .PHONY: all test clean
-all:
-	${MAKE} -C drawlet all
-test:
-	${MAKE} -C drawlet test
+all test: diffs
 clean:
 	${MAKE} -C drawlet clean

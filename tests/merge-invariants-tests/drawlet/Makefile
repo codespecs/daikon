@@ -63,70 +63,8 @@ TS_InputEventHandlerTests.inv.gz: ${DAIKON} TS_InputEventHandlerTests.dtrace.gz
 %.txt-all: %.inv.gz
 	java -cp ${DAIKON_CLASSPATH} daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
 
-#
-# Test targets
-#
-
-# Options for testing
-#
-#PPT_OPTION	= '--ppt-select-pattern=defaultHandleSize|CanvasHandle:::CLASS'
-#DEBUG_OPTION := --dbg daikon.print
-#DEBUG_OPTION := ${DEBUG_OPTION} --dbg daikon.Progress
-#TRACK_OPTION = --track 'LowerBound<com.rolemodelsoft.drawlet.basics.CanvasHandle.HANDLE_SIZE>@defaultHandleSize'
-
-# Run Daikon on all three input trace files
-# Note that this puts the output invariant file in test.inv.gz so it doesn't
-# overwrite the correct invariant file
-test_d:
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon \
-	  ${PPT_OPTION} \
-	  ${DEBUG_OPTION} \
-	  ${TRACK_OPTION} \
-	  TS_AllDrawletUnitTests.dtrace.gz \
-	  TS_DrawletFunctionalTest.dtrace.gz \
-	  TS_InputEventHandlerTests.dtrace.gz \
-	  -o test.inv.gz
-
-# run PrintInvariants on the merge invariant file
-test_pm:
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants \
-	  ${PPT_OPTION} \
-	  ${DEBUG_OPTION} \
-	  ${TRACK_OPTION} \
-	  merge.inv.gz
-
-# run MergeInvariants on the three inv files
-test_m:
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.MergeInvariants \
-	  ${DEBUG_OPTION} \
-	  TS_AllDrawletUnitTests.inv.gz TS_DrawletFunctionalTest.inv.gz \
-	  TS_InputEventHandlerTests.inv.gz \
-
-# run Daikon on the first dtrace file
-test_d1:
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants \
-	  ${PPT_OPTION} \
-	  ${DEBUG_OPTION} \
-	  ${TRACK_OPTION} \
-	  TS_AllDrawletUnitTests.inv.gz
-
-# run Daikon on the second dtrace file
-test_d2:
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon \
-	  ${PPT_OPTION} \
-	  ${DEBUG_OPTION} \
-	  ${TRACK_OPTION} \
-	  TS_DrawletFunctionalTest.dtrace.gz
-
 update-goals:
 
 .PHONY: clean
 clean:
 	/bin/rm -rf *.inv.gz *.diff *.txt
-
-show-vars:
-	@echo PPT_OPTION = ${PPT_OPTION}
-	@echo TRACK_OPTION = ${TRACK_OPTION}
-	@echo DEBUG_OPTION = ${DEBUG_OPTION}
-	@echo CLASSPATH    = ${CLASSPATH}
-	@echo DAIKON_CLASSPATH    = ${DAIKON_CLASSPATH}
