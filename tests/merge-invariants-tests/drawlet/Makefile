@@ -10,16 +10,26 @@
 
 # DAIKONDIR is the clone of the 'daikon' project.
 DAIKONDIR ?= $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
+# Make splits pathnames at spaces, so DAIKONDIR must not contain any.
+ifneq ($(words ${DAIKONDIR}),1)
+  $(error DAIKONDIR must be a directory whose pathname contains no spaces; DAIKONDIR="${DAIKONDIR}")
+endif
 
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
-DAIKON = ${DAIKONDIR}/java/daikon/Daikon.class
+# A prerequisite that changes whenever Daikon is rebuilt: Daikon.class if the
+# java/ tree is compiled, otherwise daikon.jar.  If neither exists, use
+# Daikon.class, so that make reports the missing file rather than running
+# java with no Daikon on the classpath.
+DAIKON := $(or $(firstword $(wildcard ${DAIKONDIR}/java/daikon/Daikon.class ${DAIKONDIR}/daikon.jar)),${DAIKONDIR}/java/daikon/Daikon.class)
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
+# If a recipe fails, delete its target, so that a failing diff does not
+# leave behind a daikon.txt.diff that makes the next run appear up to date.
+.DELETE_ON_ERROR:
+
 diffs: daikon.txt.diff
-daikon.txt.diff: drawlet.inv.gz merge.inv.gz
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants drawlet.inv.gz > drawlet.txt
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants merge.inv.gz > merge.txt
+daikon.txt.diff: drawlet.txt merge.txt
 	diff -u drawlet.txt merge.txt > daikon.txt.diff || (cat daikon.txt.diff && false)
 
 # Build the merged version of the invariant file from the individual inv files
@@ -28,7 +38,7 @@ merge.inv.gz: ${DAIKON} TS_AllDrawletUnitTests.inv.gz \
 	          TS_DrawletFunctionalTest.inv.gz TS_InputEventHandlerTests.inv.gz
 	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.MergeInvariants -o merge.inv.gz \
 	  TS_AllDrawletUnitTests.inv.gz TS_DrawletFunctionalTest.inv.gz \
-	  TS_InputEventHandlerTests.inv.gz \
+	  TS_InputEventHandlerTests.inv.gz
 
 
 # Build the combined inv file directly from the trace files
@@ -57,14 +67,14 @@ TS_InputEventHandlerTests.inv.gz: ${DAIKON} TS_InputEventHandlerTests.dtrace.gz
 #     TS_DrawletFunctionalTest.txt TS_DrawletFunctionalTest.txt-all \
 #     TS_InputEventHandlerTests.txt TS_InputEventHandlerTests.txt-all
 
-%.txt: %.inv.gz
-	java -cp ${DAIKON_CLASSPATH} daikon.PrintInvariants $< > $@
+%.txt: %.inv.gz ${DAIKON}
+	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants $< > $@
 
-%.txt-all: %.inv.gz
-	java -cp ${DAIKON_CLASSPATH} daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
+%.txt-all: %.inv.gz ${DAIKON}
+	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
 
 update-goals:
 
-.PHONY: clean
+.PHONY: diffs merge daikon update-goals clean
 clean:
-	/bin/rm -rf *.inv.gz *.diff *.txt
+	/bin/rm -rf *.inv.gz *.diff *.txt *.txt-all

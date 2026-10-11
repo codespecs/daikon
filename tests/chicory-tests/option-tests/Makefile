@@ -4,6 +4,10 @@
 
 # DAIKONDIR is the clone of the 'daikon' project.
 DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
+# Make splits pathnames at spaces, so DAIKONDIR must not contain any.
+ifneq ($(words ${DAIKONDIR}),1)
+  $(error DAIKONDIR must be a directory whose pathname contains no spaces; DAIKONDIR="${DAIKONDIR}")
+endif
 
 # StackAr sources are used for option testing
 SRC_DIR = ${DAIKONDIR}/tests/sources

@@ -1,5 +1,9 @@
 ###########################################################################
 DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
+# Make splits pathnames at spaces, so DAIKONDIR must not contain any.
+ifneq ($(words ${DAIKONDIR}),1)
+  $(error DAIKONDIR must be a directory whose pathname contains no spaces; DAIKONDIR="${DAIKONDIR}")
+endif
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
