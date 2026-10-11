@@ -3,12 +3,7 @@
 -include Makefile.user
 
 DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
-# Make splits pathnames at spaces, so DAIKONDIR must not contain any.
-ifeq ($(strip ${DAIKONDIR}),)
-  $(error DAIKONDIR is empty; set it to the top-level directory of your daikon clone)
-else ifneq ($(words ${DAIKONDIR}),1)
-  $(error DAIKONDIR must be a directory whose pathname contains no spaces; DAIKONDIR="${DAIKONDIR}")
-endif
+include $(dir $(lastword ${MAKEFILE_LIST}))scripts/check-daikondir.mk
 
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink

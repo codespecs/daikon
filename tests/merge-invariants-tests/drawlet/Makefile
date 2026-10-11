@@ -12,12 +12,7 @@
 ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
 endif
-# Make splits pathnames at spaces, so DAIKONDIR must not contain any.
-ifeq ($(strip ${DAIKONDIR}),)
-  $(error DAIKONDIR is empty; set it to the top-level directory of your daikon clone)
-else ifneq ($(words ${DAIKONDIR}),1)
-  $(error DAIKONDIR must be a directory whose pathname contains no spaces; DAIKONDIR="${DAIKONDIR}")
-endif
+include $(dir $(lastword ${MAKEFILE_LIST}))../../../scripts/check-daikondir.mk
 
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
 # A prerequisite that changes whenever Daikon is rebuilt: Daikon.class if the
