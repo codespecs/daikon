@@ -259,7 +259,7 @@ call the new invariant's @code{get_proto} method and recompile Daikon.
 @item
 If you do not wish to edit the Daikon source code, then compile the new
 invariant and put its @file{.class} file on your classpath.  Then, invoke
-Daikon with the @option{--user-defined-invariant} command-line argument
+Daikon with the @option{--user_defined_invariant} command-line argument
 (@pxref{Options to control invariant detection,,,daikon,Daikon User Manual}).
 @end itemize
 
