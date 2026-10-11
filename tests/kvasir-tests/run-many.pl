@@ -11,10 +11,17 @@
 # to the scenario Makefile and the rest is automatic.
 # Each run's output is written to standard output.
 # run-kvasir.sh decides whether a run failed.
+# An optional leading "--expected-status N" argument is passed to
+# run-kvasir.sh.
 
 use FindBin;
 use File::Temp qw(tempfile);
 
+my $expected_status = 0;
+if (@ARGV >= 2 && $ARGV[0] eq '--expected-status') {
+    $expected_status = $ARGV[1];
+    splice(@ARGV, 0, 2);
+}
 my $kvasir = $ARGV[0];
 my $kvasir_short = $kvasir;
 $kvasir_short =~ s!^.*/(.*)$!$1!;
@@ -27,12 +34,18 @@ while (<STDIN>) {
     chomp;
     my $args = $_;
     my $lineno = $.;
-    printf STDERR "%4d: $kvasir_short $args 2>&1\n", $lineno;
-    my $rv = system("sh '$run_kvasir' '$run_out' $kvasir $args");
+    printf STDERR "%4d: $kvasir_short $args\n", $lineno;
+    # Truncate the output file, so that if run-kvasir.sh fails before writing
+    # to it, the previous run's output is not printed again.
+    open(my $truncate_fh, '>', $run_out) or die "Cannot write $run_out: $!";
+    close($truncate_fh);
+    my $rv = system("sh '$run_kvasir' --expected-status $expected_status '$run_out' $kvasir $args");
     open(my $fh, '<', $run_out) or die "Cannot read $run_out: $!";
     print do { local $/; <$fh> };
     close($fh);
-    die "Aborting" if ($rv & 127) == 2;
+    # Abort on SIGINT, whether the shell or only the Kvasir process received it.
+    # run-kvasir.sh exits with status 130 if the Kvasir process received SIGINT.
+    die "Aborting" if ($rv & 127) == 2 || ($rv >> 8) == 130;
     if ($rv != 0) {
         print STDERR "run-many.pl: line $lineno failed: $kvasir_short $args\n";
         $failures++;
