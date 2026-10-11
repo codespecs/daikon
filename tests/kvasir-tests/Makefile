@@ -25,7 +25,7 @@ PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 default: summary-w-daikon
 
 # Variables used by Makefile.results.
-REGRESSION_TESTS_ARGS = --jobs=$$(if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then echo 1; else echo 4; fi) ${MPARG}
+REGRESSION_TESTS_ARGS = --jobs=${CI_JOBS} ${MPARG}
 REGRESSION_TESTS_TARGET = nightly-tests__diffs-w-daikon-if-working
 REGRESSION_SUMMARY_TARGET = nightly-summary-only-w-daikon
 
@@ -75,11 +75,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
-	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
-	else \
-	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
-	fi
+	${MAKE} --jobs=${CI_JOBS} ${MPARG} nightly-tests__clean
 
 default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
 	@

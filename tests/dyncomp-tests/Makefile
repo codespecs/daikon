@@ -62,11 +62,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
-	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
-	else \
-	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
-	fi
+	${MAKE} --jobs=${CI_JOBS} ${MPARG} nightly-tests__clean
 
 
 default-projects__%: pgbovine-tests__%

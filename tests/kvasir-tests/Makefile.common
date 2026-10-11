@@ -293,7 +293,9 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 else
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(RUN_KVASIR) --counts ${DAIKONDIR}/scripts/dtrace-count.pl $(NAME).counts $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS)
+	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dtrace-file=daikon-output/$(NAME).dtrace ./$(NAME) $(PROGRAM_ARGS)
+	perl ${DAIKONDIR}/scripts/dtrace-count.pl daikon-output/$(NAME).dtrace >$(NAME).counts
+	rm -f daikon-output/$(NAME).dtrace
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out

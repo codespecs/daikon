@@ -11,6 +11,7 @@
 # to the scenario Makefile and the rest is automatic.
 # Each run's output is written to standard output.
 # run-kvasir.sh decides whether a run failed.
+# A line must not contain an output redirection or a pipe; see run-kvasir.sh.
 # An optional leading "--expected-status N" argument is passed to
 # run-kvasir.sh.
 
@@ -35,10 +36,6 @@ while (<STDIN>) {
     my $args = $_;
     my $lineno = $.;
     printf STDERR "%4d: $kvasir_short $args\n", $lineno;
-    # Truncate the output file, so that if run-kvasir.sh fails before writing
-    # to it, the previous run's output is not printed again.
-    open(my $truncate_fh, '>', $run_out) or die "Cannot write $run_out: $!";
-    close($truncate_fh);
     my $rv = system("sh '$run_kvasir' --expected-status $expected_status '$run_out' $kvasir $args");
     open(my $fh, '<', $run_out) or die "Cannot read $run_out: $!";
     print do { local $/; <$fh> };
