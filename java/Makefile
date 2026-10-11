@@ -1480,7 +1480,7 @@ ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
 # Overwrites SplitterFactoryTest's goal files with the current SplitterFactory output.
 # Examine the differences (e.g., with "git diff") before committing them.
 .PHONY: update-splitter-goals
-update-splitter-goals: daikon/Daikon.class
+update-splitter-goals: daikon/Daikon.class daikon/test/split/SplitterFactoryTestUpdater.class
 	rm -f daikon/test/split/SplitterFactoryTest.java
 	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater --update-goals > /dev/null 2>&1) \
 	  || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater --update-goals

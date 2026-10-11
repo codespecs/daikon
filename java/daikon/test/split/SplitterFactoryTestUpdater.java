@@ -45,11 +45,8 @@ public class SplitterFactoryTestUpdater {
    * splitter files against the goal files. One should recompile SplitterFactoryTest after running
    * this method.
    *
-   * <p>If one has changed the test cases used below, for best results run {@code rm *.java.goal}
-   * while in the targets directory before running this method with {@code --update-goals}.
-   *
-   * @param args either empty, or {@code --update-goals} to also move the new splitter java files
-   *     into the target directory as goal files
+   * @param args either empty, or {@code --update-goals} to also replace the goal files in the
+   *     target directory by the new splitter java files
    */
   public static void main(String[] args) {
     boolean updateGoals;
@@ -127,14 +124,26 @@ public class SplitterFactoryTestUpdater {
   /**
    * Records the class names of the generated splitter files, which are in the tempDir.
    *
-   * @param updateGoals if true, also move the generated splitter files to the target directory as
-   *     goal files
+   * @param updateGoals if true, also replace the goal files in the target directory by the
+   *     generated splitter files
    */
   private static void processFiles(boolean updateGoals) {
     File tempDir = new File(SplitterFactory.getTempDir());
     String[] fileNames = tempDir.list();
     if (fileNames == null) {
       throw new Error("tmpdir = " + tempDir + " which is not a directory");
+    }
+    if (updateGoals) {
+      // Remove goal files for splitters that SplitterFactory no longer produces.
+      File[] oldGoals = new File(targetDir).listFiles((dir, name) -> name.endsWith(".java.goal"));
+      if (oldGoals == null) {
+        throw new Error("targetDir = " + targetDir + " which is not a directory");
+      }
+      for (File oldGoal : oldGoals) {
+        if (!oldGoal.delete()) {
+          throw new Error("Failed to delete " + oldGoal);
+        }
+      }
     }
     for (int i = 0; i < fileNames.length; i++) {
       if (fileNames[i].endsWith(".java")) {
@@ -392,7 +401,13 @@ public class SplitterFactoryTestUpdater {
     ps.println("  }");
     ps.println();
     ps.println("  public static void assertEqualFiles(String f1) {");
-    ps.println("    assertEqualFiles(tempDir + f1, targetDir + f1 + \".goal\");");
+    ps.println("    String goalFile = targetDir + f1 + \".goal\";");
+    ps.println("    if (!new File(goalFile).exists()) {");
+    ps.println(
+        "      fail(\"Goal file \" + goalFile"
+            + " + \" does not exist; run: make update-splitter-goals\");");
+    ps.println("    }");
+    ps.println("    assertEqualFiles(tempDir + f1, goalFile);");
     ps.println("  }");
     ps.println();
     for (String className : classNames) {
