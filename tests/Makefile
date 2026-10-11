@@ -34,6 +34,17 @@ else
   MPARG ?=
 endif
 
+# DAIKONDIR is the clone of the 'daikon' project.
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
+endif
+# Make splits pathnames at spaces, so DAIKONDIR must not contain any.
+ifeq ($(strip ${DAIKONDIR}),)
+  $(error DAIKONDIR is empty; set it to the top-level directory of your daikon clone)
+else ifneq ($(words ${DAIKONDIR}),1)
+  $(error DAIKONDIR must be a directory whose pathname contains no spaces; DAIKONDIR="${DAIKONDIR}")
+endif
+
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
 all diffs: txt-diff non-txt-diff dyncomp-tests results
@@ -52,7 +63,7 @@ txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	${MAKE} pat-daikon-tests-$@
 pat-daikon-tests-%:
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $*; \
 	else \
 	  ${MAKE} -C daikon-tests --jobs=4 ${MPARG} $*; \

@@ -20,13 +20,24 @@ else
   MPARG ?=
 endif
 
+# DAIKONDIR is the clone of the 'daikon' project.
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../..)
+endif
+# Make splits pathnames at spaces, so DAIKONDIR must not contain any.
+ifeq ($(strip ${DAIKONDIR}),)
+  $(error DAIKONDIR is empty; set it to the top-level directory of your daikon clone)
+else ifneq ($(words ${DAIKONDIR}),1)
+  $(error DAIKONDIR must be a directory whose pathname contains no spaces; DAIKONDIR="${DAIKONDIR}")
+endif
+
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
 default: summary-w-daikon
 
 .PHONY: regression-tests
 regression-tests:
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
 	else \
 	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
@@ -80,7 +91,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
 	else \
 	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
