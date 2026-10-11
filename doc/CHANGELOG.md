@@ -21,6 +21,12 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
+## Version ??
+
+`daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
+`JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
+or `PERL5LIB`.
+
 ## Version 5.9.0 (September 1, 2026)
 
 * All Daikon tools now work with Java 8-26.

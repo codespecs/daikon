@@ -3,7 +3,10 @@
 # Forked from $DAIKONDIR/tests/kvasir-tests/Makefile.common
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+# See tests/Makefile.common for why this does not use '?='.
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+endif
 
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64

@@ -1,5 +1,8 @@
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../..)
+# See tests/Makefile.common for why this does not use '?='.
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../..)
+endif
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 

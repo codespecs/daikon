@@ -1,5 +1,6 @@
 ## daikon.bashrc
 ## Daikon initialization file for bash users.
+## It sets DAIKONDIR and puts Daikon's scripts on your PATH.
 
 ## Optionally, you may set the following environment variables:
 ##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
@@ -7,20 +8,6 @@
 ##        useful if you have made changes to Daikon and compiled the .java
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
-
-if [ "$(uname)" = "Darwin" ] ; then
-  export JAVA_HOME=${JAVA_HOME:-$(/usr/libexec/java_home)}
-else
-  export JAVA_HOME=${JAVA_HOME:-$(dirname $(dirname $(readlink -f $(which javac || which java))))}
-fi
-if [ ! -d "$JAVA_HOME" ]; then
-  echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
-  return 2
-fi
-# Running Daikon needs only a JRE, but building Daikon needs a JDK.
-if [[ $- == *i* ]] && [ ! -x "$JAVA_HOME/bin/javac" ]; then
-  echo >&2 "Warning: JAVA_HOME=$JAVA_HOME is not a JDK (it has no bin/javac); building Daikon requires a JDK."
-fi
 
 if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
   # Cannot infer DAIKONDIR.
@@ -40,36 +27,4 @@ else
   export DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
 fi
 
-if [ -z "$DAIKONSCRIPTS" ]; then
-  if [ -d ${DAIKONDIR}/scripts ]; then
-    export DAIKONSCRIPTS=${DAIKONDIR}/scripts
-  else
-    echo "Cannot choose a value for environment variable DAIKONSCRIPTS."
-    echo "Maybe DAIKONDIR is badly set: $DAIKONDIR"
-    echo "Please fix the problem.  Aborting daikon.bashrc ."
-    return 2
-  fi
-fi
-
-if [ -z "$PLUME_SCRIPTS" ]; then
-  export PLUME_SCRIPTS=${DAIKONDIR}/.utils/plume-scripts
-fi
-
-DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
-# Avoid warnings about non-existent elements on classpath
-if [ -d ${DAIKONDIR}/java ]; then
-  DAIKON_CLASSPATH=${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKON_CLASSPATH}
-fi
-export DAIKON_CLASSPATH
-
-export PATH=${DAIKONSCRIPTS}:${PLUME_SCRIPTS}:${PATH}:${JAVA_HOME}/bin
-
-## Indicate where to find Perl modules such as util_daikon.pm.
-if [ $PERL5LIB ]; then
-  export PERL5LIB=${DAIKONSCRIPTS}:${PLUME_SCRIPTS}:${PERL5LIB}
-fi
-if [ $PERLLIB ]; then
-  export PERLLIB=${DAIKONSCRIPTS}:${PLUME_SCRIPTS}:${PERLLIB}
-else
-  export PERLLIB=${DAIKONSCRIPTS}:${PLUME_SCRIPTS}
-fi
+export PATH=${DAIKONDIR}/scripts:${PLUME_SCRIPTS:-${DAIKONDIR}/.utils/plume-scripts}:${PATH}
