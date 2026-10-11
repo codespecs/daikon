@@ -112,7 +112,7 @@ test_d1:
 
 # run Daikon on the second dtrace file
 test_d2:
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon
+	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon \
 	  ${PPT_OPTION} \
 	  ${DEBUG_OPTION} \
 	  ${TRACK_OPTION} \
