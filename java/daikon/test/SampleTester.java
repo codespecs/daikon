@@ -67,7 +67,7 @@ public class SampleTester {
   /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
-          "Usage: java daikon.PrintInvariants [OPTION]... FILE",
+          "Usage: java daikon.test.SampleTester [OPTION]...",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
           "  --" + Daikon.config_option_SWITCH,
@@ -78,8 +78,29 @@ public class SampleTester {
           "      Specify a class, varinfos, and ppt to debug track.",
           "      Format is class<var1,var2,var3>@ppt");
 
-  @SuppressWarnings("JUnitMethodInvoked") // main() runs the tests without JUnit
+  /**
+   * Runs the tests without JUnit.
+   *
+   * @param args command-line arguments, like those of {@link #mainHelper}
+   * @throws IOException if there is a problem reading a test file
+   */
   public static void main(String[] args) throws IOException {
+    try {
+      mainHelper(args);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
+    }
+  }
+
+  /**
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called programmatically.
+   *
+   * @param args command-line arguments, like those of {@link #main}
+   * @throws IOException if there is a problem reading a test file
+   */
+  @SuppressWarnings("JUnitMethodInvoked") // mainHelper() runs the tests without JUnit
+  public static void mainHelper(String[] args) throws IOException {
 
     LongOpt[] longopts =
         new LongOpt[] {
@@ -89,7 +110,7 @@ public class SampleTester {
           new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    Getopt g = new Getopt("daikon.test.SampleTester", args, "h:", longopts);
+    Getopt g = new Getopt("daikon.test.SampleTester", args, "h", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -134,6 +155,10 @@ public class SampleTester {
           System.out.println("getopt() returned " + c);
           break;
       }
+    }
+    if (g.getOptind() < args.length) {
+      throw new Daikon.UserError(
+          "Unexpected argument " + args[g.getOptind()] + "; run with -h for usage");
     }
 
     daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
