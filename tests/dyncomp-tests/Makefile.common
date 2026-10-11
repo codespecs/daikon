@@ -44,6 +44,9 @@ AFTER_RUN ?= @:
 
 include ${DAIKONDIR}/tests/kvasir-tests/Makefile.show-output
 
+# Some recipes use "set -o pipefail".
+SHELL := /bin/bash
+
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
@@ -191,10 +194,8 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 else
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	rm -f $(NAME).kvasir-status
-# A pipeline's exit status is that of its last command, so Kvasir's exit status is saved in a file.
-	{ $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out || echo $$? >$(NAME).kvasir-status; } | ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts
-	$(call fail_if_status_file,$(NAME).kvasir-status) $(call show_output_on_failure,$(NAME).out)
+# Without pipefail, a pipeline's exit status is that of its last command, so a Kvasir failure would go unnoticed.
+	set -o pipefail; $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out | ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts $(call show_output_on_failure,$(NAME).out)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -310,7 +311,7 @@ diffs-w-daikon-if-working:   diffs-w-daikon
 summary-w-daikon-if-working: summary-w-daikon
 
 clean:
-	rm -rf $(NAME) $(DIFF_NAME).*.diff $(NAME).out $(NAME).dyncomp.out $(NAME).kvasir-status daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts $(NAME).dtrace.gz $(NAME).decls $(NAME).[12].dtrace.gz
+	rm -rf $(NAME) $(DIFF_NAME).*.diff $(NAME).out $(NAME).dyncomp.out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts $(NAME).dtrace.gz $(NAME).decls $(NAME).[12].dtrace.gz
 	$(CLEAN_SCRIPT)
 
 update-out-goals: $(NAME).out

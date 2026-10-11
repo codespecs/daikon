@@ -28,11 +28,7 @@ default: summary-w-daikon
 # -k keeps one failing test from preventing the others from running.
 # The summary is skipped if a test failed, because it would re-run that test.
 # The results are always printed.
-# Old .diff files are removed so that the results do not report them.
-# The removal is a separate recipe line so that "make -n" does not perform it;
-# make runs any recipe line that contains ${MAKE}, even under -n.
 regression-tests:
-	@find . -name '*.diff' -delete
 	@status=0; \
 	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} -k --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working || status=$$?; \
@@ -159,21 +155,8 @@ medium-crypto-tests__%: do-rijndael__%
 do-%__quietly:
 	@${MAKE} --jobs=1 --no-print-directory -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
 
-# If the sub-make fails while running a test (a "diffs..." target), this
-# writes a .diff file so that the "results" target reports the failure.
-# (A failed test might produce no .diff file.)
-# It writes no file under "make -n".
-DRY_RUN = $(findstring n,$(firstword -$(MAKEFLAGS)))
 do-%:
-	@dir=`echo $* | perl -pe 's/__.*//;'`; \
-	target=`echo $* | perl -ne 'print $$1 if /^.+?__(.*)$$/;'`; \
-	rm -f $$dir/$$dir.make-failure.diff; \
-	${MAKE} --jobs=1 -C $$dir $$target \
-	  || { status=$$?; \
-	       if [ -z "$(DRY_RUN)" ]; then \
-	         case $$target in diffs*) echo "\"make -C $$dir $$target\" failed with exit status $$status; see the log above." >$$dir/$$dir.make-failure.diff;; esac; \
-	       fi; \
-	       exit $$status; }
+	@${MAKE} --jobs=1 -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
 
 # removes fields before the size (ie, permissions, owner, group).
 PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; if ($$1 > 0) { $$failure++; print "$$1\t$$2\t$$3\n";} END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
