@@ -15,8 +15,9 @@ Variables are in the same comparability set if their comparabilities
 are identical.  For arrays, this is stricter than Daikon, which
 compares the element and index comparabilities (as in "9[10]")
 separately.  A variable whose comparability is negative and is not an
-array is comparable to every variable; all such variables are listed on
-the last line for the program point, which starts with "-1:".
+array, or that has no comparability, is comparable to every variable;
+all such variables are listed on the last line for the program point,
+which starts with "-1:".
 
 Usage: ./decls2comp.py input.decls 'no-hashcodes' [optional]
 Running this with the 'no-hashcodes' string as the 2nd arg results
@@ -102,10 +103,12 @@ with Path(sys.argv[1]).open() as f:
     for line in f:
         line = line.strip()
 
+        # Skip blank lines and comments.  This is like FileIO.isComment in Daikon.
+        if line == "" or line.startswith(("//", "#")):
+            continue
         if line[0:4] == "ppt ":
             temp_all_ppts.append([line[len(PPT_START) :]])  # Start a new list
-            is_intermediate = 0
-        elif line != "" and line[0] != "#":  # Don't add blank lines & comments
+        else:
             if len(temp_all_ppts) > 0:
                 temp_all_ppts[-1].append(line)  # Append line to the latest entry
 
@@ -121,8 +124,7 @@ for ppt_list in temp_all_ppts:
     # There is already an entry
     if ppt_list[0] in all_ppts:
         # Try appending numbers until there isn't an entry
-        found = 1
-        while found:
+        while True:
             ppt_name = ppt_list[0] + " (" + str(index) + ")"
             if ppt_name not in all_ppts:
                 break
@@ -136,8 +138,9 @@ sorted_ppt_keys = sorted(all_ppts.keys())
 # Process each PPT
 for ppt_name in sorted_ppt_keys:
     v = all_ppts[ppt_name]
-    i = 0
-    var2comp: dict[str, str] = {}  # Key: variable name, Value: comparability number
+    # Key: variable name, Value: comparability number, or None if the
+    # variable has no comparability
+    var2comp: dict[str, str | None] = {}
 
     # The comparability info for a variable at a program point is
     # prefixed by comparability
@@ -150,6 +153,7 @@ for ppt_name in sorted_ppt_keys:
 
         if stripped_line[0 : len(VAR_START)] == VAR_START:
             cur_var = stripped_line[len(VAR_START) :]
+            var2comp[cur_var] = None
         elif stripped_line[0 : len(REP_START)] == REP_START:
             assert cur_var  # There should have been a variable entry before rep-type
             cur_rep = stripped_line[len(REP_START) :]
@@ -174,7 +178,7 @@ for ppt_name in sorted_ppt_keys:
     always_comparable = []  # Variables that are comparable to every variable
     for var_name in sorted(var2comp.keys()):
         comp = var2comp[var_name]
-        if comp.startswith("-") and var_name not in array_vars:
+        if comp is None or (comp.startswith("-") and var_name not in array_vars):
             always_comparable.append(var_name)
         else:
             groups.setdefault(comp, []).append(var_name)

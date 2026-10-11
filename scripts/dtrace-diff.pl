@@ -19,7 +19,7 @@ use lib dirname (__FILE__);
 # The file `util_daikon.pm` appears in the same directory as this script.
 use util_daikon;
 
-if (scalar(@ARGV) != 2 && scalar(@ARGV) != 3) {
+if ((scalar(@ARGV) != 2 && scalar(@ARGV) != 3) || grep(/^-./, @ARGV)) {
   die "Usage: $0 [<declsname>] <dtrace1> <dtrace2>\n";
 }
 my $declsname = (scalar(@ARGV) == 3) ? shift @ARGV : undef;
@@ -131,8 +131,9 @@ sub load_ppt ( $$$ ) {
 # record_reader in util_daikon.pm), which reads the dtrace file named $3.
 # Program point declarations that precede the ppt are added to the decls
 # hash $1.
-# Returns a "ppt_trace_info": a 3-element array of pptname, line number in
-# file, and hash mapping varname to array of value and modbit.
+# Returns a "ppt_trace_info": a 4-element array of pptname, line number in
+# file, hash mapping varname to array of value and modbit, and array of
+# varnames in the order they appear in the file.
     my ($declshash, $dtreader, $dtfhname) = @_;
     # Skip records other than data records, such as headers.
     my $record;
@@ -172,9 +173,8 @@ sub load_ppt ( $$$ ) {
 	$$ppthash{$varname} = [$varval, $modbit];
         push @varorder, $varname;
     }
-    $$ppthash{"variable order"} = [ @varorder ];
 
-    return [$pptname, $pptline, $ppthash];
+    return [$pptname, $pptline, $ppthash, \@varorder];
 }
 
 sub print_ppt ( $ ) {
@@ -222,8 +222,8 @@ sub cmp_ppts ( $$$ ) {
     }
     my $ha = $$ppta[2];  my $hb = $$pptb[2];
     my @decls_varnames = @{$$ppt{"variable order"}};
-    my @ppt1_varnames = @{$$ha{"variable order"}};
-    my @ppt2_varnames = @{$$hb{"variable order"}};
+    my @ppt1_varnames = @{$$ppta[3]};
+    my @ppt2_varnames = @{$$pptb[3]};
 
     if ((scalar(@ppt1_varnames) > 0) && ($ppt1_varnames[0] eq "this_invocation_nonce")) {
       shift @ppt1_varnames;

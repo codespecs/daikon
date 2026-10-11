@@ -371,16 +371,13 @@ while (<CSVHANDLE>) {
   my @sample = $csv->fields();  # get the parsed fields
 
   {
-    # Check the number of columns in the csv file.
+    # Check the number of columns in the csv file.  The header line
+    # determines the number of columns.  Some columns might not be
+    # declared variables, such as when a constant variable has a column.
     my $sample_length = scalar(@sample);
-    if ($sample_length > $num_decl_vars) {
-      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
-    }
-    if ($sample_length < $num_decl_vars) {
-      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
-      for (my $z = $sample_length; $z < $num_decl_vars; $z++) {
-        $sample[$z] = "";
-      }
+    my $num_csv_vars = scalar(@csv_varnames);
+    if ($sample_length != $num_csv_vars) {
+      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, but the header line contains $num_csv_vars";
     }
   }
 
@@ -435,7 +432,7 @@ if (defined($decls_file)) {
   for (my $j = 0; $j<$num_decl_vars; $j++) {
     my $csvindex = $decl_csvindex[$j];
     my $type = ($isNumber[$csvindex] ? "double" : "java.lang.String");
-    print DECLSHANDLE "  variable " . escape_decl($csv_varnames[$csvindex]) . "\n";
+    print DECLSHANDLE "  variable " . escape_decl($decl_varnames[$j]) . "\n";
     print DECLSHANDLE "    var-kind variable\n";
     print DECLSHANDLE "    dec-type $type\n";
     print DECLSHANDLE "    rep-type $type\n";

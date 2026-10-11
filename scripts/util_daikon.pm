@@ -430,10 +430,9 @@ sub parse_ppt_decl ( $;$$ ) {
 # version 2 .decls file, or a .dtrace file if the optional third argument
 # is true.  Headers, comments, and (for a .dtrace file) data trace records
 # are skipped.  Returns a list of references to hashes, as returned by
-# parse_ppt_decl.  Dies if the file is in version 1 format, contains no
-# program point declarations, or is a .decls file that contains a data
-# trace record.  The second argument is the name of the file, for use in
-# error messages.
+# parse_ppt_decl.  Dies if the file is in version 1 format, or is a .decls
+# file that contains a data trace record or no program point declarations.
+# The second argument is the name of the file, for use in error messages.
 sub read_ppt_decls ( $$;$ ) {
   my ($fh, $filename, $allow_data) = @_;
   my @ppts = ();
@@ -445,7 +444,7 @@ sub read_ppt_decls ( $$;$ ) {
       croak "Declaration files should not contain data trace records, but $filename does at line $record->{line}";
     }
   }
-  if (!@ppts) {
+  if (!@ppts && !$allow_data) {
     croak "No program point declarations in $filename";
   }
   return @ppts;

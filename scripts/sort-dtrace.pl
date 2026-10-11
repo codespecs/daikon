@@ -113,19 +113,32 @@ sub process_record {
     if ($kind eq "list-implementors") {
 	output $record->{text}, "\n";
     } elsif ($kind eq "data") {
-	my @lines = split(/\n/, $record->{text});
-	my @header;
-	push @header, shift @lines;
-	if (@lines and $lines[0] eq "this_invocation_nonce") {
-	    push @header, shift @lines;
-	    push @header, shift @lines;
+	my ($pptname, @lines) = split(/\n/, $record->{text});
+	# Each element is a [comments, line] pair for one non-comment line.  A
+	# comment line stays with the line that follows it.
+	my @items;
+	# Comment lines that are not yet attached to a line.
+	my $pending = "";
+	foreach my $line (@lines) {
+	    if (is_comment_line($line)) {
+		$pending .= "$line\n";
+	    } else {
+		push @items, [$pending, $line];
+		$pending = "";
+	    }
 	}
-	die "Bad number of lines in $ARGV at line $record->{line}" unless @lines % 3 == 0;
+	my @header = ($pptname);
+	if (@items and $items[0][1] eq "this_invocation_nonce") {
+	    push @header, map { $_->[0] . $_->[1] } splice(@items, 0, 2);
+	}
+	die "Bad number of lines in $ARGV at line $record->{line}" unless @items % 3 == 0;
+	# Each element is a [name, text] pair for one variable.
 	my @vars;
-	while (@lines) {
-	    push @vars, join("\n", splice(@lines, 0, 3));
+	while (@items) {
+	    my @var = splice(@items, 0, 3);
+	    push @vars, [$var[0][1], join("\n", map { $_->[0] . $_->[1] } @var)];
 	}
-	@vars = sort @vars;
-	output join("\n", @header, @vars), "\n\n";
+	@vars = map { $_->[1] } sort { $a->[0] cmp $b->[0] || $a->[1] cmp $b->[1] } @vars;
+	output join("\n", @header, @vars), "\n", $pending, "\n";
     }
 }
