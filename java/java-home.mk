@@ -2,16 +2,17 @@
 # value, and checks it.  It also sets JAVA_VERSION_STRING_WITH_EA (e.g., "27-ea"),
 # JAVA_VERSION_STRING (e.g., "27" or "1.8.0_402"), and JAVA_RELEASE_NUMBER
 # (e.g., "27" or "8"), all for the JDK at JAVA_HOME.
-# It is included by Makefile, java/Makefile, and tests/Makefile.common.
-# scripts/daikon.bashrc finds JAVA_HOME in the same way.
+# It is included by java/Makefile and tests/Makefile.common.
+# scripts/daikon.bashrc finds JAVA_HOME in nearly the same way.
 
-# On macOS, use /usr/libexec/java_home.  (On a Mac without a JDK, /usr/bin/javac
-# is a stub that prompts the user to install Java.)
-# Otherwise, ask the javac on the PATH which JDK it is in.  This works even if
-# javac is a wrapper script (as used by jenv, asdf, or mise).
+# Ask the javac on the PATH which JDK it is in.  This works even if javac is a
+# wrapper script (as used by jenv, asdf, or mise).
+# On macOS, /usr/bin/javac is a stub that prompts the user to install Java if no
+# JDK is installed; when it is the javac on the PATH, use /usr/libexec/java_home,
+# which finds the same JDK that the stub would run.
 # For JDK 8, java.home is the jre/ subdirectory of the JDK.
 ifeq ($(strip ${JAVA_HOME}),)
-  ifeq ($(shell uname), Darwin)
+  ifeq ($(shell uname):$(shell command -v javac 2> /dev/null),Darwin:/usr/bin/javac)
     JAVA_HOME := $(shell /usr/libexec/java_home 2> /dev/null)
   else
     JAVA_HOME := $(shell javac -J-XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$$::;p;}')

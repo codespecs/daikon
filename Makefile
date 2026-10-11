@@ -20,9 +20,6 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER := sort
 endif
 
-# This sets JAVA_HOME and JAVA_RELEASE_NUMBER.
-include ${DAIKONDIR}/java/java-home.mk
-
 
 ##########################################################################
 ### Variables
@@ -75,10 +72,6 @@ SCRIPT_PATHS := $(addprefix scripts/,${SCRIPT_FILES})
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print | ${SORT_DIRECTORY_ORDER})
-# If we're building on JDK 23 or less, remove the java24 files from the list.
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 24; echo $$?),0)
-  DAIKON_JAVA_FILES := $(filter-out %24.java, ${DAIKON_JAVA_FILES})
-endif
 
 DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/simplify/daikon-background.txt \
@@ -380,7 +373,7 @@ test-staged-dist: ${STAGING_DIR}
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
 	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ${PLUME_SCRIPTS}/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
-	(cd ${DISTTESTDIRJAVA}/daikon/java; rm `find . -name '*.class'`; ${MAKE} JAVAC='javac' compile)
+	(cd ${DISTTESTDIRJAVA}/daikon/java; rm `find . -name '*.class'`; ${MAKE} compile)
 	## Test that these new .class files work properly.
 	${MAKE} -C ${DISTTESTDIR}/daikon/java junit
 	## Test the main target of the makefile.
@@ -455,8 +448,8 @@ staging:
 	@echo "]2;Building Javadoc"
 	mkdir ${STAGING_DIR}/download/api
 	# Javadoc is skipped on Java 8.  Hard-coded JAVA_HOME path is a hack.
-	# java/Makefile uses the JDK at JAVA_HOME, not the one on the PATH.
-	(export JAVA_HOME=/usr/lib/jvm/java-11; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
+	# java/Makefile uses the JDK at JAVA_HOME; helper scripts use the one on the PATH.
+	(export JAVA_HOME=/usr/lib/jvm/java-11; export PATH=$${JAVA_HOME}/bin:${PATH}; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	mkdir ${STAGING_DIR}/download/doc
