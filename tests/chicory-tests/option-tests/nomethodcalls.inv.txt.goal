@@ -21,7 +21,6 @@ args[] == []
 args[].toString == []
 ===========================================================================
 NoMethodCalls.observe(java.util.List, int):::ENTER
-list.getClass().getName() == NoMethodCalls$CountingList.class
 NoMethodCalls.toArrayCalls <= x
 ===========================================================================
 NoMethodCalls.observe(java.util.List, int):::EXIT

@@ -28,6 +28,16 @@ public class NoMethodCalls {
       }
       observe(cl, i);
     }
+
+    // A stale view:  calling any method on it, such as toArray(), throws
+    // ConcurrentModificationException.
+    List<Object> backing = new ArrayList<>();
+    backing.add(1);
+    backing.add(2);
+    List<Object> staleView = backing.subList(0, 1);
+    backing.add(3);
+    observe(staleView, 10);
+
     if (toArrayCalls != 0) {
       throw new Error("toArray() was called " + toArrayCalls + " times");
     }
