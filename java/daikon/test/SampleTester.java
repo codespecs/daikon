@@ -78,8 +78,29 @@ public class SampleTester {
           "      Specify a class, varinfos, and ppt to debug track.",
           "      Format is class<var1,var2,var3>@ppt");
 
-  @SuppressWarnings("JUnitMethodInvoked") // main() runs the tests without JUnit
+  /**
+   * Runs the sample tests.
+   *
+   * @param args command-line arguments
+   * @throws IOException if there is trouble reading a file
+   */
   public static void main(String[] args) throws IOException {
+    try {
+      mainHelper(args);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
+    }
+  }
+
+  /**
+   * Does the work of {@link #main}, but throws an exception rather than calling {@code
+   * System.exit}.
+   *
+   * @param args command-line arguments
+   * @throws IOException if there is trouble reading a file
+   */
+  @SuppressWarnings("JUnitMethodInvoked") // mainHelper() runs the tests without JUnit
+  public static void mainHelper(String[] args) throws IOException {
 
     LongOpt[] longopts =
         new LongOpt[] {

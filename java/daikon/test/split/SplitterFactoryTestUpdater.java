@@ -247,7 +247,27 @@ public class SplitterFactoryTestUpdater {
         "      \"  -s       Save (do not delete) the splitter java files in the temp directory\",");
     ps.println("      \"  -h       Display this usage message\");");
     ps.println();
+    ps.println("  /**");
+    ps.println("   * Processes command-line options.");
+    ps.println("   *");
+    ps.println("   * @param args command-line arguments");
+    ps.println("   */");
     ps.println("  public static void main(String[] args) {");
+    ps.println("    try {");
+    ps.println("      mainHelper(args);");
+    ps.println("    } catch (Daikon.DaikonTerminationException e) {");
+    ps.println("      Daikon.handleDaikonTerminationException(e);");
+    ps.println("    }");
+    ps.println("  }");
+    ps.println();
+    ps.println("  /**");
+    ps.println(
+        "   * Does the work of {@link #main}, but throws an exception rather than calling {@code");
+    ps.println("   * System.exit}.");
+    ps.println("   *");
+    ps.println("   * @param args command-line arguments");
+    ps.println("   */");
+    ps.println("  public static void mainHelper(String[] args) {");
     ps.println("    DaikonGetopt g = new DaikonGetopt(args, \"s\", new LongOpt[0], usage);");
     ps.println("    int c;");
     ps.println("    while ((c = g.getopt()) != -1) {");
