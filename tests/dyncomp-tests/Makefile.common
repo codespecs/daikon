@@ -31,7 +31,7 @@ DECLS_2_COMP ?= ${DAIKONDIR}/scripts/decls2comp.py
 RUN_MANY := ../../kvasir-tests/run-many.pl
 # The exit status of the test program on its test inputs.
 EXPECTED_EXIT_STATUS ?= 0
-RUN_KVASIR = sh ../../kvasir-tests/run-kvasir.sh --expected-status $(EXPECTED_EXIT_STATUS)
+RUN_KVASIR = sh ../../kvasir-tests/run-kvasir.sh --expected-status '$(EXPECTED_EXIT_STATUS)'
 SORT_DTRACE_INPLACE := perl -Si ${DAIKONDIR}/scripts/sort-dtrace.pl
 SORT_DECLS := ${DAIKONDIR}/scripts/sort-decls-2.py
 INCLUDES ?=
@@ -129,7 +129,7 @@ ifdef TESTS_SCRIPT
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(TESTS_SCRIPT) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	rm -f daikon-output/$(NAME)$(DTRACE_EXT)
 	$(BEFORE_RUN)
-	DTRACEAPPEND=1 perl $(RUN_MANY) --expected-status $(EXPECTED_EXIT_STATUS) $(KVASIR_SCRIPT) <$(TESTS_SCRIPT) >$(NAME).out
+	DTRACEAPPEND=1 perl $(RUN_MANY) --expected-status '$(EXPECTED_EXIT_STATUS)' $(KVASIR_SCRIPT) <$(TESTS_SCRIPT) >$(NAME).out
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -188,9 +188,9 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 else
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dtrace-file=daikon-output/$(NAME).dtrace ./$(NAME) $(PROGRAM_ARGS)
-	perl ${DAIKONDIR}/scripts/dtrace-count.pl daikon-output/$(NAME).dtrace >$(NAME).counts
-	rm -f daikon-output/$(NAME).dtrace
+	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) ./$(NAME) $(PROGRAM_ARGS)
+	$(ZCAT) daikon-output/$(NAME)$(DTRACE_EXT) | perl ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts
+	rm -f daikon-output/$(NAME)$(DTRACE_EXT)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out

@@ -36,7 +36,7 @@ while (<STDIN>) {
     my $args = $_;
     my $lineno = $.;
     printf STDERR "%4d: $kvasir_short $args\n", $lineno;
-    my $rv = system("sh '$run_kvasir' --expected-status $expected_status '$run_out' $kvasir $args");
+    my $rv = system("sh '$run_kvasir' --expected-status '$expected_status' '$run_out' $kvasir $args");
     open(my $fh, '<', $run_out) or die "Cannot read $run_out: $!";
     print do { local $/; <$fh> };
     close($fh);
