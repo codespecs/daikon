@@ -25,7 +25,8 @@ import org.plumelib.util.FilesPlume;
  * <pre>    \rm -f targets/*.java.goal SplitterFactoryTest.java</pre>
  *
  * Then simply run the main method without any arguments in the daikon/java directory, and then
- * re-compile the SplitterFactoryTest.
+ * re-compile the SplitterFactoryTest. This program does not overwrite existing goal files, so
+ * goal files that are not removed are not updated.
  *
  * <p>To add additional tests to this test program, place the .spinfo and decls files into the
  * "targets" directory then add a call to generateSplitters with the new files. generateSplitters is
@@ -43,10 +44,11 @@ public class SplitterFactoryTestUpdater {
   private SplitterFactoryTestUpdater() {} // blocks public constructor
 
   /**
-   * If one has changed the test cases used below, for best results run {@code rm *.java.goal} while
-   * in the targets directory before running this method. Creates new splitter java files, moves the
-   * new files into target directory, rewrites the code of SplitterFactoryTest to use the new files.
-   * One should recompile SplitterFactoryTest after running this method.
+   * If one has changed the test cases used below, run {@code rm *.java.goal} while in the targets
+   * directory before running this method. Creates new splitter java files, moves the new files into
+   * target directory (except where a goal file already exists), and rewrites the code of
+   * SplitterFactoryTest to use the new files. One should recompile SplitterFactoryTest after
+   * running this method.
    *
    * @param args are ignored
    */
@@ -154,7 +156,9 @@ public class SplitterFactoryTestUpdater {
     //                   + " when copying from " + fromName);
     // }
     if (to.exists()) {
-      to.delete();
+      // Do not overwrite an existing goal file.  Otherwise, a run of this program would make
+      // SplitterFactoryTest compare SplitterFactory's output against itself.
+      return;
     }
     // file.renameTo(to) fails if the two files are on different file systems
     // (e.g., /tmp and /scratch may be different).

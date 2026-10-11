@@ -36,6 +36,9 @@ import org.junit.runners.Suite;
   daikon.test.DtraceDiffTester.class,
   // daikon.test.split.SplitterFactoryTest is run separately by the Makefile's
   // "junit" target, because SplitterFactoryTest.java is generated after
-  // everything else is compiled.
+  // everything else is compiled, and because SplitterFactoryTest must run in
+  // its own JVM:  SplitterFactory numbers the splitter files it creates using a
+  // JVM-wide counter, so other tests that create splitters would change the
+  // file names that SplitterFactoryTest expects.
 })
 public final class AllTestsSuite {}

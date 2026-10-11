@@ -1219,7 +1219,10 @@ check-serialize:
 
 
 .PHONY: junit
-junit: daikon/Daikon.class daikon/test/split/SplitterFactoryTest.class
+junit: daikon/Daikon.class
+	@# SplitterFactoryTest.class is not a prerequisite, so that under "make -j" it is not
+	@# built concurrently with daikon/Daikon.class.
+	${MAKE} ${AUTO_GENERATED_CLASSES_2}
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
 ifeq (${JAVA24}, 1)
@@ -1227,8 +1230,7 @@ ifeq (${JAVA24}, 1)
 	@# under versions of Java that do not have java.lang.classfile.
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite24
 endif
-	@# SplitterFactoryTest is not in AllTestsSuite, because SplitterFactoryTest.java
-	@# is generated after everything else is compiled.
+	@# SplitterFactoryTest is not in AllTestsSuite; see the comment there.
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTest
 
 ###
@@ -1470,7 +1472,8 @@ daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTes
 	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater > /dev/null 2>&1) || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater
 	chmod a-w $@
 
-${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
+# SplitterFactoryTest calls Daikon's methods, so recompile it when Daikon changes.
+${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2} daikon/Daikon.class
 	${JAVAC_COMMAND} ${AUTO_GENERATED_FILES_2}
 
 # Create the auto-generated files with jpp
