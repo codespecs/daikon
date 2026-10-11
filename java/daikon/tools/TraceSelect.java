@@ -237,7 +237,7 @@ public class TraceSelect {
         //  daikon.diff.Diff.main (sampleNames);
 
         // spinfo format
-        daikon.diff.MultiDiff.main(sampleNames);
+        daikon.diff.MultiDiff.mainHelper(sampleNames);
       }
 
       // Clean up the mess!  A failed cleanup is not fatal.
@@ -248,6 +248,8 @@ public class TraceSelect {
         }
       }
 
+    } catch (daikon.Daikon.DaikonTerminationException e) {
+      throw e;
     } catch (Exception e) {
       throw new Error(e);
     }
