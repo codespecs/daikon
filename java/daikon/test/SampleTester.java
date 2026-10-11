@@ -150,7 +150,8 @@ public class SampleTester {
           throw new Daikon.NormalTermination();
 
         case '?':
-          break; // getopt() already printed an error
+          // getopt() already printed an error message that names the option.
+          throw new Daikon.UserError("Invalid option; run with -h for usage");
 
         default:
           System.out.println("getopt() returned " + c);

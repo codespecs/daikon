@@ -272,7 +272,8 @@ public class SplitterFactoryTestUpdater {
     ps.println("          System.out.println(usage);");
     ps.println("          throw new Daikon.NormalTermination();");
     ps.println("        case '?':");
-    ps.println("          break;");
+    ps.println("          // getopt() already printed an error message that names the option.");
+    ps.println("          throw new Daikon.UserError(\"Invalid option; run with -h for usage\");");
     ps.println("        default:");
     ps.println("          System.out.println(\"getopt() returned \" + c);");
     ps.println("          break;");
