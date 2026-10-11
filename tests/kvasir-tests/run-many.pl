@@ -9,31 +9,32 @@
 # In practice, one adds the line:
 #   TESTS_SCRIPT := <name of file containing args to fjalar>
 # to the scenario Makefile and the rest is automatic.
+# Each run's output is written to standard output.
+# run-kvasir.sh decides whether a run failed.
+
+use FindBin;
+use File::Temp qw(tempfile);
 
 my $kvasir = $ARGV[0];
 my $kvasir_short = $kvasir;
 $kvasir_short =~ s!^.*/(.*)$!$1!;
+my $run_kvasir = "$FindBin::Bin/run-kvasir.sh";
+my (undef, $run_out) = tempfile(UNLINK => 1);
 
 my $failures = 0;
 
 while (<STDIN>) {
     chomp;
-    printf STDERR "%4d: $kvasir_short $_ 2>&1\n", $.;
-    my $output = `$kvasir $_ 2>&1`;
-    my $rv = $?;
-    print $output;
-    die "Aborting" if $rv == 2;
-    my $status = $rv >> 8;
-    # A run fails if it cannot be started ($rv == -1), if it is killed by a
-    # signal ($rv & 127), or if it exits with status greater than 1.
-    # Exit status 1 alone is not a failure, because some programs (such as
-    # tot_info) exit with status 1 on their test inputs.  But Valgrind and
-    # Kvasir also exit with status 1 on fatal errors, so exit status 1 is a
-    # failure if the output contains one of their fatal error messages.
-    my $fatal_error = $output =~ /^valgrind: |^Valgrind: FATAL|^Exiting\.$|^Terminating program\.$|^dwarf\.c: out of memory|excessive number of elements|^Kvasir is not (installed|built)/m;
-    if ($rv == -1 || ($rv & 127) || $status > 1 || ($status == 1 && $fatal_error)) {
-        printf STDERR "run-many.pl: line %d failed (exit status %d, signal %d): %s %s\n", $., $status, $rv & 127, $kvasir_short, $_;
-        print STDERR "run-many.pl: output of line $. follows:\n", $output;
+    my $args = $_;
+    my $lineno = $.;
+    printf STDERR "%4d: $kvasir_short $args 2>&1\n", $lineno;
+    my $rv = system("sh '$run_kvasir' '$run_out' $kvasir $args");
+    open(my $fh, '<', $run_out) or die "Cannot read $run_out: $!";
+    print do { local $/; <$fh> };
+    close($fh);
+    die "Aborting" if ($rv & 127) == 2;
+    if ($rv != 0) {
+        print STDERR "run-many.pl: line $lineno failed: $kvasir_short $args\n";
         $failures++;
     }
 }
