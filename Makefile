@@ -20,9 +20,9 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER := sort
 endif
 
-# Sets and exports JAVA_HOME, so that recursive invocations of make need not compute it.
+# Sets and exports JAVA_HOME (so that recursive invocations of make need not
+# compute it), and defines CHECKED_JAVA_HOME and java_at_least.
 include ${DAIKONDIR}/java/java-home.mk
-JAVA_RELEASE_NUMBER := $(or ${JAVA_RELEASE_NUMBER},0)
 
 
 ##########################################################################
@@ -77,7 +77,7 @@ SCRIPT_PATHS := $(addprefix scripts/,${SCRIPT_FILES})
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print | ${SORT_DIRECTORY_ORDER})
 # If we're building on JDK 23 or less, remove the java24 files from the list.
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 24; echo $$?),0)
+ifneq ($(call java_at_least,24),1)
   DAIKON_JAVA_FILES := $(filter-out %24.java, ${DAIKON_JAVA_FILES})
 endif
 
@@ -307,15 +307,15 @@ junit:
 # are working properly.
 quick-test:
 	cd examples/java-examples/StackAr; \
-	javac -g DataStructures/*.java
+	${CHECKED_JAVA_HOME}/bin/javac -g DataStructures/*.java
 	@echo "Running Chicory/Daikon"
 	cd examples/java-examples/StackAr; \
-	java -cp ${QT_PATH} daikon.Chicory --daikon DataStructures.StackArTester
+	${CHECKED_JAVA_HOME}/bin/java -cp ${QT_PATH} daikon.Chicory --daikon DataStructures.StackArTester
 	@echo "Running DynComp/Chicory/Daikon"
 	cd examples/java-examples/StackAr; \
-	java -cp ${QT_PATH} daikon.DynComp DataStructures.StackArTester; \
-	java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
-	java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
+	${CHECKED_JAVA_HOME}/bin/java -cp ${QT_PATH} daikon.DynComp DataStructures.StackArTester; \
+	${CHECKED_JAVA_HOME}/bin/java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
+	${CHECKED_JAVA_HOME}/bin/java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
 
 # Sanity check, suitable for continuous integration.
 nightly-test:
@@ -381,7 +381,7 @@ test-staged-dist: ${STAGING_DIR}
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
 	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ${PLUME_SCRIPTS}/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
-	(cd ${DISTTESTDIRJAVA}/daikon/java; rm `find . -name '*.class'`; ${MAKE} JAVAC='javac' compile)
+	(cd ${DISTTESTDIRJAVA}/daikon/java; rm `find . -name '*.class'`; ${MAKE} JAVAC='${CHECKED_JAVA_HOME}/bin/javac' compile)
 	## Test that these new .class files work properly.
 	${MAKE} -C ${DISTTESTDIR}/daikon/java junit
 	## Test the main target of the makefile.
@@ -612,11 +612,11 @@ daikon.jar: ${DAIKON_JAVA_FILES} $(patsubst %,java/%,${DAIKON_RESOURCE_FILES})
 		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
 
 	# make hamcrest and junit4 overwrite junit5 to get our special versions
-	for filename in ${JAR_DIR}/java/lib/*.jar ${JAR_DIR}/java/lib/hamcrest*.jar ${JAR_DIR}/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; jar xf $$filename ; done
+	for filename in ${JAR_DIR}/java/lib/*.jar ${JAR_DIR}/java/lib/hamcrest*.jar ${JAR_DIR}/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; ${CHECKED_JAVA_HOME}/bin/jar xf $$filename ; done
 	(cd java; ${RSYNC_AR} ${DAIKON_RESOURCE_FILES} ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
-	  jar cfm $@ ${JAR_DIR}/java/daikon/chicory/manifest.txt *
+	  ${CHECKED_JAVA_HOME}/bin/jar cfm $@ ${JAR_DIR}/java/daikon/chicory/manifest.txt *
 	mv ${TMPDIR}/daikon-jar/$@ $@
 	#rm -rf ${TMPDIR}/daikon-jar
 

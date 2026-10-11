@@ -8,12 +8,22 @@
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
 
-# This logic is the same as in java/java-home.mk:  ask the JVM that runs javac
-# for its home directory, or else (on macOS) use /usr/libexec/java_home.
-# "command" bypasses any alias for javac.
+# This logic is the same as in java/java-home.mk:  if javac on the PATH is (a
+# symbolic link to) a file in a JDK, use that JDK; otherwise ask the JVM that
+# runs javac for its home directory; otherwise (on macOS) use
+# /usr/libexec/java_home.  "command" bypasses any alias for javac.
 if [ -z "$JAVA_HOME" ] ; then
   if command -v javac > /dev/null 2>&1 ; then
-    JAVA_HOME=$(command javac -J-XshowSettings:properties -version 2>&1 | sed -n 's:^ *java\.home = ::p' | sed 's:/jre$::')
+    javac_realpath=$(realpath "$(command -v javac)" 2> /dev/null)
+    javac_jdk=${javac_realpath%/bin/javac}
+    # JDK 9 and later contain lib/jrt-fs.jar; JDK 8 contains jre/lib/rt.jar.
+    if [ "$javac_jdk" != "$javac_realpath" ] && [ -x "$javac_jdk/bin/java" ] \
+       && { [ -f "$javac_jdk/lib/jrt-fs.jar" ] || [ -f "$javac_jdk/jre/lib/rt.jar" ]; } ; then
+      JAVA_HOME=$javac_jdk
+    else
+      JAVA_HOME=$(command javac -J-XshowSettings:properties -version 2>&1 | sed -n 's:^ *java\.home = ::p' | sed 's:/jre$::')
+    fi
+    unset javac_realpath javac_jdk
   fi
   if [ -z "$JAVA_HOME" ] && [ "$(uname)" = "Darwin" ] ; then
     JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)

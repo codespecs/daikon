@@ -157,7 +157,9 @@ endif
 -include $(COMMON_HERE)/Makefile.user
 
 # This is included after Makefile.user, so that Makefile.user can set JAVA_HOME.
-# It sets JAVA_HOME, CHECKED_JAVA_HOME, and JAVA_RELEASE_NUMBER.
+# It sets JAVA_HOME, DAIKON_JAVA_HOME, CHECKED_JAVA_HOME, and JAVA_RELEASE_NUMBER.
+# The commands below use DAIKON_JAVA_HOME, which does not change if a project
+# Makefile later reassigns JAVA_HOME.
 include ${DAIKONDIR}/java/java-home.mk
 
 # SOURCES is where all of the source code to be examined is located
@@ -195,7 +197,7 @@ JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac
 
 JUNIT_CLASSPATH ?=
 
-JAVALIB_CLASSPATH := ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
+JAVALIB_CLASSPATH := ${DAIKON_JAVA_HOME}/jre/lib/rt.jar:${DAIKON_JAVA_HOME}/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
@@ -221,17 +223,16 @@ export LC_ALL=C
 
 default: help
 
-# JAVA_RELEASE_NUMBER is set by java-home.mk.
-# Without a JDK, the version variables are empty, so that targets that do not
-# run Java (such as "clean") work.
+# JAVA_RELEASE_NUMBER and java_at_least are defined by java-home.mk.
+# Without a JDK, JAVA_RELEASE_NUMBER and the version variables are empty, so
+# that targets that do not run Java (such as "clean") work.
+JAVA23_OR_NEWER := $(call java_at_least,23)
+JAVA21_OR_NEWER := $(call java_at_least,21)
+JAVA19_OR_NEWER := $(call java_at_least,19)
+JAVA17_OR_NEWER := $(call java_at_least,17)
+JAVA11_OR_NEWER := $(call java_at_least,11)
+JAVA8_OR_NEWER := $(call java_at_least,8)
 ifneq (,${JAVA_RELEASE_NUMBER})
-  JAVA23_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 23)
-  JAVA21_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
-  JAVA19_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 19)
-  JAVA17_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 17)
-  JAVA11_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 11)
-  JAVA8_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 8)
-
   ifneq (${JAVA8_OR_NEWER}, 1)
     $(error Must use Java version 8 or later; found ${JAVA_RELEASE_NUMBER} in ${JAVA_VERSION_STRING})
   endif
