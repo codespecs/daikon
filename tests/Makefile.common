@@ -223,32 +223,16 @@ export LC_ALL=C
 
 default: help
 
-# The general form of a Java version number prior to Java 9
-# is 1.n.n_n. For Java 9 or later it is n.n.n.n.
-# Currently, we only look for the release number, which is
-# the first 'n' in either case.
-# Note that version 11 (or 21 or ...) requires the 'start' anchor below
-# to make the old vs. new test work properly.
-
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-startJVS := $(shell echo start${JAVA_VERSION_STRING})
-ifneq (,$(findstring start1.8,$(startJVS)))
-  JAVA_RELEASE_NUMBER := 8
-else
-  # Old Java releases (e.g. 1.7) will set JAVA_RELEASE_NUMBER to 1.
-  # This will cause the JAVA8_OR_NEWER test to fail as desired.
-  JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
-endif
-
-JAVA23_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 23)
-JAVA21_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
-JAVA19_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 19)
-JAVA17_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 17)
-JAVA11_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 11)
-JAVA8_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 8)
+# JAVA_RELEASE_NUMBER and java_at_least are defined by java-home.mk.
+JAVA23_OR_NEWER := $(call java_at_least,23)
+JAVA21_OR_NEWER := $(call java_at_least,21)
+JAVA19_OR_NEWER := $(call java_at_least,19)
+JAVA17_OR_NEWER := $(call java_at_least,17)
+JAVA11_OR_NEWER := $(call java_at_least,11)
+JAVA8_OR_NEWER := $(call java_at_least,8)
 
 ifneq (${JAVA8_OR_NEWER}, 1)
-    $(error Must use Java version 8 or later; found ${JAVA_RELEASE_NUMBER} in ${JAVA_VERSION_STRING})
+  $(error Must use Java version 8 or later; found ${JAVA_RELEASE_NUMBER} in ${JAVA_VERSION_STRING})
 endif
 
 # goal_name is a function that will be called like "$(call goal_name, FILENAME)"
