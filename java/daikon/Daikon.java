@@ -1024,7 +1024,6 @@ public final class Daikon {
     LongOpt[] longopts =
         new LongOpt[] {
           // Control output
-          new LongOpt(help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -1057,7 +1056,7 @@ public final class Daikon {
           new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "o:", longopts, usage);
     int c;
 
     while ((c = g.getopt()) != -1) {
@@ -1067,10 +1066,7 @@ public final class Daikon {
           String option_name = longopts[g.getLongind()].getName();
 
           // Control output
-          if (help_SWITCH.equals(option_name)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-          } else if (no_text_output_SWITCH.equals(option_name)) {
+          if (no_text_output_SWITCH.equals(option_name)) {
             no_text_output = true;
           } else if (format_SWITCH.equals(option_name)) {
             String format_name = getOptarg(g);
@@ -1369,12 +1365,9 @@ public final class Daikon {
           } else if (mem_stat_SWITCH.equals(option_name)) {
             use_mem_monitor = true;
           } else {
-            throw new Daikon.UserError("Unknown option " + option_name + " on command line");
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
         case 'o':
           String inv_filename = getOptarg(g);
 
@@ -1392,11 +1385,6 @@ public final class Daikon {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
-        //
-        case '?':
-          // break; // getopt() already printed an error
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
         //
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
