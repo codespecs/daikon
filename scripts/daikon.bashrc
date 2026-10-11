@@ -8,21 +8,31 @@
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
 
-# Ask the javac on the PATH which JDK it is in.  This works even if javac is a
-# wrapper script (as used by jenv, asdf, or mise) or the macOS /usr/bin/javac stub.
-# Running Daikon requires only a JRE, so use the java on the PATH if there is no javac.
+# Find the JDK that contains the javac on the PATH.  (Daikon requires a JDK, not
+# just a JRE, because it compiles splitters at run time.)  Following symlinks is
+# fast, but it does not work for a wrapper script (as used by jenv, asdf, or mise)
+# or for the macOS /usr/bin/javac stub, so in those cases ask the JVM instead.
+# A JDK home contains a "release" file; a wrapper's directory does not.
 # For JDK 8, java.home is the jre/ subdirectory of the JDK.
 # A failed detection does not modify JAVA_HOME in the user's shell.
 daikon_java_home="$JAVA_HOME"
-if [ -z "$daikon_java_home" ] ; then
-  if command -v javac > /dev/null 2>&1 ; then
-    daikon_java_home=$(javac -J-XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$::;p;}')
-  else
-    daikon_java_home=$(java -XshowSettings:properties -version 2>&1 | sed -n -e '/^ *java\.home = /{s///;s:/jre$::;p;}')
+# "type -P" ignores aliases such as "alias javac='javac -g'".
+if [ -z "$daikon_java_home" ] && daikon_java_home=$(type -P javac) ; then
+  daikon_java_home=$(readlink -f "$daikon_java_home" 2> /dev/null)
+  daikon_java_home="${daikon_java_home%/bin/javac}"
+  if [ ! -f "$daikon_java_home/release" ] ; then
+    daikon_java_home=$(command javac -J-XshowSettings:properties -version 2>&1 | sed -n -e 's/^ *java\.home = //p')
+    if [ -x "${daikon_java_home%/jre}/bin/javac" ] ; then
+      daikon_java_home="${daikon_java_home%/jre}"
+    fi
   fi
 fi
-if [ -z "$daikon_java_home" ] || [ ! -x "$daikon_java_home/bin/java" ] ; then
-  echo "No Java found at JAVA_HOME=$daikon_java_home; set JAVA_HOME or put java on the PATH.  Aborting daikon.bashrc ."
+if [ -z "$daikon_java_home" ] || [ ! -x "$daikon_java_home/bin/javac" ] ; then
+  if [ -n "$JAVA_HOME" ] ; then
+    echo "JAVA_HOME=$JAVA_HOME does not contain bin/javac; set it to a JDK or unset it.  Aborting daikon.bashrc ."
+  else
+    echo "Cannot find a JDK; set JAVA_HOME or put javac on the PATH.  Aborting daikon.bashrc ."
+  fi
   unset daikon_java_home
   return 2
 fi
