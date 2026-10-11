@@ -149,19 +149,16 @@ ifndef COMMON_HERE
   $(error Test directory ${DAIKONDIR}/tests does not exist)
 endif
 
-# JAVA_HOME is set before Makefile.user is included, so that Makefile.user can use or override it.
-include ${DAIKONDIR}/java/java-home.mk
-# CHECKED_JAVA_HOME is TESTS_JAVA_HOME (defined below), but expanding it fails if
-# no JDK was found.  The check happens only when a variable that uses it is
-# expanded, so targets that do not run Java (such as "clean") work without a JDK.
-CHECKED_JAVA_HOME = $(call checked_java_home,${TESTS_JAVA_HOME})
-
 # Put user-specific changes in your own Makefile.user
 #  (such as changes to PLUME_DIR or JAVAC or PATH).
 # Make will silently continue if the file does not exist.
 # The file can be in the project dir, or in the tests dir, or both.
 -include Makefile.user
 -include $(COMMON_HERE)/Makefile.user
+
+# This is included after Makefile.user, so that Makefile.user can set JAVA_HOME.
+# It sets JAVA_HOME, CHECKED_JAVA_HOME, and JAVA_RELEASE_NUMBER.
+include ${DAIKONDIR}/java/java-home.mk
 
 # SOURCES is where all of the source code to be examined is located
 SOURCES?=$(COMMON_HERE)/sources
@@ -193,18 +190,12 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-# TESTS_JAVA_HOME is the JDK that the tests use.  It is fixed here, so that a
-# project Makefile that later reassigns JAVA_HOME does not change JAVA or JAVAC.
-TESTS_JAVA_HOME := ${JAVA_HOME}
 JAVA  = ${CHECKED_JAVA_HOME}/bin/java
 JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac
 
 JUNIT_CLASSPATH ?=
 
-# rt.jar exists only in JDK 8, and tools.jar only in JDK 8 and earlier.
-empty :=
-space := ${empty} ${empty}
-JAVALIB_CLASSPATH := $(subst ${space},:,$(if ${TESTS_JAVA_HOME},$(wildcard ${TESTS_JAVA_HOME}/jre/lib/rt.jar ${TESTS_JAVA_HOME}/lib/tools.jar)))
+JAVALIB_CLASSPATH := ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
@@ -230,26 +221,10 @@ export LC_ALL=C
 
 default: help
 
-# The general form of a Java version number prior to Java 9
-# is 1.n.n_n. For Java 9 or later it is n.n.n.n.
-# Currently, we only look for the release number, which is
-# the first 'n' in either case.
-# Note that version 11 (or 21 or ...) requires the 'start' anchor below
-# to make the old vs. new test work properly.
-
+# JAVA_RELEASE_NUMBER is set by java-home.mk.
 # Without a JDK, the version variables are empty, so that targets that do not
 # run Java (such as "clean") work.
-ifneq (,$(and ${TESTS_JAVA_HOME},$(wildcard ${TESTS_JAVA_HOME}/bin/javac)))
-  JAVA_VERSION_STRING := $(shell ${TESTS_JAVA_HOME}/bin/javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-  startJVS := $(shell echo start${JAVA_VERSION_STRING})
-  ifneq (,$(findstring start1.8,$(startJVS)))
-    JAVA_RELEASE_NUMBER := 8
-  else
-    # Old Java releases (e.g. 1.7) will set JAVA_RELEASE_NUMBER to 1.
-    # This will cause the JAVA8_OR_NEWER test to fail as desired.
-    JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
-  endif
-
+ifneq (,${JAVA_RELEASE_NUMBER})
   JAVA23_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 23)
   JAVA21_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
   JAVA19_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 19)

@@ -16,37 +16,30 @@ HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 
 USER ?= daikonbuild
 
-JAVA ?= java -ea
+# These use the JDK at JAVA_HOME, which is set by java-home.mk (included below).
+JAVA ?= ${CHECKED_JAVA_HOME}/bin/java -ea
 # For debugging, add -verbose flag to javac command
-# JAVAC ?= javac -g -Xlint:unchecked
-JAVAC ?= javac
-JAVADOC ?= javadoc
-JAR ?= jar
+# JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac -g -Xlint:unchecked
+JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac
+JAVADOC ?= ${CHECKED_JAVA_HOME}/bin/javadoc
+JAR ?= ${CHECKED_JAVA_HOME}/bin/jar
 
 BuildJDKTool = BuildJDK
 
 include ${DAIKONDIR}/java/java-home.mk
-CHECKED_JAVA_HOME := $(call checked_java_home,${JAVA_HOME})
+# Without a JDK, use 0 so that the version tests below work, and targets that
+# do not run Java (such as "clean") work.
+JAVA_RELEASE_NUMBER := $(or ${JAVA_RELEASE_NUMBER},0)
 
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
-JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-ifneq (,$(findstring start1.8,start${JAVA_VERSION_STRING}))
+JAVA8 := 0
+JAVA17 := 0
+JAVA21 := 0
+JAVA24 := 0
+JAVA25 := 0
+JAVA27 := 0
+ifeq (${JAVA_RELEASE_NUMBER},8)
   JAVA8 := 1
-  JAVA17 := 0
-  JAVA21 := 0
-  JAVA24 := 0
-  JAVA25 := 0
-  JAVA27 := 0
-  JAVA_RELEASE_NUMBER := 8
-else
-  JAVA8 := 0
-  JAVA17 := 0
-  JAVA21 := 0
-  JAVA24 := 0
-  JAVA25 := 0
-  JAVA27 := 0
-  JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]*\)\..*/\1/')
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
   JAVA17 := 1
@@ -168,9 +161,10 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
   DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar
 endif
 
-JAVADOC_COMMAND := ${JAVADOC} -cp ${DAIKON_CLASSPATH}
-JAVAC_COMMAND := ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
-JAVA_COMMAND := ${JAVA} -cp ${DAIKON_CLASSPATH}
+# Use "=", not ":=", so that a missing JDK is reported only when a command is used.
+JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
+JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
+JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 
 DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
@@ -507,7 +501,7 @@ showvars-brief:
 	@echo "CLASSPATH = ${CLASSPATH}"
 	@echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
 	@echo "JAVA_RELEASE_NUMBER = ${JAVA_RELEASE_NUMBER}"
-	@echo "JAVA_VERSION_STRING_WITH_EA = ${JAVA_VERSION_STRING_WITH_EA}"
+	@echo "JAVA_VERSION_STRING = ${JAVA_VERSION_STRING}"
 
 .PHONY: xlint
 xlint: daikon/Daikon.class
@@ -1232,7 +1226,7 @@ junit-all: junit
 ###
 
 CLOVER := ${HOME}/clover
-CLOVER_CMD := ${JAVA_COMMAND} -cp ${CLOVER}/clover-1.3.1/lib/clover.jar \
+CLOVER_CMD = ${JAVA_COMMAND} -cp ${CLOVER}/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
 CLOVER_CP := $(subst ${DAIKONDIR}/java,${CLOVER}/java,${DAIKON_CLASSPATH})
 CLOVER_CP := ${CLOVER_CP}:${CLOVER}/clover-1.3.1/lib/clover.jar
