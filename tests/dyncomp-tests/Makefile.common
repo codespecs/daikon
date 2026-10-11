@@ -254,7 +254,7 @@ endif
 
 daikon-output/$(NAME)_2.dtrace: daikon-output/$(NAME).dtrace
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_DECLS_2) --dtrace-file=daikon-output/$(NAME)_2.dtrace ./$(NAME) $(PROGRAM_ARGS) > kvasir-output.log
+	$(KVASIR_SCRIPT) --dtrace-file=daikon-output/$(NAME)_2.dtrace ./$(NAME) $(PROGRAM_ARGS) > kvasir-output.log
 	$(AFTER_RUN)
 
 decls-2-compile: daikon-output/$(NAME)_2.dtrace
