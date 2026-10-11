@@ -11,24 +11,4 @@ ifeq ($(origin DAIKONDIR), undefined)
 endif
 include ${DAIKONDIR}/tests/Makefile.jdk
 
-# This test seems to be non-deterministic on Ubuntu 22.10 with JDK 19.
-
-JAVA_VERSION_STRING := $(shell ${JAVAC} -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
-ifeq ($(shell expr ${JAVA_RELEASE_NUMBER} \>= 19),1)
-  JAVA19_OR_NEWER := 1
-else
-  JAVA19_OR_NEWER := 0
-endif
-
-OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release | cut -d " " -f1)
-OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
-ifeq (${OS_ID},Ubuntu)
-ifeq (${OS_REL},22.10)
-ifeq (${JAVA19_OR_NEWER},1)
-#SKIP_COMP_DIFF := 1
-endif
-endif
-endif
-
 include ../Makefile.common
