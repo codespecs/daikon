@@ -14,8 +14,7 @@ include $(dir $(lastword ${MAKEFILE_LIST}))../../../scripts/check-daikondir.mk
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
 # A prerequisite that changes whenever Daikon is rebuilt: Daikon.class if the
 # java/ tree is compiled, otherwise daikon.jar.  If neither exists, use
-# Daikon.class, so that make reports the missing file rather than running
-# java with no Daikon on the classpath.
+# Daikon.class, whose rule below reports that Daikon is not built.
 DAIKON := $(or $(firstword $(wildcard ${DAIKONDIR}/java/daikon/Daikon.class ${DAIKONDIR}/daikon.jar)),${DAIKONDIR}/java/daikon/Daikon.class)
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
@@ -62,6 +61,11 @@ TS_InputEventHandlerTests.inv.gz: ${DAIKON} TS_InputEventHandlerTests.dtrace.gz
 #   make TS_AllDrawletUnitTests.txt TS_AllDrawletUnitTests.txt-all \
 #     TS_DrawletFunctionalTest.txt TS_DrawletFunctionalTest.txt-all \
 #     TS_InputEventHandlerTests.txt TS_InputEventHandlerTests.txt-all
+
+# Without this rule, a missing ${DAIKON} would make the "%.txt" pattern rule
+# inapplicable, and make would report "No rule to make target 'drawlet.txt'".
+${DAIKON}:
+	@echo "Daikon is not built.  Run \"make -C ${DAIKONDIR} compile\"." && false
 
 %.txt: %.inv.gz ${DAIKON}
 	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants $< > $@

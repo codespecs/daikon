@@ -3,7 +3,6 @@
 #
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
 include $(dir $(lastword ${MAKEFILE_LIST}))../../../scripts/check-daikondir.mk
 
 # StackAr sources are used for option testing

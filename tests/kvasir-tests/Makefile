@@ -28,13 +28,8 @@ include ${DAIKONDIR}/scripts/plume-scripts.mk
 default: summary-w-daikon
 
 .PHONY: regression-tests
-regression-tests:
-	is_ci=$$("${PLUME_SCRIPTS}"/is-ci.sh) || exit 1; \
-	if [ -n "$${is_ci}" ]; then \
-	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
-	else \
-	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
-	fi
+regression-tests: | ${PLUME_SCRIPTS}
+	${MAKE} --jobs=$(if ${IS_CI},1,4) ${MPARG} nightly-tests__diffs-w-daikon-if-working
 	${MAKE} nightly-summary-only-w-daikon
 	@${MAKE} --no-print-directory results
 
@@ -83,13 +78,8 @@ update-all:
 	${MAKE} nightly-tests__update-goals
 
 .PHONY: clean-all
-clean-all:
-	is_ci=$$("${PLUME_SCRIPTS}"/is-ci.sh) || exit 1; \
-	if [ -n "$${is_ci}" ]; then \
-	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
-	else \
-	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
-	fi
+clean-all: | ${PLUME_SCRIPTS}
+	${MAKE} --jobs=$(if ${IS_CI},1,4) ${MPARG} nightly-tests__clean
 
 default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
 	@

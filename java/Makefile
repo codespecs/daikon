@@ -2,17 +2,16 @@
 
 default: daikon
 
+# DAIKONDIR is the clone of the 'daikon' project.
+include $(dir $(lastword ${MAKEFILE_LIST}))../scripts/check-daikondir.mk
+
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-# Don't let the user override this; it should refer to the current directory.
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
-include $(dir $(lastword ${MAKEFILE_LIST}))../scripts/check-daikondir.mk
-
 DAIKONSCRIPTS ?= ${DAIKONDIR}/scripts
 
-PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+include ${DAIKONDIR}/scripts/plume-scripts.mk
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 
 USER ?= daikonbuild
@@ -682,15 +681,9 @@ dyncomp-jdk-only dcomp-jdk-only :
 	  ${JAR} cf dcomp_rt.jar -C ${DCOMP_RT} .; \
 	fi
 
-## These two rules create the directories if absent but don't update them.
-${PLUME_SCRIPTS}:
-	${MAKE} -C .. update-plume-scripts
+## This rule creates the directory if absent but doesn't update it.
 ../.utils/html-tools:
 	${MAKE} -C .. update-html-tools
-
-.PHONY: update-plume-scripts
-update-plume-scripts:
-	${MAKE} -C .. update-plume-scripts
 
 # Checks that daikon.plumelib, rather than plume, is imported by source files
 # that do instrumentation.  Should also check that daikon.plumelib is never

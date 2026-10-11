@@ -1,16 +1,22 @@
+# DAIKONDIR is the clone of the 'daikon' project.
+include $(dir $(lastword ${MAKEFILE_LIST}))scripts/check-daikondir.mk
+# Export it so that commands run by recipes use this clone.
+export DAIKONDIR
+
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
-
-# Don't let the user override this; it should refer to the current directory.
-# Export it so that sub-makes use this clone rather than a DAIKONDIR from the environment.
-export DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
-include $(dir $(lastword ${MAKEFILE_LIST}))scripts/check-daikondir.mk
 
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
 
 include ${DAIKONDIR}/scripts/plume-scripts.mk
+# Clone plume-scripts now, because SORT_DIRECTORY_ORDER is used while this Makefile is read.
+ifndef NONETWORK
+ifeq (,$(wildcard ${PLUME_SCRIPTS}))
+  dummy := $(shell ${PLUME_SCRIPTS_CLONE})
+endif
+endif
 SORT_DIRECTORY_ORDER := ${PLUME_SCRIPTS}/sort-directory-order
 ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   # The clone above did not happen or did not succeed, so sort-directory-order is not available.
@@ -786,9 +792,6 @@ ifndef NONETWORK
 	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/html-tools.git ${HTMLTOOLS} || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/html-tools.git ${HTMLTOOLS}))) \
 	fi
 endif
-
-# update-plume-scripts is defined in .utils/plume-scripts/code-style.mak which
-# is included by this Makefile.
 
 update-run-google-java-format:
 ifndef NONETWORK

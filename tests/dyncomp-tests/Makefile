@@ -66,13 +66,8 @@ update-all:
 	${MAKE} nightly-tests__update-goals
 
 .PHONY: clean-all
-clean-all:
-	is_ci=$$("${PLUME_SCRIPTS}"/is-ci.sh) || exit 1; \
-	if [ -n "$${is_ci}" ]; then \
-	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
-	else \
-	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
-	fi
+clean-all: | ${PLUME_SCRIPTS}
+	${MAKE} --jobs=$(if ${IS_CI},1,4) ${MPARG} nightly-tests__clean
 
 
 default-projects__%: pgbovine-tests__%
