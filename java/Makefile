@@ -16,44 +16,70 @@ HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 
 USER ?= daikonbuild
 
-# These use the JDK at JAVA_HOME, which is set by java-home.mk (included below).
-JAVA ?= ${CHECKED_JAVA_HOME}/bin/java -ea
+JAVA ?= java -ea
 # For debugging, add -verbose flag to javac command
-# JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac -g -Xlint:unchecked
-JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac
-JAVADOC ?= ${CHECKED_JAVA_HOME}/bin/javadoc
-JAR ?= ${CHECKED_JAVA_HOME}/bin/jar
+# JAVAC ?= javac -g -Xlint:unchecked
+JAVAC ?= javac
+JAVADOC ?= javadoc
+JAR ?= jar
 
 BuildJDKTool = BuildJDK
 
 include ${DAIKONDIR}/java/java-home.mk
+ifeq (,$(call is_jdk,${JAVA_HOME}))
+  $(error No JDK found at JAVA_HOME="${JAVA_HOME}"; set JAVA_HOME or put javac on the PATH)
+endif
 
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
-# Without a JDK, they are all 0, so that targets that do not run Java (such as
-# "clean") work.
-JAVA8 := $(if $(filter 8,${JAVA_RELEASE_NUMBER}),1,0)
-JAVA17 := $(if $(call java_at_least,17),1,0)
-JAVA21 := $(if $(call java_at_least,21),1,0)
+JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
+ifneq (,$(findstring start1.8,start${JAVA_VERSION_STRING}))
+  JAVA8 := 1
+  JAVA17 := 0
+  JAVA21 := 0
+  JAVA24 := 0
+  JAVA25 := 0
+  JAVA27 := 0
+  JAVA_RELEASE_NUMBER := 8
+else
+  JAVA8 := 0
+  JAVA17 := 0
+  JAVA21 := 0
+  JAVA24 := 0
+  JAVA25 := 0
+  JAVA27 := 0
+  JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]*\)\..*/\1/')
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
+  JAVA17 := 1
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 21; echo $$?),0)
+  JAVA21 := 1
+endif
 # JDK 24 isn't an LTS version, but we need it to know whether to compile Instrument24.java.
-JAVA24 := $(if $(call java_at_least,24),1,0)
-ifeq (${JAVA24}, 1)
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
+  JAVA24 := 1
   BuildJDKTool = BuildJDK24
 endif
-JAVA25 := $(if $(call java_at_least,25),1,0)
-JAVA27 := $(if $(call java_at_least,27),1,0)
-ifeq (${JAVA_RELEASE_NUMBER},25)
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 25; echo $$?),0)
+  JAVA25 := 1
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 25; echo $$?),0)
   ifndef JAVA25_HOME
-    JAVA25_HOME := ${DAIKON_JAVA_HOME}
+    JAVA25_HOME := ${JAVA_HOME}
   endif
 endif
-# Use 26, not 27, so that JDK 26 has a value for the --system flag below.
-ifeq ($(call java_at_least,26),1)
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 27; echo $$?),0)
+  JAVA27 := 1
+endif
+# Use -ge 26, not -ge 27, so that JDK 26 has a value for the --system flag below.
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 26; echo $$?),0)
   ifndef JAVA27_HOME
-    JAVA27_HOME := ${DAIKON_JAVA_HOME}
+    JAVA27_HOME := ${JAVA_HOME}
   endif
 endif
 
-ifeq ($(call java_at_least,21),1)
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
   LINT_THIS_ESCAPE=-Xlint:-this-escape
 endif
 
@@ -137,23 +163,22 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/junit-4.13.2-Daikon.jar:${DAIKONDIR}/java/lib/hamcrest-core-1.3-Daikon.jar:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
 
 ## Add tools.jar and rt.jar, if they exist
-ifneq "$(wildcard ${DAIKON_JAVA_HOME}/lib/tools.jar)" ""
-  DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${DAIKON_JAVA_HOME}/lib/tools.jar
+ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
+  DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/lib/tools.jar
 endif
-ifneq "$(wildcard ${DAIKON_JAVA_HOME}/jre/lib/rt.jar)" ""
-  DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${DAIKON_JAVA_HOME}/jre/lib/rt.jar
+ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
+  DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar
 endif
 
-# Use "=", not ":=", so that a missing JDK is reported only when a command is used.
-JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
-JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
-JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
+JAVADOC_COMMAND := ${JAVADOC} -cp ${DAIKON_CLASSPATH}
+JAVAC_COMMAND := ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
+JAVA_COMMAND := ${JAVA} -cp ${DAIKON_CLASSPATH}
 
 DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 DOCLET_FLAGS :=
 LINKOFFLINE := https://docs.oracle.com/javase/8/docs/api/
-ifeq ($(call java_at_least,11),1)
+ifeq ($(shell expr ${JAVA_RELEASE_NUMBER} \>= 11),1)
   DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
   LINKOFFLINE := https://docs.oracle.com/en/java/javase/17/docs/api/
 endif
@@ -484,7 +509,7 @@ showvars-brief:
 	@echo "CLASSPATH = ${CLASSPATH}"
 	@echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
 	@echo "JAVA_RELEASE_NUMBER = ${JAVA_RELEASE_NUMBER}"
-	@echo "JAVA_VERSION_STRING = ${JAVA_VERSION_STRING}"
+	@echo "JAVA_VERSION_STRING_WITH_EA = ${JAVA_VERSION_STRING_WITH_EA}"
 
 .PHONY: xlint
 xlint: daikon/Daikon.class
@@ -1209,7 +1234,7 @@ junit-all: junit
 ###
 
 CLOVER := ${HOME}/clover
-CLOVER_CMD = ${JAVA_COMMAND} -cp ${CLOVER}/clover-1.3.1/lib/clover.jar \
+CLOVER_CMD := ${JAVA_COMMAND} -cp ${CLOVER}/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
 CLOVER_CP := $(subst ${DAIKONDIR}/java,${CLOVER}/java,${DAIKON_CLASSPATH})
 CLOVER_CP := ${CLOVER_CP}:${CLOVER}/clover-1.3.1/lib/clover.jar
@@ -1307,7 +1332,7 @@ endif
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ${PLUME_SCRIPTS} ${AUTO_GENERATED_FILES}
-ifeq (${JAVA8}, 1)
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 8; echo $$?),0)
 	@echo "Skipping api-private target under Java 8"
 else
 	mkdir -p ${JAVADOC_DEST}

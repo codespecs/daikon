@@ -9,34 +9,25 @@
 ## You should not need to edit this file.
 
 # This logic is the same as in java/java-home.mk:  if javac on the PATH is (a
-# symbolic link to) a file in a JDK, use that JDK; otherwise ask the JVM that
-# runs javac for its home directory; otherwise (on macOS) use
-# /usr/libexec/java_home.  "command" bypasses any alias for javac.
+# symbolic link to) a file in a JDK, use that JDK; otherwise, on macOS, use
+# /usr/libexec/java_home.  If javac is a wrapper script (as used by jenv, asdf,
+# or mise), set JAVA_HOME instead.
 if [ -z "$JAVA_HOME" ] ; then
-  if command -v javac > /dev/null 2>&1 ; then
-    javac_realpath=$(realpath "$(command -v javac)" 2> /dev/null)
-    javac_jdk=${javac_realpath%/bin/javac}
-    # JDK 9 and later contain lib/jrt-fs.jar; JDK 8 contains jre/lib/rt.jar.
-    if [ "$javac_jdk" != "$javac_realpath" ] && [ -x "$javac_jdk/bin/java" ] \
-       && { [ -f "$javac_jdk/lib/jrt-fs.jar" ] || [ -f "$javac_jdk/jre/lib/rt.jar" ]; } ; then
-      JAVA_HOME=$javac_jdk
-    else
-      JAVA_HOME=$(command javac -J-XshowSettings:properties -version 2>&1 | sed -n 's:^ *java\.home = ::p' | sed 's:/jre$::')
-    fi
-    unset javac_realpath javac_jdk
-  fi
-  if [ -z "$JAVA_HOME" ] && [ "$(uname)" = "Darwin" ] ; then
+  javac_realpath=$(realpath "$(type -P javac)" 2> /dev/null)
+  javac_jdk=${javac_realpath%/bin/javac}
+  # JDK 9 and later contain lib/jrt-fs.jar; JDK 8 contains jre/lib/rt.jar.
+  if [ "$javac_jdk" != "$javac_realpath" ] && [ -x "$javac_jdk/bin/javac" ] \
+     && { [ -f "$javac_jdk/lib/jrt-fs.jar" ] || [ -f "$javac_jdk/jre/lib/rt.jar" ]; } ; then
+    JAVA_HOME=$javac_jdk
+  elif [ "$(uname)" = "Darwin" ] ; then
     JAVA_HOME=$(/usr/libexec/java_home 2> /dev/null)
   fi
+  unset javac_realpath javac_jdk
 fi
 export JAVA_HOME
 if [ ! -d "$JAVA_HOME" ]; then
   echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."
   return 2
-fi
-# Running Daikon needs only a JRE, but building Daikon needs a JDK.
-if [ ! -x "$JAVA_HOME/bin/javac" ]; then
-  echo "Warning: JAVA_HOME=$JAVA_HOME is not a JDK (it has no bin/javac); building Daikon requires a JDK."
 fi
 
 if [ ${#BASH_SOURCE[@]} -eq 0 ]; then

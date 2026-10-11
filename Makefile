@@ -20,9 +20,7 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER := sort
 endif
 
-# Sets and exports JAVA_HOME (so that recursive invocations of make need not
-# compute it), and defines CHECKED_JAVA_HOME and java_at_least.
-include ${DAIKONDIR}/java/java-home.mk
+JAVA_RELEASE_NUMBER := $(shell java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
 
 
 ##########################################################################
@@ -77,7 +75,7 @@ SCRIPT_PATHS := $(addprefix scripts/,${SCRIPT_FILES})
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print | ${SORT_DIRECTORY_ORDER})
 # If we're building on JDK 23 or less, remove the java24 files from the list.
-ifneq ($(call java_at_least,24),1)
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 24; echo $$?),0)
   DAIKON_JAVA_FILES := $(filter-out %24.java, ${DAIKON_JAVA_FILES})
 endif
 
@@ -307,15 +305,15 @@ junit:
 # are working properly.
 quick-test:
 	cd examples/java-examples/StackAr; \
-	${CHECKED_JAVA_HOME}/bin/javac -g DataStructures/*.java
+	javac -g DataStructures/*.java
 	@echo "Running Chicory/Daikon"
 	cd examples/java-examples/StackAr; \
-	${CHECKED_JAVA_HOME}/bin/java -cp ${QT_PATH} daikon.Chicory --daikon DataStructures.StackArTester
+	java -cp ${QT_PATH} daikon.Chicory --daikon DataStructures.StackArTester
 	@echo "Running DynComp/Chicory/Daikon"
 	cd examples/java-examples/StackAr; \
-	${CHECKED_JAVA_HOME}/bin/java -cp ${QT_PATH} daikon.DynComp DataStructures.StackArTester; \
-	${CHECKED_JAVA_HOME}/bin/java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
-	${CHECKED_JAVA_HOME}/bin/java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
+	java -cp ${QT_PATH} daikon.DynComp DataStructures.StackArTester; \
+	java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
+	java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
 
 # Sanity check, suitable for continuous integration.
 nightly-test:
@@ -381,7 +379,7 @@ test-staged-dist: ${STAGING_DIR}
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
 	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ${PLUME_SCRIPTS}/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
-	(cd ${DISTTESTDIRJAVA}/daikon/java; rm `find . -name '*.class'`; ${MAKE} JAVAC='${CHECKED_JAVA_HOME}/bin/javac' compile)
+	(cd ${DISTTESTDIRJAVA}/daikon/java; rm `find . -name '*.class'`; ${MAKE} JAVAC='javac' compile)
 	## Test that these new .class files work properly.
 	${MAKE} -C ${DISTTESTDIR}/daikon/java junit
 	## Test the main target of the makefile.
@@ -456,8 +454,7 @@ staging:
 	@echo "]2;Building Javadoc"
 	mkdir ${STAGING_DIR}/download/api
 	# Javadoc is skipped on Java 8.  Hard-coded JAVA_HOME path is a hack.
-	(if [ -d /usr/lib/jvm/java-11 ]; then export JAVA_HOME=/usr/lib/jvm/java-11 PATH=/usr/lib/jvm/java-11/bin:$${PATH}; fi; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
-	@test -f ${STAGING_DIR}/download/api/index.html || (echo "Javadoc was not built; use Java 11 or later" && false)
+	(export PATH=/usr/lib/jvm/java-11/bin:${PATH}; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	mkdir ${STAGING_DIR}/download/doc
@@ -612,11 +609,11 @@ daikon.jar: ${DAIKON_JAVA_FILES} $(patsubst %,java/%,${DAIKON_RESOURCE_FILES})
 		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
 
 	# make hamcrest and junit4 overwrite junit5 to get our special versions
-	for filename in ${JAR_DIR}/java/lib/*.jar ${JAR_DIR}/java/lib/hamcrest*.jar ${JAR_DIR}/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; ${CHECKED_JAVA_HOME}/bin/jar xf $$filename ; done
+	for filename in ${JAR_DIR}/java/lib/*.jar ${JAR_DIR}/java/lib/hamcrest*.jar ${JAR_DIR}/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; jar xf $$filename ; done
 	(cd java; ${RSYNC_AR} ${DAIKON_RESOURCE_FILES} ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
-	  ${CHECKED_JAVA_HOME}/bin/jar cfm $@ ${JAR_DIR}/java/daikon/chicory/manifest.txt *
+	  jar cfm $@ ${JAR_DIR}/java/daikon/chicory/manifest.txt *
 	mv ${TMPDIR}/daikon-jar/$@ $@
 	#rm -rf ${TMPDIR}/daikon-jar
 
