@@ -11,13 +11,15 @@ RESULTS_PATTERN :=    -name '*.diff'
 
 .PHONY: regression-tests
 # The .diff files are deleted first, so that a test that crashes does not
-# leave behind a .diff file from an earlier run.
+# leave behind a .diff file from an earlier run.  The deletion is a separate
+# recipe line, because make runs any line that contains $(MAKE) even under
+# "make -n".
 # -k keeps one failing test from preventing the others from running.
 # The summary is skipped if a test failed, because it would re-run that test.
 # The results are always printed.
 regression-tests:
+	@find . ${RESULTS_PATTERN} -delete
 	@status=0; \
-	find . ${RESULTS_PATTERN} -delete; \
 	${MAKE} -k ${REGRESSION_TESTS_ARGS} ${REGRESSION_TESTS_TARGET} || status=$$?; \
 	if [ $$status -eq 0 ]; then ${MAKE} ${REGRESSION_SUMMARY_TARGET} || status=$$?; fi; \
 	${MAKE} --no-print-directory results TESTS_STATUS=$$status || status=$$?; \

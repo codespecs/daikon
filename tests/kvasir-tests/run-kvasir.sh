@@ -71,13 +71,16 @@ if [ "$status" -eq 1 ] \
   cat "$run_out" >&2
   exit 1
 fi
+# This check precedes the check of the command's exit status, because if
+# $dtrace_count dies, the command is killed by SIGPIPE.
+if [ "$count_status" -ne 0 ]; then
+  echo "$dtrace_count failed with exit status $count_status (command exit status $status); command output follows:" >&2
+  cat "$run_out" >&2
+  exit "$count_status"
+fi
 if [ "$status" -gt 1 ]; then
   echo "Command failed with exit status $status; output follows:" >&2
   cat "$run_out" >&2
   exit "$status"
-fi
-if [ "$count_status" -ne 0 ]; then
-  echo "$dtrace_count failed with exit status $count_status" >&2
-  exit "$count_status"
 fi
 exit 0
