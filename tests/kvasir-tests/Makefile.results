@@ -3,8 +3,10 @@
 #
 # The including Makefile sets:
 #   REGRESSION_TESTS_TARGET: the target that runs the tests and creates the .diff files
-#   REGRESSION_TESTS_ARGS: extra arguments to make, when making REGRESSION_TESTS_TARGET
+#   REGRESSION_TESTS_ARGS: extra arguments to make, when making REGRESSION_TESTS_TARGET (optional)
 #   REGRESSION_SUMMARY_TARGET: the target that summarizes the tests
+
+REGRESSION_TESTS_ARGS ?=
 
 # args to 'find' program, to find files containing results
 RESULTS_PATTERN :=    -name '*.diff'

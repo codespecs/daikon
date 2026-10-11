@@ -250,9 +250,9 @@ else
 ifdef DTRACE_APPEND
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS)
+	$(RUN_KVASIR) $(NAME).decls.out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS)
 	$(BEFORE_RUN)
-	$(RUN_KVASIR) --append $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls --dtrace-file=daikon-output/$(NAME).dtrace --dtrace-append ./$(NAME) $(PROGRAM_ARGS)
+	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls --dtrace-file=daikon-output/$(NAME).dtrace --dtrace-append ./$(NAME) $(PROGRAM_ARGS)
 	$(BEFORE_RUN)
 	$(RUN_KVASIR) $(NAME).dyncomp.out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS)
 	$(AFTER_RUN)
@@ -420,7 +420,7 @@ diffs-w-daikon-if-working:   diffs-w-daikon
 summary-w-daikon-if-working: summary-w-daikon
 
 clean:
-	rm -rf $(NAME) $(DIFF_NAME).*.diff $(NAME).out $(NAME).dyncomp.out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts $(NAME).dtrace.gz $(NAME).decls $(NAME).[12].dtrace.gz
+	rm -rf $(NAME) $(DIFF_NAME).*.diff $(NAME).out $(NAME).decls.out $(NAME).dyncomp.out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts $(NAME).dtrace.gz $(NAME).decls $(NAME).[12].dtrace.gz
 	$(CLEAN_SCRIPT)
 
 update-out-goals: $(NAME).out

@@ -23,7 +23,6 @@ PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 default: summary
 
 # Variables used by Makefile.results.
-REGRESSION_TESTS_ARGS =
 REGRESSION_TESTS_TARGET = nightly-tests__diffs-w-daikon
 REGRESSION_SUMMARY_TARGET = nightly-summary-only-w-daikon
 

@@ -4,9 +4,8 @@
 # prints the output to standard error and exits with a nonzero status.
 #
 # Usage:
-#   run-kvasir.sh [--append] OUTFILE COMMAND [ARGS...]
+#   run-kvasir.sh OUTFILE COMMAND [ARGS...]
 #     Writes the command's standard output and standard error to OUTFILE.
-#     With --append, appends to OUTFILE.
 #   run-kvasir.sh --counts DTRACE_COUNT COUNTSFILE OUTFILE COMMAND [ARGS...]
 #     Writes the command's standard error to OUTFILE.  The command's standard
 #     output is a dtrace file; the DTRACE_COUNT script (dtrace-count.pl)
@@ -22,65 +21,46 @@
 # Used by Makefile.common and run-many.pl in tests/kvasir-tests/, and by
 # tests/dyncomp-tests/Makefile.common.
 
-append=false
 dtrace_count=
 counts=
-case "$1" in
-  --append)
-    append=true
-    shift
-    ;;
-  --counts)
-    dtrace_count="$2"
-    counts="$3"
-    shift 3
-    ;;
-esac
+if [ "$1" = --counts ]; then
+  dtrace_count="$2"
+  counts="$3"
+  shift 3
+fi
 out="$1"
 shift
-
-# The output of this run.  With --append, it is appended to $out afterward.
-if $append; then
-  run_out=$(mktemp)
-  trap 'rm -f "$run_out"' EXIT
-else
-  run_out="$out"
-fi
 
 count_status=0
 if [ -n "$counts" ]; then
   # A pipeline's exit status is that of its last command, so the command's
   # exit status is passed out of the pipeline on file descriptor 3.
-  status=$({ { "$@" 2> "$run_out" 3>&-; echo $? >&3; } | perl "$dtrace_count" > "$counts" 3>&-; } 3>&1)
+  status=$({ { "$@" 2> "$out" 3>&-; echo $? >&3; } | perl "$dtrace_count" > "$counts" 3>&-; } 3>&1)
   count_status=$?
 else
-  "$@" > "$run_out" 2>&1
+  "$@" > "$out" 2>&1
   status=$?
-fi
-
-if $append; then
-  cat "$run_out" >> "$out"
 fi
 
 # Each regular expression matches a fatal error message from Valgrind, from
 # Kvasir, or from the kvasir-dtrace script, including the context that
 # distinguishes the message from ordinary program output.
 if [ "$status" -eq 1 ] \
-  && perl -0777 -ne 'exit(/^valgrind: |^Valgrind: FATAL|^Error: .*\n\n?Exiting\.$|^Out of memory allocating .*\nTerminating program\.$|^dwarf\.c: out of memory|^(dwarf\.c: Error: )?Attempt to .* with an excessive number of elements|^Kvasir is not (installed|built)/m ? 0 : 1)' "$run_out"; then
+  && perl -0777 -ne 'exit(/^valgrind: |^Valgrind: FATAL|^Error: .*\n\n?Exiting\.$|^Out of memory allocating .*\nTerminating program\.$|^dwarf\.c: out of memory|^(dwarf\.c: Error: )?Attempt to .* with an excessive number of elements|^Kvasir is not (installed|built)/m ? 0 : 1)' "$out"; then
   echo "Kvasir failed with a fatal error; output follows:" >&2
-  cat "$run_out" >&2
+  cat "$out" >&2
   exit 1
 fi
 # This check precedes the check of the command's exit status, because if
 # $dtrace_count dies, the command is killed by SIGPIPE.
 if [ "$count_status" -ne 0 ]; then
   echo "$dtrace_count failed with exit status $count_status (command exit status $status); command output follows:" >&2
-  cat "$run_out" >&2
+  cat "$out" >&2
   exit "$count_status"
 fi
 if [ "$status" -gt 1 ]; then
   echo "Command failed with exit status $status; output follows:" >&2
-  cat "$run_out" >&2
+  cat "$out" >&2
   exit "$status"
 fi
 exit 0
