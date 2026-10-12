@@ -28,6 +28,7 @@ Further documentation can be found in:
    with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
+* Removed the Perl front end, dfepl.
 * `daikon.tools.TraceSelect` checks all its arguments before sampling.  Its
    `-SEED` option now takes effect.  Its options must precede the arguments
    that it passes to Daikon.
@@ -42,8 +43,6 @@ Daikon no longer reads `.decls` and `.dtrace` files in the obsolete version 1
 format (files that contain `decl-version 1.0`, `VarComparability`, or `DECLARE`
 records).  Re-generate such files with a current front end.  Daikon also cannot read `.inv` files written by
 earlier versions of Daikon.
-
-Removed the Perl front end, dfepl.
 
 Removed configuration option `daikon.PrintInvariants.remove_post_vars`, which
 had an effect only for version 1 files.
