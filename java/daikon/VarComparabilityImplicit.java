@@ -254,6 +254,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    * @param groups a union-find structure over comparable sets, as built by {@link #unify}
    * @return a comparability like this one, with each comparable set replaced by its representative
    */
+  @SuppressWarnings("interning:not.interned") // test whether remap() created a new object
   VarComparabilityImplicit remap(Map<Integer, Integer> groups) {
     int newBase = (base < 0) ? base : findGroup(base, groups);
     VarComparabilityImplicit @Nullable [] oldIndexTypes = indexTypes;
@@ -285,6 +286,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    * @param type2 a comparability that is comparable to {@code type1}
    * @return a comparability that is comparable to everything that either argument is comparable to
    */
+  @SuppressWarnings("interning:not.interned") // test whether join() created a new object
   static VarComparabilityImplicit join(
       VarComparabilityImplicit type1, VarComparabilityImplicit type2) {
     if (type1.dimensions != type2.dimensions) {
