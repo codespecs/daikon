@@ -37,20 +37,17 @@ public class ExtractConsequentTest {
   }
 
   /**
-   * Returns a new boolean variable whose representation type is int. Daikon infers numeric
-   * invariants, such as "b1 &gt; b2", over such a variable.
+   * Returns a new boolean variable. If its file representation type is int, Daikon infers numeric
+   * invariants, such as "b1 &gt; b2", over the variable.
    *
    * @param name the name of the variable
+   * @param file_rep_type the file representation type of the variable: int or boolean
    * @return a new boolean variable
    */
   @SuppressWarnings("interning") // newly-created VarInfo
-  private static VarInfo newBooleanVarInfo(String name) {
+  private static VarInfo newBooleanVarInfo(String name, ProglangType file_rep_type) {
     return new VarInfo(
-        name,
-        ProglangType.BOOLEAN,
-        ProglangType.INT,
-        VarComparabilityNone.it,
-        VarInfoAux.getDefault());
+        name, ProglangType.BOOLEAN, file_rep_type, VarComparabilityNone.it, VarInfoAux.getDefault());
   }
 
   @Test
@@ -120,8 +117,8 @@ public class ExtractConsequentTest {
 
   @Test
   public void testIsLegalForBooleans() {
-    VarInfo b1 = newBooleanVarInfo("b1");
-    VarInfo b2 = newBooleanVarInfo("b2");
+    VarInfo b1 = newBooleanVarInfo("b1", ProglangType.INT);
+    VarInfo b2 = newBooleanVarInfo("b2", ProglangType.INT);
     VarInfo i1 = Common.newIntVarInfo("i1");
     VarInfo i2 = Common.newIntVarInfo("i2");
 
@@ -143,14 +140,7 @@ public class ExtractConsequentTest {
 
     // OneOfScalar formats a boolean whose file representation type is boolean as "b3 == true" or
     // "b3 == false".
-    @SuppressWarnings("interning") // newly-created VarInfo
-    VarInfo b3 =
-        new VarInfo(
-            "b3",
-            ProglangType.BOOLEAN,
-            ProglangType.BOOLEAN,
-            VarComparabilityNone.it,
-            VarInfoAux.getDefault());
+    VarInfo b3 = newBooleanVarInfo("b3", ProglangType.BOOLEAN);
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b3)));
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(i1)));
 
