@@ -3,9 +3,12 @@ package daikon.tools.runtimechecker;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Daikon;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
+import java.util.stream.Collectors;
 
 /**
  * A command handler handles a set of commands. A command is the first argument given to the
@@ -42,8 +45,16 @@ public class CommandHandler {
     if (in == null) {
       throw new Daikon.BugInDaikon("Didn't find documentation " + docFile + " for " + getClass());
     }
-    try (in) {
-      return new String(in.readAllBytes(), UTF_8).stripTrailing();
+    // When Daikon requires Java 11 or later, simplify this to:
+    //   try (in) {
+    //     return new String(in.readAllBytes(), UTF_8).stripTrailing();
+    //   }
+    // and remove the imports of BufferedReader, InputStreamReader, and Collectors.
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, UTF_8))) {
+      return reader
+          .lines()
+          .collect(Collectors.joining(System.lineSeparator()))
+          .replaceAll("\\s+$", "");
     } catch (IOException e) {
       throw new UncheckedIOException("problem reading " + docFile, e);
     }
