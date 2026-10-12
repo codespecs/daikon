@@ -8,9 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.StringJoiner;
 import jtb.cparser.*;
 import jtb.cparser.customvisitor.*;
@@ -59,12 +57,22 @@ public class CreateSpinfoC {
     }
     // Process every file, even if an earlier one fails.
     StringJoiner errors = new StringJoiner(Daikon.lineSep);
+    // The first unexpected exception, which indicates a bug in CreateSpinfoC or its parser.
+    RuntimeException bug = null;
     for (String inputFile : files) {
       try {
         processFile(inputFile);
       } catch (Daikon.UserError e) {
         errors.add(String.valueOf(e.getMessage()));
+      } catch (RuntimeException e) {
+        errors.add("Problem processing " + inputFile + ": " + e);
+        if (bug == null) {
+          bug = e;
+        }
       }
+    }
+    if (bug != null) {
+      throw new Daikon.BugInDaikon(errors.toString(), bug);
     }
     if (errors.length() != 0) {
       throw new Daikon.UserError(errors.toString());
@@ -107,26 +115,28 @@ public class CreateSpinfoC {
     StringFinder finder = new StringFinder();
     root.accept(finder);
 
-    // Write to a temporary file and rename it on success, so that a failure does not leave a
-    // partial .spinfo file.
-    Path spinfoFile = Paths.get(fileName + ".spinfo");
-    Path tempFile = null;
+    String spinfoFile = fileName + ".spinfo";
+    ConditionPrinter printer;
     try {
-      Path dir = spinfoFile.toAbsolutePath().getParent();
-      assert dir != null : "@AssumeAssertion(nullness): an absolute file path has a parent";
-      tempFile = Files.createTempFile(dir, "CreateSpinfoC", ".spinfo");
-      try (ConditionPrinter printer = new ConditionPrinter(tempFile.toString())) {
+      printer = new ConditionPrinter(spinfoFile);
+    } catch (IOException e) {
+      throw new Daikon.UserError(e, "Problem writing " + spinfoFile + ": " + e);
+    }
+    // The file is now open and truncated, so delete it if writing fails rather than leave a partial
+    // .spinfo file.
+    boolean written = false;
+    try {
+      try (printer) {
         printer.setActualStrings(finder.functionStringMapping);
         printer.setStringArrays(finder.stringMatrices);
         root.accept(printer);
       }
-      Files.move(tempFile, spinfoFile, StandardCopyOption.REPLACE_EXISTING);
+      written = true;
     } catch (IOException e) {
       throw new Daikon.UserError(e, "Problem writing " + spinfoFile + ": " + e);
     } finally {
-      // After a successful move, the temporary file no longer exists.
-      if (tempFile != null) {
-        tempFile.toFile().delete();
+      if (!written) {
+        new File(spinfoFile).delete();
       }
     }
     System.out.println("CreateSpinfoC:  C program parsed successfully.");
