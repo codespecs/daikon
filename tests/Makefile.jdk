@@ -4,6 +4,8 @@
 # Makefiles.  Each may be overridden on the command line or in the environment.
 # If JAVAC is set, JAVA_HOME is the JDK that contains that javac, so that the
 # tests are compiled, run, and compared to goal files for the same JDK.
+# A Makefile.user that sets JAVAC must not refer to JAVA_HOME, which is not yet
+# set; to pass arguments such as a classpath to javac, set JAVAC_ARGS instead.
 
 # Some Makefiles include this file twice, directly and via another file.
 ifndef MAKEFILE_JDK_INCLUDED

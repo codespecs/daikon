@@ -4,7 +4,7 @@
 # (e.g., "27-ea"), JAVA_VERSION_STRING (e.g., "27" or "1.8.0_402"),
 # JAVA_RELEASE_NUMBER (e.g., "27" or "8"), and JAVANN_OR_NEWER (e.g.,
 # JAVA21_OR_NEWER), all for the JDK at JAVA_HOME.
-# It is included by java/Makefile, tests/Makefile.common, and ../Makefile.
+# It is included by java/Makefile, tests/Makefile.jdk, and ../Makefile.
 
 # For JDK 8, java.home is the jre/ subdirectory of the JDK, and a user's
 # JAVA_HOME may be too.  jdk_of_jre yields the JDK if its argument is such a

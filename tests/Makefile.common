@@ -69,6 +69,7 @@
 # MAIN2_CLASS  = < pkg.ClassName >      ; if loaded by reflection (e.g., JUnit)
 # MAIN_ARGS    = < command line >       ; optional, only relevant if 'generated'
 # JAVA_ARGS    = < -Dfoo=bar ... >      ; optional, only relevant if 'generated' and 'java'
+# JAVAC_ARGS   = < -cp ... >            ; optional; arguments for compiling the test sources
 # ESC_ON       = { *any* }              ; optional; enables ESC/Java
 # PRESERVE_DECLS = { *any* }            ; optional; reuses previous decls (unless set to "no")
 
@@ -400,7 +401,7 @@ ${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists ./Makefile $(MAIN_JAVA) $(MAIN2_
 	@echo
 	@echo "### figure out the necessary files (${PROJECT_FILE})"
 	@echo
-	${DAIKONDIR}/scripts/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" "$(JAVAC)" \
+	${DAIKONDIR}/scripts/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" "$(JAVAC) $(JAVAC_ARGS)" \
 		> $(ALL_LIST_FILE)
 
 
@@ -534,7 +535,7 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
 	# Calls the sub-make only if the variable EXTRA_TARGET is not empty
 	if [ -n "${EXTRA_TARGET}" ]; then ${MAKE} -C "${CWD}" extra-target; fi
-	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
+	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} ${JAVAC_ARGS} -g `cat $(ALL_LIST_FILE)`
 	export LD_LIBRARY_PATH="${CWD}" && \
 	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
 	export LD_LIBRARY_PATH="${CWD}" && \
@@ -581,7 +582,7 @@ test-run: ${SCRATCH_FOR_DAIKON}/.copy-timestamp
 	@echo
 	@echo "### test-run (${PROJECT_FILE})"
 	@echo
-	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
+	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} ${JAVAC_ARGS} -g `cat $(ALL_LIST_FILE)`
 	${RUN_JAVA} ${JAVA_ARGS} ${JUNIT} ${MAIN_CLASS} ${MAIN_ARGS}
 
 # generate invariants from the dtrace, decls, etc. data
@@ -1128,7 +1129,7 @@ merged/.merged-esc: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_V
 	mkdir -p merged
 	tar cf - -C ${SOURCES} `cat ${ALL_LIST_FILE}` | tar -xf - -C $(CWD)/merged
 #	For use with daikon.tools.MergeESC.  Must compile first for MergeESC.
-	cd merged && ${JAVAC} `find . $(FINDARGS) -name '*.java'`
+	cd merged && ${JAVAC} ${JAVAC_ARGS} `find . $(FINDARGS) -name '*.java'`
 	echo INST_LIST_FILE = ${INST_LIST_FILE}
 	cd merged && ${MERGE_ESC} \
 		${MERGE_ESC_OPTIONS} ${USER_MERGE_ESC_OPTIONS} \
@@ -1155,7 +1156,7 @@ merged/.merged-jml: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_V
 	mkdir -p merged
 	tar -cf - -C ${SOURCES} `cat ${ALL_LIST_FILE}`  | tar xf - -C $(CWD)/merged
 #	For use with daikon.tools.MergeESC.  Must compile first for MergeESC.
-	cd merged && ${JAVAC} `find . $(FINDARGS) -name '*.java'`
+	cd merged && ${JAVAC} ${JAVAC_ARGS} `find . $(FINDARGS) -name '*.java'`
 	cd merged && ${MERGE_ESC} --format jml \
 		${MERGE_ESC_OPTIONS} ${USER_MERGE_ESC_OPTIONS} \
 		${INV_FILE} \
@@ -1266,7 +1267,7 @@ $(RTC_SCRATCH)/violations.txt: $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
 	@echo
 	cd scratch && ${JAVA} -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.tools.runtimechecker.Main instrument --directory $(RTC_SCRATCH) \
 		--make_all_fields_public ${INV_FILE} `cat $(INST_LIST_FILE)`
-	cd $(RTC_SCRATCH) && ${JAVAC} -g `find . $(FINDARGS) -name '*.java'`
+	cd $(RTC_SCRATCH) && ${JAVAC} ${JAVAC_ARGS} -g `find . $(FINDARGS) -name '*.java'`
 	cd $(RTC_SCRATCH) && ${JAVA} -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.tools.runtimechecker.WriteViolationFile $(RTC_USER_FLAGS) \
 		$(subst /,.,${MAIN_CLASS}) ${MAIN_ARGS}
 rtc-diff: rtc-violations.txt.diff
