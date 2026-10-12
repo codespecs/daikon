@@ -6,10 +6,14 @@
 # It is included by java/Makefile, tests/Makefile.common, and ../Makefile.
 
 # For JDK 8, java.home is the jre/ subdirectory of the JDK, and a user's
-# JAVA_HOME may be too.  "override" applies these assignments to "make JAVA_HOME=...".
+# JAVA_HOME may be too.  jdk_of_jre yields the JDK if its argument is such a
+# jre/ subdirectory, and otherwise yields its argument unchanged.  A directory
+# named "jre" that is itself a JDK (such as Fedora's /usr/lib/jvm/jre) is kept.
+jdk_of_jre = $(if $(and $(filter %/jre,$1),$(if $(wildcard $1/bin/javac),,no-javac),$(wildcard $(patsubst %/jre,%,$1)/bin/javac)),$(patsubst %/jre,%,$1),$1)
+# "override" applies these assignments to "make JAVA_HOME=...".
 JAVA_HOME_ORIGIN := $(origin JAVA_HOME)
 JAVA_HOME_FROM_PATH :=
-override JAVA_HOME := $(patsubst %/jre,%,$(patsubst %/,%,$(strip ${JAVA_HOME})))
+override JAVA_HOME := $(call jdk_of_jre,$(patsubst %/,%,$(strip ${JAVA_HOME})))
 # If JAVA_HOME is unset, or is a JRE that came from the environment, use the JDK
 # that contains the javac on the PATH.  Any other JAVA_HOME that is not a JDK is
 # probably a mistake, so it is reported below.
@@ -26,7 +30,7 @@ endif
 # Ask the javac on the PATH which JDK it is in.  This works even if javac is a
 # wrapper script (as used by jenv, asdf, or mise) or the macOS /usr/bin/javac stub.
 ifdef JAVA_HOME_FROM_PATH
-  override JAVA_HOME := $(patsubst %/jre,%,$(shell javac -J-XshowSettings:properties -version 2>&1 | sed -n -e 's/^ *java\.home = //p'))
+  override JAVA_HOME := $(call jdk_of_jre,$(shell javac -J-XshowSettings:properties -version 2>&1 | sed -n -e 's/^ *java\.home = //p'))
 endif
 
 # If JAVA_HOME_DEFER_ERROR is set, a problem is recorded in JAVA_HOME_ERROR

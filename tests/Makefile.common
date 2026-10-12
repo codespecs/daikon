@@ -141,7 +141,7 @@ ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 endif
 # The directory containing this file.  It is used instead of DAIKONDIR to find
-# java-home.mk, because DAIKONDIR may be set (by the environment) to a
+# Makefile.jdk, because DAIKONDIR may be set (by the environment) to a
 # different Daikon tree.
 TESTS_MAKEFILE_COMMON_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
@@ -160,8 +160,9 @@ endif
 -include Makefile.user
 -include $(COMMON_HERE)/Makefile.user
 
-# This is included after Makefile.user, so that Makefile.user can set JAVA_HOME.
-include ${TESTS_MAKEFILE_COMMON_DIR}../java/java-home.mk
+# This is included after Makefile.user, so that Makefile.user can set JAVA_HOME,
+# JAVA, or JAVAC.
+include ${TESTS_MAKEFILE_COMMON_DIR}Makefile.jdk
 
 # SOURCES is where all of the source code to be examined is located
 SOURCES?=$(COMMON_HERE)/sources
@@ -193,8 +194,6 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-JAVA  := ${JAVA_HOME}/bin/java
-JAVAC ?= ${JAVA_HOME}/bin/javac
 
 JUNIT_CLASSPATH ?=
 
