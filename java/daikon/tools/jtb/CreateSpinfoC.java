@@ -8,7 +8,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.StringJoiner;
 import jtb.cparser.*;
 import jtb.cparser.customvisitor.*;
 import jtb.cparser.syntaxtree.*;
@@ -24,11 +27,11 @@ public class CreateSpinfoC {
   private static final String usage =
       "C Parser Version 0.1Alpha:  Usage:  java daikon.tools.jtb.CreateSpinfoC inputfile ...";
 
-  /**
-   * True if the parser has been constructed. {@link CParser} is a static parser, so it can be
-   * constructed only once; thereafter it must be reinitialized instead.
-   */
-  private static boolean parserConstructed = false;
+  // CParser is a static parser, so it can be constructed only once.  Each parse reinitializes it.
+  static {
+    @SuppressWarnings("UnusedVariable") // sets static variables for CParser.TranslationUnit()
+    CParser parser = new CParser(new StringReader(""));
+  }
 
   /**
    * The entry point for CreateSpinfoC.
@@ -54,8 +57,17 @@ public class CreateSpinfoC {
     if (files.length == 0) {
       throw new Daikon.UserError(usage);
     }
+    // Process every file, even if an earlier one fails.
+    StringJoiner errors = new StringJoiner(Daikon.lineSep);
     for (String inputFile : files) {
-      processFile(inputFile);
+      try {
+        processFile(inputFile);
+      } catch (Daikon.UserError e) {
+        errors.add(String.valueOf(e.getMessage()));
+      }
+    }
+    if (errors.length() != 0) {
+      throw new Daikon.UserError(errors.toString());
     }
   }
 
@@ -87,14 +99,7 @@ public class CreateSpinfoC {
 
     TranslationUnit root;
     try {
-      StringReader reader = new StringReader(contents);
-      if (parserConstructed) {
-        CParser.ReInit(reader);
-      } else {
-        @SuppressWarnings("UnusedVariable") // sets static variables for TranslationUnit()
-        CParser parser = new CParser(reader);
-        parserConstructed = true;
-      }
+      CParser.ReInit(new StringReader(contents));
       root = CParser.TranslationUnit();
     } catch (ParseException | TokenMgrError e) {
       throw new Daikon.UserError(e, "CreateSpinfoC encountered errors while parsing " + inputFile);
@@ -102,13 +107,27 @@ public class CreateSpinfoC {
     StringFinder finder = new StringFinder();
     root.accept(finder);
 
-    String spinfoFile = fileName + ".spinfo";
-    try (ConditionPrinter printer = new ConditionPrinter(spinfoFile)) {
-      printer.setActualStrings(finder.functionStringMapping);
-      printer.setStringArrays(finder.stringMatrices);
-      root.accept(printer);
+    // Write to a temporary file and rename it on success, so that a failure does not leave a
+    // partial .spinfo file.
+    Path spinfoFile = Paths.get(fileName + ".spinfo");
+    Path tempFile = null;
+    try {
+      Path dir = spinfoFile.toAbsolutePath().getParent();
+      assert dir != null : "@AssumeAssertion(nullness): an absolute file path has a parent";
+      tempFile = Files.createTempFile(dir, "CreateSpinfoC", ".spinfo");
+      try (ConditionPrinter printer = new ConditionPrinter(tempFile.toString())) {
+        printer.setActualStrings(finder.functionStringMapping);
+        printer.setStringArrays(finder.stringMatrices);
+        root.accept(printer);
+      }
+      Files.move(tempFile, spinfoFile, StandardCopyOption.REPLACE_EXISTING);
     } catch (IOException e) {
-      throw new Daikon.UserError(e, "Problem writing " + spinfoFile);
+      throw new Daikon.UserError(e, "Problem writing " + spinfoFile + ": " + e);
+    } finally {
+      // After a successful move, the temporary file no longer exists.
+      if (tempFile != null) {
+        tempFile.toFile().delete();
+      }
     }
     System.out.println("CreateSpinfoC:  C program parsed successfully.");
   }
