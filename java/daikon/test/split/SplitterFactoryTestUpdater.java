@@ -13,7 +13,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import org.plumelib.util.FilesPlume;
 
@@ -83,7 +82,7 @@ public class SplitterFactoryTestUpdater {
    * @param decls the decls files that should be used in generating the splitter java files
    */
   private static void generateSplitters(List<String> spinfos, List<String> decls) {
-    LinkedHashSet<File> declsFileSet = new LinkedHashSet<>();
+    HashSet<File> declsFileSet = new HashSet<>();
     HashSet<File> spinfoFiles = new HashSet<>();
     PptMap allPpts = new PptMap();
     for (String spinfoFile : spinfos) {
@@ -98,8 +97,10 @@ public class SplitterFactoryTestUpdater {
     try {
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
-      for (File declsFile : declsFileSet) {
-        FileIO.read_data_trace_file(declsFile.toString(), allPpts);
+      // An earlier read in this JVM may have set the decl format.
+      FileIO.resetNewDeclFormat();
+      for (String declsFile : decls) {
+        FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -242,24 +243,36 @@ public class SplitterFactoryTestUpdater {
         "      \"  -s       Save (do not delete) the splitter java files in the temp directory\",");
     ps.println("      \"  -h       Display this usage message\");");
     ps.println();
+    ps.println("  /**");
+    ps.println("   * Processes command-line options.");
+    ps.println("   *");
+    ps.println("   * @param args command-line arguments");
+    ps.println("   */");
     ps.println("  public static void main(String[] args) {");
+    ps.println("    try {");
+    ps.println("      mainHelper(args);");
+    ps.println("    } catch (Daikon.DaikonTerminationException e) {");
+    ps.println("      Daikon.handleDaikonTerminationException(e);");
+    ps.println("    }");
+    ps.println("  }");
+    ps.println();
+    ps.println("  /**");
     ps.println(
-        "    Getopt g = new Getopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\");");
+        "   * Does the work of {@link #main}, but throws an exception rather than calling {@code");
+    ps.println("   * System.exit}.");
+    ps.println("   *");
+    ps.println("   * @param args command-line arguments");
+    ps.println("   */");
+    ps.println("  public static void mainHelper(String[] args) {");
+    ps.println("    DaikonGetopt g = new DaikonGetopt(args, \"s\", new LongOpt[0], usage);");
     ps.println("    int c;");
     ps.println("    while ((c = g.getopt()) != -1) {");
     ps.println("      switch (c) {");
     ps.println("        case 's':");
     ps.println("          saveFiles = true;");
     ps.println("          break;");
-    ps.println("        case 'h':");
-    ps.println("          System.out.println(usage);");
-    ps.println("          System.exit(1);");
-    ps.println("          break;");
-    ps.println("        case '?':");
-    ps.println("          break;");
     ps.println("        default:");
-    ps.println("          System.out.println(\"getopt() returned \" + c);");
-    ps.println("          break;");
+    ps.println("          throw new Daikon.BugInDaikon(\"getopt() returned \" + c);");
     ps.println("      }");
     ps.println("    }");
     ps.println("  }");
@@ -290,7 +303,9 @@ public class SplitterFactoryTestUpdater {
     ps.println("      }");
     ps.println("      PptSplitter.dkconfig_suppressSplitterErrors = true;");
     ps.println("      Daikon.create_splitters(spFiles);");
-    ps.println("      for (String declsFile : new LinkedHashSet<>(decls)) {");
+    ps.println("      // An earlier read in this JVM may have set the decl format.");
+    ps.println("      FileIO.resetNewDeclFormat();");
+    ps.println("      for (String declsFile : decls) {");
     ps.println(
         "        FileIO.read_data_trace_file(declsFile, allPpts);"); // invoked for side effects
     ps.println("      }");
