@@ -24,6 +24,8 @@ Further documentation can be found in:
 ## Version 5.9.1 (???, 2026)
 
 * Daikon and its tools now reject a malformed command-line option.
+* All tools accept `-h` and `--help`, which print a usage message and exit
+   with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
@@ -32,6 +34,7 @@ Further documentation can be found in:
   This affects where Daikon uses a condition only if indiscriminate splitting
   is disabled via `--config_option daikon.split.SplitterList.all_splitters=false`.
 * ExtractConsequent writes splitting conditions that Daikon can use.
+* Removed the Perl front end, dfepl.
 
 ## Version 5.9.0 (September 1, 2026)
 
