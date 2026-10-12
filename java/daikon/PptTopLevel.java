@@ -4685,8 +4685,9 @@ public class PptTopLevel extends Ppt {
    * Returns true if this ppt is a leaf of the dataflow hierarchy: that is, its invariants are
    * computed from samples (possibly by way of its conditional ppts) rather than by merging the
    * invariants of other ppts. Every ppt is a leaf if {@link Daikon#use_dataflow_hierarchy} is
-   * false. Otherwise, if the ppt's type is known, the leaves are POINT and SUBEXIT ppts (and the
-   * conditional ppts of such ppts). If the type is not known, the non-leaves are combined exit,
+   * false. Otherwise, if the ppt's type is known, the leaves are POINT and numbered exit ppts (and
+   * the conditional ppts of such ppts); a ppt of type EXIT or SUBEXIT is a numbered exit unless its
+   * name is that of a combined exit. If the type is not known, the non-leaves are combined exit,
    * enter, throws, OBJECT, and CLASS ppts (and the conditional ppts of such ppts); defining the
    * leaves this way ensures that arbitrarily named ppts, such as {@code :::POINT} (used by
    * convertcsv.pl), are leaves.
@@ -4702,10 +4703,22 @@ public class PptTopLevel extends Ppt {
       return true;
     }
     PptTopLevel ppt = (this instanceof PptConditional) ? ((PptConditional) this).parent : this;
-    if (ppt.type != null) {
-      return (ppt.type == PptType.POINT) || (ppt.type == PptType.SUBEXIT);
-    }
     PptName pname = ppt.ppt_name;
+    if (ppt.type != null) {
+      switch (ppt.type) {
+        case POINT:
+          return true;
+        case CLASS:
+        case OBJECT:
+        case ENTER:
+          return false;
+        case EXIT:
+        case SUBEXIT:
+          // Some front ends declare a numbered exit such as foo:::EXIT22 with type EXIT, so the
+          // name distinguishes a combined exit from a numbered exit.
+          return !pname.isCombinedExitPoint();
+      }
+    }
     return !(pname.isCombinedExitPoint()
         || pname.isEnterPoint()
         || pname.isThrowsPoint()
