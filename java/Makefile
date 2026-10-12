@@ -2,12 +2,16 @@
 
 default: daikon
 
+# The directory containing this file.  It is computed before any other file is
+# included, because MAKEFILE_LIST ends with the most recently read makefile.
+JAVA_MAKEFILE_DIR := $(dir $(lastword ${MAKEFILE_LIST}))
+
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
 # Don't let the user override this; it should refer to the current directory.
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
+DAIKONDIR := $(realpath ${JAVA_MAKEFILE_DIR}..)
 
 DAIKONSCRIPTS ?= ${DAIKONDIR}/scripts
 
@@ -32,6 +36,7 @@ include ${DAIKONDIR}/java/java-home.mk
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
 # java-home.mk sets JAVA_RELEASE_NUMBER.
 JAVA8 := $(shell expr ${JAVA_RELEASE_NUMBER} = 8)
+JAVA11 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 11)
 JAVA17 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 17)
 JAVA21 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
 # JDK 24 isn't an LTS version, but we need it to know whether to compile Instrument24.java.
@@ -65,11 +70,12 @@ OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Use "--source 25 --target 25" because Java 25 is an LTS version.
 ifeq (${JAVA25}, 1)
-  # JAVA25_HOME or JAVA27_HOME is set, because JAVA_HOME is non-empty.
   ifdef JAVA25_HOME
     JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}
-  else
+  else ifdef JAVA27_HOME
     JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA27_HOME}
+  else
+    $(error Set JAVA25_HOME or JAVA27_HOME)
   endif
 else
   JAVAC_TARGET_FLAGS ?= -source 8 -target 8
@@ -149,7 +155,7 @@ DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar
 
 DOCLET_FLAGS :=
 LINKOFFLINE := https://docs.oracle.com/javase/8/docs/api/
-ifeq ($(shell expr ${JAVA_RELEASE_NUMBER} \>= 11),1)
+ifeq (${JAVA11},1)
   DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
   LINKOFFLINE := https://docs.oracle.com/en/java/javase/17/docs/api/
 endif
@@ -1373,11 +1379,11 @@ showvars:
 	@echo PATH = $${PATH}
 
 	@echo JAVA_HOME = ${JAVA_HOME}
-	which java
-	java -version 2>&1
-	which javac
-	javac -version
+	${JAVA_HOME}/bin/java -version 2>&1
 	${JAVA_HOME}/bin/javac -version
+	# Some helper scripts use the java on the PATH.
+	-which java
+	-java -version 2>&1
 	@echo JAVA = ${JAVA}
 	@echo JAVA_COMMAND = ${JAVA_COMMAND}
 	@echo JAVAC = ${JAVAC}
