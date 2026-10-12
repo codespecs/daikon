@@ -21,11 +21,16 @@ public class CParser implements CParserConstants {
          }
       return false;
    }
-   /** Forgets all typedef names, so that a new parse does not see those of a previous parse. */
-   private static void resetTypes()
+   /**
+    * Resets state that a previous parse may have left behind, including a parse that a
+    * TokenMgrError aborted partway through a lookahead.
+    */
+   private static void resetParseState()
    {
       types.clear();
       typedefParsingStack.clear();
+      lookingAhead = false;
+      jj_rescan = false;
    }
    private static void addType(String type)
    {
@@ -6057,7 +6062,7 @@ public class CParser implements CParserConstants {
   }
 
   static public void ReInit(java.io.InputStream stream) {
-    resetTypes();
+    resetParseState();
     ASCII_CharStream.ReInit(stream, 1, 1);
     CParserTokenManager.ReInit(jj_input_stream);
     token = new Token();
@@ -6085,7 +6090,7 @@ public class CParser implements CParserConstants {
   }
 
   static public void ReInit(java.io.Reader stream) {
-    resetTypes();
+    resetParseState();
     ASCII_CharStream.ReInit(stream, 1, 1);
     CParserTokenManager.ReInit(jj_input_stream);
     token = new Token();
