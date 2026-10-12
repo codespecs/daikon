@@ -55,7 +55,11 @@ public class MultiDiff {
       catch (IOException e) {e.printStackTrace(); }
       */
       MultiDiffVisitor.setForSpinfoOut(out);
-      Diff.main(args);
+      try {
+        Diff.mainHelper(args);
+      } finally {
+        MultiDiffVisitor.resetSpinfoOut();
+      }
     }
   }
 }
