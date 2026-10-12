@@ -981,6 +981,8 @@ public final class Daikon {
     var_omit_regexp = null;
     server_dir = null;
     use_mem_monitor = false;
+    userDefinedInvariants.clear();
+    spinfoFiles.clear();
 
     proto_invs.clear();
   }
@@ -1486,7 +1488,7 @@ public final class Daikon {
   }
 
   /**
-   * Invariants passed on the command line with the {@code --user_defined_invariant} option. A list
+   * Invariants passed on the command line with the {@code --user-defined-invariant} option. A list
    * of class names in the format required by {@link Class#forName(String)}.
    */
   private static List<@ClassGetName String> userDefinedInvariants =
