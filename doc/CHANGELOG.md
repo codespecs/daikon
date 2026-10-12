@@ -21,7 +21,11 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
-## Version 5.9.1 (??)
+## Version 5.9.1 (???, 2026)
+
+* Daikon and its tools now reject a malformed command-line option.
+* `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
+   no effect.
 
 Daikon supports the following new invariants, over strings and sequences of
 strings; all of them are enabled by default:
