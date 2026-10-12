@@ -23,10 +23,7 @@ Further documentation can be found in:
 
 ## Version 5.9.1 (???, 2026)
 
-* Daikon and its tools now reject an unrecognized, ambiguous, or malformed
-   command-line option:  they describe the problem and exit with a non-zero
-   status.  Previously, Daikon printed its usage message and exited with
-   status 0, and most other tools ignored the bad option and continued.
+* Daikon and its tools now reject a malformed command-line option.
 * All tools accept `-h` and `--help`, which print a usage message and exit
    with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
