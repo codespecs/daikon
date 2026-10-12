@@ -110,44 +110,50 @@ public final class QuantCallsSplitterTest {
       throw new AssertionError("No program point in " + ppts.nameStringSet());
     }
 
-    PrintStream oldOut = System.out;
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    System.setOut(new PrintStream(out, true, StandardCharsets.UTF_8));
+    // Splitters that other tests registered for pptName would be counted below.
+    SplitterList.remove(pptName);
     try {
-      SplitterFactory.load_splitters(ppt, Collections.singletonList(spinfo));
+      PrintStream oldOut = System.out;
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      System.setOut(new PrintStream(out, true, StandardCharsets.UTF_8));
+      try {
+        SplitterFactory.load_splitters(ppt, Collections.singletonList(spinfo));
+      } finally {
+        System.setOut(oldOut);
+      }
+      String output = new String(out.toByteArray(), StandardCharsets.UTF_8);
+
+      for (String condition : untranslatableConditions) {
+        assertTrue(output, output.contains(condition + " cannot be parsed or translated:"));
+      }
+      assertTrue(output, output.contains("the splitter cannot pass the array this.a to a method"));
+      assertTrue(
+          output,
+          output.contains(
+              "Cannot translate daikon.Quant.size(this_h): the first argument is not an array whose"
+                  + " elements are available to the splitter"));
+      assertTrue(
+          output,
+          output.contains(
+              "Cannot translate daikon.Quant.getElement_int(this_d,0): the element type of"
+                  + " this.d[..] is not the one that the method expects"));
+
+      Splitter[] factories = SplitterList.get_raw(pptName);
+      if (factories == null) {
+        throw new AssertionError(output);
+      }
+      assertEquals(output, expectedValues.size(), factories.length);
+      ValueTuple vt = makeVt(ppt);
+      for (Splitter factory : factories) {
+        String condition = factory.condition();
+        Boolean expected = expectedValues.get(condition);
+        assertNotNull(condition, expected);
+        Splitter splitter = factory.instantiateSplitter(ppt);
+        assertTrue(condition, splitter.valid());
+        assertEquals(condition, expected, splitter.test(vt));
+      }
     } finally {
-      System.setOut(oldOut);
-    }
-    String output = new String(out.toByteArray(), StandardCharsets.UTF_8);
-
-    for (String condition : untranslatableConditions) {
-      assertTrue(output, output.contains(condition + " cannot be parsed or translated:"));
-    }
-    assertTrue(output, output.contains("the splitter cannot pass the array this.a to a method"));
-    assertTrue(
-        output,
-        output.contains(
-            "Cannot translate daikon.Quant.size(this_h): the first argument is not an array whose"
-                + " elements are available to the splitter"));
-    assertTrue(
-        output,
-        output.contains(
-            "Cannot translate daikon.Quant.getElement_int(this_d,0): the element type of this.d[..]"
-                + " is not the one that the method expects"));
-
-    Splitter[] factories = SplitterList.get_raw(pptName);
-    if (factories == null) {
-      throw new AssertionError(output);
-    }
-    assertEquals(output, expectedValues.size(), factories.length);
-    ValueTuple vt = makeVt(ppt);
-    for (Splitter factory : factories) {
-      String condition = factory.condition();
-      Boolean expected = expectedValues.get(condition);
-      assertNotNull(condition, expected);
-      Splitter splitter = factory.instantiateSplitter(ppt);
-      assertTrue(condition, splitter.valid());
-      assertEquals(condition, expected, splitter.test(vt));
+      SplitterList.remove(pptName);
     }
   }
 
