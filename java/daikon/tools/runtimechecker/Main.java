@@ -67,11 +67,9 @@ public class Main extends CommandHandler {
       throw new Daikon.UserError("Unknown command: " + command + Daikon.lineSep + helpHint);
     }
 
+    // A handler that returns false has already printed a description of the problem.
     if (!h.handle(commandAndArgs)) {
-      System.err.println("The command you issued returned a failing status flag.");
-      System.err.println("The instrumenter failed.");
-      h.usageMessage();
-      System.exit(1);
+      throw new Daikon.UserError("The instrumenter failed.");
     }
   }
 

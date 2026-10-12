@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 import jtb.syntaxtree.*;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
-import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 
 /**
  * Instruments a file to check invariant violations at run time. Violated invariants are stored in a
@@ -84,9 +83,6 @@ public class InstrumentHandler extends CommandHandler {
 
     String[] realArgs = Arrays.copyOfRange(args, 1, args.length);
     Arguments arguments = readArguments(realArgs);
-    if (arguments == errorWhileReadingArguments) {
-      return false;
-    }
 
     // Set up debug traces; note this comes after reading command line options.
     daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
@@ -185,7 +181,6 @@ public class InstrumentHandler extends CommandHandler {
     return true;
   }
 
-  @UsesObjectEquals
   private static class Arguments {
     String invFile;
     List<String> javaFileNames;
@@ -196,9 +191,17 @@ public class InstrumentHandler extends CommandHandler {
     }
   }
 
-  private static final Arguments errorWhileReadingArguments =
-      new Arguments("error while reading arguments", new ArrayList<String>());
+  /** Text appended to the description of a bad command-line argument. */
+  private static final String usageHint = "run with \"instrument -h\" for usage";
 
+  /**
+   * Parses the command-line arguments of the {@code instrument} command.
+   *
+   * @param args the arguments that follow the command name
+   * @return the parsed arguments
+   * @throws Daikon.NormalTermination after printing the usage message, if an argument requests it
+   * @throws Daikon.UserError if an argument is malformed or missing
+   */
   private Arguments readArguments(String[] args) {
 
     LongOpt[] longopts =
@@ -212,7 +215,7 @@ public class InstrumentHandler extends CommandHandler {
           new LongOpt(checkers_directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
         };
     DaikonGetopt g = new DaikonGetopt(args, "", longopts, this::usageMessageString);
-    g.setUsageHint("run with \"instrument -h\" for usage");
+    g.setUsageHint(usageHint);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -246,25 +249,22 @@ public class InstrumentHandler extends CommandHandler {
     // invariant file.
     int argindex = g.getOptind();
     if (argindex >= args.length) {
-      System.err.println("Error: No .inv file or .java file arguments supplied.");
-      return errorWhileReadingArguments;
+      throw new Daikon.UserError("No .inv file or .java file arguments supplied; " + usageHint);
     }
     String invfile = args[argindex];
     argindex++;
     if (!(invfile.endsWith(".inv") || invfile.endsWith(".inv.gz"))) {
-      System.err.println("Error: first argument must be a file ending in .inv or .inv.gz.");
-      return errorWhileReadingArguments;
+      throw new Daikon.UserError(
+          "First argument must be a file ending in .inv or .inv.gz; " + usageHint);
     }
     if (argindex >= args.length) {
-      System.err.println("Error: No .java file arguments supplied.");
-      return errorWhileReadingArguments;
+      throw new Daikon.UserError("No .java file arguments supplied; " + usageHint);
     }
     List<String> javaFileNames = new ArrayList<>();
     for (; argindex < args.length; argindex++) {
       String javafile = args[argindex];
       if (!javafile.endsWith(".java")) {
-        System.err.println("File does not end in .java: " + javafile);
-        return errorWhileReadingArguments;
+        throw new Daikon.UserError("File does not end in .java: " + javafile + "; " + usageHint);
       }
       javaFileNames.add(javafile);
     }

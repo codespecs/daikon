@@ -22,15 +22,6 @@ public class CommandHandler {
   }
 
   /**
-   * Prints the usage message to standard error.
-   *
-   * @throws Daikon.BugInDaikon if the documentation file is missing
-   */
-  public void usageMessage() {
-    System.err.println(usageMessageString());
-  }
-
-  /**
    * Returns the usage message, which is the contents of this class's documentation file.
    *
    * @return the usage message
