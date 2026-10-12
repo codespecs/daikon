@@ -126,10 +126,16 @@ public class CreateSpinfoC {
     // .spinfo file.
     boolean written = false;
     try {
-      try (printer) {
-        printer.setActualStrings(finder.functionStringMapping);
-        printer.setStringArrays(finder.stringMatrices);
-        root.accept(printer);
+      // When Daikon requires Java 9 or later, simplify this to:
+      //   try (printer) {
+      //     printer.setActualStrings(finder.functionStringMapping);
+      //     printer.setStringArrays(finder.stringMatrices);
+      //     root.accept(printer);
+      //   }
+      try (ConditionPrinter p = printer) {
+        p.setActualStrings(finder.functionStringMapping);
+        p.setStringArrays(finder.stringMatrices);
+        root.accept(p);
       }
       written = true;
     } catch (IOException e) {
