@@ -67,7 +67,7 @@ public class SampleTester {
   /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
-          "Usage: java daikon.test.SampleTester [OPTION]...",
+          "Usage: java daikon.PrintInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
           "  --" + Daikon.config_option_SWITCH,
@@ -79,10 +79,10 @@ public class SampleTester {
           "      Format is class<var1,var2,var3>@ppt");
 
   /**
-   * Runs the tests without JUnit.
+   * Runs the sample tests.
    *
-   * @param args command-line arguments, like those of {@link #mainHelper}
-   * @throws IOException if there is a problem reading a test file
+   * @param args command-line arguments
+   * @throws IOException if there is trouble reading a file
    */
   public static void main(String[] args) throws IOException {
     try {
@@ -93,11 +93,11 @@ public class SampleTester {
   }
 
   /**
-   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called programmatically.
+   * Does the work of {@link #main}, but throws an exception rather than calling {@code
+   * System.exit}.
    *
-   * @param args command-line arguments, like those of {@link #main}
-   * @throws IOException if there is a problem reading a test file
+   * @param args command-line arguments
+   * @throws IOException if there is trouble reading a file
    */
   @SuppressWarnings("JUnitMethodInvoked") // mainHelper() runs the tests without JUnit
   public static void mainHelper(String[] args) throws IOException {
