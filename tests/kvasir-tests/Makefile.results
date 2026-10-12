@@ -9,7 +9,7 @@
 REGRESSION_TESTS_ARGS ?=
 
 # The number of jobs for running all the tests in parallel: 1 on CI, else 4.
-CI_JOBS = $(if $(shell "${PLUME_SCRIPTS}"/is-ci.sh),1,4)
+CI_JOBS := $(if $(shell "${PLUME_SCRIPTS}"/is-ci.sh),1,4)
 
 # args to 'find' program, to find files containing results
 RESULTS_PATTERN :=    -name '*.diff'

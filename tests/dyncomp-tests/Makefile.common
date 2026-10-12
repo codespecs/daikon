@@ -186,6 +186,8 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
 	touch $@
 else
+# pipefail makes a failure of $(ZCAT) (e.g., a truncated trace) fail the recipe.
+ran-kvasir: SHELL := /bin/bash -o pipefail
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
 	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) ./$(NAME) $(PROGRAM_ARGS)
