@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.Debug;
 import daikon.FileIO;
 import daikon.Global;
@@ -18,7 +19,6 @@ import daikon.PrintInvariants;
 import daikon.ValueTuple;
 import daikon.VarInfo;
 import daikon.inv.Invariant;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.IOException;
@@ -105,14 +105,13 @@ public class SampleTester {
 
     LongOpt[] longopts =
         new LongOpt[] {
-          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    Getopt g = new Getopt("daikon.test.SampleTester", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -120,11 +119,7 @@ public class SampleTester {
         // long option
         case 0:
           String option_name = longopts[g.getLongind()].getName();
-          if (Daikon.help_SWITCH.equals(option_name)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-
-          } else if (Daikon.config_option_SWITCH.equals(option_name)) {
+          if (Daikon.config_option_SWITCH.equals(option_name)) {
             String item = Daikon.getOptarg(g);
             daikon.config.Configuration.getInstance().apply(item);
             break;
@@ -142,21 +137,12 @@ public class SampleTester {
                   "Error parsing track argument '" + Daikon.getOptarg(g) + "' - " + error);
             }
           } else {
-            throw new RuntimeException("Unknown long option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
 
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
-
-        case '?':
-          // getopt() already printed an error
-          throw new Daikon.UserError("Run with -h for usage");
-
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
     if (g.getOptind() < args.length) {

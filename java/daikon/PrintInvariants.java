@@ -24,7 +24,6 @@ import daikon.inv.filter.UnjustifiedFilter;
 import daikon.split.PptSplitter;
 import daikon.suppress.NIS;
 import daikon.suppress.NISuppressionSet;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -329,7 +328,6 @@ public final class PrintInvariants {
 
     LongOpt[] longopts =
         new LongOpt[] {
-          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -344,17 +342,14 @@ public final class PrintInvariants {
           new LongOpt(
               PrintInvariants.print_csharp_metadata_SWITCH, LongOpt.OPTIONAL_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
         case 0:
           // got a long option
           String option_name = longopts[g.getLongind()].getName();
-          if (Daikon.help_SWITCH.equals(option_name)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-          } else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
+          if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
             if (ppt_regexp != null) {
               throw new Error(
                   "multiple --"
@@ -430,17 +425,11 @@ public final class PrintInvariants {
           } else if (Daikon.wrap_xml_SWITCH.equals(option_name)) {
             wrap_xml = true;
           } else {
-            throw new RuntimeException("Unknown long option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
-        case '?':
-          break; // getopt() already printed an error
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
 

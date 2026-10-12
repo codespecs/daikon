@@ -274,6 +274,11 @@ public class SplitterFactoryTestUpdater {
             + " directory\",");
     ps.println("      \"  -h          Display this usage message\");");
     ps.println();
+    ps.println("  /**");
+    ps.println("   * Runs the tests.");
+    ps.println("   *");
+    ps.println("   * @param args command-line arguments");
+    ps.println("   */");
     ps.println("  public static void main(String[] args) {");
     ps.println("    try {");
     ps.println("      if (!mainHelper(args)) {");
@@ -294,23 +299,15 @@ public class SplitterFactoryTestUpdater {
     ps.println("   * @return true if all the tests passed");
     ps.println("   */");
     ps.println("  public static boolean mainHelper(String[] args) {");
-    ps.println(
-        "    Getopt g = new Getopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\");");
+    ps.println("    DaikonGetopt g = new DaikonGetopt(args, \"s\", new LongOpt[0], usage);");
     ps.println("    int c;");
     ps.println("    while ((c = g.getopt()) != -1) {");
     ps.println("      switch (c) {");
     ps.println("        case 's':");
     ps.println("          saveFiles = true;");
     ps.println("          break;");
-    ps.println("        case 'h':");
-    ps.println("          System.out.println(usage);");
-    ps.println("          throw new Daikon.NormalTermination();");
-    ps.println("        case '?':");
-    ps.println("          // getopt() already printed an error");
-    ps.println("          throw new Daikon.UserError(\"Run with -h for usage\");");
     ps.println("        default:");
-    ps.println("          System.out.println(\"getopt() returned \" + c);");
-    ps.println("          break;");
+    ps.println("          throw new Daikon.BugInDaikon(\"getopt() returned \" + c);");
     ps.println("      }");
     ps.println("    }");
     ps.println("    if (g.getOptind() < args.length) {");
