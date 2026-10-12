@@ -979,6 +979,7 @@ public final class Daikon {
     server_dir = null;
     use_mem_monitor = false;
     userDefinedInvariants.clear();
+    spinfoFiles.clear();
 
     proto_invs.clear();
   }
