@@ -37,10 +37,9 @@ public class Printer extends DepthFirstVisitor {
    * @throws IOException if any write to the output file failed
    */
   public void close() throws IOException {
-    // PrintWriter does not throw exceptions, so check whether any write failed.
-    boolean error = out.checkError();
     out.close();
-    if (error) {
+    // PrintWriter does not throw exceptions, so check whether any write, flush, or close failed.
+    if (out.checkError()) {
       throw new IOException("write failed");
     }
   }
