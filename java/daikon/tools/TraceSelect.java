@@ -237,7 +237,7 @@ public class TraceSelect {
         //  daikon.diff.Diff.main (sampleNames);
 
         // spinfo format
-        daikon.diff.MultiDiff.main(sampleNames);
+        daikon.diff.MultiDiff.mainHelper(sampleNames);
       }
 
       // Clean up the mess!  A failed cleanup is not fatal.
@@ -248,7 +248,7 @@ public class TraceSelect {
         }
       }
 
-    } catch (Exception e) {
+    } catch (IOException | ReflectiveOperationException e) {
       throw new Error(e);
     }
   }
@@ -290,9 +290,7 @@ public class TraceSelect {
     // create an array to store the Strings in daikonArgsList
     String[] daikonArgs = daikonArgsList.toArray(new String[0]);
 
-    // initializes daikon again or else an exception is thrown
-    reinitializeDaikon();
-    daikon.Daikon.main(daikonArgs);
+    daikon.Daikon.mainHelper(daikonArgs);
     // Run: java daikon.PrintInvariants dtraceName.inv > dtraceName.txt
     ProcessBuilder pb = new ProcessBuilder("java", "daikon.PrintInvariants", dtraceName + ".inv");
     pb.redirectOutput(new File(dtraceName + ".txt"));
@@ -307,10 +305,6 @@ public class TraceSelect {
     } catch (InterruptedException e) {
       // do nothing
     }
-  }
-
-  private static void reinitializeDaikon() {
-    daikon.Daikon.inv_file = null;
   }
 
   private static String calcOut(String strFileName) {
