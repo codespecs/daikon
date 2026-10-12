@@ -15,7 +15,6 @@
 # An optional leading "--expected-status N" argument is passed to
 # run-kvasir.sh.
 
-use FindBin;
 use File::Temp qw(tempfile);
 
 my $expected_status = 0;
@@ -26,7 +25,9 @@ if (@ARGV >= 2 && $ARGV[0] eq '--expected-status') {
 my $kvasir = $ARGV[0];
 my $kvasir_short = $kvasir;
 $kvasir_short =~ s!^.*/(.*)$!$1!;
-my $run_kvasir = "$FindBin::Bin/run-kvasir.sh";
+# run-kvasir.sh is in the same directory as this script.
+my $run_kvasir = $0;
+$run_kvasir =~ s![^/]*$!run-kvasir.sh!;
 my (undef, $run_out) = tempfile(UNLINK => 1);
 
 my $failures = 0;
