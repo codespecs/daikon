@@ -4,6 +4,7 @@ import static daikon.tools.nullness.NullnessUtil.castNonNull;
 
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
+import java.util.Arrays;
 import org.plumelib.util.ArraysPlume;
 
 /**
@@ -40,6 +41,46 @@ public class DaikonGetopt extends Getopt {
             longopts, new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 'h')));
     this.usage = usage;
     opterr = false;
+  }
+
+  /**
+   * Processes the leading command-line arguments of a program that takes no options other than
+   * {@code -h} and {@code --help}. Processing stops at the first argument that is not an option, so
+   * later arguments may be options for some other program.
+   *
+   * @param argv the command-line arguments
+   * @param usage the usage message to print for {@code -h} and {@code --help}
+   * @return the arguments from the first one that is not an option onward
+   * @throws Daikon.NormalTermination after printing the usage message, if a leading argument
+   *     requests it
+   * @throws Daikon.UserError if a leading argument is any other option
+   */
+  public static String[] argsAfterLeadingOptions(String[] argv, String usage) {
+    // A leading "+" tells Getopt to stop at the first argument that is not an option.
+    return argsAfterOptions(argv, "+", usage);
+  }
+
+  /**
+   * Processes command-line arguments, permitting no options other than {@code -h} and {@code
+   * --help}.
+   *
+   * @param argv the command-line arguments
+   * @param optstring "" to process all the arguments, or "+" to stop at the first non-option
+   * @param usage the usage message to print for {@code -h} and {@code --help}
+   * @return the arguments that Getopt did not process as options
+   * @throws Daikon.NormalTermination after printing the usage message, if an argument requests it
+   * @throws Daikon.UserError if an argument is any other option
+   */
+  private static String[] argsAfterOptions(String[] argv, String optstring, String usage) {
+    // Getopt permutes its argument array, so give it a copy to avoid modifying the caller's array.
+    String[] argvCopy = argv.clone();
+    DaikonGetopt g = new DaikonGetopt(argvCopy, optstring, new LongOpt[0], usage);
+    // Every option other than -h and --help is bad, so getopt() returns only -1 or throws.
+    int c = g.getopt();
+    if (c != -1) {
+      throw new Daikon.BugInDaikon("getopt() returned " + c);
+    }
+    return Arrays.copyOfRange(argvCopy, g.getOptind(), argvCopy.length);
   }
 
   /**
