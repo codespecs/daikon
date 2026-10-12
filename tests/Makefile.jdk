@@ -1,0 +1,24 @@
+# This is a -*- makefile -*-, Emacs.
+
+# Defines JAVA_HOME, JAVA, and JAVAC, for use by test Makefiles.
+# Each may be overridden on the command line or in the environment.
+
+ifeq ($(shell uname), Darwin)
+  JAVA_HOME ?= $(shell /usr/libexec/java_home)
+else ifndef JAVA_HOME
+  ifdef JAVAC
+    JAVA_HOME := $(shell readlink -f $(shell command -v $(firstword ${JAVAC})) | sed "s:/bin/javac::")
+  else ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
+    JAVA_HOME := $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
+  else
+    $(info Failure: Here is the output of: which javac)
+    $(info $(shell which javac))
+    $(error 'which javac' had exit status 1, and neither JAVA_HOME nor JAVAC is set)
+  endif
+endif
+JAVA  ?= ${JAVA_HOME}/bin/java
+JAVAC ?= ${JAVA_HOME}/bin/javac
+
+ifeq ($(shell command -v $(firstword ${JAVAC})),)
+  $(error JAVAC=${JAVAC} is not an executable command)
+endif
