@@ -26,9 +26,6 @@ Further documentation can be found in:
 * Daikon and its tools now reject a malformed command-line option.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
-* `daikon.tools.TraceSelect` checks all its arguments before sampling.  Its
-   `-SEED` option now takes effect.  Its options must precede the arguments
-   that it passes to Daikon.
 
 ## Version 5.9.0 (September 1, 2026)
 
