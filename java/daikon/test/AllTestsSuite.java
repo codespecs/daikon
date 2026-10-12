@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   daikon.chicory.RuntimeTest.class,
+  daikon.test.BadOptionTest.class,
   daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
   daikon.test.TestAst.class,
   daikon.test.config.ConfigurationTest.class,
@@ -34,11 +35,8 @@ import org.junit.runners.Suite;
   daikon.test.TestQuant.class,
   daikon.test.TestAnnotate.class,
   daikon.test.DtraceDiffTester.class,
-  // daikon.test.split.SplitterFactoryTest is run separately by the Makefile's
-  // "junit" target, because SplitterFactoryTest.java is generated after
-  // everything else is compiled, and because SplitterFactoryTest must run in
-  // its own JVM:  SplitterFactory numbers the splitter files it creates using a
-  // JVM-wide counter, so other tests that create splitters would change the
-  // file names that SplitterFactoryTest expects.
+  // daikon.test.split.SplitterFactoryTest is not in this suite, because it is generated after the
+  // rest of Daikon (including this class) is compiled.  The Makefile's "junit" target runs it
+  // separately.
 })
 public final class AllTestsSuite {}

@@ -181,7 +181,7 @@ JAVADOC_COMMAND := ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 JAVAC_COMMAND := ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
 JAVA_COMMAND := ${JAVA} -cp ${DAIKON_CLASSPATH}
 
-DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
+DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/java-getopt-*.jar):$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 DOCLET_FLAGS :=
 LINKOFFLINE := https://docs.oracle.com/javase/8/docs/api/
@@ -1220,8 +1220,8 @@ check-serialize:
 
 .PHONY: junit
 junit: daikon/Daikon.class
-	@# SplitterFactoryTest.class is not a prerequisite, so that under "make -j" it is not
-	@# built concurrently with daikon/Daikon.class.
+	@# This is not a prerequisite, so that "make -j" does not run it concurrently
+	@# with compiling Daikon, whose classes the SplitterFactoryTest rules use.
 	${MAKE} ${AUTO_GENERATED_CLASSES_2}
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
@@ -1230,8 +1230,9 @@ ifeq (${JAVA24}, 1)
 	@# under versions of Java that do not have java.lang.classfile.
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite24
 endif
-	@# SplitterFactoryTest is not in AllTestsSuite; see the comment there.
-	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTest
+	@# SplitterFactoryTest is not in AllTestsSuite, because SplitterFactoryTest
+	@# is generated after the rest of Daikon (including AllTestsSuite) is compiled.
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.split.SplitterFactoryTest
 
 ###
 ### Clover (code coverage)
@@ -1465,7 +1466,8 @@ daikon/test/split/SplitterFactoryTestUpdater.class: daikon/test/split/SplitterFa
 	${JAVAC_COMMAND} $<
 
 ## First, a file not generated via java-cpp.
-daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.class
+daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.class \
+		$(wildcard daikon/test/split/targets/*.spinfo daikon/test/split/targets/*.decls)
 	rm -f $@
 # Has expected errors while compiling splitter files.
 # Suppress output unless whole command fails.
@@ -1475,6 +1477,16 @@ daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTes
 # SplitterFactoryTest calls Daikon's methods, so recompile it when Daikon changes.
 ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2} daikon/Daikon.class
 	${JAVAC_COMMAND} ${AUTO_GENERATED_FILES_2}
+
+# Overwrites SplitterFactoryTest's goal files with the current SplitterFactory output.
+# Examine the differences (e.g., with "git diff") before committing them.
+.PHONY: update-splitter-goals
+update-splitter-goals: daikon/Daikon.class daikon/test/split/SplitterFactoryTestUpdater.class
+	rm -f daikon/test/split/SplitterFactoryTest.java
+	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater --update-goals > /dev/null 2>&1) \
+	  || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater --update-goals
+	chmod a-w daikon/test/split/SplitterFactoryTest.java
+	${MAKE} ${AUTO_GENERATED_CLASSES_2}
 
 # Create the auto-generated files with jpp
 .PHONY: jpp
