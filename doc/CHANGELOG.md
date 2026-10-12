@@ -21,6 +21,12 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
+## Version 5.9.1 (???, 2026)
+
+* Daikon and its tools now reject a malformed command-line option.
+* `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
+   no effect.
+
 ## Version 5.9.0 (September 1, 2026)
 
 * All Daikon tools now work with Java 8-26.
