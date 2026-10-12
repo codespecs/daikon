@@ -90,16 +90,15 @@ public class DaikonGetopt extends Getopt {
    * @throws Daikon.UserError if a leading argument is any other option
    */
   public static String[] argsAfterLeadingOptions(String[] argv, Supplier<String> usage) {
-    // Getopt permutes its argument array, so give it a copy to avoid modifying the caller's array.
-    String[] argvCopy = argv.clone();
-    // A leading "+" tells Getopt to stop at the first argument that is not an option.
-    DaikonGetopt g = new DaikonGetopt(argvCopy, "+", new LongOpt[0], usage);
+    // A leading "+" tells Getopt to stop at the first argument that is not an option. In that mode,
+    // Getopt does not permute argv.
+    DaikonGetopt g = new DaikonGetopt(argv, "+", new LongOpt[0], usage);
     // Every option other than -h and --help is bad, so getopt() returns only -1 or throws.
     int c = g.getopt();
     if (c != -1) {
       throw new Daikon.BugInDaikon("getopt() returned " + c);
     }
-    return Arrays.copyOfRange(argvCopy, g.getOptind(), argvCopy.length);
+    return Arrays.copyOfRange(argv, g.getOptind(), argv.length);
   }
 
   /**

@@ -71,15 +71,10 @@ public class InstrumentHandler extends CommandHandler {
   // oneFile.roots) {"
   )
   @Override
-  public boolean handle(String[] args) {
+  public void handle(String[] args) {
 
     Daikon.output_format = daikon.inv.OutputFormat.JAVA;
     daikon.PrintInvariants.wrap_xml = true;
-
-    if (!args[0].equals("instrument")) {
-      System.err.println("Command (first argument) to instrumenter was not recognized.");
-      return false;
-    }
 
     String[] realArgs = Arrays.copyOfRange(args, 1, args.length);
     Arguments arguments = readArguments(realArgs);
@@ -96,10 +91,7 @@ public class InstrumentHandler extends CommandHandler {
       ppts =
           FileIO.read_serialized_pptmap(new File(arguments.invFile), true /* use saved config */);
     } catch (IOException e) {
-      System.err.println("Exception while reading invariant file " + arguments.invFile);
-      System.err.println(e.getMessage());
-      e.printStackTrace();
-      return false;
+      throw new Daikon.UserError(e, "Problem while reading invariant file " + arguments.invFile);
     }
 
     // Compile original sources (because daikon.tools.jtb.Ast accesses
@@ -171,14 +163,9 @@ public class InstrumentHandler extends CommandHandler {
         }
 
       } catch (IOException e) {
-        System.err.println("Exception while instrumenting " + oneFile.fileName);
-        System.err.println(e.getMessage());
-        e.printStackTrace();
-        return false;
+        throw new Daikon.UserError(e, "Problem while writing output for " + oneFile.fileName);
       }
     }
-
-    return true;
   }
 
   private static class Arguments {

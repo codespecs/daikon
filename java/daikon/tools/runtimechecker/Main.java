@@ -19,7 +19,7 @@ public class Main extends CommandHandler {
    * @param handlers the handlers whose usage messages to include
    * @return the usage message of this and of each handler
    */
-  private String usageMessageString(List<CommandHandler> handlers) {
+  private String fullUsageMessage(List<CommandHandler> handlers) {
     StringJoiner result = new StringJoiner(Daikon.lineSep);
     result.add(usageMessageString());
     for (CommandHandler h : handlers) {
@@ -44,13 +44,13 @@ public class Main extends CommandHandler {
         Collections.singletonList((CommandHandler) new InstrumentHandler());
 
     String[] commandAndArgs =
-        DaikonGetopt.argsAfterLeadingOptions(args, () -> usageMessageString(handlers));
+        DaikonGetopt.argsAfterLeadingOptions(args, () -> fullUsageMessage(handlers));
     if (commandAndArgs.length < 1) {
-      throw new Daikon.UserError("ERROR:  No command given." + Daikon.lineSep + helpHint);
+      throw new Daikon.UserError("No command given." + Daikon.lineSep + helpHint);
     }
     if (commandAndArgs[0].toUpperCase(Locale.ENGLISH).equals("HELP")
         || commandAndArgs[0].equals("?")) {
-      System.out.println(usageMessageString(handlers));
+      System.out.println(fullUsageMessage(handlers));
       throw new Daikon.NormalTermination();
     }
 
@@ -67,10 +67,7 @@ public class Main extends CommandHandler {
       throw new Daikon.UserError("Unknown command: " + command + Daikon.lineSep + helpHint);
     }
 
-    // A handler that returns false has already printed a description of the problem.
-    if (!h.handle(commandAndArgs)) {
-      throw new Daikon.UserError("The instrumenter failed.");
-    }
+    h.handle(commandAndArgs);
   }
 
   public static void main(String[] args) {

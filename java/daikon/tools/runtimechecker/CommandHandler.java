@@ -17,7 +17,13 @@ public class CommandHandler {
     throw new UnsupportedOperationException();
   }
 
-  public boolean handle(String[] args) {
+  /**
+   * Performs the command.
+   *
+   * @param args the command, followed by its arguments
+   * @throws Daikon.DaikonTerminationException if the program should exit
+   */
+  public void handle(String[] args) {
     throw new UnsupportedOperationException();
   }
 
