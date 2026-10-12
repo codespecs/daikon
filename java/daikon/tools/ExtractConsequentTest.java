@@ -47,7 +47,11 @@ public class ExtractConsequentTest {
   @SuppressWarnings("interning") // newly-created VarInfo
   private static VarInfo newBooleanVarInfo(String name, ProglangType file_rep_type) {
     return new VarInfo(
-        name, ProglangType.BOOLEAN, file_rep_type, VarComparabilityNone.it, VarInfoAux.getDefault());
+        name,
+        ProglangType.BOOLEAN,
+        file_rep_type,
+        VarComparabilityNone.it,
+        VarInfoAux.getDefault());
   }
 
   @Test
