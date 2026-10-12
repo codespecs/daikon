@@ -196,6 +196,12 @@ CP_PARENTS := rsync -aR
 
 
 JUNIT_CLASSPATH ?=
+# Compile the test sources against JUNIT_CLASSPATH.  This is not done by setting
+# JAVAC in a Makefile.user, because Makefile.jdk would treat that JAVAC as the
+# user's choice of JDK.
+ifneq (${JUNIT_CLASSPATH},)
+  override JAVAC += -cp .:${JUNIT_CLASSPATH}
+endif
 
 JAVALIB_CLASSPATH := ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 
