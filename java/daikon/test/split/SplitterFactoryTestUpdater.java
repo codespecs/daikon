@@ -97,8 +97,6 @@ public class SplitterFactoryTestUpdater {
     try {
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
-      // An earlier read in this JVM may have set the decl format.
-      FileIO.resetNewDeclFormat();
       for (String declsFile : decls) {
         FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
       }
@@ -303,8 +301,6 @@ public class SplitterFactoryTestUpdater {
     ps.println("      }");
     ps.println("      PptSplitter.dkconfig_suppressSplitterErrors = true;");
     ps.println("      Daikon.create_splitters(spFiles);");
-    ps.println("      // An earlier read in this JVM may have set the decl format.");
-    ps.println("      FileIO.resetNewDeclFormat();");
     ps.println("      for (String declsFile : decls) {");
     ps.println(
         "        FileIO.read_data_trace_file(declsFile, allPpts);"); // invoked for side effects
