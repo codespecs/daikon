@@ -79,6 +79,8 @@ JAVA26_OR_NEWER := $(call java_or_newer,26)
 # Commands run by make, including recursive invocations of make, use this value.
 export JAVA_HOME
 # Helper scripts that run "java" or "javac" use the JDK at JAVA_HOME.
+# "override" applies this assignment to "make PATH=...".
 ifneq ($(firstword $(subst :, ,${PATH})),${JAVA_HOME}/bin)
-  export PATH := ${JAVA_HOME}/bin:${PATH}
+  override PATH := ${JAVA_HOME}/bin:${PATH}
 endif
+export PATH
