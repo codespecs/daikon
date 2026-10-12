@@ -290,7 +290,7 @@ public final class MergeInvariants {
               .startsWith(
                   "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
       if (debug) {
-        System.out.printf("MergeInvariants processing ppt " + ppt);
+        System.out.printf("MergeInvariants processing ppt %s%n", ppt);
       }
 
       // Skip everything that is not a final exit point
