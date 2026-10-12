@@ -223,12 +223,7 @@ export LC_ALL=C
 
 default: help
 
-# java-home.mk sets JAVA_RELEASE_NUMBER.
-JAVA23_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 23)
-JAVA21_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
-JAVA19_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 19)
-JAVA17_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 17)
-JAVA11_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 11)
+# java-home.mk sets the JAVANN_OR_NEWER variables used below.
 
 # goal_name is a function that will be called like "$(call goal_name, FILENAME)"
 # to compute goal filename extension.

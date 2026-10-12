@@ -22,14 +22,11 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER := sort
 endif
 
-# java-home.mk sets and exports JAVA_HOME.  If there is no suitable JDK, it sets
-# JAVA_HOME_ERROR instead of failing, so that recipes that do not use JDK_BIN
-# do not need a JDK.
-JAVA_HOME_DEFER_ERROR := 1
-include ${DAIKONDIR}/java/java-home.mk
 # The bin/ directory of the JDK.  Recipes that run JDK tools use it, as in
-# "${JDK_BIN}/javac".
-JDK_BIN = $(if ${JAVA_HOME_ERROR},$(error ${JAVA_HOME_ERROR}))${JAVA_HOME}/bin
+# "${JDK_BIN}/javac".  java-home.mk, which sets and exports JAVA_HOME, is read
+# the first time JDK_BIN is expanded, so that targets that do not use JDK_BIN
+# neither run javac nor need a JDK.
+JDK_BIN = $(eval include ${DAIKONDIR}/java/java-home.mk)$(eval JDK_BIN := $${JAVA_HOME}/bin)${JDK_BIN}
 
 
 ##########################################################################

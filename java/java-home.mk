@@ -1,8 +1,9 @@
 # Makefile fragment that sets JAVA_HOME to a JDK, version 8 or later.  It uses
 # the existing value of JAVA_HOME if that is a JDK, and otherwise the JDK that
 # contains the javac on the PATH.  It also sets JAVA_VERSION_STRING_WITH_EA
-# (e.g., "27-ea"), JAVA_VERSION_STRING (e.g., "27" or "1.8.0_402"), and
-# JAVA_RELEASE_NUMBER (e.g., "27" or "8"), all for the JDK at JAVA_HOME.
+# (e.g., "27-ea"), JAVA_VERSION_STRING (e.g., "27" or "1.8.0_402"),
+# JAVA_RELEASE_NUMBER (e.g., "27" or "8"), and JAVANN_OR_NEWER (e.g.,
+# JAVA21_OR_NEWER), all for the JDK at JAVA_HOME.
 # It is included by java/Makefile, tests/Makefile.common, and ../Makefile.
 
 # For JDK 8, java.home is the jre/ subdirectory of the JDK, and a user's
@@ -33,39 +34,46 @@ ifdef JAVA_HOME_FROM_PATH
   override JAVA_HOME := $(call jdk_of_jre,$(shell javac -J-XshowSettings:properties -version 2>&1 | sed -n -e 's/^ *java\.home = //p'))
 endif
 
-# If JAVA_HOME_DEFER_ERROR is set, a problem is recorded in JAVA_HOME_ERROR
-# rather than reported immediately.
-JAVA_HOME_ERROR :=
 # Make splits values on spaces, and many recipes use ${JAVA_HOME} unquoted.
 ifneq ($(word 2,${JAVA_HOME}),)
-  JAVA_HOME_ERROR := JAVA_HOME="${JAVA_HOME}" contains a space; use a path without spaces, such as a symbolic link to the JDK
+  $(error JAVA_HOME="${JAVA_HOME}" contains a space; use a path without spaces, such as a symbolic link to the JDK)
 else ifeq ($(if ${JAVA_HOME},$(wildcard ${JAVA_HOME}/bin/javac)),)
   ifdef JAVA_HOME_FROM_PATH
-    JAVA_HOME_ERROR := No JDK found; set JAVA_HOME to a JDK or put javac on the PATH
+    $(error No JDK found; set JAVA_HOME to a JDK or put javac on the PATH)
   else
-    JAVA_HOME_ERROR := JAVA_HOME="${JAVA_HOME}" is not a JDK (it has no bin/javac)
+    $(error JAVA_HOME="${JAVA_HOME}" is not a JDK (it has no bin/javac))
   endif
+endif
+
+# The output of `javac -version` is like "javac 27-ea", "javac 25.0.1", or
+# "javac 1.8.0_402".  It may be preceded by lines such as
+# "Picked up JAVA_TOOL_OPTIONS: ...".
+JAVA_VERSION_STRING_WITH_EA := $(shell '${JAVA_HOME}/bin/javac' -version 2>&1 | sed -n -e 's/^javac //p')
+JAVA_VERSION_STRING := $(subst -ea,,${JAVA_VERSION_STRING_WITH_EA})
+# The release number is the first component, or the second if the first is "1".
+JAVA_VERSION_COMPONENTS := $(subst ., ,$(subst -, ,${JAVA_VERSION_STRING}))
+ifeq ($(firstword ${JAVA_VERSION_COMPONENTS}),1)
+  JAVA_RELEASE_NUMBER := $(word 2,${JAVA_VERSION_COMPONENTS})
 else
-  # The output of `javac -version` is like "javac 27-ea", "javac 25.0.1", or
-  # "javac 1.8.0_402".  It may be preceded by lines such as
-  # "Picked up JAVA_TOOL_OPTIONS: ...".
-  JAVA_VERSION_STRING_WITH_EA := $(shell '${JAVA_HOME}/bin/javac' -version 2>&1 | sed -n -e 's/^javac //p')
-  JAVA_VERSION_STRING := $(subst -ea,,${JAVA_VERSION_STRING_WITH_EA})
-  # The release number is the first component, or the second if the first is "1".
-  JAVA_VERSION_COMPONENTS := $(subst ., ,$(subst -, ,${JAVA_VERSION_STRING}))
-  ifeq ($(firstword ${JAVA_VERSION_COMPONENTS}),1)
-    JAVA_RELEASE_NUMBER := $(word 2,${JAVA_VERSION_COMPONENTS})
-  else
-    JAVA_RELEASE_NUMBER := $(firstword ${JAVA_VERSION_COMPONENTS})
-  endif
-  ifneq ($(shell [ '${JAVA_RELEASE_NUMBER}' -ge 8 ] 2>/dev/null && echo yes),yes)
-    JAVA_HOME_ERROR := Java 8 or later is required; "${JAVA_HOME}/bin/javac -version" yields "${JAVA_VERSION_STRING_WITH_EA}"
-  endif
+  JAVA_RELEASE_NUMBER := $(firstword ${JAVA_VERSION_COMPONENTS})
 endif
-ifneq (${JAVA_HOME_ERROR},)
-  ifndef JAVA_HOME_DEFER_ERROR
-    $(error ${JAVA_HOME_ERROR})
-  endif
+# The releases from 8 through JAVA_RELEASE_NUMBER.  It does not contain
+# JAVA_RELEASE_NUMBER if JAVA_RELEASE_NUMBER is not an integer that is at least 8.
+JAVA_RELEASES_THROUGH_CURRENT := $(shell seq 8 '${JAVA_RELEASE_NUMBER}' 2>/dev/null)
+ifeq ($(filter ${JAVA_RELEASE_NUMBER},${JAVA_RELEASES_THROUGH_CURRENT}),)
+  $(error Java 8 or later is required; "${JAVA_HOME}/bin/javac -version" yields "${JAVA_VERSION_STRING_WITH_EA}")
 endif
+# JAVANN_OR_NEWER is 1 if JAVA_RELEASE_NUMBER is at least NN, and 0 otherwise.
+java_or_newer = $(if $(filter $1,${JAVA_RELEASES_THROUGH_CURRENT}),1,0)
+JAVA11_OR_NEWER := $(call java_or_newer,11)
+JAVA17_OR_NEWER := $(call java_or_newer,17)
+JAVA19_OR_NEWER := $(call java_or_newer,19)
+JAVA21_OR_NEWER := $(call java_or_newer,21)
+JAVA23_OR_NEWER := $(call java_or_newer,23)
+# JDK 24 is not an LTS version, but java/Makefile uses it to decide whether to compile Instrument24.java.
+JAVA24_OR_NEWER := $(call java_or_newer,24)
+JAVA25_OR_NEWER := $(call java_or_newer,25)
+JAVA26_OR_NEWER := $(call java_or_newer,26)
+
 # Commands run by make, including recursive invocations of make, use this value.
 export JAVA_HOME
