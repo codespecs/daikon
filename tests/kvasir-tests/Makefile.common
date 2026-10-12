@@ -4,7 +4,9 @@
 ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 endif
-include ${DAIKONDIR}/tests/Makefile.jdk
+# Find Makefile.jdk relative to this file, not via DAIKONDIR, which may name a
+# different Daikon tree.
+include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.jdk
 DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 # Fails when running "clean".
 # $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))

@@ -4,7 +4,9 @@
 
 # DAIKONDIR is the clone of the 'daikon' project.
 DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
-include ${DAIKONDIR}/tests/Makefile.jdk
+# Find Makefile.jdk relative to this file, not via DAIKONDIR, which may name a
+# different Daikon tree.
+include $(dir $(lastword ${MAKEFILE_LIST}))../../Makefile.jdk
 
 # StackAr sources are used for option testing
 SRC_DIR = ${DAIKONDIR}/tests/sources
