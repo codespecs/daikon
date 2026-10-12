@@ -1466,12 +1466,19 @@ daikon/test/split/SplitterFactoryTestUpdater.class: daikon/test/split/SplitterFa
 	${JAVAC_COMMAND} $<
 
 ## First, a file not generated via java-cpp.
-daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.class \
+# Depending on daikon/Daikon.class regenerates the test whenever Daikon is
+# recompiled, because SplitterFactory determines which splitters the test covers.
+# The rule for daikon/Daikon.class makes this file only after touching
+# daikon/Daikon.class, so this prerequisite does not cause a regress.
+# SPLITTER_UPDATER_ARGS is set by the update-splitter-goals target.
+daikon/test/split/SplitterFactoryTest.java: daikon/Daikon.class \
+		daikon/test/split/SplitterFactoryTestUpdater.class \
 		$(wildcard daikon/test/split/targets/*.spinfo daikon/test/split/targets/*.decls)
 	rm -f $@
 # Has expected errors while compiling splitter files.
 # Suppress output unless whole command fails.
-	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater > /dev/null 2>&1) || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater
+	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater ${SPLITTER_UPDATER_ARGS} > /dev/null 2>&1) \
+	  || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater ${SPLITTER_UPDATER_ARGS}
 	chmod a-w $@
 
 ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
@@ -1482,10 +1489,7 @@ ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
 .PHONY: update-splitter-goals
 update-splitter-goals: daikon/Daikon.class daikon/test/split/SplitterFactoryTestUpdater.class
 	rm -f daikon/test/split/SplitterFactoryTest.java
-	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater --update-goals > /dev/null 2>&1) \
-	  || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater --update-goals
-	chmod a-w daikon/test/split/SplitterFactoryTest.java
-	${MAKE} ${AUTO_GENERATED_CLASSES_2}
+	${MAKE} SPLITTER_UPDATER_ARGS=--update-goals ${AUTO_GENERATED_CLASSES_2}
 
 # Create the auto-generated files with jpp
 .PHONY: jpp

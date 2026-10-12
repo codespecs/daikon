@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import org.plumelib.util.FilesPlume;
@@ -133,8 +134,11 @@ public class SplitterFactoryTestUpdater {
     if (fileNames == null) {
       throw new Error("tmpdir = " + tempDir + " which is not a directory");
     }
+    // Sort so that the generated test does not depend on the file system's directory order.
+    Arrays.sort(fileNames);
     if (updateGoals) {
-      // Remove goal files for splitters that SplitterFactory no longer produces.
+      // Remove all goal files, so that none remain for splitters that SplitterFactory does not
+      // produce.
       File[] oldGoals = new File(targetDir).listFiles((dir, name) -> name.endsWith(".java.goal"));
       if (oldGoals == null) {
         throw new Error("targetDir = " + targetDir + " which is not a directory");
