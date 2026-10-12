@@ -862,7 +862,7 @@ ifeq (${JAVA21_OR_NEWER}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
-	@PATH=${JAVA_HOME}/bin:$${PATH} ../.utils/run-google-java-format/run-google-java-format.py \
+	@../.utils/run-google-java-format/run-google-java-format.py \
 	  ${JAVA_FILES_FOR_FORMAT}
 endif
 
@@ -871,7 +871,7 @@ ifeq (${JAVA21_OR_NEWER}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
-	@PATH=${JAVA_HOME}/bin:$${PATH} ../.utils/run-google-java-format/check-google-java-format.py \
+	@../.utils/run-google-java-format/check-google-java-format.py \
 	  ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
 endif
 
@@ -1370,9 +1370,6 @@ showvars:
 	@echo JAVA_HOME = ${JAVA_HOME}
 	${JAVA_HOME}/bin/java -version 2>&1
 	${JAVA_HOME}/bin/javac -version
-	# Some helper scripts use the java on the PATH.
-	-which java
-	-java -version 2>&1
 	@echo JAVA = ${JAVA}
 	@echo JAVA_COMMAND = ${JAVA_COMMAND}
 	@echo JAVAC = ${JAVAC}
