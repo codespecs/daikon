@@ -35,10 +35,7 @@ else
 endif
 
 # DAIKONDIR is the clone of the 'daikon' project.
-# TESTS_MAKEFILE_DIR is simply expanded (":=") so that it is not affected by later
-# includes, which change MAKEFILE_LIST.
-TESTS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-DAIKONDIR ?= $(realpath ${TESTS_MAKEFILE_DIR}..)
+DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
@@ -58,7 +55,7 @@ txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	${MAKE} pat-daikon-tests-$@
 pat-daikon-tests-%:
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $*; \
 	else \
 	  ${MAKE} -C daikon-tests --jobs=4 ${MPARG} $*; \

@@ -19,10 +19,7 @@
 # Forked from $DAIKONDIR/tests/kvasir-tests/Makefile
 
 # DAIKONDIR is the clone of the 'daikon' project.
-# DYNCOMP_DRIVER_DIR is simply expanded (":=") so that it is not affected by later
-# includes, which change MAKEFILE_LIST.
-DYNCOMP_DRIVER_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-DAIKONDIR ?= $(realpath ${DYNCOMP_DRIVER_DIR}../..)
+DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
@@ -70,7 +67,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
 	else \
 	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \

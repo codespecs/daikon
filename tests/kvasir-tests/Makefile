@@ -21,10 +21,7 @@ else
 endif
 
 # DAIKONDIR is the clone of the 'daikon' project.
-# KVASIR_DRIVER_DIR is simply expanded (":=") so that it is not affected by later
-# includes, which change MAKEFILE_LIST.
-KVASIR_DRIVER_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-DAIKONDIR ?= $(realpath ${KVASIR_DRIVER_DIR}../..)
+DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
@@ -32,7 +29,7 @@ default: summary-w-daikon
 
 .PHONY: regression-tests
 regression-tests:
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
 	else \
 	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
@@ -86,7 +83,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
 	else \
 	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
