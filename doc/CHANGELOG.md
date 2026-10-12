@@ -26,6 +26,7 @@ Further documentation can be found in:
 * Daikon and its tools now reject a malformed command-line option.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
+* Removed the Perl front end, dfepl.
 
 ## Version 5.9.0 (September 1, 2026)
 
