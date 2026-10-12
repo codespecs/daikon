@@ -21,8 +21,11 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
-## Version ??
+## Version 5.9.1 (???, 2026)
 
+* Daikon and its tools now reject a malformed command-line option.
+* `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
+   no effect.
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
   complete program point name, and it matches only the program point of that
   name.  A name ending with `:::EXIT` also matches the numbered exit points.

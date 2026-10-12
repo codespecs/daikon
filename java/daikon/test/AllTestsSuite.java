@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   daikon.chicory.RuntimeTest.class,
+  daikon.test.BadOptionTest.class,
   daikon.tools.ExtractConsequentTest.class,
   daikon.split.SplitterFactoryFileNameTest.class,
   daikon.split.SplitterListTest.class,
