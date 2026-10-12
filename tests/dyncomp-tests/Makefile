@@ -18,10 +18,7 @@
 
 # Forked from $DAIKONDIR/tests/kvasir-tests/Makefile
 
-# DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
-
-PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.jobs
 
 default: summary
 
@@ -67,11 +64,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	if [ -n "$$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
-	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
-	else \
-	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
-	fi
+	${MAKE} --jobs=${DAIKON_TEST_JOBS} ${MPARG} nightly-tests__clean
 
 
 default-projects__%: pgbovine-tests__%
