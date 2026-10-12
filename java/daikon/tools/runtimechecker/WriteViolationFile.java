@@ -43,14 +43,12 @@ class WriteViolationFile {
     String[] classAndArgs;
     try {
       classAndArgs = DaikonGetopt.argsAfterLeadingOptions(args, usageMessage);
+      if (classAndArgs.length == 0) {
+        throw new Daikon.UserError("Error: no class specified" + Daikon.lineSep + usageMessage);
+      }
     } catch (Daikon.DaikonTerminationException e) {
       Daikon.handleDaikonTerminationException(e);
       return;
-    }
-    if (classAndArgs.length == 0) {
-      System.err.println("Error: no class specified");
-      System.err.println(usageMessage);
-      System.exit(1);
     }
     @SuppressWarnings("signature") // will be checked immediately below, and exception is caught
     @BinaryName String class_name = classAndArgs[0];

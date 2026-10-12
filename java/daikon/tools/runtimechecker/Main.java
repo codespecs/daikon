@@ -19,7 +19,7 @@ public class Main extends CommandHandler {
    * @param handlers the handlers whose usage messages to include
    * @return the usage message of this and of each handler
    */
-  private String usageMessage(List<CommandHandler> handlers) {
+  private String usageMessageString(List<CommandHandler> handlers) {
     StringJoiner result = new StringJoiner(Daikon.lineSep);
     result.add(usageMessageString());
     for (CommandHandler h : handlers) {
@@ -44,13 +44,13 @@ public class Main extends CommandHandler {
         Collections.singletonList((CommandHandler) new InstrumentHandler());
 
     String[] commandAndArgs =
-        DaikonGetopt.argsAfterLeadingOptions(args, () -> usageMessage(handlers));
+        DaikonGetopt.argsAfterLeadingOptions(args, () -> usageMessageString(handlers));
     if (commandAndArgs.length < 1) {
       throw new Daikon.UserError("ERROR:  No command given." + Daikon.lineSep + helpHint);
     }
     if (commandAndArgs[0].toUpperCase(Locale.ENGLISH).equals("HELP")
         || commandAndArgs[0].equals("?")) {
-      System.out.println(usageMessage(handlers));
+      System.out.println(usageMessageString(handlers));
       throw new Daikon.NormalTermination();
     }
 
