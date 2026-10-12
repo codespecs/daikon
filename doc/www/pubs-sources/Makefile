@@ -1,8 +1,8 @@
 ###########################################################################
-# DAIKONDIR is the clone of the 'daikon' project.
-include $(dir $(lastword ${MAKEFILE_LIST}))../../../scripts/check-daikondir.mk
+DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
+PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 BPHOME ?= ${DAIKONDIR}/.utils/bibtex2web/lib
 export BPHOME
 BWBIN = ${BPHOME}/../bin

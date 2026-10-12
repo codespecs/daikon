@@ -2,16 +2,16 @@
 
 default: daikon
 
-# DAIKONDIR is the clone of the 'daikon' project.
-include $(dir $(lastword ${MAKEFILE_LIST}))../scripts/check-daikondir.mk
-
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
+# Don't let the user override this; it should refer to the current directory.
+DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
+
 DAIKONSCRIPTS ?= ${DAIKONDIR}/scripts
 
-include ${DAIKONDIR}/scripts/plume-scripts.mk
+PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 
 USER ?= daikonbuild
@@ -181,7 +181,7 @@ JAVADOC_COMMAND := ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 JAVAC_COMMAND := ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
 JAVA_COMMAND := ${JAVA} -cp ${DAIKON_CLASSPATH}
 
-DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
+DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/java-getopt-*.jar):$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 DOCLET_FLAGS :=
 LINKOFFLINE := https://docs.oracle.com/javase/8/docs/api/
@@ -681,9 +681,15 @@ dyncomp-jdk-only dcomp-jdk-only :
 	  ${JAR} cf dcomp_rt.jar -C ${DCOMP_RT} .; \
 	fi
 
-## This rule creates the directory if absent but doesn't update it.
+## These two rules create the directories if absent but don't update them.
+${PLUME_SCRIPTS}:
+	${MAKE} -C .. update-plume-scripts
 ../.utils/html-tools:
 	${MAKE} -C .. update-html-tools
+
+.PHONY: update-plume-scripts
+update-plume-scripts:
+	${MAKE} -C .. update-plume-scripts
 
 # Checks that daikon.plumelib, rather than plume, is imported by source files
 # that do instrumentation.  Should also check that daikon.plumelib is never

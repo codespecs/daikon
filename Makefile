@@ -1,20 +1,17 @@
-# DAIKONDIR is the clone of the 'daikon' project.
-include $(dir $(lastword ${MAKEFILE_LIST}))scripts/check-daikondir.mk
-# Export it so that commands run by recipes use this clone.
-export DAIKONDIR
-
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
+DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
+
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
 
-include ${DAIKONDIR}/scripts/plume-scripts.mk
-# Clone plume-scripts now, because SORT_DIRECTORY_ORDER is used while this Makefile is read.
+PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+
 ifndef NONETWORK
 ifeq (,$(wildcard ${PLUME_SCRIPTS}))
-  dummy := $(shell ${PLUME_SCRIPTS_CLONE})
+  dummy := $(shell mkdir -p "$(dir ${PLUME_SCRIPTS})" && git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git "${PLUME_SCRIPTS}")
 endif
 endif
 SORT_DIRECTORY_ORDER := ${PLUME_SCRIPTS}/sort-directory-order
@@ -63,7 +60,6 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 # compiling Daikon' in the Daikon Developer manual; which is in turn referenced
 # from the 'Installation' section of the Daikon manual.
 SCRIPT_FILES := Makefile \
-	check-daikondir.mk plume-scripts.mk \
 	daikon.bashrc \
 	dfepl dtrace-perl dtype-perl \
 	java-cpp \
@@ -792,6 +788,9 @@ ifndef NONETWORK
 	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/html-tools.git ${HTMLTOOLS} || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/html-tools.git ${HTMLTOOLS}))) \
 	fi
 endif
+
+# update-plume-scripts is defined in .utils/plume-scripts/code-style.mak which
+# is included by this Makefile.
 
 update-run-google-java-format:
 ifndef NONETWORK

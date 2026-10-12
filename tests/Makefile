@@ -34,10 +34,7 @@ else
   MPARG ?=
 endif
 
-# DAIKONDIR is the clone of the 'daikon' project.
-include $(dir $(lastword ${MAKEFILE_LIST}))../scripts/check-daikondir.mk
-
-include ${DAIKONDIR}/scripts/plume-scripts.mk
+PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
 all diffs: txt-diff non-txt-diff dyncomp-tests results
 
@@ -53,9 +50,13 @@ txt-daikon txt-chicory cross-checker chicory chicory-diff \
 esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff txt-merge-diff \
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	${MAKE} pat-daikon-tests-$@
-pat-daikon-tests-%: | ${PLUME_SCRIPTS}
+pat-daikon-tests-%:
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-	${MAKE} -C daikon-tests --jobs=$(if ${IS_CI},1,4) ${MPARG} $*
+	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $*; \
+	else \
+	  ${MAKE} -C daikon-tests --jobs=4 ${MPARG} $*; \
+	fi
 
 list-targets:
 	${MAKE} -C daikon-tests list-targets

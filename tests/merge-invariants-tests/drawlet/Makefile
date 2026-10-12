@@ -9,7 +9,10 @@
 # files are in drawlet_src.zip in this directory
 
 # DAIKONDIR is the clone of the 'daikon' project.
-include $(dir $(lastword ${MAKEFILE_LIST}))../../../scripts/check-daikondir.mk
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
+endif
+include ${DAIKONDIR}/tests/Makefile.jdk
 
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
 # A prerequisite that changes whenever Daikon is rebuilt: Daikon.class if the
@@ -31,7 +34,7 @@ daikon.txt.diff: drawlet.txt merge.txt
 merge: merge.inv.gz
 merge.inv.gz: ${DAIKON} TS_AllDrawletUnitTests.inv.gz \
 	          TS_DrawletFunctionalTest.inv.gz TS_InputEventHandlerTests.inv.gz
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.MergeInvariants -o merge.inv.gz \
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.MergeInvariants -o merge.inv.gz \
 	  TS_AllDrawletUnitTests.inv.gz TS_DrawletFunctionalTest.inv.gz \
 	  TS_InputEventHandlerTests.inv.gz
 
@@ -40,21 +43,21 @@ merge.inv.gz: ${DAIKON} TS_AllDrawletUnitTests.inv.gz \
 daikon : drawlet.inv.gz
 drawlet.inv.gz : ${DAIKON} TS_AllDrawletUnitTests.dtrace.gz \
 	TS_DrawletFunctionalTest.dtrace.gz TS_InputEventHandlerTests.dtrace.gz
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon -o drawlet.inv.gz ${DAIKON_ARGS} \
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon -o drawlet.inv.gz ${DAIKON_ARGS} \
 	  TS_AllDrawletUnitTests.dtrace.gz \
 	  TS_DrawletFunctionalTest.dtrace.gz \
 	  TS_InputEventHandlerTests.dtrace.gz
 
 TS_AllDrawletUnitTests.inv.gz: ${DAIKON} TS_AllDrawletUnitTests.dtrace.gz
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon ${DAIKON_ARGS} \
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon ${DAIKON_ARGS} \
 	  TS_AllDrawletUnitTests.dtrace.gz
 
 TS_DrawletFunctionalTest.inv.gz: ${DAIKON} TS_DrawletFunctionalTest.dtrace.gz
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon ${DAIKON_ARGS} \
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon ${DAIKON_ARGS} \
 	  TS_DrawletFunctionalTest.dtrace.gz
 
 TS_InputEventHandlerTests.inv.gz: ${DAIKON} TS_InputEventHandlerTests.dtrace.gz
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon ${DAIKON_ARGS} \
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon ${DAIKON_ARGS} \
 	  TS_InputEventHandlerTests.dtrace.gz
 
 # For debugging:
@@ -68,10 +71,10 @@ ${DAIKON}:
 	@echo "Daikon is not built.  Run \"make -C ${DAIKONDIR} compile\"." && false
 
 %.txt: %.inv.gz ${DAIKON}
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants $< > $@
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants $< > $@
 
 %.txt-all: %.inv.gz ${DAIKON}
-	java -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
 
 update-goals:
 

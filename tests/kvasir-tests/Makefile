@@ -20,16 +20,17 @@ else
   MPARG ?=
 endif
 
-# DAIKONDIR is the clone of the 'daikon' project.
-include $(dir $(lastword ${MAKEFILE_LIST}))../../scripts/check-daikondir.mk
-
-include ${DAIKONDIR}/scripts/plume-scripts.mk
+PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
 default: summary-w-daikon
 
 .PHONY: regression-tests
-regression-tests: | ${PLUME_SCRIPTS}
-	${MAKE} --jobs=$(if ${IS_CI},1,4) ${MPARG} nightly-tests__diffs-w-daikon-if-working
+regression-tests:
+	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
+	else \
+	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
+	fi
 	${MAKE} nightly-summary-only-w-daikon
 	@${MAKE} --no-print-directory results
 
@@ -78,8 +79,12 @@ update-all:
 	${MAKE} nightly-tests__update-goals
 
 .PHONY: clean-all
-clean-all: | ${PLUME_SCRIPTS}
-	${MAKE} --jobs=$(if ${IS_CI},1,4) ${MPARG} nightly-tests__clean
+clean-all:
+	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
+	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
+	else \
+	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
+	fi
 
 default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
 	@

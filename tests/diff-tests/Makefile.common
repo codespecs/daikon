@@ -6,13 +6,16 @@
 # of Diff.
 
 # DAIKONDIR is the clone of the 'daikon' project.
-include $(dir $(lastword $(MAKEFILE_LIST)))../../scripts/check-daikondir.mk
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+endif
+include ${DAIKONDIR}/tests/Makefile.jdk
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 PROGRAM := $(notdir $(shell pwd))
-DAIKON := java -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
-INV_DIFF := java -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
+DAIKON := ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
+INV_DIFF := ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 
@@ -20,10 +23,10 @@ INV_FILES := $(PROGRAM)-1.inv.gz $(PROGRAM)-2.inv.gz
 # An output file must satisfy the pattern program%.txt, where the % is
 # the options passed to Diff
 ## Must reinstate -a and -ap and -p in V3 as soon as possible.  -MDE 6/10/2003
-# OUTPUT := $(PROGRAM).txt $(PROGRAM)-u.txt $(PROGRAM)-a.txt $(PROGRAM)-p.txt \
+# OUTPUT := $(PROGRAM).txt $(PROGRAM)-a.txt $(PROGRAM)-p.txt \
 # 	  $(PROGRAM)-e.txt $(PROGRAM)-ap.txt $(PROGRAM)-t.txt \
 # 	  $(PROGRAM)-jt.txt
-OUTPUT := $(PROGRAM).txt $(PROGRAM)-u.txt \
+OUTPUT := $(PROGRAM).txt \
 	  $(PROGRAM)-e.txt $(PROGRAM)-t.txt \
 	  $(PROGRAM)-jt.txt
 # Must be handled differently than OUTPUT, because map files are

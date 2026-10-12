@@ -4,13 +4,13 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Ppt;
 import daikon.PptConditional;
 import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.inv.Invariant;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -68,13 +68,19 @@ public final class Diff {
           "  For a list of flags, see the Daikon manual, which appears in the ",
           "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.");
 
-  /** The long command line options. */
-  private static final String HELP_SWITCH = "help";
-
+  /** The long command-line option that specifies the comparator to sort the first set of invs. */
   private static final String INV_SORT_COMPARATOR1_SWITCH = "invSortComparator1";
+
+  /** The long command-line option that specifies the comparator to sort the second set of invs. */
   private static final String INV_SORT_COMPARATOR2_SWITCH = "invSortComparator2";
+
+  /** The long command-line option that specifies the comparator to pair up invs. */
   private static final String INV_PAIR_COMPARATOR_SWITCH = "invPairComparator";
+
+  /** The long command-line option that is a synonym for -y. */
   private static final String IGNORE_UNJUSTIFIED_SWITCH = "ignore_unjustified";
+
+  /** The long command-line option that ignores numbered exit points. */
   private static final String IGNORE_NUMBERED_EXITS_SWITCH = "ignore_exitNN";
 
   /** Determine which ppts should be paired together in the tree. */
@@ -193,7 +199,6 @@ public final class Diff {
 
     LongOpt[] longOpts =
         new LongOpt[] {
-          new LongOpt(HELP_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(INV_SORT_COMPARATOR1_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(INV_SORT_COMPARATOR2_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(INV_PAIR_COMPARATOR_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -201,20 +206,14 @@ public final class Diff {
           new LongOpt(IGNORE_NUMBERED_EXITS_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         };
 
-    Getopt g =
-        new Getopt(
-            "daikon.diff.Diff", args,
-            "Hhyduastmxno:jzpevl", longOpts);
+    DaikonGetopt g = new DaikonGetopt(args, "Hydastmxno:jpevl", longOpts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
         case 0:
           // got a long option
           String optionName = longOpts[g.getLongind()].getName();
-          if (Daikon.help_SWITCH.equals(optionName)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-          } else if (INV_SORT_COMPARATOR1_SWITCH.equals(optionName)) {
+          if (INV_SORT_COMPARATOR1_SWITCH.equals(optionName)) {
             if (invSortComparator1Classname != null) {
               throw new Error(
                   "multiple --"
@@ -252,12 +251,9 @@ public final class Diff {
             ignoreNumberedExits = true;
             break;
           } else {
-            throw new RuntimeException("Unknown long option received: " + optionName);
+            throw new Daikon.BugInDaikon("Unhandled long option " + optionName);
           }
           break;
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
         case 'H':
           PrintAllVisitor.HUMAN_OUTPUT = true;
           break;
@@ -318,13 +314,8 @@ public final class Diff {
         case 'l':
           logging = true;
           break;
-        case '?':
-          // getopt() already printed an error
-          System.out.println(usage);
-          throw new Daikon.UserError("Bad argument");
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
 
@@ -422,8 +413,7 @@ public final class Diff {
       v1.printAll();
       return;
     } else {
-      System.out.println(usage);
-      throw new Daikon.NormalTermination();
+      throw new Daikon.UserError("No invariant files specified; run with -h for usage");
     }
 
     if (logging) {
