@@ -23,6 +23,10 @@ Further documentation can be found in:
 
 ## Version 5.9.1 (???, 2026)
 
+* Daikon and its tools now reject a malformed command-line option.
+* `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
+   no effect.
+
 Chicory:
 
 * New command-line option `--no-method-calls` makes Chicory never call methods
