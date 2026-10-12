@@ -119,7 +119,8 @@ public class DaikonGetopt extends Getopt {
    * @throws Daikon.NormalTermination after printing the usage message, if an argument requests it
    * @throws Daikon.UserError if an argument is any other option
    */
-  private static String[] argsAfterOptions(String[] argv, String optstring, Supplier<String> usage) {
+  private static String[] argsAfterOptions(
+      String[] argv, String optstring, Supplier<String> usage) {
     // Getopt permutes its argument array, so give it a copy to avoid modifying the caller's array.
     String[] argvCopy = argv.clone();
     DaikonGetopt g = new DaikonGetopt(argvCopy, optstring, new LongOpt[0], usage);
