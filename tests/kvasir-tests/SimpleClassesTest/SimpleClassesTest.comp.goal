@@ -78,6 +78,7 @@ A.setEverything():::EXIT0
 this
 
 A:::OBJECT
+-1: this this->privateIntA this->protectedIntA this->publicIntA
 
 B.setEverything():::ENTER
 ::arrayOfBees
@@ -120,6 +121,7 @@ B.setEverything():::EXIT0
 this
 
 B:::OBJECT
+-1: this this->C.privateIntC this->C.protectedIntC this->C.publicIntC this->D.privateIntD this->D.protectedIntD this->D.publicIntD this->E.A.privateIntA this->E.A.protectedIntA this->E.A.publicIntA this->E.privateIntE this->E.protectedIntE this->E.publicIntE this->privateIntB this->protectedIntB this->publicIntB
 
 C.setEverything():::ENTER
 ::arrayOfBees
@@ -162,6 +164,7 @@ C.setEverything():::EXIT0
 this
 
 C:::OBJECT
+-1: this this->privateIntC this->protectedIntC this->publicIntC
 
 D.setEverything():::ENTER
 ::arrayOfBees
@@ -204,6 +207,7 @@ D.setEverything():::EXIT0
 this
 
 D:::OBJECT
+-1: this this->privateIntD this->protectedIntD this->publicIntD
 
 E.setEverything():::ENTER
 ::arrayOfBees
@@ -246,4 +250,5 @@ E.setEverything():::EXIT0
 this
 
 E:::OBJECT
+-1: this this->A.privateIntA this->A.protectedIntA this->A.publicIntA this->privateIntE this->protectedIntE this->publicIntE
 

@@ -882,8 +882,8 @@ Resolved Issues:
       nice to use "*" for dereferences in C (though we don't at the
       moment). In Perl, there's a class of variables whose names start
       with "*" and there's also a global variable for just about every
-      punctuation character, including $*. Perhaps a multi-character marker would
-      be more robust?  (smcc)
+      punctuation character, including $*. Perhaps a multi-character
+      marker would be more robust?  (smcc)
 
       I'd forgotten about '*' in C.  I've changed the proposal to use
       '..' instead.  We could also use '...', or the somewhat less

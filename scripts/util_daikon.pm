@@ -11,7 +11,7 @@ our @EXPORT = qw( cleanup_pptname system_or_die backticks_or_die
                   record_kind record_reader for_each_record
                   parse_ppt_decl read_ppt_decls );
 
-use English;
+use English qw(-no_match_vars);
 use strict;
 $WARNING = 1;			# "-w" flag
 
@@ -152,11 +152,14 @@ sub record_kind ( $;$ ) {
 #   text      the lines of the record, without the empty line that
 #             terminates it; or "" if kind is ""
 #   line      the line number of the first line of the record
+#   newline   the line ending of the file, "\n" or "\r\n"
 #
 # For speed, the input is read a paragraph at a time rather than a line at
 # a time.  A paragraph ends with an empty line.  Line endings may be "\n"
-# or "\r\n", as determined by the first line of the file; "\r\n" line
-# endings are converted to "\n".
+# or "\r\n", as determined by the first line of the file.  In the comments
+# and text of a record, "\r\n" line endings are converted to "\n"; a
+# client that writes a file in place can use the newline key to restore
+# them.
 
 # Returns a new reader state for the file with the given name.
 sub new_reader_state ( $ ) {
@@ -198,7 +201,11 @@ my $other_terminator = qr/^\n/m;
 # file whose reader state is the first argument.  Updates the state.
 sub paragraph_records ( $$ ) {
   my ($state, $paragraph) = @_;
-  $paragraph =~ s/\r\n/\n/g if $state->{separator} eq "\r\n\r\n";
+  my $newline = "\n";
+  if ($state->{separator} eq "\r\n\r\n") {
+    $paragraph =~ s/\r\n/\n/g;
+    $newline = "\r\n";
+  }
   my @records = ();
   my $line = $state->{line};
   $state->{line} += ($paragraph =~ tr/\n//);
@@ -224,7 +231,7 @@ sub paragraph_records ( $$ ) {
     if (!defined($kind) || $kind eq "header") {
       if (defined($kind)) {
         push @records, { comments => $state->{comments}, kind => $kind,
-                         text => $first, line => $line };
+                         text => $first, line => $line, newline => $newline };
         $state->{comments} = "";
       } else {
         $state->{comments} .= $first;
@@ -245,7 +252,7 @@ sub paragraph_records ( $$ ) {
     }
     my $text = substr($paragraph, $pos, $text_end - $pos);
     push @records, { comments => $state->{comments}, kind => $kind,
-                     text => $text, line => $line };
+                     text => $text, line => $line, newline => $newline };
     $state->{comments} = "";
     $line += ($text =~ tr/\n//) + 1;
     $pos = $after;
@@ -258,8 +265,10 @@ sub paragraph_records ( $$ ) {
 sub end_of_file_records ( $ ) {
   my ($state) = @_;
   return () if $state->{comments} eq "";
+  my $newline = (defined($state->{separator})
+                 && $state->{separator} eq "\r\n\r\n") ? "\r\n" : "\n";
   my $record = { comments => $state->{comments}, kind => "", text => "",
-                 line => $state->{line} };
+                 line => $state->{line}, newline => $newline };
   $state->{comments} = "";
   return ($record);
 }
@@ -338,6 +347,8 @@ my %var_keys = map { $_ => 1 }
 #            variable, or undef if the variable is not a constant).  The
 #            value of a constant variable does not appear in data trace
 #            records.
+#   file     the second argument, or undef
+#   line     the third argument, or undef
 sub parse_ppt_decl ( $;$$ ) {
   my ($text, $filename, $line_number) = @_;
   my ($pptline, @lines) = split(/\n/, $text);
@@ -351,7 +362,8 @@ sub parse_ppt_decl ( $;$$ ) {
   };
   $pptline =~ /\Appt\s+(.*?)\s*\z/s
     or croak "Not a program point declaration in " . $where->(0) . ": $pptline";
-  my $ppt = { name => unescape_decl($1), parents => [], vars => [] };
+  my $ppt = { name => unescape_decl($1), parents => [], vars => [],
+              file => $filename, line => $line_number };
   # Dies with a message about the line at the given index of @lines.
   my $malformed = sub {
     my ($i, $message) = @_;
@@ -415,23 +427,24 @@ sub parse_ppt_decl ( $;$$ ) {
 }
 
 # Reads all the program point declarations from the filehandle, which is a
-# version 2 .decls file.  Headers and comments are skipped.  Returns a list
-# of references to hashes, as returned by parse_ppt_decl.  Dies if the file
-# is in version 1 format, contains a data trace record, or contains no
-# program point declarations.  The second argument is the name of the
-# file, for use in error messages.
-sub read_ppt_decls ( $$ ) {
-  my ($fh, $filename) = @_;
+# version 2 .decls file, or a .dtrace file if the optional third argument
+# is true.  Headers, comments, and (for a .dtrace file) data trace records
+# are skipped.  Returns a list of references to hashes, as returned by
+# parse_ppt_decl.  Dies if the file is in version 1 format, or is a .decls
+# file that contains a data trace record or no program point declarations.
+# The second argument is the name of the file, for use in error messages.
+sub read_ppt_decls ( $$;$ ) {
+  my ($fh, $filename, $allow_data) = @_;
   my @ppts = ();
   my $reader = record_reader($fh, $filename);
   while (defined(my $record = $reader->())) {
     if ($record->{kind} eq "ppt") {
       push @ppts, parse_ppt_decl($record->{text}, $filename, $record->{line});
-    } elsif ($record->{kind} eq "data") {
+    } elsif ($record->{kind} eq "data" && !$allow_data) {
       croak "Declaration files should not contain data trace records, but $filename does at line $record->{line}";
     }
   }
-  if (!@ppts) {
+  if (!@ppts && !$allow_data) {
     croak "No program point declarations in $filename";
   }
   return @ppts;

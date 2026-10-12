@@ -86,33 +86,6 @@ sub parseDecl ( $ ) {
   return ($$ppt{name}, @varnames);
 }
 
-# Returns the variable name, surrounded by double quotes (and with
-# backslashes and double quotes escaped) if it contains spaces, periods,
-# hyphens, double quotes, slashes, or (square|angle|regular) brackets.
-# Daikon parses each variable name (see VarInfoName.parse), and a quoted
-# name is parsed as a simple name.
-sub formatVarName ( $ ) {
-  my ($input) = check_args(1, @_);
-  my $simplified = $input;
-  # To facilitate commenting out
-  # one or more of these expressions,
-  # each one was written in a separate line.
-  $simplified =~ s/ /_/g;
-  $simplified =~ s/\./_/g;
-  $simplified =~ s/(\"|-|\/)/_/g;
-  $simplified =~ s/(\(|\))//g;
-  $simplified =~ s/(\[|\])//g;
-  $simplified =~ s/(\<|\>)//g;
-  if ($simplified eq $input) {
-    return $input;
-  }
-  $simplified = $input;
-  # Quote backslashes and quotes (in that order)
-  $simplified =~ s/\\/\\\\/g;
-  $simplified =~ s/\"/\\\"/g;
-  return '"' . $simplified . '"';
-}
-
 
 
 ###########################################################################
@@ -226,13 +199,6 @@ sub getVariableNames ( $ ) {
   }
 
   @csv_varnames = $csv->fields(); # get the parsed fields
-  my $i = 0;
-  foreach my $var (@csv_varnames) {
-    # Quote names that Daikon could not otherwise parse as simple names.
-    $csv_varnames[$i] = formatVarName($csv_varnames[$i]);
-    $i++;
-  }
-
 }
 
 my $varnames_input = <CSVHANDLE>;
@@ -251,16 +217,12 @@ if (defined($decls_file)) {
 }
 my $num_decl_vars = scalar(@decl_varnames);
 
-# The csv index of each declared variable.  A declared variable matches a
-# csv column whose name is the same, either as written in the csv file or
-# as transformed by formatVarName.
+# The csv index of each declared variable.  A declared variable matches the
+# csv column with the same name.
 my @decl_csvindex;
 for (my $j = 0; $j < $num_decl_vars; $j++) {
   my $varname = $decl_varnames[$j];
   my $csvindex = $varNameCsvIndex{$varname};
-  if (!defined($csvindex)) {
-    $csvindex = $varNameCsvIndex{formatVarName($varname)};
-  }
   if (!defined($csvindex)) {
     die "Declared variable " . escape_decl($varname) . " is not a column of $inputfilename";
   }
@@ -371,16 +333,13 @@ while (<CSVHANDLE>) {
   my @sample = $csv->fields();  # get the parsed fields
 
   {
-    # Check the number of columns in the csv file.
+    # Check the number of columns in the csv file.  The header line
+    # determines the number of columns.  Some columns might not be
+    # declared variables, such as when a constant variable has a column.
     my $sample_length = scalar(@sample);
-    if ($sample_length > $num_decl_vars) {
-      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
-    }
-    if ($sample_length < $num_decl_vars) {
-      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
-      for (my $z = $sample_length; $z < $num_decl_vars; $z++) {
-        $sample[$z] = "";
-      }
+    my $num_csv_vars = scalar(@csv_varnames);
+    if ($sample_length != $num_csv_vars) {
+      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, but the header line contains $num_csv_vars";
     }
   }
 
@@ -435,7 +394,7 @@ if (defined($decls_file)) {
   for (my $j = 0; $j<$num_decl_vars; $j++) {
     my $csvindex = $decl_csvindex[$j];
     my $type = ($isNumber[$csvindex] ? "double" : "java.lang.String");
-    print DECLSHANDLE "  variable " . escape_decl($csv_varnames[$csvindex]) . "\n";
+    print DECLSHANDLE "  variable " . escape_decl($decl_varnames[$j]) . "\n";
     print DECLSHANDLE "    var-kind variable\n";
     print DECLSHANDLE "    dec-type $type\n";
     print DECLSHANDLE "    rep-type $type\n";
