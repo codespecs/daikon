@@ -24112,11 +24112,6 @@ ppt scan.c.yyunput():::ENTER
     rep-type int
     dec-type int
     flags is_param 
-  variable yy_bp
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
 
 ppt scan.c.yyunput():::EXIT0
   ppt-type subexit
@@ -24124,11 +24119,6 @@ ppt scan.c.yyunput():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
-  variable yy_bp
-    var-kind variable
-    rep-type string
-    dec-type char*
     flags is_param 
 
 ppt util.c.make_arg_str():::ENTER
