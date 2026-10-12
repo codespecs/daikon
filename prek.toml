@@ -155,6 +155,21 @@ hooks = [
   ] } },
 ]
 
+# In a Makefile, `$FOO` means `${F}OO`, and `($warning ...)` means `(${w}arning ...)`.
+# This hook reports `$` followed by two or more identifier characters, except
+# after `$$` (a literal `$`) and in comment lines.  A recipe line (which starts
+# with a tab) is checked even if it starts with `#`, because Make expands it.
+# Single-letter references such as `$x` are legitimate in `$(foreach x,...)`.
+[[repos]]
+repo = "local"
+hooks = [
+  { id = "check-makefile-dollar", name = "malformed Makefile variable references (write $(FOO) or $$FOO)", language = "pygrep", entry = '^(?:\t.*?|(?!\s*#)(?:[^#]|\\#)*?)(?<!\$)(?:\$\$)*\$[A-Za-z_][A-Za-z0-9_]', files = { glob = [
+    "**/{GNUmakefile,Makefile,makefile,Makefile.*,makefile.*,*.Makefile,*.mak,*.mk}",
+  ] }, exclude = { glob = [
+    "**/Makefile.{am,in}",
+  ] } },
+]
+
 ## Markdown
 
 [[repos]]
