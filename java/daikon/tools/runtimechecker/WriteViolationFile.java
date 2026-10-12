@@ -58,7 +58,7 @@ class WriteViolationFile {
     try {
       mainMethod = cls.getMethod("main", new Class<?>[] {String[].class});
     } catch (NoSuchMethodException e) {
-      throw new Daikon.UserError("Cannot find public main method in class " + className);
+      throw new Daikon.UserError(e, "Cannot find public main method in class " + className);
     }
     if (!Modifier.isStatic(mainMethod.getModifiers())) {
       throw new Daikon.UserError("main method is not static in class " + className);
