@@ -2,12 +2,16 @@
 
 default: daikon
 
+# The directory containing this file.  It is computed before any other file is
+# included, because MAKEFILE_LIST ends with the most recently read makefile.
+JAVA_MAKEFILE_DIR := $(dir $(lastword ${MAKEFILE_LIST}))
+
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
 # Don't let the user override this; it should refer to the current directory.
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
+DAIKONDIR := $(realpath ${JAVA_MAKEFILE_DIR}..)
 
 DAIKONSCRIPTS ?= ${DAIKONDIR}/scripts
 
@@ -29,17 +33,7 @@ BuildJDKTool = BuildJDK
 
 include ${DAIKONDIR}/java/java-home.mk
 
-# The "JAVANN" variables mean "at least version NN", except JAVA8.
-# java-home.mk sets JAVA_RELEASE_NUMBER.
-JAVA8 := $(shell expr ${JAVA_RELEASE_NUMBER} = 8)
-JAVA17 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 17)
-JAVA21 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
-# JDK 24 isn't an LTS version, but we need it to know whether to compile Instrument24.java.
-JAVA24 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 24)
-JAVA25 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 25)
-JAVA26 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 26)
-JAVA27 := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 27)
-ifeq (${JAVA24},1)
+ifeq (${JAVA24_OR_NEWER},1)
   BuildJDKTool = BuildJDK24
 endif
 ifeq (${JAVA_RELEASE_NUMBER},25)
@@ -47,14 +41,14 @@ ifeq (${JAVA_RELEASE_NUMBER},25)
     JAVA25_HOME := ${JAVA_HOME}
   endif
 endif
-# Use JAVA26, not JAVA27, so that JDK 26 has a value for the --system flag below.
-ifeq (${JAVA26},1)
+# Use JAVA26_OR_NEWER, not JAVA27_OR_NEWER, so that JDK 26 has a value for the --system flag below.
+ifeq (${JAVA26_OR_NEWER},1)
   ifndef JAVA27_HOME
     JAVA27_HOME := ${JAVA_HOME}
   endif
 endif
 
-ifeq (${JAVA21},1)
+ifeq (${JAVA21_OR_NEWER},1)
   LINT_THIS_ESCAPE=-Xlint:-this-escape
 endif
 
@@ -64,12 +58,13 @@ OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 ## TODO: It would be better to use "-target 8" for all files EXCEPT those ending in "24.java".
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Use "--source 25 --target 25" because Java 25 is an LTS version.
-ifeq (${JAVA25}, 1)
-  # JAVA25_HOME or JAVA27_HOME is set, because JAVA_HOME is non-empty.
+ifeq (${JAVA25_OR_NEWER}, 1)
   ifdef JAVA25_HOME
     JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}
-  else
+  else ifdef JAVA27_HOME
     JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA27_HOME}
+  else
+    $(error Set JAVA25_HOME or JAVA27_HOME)
   endif
 else
   JAVAC_TARGET_FLAGS ?= -source 8 -target 8
@@ -145,11 +140,11 @@ JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
 JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 
-DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
+DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/java-getopt-*.jar):$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 DOCLET_FLAGS :=
 LINKOFFLINE := https://docs.oracle.com/javase/8/docs/api/
-ifeq ($(shell expr ${JAVA_RELEASE_NUMBER} \>= 11),1)
+ifeq (${JAVA11_OR_NEWER},1)
   DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
   LINKOFFLINE := https://docs.oracle.com/en/java/javase/17/docs/api/
 endif
@@ -167,7 +162,7 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER := sort
 endif
 
-ifeq (${JAVA8}, 1)
+ifeq (${JAVA_RELEASE_NUMBER},8)
 dummy := $(shell cp -pf daikon/config/InvariantDoclet.java8 daikon/config/InvariantDoclet.java)
 dummy := $(shell cp -pf daikon/config/ParameterDoclet.java8 daikon/config/ParameterDoclet.java)
 else
@@ -176,21 +171,21 @@ dummy := $(shell cp -pf daikon/config/ParameterDoclet.java11 daikon/config/Param
 endif
 
 DAIKON_JAVA_FILES := $(shell find daikon/ -name '*.java' -not -name '*\#*' -print | ${SORT_DIRECTORY_ORDER})
-ifeq (${JAVA24}, 0)
+ifeq (${JAVA24_OR_NEWER}, 0)
   DAIKON_JAVA_FILES :=  $(filter-out %24.java, ${DAIKON_JAVA_FILES})
 endif
 JAVA_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
-ifeq (${JAVA24}, 0)
+ifeq (${JAVA24_OR_NEWER}, 0)
   JAVA_FILES :=  $(filter-out %24.java, ${JAVA_FILES})
 endif
 JAVA_FILES_FOR_DEPENDENCES := $(filter-out daikon/test/split/SplitterFactoryTestUpdater.java, $(filter-out daikon/test/split/SplitterFactoryTest.java, ${JAVA_FILES}))
 JAVA_FILES_FOR_STYLE := $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' -o -path './daikon/dcomp-transfer' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
-ifeq (${JAVA24}, 0)
+ifeq (${JAVA24_OR_NEWER}, 0)
   JAVA_FILES_FOR_STYLE :=  $(filter-out %24.java, ${JAVA_FILES_FOR_STYLE})
 endif
 # Other find commands should perhaps use the recursive grep form instead
 JAVA_FILES_FOR_FORMAT := $(shell grep -r --include '*.java' --exclude-dir '*daikon-java*' --exclude-dir '*daikon-instrumented*' --exclude WeakHasherMap.java --exclude WeakIdentityHashMap.java --exclude InvariantDoclet.java --exclude ParameterDoclet.java -L 'This file is automatically generated' . | grep -v "^./jtb" | ${SORT_DIRECTORY_ORDER})
-ifeq (${JAVA24}, 0)
+ifeq (${JAVA24_OR_NEWER}, 0)
   JAVA_FILES_FOR_FORMAT :=  $(filter-out %24.java, ${JAVA_FILES_FOR_FORMAT})
 endif
 
@@ -528,7 +523,7 @@ rename-dcruntime:
 # Chicory java front end for Daikon
 #
 CHICORY_JAVA_FILES := daikon/Chicory.java $(wildcard daikon/chicory/*.java)
-ifeq (${JAVA24}, 0)
+ifeq (${JAVA24_OR_NEWER}, 0)
 CHICORY_JAVA_FILES := $(filter-out %24.java, ${CHICORY_JAVA_FILES})
 endif
 
@@ -562,7 +557,7 @@ daikon/chicory/inv_out.diff: ChicoryPremain.jar
 # Dynamic Comparability (DynComp/Java; also Chicory)
 #
 INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java $(wildcard daikon/dcomp/*.java daikon/chicory/*.java)
-ifeq (${JAVA24}, 0)
+ifeq (${JAVA24_OR_NEWER}, 0)
 INSTRUMENTATION_JAVA_FILES := $(filter-out %24.java, ${INSTRUMENTATION_JAVA_FILES})
 endif
 
@@ -796,7 +791,7 @@ errorprone: compile errorprone-nocompile
 #   -Xep:PatternMatchingInstanceof:OFF  requires Java 17 source code
 #   -Xep:StringConcatToTextBlock:OFF  requires Java 15 source code (text blocks)
 errorprone-nocompile:
-ifneq (${JAVA21}, 1)
+ifneq (${JAVA21_OR_NEWER}, 1)
 	@echo "Error Prone is only run under Java 21+"
 else
 	@echo "Using Error Prone version ${error-prone-version}"
@@ -860,10 +855,10 @@ audit:
 .PHONY: reformat check-format
 
 # google-java-format requires JDK 21 or later.  The scripts run the java on the
-# PATH, so put the JDK at JAVA_HOME (which determines JAVA21) first on the PATH.
+# PATH, so put the JDK at JAVA_HOME (which determines JAVA21_OR_NEWER) first on the PATH.
 format: reformat
 reformat:
-ifeq (${JAVA21}, 0)
+ifeq (${JAVA21_OR_NEWER}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
@@ -872,7 +867,7 @@ else
 endif
 
 check-format:
-ifeq (${JAVA21}, 0)
+ifeq (${JAVA21_OR_NEWER}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
@@ -893,7 +888,7 @@ endif
 # version 8 rather than version 9, and so typecheck jobs can be run in parallel).
 # JAVACHECK_EXTRA_ARGS is set only by the user.
 CHECKER_ARGS_ALL_JDK_VERSIONS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -Aversion -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -AwarnRedundantAnnotations -XDignore.symbol.file -Xlint:deprecation -proc:only -processorpath ${CHECKERFRAMEWORK_JAR} ${JAVACHECK_EXTRA_ARGS}
-ifeq (${JAVA8},1)
+ifeq (${JAVA_RELEASE_NUMBER},8)
   CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC}
 else
   CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} \
@@ -1187,7 +1182,7 @@ check-serialize:
 junit: daikon/Daikon.class
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
-ifeq (${JAVA24}, 1)
+ifeq (${JAVA24_OR_NEWER}, 1)
 	@# These tests are not in AllTestsSuite, because AllTestsSuite must compile
 	@# under versions of Java that do not have java.lang.classfile.
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite24
@@ -1258,12 +1253,12 @@ DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' | egrep -v 'd
 javadoc-files.txt:
 	${MAKE} ${AUTO_GENERATED_FILES}
 	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*24.java" -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
-ifeq (${JAVA24}, 1)
+ifeq (${JAVA24_OR_NEWER}, 1)
 	find * -name "*24.java" -print | ${SORT_DIRECTORY_ORDER} >> javadoc-files.txt
 endif
 
 # If Java 8, don't run javadoc; a bug in javadoc causes it to crash.
-ifeq (${JAVA8}, 1)
+ifeq (${JAVA_RELEASE_NUMBER},8)
   SKIP_JAVADOC=1
 endif
 
@@ -1304,7 +1299,7 @@ endif
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ${PLUME_SCRIPTS} ${AUTO_GENERATED_FILES}
-ifeq (${JAVA8},1)
+ifeq (${JAVA_RELEASE_NUMBER},8)
 	@echo "Skipping api-private target under Java 8"
 else
 	mkdir -p ${JAVADOC_DEST}
@@ -1373,18 +1368,18 @@ showvars:
 	@echo PATH = $${PATH}
 
 	@echo JAVA_HOME = ${JAVA_HOME}
-	which java
-	java -version 2>&1
-	which javac
-	javac -version
+	${JAVA_HOME}/bin/java -version 2>&1
 	${JAVA_HOME}/bin/javac -version
+	# Some helper scripts use the java on the PATH.
+	-which java
+	-java -version 2>&1
 	@echo JAVA = ${JAVA}
 	@echo JAVA_COMMAND = ${JAVA_COMMAND}
 	@echo JAVAC = ${JAVAC}
 	@echo JAVAC_ARGS = ${JAVAC_ARGS}
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
 	@echo SKIP_JAVADOC = ${SKIP_JAVADOC}
-	@echo JAVA24 = ${JAVA24}
+	@echo JAVA24_OR_NEWER = ${JAVA24_OR_NEWER}
 
 	@echo CLASSPATH = "${CLASSPATH}"
 	@echo DAIKON_CLASSPATH = "${DAIKON_CLASSPATH}"

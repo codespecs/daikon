@@ -1,8 +1,10 @@
+# The directory containing this file.  It is computed before any other file is
+# included, because MAKEFILE_LIST ends with the most recently read makefile.
+DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
+
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
-
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
 
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
@@ -20,8 +22,11 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER := sort
 endif
 
-# Use the JDK at JAVA_HOME if it is set, as java/Makefile does; otherwise use the PATH.
-JAVA_BIN := $(if $(strip ${JAVA_HOME}),${JAVA_HOME}/bin/)
+# The bin/ directory of the JDK.  Recipes that run JDK tools use it, as in
+# "${JDK_BIN}/javac".  java-home.mk, which sets and exports JAVA_HOME, is read
+# the first time JDK_BIN is expanded, so that targets that do not use JDK_BIN
+# neither run javac nor need a JDK.
+JDK_BIN = $(eval include ${DAIKONDIR}/java/java-home.mk)$(eval JDK_BIN := $${CHECKED_JAVA_HOME}/bin)${JDK_BIN}
 
 
 ##########################################################################
@@ -302,15 +307,15 @@ junit:
 # are working properly.
 quick-test:
 	cd examples/java-examples/StackAr; \
-	${JAVA_BIN}javac -g DataStructures/*.java
+	${JDK_BIN}/javac -g DataStructures/*.java
 	@echo "Running Chicory/Daikon"
 	cd examples/java-examples/StackAr; \
-	${JAVA_BIN}java -cp ${QT_PATH} daikon.Chicory --daikon DataStructures.StackArTester
+	${JDK_BIN}/java -cp ${QT_PATH} daikon.Chicory --daikon DataStructures.StackArTester
 	@echo "Running DynComp/Chicory/Daikon"
 	cd examples/java-examples/StackAr; \
-	${JAVA_BIN}java -cp ${QT_PATH} daikon.DynComp DataStructures.StackArTester; \
-	${JAVA_BIN}java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
-	${JAVA_BIN}java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
+	${JDK_BIN}/java -cp ${QT_PATH} daikon.DynComp DataStructures.StackArTester; \
+	${JDK_BIN}/java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
+	${JDK_BIN}/java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
 
 # Sanity check, suitable for continuous integration.
 nightly-test:
@@ -450,9 +455,9 @@ staging:
 	# Build javadoc
 	@echo "]2;Building Javadoc"
 	mkdir ${STAGING_DIR}/download/api
-	# Javadoc is skipped on Java 8.  Hard-coded JAVA_HOME path is a hack.
+	# Javadoc is skipped on Java 8, so use Java 11 if it exists.  Hard-coded path is a hack.
 	# java/Makefile uses the JDK at JAVA_HOME; helper scripts use the one on the PATH.
-	(export JAVA_HOME=/usr/lib/jvm/java-11; export PATH=$${JAVA_HOME}/bin:${PATH}; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
+	(if [ -x /usr/lib/jvm/java-11/bin/javac ]; then export JAVA_HOME=/usr/lib/jvm/java-11; export PATH=$${JAVA_HOME}/bin:${PATH}; fi; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	mkdir ${STAGING_DIR}/download/doc
@@ -607,11 +612,11 @@ daikon.jar: ${DAIKON_JAVA_FILES} $(patsubst %,java/%,${DAIKON_RESOURCE_FILES})
 		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
 
 	# make hamcrest and junit4 overwrite junit5 to get our special versions
-	for filename in ${JAR_DIR}/java/lib/*.jar ${JAR_DIR}/java/lib/hamcrest*.jar ${JAR_DIR}/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; ${JAVA_BIN}jar xf $$filename ; done
+	for filename in ${JAR_DIR}/java/lib/*.jar ${JAR_DIR}/java/lib/hamcrest*.jar ${JAR_DIR}/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; ${JDK_BIN}/jar xf $$filename ; done
 	(cd java; ${RSYNC_AR} ${DAIKON_RESOURCE_FILES} ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
-	  ${JAVA_BIN}jar cfm $@ ${JAR_DIR}/java/daikon/chicory/manifest.txt *
+	  ${JDK_BIN}/jar cfm $@ ${JAR_DIR}/java/daikon/chicory/manifest.txt *
 	mv ${TMPDIR}/daikon-jar/$@ $@
 	#rm -rf ${TMPDIR}/daikon-jar
 
