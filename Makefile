@@ -25,7 +25,9 @@ endif
 # The bin/ directory of the JDK.  Recipes that run JDK tools use it, as in
 # "${JDK_BIN}/javac".  java-home.mk, which sets and exports JAVA_HOME, is read
 # the first time JDK_BIN is expanded, so that targets that do not use JDK_BIN
-# neither run javac nor need a JDK.
+# neither run javac nor need a JDK.  Therefore, JAVA_HOME, JAVA_RELEASE_NUMBER,
+# and the JAVANN_OR_NEWER variables are not set in this file until JDK_BIN has
+# been expanded; recipes should use ${JDK_BIN} rather than those variables.
 JDK_BIN = $(eval include ${DAIKONDIR}/java/java-home.mk)$(eval JDK_BIN := $${JAVA_HOME}/bin)${JDK_BIN}
 
 
