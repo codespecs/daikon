@@ -25,8 +25,12 @@ endif
 # The bin/ directory of the JDK.  Recipes that run JDK tools use it, as in
 # "${JDK_BIN}/javac".  java-home.mk, which sets and exports JAVA_HOME, is read
 # the first time JDK_BIN is expanded, so that targets that do not use JDK_BIN
-# neither run javac nor need a JDK.
-JDK_BIN = $(eval include ${DAIKONDIR}/java/java-home.mk)$(eval JDK_BIN := $${CHECKED_JAVA_HOME}/bin)${JDK_BIN}
+# neither run javac nor need a JDK.  Therefore, JAVA_HOME, JAVA_RELEASE_NUMBER,
+# and the JAVANN_OR_NEWER variables are not set in this file until JDK_BIN has
+# been expanded; recipes should use ${JDK_BIN} rather than those variables.
+# JDK_BIN does not redefine itself, because make's expansion of a variable can
+# misbehave if the variable is redefined during that expansion.
+JDK_BIN = $(if ${JAVA_HOME_MK_READ},,$(eval include ${DAIKONDIR}/java/java-home.mk)$(eval JAVA_HOME_MK_READ := 1))${CHECKED_JAVA_HOME}/bin
 
 
 ##########################################################################
@@ -38,7 +42,7 @@ JDK_BIN = $(eval include ${DAIKONDIR}/java/java-home.mk)$(eval JDK_BIN := $${CHE
 
 # note that for right now, we are only copying the html and texinfo
 # versions of the developer manual (though the PDF version is also built)
-IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.dot
+IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,${IMAGE_FILES})
 DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo \
                        config-options.texinfo invariants-doc.texinfo \
@@ -58,7 +62,7 @@ README_PATHS := README doc/README fjalar/README
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
                       doc/index.html doc/www/download/index.html
 
-# Scripts, such as Perl programs, that are included in the Daikon distribution.
+# Scripts that are included in the Daikon distribution.
 # Why not just include all of them?  (Maybe to avoid problems with
 # accidentally including things in the user's checkout that are not needed
 # by most users, but why not include everything that's in repository?)
@@ -67,7 +71,6 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 # from the 'Installation' section of the Daikon manual.
 SCRIPT_FILES := Makefile \
 	daikon.bashrc \
-	dfepl dtrace-perl dtype-perl \
 	java-cpp \
 	kvasir-dtrace \
 	convertcsv.pl \
@@ -143,16 +146,6 @@ endif
 
 # For deterministic sorting
 export LC_ALL=C
-
-## Examples of better ways to get the lists:
-# PERL_MODULES := $(wildcard *.pm)
-# PERL_SCRIPTS := $(wildcard *.pl)
-# PERL_SCRIPTS += em_analyze em_reports cppp
-# PERL_MODULE_TEXI := $(patsubst %.pm,%.texi,${PERL_MODULES})
-# PERL_MODULE_INFO := $(patsubst %.pm,%.info,${PERL_MODULES})
-# PERL_MODULE_MAN := $(patsubst %.pm,%.man,${PERL_MODULES})
-# PERL_MODULE_HTML := $(patsubst %.pm,%.html,${PERL_MODULES})
-
 
 ###########################################################################
 ### Rules
@@ -663,10 +656,6 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	# Keep .java files, delete everything else
 	(cd ${TMPDIR}/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print0 | xargs -0 rm -rf)
 
-	# Perl example files
-	mkdir ${TMPDIR}/daikon/examples/perl-examples
-	(cd examples/perl-examples && cp -p Birthday.accessors Birthday.pm standalone.pl test_bday.pl ${TMPDIR}/daikon/examples/perl-examples)
-
 	# C example files for Kvasir
 	mkdir ${TMPDIR}/daikon/examples/c-examples
 	mkdir ${TMPDIR}/daikon/examples/c-examples/bzip2
@@ -689,14 +678,6 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	# Maybe I should do  ${MAKE} javadoc
 	# Don't do  ${MAKE} clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; ${RM_TEMP_FILES})
-
-	## Front ends
-	mkdir ${TMPDIR}/daikon/front-end
-
-	# Perl front end
-	# mkdir ${TMPDIR}/daikon/front-end/perl
-	cp -pR front-end/perl ${TMPDIR}/daikon/front-end
-	(cd ${TMPDIR}/daikon/front-end/perl; ${RM_TEMP_FILES} )
 
 	# Kvasir C front end
 # We use the --filter option twice with rsync to exclude unneeded files.

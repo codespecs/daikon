@@ -12,7 +12,9 @@
 ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
 endif
-include ${DAIKONDIR}/tests/Makefile.jdk
+# Find Makefile.jdk relative to this file, not via DAIKONDIR, which may name a
+# different Daikon tree.
+include $(dir $(lastword ${MAKEFILE_LIST}))../../Makefile.jdk
 
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
 DAIKON = ${DAIKONDIR}/java/daikon/Daikon.class

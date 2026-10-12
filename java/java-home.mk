@@ -3,9 +3,10 @@
 # contains the javac on the PATH.  It also sets CHECKED_JAVA_HOME (see below),
 # JAVA_VERSION_STRING_WITH_EA (e.g., "27-ea"), JAVA_VERSION_STRING (e.g., "27"
 # or "1.8.0_402"), JAVA_RELEASE_NUMBER (e.g., "27" or "8"), and JAVANN_OR_NEWER
-# (e.g., JAVA21_OR_NEWER), all for the JDK at JAVA_HOME.
+# (e.g., JAVA21_OR_NEWER), all for the JDK at JAVA_HOME.  It puts the JDK's bin/
+# directory at the front of the PATH.
 # If there is no JDK, JAVA_RELEASE_NUMBER is 0 and every JAVANN_OR_NEWER is 0.
-# It is included by java/Makefile, tests/Makefile.common, and ../Makefile.
+# It is included by java/Makefile, tests/Makefile.jdk, and ../Makefile.
 
 # For JDK 8, java.home is the jre/ subdirectory of the JDK, and a user's
 # JAVA_HOME may be too.  jdk_of_jre yields the JDK if its argument is such a
@@ -61,6 +62,11 @@ endif
 JAVA_RELEASES_THROUGH_CURRENT := $(shell seq 8 '${JAVA_RELEASE_NUMBER}' 2>/dev/null)
 ifeq ($(filter ${JAVA_RELEASE_NUMBER},${JAVA_RELEASES_THROUGH_CURRENT}),)
   $(error Java 8 or later is required; "${JAVA_HOME}/bin/javac -version" yields "${JAVA_VERSION_STRING_WITH_EA}")
+endif
+
+# Helper scripts that run "java" or "javac" use the JDK at JAVA_HOME.
+ifneq ($(firstword $(subst :, ,${PATH})),${JAVA_HOME}/bin)
+  export PATH := ${JAVA_HOME}/bin:${PATH}
 endif
 
 else
