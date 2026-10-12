@@ -4,6 +4,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import daikon.Daikon;
 import daikon.DaikonGetopt;
@@ -26,27 +27,43 @@ import org.junit.function.ThrowingRunnable;
  */
 public class BadOptionTest {
 
-  /** The long options used by {@link #parse}. */
+  /** The long options used by {@link #parse}. DaikonGetopt adds {@code --help}. */
   private static final LongOpt[] longopts =
       new LongOpt[] {
-        new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt("config", LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt("config_option", LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt("debug", LongOpt.REQUIRED_ARGUMENT, null, 'd'),
         new LongOpt("verbose", LongOpt.NO_ARGUMENT, null, 'v'),
       };
 
+  /** The suffix of every description of a bad command-line option. */
+  private static final String USAGE_HINT = "; run with -h for usage";
+
   /**
    * Parses the given command-line arguments, which must contain a bad option, and returns the
-   * resulting error message.
+   * resulting error message, without its suffix that suggests running with -h.
+   *
+   * @param optstring the short options, in the format of Getopt
+   * @param args command-line arguments
+   * @return the message of the UserError for the bad option, without {@link #USAGE_HINT}
+   */
+  private static String parseWith(String optstring, String... args) {
+    DaikonGetopt g = new DaikonGetopt(args, optstring, longopts, "usage");
+    Daikon.UserError e = assertThrows(Daikon.UserError.class, () -> consumeAll(g));
+    String message = String.valueOf(e.getMessage());
+    assertTrue(message, message.endsWith(USAGE_HINT));
+    return message.substring(0, message.length() - USAGE_HINT.length());
+  }
+
+  /**
+   * Parses the given command-line arguments, which must contain a bad option, and returns the
+   * resulting error message, without its suffix that suggests running with -h.
    *
    * @param args command-line arguments
-   * @return the message of the UserError for the bad option
+   * @return the message of the UserError for the bad option, without {@link #USAGE_HINT}
    */
   private static String parse(String... args) {
-    DaikonGetopt g = new DaikonGetopt(args, "ho:", longopts);
-    Daikon.UserError e = assertThrows(Daikon.UserError.class, () -> consumeAll(g));
-    return String.valueOf(e.getMessage());
+    return parseWith("vo:", args);
   }
 
   /**
@@ -64,15 +81,15 @@ public class BadOptionTest {
     assertEquals("Unrecognized command-line option --bogus", parse("--bogus"));
     assertEquals("Unrecognized command-line option --bogus", parse("--bogus=3"));
     assertEquals("Unrecognized command-line option --=3", parse("--=3"));
-    assertEquals("Unrecognized command-line option --bogus", parse("-h", "--bogus", "file"));
+    assertEquals("Unrecognized command-line option --bogus", parse("-v", "--bogus", "file"));
   }
 
   /** Tests an unrecognized short option, alone and combined with a valid one. */
   @Test
   public void testUnrecognizedShortOption() {
     assertEquals("Unrecognized command-line option -x", parse("-x"));
-    assertEquals("Unrecognized command-line option -x", parse("-xh"));
-    assertEquals("Unrecognized command-line option -x", parse("-hx"));
+    assertEquals("Unrecognized command-line option -x", parse("-xv"));
+    assertEquals("Unrecognized command-line option -x", parse("-vx"));
     assertEquals("Unrecognized command-line option -:", parse("-:"));
   }
 
@@ -80,9 +97,7 @@ public class BadOptionTest {
   @Test
   public void testNoShortOptions() {
     for (String arg : new String[] {"- ", "-x", "-:"}) {
-      DaikonGetopt g = new DaikonGetopt(new String[] {arg}, "", longopts);
-      Daikon.UserError e = assertThrows(Daikon.UserError.class, g::getopt);
-      assertEquals("Unrecognized command-line option " + arg, String.valueOf(e.getMessage()));
+      assertEquals("Unrecognized command-line option " + arg, parseWith("", arg));
     }
   }
 
@@ -93,35 +108,20 @@ public class BadOptionTest {
     assertEquals("Ambiguous command-line option --conf", parse("--conf"));
   }
 
-  /** Tests that the description of a bad option suggests -h if DaikonGetopt handles -h. */
-  @Test
-  public void testUsageHint() {
-    DaikonGetopt g = new DaikonGetopt(new String[] {"--bogus"}, "o:", new LongOpt[0], "usage");
-    Daikon.UserError e = assertThrows(Daikon.UserError.class, g::getopt);
-    assertEquals(
-        "Unrecognized command-line option --bogus; run with -h for usage",
-        String.valueOf(e.getMessage()));
-  }
-
   /** Tests options that are missing their required argument. */
   @Test
   public void testMissingArgument() {
     assertEquals("Command-line option --config requires an argument", parse("--config"));
     assertEquals("Command-line option --debug requires an argument", parse("--deb"));
     assertEquals("Command-line option -o requires an argument", parse("-o"));
-    assertEquals("Command-line option -o requires an argument", parse("-ho"));
+    assertEquals("Command-line option -o requires an argument", parse("-vo"));
   }
 
   /** Tests options that are missing their required argument, when the optstring starts with ':'. */
   @Test
   public void testMissingArgumentLeadingColon() {
-    DaikonGetopt g = new DaikonGetopt(new String[] {"-o"}, ":ho:", longopts);
-    Daikon.UserError e = assertThrows(Daikon.UserError.class, g::getopt);
-    assertEquals("Command-line option -o requires an argument", String.valueOf(e.getMessage()));
-    g = new DaikonGetopt(new String[] {"--config"}, ":ho:", longopts);
-    e = assertThrows(Daikon.UserError.class, g::getopt);
-    assertEquals(
-        "Command-line option --config requires an argument", String.valueOf(e.getMessage()));
+    assertEquals("Command-line option -o requires an argument", parseWith(":o:", "-o"));
+    assertEquals("Command-line option --config requires an argument", parseWith(":o:", "--config"));
   }
 
   /** Tests long options that are given an argument they do not take. */
@@ -139,7 +139,7 @@ public class BadOptionTest {
    */
   private static void assertBadOption(String description, ThrowingRunnable mainCall) {
     Daikon.UserError e = assertThrows(Daikon.UserError.class, mainCall);
-    assertEquals(description + "; run with -h for usage", String.valueOf(e.getMessage()));
+    assertEquals(description + USAGE_HINT, String.valueOf(e.getMessage()));
   }
 
   /** Tests an unrecognized long option in a tool. */
