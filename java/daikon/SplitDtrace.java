@@ -5,6 +5,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,6 +75,9 @@ public final class SplitDtrace {
       ArrayList<String> rec = new ArrayList<>();
       while (true) {
         readRec(reader, rec);
+        if (rec.isEmpty()) {
+          throw new Daikon.UserError("No DECLARE record in " + filename);
+        }
         if (isDeclare(rec)) {
           break;
         }
@@ -89,6 +93,8 @@ public final class SplitDtrace {
           recNum++;
         }
       }
+    } catch (FileNotFoundException e) {
+      throw new Daikon.UserError(e, "File not found");
     }
 
     System.out.println(

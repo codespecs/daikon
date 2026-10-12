@@ -7,6 +7,7 @@ import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.ValueTuple;
 import daikon.VarInfo;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -72,7 +73,7 @@ public class ReadTrace {
       // `read_data_trace_files()` requires the list of files to be modifiable.
       FileIO.read_data_trace_files(
           new ArrayList<>(Arrays.asList(traceFiles)), ppts, processor, false);
-    } catch (Exception e) {
+    } catch (IOException e) {
       throw new Error(e);
     }
 
