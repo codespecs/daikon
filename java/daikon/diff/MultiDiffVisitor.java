@@ -46,6 +46,12 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     spinfoMode = true;
   }
 
+  /** Undoes {@link #setForSpinfoOut}: subsequent output goes to System.out, not in spinfo mode. */
+  public static void resetSpinfoOut() {
+    MultiDiffVisitor.out = System.out;
+    spinfoMode = false;
+  }
+
   @Override
   public void visit(RootNode node) {
 
