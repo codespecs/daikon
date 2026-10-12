@@ -276,8 +276,8 @@ or else log out and log back in to achieve the same
 effect.
 
 @item
-Optionally, customize other variables.  The customizable variables are
-listed in the Daikon startup file: @file{$@{DAIKONDIR@}/scripts/daikon.bashrc}.
+Optionally, customize variables used when building Daikon.  The
+customizable variables are defined in @file{$@{DAIKONDIR@}/java/Makefile}.
 
 You may customize them by setting environment variables, or by adding a
 @file{Makefile.user} file to directory @file{$@{DAIKONDIR@}/java} (it is
