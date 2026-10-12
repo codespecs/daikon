@@ -28,16 +28,26 @@ my @decls;
 # blank lines between them, and a blank line follows the last of them.
 my $after_header = 0;
 
+# The line ending of the current file, "\n" or "\r\n".
+my $newline = "\n";
+
+# Prints the arguments, using the line ending of the current file.
+sub output {
+    my $text = join("", @_);
+    $text =~ s/\n/\r\n/g if $newline ne "\n";
+    print $text;
+}
+
 sub end_headers {
     if ($after_header) {
-	print "\n";
+	output "\n";
 	$after_header = 0;
     }
 }
 
 sub flush_decls {
     foreach my $decl (sort { $a->[1] cmp $b->[1] } @decls) {
-	print $decl->[0], $decl->[1], "\n";
+	output $decl->[0], $decl->[1], "\n";
     }
     @decls = ();
 }
@@ -83,10 +93,11 @@ for_each_record(\&process_record, sub { end_headers(); flush_decls(); });
 
 sub process_record {
     my ($record) = @_;
+    $newline = $record->{newline};
     my $kind = $record->{kind};
     if ($kind eq "header") {
 	flush_decls();
-	print $record->{comments}, $record->{text};
+	output $record->{comments}, $record->{text};
 	$after_header = 1;
 	return;
     }
@@ -98,23 +109,36 @@ sub process_record {
 	return;
     }
     flush_decls();
-    print $record->{comments};
+    output $record->{comments};
     if ($kind eq "list-implementors") {
-	print $record->{text}, "\n";
+	output $record->{text}, "\n";
     } elsif ($kind eq "data") {
-	my @lines = split(/\n/, $record->{text});
-	my @header;
-	push @header, shift @lines;
-	if (@lines and $lines[0] eq "this_invocation_nonce") {
-	    push @header, shift @lines;
-	    push @header, shift @lines;
+	my ($pptname, @lines) = split(/\n/, $record->{text});
+	# Each element is a [comments, line] pair for one non-comment line.  A
+	# comment line stays with the line that follows it.
+	my @items;
+	# Comment lines that are not yet attached to a line.
+	my $pending = "";
+	foreach my $line (@lines) {
+	    if (is_comment_line($line)) {
+		$pending .= "$line\n";
+	    } else {
+		push @items, [$pending, $line];
+		$pending = "";
+	    }
 	}
-	die "Bad number of lines in $ARGV at line $record->{line}" unless @lines % 3 == 0;
+	my @header = ($pptname);
+	if (@items and $items[0][1] eq "this_invocation_nonce") {
+	    push @header, map { $_->[0] . $_->[1] } splice(@items, 0, 2);
+	}
+	die "Bad number of lines in $ARGV at line $record->{line}" unless @items % 3 == 0;
+	# Each element is a [name, text] pair for one variable.
 	my @vars;
-	while (@lines) {
-	    push @vars, join("\n", splice(@lines, 0, 3));
+	while (@items) {
+	    my @var = splice(@items, 0, 3);
+	    push @vars, [$var[0][1], join("\n", map { $_->[0] . $_->[1] } @var)];
 	}
-	@vars = sort @vars;
-	print join("\n", @header, @vars), "\n\n";
+	@vars = map { $_->[1] } sort { $a->[0] cmp $b->[0] || $a->[1] cmp $b->[1] } @vars;
+	output join("\n", @header, @vars), "\n", $pending, "\n";
     }
 }

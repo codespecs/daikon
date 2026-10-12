@@ -21,14 +21,17 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
-## Version ??
+## Version 5.9.1 (???, 2026)
+
+* Daikon and its tools now reject a malformed command-line option.
+* `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
+   no effect.
+* Removed the Perl front end, dfepl.
 
 Daikon no longer reads `.decls` and `.dtrace` files in the obsolete version 1
 format (files that contain `decl-version 1.0`, `VarComparability`, or `DECLARE`
 records).  Re-generate such files with a current front end.  Daikon also cannot read `.inv` files written by
 earlier versions of Daikon.
-
-Removed the Perl front end, dfepl.
 
 Removed configuration option `daikon.PrintInvariants.remove_post_vars`, which
 had an effect only for version 1 files.

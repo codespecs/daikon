@@ -12,9 +12,10 @@ with Path(sys.argv[1]).open() as f:
     all_lines = [line.strip() for line in f]
 
 # Key: program point name
-# Value: a list where each element is the size of a comparability set
-#        for that ppt
-ppt_info_dict = {}
+# Value: a pair of a list where each element is the size of a comparability
+#        set for that ppt, and the number of variables that are comparable
+#        to every variable at that ppt
+ppt_info_dict: dict[str, tuple[list[int], int]] = {}
 
 # The current program point we are analyzing
 cur_ppt = None
@@ -22,6 +23,9 @@ cur_ppt = None
 # Initialize this to an empty list and append on the size of the
 # comparability sets for each line you encounter in the program point.
 cur_ppt_set_sizes: list[int] = []
+# The number of variables at the current program point that are comparable
+# to every variable.  decls2comp.py lists them on a line starting with "-1:".
+cur_ppt_num_always_comparable = 0
 
 # Initialize ppt_info_dict
 for line in all_lines:
@@ -35,10 +39,15 @@ for line in all_lines:
         # Normally, throw all of the data about the previous program
         # point into ppt_info_dict and update cur_ppt
         else:
-            ppt_info_dict[cur_ppt] = cur_ppt_set_sizes
+            ppt_info_dict[cur_ppt] = (cur_ppt_set_sizes, cur_ppt_num_always_comparable)
             cur_ppt = line
 
         cur_ppt_set_sizes = []
+        cur_ppt_num_always_comparable = 0
+
+    # The variables that are comparable to every variable
+    elif line.startswith("-1:"):
+        cur_ppt_num_always_comparable = len(line.split()) - 1
 
     # (Ignore blank lines) ... we hit a space-delimited list of
     # comparable variables
@@ -46,6 +55,8 @@ for line in all_lines:
         # Size of comparability set for that line (usually 1)
         cur_ppt_set_sizes.append(len(line.split()))
 
+if cur_ppt:
+    ppt_info_dict[cur_ppt] = (cur_ppt_set_sizes, cur_ppt_num_always_comparable)
 
 # Now ppt_info_dict should be initialized with all numerical data.
 # We can now crunch numbers and produce useful-looking results
@@ -58,9 +69,15 @@ total_vars = 0
 
 total_square_vars_no_comp = 0
 
-for ppt, comp_set_sizes_at_ppt in ppt_info_dict.items():  # ruff:ignore[unused-loop-control-variable, incorrect-dict-iterator]
-    total_vars_at_ppt = sum(comp_set_sizes_at_ppt)
-    square_vars_at_ppt = sum((i * i) for i in comp_set_sizes_at_ppt)
+for ppt, (comp_set_sizes_at_ppt, num_always_comparable) in ppt_info_dict.items():  # ruff:ignore[unused-loop-control-variable, incorrect-dict-iterator]
+    total_vars_at_ppt = sum(comp_set_sizes_at_ppt) + num_always_comparable
+    # The sum, over all variables at the ppt, of the number of variables it is
+    # comparable to.  A variable in a comparability set of size i is
+    # comparable to the i variables in its set and to every variable that is
+    # comparable to every variable.
+    square_vars_at_ppt = sum((i * (i + num_always_comparable)) for i in comp_set_sizes_at_ppt) + (
+        num_always_comparable * total_vars_at_ppt
+    )
 
     if total_vars_at_ppt > 0:
         avg_for_ppt = float(square_vars_at_ppt) / float(total_vars_at_ppt)
