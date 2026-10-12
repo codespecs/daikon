@@ -23,6 +23,9 @@ Further documentation can be found in:
 
 ## Version 5.9.1 (???, 2026)
 
+* Daikon and its tools now reject a malformed command-line option.
+* `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
+   no effect.
 * New tool `daikon.tools.MergeComparability` merges the comparability
   information from multiple runs of DynComp.
 
