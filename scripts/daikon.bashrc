@@ -1,6 +1,7 @@
 ## daikon.bashrc
 ## Daikon initialization file for bash users.
 ## It sets DAIKONDIR and puts Daikon's scripts on your PATH.
+## If JAVA_HOME is set, it also appends $JAVA_HOME/bin to your PATH.
 
 ## You should not need to edit this file.
 
@@ -22,4 +23,4 @@ else
   export DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
 fi
 
-export PATH=${DAIKONDIR}/scripts:${PLUME_SCRIPTS:-${DAIKONDIR}/.utils/plume-scripts}:${PATH}
+export PATH=${DAIKONDIR}/scripts:${PLUME_SCRIPTS:-${DAIKONDIR}/.utils/plume-scripts}:${PATH}${JAVA_HOME:+:${JAVA_HOME}/bin}
