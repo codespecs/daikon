@@ -22,14 +22,33 @@ my %ppt_count;
 
 my %long_names;
 
+# A truncated record is marked by a "// EOF" line, which is either within
+# the record or among the comment lines that follow it, which precede the
+# next record.  Therefore, a data record is counted only once the next
+# record has been read, or at the end of the file.
+my $pending;                    # the data record that has not yet been counted
+
 for_each_record(sub {
   my ($record) = @_;
+  if (defined($pending)) {
+    count_record($pending, scalar($record->{comments} =~ m{^// EOF}m));
+    undef $pending;
+  }
   # Skip headers and declarations
-  count_record($record->{text}) if $record->{kind} eq "data";
+  $pending = $record if $record->{kind} eq "data";
+}, sub {
+  if (defined($pending)) {
+    count_record($pending, 0);
+    undef $pending;
+  }
 });
 
+# Counts the data record given by the first argument.  The second argument
+# is true if a "// EOF" line follows the record.
 sub count_record {
-    local $_ = shift;
+    my ($record, $followed_by_eof) = @_;
+    local $_ = $record->{text};
+    my $truncated = ($followed_by_eof || $_ =~ "// EOF");
     return if /^Begin/ or /^Done/; # Skip processing program point comments
     # This script assumes that each program point name contains ":::".
     /^(.*):::(.+)$/m or die "Can't parse PPT name from <$_>";
@@ -47,7 +66,7 @@ sub count_record {
 	die "Mismatched line count (expected $ppt_count{$name}[1], found $line_count)".
 	  " for $name in $_"
 	    unless (($ppt_count{$name}[1] == $line_count)
-                    || ($_ =~ "// EOF") || ($name=~m/std::allocator<testing::/));
+                    || $truncated || ($name=~m/std::allocator<testing::/));
     } else {
 	$ppt_count{$name}[0] = 1;
 	$ppt_count{$name}[1] = $line_count;
