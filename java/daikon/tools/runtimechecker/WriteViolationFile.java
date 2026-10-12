@@ -38,10 +38,6 @@ class WriteViolationFile {
           "  except that CLASS is written as a binary name, not a fully-qualified name",
           "Output is written to file \"violations.txt\" in the current directory.");
 
-  public static void usage() {
-    System.out.println(usageMessage);
-  }
-
   @SuppressWarnings("Finally")
   public static void main(String[] args) {
     String[] classAndArgs;
@@ -52,8 +48,8 @@ class WriteViolationFile {
       return;
     }
     if (classAndArgs.length == 0) {
-      System.out.println("Error: no class specified");
-      usage();
+      System.err.println("Error: no class specified");
+      System.err.println(usageMessage);
       System.exit(1);
     }
     @SuppressWarnings("signature") // will be checked immediately below, and exception is caught

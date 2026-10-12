@@ -83,16 +83,7 @@ public class InstrumentHandler extends CommandHandler {
     }
 
     String[] realArgs = Arrays.copyOfRange(args, 1, args.length);
-    Arguments arguments;
-    try {
-      arguments = readArguments(realArgs);
-    } catch (Daikon.NormalTermination e) {
-      // The user requested the usage message, which has been printed.
-      return true;
-    } catch (Daikon.UserError e) {
-      System.err.println(e.getMessage());
-      return false;
-    }
+    Arguments arguments = readArguments(realArgs);
     if (arguments == errorWhileReadingArguments) {
       return false;
     }
@@ -221,8 +212,7 @@ public class InstrumentHandler extends CommandHandler {
           new LongOpt(checkers_directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
         };
     DaikonGetopt g = new DaikonGetopt(args, "", longopts, this::usageMessageString);
-    // The caller prints the usage message when this command fails.
-    g.setUsageHint(null);
+    g.setUsageHint("run with \"instrument -h\" for usage");
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {

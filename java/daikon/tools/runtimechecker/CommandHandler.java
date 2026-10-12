@@ -3,12 +3,8 @@ package daikon.tools.runtimechecker;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Daikon;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.UncheckedIOException;
 
 /**
@@ -25,29 +21,22 @@ public class CommandHandler {
     throw new UnsupportedOperationException();
   }
 
-  /** Prints the usage message to standard error. */
-  public void usageMessage() {
-    usageMessage(System.err);
-  }
-
   /**
-   * Returns the usage message.
+   * Prints the usage message to standard error.
    *
-   * @return the usage message
-   */
-  public String usageMessageString() {
-    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    usageMessage(new PrintStream(bytes, true, UTF_8));
-    return bytes.toString(UTF_8).stripTrailing();
-  }
-
-  /**
-   * Prints the usage message.
-   *
-   * @param out where to print the usage message
    * @throws Daikon.BugInDaikon if the documentation file is missing
    */
-  public void usageMessage(PrintStream out) {
+  public void usageMessage() {
+    System.err.println(usageMessageString());
+  }
+
+  /**
+   * Returns the usage message, which is the contents of this class's documentation file.
+   *
+   * @return the usage message
+   * @throws Daikon.BugInDaikon if the documentation file is missing
+   */
+  public String usageMessageString() {
     String[] classnameArray = getClass().getName().split("\\.");
     String simpleClassname = classnameArray[classnameArray.length - 1];
 
@@ -56,11 +45,8 @@ public class CommandHandler {
     if (in == null) {
       throw new Daikon.BugInDaikon("Didn't find documentation " + docFile + " for " + getClass());
     }
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, UTF_8))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        out.println(line);
-      }
+    try (in) {
+      return new String(in.readAllBytes(), UTF_8).stripTrailing();
     } catch (IOException e) {
       throw new UncheckedIOException("problem reading " + docFile, e);
     }

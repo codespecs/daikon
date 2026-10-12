@@ -28,81 +28,58 @@ public class Main extends CommandHandler {
     return result.toString();
   }
 
+  /** The hint printed after an error message. */
+  private static final String helpHint = "For more help, run the instrumenter with -h.";
+
   /**
    * Entry point for the instrumenter. Passes control to whichever handler can handle the
    * user-specified command.
    *
    * @param args the arguments to the program
+   * @throws Daikon.DaikonTerminationException if the instrumenter should exit
    */
   public void nonStaticMain(String[] args) {
 
     List<CommandHandler> handlers =
         Collections.singletonList((CommandHandler) new InstrumentHandler());
 
-    String[] commandAndArgs;
-    try {
-      commandAndArgs = DaikonGetopt.argsAfterLeadingOptions(args, () -> usageMessage(handlers));
-    } catch (Daikon.DaikonTerminationException e) {
-      Daikon.handleDaikonTerminationException(e);
-      return;
-    }
+    String[] commandAndArgs =
+        DaikonGetopt.argsAfterLeadingOptions(args, () -> usageMessage(handlers));
     if (commandAndArgs.length < 1) {
-      System.err.println("ERROR:  No command given.");
-      System.err.println(
-          "For more help, invoke the instrumenter with \"help\" as its sole argument.");
-      System.exit(1);
+      throw new Daikon.UserError("ERROR:  No command given." + Daikon.lineSep + helpHint);
     }
     if (commandAndArgs[0].toUpperCase(Locale.ENGLISH).equals("HELP")
         || commandAndArgs[0].equals("?")) {
       System.out.println(usageMessage(handlers));
-      System.exit(0);
+      throw new Daikon.NormalTermination();
     }
 
     String command = commandAndArgs[0];
 
-    boolean success = false;
-
     CommandHandler h = null;
-    try {
-
-      for (CommandHandler handler : handlers) {
-        if (handler.handles(command)) {
-          h = handler;
-          success = h.handle(commandAndArgs);
-          if (!success) {
-            System.err.println("The command you issued returned a failing status flag.");
-          }
-          break;
-        }
+    for (CommandHandler handler : handlers) {
+      if (handler.handles(command)) {
+        h = handler;
+        break;
       }
+    }
+    if (h == null) {
+      throw new Daikon.UserError("Unknown command: " + command + Daikon.lineSep + helpHint);
+    }
 
-    } catch (Throwable e) {
-      System.out.println("Throwable thrown while handling command:" + e);
-      e.printStackTrace();
-      success = false;
-    } finally {
-      if (!success) {
-        System.err.println("The instrumenter failed.");
-        if (h == null) {
-          System.err.println("Unknown command: " + command);
-          System.err.println(
-              "For more help, invoke the instrumenter with \"help\" as its sole argument.");
-        } else {
-          // Don't let a problem printing the usage message prevent the exit below.
-          try {
-            h.usageMessage();
-          } catch (RuntimeException e) {
-            System.err.println(e.getMessage());
-          }
-        }
-        System.exit(1);
-      } else {
-      }
+    if (!h.handle(commandAndArgs)) {
+      System.err.println("The command you issued returned a failing status flag.");
+      System.err.println("The instrumenter failed.");
+      h.usageMessage();
+      System.exit(1);
     }
   }
 
   public static void main(String[] args) {
-    Main main = new Main();
-    main.nonStaticMain(args);
+    try {
+      new Main().nonStaticMain(args);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
+    }
   }
 }
