@@ -13,7 +13,7 @@ ESC_ON:=1
 
 include ../../Makefile.common
 
-# USER_DAIKON_OPTIONS:=--var_omit_pattern=".*wrapped.*"
+# USER_DAIKON_OPTIONS:=--var-omit-pattern=".*wrapped.*"
 
 # USER_DAIKON_OPTIONS:=--ppt-select-pattern="^Rat" --config config.txt
 
