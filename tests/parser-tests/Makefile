@@ -1,8 +1,8 @@
 # DAIKONDIR is the clone of the 'daikon' project.
-# See tests/Makefile.common for why this does not use '?='.
 ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../..)
 endif
+include ${DAIKONDIR}/tests/Makefile.jdk
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
@@ -23,6 +23,6 @@ clean:
 	rm -f *.java-parsed *.diff *.log
 
 %.java-parsed : %.java
-	-java -ea -cp .:${DAIKON_CLASSPATH} jtb.JavaParserTest $< > $<.log 2>&1
+	-${JAVA} -ea -cp .:${DAIKON_CLASSPATH} jtb.JavaParserTest $< > $<.log 2>&1
 	-diff -u $< $@ > $@.diff 2>&1
 	@cat $@.diff

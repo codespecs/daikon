@@ -1,10 +1,10 @@
-# This is a -*- makefile -*-, Emacs
+# This is a -*- makefile -*-, Emacs.
 
 # DAIKONDIR is the clone of the 'daikon' project.
-# See tests/Makefile.common for why this does not use '?='.
 ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 endif
+include ${DAIKONDIR}/tests/Makefile.jdk
 DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 # Fails when running "clean".
 # $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
@@ -57,8 +57,8 @@ BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := java -ea -Xmx7g -cp ${DAIKON_JAR} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := java -Xmx7g -cp ${DAIKON_JAR} daikon.PrintInvariants
+DAIKON := ${JAVA} -ea -Xmx7g -cp ${DAIKON_JAR} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
+PRINT_INV := ${JAVA} -Xmx7g -cp ${DAIKON_JAR} daikon.PrintInvariants
 
 default: summary-w-daikon
 
@@ -72,7 +72,7 @@ $(info OS_ID="$(OS_ID)")
 $(info OS_REL="$(OS_REL)")
 
 ifeq ($(OS_ID),CentOS)
-($warning !!Daikon no longer tests on CentOS!!)
+$(warning !!Daikon no longer tests on CentOS!!)
 endif
 
 ifeq ($(OS_ID),Fedora)
