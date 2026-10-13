@@ -67,22 +67,23 @@ public class SampleTester {
   /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
-          "Usage: java daikon.PrintInvariants [OPTION]... FILE",
+          "Usage: java daikon.test.SampleTester [OPTION]...",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
-          "  --" + Daikon.config_option_SWITCH,
-          "      Specify a configuration option ",
-          "  --" + Daikon.debug_SWITCH,
-          "      Specify a logger to enable",
-          "  --" + Daikon.track_SWITCH,
-          "      Specify a class, varinfos, and ppt to debug track.",
-          "      Format is class<var1,var2,var3>@ppt");
+          "  --" + Daikon.config_option_SWITCH + " config_var=val",
+          "      Set the specified configuration variable",
+          "  --" + Daikon.debugAll_SWITCH,
+          "      Turn on all debug flags (voluminous output)",
+          "  --" + Daikon.debug_SWITCH + " logger",
+          "      Turn on the specified debug logger",
+          "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
+          "      Print debug info on the specified invariant class, vars, and ppt");
 
   /**
-   * Runs the sample tests.
+   * Runs the tests without JUnit.
    *
-   * @param args command-line arguments
-   * @throws IOException if there is trouble reading a file
+   * @param args command-line arguments; see {@link #usage}
+   * @throws IOException if there is a problem reading a test file
    */
   public static void main(String[] args) throws IOException {
     try {
@@ -93,11 +94,11 @@ public class SampleTester {
   }
 
   /**
-   * Does the work of {@link #main}, but throws an exception rather than calling {@code
-   * System.exit}.
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called programmatically.
    *
-   * @param args command-line arguments
-   * @throws IOException if there is trouble reading a file
+   * @param args command-line arguments; see {@link #usage}
+   * @throws IOException if there is a problem reading a test file
    */
   @SuppressWarnings("JUnitMethodInvoked") // mainHelper() runs the tests without JUnit
   public static void mainHelper(String[] args) throws IOException {
@@ -143,6 +144,10 @@ public class SampleTester {
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
+    }
+    if (g.getOptind() < args.length) {
+      throw new Daikon.UserError(
+          "Unexpected argument " + args[g.getOptind()] + "; run with -h for usage");
     }
 
     daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);

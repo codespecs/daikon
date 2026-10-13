@@ -276,8 +276,8 @@ or else log out and log back in to achieve the same
 effect.
 
 @item
-Optionally, customize other variables.  The customizable variables are
-listed in the Daikon startup file: @file{$@{DAIKONDIR@}/scripts/daikon.bashrc}.
+Optionally, customize variables used when building Daikon.  The
+customizable variables are defined in @file{$@{DAIKONDIR@}/java/Makefile}.
 
 You may customize them by setting environment variables, or by adding a
 @file{Makefile.user} file to directory @file{$@{DAIKONDIR@}/java} (it is
@@ -2699,8 +2699,7 @@ then you forgot to run @command{CPP} before running @command{CreateSpinfoC}@.
 
 If you get an error such as
 @example
-CreateSpinfoC encountered errors during parse.
-Encountered "__extension__ typedef struct @{  ...
+CreateSpinfoC encountered errors while parsing foo.c-expanded: Encountered "__extension__ typedef struct @{  ...
 @end example
 
 @noindent

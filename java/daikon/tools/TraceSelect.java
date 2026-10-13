@@ -4,9 +4,9 @@ package daikon.tools;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DaikonGetopt;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -266,6 +266,9 @@ public class TraceSelect {
       }
 
       return dec.patchValues(al, includeUnreturned);
+    } catch (UncheckedIOException e) {
+      // DtracePartitioner's Iterator methods cannot throw IOException.
+      throw e.getCause();
     }
   }
 
@@ -309,11 +312,9 @@ public class TraceSelect {
    * Checks Daikon command-line arguments by passing them to {@link daikon.Daikon#read_options}.
    * Handles -h and --help.
    *
-   * <p>This does not call {@link daikon.Daikon#cleanup}, so that it does not discard global state
-   * that the caller may depend on. {@code read_options} sets static fields for the options in
-   * {@code args}; {@link daikon.Daikon#mainHelper} resets them before it runs. An exception is
-   * {@code -o}, which {@code read_options} rejects if {@link daikon.Daikon#inv_file} is already
-   * set. This method clears that field during the check and then restores it.
+   * <p>Like {@link daikon.Daikon#mainHelper}, this first calls {@link daikon.Daikon#cleanup},
+   * because {@code read_options} rejects some options, such as {@code -o}, if the corresponding
+   * static field is already set.
    *
    * @param args the Daikon command-line arguments
    * @throws daikon.Daikon.NormalTermination after printing the usage message, if an argument
@@ -321,13 +322,8 @@ public class TraceSelect {
    * @throws daikon.Daikon.UserError if an argument is bad
    */
   private static void checkDaikonArgs(String[] args) {
-    File savedInvFile = daikon.Daikon.inv_file;
-    daikon.Daikon.inv_file = null;
-    try {
-      daikon.Daikon.read_options(args, usage);
-    } finally {
-      daikon.Daikon.inv_file = savedInvFile;
-    }
+    daikon.Daikon.cleanup();
+    daikon.Daikon.read_options(args, usage);
   }
 
   /**

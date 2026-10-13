@@ -22,9 +22,9 @@ import org.junit.function.ThrowingRunnable;
 /**
  * Tests that Daikon tools reject bad command-line options with a UserError.
  *
- * <p>These tests do not call {@code Daikon.mainHelper} or {@code Daikon.cleanup}, because they
- * reset Daikon's global state, which other tests in the same JVM depend on. TraceSelect checks its
- * Daikon arguments without calling either of them.
+ * <p>These tests do not call {@code Daikon.mainHelper}, which runs Daikon. However, {@link
+ * #testHelpOption} passes Daikon arguments to TraceSelect, which checks them by calling {@code
+ * Daikon.cleanup} and {@code Daikon.read_options}. Those calls reset Daikon's global state.
  */
 public class BadOptionTest {
 
@@ -190,12 +190,12 @@ public class BadOptionTest {
   public void testHelpOption() {
     assertPrintsUsage(() -> DtraceDiff.mainHelper(new String[] {"--help"}));
     assertPrintsUsage(() -> UnionInvariants.mainHelper(new String[] {"--help"}));
-    assertPrintsUsage(() -> SplitDtrace.mainHelper(new String[] {"-h", "x"}));
     assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"--help"}));
     assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"20", "10", "-h", "x.dtrace"}));
     assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"20", "10", "--help"}));
     assertPrintsUsage(
         () -> TraceSelect.mainHelper(new String[] {"20", "10", "-NOCLEAN", "x.dtrace", "--he"}));
+    assertPrintsUsage(() -> SplitDtrace.mainHelper(new String[] {"-h", "x"}));
   }
 
   /**

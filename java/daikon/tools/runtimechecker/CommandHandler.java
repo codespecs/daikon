@@ -4,12 +4,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Daikon;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.UncheckedIOException;
+import java.util.stream.Collectors;
 
 /**
  * A command handler handles a set of commands. A command is the first argument given to the
@@ -21,33 +20,23 @@ public class CommandHandler {
     throw new UnsupportedOperationException();
   }
 
-  public boolean handle(String[] args) {
+  /**
+   * Performs the command.
+   *
+   * @param args the command, followed by its arguments
+   * @throws Daikon.DaikonTerminationException if the program should exit
+   */
+  public void handle(String[] args) {
     throw new UnsupportedOperationException();
   }
 
-  /** Prints the usage message to standard error. */
-  public void usageMessage() {
-    usageMessage(System.err);
-  }
-
   /**
-   * Returns the usage message.
+   * Returns the usage message, which is the contents of this class's documentation file.
    *
    * @return the usage message
-   */
-  public String usageMessageString() {
-    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    usageMessage(new PrintStream(bytes, true, UTF_8));
-    return bytes.toString(UTF_8).stripTrailing();
-  }
-
-  /**
-   * Prints the usage message.
-   *
-   * @param out where to print the usage message
    * @throws Daikon.BugInDaikon if the documentation file is missing
    */
-  public void usageMessage(PrintStream out) {
+  public String usageMessageString() {
     String[] classnameArray = getClass().getName().split("\\.");
     String simpleClassname = classnameArray[classnameArray.length - 1];
 
@@ -56,11 +45,16 @@ public class CommandHandler {
     if (in == null) {
       throw new Daikon.BugInDaikon("Didn't find documentation " + docFile + " for " + getClass());
     }
+    // When Daikon requires Java 11 or later, simplify this to:
+    //   try (in) {
+    //     return new String(in.readAllBytes(), UTF_8).stripTrailing();
+    //   }
+    // and remove the imports of BufferedReader, InputStreamReader, and Collectors.
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, UTF_8))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        out.println(line);
-      }
+      return reader
+          .lines()
+          .collect(Collectors.joining(System.lineSeparator()))
+          .replaceAll("\\s+$", "");
     } catch (IOException e) {
       throw new UncheckedIOException("problem reading " + docFile, e);
     }

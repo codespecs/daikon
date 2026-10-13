@@ -42,9 +42,8 @@ import org.junit.runners.Suite;
   daikon.test.DtraceNonceFixerTest.class,
   daikon.test.split.QuantCallsSplitterTest.class,
   daikon.test.split.SplitterLoadTest.class,
-  //       ,
-  //       // I'm having trouble with this; need to fix, reinstate, and not call
-  //       // specially from Makefile.  -MDE 7/8/2005
-  //       daikon.test.split.SplitterFactoryTest.class
+  // daikon.test.split.SplitterFactoryTest is not in this suite, because it is generated after the
+  // rest of Daikon (including this class) is compiled.  The Makefile's "junit" target runs it
+  // separately.
 })
 public final class AllTestsSuite {}
