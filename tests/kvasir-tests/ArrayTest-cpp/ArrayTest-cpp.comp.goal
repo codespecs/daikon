@@ -687,6 +687,7 @@ return[..].foo_head
 return[..].foo_tail
 
 A:::OBJECT
+-1: this this->B this->B[..] this->B[..].C this->B[..].C.baz_head this->B[..].C.baz_tail this->B[..].C.y this->B[..].D[0] this->B[..].D[0]->neverSeeMe this->B[..].D[0][0] this->B[..].D[1] this->B[..].D[1]->neverSeeMe this->B[..].D[1][0] this->B[..].D[2] this->B[..].D[2]->neverSeeMe this->B[..].D[2][0] this->B[..].bar_head this->B[..].bar_tail this->foo_head this->foo_tail
 
 ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
 ::abracadabra ::abracadabra.social_security[..]
@@ -829,12 +830,17 @@ a b[..] return
 b
 
 _buffers:::OBJECT
+-1: this this->SS this->age this->firstName this->lastName this->mallocMePlease this->middleName this->weight
 
 array_struct:::OBJECT
+-1: this this->MIT_id this->MIT_id[..] this->birthday this->birthday[..] this->social_security this->social_security[..]
 
 unnamed_DWARF_ID_1:::OBJECT
+-1: this this->C this->C.baz_head this->C.baz_tail this->C.y this->D this->D[..] this->D[..].neverSeeMe this->bar_head this->bar_tail
 
 unnamed_DWARF_ID_2:::OBJECT
+-1: this this->baz_head this->baz_tail this->y
 
 unnamed_DWARF_ID_3:::OBJECT
+-1: this this->neverSeeMe
 
