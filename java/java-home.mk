@@ -65,9 +65,11 @@ ifeq ($(filter ${JAVA_RELEASE_NUMBER},${JAVA_RELEASES_THROUGH_CURRENT}),)
 endif
 
 # Helper scripts that run "java" or "javac" use the JDK at JAVA_HOME.
+# "override" applies this assignment to "make PATH=...".
 ifneq ($(firstword $(subst :, ,${PATH})),${JAVA_HOME}/bin)
-  export PATH := ${JAVA_HOME}/bin:${PATH}
+  override PATH := ${JAVA_HOME}/bin:${PATH}
 endif
+export PATH
 
 else
 # Expanding CHECKED_JAVA_HOME reports the missing JDK.  This happens only when a

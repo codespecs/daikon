@@ -17,15 +17,26 @@ endif
 include $(dir $(lastword ${MAKEFILE_LIST}))../../Makefile.jdk
 
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
-DAIKON = ${DAIKONDIR}/java/daikon/Daikon.class
+# A prerequisite that changes whenever Daikon is rebuilt: Daikon.class if the
+# java/ tree is compiled, otherwise daikon.jar.
+DAIKON := $(firstword $(wildcard ${DAIKONDIR}/java/daikon/Daikon.class ${DAIKONDIR}/daikon.jar))
+ifeq (${DAIKON},)
+  ifneq ($(filter-out clean update-goals,$(or ${MAKECMDGOALS},diffs)),)
+    $(error Daikon is not built.  Run "make -C ${DAIKONDIR} compile")
+  endif
+endif
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
+# If a recipe fails, delete its target, so that a partially written output
+# file does not make the next run appear up to date.
+.DELETE_ON_ERROR:
+
+# A failing diff is left in daikon.txt-failed.diff for inspection.
 diffs: daikon.txt.diff
-daikon.txt.diff: drawlet.inv.gz merge.inv.gz
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants drawlet.inv.gz > drawlet.txt
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants merge.inv.gz > merge.txt
-	diff -u drawlet.txt merge.txt > daikon.txt.diff || (cat daikon.txt.diff && false)
+daikon.txt.diff: drawlet.txt merge.txt
+	diff -u drawlet.txt merge.txt > daikon.txt-failed.diff || (cat daikon.txt-failed.diff && false)
+	mv daikon.txt-failed.diff daikon.txt.diff
 
 # Build the merged version of the invariant file from the individual inv files
 merge: merge.inv.gz
@@ -33,7 +44,7 @@ merge.inv.gz: ${DAIKON} TS_AllDrawletUnitTests.inv.gz \
 	          TS_DrawletFunctionalTest.inv.gz TS_InputEventHandlerTests.inv.gz
 	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.MergeInvariants -o merge.inv.gz \
 	  TS_AllDrawletUnitTests.inv.gz TS_DrawletFunctionalTest.inv.gz \
-	  TS_InputEventHandlerTests.inv.gz \
+	  TS_InputEventHandlerTests.inv.gz
 
 
 # Build the combined inv file directly from the trace files
@@ -45,93 +56,22 @@ drawlet.inv.gz : ${DAIKON} TS_AllDrawletUnitTests.dtrace.gz \
 	  TS_DrawletFunctionalTest.dtrace.gz \
 	  TS_InputEventHandlerTests.dtrace.gz
 
-TS_AllDrawletUnitTests.inv.gz: ${DAIKON} TS_AllDrawletUnitTests.dtrace.gz
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon ${DAIKON_ARGS} \
-	  TS_AllDrawletUnitTests.dtrace.gz
-
-TS_DrawletFunctionalTest.inv.gz: ${DAIKON} TS_DrawletFunctionalTest.dtrace.gz
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon ${DAIKON_ARGS} \
-	  TS_DrawletFunctionalTest.dtrace.gz
-
-TS_InputEventHandlerTests.inv.gz: ${DAIKON} TS_InputEventHandlerTests.dtrace.gz
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon ${DAIKON_ARGS} \
-	  TS_InputEventHandlerTests.dtrace.gz
+TS_%.inv.gz: TS_%.dtrace.gz ${DAIKON}
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon -o $@ ${DAIKON_ARGS} $<
 
 # For debugging:
 #   make TS_AllDrawletUnitTests.txt TS_AllDrawletUnitTests.txt-all \
 #     TS_DrawletFunctionalTest.txt TS_DrawletFunctionalTest.txt-all \
 #     TS_InputEventHandlerTests.txt TS_InputEventHandlerTests.txt-all
 
-%.txt: %.inv.gz
-	${JAVA} -cp $d/daikon.jar daikon.PrintInvariants $< > $@
+%.txt: %.inv.gz ${DAIKON}
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants $< > $@
 
-%.txt-all: %.inv.gz
-	${JAVA} -cp $d/daikon.jar daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
-
-#
-# Test targets
-#
-
-# Options for testing
-#
-#PPT_OPTION	= '--ppt-select-pattern=defaultHandleSize|CanvasHandle:::CLASS'
-#DEBUG_OPTION := --dbg daikon.print
-#DEBUG_OPTION := ${DEBUG_OPTION} --dbg daikon.Progress
-#TRACK_OPTION = --track 'LowerBound<com.rolemodelsoft.drawlet.basics.CanvasHandle.HANDLE_SIZE>@defaultHandleSize'
-
-# Run Daikon on all three input trace files
-# Note that this puts the output invariant file in test.inv.gz so it doesn't
-# overwrite the correct invariant file
-test_d:
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon \
-	  ${PPT_OPTION} \
-	  ${DEBUG_OPTION} \
-	  ${TRACK_OPTION} \
-	  TS_AllDrawletUnitTests.dtrace.gz \
-	  TS_DrawletFunctionalTest.dtrace.gz \
-	  TS_InputEventHandlerTests.dtrace.gz \
-	  -o test.inv.gz
-
-# run PrintInvariants on the merge invariant file
-test_pm:
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants \
-	  ${PPT_OPTION} \
-	  ${DEBUG_OPTION} \
-	  ${TRACK_OPTION} \
-	  merge.inv.gz
-
-# run MergeInvariants on the three inv files
-test_m:
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.MergeInvariants \
-	  ${DEBUG_OPTION} \
-	  TS_AllDrawletUnitTests.inv.gz TS_DrawletFunctionalTest.inv.gz \
-	  TS_InputEventHandlerTests.inv.gz \
-
-# run Daikon on the first dtrace file
-test_d1:
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants \
-	  ${PPT_OPTION} \
-	  ${DEBUG_OPTION} \
-	  ${TRACK_OPTION} \
-	  TS_AllDrawletUnitTests.inv.gz
-
-# run Daikon on the second dtrace file
-test_d2:
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon
-	  ${PPT_OPTION} \
-	  ${DEBUG_OPTION} \
-	  ${TRACK_OPTION} \
-	  TS_DrawletFunctionalTest.dtrace.gz
+%.txt-all: %.inv.gz ${DAIKON}
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
 
 update-goals:
 
-.PHONY: clean
+.PHONY: diffs merge daikon update-goals clean
 clean:
-	/bin/rm -rf *.inv.gz *.diff *.txt
-
-show-vars:
-	@echo PPT_OPTION = ${PPT_OPTION}
-	@echo TRACK_OPTION = ${TRACK_OPTION}
-	@echo DEBUG_OPTION = ${DEBUG_OPTION}
-	@echo CLASSPATH    = ${CLASSPATH}
-	@echo DAIKON_CLASSPATH    = ${DAIKON_CLASSPATH}
+	/bin/rm -rf *.inv.gz *.diff *.txt *.txt-all
