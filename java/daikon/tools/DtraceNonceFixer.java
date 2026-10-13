@@ -4,6 +4,7 @@ package daikon.tools;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
 
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -79,32 +80,33 @@ public class DtraceNonceFixer {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(final String[] args) {
-    if (args.length != 1 && args.length != 2) {
+    String[] files = DaikonGetopt.nonOptionArgs(args, usage);
+    if (files.length != 1 && files.length != 2) {
       throw new daikon.Daikon.UserError(usage);
     }
 
     try {
-      if (args.length == 1) {
-        String suffix = args[0].endsWith(".gz") ? ".gz" : "";
-        String fixedFilename = args[0] + "_fixed" + suffix;
+      if (files.length == 1) {
+        String suffix = files[0].endsWith(".gz") ? ".gz" : "";
+        String fixedFilename = files[0] + "_fixed" + suffix;
         Set<Integer> exitNonces = new HashSet<>();
-        int maxNonce = correctNonces(args[0], fixedFilename, exitNonces);
-        addMissingNonces(fixedFilename, args[0] + "_all_fixed" + suffix, maxNonce, exitNonces);
+        int maxNonce = correctNonces(files[0], fixedFilename, exitNonces);
+        addMissingNonces(fixedFilename, files[0] + "_all_fixed" + suffix, maxNonce, exitNonces);
       } else {
         // The temporary files are in OUTFILE's directory, so that the final move can be atomic,
         // and have fresh names so that they overwrite no existing file.  OUTFILE is not opened
         // for writing, so if this program fails, OUTFILE (which may be the input) is unchanged.
         // If OUTFILE is a symbolic link, the file that it refers to is replaced.
-        Path outfile = resolveSymbolicLinks(Path.of(args[1]).toAbsolutePath());
+        Path outfile = resolveSymbolicLinks(Path.of(files[1]).toAbsolutePath());
         Path dir = castNonNull(outfile.getParent()); // an absolute file path has a parent
         String prefix = outfile.getFileName() + "-";
-        String suffix = args[1].endsWith(".gz") ? ".gz" : "";
+        String suffix = files[1].endsWith(".gz") ? ".gz" : "";
         Path tmpFile = createFreshFile(dir, prefix, "-fixed" + suffix);
         Path tmpOutFile = null;
         try {
           tmpOutFile = createFreshFile(dir, prefix, "-all-fixed" + suffix);
           Set<Integer> exitNonces = new HashSet<>();
-          int maxNonce = correctNonces(args[0], tmpFile.toString(), exitNonces);
+          int maxNonce = correctNonces(files[0], tmpFile.toString(), exitNonces);
           addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce, exitNonces);
           replaceFile(tmpOutFile, outfile);
         } finally {

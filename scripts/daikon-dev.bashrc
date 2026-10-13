@@ -2,7 +2,7 @@
 
 export LC_ALL=${LC_ALL:-en_US}
 
-DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )../" && pwd )"
+DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 export DAIKONSCRIPTS=${DAIKONDIR}/scripts
 : "${PLUME_SCRIPTS:=${DAIKONDIR}/.utils/plume-scripts}"
