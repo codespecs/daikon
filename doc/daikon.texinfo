@@ -2689,8 +2689,7 @@ then you forgot to run @command{CPP} before running @command{CreateSpinfoC}@.
 
 If you get an error such as
 @example
-CreateSpinfoC encountered errors during parse.
-Encountered "__extension__ typedef struct @{  ...
+CreateSpinfoC encountered errors while parsing foo.c-expanded: Encountered "__extension__ typedef struct @{  ...
 @end example
 
 @noindent
