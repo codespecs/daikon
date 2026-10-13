@@ -1302,6 +1302,13 @@ ifeq (${JAVA8}, 1)
   SKIP_JAVADOC=1
 endif
 
+# Fails if the api target would skip javadoc.
+.PHONY: check-javadoc-enabled
+check-javadoc-enabled:
+ifeq (${SKIP_JAVADOC},1)
+	$(error Javadoc is disabled (Java 8, or SKIP_JAVADOC=1); use Java 11 or later)
+endif
+
 # Build javadoc using the daikon package and all subpackages of daikon.
 javadoc: api
 .PHONY: api
