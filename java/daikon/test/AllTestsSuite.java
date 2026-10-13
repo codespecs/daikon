@@ -8,6 +8,9 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
   daikon.chicory.RuntimeTest.class,
   daikon.test.BadOptionTest.class,
+  daikon.tools.ExtractConsequentTest.class,
+  daikon.split.SplitterFactoryFileNameTest.class,
+  daikon.split.SplitterListTest.class,
   daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
   daikon.test.TestAst.class,
   daikon.test.config.ConfigurationTest.class,
