@@ -5,23 +5,23 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.PptMap;
 import daikon.tools.jtb.ParseResults;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import jtb.syntaxtree.*;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
-import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 
 /**
  * Instruments a file to check invariant violations at run time. Violated invariants are stored in a
@@ -71,24 +71,13 @@ public class InstrumentHandler extends CommandHandler {
   // oneFile.roots) {"
   )
   @Override
-  public boolean handle(String[] args) {
+  public void handle(String[] args) {
 
     Daikon.output_format = daikon.inv.OutputFormat.JAVA;
     daikon.PrintInvariants.wrap_xml = true;
 
-    if (!args[0].equals("instrument")) {
-      System.err.println("Command (first argument) to instrumenter was not recognized.");
-      return false;
-    }
-
-    String[] realArgs = new String[args.length - 1];
-    for (int i = 0; i < realArgs.length; i++) {
-      realArgs[i] = args[i + 1];
-    }
+    String[] realArgs = Arrays.copyOfRange(args, 1, args.length);
     Arguments arguments = readArguments(realArgs);
-    if (arguments == errorWhileReadingArguments) {
-      return false;
-    }
 
     // Set up debug traces; note this comes after reading command line options.
     daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
@@ -102,10 +91,7 @@ public class InstrumentHandler extends CommandHandler {
       ppts =
           FileIO.read_serialized_pptmap(new File(arguments.invFile), true /* use saved config */);
     } catch (IOException e) {
-      System.err.println("Exception while reading invariant file " + arguments.invFile);
-      System.err.println(e.getMessage());
-      e.printStackTrace();
-      return false;
+      throw new Daikon.UserError(e, "Problem while reading invariant file " + arguments.invFile);
     }
 
     // Compile original sources (because daikon.tools.jtb.Ast accesses
@@ -177,17 +163,11 @@ public class InstrumentHandler extends CommandHandler {
         }
 
       } catch (IOException e) {
-        System.err.println("Exception while instrumenting " + oneFile.fileName);
-        System.err.println(e.getMessage());
-        e.printStackTrace();
-        return false;
+        throw new Daikon.UserError(e, "Problem while writing output for " + oneFile.fileName);
       }
     }
-
-    return true;
   }
 
-  @UsesObjectEquals
   private static class Arguments {
     String invFile;
     List<String> javaFileNames;
@@ -198,9 +178,17 @@ public class InstrumentHandler extends CommandHandler {
     }
   }
 
-  private static Arguments errorWhileReadingArguments =
-      new Arguments("error while reading arguments", new ArrayList<String>());
+  /** Text appended to the description of a bad command-line argument. */
+  private static final String usageHint = "run with \"instrument -h\" for usage";
 
+  /**
+   * Parses the command-line arguments of the {@code instrument} command.
+   *
+   * @param args the arguments that follow the command name
+   * @return the parsed arguments
+   * @throws Daikon.NormalTermination after printing the usage message, if an argument requests it
+   * @throws Daikon.UserError if an argument is malformed or missing
+   */
   private Arguments readArguments(String[] args) {
 
     LongOpt[] longopts =
@@ -213,7 +201,8 @@ public class InstrumentHandler extends CommandHandler {
           new LongOpt(directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(checkers_directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
         };
-    Getopt g = new Getopt("daikon.tools.runtimechecker.InstrumentHandler", args, "hs", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, this::usageMessageString);
+    g.setUsageHint(usageHint);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -236,37 +225,33 @@ public class InstrumentHandler extends CommandHandler {
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
             daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
-            System.err.println("Unknown long option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
         default:
-          System.out.println("unrecognized option" + c);
-          return errorWhileReadingArguments;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
     // The index of the first non-option argument -- the name of the
     // invariant file.
     int argindex = g.getOptind();
     if (argindex >= args.length) {
-      System.out.println("Error: No .inv file or .java file arguments supplied.");
-      return errorWhileReadingArguments;
+      throw new Daikon.UserError("No .inv file or .java file arguments supplied; " + usageHint);
     }
     String invfile = args[argindex];
     argindex++;
     if (!(invfile.endsWith(".inv") || invfile.endsWith(".inv.gz"))) {
-      System.out.println("Error: first argument must be a file ending in .inv or .inv.gz.");
-      return errorWhileReadingArguments;
+      throw new Daikon.UserError(
+          "First argument must be a file ending in .inv or .inv.gz; " + usageHint);
     }
     if (argindex >= args.length) {
-      System.out.println("Error: No .java file arguments supplied.");
-      return errorWhileReadingArguments;
+      throw new Daikon.UserError("No .java file arguments supplied; " + usageHint);
     }
     List<String> javaFileNames = new ArrayList<>();
     for (; argindex < args.length; argindex++) {
       String javafile = args[argindex];
       if (!javafile.endsWith(".java")) {
-        System.out.println("File does not end in .java: " + javafile);
-        return errorWhileReadingArguments;
+        throw new Daikon.UserError("File does not end in .java: " + javafile + "; " + usageHint);
       }
       javaFileNames.add(javafile);
     }

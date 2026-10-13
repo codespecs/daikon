@@ -51,4 +51,4 @@ make kvasir
 
 make -C tests/dyncomp-tests regression-tests
 #make -C tests/kvasir-tests regression-tests
-make MPARG=-j1 -C tests/kvasir-tests regression-tests
+make DAIKON_TEST_JOBS=1 -C tests/kvasir-tests regression-tests
