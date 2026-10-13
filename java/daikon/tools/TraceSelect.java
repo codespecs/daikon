@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 import java.util.StringTokenizer;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
@@ -53,6 +54,33 @@ public class TraceSelect {
   private static @MonotonicNonNull Random randObj;
 
   private static int daikonArgStart = 0;
+
+  /** The index in {@link #argles} of the dtrace file that is sampled, or -1 if none. */
+  private static int fileNameIndex = -1;
+
+  /**
+   * Daikon command-line options that take a separate argument. This must be kept in sync with the
+   * options that {@link daikon.Daikon} declares with {@code LongOpt.REQUIRED_ARGUMENT}, plus "-o".
+   */
+  private static final Set<String> daikonOptionsWithArgument =
+      Set.of(
+          "-o",
+          "--" + daikon.Daikon.format_SWITCH,
+          "--" + daikon.Daikon.files_from_SWITCH,
+          "--" + daikon.Daikon.omit_from_output_SWITCH,
+          "--" + daikon.Daikon.conf_limit_SWITCH,
+          "--" + daikon.Daikon.list_type_SWITCH,
+          "--" + daikon.Daikon.user_defined_invariant_SWITCH,
+          "--" + daikon.Daikon.ppt_regexp_SWITCH,
+          "--" + daikon.Daikon.ppt_omit_regexp_SWITCH,
+          "--" + daikon.Daikon.var_regexp_SWITCH,
+          "--" + daikon.Daikon.var_omit_regexp_SWITCH,
+          "--" + daikon.Daikon.server_SWITCH,
+          "--" + daikon.Daikon.config_SWITCH,
+          "--" + daikon.Daikon.config_option_SWITCH,
+          "--" + daikon.Daikon.debug_SWITCH,
+          "--" + daikon.Daikon.track_SWITCH,
+          "--" + daikon.Daikon.disc_reason_SWITCH);
 
   // This allows us to simply call MultiDiff
   // with the same files we just created.
@@ -132,18 +160,29 @@ public class TraceSelect {
         daikonArgStart = i + 1;
       }
 
-      // TODO: The current implementation assumes that a decls
-      // or dtrace file will be the first of the Daikon arguments,
-      // marking the end of the TraceSelect arguments.  That is
-      // not necessarily true, especially in cases when someone
-      // uses a Daikon argument such as "--nohierarchy" or "--format java"
-      // and the manual examples place the arguments before any dtrace
-      // or decls arguments.
+      // A Daikon option that takes a separate argument, such as "--config foo.dtrace" or
+      // "-o foo.inv".  Its argument is not a trace file, even if it ends in ".dtrace".
+      else if (daikonOptionTakesArgument(args[i])) {
+        if (!knowArgStart) {
+          daikonArgStart = i;
+          knowArgStart = true;
+        }
+        i++;
+      }
+
+      // Any other Daikon option, such as "--nohierarchy" or "--config=foo.dtrace".
+      else if (args[i].startsWith("-")) {
+        if (!knowArgStart) {
+          daikonArgStart = i;
+          knowArgStart = true;
+        }
+      }
 
       // For now, only the first dtrace file will be sampled
       else if (args[i].endsWith(".dtrace")) {
         if (fileName == null) {
           fileName = args[i];
+          fileNameIndex = i;
         } else {
           throw new daikon.Daikon.UserError("Only 1 dtrace file for input allowed");
         }
@@ -254,6 +293,17 @@ public class TraceSelect {
   }
 
   /**
+   * Returns true if the given command-line argument is a Daikon option whose value is the next
+   * command-line argument.
+   *
+   * @param arg a command-line argument
+   * @return true if {@code arg} is a Daikon option that consumes the next argument
+   */
+  private static boolean daikonOptionTakesArgument(String arg) {
+    return daikonOptionsWithArgument.contains(arg);
+  }
+
+  /**
    * Deletes the file with the given name, if it exists. A failed deletion is not fatal; it produces
    * a warning on standard output. Tolerates a name that is not a legal file path.
    *
@@ -281,7 +331,7 @@ public class TraceSelect {
     // find all the Daikon args except for the original
     // single dtrace file.
     for (int i = daikonArgStart; i < argles.length; i++) {
-      if (argles[i].endsWith(".dtrace")) {
+      if (i == fileNameIndex) {
         continue;
       }
       daikonArgsList.add(argles[i]);
