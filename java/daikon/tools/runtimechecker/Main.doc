@@ -6,5 +6,5 @@ invariant properties are checked at run time.
 The instrumenter can operate in the following modes, indicated by the first
 argument to the daikon.tools.runtimecheker.Main class:
 
-help
+help, -h, --help
   Print a usage message

@@ -209,6 +209,9 @@ getVariableNames($varnames_input);
 for (my $i=0; $i<scalar(@csv_varnames); $i++) {
   $prevvalues[$i] = 0;          # initialize all previous values to 0
   $isNumber[$i] = 1;            # initialize all types to number
+  if (exists($varNameCsvIndex{$csv_varnames[$i]})) {
+    die "Duplicate column name " . escape_decl($csv_varnames[$i]) . " in $inputfilename";
+  }
   $varNameCsvIndex{$csv_varnames[$i]} = $i;
 }
 
