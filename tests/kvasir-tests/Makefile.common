@@ -42,7 +42,6 @@ KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/libexec/valgrind/fjalar-$(VALGRI
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
 # --dyncomp is now the default; turn back off to minimize changes to this Makefile
 KVASIR_OPTIONS := $(KVASIR_OPTIONS) --no-dyncomp
-KVASIR_DECLS_2 := $(KVASIR_DECLS_@)
 CLEAN_OUTPUT := ../clean-output.pl
 CLEAN_DECLS := ../clean-decls.pl
 REMOVE_TIMING := ../remove-timing.pl
@@ -377,7 +376,7 @@ endif
 
 daikon-output/$(NAME)_2.dtrace: daikon-output/$(NAME).dtrace $(KVASIR_SCRIPT) $(VALGRIND)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_DECLS_2) --dtrace-file=daikon-output/$(NAME)_2.dtrace ./$(NAME) $(PROGRAM_ARGS) > kvasir-output.log
+	$(KVASIR_SCRIPT) --dtrace-file=daikon-output/$(NAME)_2.dtrace ./$(NAME) $(PROGRAM_ARGS) > kvasir-output.log
 	$(AFTER_RUN)
 
 decls-2-compile: daikon-output/$(NAME)_2.dtrace

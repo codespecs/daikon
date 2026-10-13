@@ -418,6 +418,7 @@ check-repo: doc/CHANGELOG.md
 # daikon.tar.gz, daikon.zip, daikon.jar, javadoc, and the documentation.
 # See the dist target for moving these files to the website.
 staging:
+	${MAKE} -C java check-javadoc-enabled
 # Our intention is that members of the plse_www group will always have
 # write permission on the release directories; however, if you happen
 # to be the owner of an existing file, the permissions system gives
@@ -448,9 +449,7 @@ staging:
 	# Build javadoc
 	@echo "]2;Building Javadoc"
 	mkdir ${STAGING_DIR}/download/api
-	# Javadoc is skipped on Java 8, so use Java 11 if it exists.  Hard-coded path is a hack.
-	# java/Makefile uses the JDK at JAVA_HOME; helper scripts use the one on the PATH.
-	(if [ -x /usr/lib/jvm/java-11/bin/javac ]; then export JAVA_HOME=/usr/lib/jvm/java-11; export PATH=$${JAVA_HOME}/bin:${PATH}; fi; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
+	(cd java; ${MAKE} 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	mkdir ${STAGING_DIR}/download/doc
