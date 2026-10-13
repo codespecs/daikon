@@ -1,0 +1,42 @@
+# This is a -*- makefile -*-, Emacs
+#
+# Settings shared by the Makefiles that drive a whole test suite:
+# tests/Makefile, tests/kvasir-tests/Makefile, and tests/dyncomp-tests/Makefile.
+# The including Makefile locates this file via $(lastword $(MAKEFILE_LIST)),
+# so its include line must precede any other include in that Makefile.
+
+# To produce incremental output, invoke make as: make MPARG=-Otarget ...
+ifeq (4.0,$(firstword $(sort ${MAKE_VERSION} 4.0)))
+  # Version 4.0 or higher
+  MPARG ?= -Orecurse
+else
+  MPARG ?=
+endif
+
+ifndef PLUME_SCRIPTS
+  PLUME_SCRIPTS := $(or ${DAIKONDIR},$(realpath $(dir $(lastword $(MAKEFILE_LIST)))..))/.utils/plume-scripts
+endif
+
+# DAIKON_TEST_JOBS is the number of tests to run in parallel.
+# Under CI, limit to 1 to avoid out-of-memory errors.
+# To override it, set DAIKON_TEST_JOBS on the command line or in the environment;
+# for example, to not run in parallel: make DAIKON_TEST_JOBS=1 ...
+# The default is computed only when a recipe uses it, so targets such as
+# "clean" and "help" work even if plume-scripts has not been cloned.
+# As in the top-level Makefile, plume-scripts is cloned if absent, unless
+# NONETWORK is set.  Several sub-makes may do so concurrently, so each clones
+# into a temporary directory and then renames it into place; rename(2) is
+# atomic and fails if the destination exists, so PLUME_SCRIPTS never holds a
+# partial clone.
+ifeq ($(strip ${DAIKON_TEST_JOBS}),)
+  override DAIKON_TEST_JOBS = $(or $(shell \
+      if [ ! -e "${PLUME_SCRIPTS}" ] && [ -z "${NONETWORK}" ]; then \
+        tmp="${PLUME_SCRIPTS}.tmp.$$$$"; \
+        git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git "$$tmp" >&2 \
+          && perl -e 'rename($$ARGV[0], $$ARGV[1])' "$$tmp" "${PLUME_SCRIPTS}"; \
+        rm -rf "$$tmp"; \
+      fi; \
+      if [ -f "${PLUME_SCRIPTS}/is-ci.sh" ]; then \
+        if [ -n "$$(sh "${PLUME_SCRIPTS}/is-ci.sh")" ]; then echo 1; else echo 4; fi; \
+      fi),$(error ${PLUME_SCRIPTS}/is-ci.sh not found; clone plume-scripts there, or set DAIKON_TEST_JOBS))
+endif

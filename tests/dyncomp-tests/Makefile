@@ -18,13 +18,13 @@
 
 # Forked from $DAIKONDIR/tests/kvasir-tests/Makefile
 
-PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.jobs
 
 default: summary
 
 .PHONY: regression-tests
 regression-tests:
-	${MAKE} nightly-tests__diffs-w-daikon
+	${MAKE} --jobs=${DAIKON_TEST_JOBS} ${MPARG} nightly-tests__diffs-w-daikon
 	${MAKE} nightly-summary-only-w-daikon
 	@${MAKE} --no-print-directory results
 
@@ -63,12 +63,10 @@ update-all:
 	${MAKE} nightly-tests__update-goals
 
 .PHONY: clean-all
+# Cleaning uses little memory, and it must work even if plume-scripts has not
+# been cloned, so it does not use DAIKON_TEST_JOBS.
 clean-all:
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
-	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
-	else \
-	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
-	fi
+	${MAKE} --jobs=4 ${MPARG} nightly-tests__clean
 
 
 default-projects__%: pgbovine-tests__%

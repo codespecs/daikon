@@ -54,9 +54,6 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
   devscripts-checkbashisms \
   gcc-c++ \
-  graphviz \
-  netpbm \
-  netpbm-progs \
   python3 \
   python3-distutils-extra \
   ShellCheck \
