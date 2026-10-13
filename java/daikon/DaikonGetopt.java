@@ -61,6 +61,20 @@ public class DaikonGetopt extends Getopt {
   }
 
   /**
+   * Processes the command-line arguments of a program that takes no options other than {@code -h}
+   * and {@code --help}.
+   *
+   * @param argv the command-line arguments
+   * @param usage the usage message to print for {@code -h} and {@code --help}
+   * @return the arguments that are not options
+   * @throws Daikon.NormalTermination after printing the usage message, if an argument requests it
+   * @throws Daikon.UserError if an argument is any other option
+   */
+  public static String[] nonOptionArgs(String[] argv, String usage) {
+    return argsAfterOptions(argv, "", usage);
+  }
+
+  /**
    * Processes command-line arguments, permitting no options other than {@code -h} and {@code
    * --help}.
    *

@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import daikon.Daikon;
 import daikon.DaikonGetopt;
 import daikon.PrintInvariants;
+import daikon.SplitDtrace;
 import daikon.UnionInvariants;
 import daikon.tools.DtraceDiff;
 import daikon.tools.TraceSelect;
@@ -194,6 +195,7 @@ public class BadOptionTest {
     assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"20", "10", "--help"}));
     assertPrintsUsage(
         () -> TraceSelect.mainHelper(new String[] {"20", "10", "-NOCLEAN", "x.dtrace", "--he"}));
+    assertPrintsUsage(() -> SplitDtrace.mainHelper(new String[] {"-h", "x"}));
   }
 
   /**

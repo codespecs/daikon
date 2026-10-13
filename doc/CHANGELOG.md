@@ -24,8 +24,14 @@ Further documentation can be found in:
 ## Version 5.9.1 (???, 2026)
 
 * Daikon and its tools now reject a malformed command-line option.
+* All tools accept `-h` and `--help`, which print a usage message and exit
+   with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
+* `daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
+   `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
+   or `PERL5LIB`.
+* Removed the Perl front end, dfepl.
 
 ## Version 5.9.0 (September 1, 2026)
 
