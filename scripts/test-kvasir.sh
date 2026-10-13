@@ -53,5 +53,5 @@ make kvasir
 status=0
 make -C tests/dyncomp-tests regression-tests || status=$?
 #make -C tests/kvasir-tests regression-tests || status=$?
-make MPARG=-j1 -C tests/kvasir-tests regression-tests || status=$?
+make DAIKON_TEST_JOBS=1 -C tests/kvasir-tests regression-tests || status=$?
 exit $status

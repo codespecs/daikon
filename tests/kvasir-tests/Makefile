@@ -13,19 +13,12 @@
 #    category to contain it.
 #
 
-ifeq (4.0,$(firstword $(sort ${MAKE_VERSION} 4.0)))
-  # Version 4.0 or higher
-  MPARG ?= -Orecurse
-else
-  MPARG ?=
-endif
-
-PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.jobs
 
 default: summary-w-daikon
 
 # Variables used by Makefile.results.
-REGRESSION_TESTS_ARGS = --jobs=${CI_JOBS} ${MPARG}
+REGRESSION_TESTS_ARGS = --jobs=${DAIKON_TEST_JOBS} ${MPARG}
 REGRESSION_TESTS_TARGET = nightly-tests__diffs-w-daikon-if-working
 REGRESSION_SUMMARY_TARGET = nightly-summary-only-w-daikon
 
@@ -74,8 +67,10 @@ update-all:
 	${MAKE} nightly-tests__update-goals
 
 .PHONY: clean-all
+# Cleaning uses little memory, and it must work even if plume-scripts has not
+# been cloned, so it does not use DAIKON_TEST_JOBS.
 clean-all:
-	${MAKE} --jobs=${CI_JOBS} ${MPARG} nightly-tests__clean
+	${MAKE} --jobs=4 ${MPARG} nightly-tests__clean
 
 default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
 	@

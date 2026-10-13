@@ -24,8 +24,29 @@ Further documentation can be found in:
 ## Version 5.9.1 (???, 2026)
 
 * Daikon and its tools now reject a malformed command-line option.
+* All tools accept `-h` and `--help`, which print a usage message and exit
+   with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
+* `daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
+   `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
+   or `PERL5LIB`.
+* Removed the Perl front end, dfepl.
+
+Scripts:
+
+* `convertcsv.pl` now writes version 2 files.
+* `convertcsv.pl -decl`, `dtrace-count.pl`, `dtrace-diff.pl`,
+  `dtrace-indent.pl`, and `sort-dtrace.pl` no longer accept version 1
+  declarations.
+* `dtrace-diff.pl` reads program point declarations from the .dtrace files,
+  so its .decls file argument is now optional.  It no longer accepts the
+  `--ignore_exitno` option, which had no effect.
+* Removed scripts that processed only version 1 files:  `auxinfo.pl`,
+  `clean-decls.php`, `copy_comparable.pl`, `decls2comp-1.0.py`,
+  `decls-lackwit-disjoint.pl`, `dfec-to-kvasir.py`, `dfec-to-kvasir-dtrace.py`,
+  `dtrace-rm-decls.php`, `find_comparable.pl`, `find_globals.pl`,
+  `generate-dec-types.py`, `lwpp.pl`, `lwpp-init.pl`, and `set_decl_type.pl`.
 
 ## Version 5.9.0 (September 1, 2026)
 

@@ -338,6 +338,7 @@ public final class PrintInvariants {
           new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.wrap_xml_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(Daikon.disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(PrintInvariants.output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(
               PrintInvariants.print_csharp_metadata_SWITCH, LongOpt.OPTIONAL_ARGUMENT, null, 0),
