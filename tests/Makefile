@@ -25,16 +25,7 @@ help-recurse-list:
 	@echo " which are ones that have been selected as useful tests.)"
 	@echo ""
 
-# To produce incremental output, invoke make as: make MPARG=-Otarget ...
-# To not run in parallel, invoke make as: make MPARG=-j1 ...
-ifeq (4.0,$(firstword $(sort ${MAKE_VERSION} 4.0)))
-  # Version 4.0 or higher
-  MPARG ?= -Orecurse
-else
-  MPARG ?=
-endif
-
-PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+include $(dir $(lastword $(MAKEFILE_LIST)))Makefile.jobs
 
 all diffs: txt-diff non-txt-diff dyncomp-tests results
 
@@ -51,12 +42,7 @@ esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff tx
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	${MAKE} pat-daikon-tests-$@
 pat-daikon-tests-%:
-# Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
-	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $*; \
-	else \
-	  ${MAKE} -C daikon-tests --jobs=4 ${MPARG} $*; \
-	fi
+	${MAKE} -C daikon-tests --jobs=${DAIKON_TEST_JOBS} ${MPARG} $*
 
 list-targets:
 	${MAKE} -C daikon-tests list-targets
