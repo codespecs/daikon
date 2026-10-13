@@ -68,8 +68,10 @@ update-all:
 	${MAKE} nightly-tests__update-goals
 
 .PHONY: clean-all
+# Cleaning uses little memory, and it must work even if plume-scripts has not
+# been cloned, so it does not use DAIKON_TEST_JOBS.
 clean-all:
-	${MAKE} --jobs=${DAIKON_TEST_JOBS} ${MPARG} nightly-tests__clean
+	${MAKE} --jobs=4 ${MPARG} nightly-tests__clean
 
 default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
 	@
