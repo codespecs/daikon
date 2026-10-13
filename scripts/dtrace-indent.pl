@@ -28,7 +28,7 @@ for_each_record(sub {
   my $suffix = $2;
   my $name = $base . ":::" . $suffix;
   if ($suffix !~ /^EXIT|^ENTER$/) {
-    die "What is this line? <suffix> <$text>";
+    die "What is this line? <$suffix> <$text>";
   }
   if ($suffix =~ /^EXIT/) {
     $indentation--;
