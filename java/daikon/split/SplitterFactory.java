@@ -148,6 +148,15 @@ public class SplitterFactory {
     Global.debugSplit.fine("<<exit>>  load_splitters");
   }
 
+  /**
+   * Resets the counter that numbers splitter files, so that the names of subsequently-written
+   * splitter files do not depend on what splitters were created earlier in this JVM. Accessible for
+   * the purpose of testing.
+   */
+  public static void resetGuid() {
+    guid = 0;
+  }
+
   // Accessible for the purpose of testing.
   public static String getTempDir() {
     if (tempdir == null) {
