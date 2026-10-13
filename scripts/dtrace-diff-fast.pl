@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 # dtrace-diff-fast.pl
-# arguments:  dtrace-diff declsfile dtrace1 dtrace2
+# arguments:  [declsfile] dtrace1 dtrace2
 # (declsfile is ignored, but accepted for compatibility with dtrace-diff.pl)
 # Outputs the first difference that isn't a large pointer-like integer
 
@@ -18,10 +18,10 @@ BEGIN {
     }
 }
 
-if (scalar(@ARGV) != 3) {
-  die "Usage: $0 <declsname> <dtrace1> <dtrace2>\n";
+if (scalar(@ARGV) != 2 && scalar(@ARGV) != 3) {
+  die "Usage: $0 [<declsname>] <dtrace1> <dtrace2>\n";
 }
-my ($decls_name, $dt1_name, $dt2_name) = @ARGV;
+my ($dt1_name, $dt2_name) = @ARGV[-2, -1];
 if ($dt1_name =~ /\.gz$/) {
     open(DT1, "gzip -dc $dt1_name |") or die "Can't open $dt1_name: $!\n";
 } else {
