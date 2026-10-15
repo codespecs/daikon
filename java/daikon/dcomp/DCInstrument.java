@@ -2462,7 +2462,7 @@ public class DCInstrument extends InstructionListUtils {
     // Get information about the call
     @SuppressWarnings("signature:assignment") // BCEL incorrectly says @ClassGetName
     @BinaryName String classname = invoke.getClassName(pool);
-    String methodName = invoke.getMethodName(pool);
+    @Identifier String methodName = invoke.getMethodName(pool);
     // getClassName does not work properly if invoke is INVOKEDYNAMIC.
     // We will deal with this later.
     Type returnType = invoke.getReturnType(pool);
