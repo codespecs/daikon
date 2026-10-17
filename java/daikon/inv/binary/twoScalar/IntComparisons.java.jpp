@@ -37,6 +37,8 @@
   #define LESS_THAN_CLASS IntLessThan
   #define GREATER_THAN_CLASS IntGreaterThan
   #define EQUAL_CLASS IntEqual
+  #define AUX_BOUND_TYPE long
+  #define GET_AUX_BOUND getLong
 #elif (defined (EQUALFLOAT) || defined(NONEQUALFLOAT) \
     || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) \
     || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
@@ -59,6 +61,8 @@
   #define LESS_THAN_CLASS FloatLessThan
   #define GREATER_THAN_CLASS FloatGreaterThan
   #define EQUAL_CLASS FloatEqual
+  #define AUX_BOUND_TYPE double
+  #define GET_AUX_BOUND getDouble
 #else
   #define IS_STRING 1
   #define PRIMITIVE @Interned String
@@ -74,6 +78,8 @@
   #define LESS_THAN_CLASS StringLessThan
   #define GREATER_THAN_CLASS StringGreaterThan
   #define EQUAL_CLASS StringEqual
+  #define AUX_BOUND_TYPE long
+  #define GET_AUX_BOUND getLong
 #endif
 
 #if defined(EQUAL)
@@ -926,10 +932,10 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
       @SuppressWarnings("all:argument") // EnsuresKeyFor for multiple maps; also https://tinyurl.com/cfissue/2586
-      int minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE),
-          maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
-          minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE),
-          maxB = var2.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
+      AUX_BOUND_TYPE minA = var1.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE),
+          maxA = var1.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE),
+          minB = var2.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE),
+          maxB = var2.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE);
 
       if (minA == maxA && maxA == minB && minB == maxB) {
         return new DiscardInfo(
@@ -941,8 +947,8 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     #if defined(LESSTHAN_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
     if (var1.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)) {
-      int maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
-          minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE);
+      AUX_BOUND_TYPE maxA = var1.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE),
+          minB = var2.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE);
 
       #if defined(LESSTHAN_OP)
       #define DISCARD_OP <
@@ -963,8 +969,8 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     #if defined(GREATERTHAN_OP) || defined(GREATEREQUAL_OP) || defined(NONEQUAL_OP)
     if (var1.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-      int maxB = var2.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
-          minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE);
+      AUX_BOUND_TYPE maxB = var2.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE),
+          minA = var1.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE);
 
       #if defined(GREATERTHAN_OP)
       #define DISCARD_OP >

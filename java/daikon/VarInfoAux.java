@@ -398,6 +398,38 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
+   * Returns the long value associated with a key, assuming it is defined. It is recommended to
+   * check that it is defined first with {@link #hasValue(String)}.
+   *
+   * @throws RuntimeException if the key is not defined
+   * @throws NumberFormatException if the value of the key cannot be parsed as a long
+   * @see #hasValue(String)
+   */
+  @Pure
+  public long getLong(@KeyFor("this.map") String key) {
+    if (!hasValue(key)) {
+      throw new RuntimeException(String.format("Key '%s' is not defined", key));
+    }
+    return Long.parseLong(getValue(key));
+  }
+
+  /**
+   * Returns the double value associated with a key, assuming it is defined. It is recommended to
+   * check that it is defined first with {@link #hasValue(String)}.
+   *
+   * @throws RuntimeException if the key is not defined
+   * @throws NumberFormatException if the value of the key cannot be parsed as a double
+   * @see #hasValue(String)
+   */
+  @Pure
+  public double getDouble(@KeyFor("this.map") String key) {
+    if (!hasValue(key)) {
+      throw new RuntimeException(String.format("Key '%s' is not defined", key));
+    }
+    return Double.parseDouble(getValue(key));
+  }
+
+  /**
    * Returns the string array associated with a key, assuming it is defined. It is recommended to
    * check that it is defined first with {@link #hasValue(String)}.
    *

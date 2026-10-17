@@ -64,6 +64,7 @@ The correct way to build the system is to run 'make'.
   #define ELTONEOF EltOneOf
   #define LOWERBOUND LowerBound
   #define UPPERBOUND UpperBound
+  #define GET_AUX_BOUND getLong
 #elif defined(FLOAT)
   #undef EQUALS
   #define EQUALS(a,b) (Global.fuzzy.eq(a, b) || (Double.isNaN(a) && Double.isNaN(b)))
@@ -85,6 +86,7 @@ The correct way to build the system is to run 'make'.
   #define ELTONEOF EltOneOfFloat
   #define LOWERBOUND LowerBoundFloat
   #define UPPERBOUND UpperBoundFloat
+  #define GET_AUX_BOUND getDouble
 #elif defined(STRING)
   #define COMMENT No "EQUALS(a,b)" because we intern and so can use equality tests
   #undef JAVA_EQUALS_STRING
@@ -1598,8 +1600,8 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       if (num_elts == 1
           && v.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
           && v.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-        int min = v.aux.getInt(VarInfoAux.MINIMUM_VALUE),
-            max = v.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
+        INT min = v.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE),
+            max = v.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE);
         if (min == max && min == elts[0]) {
           return new DiscardInfo(
               this,
