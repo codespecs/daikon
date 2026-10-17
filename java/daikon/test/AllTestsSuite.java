@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   daikon.chicory.RuntimeTest.class,
+  daikon.test.BadOptionTest.class,
   daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
   daikon.test.TestAst.class,
   daikon.test.config.ConfigurationTest.class,
@@ -34,9 +35,8 @@ import org.junit.runners.Suite;
   daikon.test.TestQuant.class,
   daikon.test.TestAnnotate.class,
   daikon.test.DtraceDiffTester.class,
-  //       ,
-  //       // I'm having trouble with this; need to fix, reinstate, and not call
-  //       // specially from Makefile.  -MDE 7/8/2005
-  //       daikon.test.split.SplitterFactoryTest.class
+  // daikon.test.split.SplitterFactoryTest is not in this suite, because it is generated after the
+  // rest of Daikon (including this class) is compiled.  The Makefile's "junit" target runs it
+  // separately.
 })
 public final class AllTestsSuite {}

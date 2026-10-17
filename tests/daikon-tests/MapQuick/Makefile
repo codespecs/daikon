@@ -77,7 +77,7 @@ txts: ${SEP_TXTD} ${SEP_TXTE}
 
 oneinv: MapQuick.inv.gz
 MapQuick.inv.gz: separate*.inv.gz
-	java daikon.UnionInvariants --suppress_redundant -o $@ separate*.inv.gz
+	${JAVA} daikon.UnionInvariants --suppress_redundant -o $@ separate*.inv.gz
 
 # USER_MERGE_ESC_OPTIONS:=--dbg daikon.tools.jtb.MergeESC
 

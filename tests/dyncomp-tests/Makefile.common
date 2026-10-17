@@ -1,9 +1,12 @@
-# This is a -*- makefile -*-, Emacs
+# This is a -*- makefile -*-, Emacs.
 
 # Forked from $DAIKONDIR/tests/kvasir-tests/Makefile.common
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+endif
+include ${DAIKONDIR}/tests/Makefile.jdk
 
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64
@@ -22,7 +25,6 @@ KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/libexec/valgrind/fjalar-$(VALGRI
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
 # --dyncomp is now the default; turn back off to minimize changes to this Makefile
 KVASIR_OPTIONS := $(KVASIR_OPTIONS) --no-dyncomp
-KVASIR_DECLS_2 := $(KVASIR_DECLS_@)
 CLEAN_OUTPUT := ../../kvasir-tests/clean-output.pl
 CLEAN_DECLS := ../../kvasir-tests/clean-decls.pl
 REMOVE_TIMING := ../../kvasir-tests/remove-timing.pl
@@ -41,8 +43,8 @@ AFTER_RUN ?= @:
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := java -Xmx7g -cp "${DAIKON_CLASSPATH}" daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true
-PRINT_INV := java -Xmx7g -cp "${DAIKON_CLASSPATH}" daikon.PrintInvariants
+DAIKON := ${JAVA} -Xmx7g -cp "${DAIKON_CLASSPATH}" daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true
+PRINT_INV := ${JAVA} -Xmx7g -cp "${DAIKON_CLASSPATH}" daikon.PrintInvariants
 
 default: summary
 
@@ -254,7 +256,7 @@ endif
 
 daikon-output/$(NAME)_2.dtrace: daikon-output/$(NAME).dtrace
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_DECLS_2) --dtrace-file=daikon-output/$(NAME)_2.dtrace ./$(NAME) $(PROGRAM_ARGS) > kvasir-output.log
+	$(KVASIR_SCRIPT) --dtrace-file=daikon-output/$(NAME)_2.dtrace ./$(NAME) $(PROGRAM_ARGS) > kvasir-output.log
 	$(AFTER_RUN)
 
 decls-2-compile: daikon-output/$(NAME)_2.dtrace
