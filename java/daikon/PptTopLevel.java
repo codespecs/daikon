@@ -374,6 +374,13 @@ public class PptTopLevel extends Ppt {
    */
   public boolean invariants_merged = false;
 
+  /**
+   * The comparability of each variable before {@link #makeComparable} loosened it, or null if it
+   * has not been loosened. {@link #clean_for_merge} restores it.
+   */
+  @SuppressWarnings("serial")
+  private VarComparability @Nullable [] declaredComparability = null;
+
   // True while we're inside an invocation of mergeInvs() on this PPT.
   // Used to prevent calling mergeInvs() recursively on a child in such
   // a way as to cause an infinite loop, even if there is a loop in the
@@ -3727,26 +3734,7 @@ public class PptTopLevel extends Ppt {
     assert (equality_view == null) : name() + ": " + equality_view;
     equality_view = new PptSliceEquality(this);
 
-    // Get all of the binary relationships from the first child's
-    // equality sets.
-    Map<VarInfo.Pair, VarInfo.Pair> equalityPairs = null; // a set of pairs, represented as a map
-    int first_child = 0; // the index of the first child with num_samples() > 0
-    for (first_child = 0; first_child < children.size(); first_child++) {
-      PptRelation c1 = children.get(first_child);
-      debugMerge.fine("looking at " + c1.child.name() + " " + c1.child.num_samples());
-      if (c1.child.num_samples() > 0) {
-        // System.out.printf("First child equality set: %s%n",
-        //                     c1.child.equality_view);
-        equalityPairs = c1.get_child_equalities_as_parent();
-        if (debugMerge.isLoggable(Level.FINE)) {
-          debugMerge.fine("Found equality pairs via " + c1);
-          for (VarInfo.Pair vp : equalityPairs.keySet()) {
-            debugMerge.fine("-- " + vp);
-          }
-        }
-        break;
-      }
-    }
+    Map<VarInfo.Pair, VarInfo.Pair> equalityPairs = childEqualityPairs();
     if (equalityPairs == null) {
       equality_view.instantiate_invariants();
       invariants_merged = true;
@@ -3754,31 +3742,12 @@ public class PptTopLevel extends Ppt {
       return;
     }
 
-    // Loop through the remaining children, intersecting the equal
-    // variables and incrementing the sample count as we go.
-    for (int i = first_child + 1; i < children.size(); i++) {
-      PptRelation rel = children.get(i);
-      if (rel.child.num_samples() == 0) {
-        continue;
-      }
-      Map<VarInfo.Pair, VarInfo.Pair> eq_new = rel.get_child_equalities_as_parent();
-      // Cannot use foreach loop, due to desire to remove from equalityPairs.
-      for (Iterator<VarInfo.@KeyFor("equalityPairs") Pair> j = equalityPairs.keySet().iterator();
-          j.hasNext(); ) {
-        VarInfo.Pair curpair = j.next();
-        VarInfo.Pair newpair = eq_new.get(curpair);
-        if (newpair == null) {
-          // Equivalent to equalityPairs.remove(...), but that could throw a
-          // ConcurrentModificationException, so must remove via the iterator.
-          j.remove();
-        } else {
-          curpair.samples += newpair.samples;
-        }
-      }
-    }
-
     // Build actual equality sets that match the pairs we found
     Set<VarInfo.Pair> equalityPairs_keySet = equalityPairs.keySet();
+    // A conditional ppt's comparability was already set by its parent; see makeComparable.
+    if (!(this instanceof PptConditional)) {
+      makeComparable(equalityPairs_keySet);
+    }
     equality_view.instantiate_from_pairs(equalityPairs_keySet);
     if (debugMerge.isLoggable(Level.FINE)) {
       debugMerge.fine("Built equality sets ");
@@ -3976,6 +3945,193 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Returns the pairs of this ppt's variables that are in the same equality set in every child that
+   * has samples.
+   *
+   * @return the pairs of variables that are equal in every child, represented as a map from each
+   *     pair to itself; null if no child has samples
+   */
+  @Nullable Map<VarInfo.Pair, VarInfo.Pair> childEqualityPairs() {
+    // Get all of the binary relationships from the first child's
+    // equality sets.
+    Map<VarInfo.Pair, VarInfo.Pair> equalityPairs = null; // a set of pairs, represented as a map
+    int first_child = 0; // the index of the first child with num_samples() > 0
+    for (first_child = 0; first_child < children.size(); first_child++) {
+      PptRelation c1 = children.get(first_child);
+      debugMerge.fine("looking at " + c1.child.name() + " " + c1.child.num_samples());
+      if (c1.child.num_samples() > 0) {
+        // System.out.printf("First child equality set: %s%n",
+        //                     c1.child.equality_view);
+        equalityPairs = c1.get_child_equalities_as_parent();
+        if (debugMerge.isLoggable(Level.FINE)) {
+          debugMerge.fine("Found equality pairs via " + c1);
+          for (VarInfo.Pair vp : equalityPairs.keySet()) {
+            debugMerge.fine("-- " + vp);
+          }
+        }
+        break;
+      }
+    }
+    if (equalityPairs == null) {
+      return null;
+    }
+
+    // Loop through the remaining children, intersecting the equal
+    // variables and incrementing the sample count as we go.
+    for (int i = first_child + 1; i < children.size(); i++) {
+      PptRelation rel = children.get(i);
+      if (rel.child.num_samples() == 0) {
+        continue;
+      }
+      Map<VarInfo.Pair, VarInfo.Pair> eq_new = rel.get_child_equalities_as_parent();
+      // Cannot use foreach loop, due to desire to remove from equalityPairs.
+      for (Iterator<VarInfo.@KeyFor("equalityPairs") Pair> j = equalityPairs.keySet().iterator();
+          j.hasNext(); ) {
+        VarInfo.Pair curpair = j.next();
+        VarInfo.Pair newpair = eq_new.get(curpair);
+        if (newpair == null) {
+          // Equivalent to equalityPairs.remove(...), but that could throw a
+          // ConcurrentModificationException, so must remove via the iterator.
+          j.remove();
+        } else {
+          curpair.samples += newpair.samples;
+        }
+      }
+    }
+    return equalityPairs;
+  }
+
+  /**
+   * Loosens the comparability of the variables at this program point and at its conditional program
+   * points, so that every two variables that are in the same equality set at any of them are
+   * comparable. Comparability is computed separately for each program point, so variables that are
+   * comparable and equal in every child may be incomparable at this program point. Since they are
+   * always equal, they are in the same equality set here and so must be comparable.
+   *
+   * <p>The comparable sets of the two variables in each pair are merged. Therefore, every variable
+   * that is comparable to one of them becomes comparable to both, including derived variables.
+   * Furthermore, if any variable in an equality set is comparable to everything, every variable in
+   * that equality set becomes comparable to everything, so that the invariants do not depend on
+   * which variable is the equality set's leader.
+   *
+   * <p>A conditional program point has the same variables as this one, and its invariants are
+   * compared to this program point's invariants. Therefore, this program point and its conditional
+   * program points are given the same comparability, computed from the equality sets of all of
+   * them.
+   *
+   * @param pairs pairs of variables at this program point that are equal in every child
+   */
+  private void makeComparable(Collection<VarInfo.Pair> pairs) {
+    List<VarInfo.Pair> allPairs = new ArrayList<>(pairs);
+    for (PptConditional pptCond : cond_iterable()) {
+      assert pptCond.var_infos.length == var_infos.length : pptCond.name();
+      for (PptRelation rel : pptCond.children) {
+        if (!rel.child.in_merge) {
+          rel.child.mergeInvs();
+        }
+      }
+      Map<VarInfo.Pair, VarInfo.Pair> condPairs = pptCond.childEqualityPairs();
+      if (condPairs != null) {
+        for (VarInfo.Pair pair : condPairs.keySet()) {
+          allPairs.add(
+              new VarInfo.Pair(
+                  var_infos[pair.v1.varinfo_index], var_infos[pair.v2.varinfo_index], 0));
+        }
+      }
+    }
+    if (allPairs.isEmpty()) {
+      return;
+    }
+
+    // Merge the comparable sets of the two variables in each pair.
+    Map<Integer, Integer> groups = new HashMap<>();
+    for (VarInfo.Pair pair : allPairs) {
+      if (pair.v1.comparability instanceof VarComparabilityImplicit
+          && pair.v2.comparability instanceof VarComparabilityImplicit) {
+        VarComparabilityImplicit.unify(
+            (VarComparabilityImplicit) pair.v1.comparability,
+            (VarComparabilityImplicit) pair.v2.comparability,
+            groups);
+      }
+    }
+    VarComparability[] newComparability = new VarComparability[var_infos.length];
+    for (int i = 0; i < var_infos.length; i++) {
+      VarComparability comparability = var_infos[i].comparability;
+      newComparability[i] =
+          (comparability instanceof VarComparabilityImplicit)
+              ? ((VarComparabilityImplicit) comparability).remap(groups)
+              : comparability;
+    }
+
+    // Give all the variables in each equality set the same comparability.  equalitySets is a
+    // union-find structure over variable indices; equalitySets[i] == i for a representative.
+    int[] equalitySets = new int[var_infos.length];
+    for (int i = 0; i < equalitySets.length; i++) {
+      equalitySets[i] = i;
+    }
+    for (VarInfo.Pair pair : allPairs) {
+      int root1 = findEqualitySet(equalitySets, pair.v1.varinfo_index);
+      int root2 = findEqualitySet(equalitySets, pair.v2.varinfo_index);
+      equalitySets[Math.max(root1, root2)] = Math.min(root1, root2);
+    }
+    Map<Integer, VarComparabilityImplicit> joined = new HashMap<>();
+    for (int i = 0; i < var_infos.length; i++) {
+      if (newComparability[i] instanceof VarComparabilityImplicit) {
+        joined.merge(
+            findEqualitySet(equalitySets, i),
+            (VarComparabilityImplicit) newComparability[i],
+            VarComparabilityImplicit::join);
+      }
+    }
+    for (int i = 0; i < var_infos.length; i++) {
+      VarComparabilityImplicit setComparability = joined.get(findEqualitySet(equalitySets, i));
+      if (setComparability != null && newComparability[i] instanceof VarComparabilityImplicit) {
+        newComparability[i] = setComparability;
+      }
+    }
+
+    setComparability(newComparability);
+    for (PptConditional pptCond : cond_iterable()) {
+      pptCond.setComparability(newComparability);
+    }
+  }
+
+  /**
+   * Sets the comparability of each variable at this program point, first recording the declared
+   * comparability if it has not already been recorded.
+   *
+   * @param newComparability the new comparability of each variable
+   */
+  void setComparability(VarComparability[] newComparability) {
+    if (declaredComparability == null) {
+      declaredComparability = new VarComparability[var_infos.length];
+      for (int i = 0; i < var_infos.length; i++) {
+        declaredComparability[i] = var_infos[i].comparability;
+      }
+    }
+    for (int i = 0; i < var_infos.length; i++) {
+      var_infos[i].comparability = newComparability[i];
+    }
+  }
+
+  /**
+   * Returns the representative of the equality set that contains variable {@code i}.
+   *
+   * @param equalitySets a union-find structure over variable indices, as built by {@link
+   *     #makeComparable}
+   * @param i a variable index
+   * @return the representative of the equality set that contains variable {@code i}
+   */
+  private static int findEqualitySet(int[] equalitySets, int i) {
+    while (equalitySets[i] != i) {
+      // Path halving
+      equalitySets[i] = equalitySets[equalitySets[i]];
+      i = equalitySets[i];
+    }
+    return i;
+  }
+
+  /**
    * Merges one child. Since there is only one child, the merge is trivial. Just copy each invariant
    * to the parent.
    */
@@ -4145,6 +4301,12 @@ public class PptTopLevel extends Ppt {
     equality_view = null;
     for (int i = 0; i < var_infos.length; i++) {
       var_infos[i].equalitySet = null;
+    }
+    if (declaredComparability != null) {
+      for (int i = 0; i < var_infos.length; i++) {
+        var_infos[i].comparability = declaredComparability[i];
+      }
+      declaredComparability = null;
     }
     views = new HashMap<>();
     // parents = new ArrayList();
