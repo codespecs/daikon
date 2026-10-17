@@ -1207,4 +1207,5 @@ this->max this->used this[0]
 this->theBuffer
 
 Dstr:::OBJECT
+-1: this this->max this->theBuffer this->used
 

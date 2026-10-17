@@ -151,4 +151,5 @@ this->myName
 this->stackRep[..]
 
 Stack:::OBJECT
+-1: this this->maxElts this->myName this->numElts this->stackRep this->stackRep[..]
 
