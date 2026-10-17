@@ -2,6 +2,8 @@ package daikon.tools.runtimechecker;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import daikon.Daikon;
+import daikon.DaikonGetopt;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -11,8 +13,10 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import org.checkerframework.checker.signature.qual.BinaryName;
+import org.plumelib.util.StringsPlume;
 
 /**
  * This program runs a given program (which is assumed to contain some classes that have been
@@ -26,47 +30,64 @@ class WriteViolationFile {
     throw new UnsupportedOperationException("Do not instantiate");
   }
 
-  public static void usage() {
-    System.out.println("Usage:  java WriteViolationFile CLASS ARGS");
-    System.out.println("  CLASS and ARGS are just as they would be when being run directly,");
-    System.out.println(
-        "  except that CLASS is written as a binary name, not a fully-qualified name");
-    System.out.println("Output is written to file \"violations.txt\" in the current directory.");
-  }
+  /** The usage message for this program. */
+  private static final String usageMessage =
+      StringsPlume.joinLines(
+          "Usage:  java WriteViolationFile CLASS ARGS",
+          "  CLASS and ARGS are just as they would be when being run directly,",
+          "  except that CLASS is written as a binary name, not a fully-qualified name",
+          "Output is written to file \"violations.txt\" in the current directory.");
 
-  @SuppressWarnings("Finally")
-  public static void main(String[] args) {
-    if (args.length == 0) {
-      System.out.println("Error: no class specified");
-      usage();
-      System.exit(1);
-    }
-    @SuppressWarnings("signature") // will be checked immediately below, and exception is caught
-    @BinaryName String class_name = args[0];
-    String[] main_args = new String[args.length - 1];
-    for (int i = 0; i < main_args.length; i++) {
-      main_args[i] = args[i + 1];
-    }
+  /**
+   * Returns the main method of the given class.
+   *
+   * @param className the binary name of a class
+   * @return the main method of the class
+   * @throws Daikon.UserError if the class does not exist or has no public static main method
+   */
+  private static Method getMainMethod(String className) {
     Class<?> cls;
     try {
-      cls = Class.forName(class_name);
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new Error("Cannot find class " + class_name);
+      @SuppressWarnings("signature") // checked by Class.forName, which throws if it is malformed
+      @BinaryName String binaryName = className;
+      cls = Class.forName(binaryName);
+    } catch (ClassNotFoundException e) {
+      throw new Daikon.UserError(e, "Cannot find class " + className);
     }
-    Method main_method;
+    Method mainMethod;
     try {
-      main_method = cls.getMethod("main", new Class<?>[] {String[].class});
-    } catch (Exception e) {
-      throw new Error("Cannot find main method in class " + class_name);
+      mainMethod = cls.getMethod("main", new Class<?>[] {String[].class});
+    } catch (NoSuchMethodException e) {
+      throw new Daikon.UserError(e, "Cannot find public main method in class " + className);
     }
-    int mods = main_method.getModifiers();
-    if (!Modifier.isPublic(mods)) {
-      throw new Error("main method is not public in class " + class_name);
+    if (!Modifier.isStatic(mainMethod.getModifiers())) {
+      throw new Daikon.UserError("main method is not static in class " + className);
     }
-    if (!Modifier.isStatic(mods)) {
-      throw new Error("main method is not static in class " + class_name);
+    return mainMethod;
+  }
+
+  public static void main(String[] args) {
+    try {
+      mainHelper(args);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
+  }
+
+  /**
+   * This does the work of {@link #main(String[])}, but it never calls System.exit.
+   *
+   * @param args the command-line arguments
+   * @throws Daikon.DaikonTerminationException if the arguments are malformed or request help
+   */
+  @SuppressWarnings("Finally")
+  private static void mainHelper(String[] args) {
+    String[] classAndArgs = DaikonGetopt.argsAfterLeadingOptions(args, usageMessage);
+    if (classAndArgs.length == 0) {
+      throw new Daikon.UserError("No class specified" + Daikon.lineSep + usageMessage);
+    }
+    Method main_method = getMainMethod(classAndArgs[0]);
+    String[] main_args = Arrays.copyOfRange(classAndArgs, 1, classAndArgs.length);
 
     // This will produce no output if the program under test calls
     // System.exit(1).  Let's hope it doesn't (and fix this later).
