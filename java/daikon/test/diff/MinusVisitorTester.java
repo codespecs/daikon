@@ -21,7 +21,6 @@ public class MinusVisitorTester {
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
-    FileIO.new_decl_format = true;
   }
 
   // X1 and X2 have the same class and vars, but different formula
