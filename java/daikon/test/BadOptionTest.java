@@ -12,6 +12,7 @@ import daikon.PrintInvariants;
 import daikon.SplitDtrace;
 import daikon.UnionInvariants;
 import daikon.tools.DtraceDiff;
+import daikon.tools.TraceSelect;
 import gnu.getopt.LongOpt;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -147,6 +148,18 @@ public class BadOptionTest {
     assertBadOption(
         "Unrecognized command-line option --bogus",
         () -> PrintInvariants.mainHelper(new String[] {"--bogus", "foo.inv.gz"}));
+  }
+
+  /** Tests that TraceSelect rejects Daikon's -o option, which it passes to Daikon itself. */
+  @Test
+  public void testTraceSelectOutputOption() {
+    Daikon.UserError e =
+        assertThrows(
+            Daikon.UserError.class,
+            () ->
+                TraceSelect.mainHelper(
+                    new String[] {"1", "10", "-o", "results.inv", "input.dtrace"}));
+    assertTrue(String.valueOf(e.getMessage()).contains("-o"));
   }
 
   /** Tests that tools accept the {@code --help} option that their usage messages document. */

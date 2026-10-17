@@ -60,11 +60,11 @@ public class TraceSelect {
 
   /**
    * Daikon command-line options that take a separate argument. This must be kept in sync with the
-   * options that {@link daikon.Daikon} declares with {@code LongOpt.REQUIRED_ARGUMENT}, plus "-o".
+   * options that {@link daikon.Daikon} declares with {@code LongOpt.REQUIRED_ARGUMENT}. It omits
+   * "-o", which TraceSelect rejects.
    */
   private static final Set<String> daikonOptionsWithArgument =
       Set.of(
-          "-o",
           "--" + daikon.Daikon.format_SWITCH,
           "--" + daikon.Daikon.files_from_SWITCH,
           "--" + daikon.Daikon.omit_from_output_SWITCH,
@@ -160,8 +160,17 @@ public class TraceSelect {
         daikonArgStart = i + 1;
       }
 
-      // A Daikon option that takes a separate argument, such as "--config foo.dtrace" or
-      // "-o foo.inv".  Its argument is not a trace file, even if it ends in ".dtrace".
+      // Daikon's -o option, as "-o foo.inv" or "-ofoo.inv".  TraceSelect itself passes -o to
+      // Daikon, to write each sample's invariants to a file that TraceSelect then reads; Daikon
+      // rejects a second -o.
+      else if (args[i].startsWith("-o")) {
+        throw new daikon.Daikon.UserError(
+            "TraceSelect does not accept Daikon's -o option: it writes the invariants of each"
+                + " sample to the sample's file name plus \".inv\"");
+      }
+
+      // A Daikon option that takes a separate argument, such as "--config foo.dtrace".  Its
+      // argument is not a trace file, even if it ends in ".dtrace".
       else if (daikonOptionTakesArgument(args[i])) {
         if (!knowArgStart) {
           daikonArgStart = i;
