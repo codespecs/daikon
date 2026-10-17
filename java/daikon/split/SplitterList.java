@@ -253,7 +253,7 @@ public abstract class SplitterList {
    */
   public static Splitter @Nullable [] get(String pptName) {
     boolean useAllIncomplete = false;
-    if (pptName.contains("OBJECT")) {
+    if (pptName.endsWith(FileIO.object_tag)) {
       for (String name : ppt_splitters.keySet()) {
         if (!isComplete(name) && name.contains("OBJECT")) {
           useAllIncomplete = true;
