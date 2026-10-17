@@ -7,7 +7,7 @@ import java.io.*;
 
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class ConditionPrinter extends DepthFirstVisitor {
+public class ConditionPrinter extends DepthFirstVisitor implements AutoCloseable {
 
     private final Printer printer;
     private final Converter converter = new Converter();
@@ -22,6 +22,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
         printer = new Printer(fileName);
     }
 
+    @Override
     public void close() throws IOException {
         printer.close();
     }
