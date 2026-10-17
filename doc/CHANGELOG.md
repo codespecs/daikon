@@ -48,6 +48,12 @@ Scripts:
   `dtrace-rm-decls.php`, `find_comparable.pl`, `find_globals.pl`,
   `generate-dec-types.py`, `lwpp.pl`, `lwpp-init.pl`, and `set_decl_type.pl`.
 
+Fjalar/Kvasir:
+
+* New command-line option `--dyncomp-unhandled-ops=warn` makes DynComp
+  print a warning and continue, rather than stop, when it encounters a VEX IR
+  operation that it does not handle.
+
 ## Version 5.9.0 (September 1, 2026)
 
 * All Daikon tools now work with Java 8-26.
