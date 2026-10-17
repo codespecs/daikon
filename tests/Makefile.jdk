@@ -1,24 +1,39 @@
 # This is a -*- makefile -*-, Emacs.
 
-# Defines JAVA_HOME, JAVA, and JAVAC, for use by test Makefiles.
-# Each may be overridden on the command line or in the environment.
+# Defines JAVA_HOME (via java/java-home.mk), JAVA, and JAVAC, for use by test
+# Makefiles.  Each may be overridden on the command line or in the environment.
+# If JAVAC is set, JAVA_HOME is the JDK that contains that javac, so that the
+# tests are compiled, run, and compared to goal files for the same JDK.
+# A Makefile.user that sets JAVAC must not refer to JAVA_HOME, which is not yet
+# set; to pass arguments such as a classpath to javac, set TEST_JAVAC_ARGS instead.
 
-ifeq ($(shell uname), Darwin)
-  JAVA_HOME ?= $(shell /usr/libexec/java_home)
-else ifndef JAVA_HOME
-  ifdef JAVAC
-    JAVA_HOME := $(shell readlink -f $(shell command -v $(firstword ${JAVAC})) | sed "s:/bin/javac::")
-  else ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
-    JAVA_HOME := $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
-  else
-    $(info Failure: Here is the output of: which javac)
-    $(info $(shell which javac))
-    $(error 'which javac' had exit status 1, and neither JAVA_HOME nor JAVAC is set)
+# Some Makefiles include this file twice, directly and via another file.
+ifndef MAKEFILE_JDK_INCLUDED
+MAKEFILE_JDK_INCLUDED := 1
+
+ifdef JAVAC
+  ifeq ($(shell command -v $(firstword ${JAVAC})),)
+    $(error JAVAC=${JAVAC} is not an executable command)
+  endif
+  JAVAC_JAVA_HOME := $(shell ${JAVAC} -J-XshowSettings:properties -version 2>&1 | sed -n -e 's/^ *java\.home = //p')
+  ifeq (${JAVAC_JAVA_HOME},)
+    $(error Cannot determine the JDK of JAVAC=${JAVAC})
+  endif
+  # A JAVA_HOME on the command line is checked against JAVAC below.
+  ifneq ($(origin JAVA_HOME),command line)
+    override JAVA_HOME := ${JAVAC_JAVA_HOME}
   endif
 endif
+
+include $(dir $(lastword ${MAKEFILE_LIST}))../java/java-home.mk
+
+ifdef JAVAC_JAVA_HOME
+  ifneq ($(realpath ${JAVA_HOME}),$(realpath $(call jdk_of_jre,${JAVAC_JAVA_HOME})))
+    $(error JAVA_HOME=${JAVA_HOME} differs from the JDK of JAVAC=${JAVAC}, which is $(call jdk_of_jre,${JAVAC_JAVA_HOME}))
+  endif
+endif
+
 JAVA  ?= ${JAVA_HOME}/bin/java
 JAVAC ?= ${JAVA_HOME}/bin/javac
 
-ifeq ($(shell command -v $(firstword ${JAVAC})),)
-  $(error JAVAC=${JAVAC} is not an executable command)
 endif

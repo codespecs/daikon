@@ -1,8 +1,10 @@
+# The directory containing this file.  It is computed before any other file is
+# included, because MAKEFILE_LIST ends with the most recently read makefile.
+DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
+
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
-
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
 
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
@@ -20,7 +22,15 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER := sort
 endif
 
-JAVA_RELEASE_NUMBER := $(shell java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
+# The bin/ directory of the JDK.  Recipes that run JDK tools use it, as in
+# "${JDK_BIN}/javac".  java-home.mk, which sets and exports JAVA_HOME, is read
+# the first time JDK_BIN is expanded, so that targets that do not use JDK_BIN
+# neither run javac nor need a JDK.  Therefore, JAVA_HOME, JAVA_RELEASE_NUMBER,
+# and the JAVANN_OR_NEWER variables are not set in this file until JDK_BIN has
+# been expanded; recipes should use ${JDK_BIN} rather than those variables.
+# JDK_BIN does not redefine itself, because make's expansion of a variable can
+# misbehave if the variable is redefined during that expansion.
+JDK_BIN = $(if ${JAVA_HOME_MK_READ},,$(eval include ${DAIKONDIR}/java/java-home.mk)$(eval JAVA_HOME_MK_READ := 1))${JAVA_HOME}/bin
 
 
 ##########################################################################
@@ -73,10 +83,6 @@ SCRIPT_PATHS := $(addprefix scripts/,${SCRIPT_FILES})
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print | ${SORT_DIRECTORY_ORDER})
-# If we're building on JDK 23 or less, remove the java24 files from the list.
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 24; echo $$?),0)
-  DAIKON_JAVA_FILES := $(filter-out %24.java, ${DAIKON_JAVA_FILES})
-endif
 
 DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/simplify/daikon-background.txt \
@@ -290,15 +296,15 @@ junit:
 # are working properly.
 quick-test:
 	cd examples/java-examples/StackAr; \
-	javac -g DataStructures/*.java
+	${JDK_BIN}/javac -g DataStructures/*.java
 	@echo "Running Chicory/Daikon"
 	cd examples/java-examples/StackAr; \
-	java -cp ${QT_PATH} daikon.Chicory --daikon DataStructures.StackArTester
+	${JDK_BIN}/java -cp ${QT_PATH} daikon.Chicory --daikon DataStructures.StackArTester
 	@echo "Running DynComp/Chicory/Daikon"
 	cd examples/java-examples/StackAr; \
-	java -cp ${QT_PATH} daikon.DynComp DataStructures.StackArTester; \
-	java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
-	java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
+	${JDK_BIN}/java -cp ${QT_PATH} daikon.DynComp DataStructures.StackArTester; \
+	${JDK_BIN}/java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
+	${JDK_BIN}/java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
 
 # Sanity check, suitable for continuous integration.
 nightly-test:
@@ -364,7 +370,7 @@ test-staged-dist: ${STAGING_DIR}
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
 	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ${PLUME_SCRIPTS}/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
-	(cd ${DISTTESTDIRJAVA}/daikon/java; rm `find . -name '*.class'`; ${MAKE} JAVAC='javac' compile)
+	(cd ${DISTTESTDIRJAVA}/daikon/java; rm `find . -name '*.class'`; ${MAKE} compile)
 	## Test that these new .class files work properly.
 	${MAKE} -C ${DISTTESTDIR}/daikon/java junit
 	## Test the main target of the makefile.
@@ -594,11 +600,11 @@ daikon.jar: ${DAIKON_JAVA_FILES} $(patsubst %,java/%,${DAIKON_RESOURCE_FILES})
 		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
 
 	# make hamcrest and junit4 overwrite junit5 to get our special versions
-	for filename in ${JAR_DIR}/java/lib/*.jar ${JAR_DIR}/java/lib/hamcrest*.jar ${JAR_DIR}/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; jar xf $$filename ; done
+	for filename in ${JAR_DIR}/java/lib/*.jar ${JAR_DIR}/java/lib/hamcrest*.jar ${JAR_DIR}/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; ${JDK_BIN}/jar xf $$filename ; done
 	(cd java; ${RSYNC_AR} ${DAIKON_RESOURCE_FILES} ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
-	  jar cfm $@ ${JAR_DIR}/java/daikon/chicory/manifest.txt *
+	  ${JDK_BIN}/jar cfm $@ ${JAR_DIR}/java/daikon/chicory/manifest.txt *
 	mv ${TMPDIR}/daikon-jar/$@ $@
 	#rm -rf ${TMPDIR}/daikon-jar
 
@@ -609,7 +615,7 @@ daikon.jar: ${DAIKON_JAVA_FILES} $(patsubst %,java/%,${DAIKON_RESOURCE_FILES})
 # careful about not including extraneous files in the distribution, and one
 # could make a distribution even if there were diffs in the current
 # checkout.
-daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
+daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile java/java-home.mk
 	${MAKE} doc-all
 	# `make doc-all` just did the work, but check that the files exist.
 	${MAKE} ${DOC_PATHS}
@@ -663,6 +669,7 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	(cd java; tar chf ${TMPDIR}/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user --exclude PrototypeChecker.java --exclude VIndexChecker.java --exclude VIndexAnnotatedTypeFactory.java daikon jtb lib typequals)
 	(mkdir ${TMPDIR}/daikon/java; cd ${TMPDIR}/daikon/java; tar xf ${TMPDIR}/daikon-java.tar; rm ${TMPDIR}/daikon-java.tar)
 	cp -p java/Makefile ${TMPDIR}/daikon/java/Makefile
+	cp -p java/java-home.mk ${TMPDIR}/daikon/java/java-home.mk
 	# Maybe I should do  ${MAKE} javadoc
 	# Don't do  ${MAKE} clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; ${RM_TEMP_FILES})
