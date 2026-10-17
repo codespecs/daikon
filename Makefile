@@ -109,11 +109,7 @@ WWW_DIR := ${WWW_PARENT}/daikon
 INV_DIR := $(shell pwd)
 
 JAR_DIR := ${INV_DIR}
-# This path needs to contain checker.jar, because the files being run
-# were compiled with checker.jar at the beginning of the path.  This
-# is a problem when checker.jar has a different version of a library
-# such as plume-util. TODO:  Find a way to remove checker.jar.
-QT_PATH := ../../../java/lib/checker-framework/checker.jar:../../../daikon.jar:.:../../../java/*
+QT_PATH := ../../../java/lib/checker-qual.jar:../../../daikon.jar:.:../../../java/*
 
 # Staging area for the distribution
 STAGING_DIR := ${WWW_PARENT}/staging-daikon
@@ -411,6 +407,7 @@ check-repo: doc/CHANGELOG.md
 # daikon.tar.gz, daikon.zip, daikon.jar, javadoc, and the documentation.
 # See the dist target for moving these files to the website.
 staging:
+	${MAKE} -C java check-javadoc-enabled
 # Our intention is that members of the plse_www group will always have
 # write permission on the release directories; however, if you happen
 # to be the owner of an existing file, the permissions system gives
@@ -441,8 +438,7 @@ staging:
 	# Build javadoc
 	@echo "]2;Building Javadoc"
 	mkdir ${STAGING_DIR}/download/api
-	# Javadoc is skipped on Java 8.  Hard-coded JAVA_HOME path is a hack.
-	(export PATH=/usr/lib/jvm/java-11/bin:${PATH}; cd java; ${MAKE} SKIP_JAVADOC=0 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
+	(cd java; ${MAKE} 'JAVADOC_DEST=${STAGING_DIR}/download/api' javadoc)
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	mkdir ${STAGING_DIR}/download/doc

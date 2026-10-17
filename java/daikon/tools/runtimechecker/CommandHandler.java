@@ -2,11 +2,13 @@ package daikon.tools.runtimechecker;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import daikon.Daikon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
+import java.util.stream.Collectors;
 
 /**
  * A command handler handles a set of commands. A command is the first argument given to the
@@ -18,25 +20,41 @@ public class CommandHandler {
     throw new UnsupportedOperationException();
   }
 
-  public boolean handle(String[] args) {
+  /**
+   * Performs the command.
+   *
+   * @param args the command, followed by its arguments
+   * @throws Daikon.DaikonTerminationException if the program should exit
+   */
+  public void handle(String[] args) {
     throw new UnsupportedOperationException();
   }
 
-  public void usageMessage() {
+  /**
+   * Returns the usage message, which is the contents of this class's documentation file.
+   *
+   * @return the usage message
+   * @throws Daikon.BugInDaikon if the documentation file is missing
+   */
+  public String usageMessageString() {
     String[] classnameArray = getClass().getName().split("\\.");
     String simpleClassname = classnameArray[classnameArray.length - 1];
 
     String docFile = simpleClassname + ".doc";
     InputStream in = getClass().getResourceAsStream(docFile);
     if (in == null) {
-      System.err.println("Didn't find documentation for " + getClass());
-      return;
+      throw new Daikon.BugInDaikon("Didn't find documentation " + docFile + " for " + getClass());
     }
+    // When Daikon requires Java 11 or later, simplify this to:
+    //   try (in) {
+    //     return new String(in.readAllBytes(), UTF_8).stripTrailing();
+    //   }
+    // and remove the imports of BufferedReader, InputStreamReader, and Collectors.
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, UTF_8))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        System.err.println(line);
-      }
+      return reader
+          .lines()
+          .collect(Collectors.joining(System.lineSeparator()))
+          .replaceAll("\\s+$", "");
     } catch (IOException e) {
       throw new UncheckedIOException("problem reading " + docFile, e);
     }
