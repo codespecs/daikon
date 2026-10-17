@@ -28,6 +28,12 @@ Further documentation can be found in:
    with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
+* In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
+  complete program point name, and it matches only the program point of that
+  name.  A name ending with `:::EXIT` also matches the numbered exit points.
+  This affects where Daikon uses a condition only if indiscriminate splitting
+  is disabled via `--config_option daikon.split.SplitterList.all_splitters=false`.
+* ExtractConsequent writes splitting conditions that Daikon can use.
 * `daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
    `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
    or `PERL5LIB`.
