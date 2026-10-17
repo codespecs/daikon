@@ -71,6 +71,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy install \
   devscripts \
   g++ \
+  gdb \
   libc6-dbg \
   python3-setuptools \
   shellcheck \

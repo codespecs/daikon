@@ -58,6 +58,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
   devscripts-checkbashisms \
   gcc-c++ \
+  gdb \
   python3 \
   python3-distutils-extra \
   ShellCheck \
@@ -65,6 +66,11 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   texinfo-tex \
   texlive \
   yamllint
+
+# Valgrind's gdbserver regression tests, run by Fjalar's CI, need gdb (above)
+# and glibc's debugging information.  (On Ubuntu, that is package libc6-dbg.)
+# `dnf debuginfo-install` is in dnf-plugins-core.
+RUN dnf -q -y upgrade && dnf -q -y debuginfo-install glibc
 
 ## Other ways to install gradle:
 ##  * The `dnf` package repository has a very old version of gradle.
