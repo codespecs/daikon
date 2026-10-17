@@ -18,4 +18,4 @@ make dyncomp-jdk
 #   MPARG_ARG="MPARG=-Otarget"
 # fi
 make quick-test
-make -C tests MPARG=-j1 quick-txt-diff results
+make -C tests DAIKON_TEST_JOBS=1 quick-txt-diff results
