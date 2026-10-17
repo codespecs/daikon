@@ -21,6 +21,17 @@ public class CParser implements CParserConstants {
          }
       return false;
    }
+   /**
+    * Resets state that a previous parse may have left behind, including a parse that a
+    * TokenMgrError aborted partway through a lookahead.
+    */
+   private static void resetParseState()
+   {
+      types.clear();
+      typedefParsingStack.clear();
+      lookingAhead = false;
+      jj_rescan = false;
+   }
    private static void addType(String type)
    {
       types.put(type,Boolean.TRUE);
@@ -6051,6 +6062,7 @@ public class CParser implements CParserConstants {
   }
 
   static public void ReInit(java.io.InputStream stream) {
+    resetParseState();
     ASCII_CharStream.ReInit(stream, 1, 1);
     CParserTokenManager.ReInit(jj_input_stream);
     token = new Token();
@@ -6078,6 +6090,7 @@ public class CParser implements CParserConstants {
   }
 
   static public void ReInit(java.io.Reader stream) {
+    resetParseState();
     ASCII_CharStream.ReInit(stream, 1, 1);
     CParserTokenManager.ReInit(jj_input_stream);
     token = new Token();

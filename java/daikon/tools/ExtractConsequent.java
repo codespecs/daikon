@@ -5,6 +5,7 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.Ppt;
@@ -118,17 +119,14 @@ public class ExtractConsequent {
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.ExtractConsequent", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
         case 0:
           // got a long option
           String option_name = longopts[g.getLongind()].getName();
-          if (Daikon.help_SWITCH.equals(option_name)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-          } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
+          if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
             Daikon.suppress_redundant_invariants_with_simplify = true;
           } else if (Daikon.config_option_SWITCH.equals(option_name)) {
             String item = Daikon.getOptarg(g);
@@ -139,17 +137,11 @@ public class ExtractConsequent {
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
             daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
-            throw new RuntimeException("Unknown long option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
-        case '?':
-          break; // getopt() already printed an error
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
     // The index of the first non-option argument -- the name of the file
