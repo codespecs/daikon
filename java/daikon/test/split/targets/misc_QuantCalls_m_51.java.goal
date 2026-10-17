@@ -1,0 +1,65 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class misc_QuantCalls_m_51 extends Splitter {
+
+  public String condition() {
+    return "daikon.Quant.getElement_char(this.str, 0) == 'a' && daikon.Quant.size(this.str) > 1";
+  }
+
+  VarInfo this_str_array_varinfo; // this.str
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public misc_QuantCalls_m_51() { }
+  public misc_QuantCalls_m_51(Ppt ppt) {
+    this_str_array_varinfo = ppt.find_var_by_name("this.str");
+  }
+
+  public Splitter instantiateSplitter(Ppt ppt) {
+    return new misc_QuantCalls_m_51(ppt);
+  }
+
+  public boolean valid() {
+    return (this_str_array_varinfo != null);
+  }
+
+  public boolean test(ValueTuple vt) {
+    /* writeTestBody: 1 declarations */
+    String this_str_array = this_str_array_varinfo.getStringValue(vt);
+    return(getElement_char(this_str_array,0)=='a'&&size(this_str_array)>1);
+  }
+
+  public String repr() {
+    return "misc_QuantCalls_m_51: "
+      + "this_str_array_varinfo = " + this_str_array_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariantFactory(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo this_str_array_vi = ppt.find_var_by_name("this.str");
+    if (this_str_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_str_array_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+
+  public int[] getIntArray(long[] longArray) {
+    int[] intArray = new int[longArray.length];
+    for (int i = 0; i < intArray.length; i++) {
+      intArray[i] = (int) longArray[i];
+    }
+    return intArray;
+  }
+
+}

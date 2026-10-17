@@ -3,8 +3,13 @@ package daikon.split;
 import daikon.ProglangType;
 import daikon.VarInfo;
 import daikon.tools.jtb.Ast;
+import java.util.ArrayList;
+import java.util.List;
 import jtb.ParseException;
+import jtb.syntaxtree.ArgumentList;
+import jtb.syntaxtree.Arguments;
 import jtb.syntaxtree.Node;
+import jtb.syntaxtree.NodeSequence;
 import jtb.syntaxtree.NodeToken;
 import jtb.visitor.DepthFirstVisitor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -21,6 +26,11 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
  * this_a_array[2] == 3 && this_a_array.length == 3 &&
  * this_a_identity == this_b_identity
  * }</pre>
+ *
+ * A splitter does not represent an array as an array object, so an array cannot be passed to a
+ * method; ArrayFixer reports an error for an array that is an argument of a method call, such as
+ * {@code java.util.Arrays.equals(this_a, this_b)}. (QuantFixer has already replaced the calls to
+ * daikon.Quant methods that access arrays.)
  */
 class ArrayFixer extends DepthFirstVisitor {
 
@@ -59,6 +69,9 @@ class ArrayFixer extends DepthFirstVisitor {
    */
   private boolean lastTokenMayBeIdentity = false;
 
+  /** Descriptions of the method calls that have an array argument. */
+  private final List<String> errors = new ArrayList<>();
+
   /**
    * Creates a new instance of ArrayFixer.
    *
@@ -80,29 +93,59 @@ class ArrayFixer extends DepthFirstVisitor {
    * @param varInfos is a List of VarInfos for all the variables named in names
    * @return condition with all variable referring to arrays suffixed with "_identity" or "_array"
    *     as needed
-   * @throws ParseException when condition is not a valid segment of java code
+   * @throws ParseException when condition is not a valid segment of java code, or when an array is
+   *     an argument of a method call
    */
   public static String fixArrays(String expression, String[] names, VarInfo[] varInfos)
       throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     ArrayFixer fixer = new ArrayFixer(names, varInfos);
     root.accept(fixer);
+    if (!fixer.errors.isEmpty()) {
+      throw new ParseException(String.join(System.lineSeparator(), fixer.errors));
+    }
     fixer.fixLastToken();
     return Ast.format(root);
   }
 
   /**
-   * Fixes the arrays found in statement (see class description). names and varInfos must be in same
-   * order s.t. the ith element of varInfos is the VarInfo for the ith element of names.
-   *
-   * @param root the root of a jtb syntax tree
-   * @param names is a List of Strings that are the names of all the variables in statement
-   * @param varInfos is a List of VarInfos for all the variables named in names
+   * This method should not be directly used by users of this class; however, must be public to
+   * fulfill the Visitor interface. Records an error for each argument of n that is an array.
    */
-  public static void fixArrays(Node root, String[] names, VarInfo[] varInfos) {
-    ArrayFixer fixer = new ArrayFixer(names, varInfos);
-    root.accept(fixer);
-    fixer.fixLastToken();
+  @Override
+  public void visit(Arguments n) {
+    if (n.f1.present()) {
+      ArgumentList argList = (ArgumentList) n.f1.node;
+      checkNotArray(argList.f0, n);
+      for (Node commaAndArg : argList.f1.nodes) {
+        checkNotArray(((NodeSequence) commaAndArg).elementAt(1), n);
+      }
+    }
+    super.visit(n);
+  }
+
+  /**
+   * Records an error if arg is the name of an array.
+   *
+   * @param arg an argument of a method call
+   * @param args all the arguments of the method call, for the error message
+   */
+  private void checkNotArray(Node arg, Arguments args) {
+    NodeToken[] tokens = TokenExtractor.extractTokens(arg);
+    if (tokens.length != 1) {
+      return;
+    }
+    for (int i = 0; i < varInfos.length; i++) {
+      if (varInfos[i].type.isArray() && varNames[i].equals(tokens[0].tokenImage)) {
+        errors.add(
+            "Cannot translate a method call with arguments "
+                + Ast.format(args)
+                + ": the splitter cannot pass the array "
+                + varInfos[i].name()
+                + " to a method");
+        return;
+      }
+    }
   }
 
   /**

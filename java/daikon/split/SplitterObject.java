@@ -90,7 +90,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
 
   /** Sets the "splitter" field of this object to a newly-instantiated object. */
   public void load() {
-    Class<?> tempClass = defineSplitterClass(className, directory + className + ".class");
+    Class<?> tempClass = defineSplitterClass(className, getFullClassPath());
     if (tempClass != null) {
       try {
         splitter = (Splitter) tempClass.getDeclaredConstructor().newInstance();
@@ -118,12 +118,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       exists = true;
     } else {
       errorMessage =
-          "No class data for "
-              + this.toString()
-              + ", to be loaded from "
-              + directory
-              + className
-              + ".class";
+          "No class data for " + this.toString() + ", to be loaded from " + getFullClassPath();
       exists = false;
     }
   }
@@ -193,6 +188,15 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
+   * Returns the path of the class file of the Splitter.
+   *
+   * @return the path of the class file of the Splitter
+   */
+  public String getFullClassPath() {
+    return (directory + className + ".class");
+  }
+
+  /**
    * Returns the program point represented by this Splitter.
    *
    * @return the program point represented by this Splitter
@@ -204,7 +208,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   /** Set the className of this Splitter. */
   public void setClassName(@BinaryName String className) {
     this.className = className;
-    classFile = new File(directory + className + ".class");
+    classFile = new File(getFullClassPath());
   }
 
   /**

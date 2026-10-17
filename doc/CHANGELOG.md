@@ -28,10 +28,27 @@ Further documentation can be found in:
    with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
+* In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
+  complete program point name, and it matches only the program point of that
+  name.  A name ending with `:::EXIT` also matches the numbered exit points.
+  This affects where Daikon uses a condition only if indiscriminate splitting
+  is disabled via `--config_option daikon.split.SplitterList.all_splitters=false`.
+* ExtractConsequent writes splitting conditions that Daikon can use.
 * `daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
    `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
    or `PERL5LIB`.
 * Removed the Perl front end, dfepl.
+* Daikon and its tools no longer read `.decls` and `.dtrace` files in the
+  obsolete version 1 format (files that contain `decl-version 1.0`,
+  `VarComparability`, or `DECLARE` records).  Daikon also cannot read
+  `.inv` files written by earlier versions of Daikon.
+  * Removed configuration option `daikon.PrintInvariants.remove_post_vars`, which
+    had an effect only for version 1 files.
+  * Removed scripts that processed only version 1 files:  `auxinfo.pl`,
+    `clean-decls.php`, `copy_comparable.pl`, `decls2comp-1.0.py`,
+    `decls-lackwit-disjoint.pl`, `dfec-to-kvasir.py`, `dfec-to-kvasir-dtrace.py`,
+    `dtrace-rm-decls.php`, `find_comparable.pl`, `find_globals.pl`,
+    `generate-dec-types.py`, `lwpp.pl`, `lwpp-init.pl`, and `set_decl_type.pl`.
 
 Scripts:
 

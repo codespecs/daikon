@@ -89,6 +89,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -186,7 +187,11 @@ public class PptTopLevel extends Ppt {
     OBJECT,
     ENTER,
     EXIT,
-    SUBEXIT
+    SUBEXIT,
+    /** A :::THROWS program point. Daikon assigns this type based on the program point's name. */
+    THROWS,
+    /** A :::GLOBAL program point. Daikon assigns this type based on the program point's name. */
+    GLOBAL
   }
 
   /** Type of this program point. */
@@ -411,7 +416,7 @@ public class PptTopLevel extends Ppt {
   @SuppressWarnings("fields.uninitialized") // todo: initialization and helper methods
   public PptTopLevel(
       String name,
-      PptType type,
+      @Nullable PptType type,
       List<ParentRelation> parents,
       EnumSet<PptFlags> flags,
       VarInfo[] var_infos) {
@@ -419,11 +424,11 @@ public class PptTopLevel extends Ppt {
 
     this.name = name;
     if (!name.contains(":::")) {
-      name += ":::" + type;
+      name += ":::" + (type == null ? PptType.POINT : type);
     }
     this.ppt_name = new PptName(name);
     this.flags = flags;
-    this.type = type;
+    this.type = normalize_type(ppt_name, type);
     this.parent_relations = parents;
     init_vars();
   }
@@ -433,6 +438,99 @@ public class PptTopLevel extends Ppt {
     in.defaultReadObject();
   }
 
+  /**
+   * Returns the type that a program point with the given name and declared type should have.
+   *
+   * <p>A program point that has no declared type (as in a version 1 decls file, or a version 2
+   * decls file that omits the ppt-type record) gets its type from its name:
+   *
+   * <ul>
+   *   <li>foo:::ENTER is an {@link PptType#ENTER},
+   *   <li>a combined exit point, foo:::EXIT, is an {@link PptType#EXIT},
+   *   <li>a numbered exit point such as foo:::EXIT22 is a {@link PptType#SUBEXIT},
+   *   <li>Foo:::OBJECT is an {@link PptType#OBJECT},
+   *   <li>Foo:::CLASS is a {@link PptType#CLASS},
+   *   <li>foo:::THROWS is a {@link PptType#THROWS},
+   *   <li>:::GLOBAL is a {@link PptType#GLOBAL}, and
+   *   <li>any other program point is a generic {@link PptType#POINT}.
+   * </ul>
+   *
+   * <p>A program point that is declared with type {@link PptType#EXIT} or {@link PptType#SUBEXIT}
+   * is a combined exit or a numbered exit, according to its name. (Some front ends declare a
+   * numbered exit with type {@link PptType#EXIT}.)
+   *
+   * <p>A program point that is declared with any other type keeps that type. Its name must conform
+   * to the type, except for {@link PptType#POINT}, which permits any name.
+   *
+   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, is_dataflow_leaf, etc.
+   * agree with one another and with the program point's name.
+   *
+   * @param ppt_name the name of the program point
+   * @param type the declared type of the program point, or null if none was declared
+   * @return the type that the program point should have
+   * @throws IllegalArgumentException if the declared type does not conform to the name
+   */
+  private static PptType normalize_type(PptName ppt_name, @Nullable PptType type) {
+    if (type == null) {
+      if (ppt_name.isEnterPoint()) {
+        return PptType.ENTER;
+      } else if (ppt_name.isCombinedExitPoint()) {
+        return PptType.EXIT;
+      } else if (ppt_name.isNumberedExitPoint()) {
+        return PptType.SUBEXIT;
+      } else if (ppt_name.isObjectInstanceSynthetic()) {
+        return PptType.OBJECT;
+      } else if (ppt_name.isClassStaticSynthetic()) {
+        return PptType.CLASS;
+      } else if (ppt_name.isThrowsPoint()) {
+        return PptType.THROWS;
+      } else if (ppt_name.isGlobalPoint()) {
+        return PptType.GLOBAL;
+      } else {
+        return PptType.POINT;
+      }
+    }
+
+    boolean conforms;
+    switch (type) {
+      case POINT:
+        return type;
+      case ENTER:
+        conforms = ppt_name.isEnterPoint();
+        break;
+      case EXIT:
+      case SUBEXIT:
+        if (ppt_name.isCombinedExitPoint()) {
+          return PptType.EXIT;
+        } else if (ppt_name.isNumberedExitPoint()) {
+          return PptType.SUBEXIT;
+        }
+        conforms = false;
+        break;
+      case OBJECT:
+        conforms = ppt_name.isObjectInstanceSynthetic();
+        break;
+      case CLASS:
+        conforms = ppt_name.isClassStaticSynthetic();
+        break;
+      case THROWS:
+        conforms = ppt_name.isThrowsPoint();
+        break;
+      case GLOBAL:
+        conforms = ppt_name.isGlobalPoint();
+        break;
+      default:
+        throw new Error("Unexpected program point type " + type);
+    }
+    if (!conforms) {
+      throw new IllegalArgumentException(
+          String.format(
+              "Program point %s has type %s, but its name does not conform to that type",
+              ppt_name.getName(), type.toString().toLowerCase(Locale.ROOT)));
+    }
+    return type;
+  }
+
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
   @SuppressWarnings(
       "nullness:fields.uninitialized") // violates invariants; also uses helper function
@@ -440,6 +538,7 @@ public class PptTopLevel extends Ppt {
     super(var_infos);
     this.name = name;
     ppt_name = new PptName(name);
+    type = normalize_type(ppt_name, null);
     init_vars();
   }
 
@@ -3363,22 +3462,6 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /**
-   * Simplify the names of variables before printing them. For example, "orig(a[post(i)])" might
-   * change into "orig(a[i+1])". We might want to switch off this behavior, depending on various
-   * heuristics. We'll have to try it and see which output we like best. In any case, we have to do
-   * this for ESC output, since ESC doesn't have anything like post().
-   */
-  public void simplify_variable_names() {
-    for (VarInfo vi : var_infos) {
-      // String original = vi.name();
-      vi.simplify_expression();
-      // if (!original.equals (vi.name()))
-      //   System.out.printf("modified var from %s to %s%n", original,
-      //                      vi.name());
-    }
-  }
-
   public static final Comparator<Invariant> icfp = new Invariant.InvariantComparatorForPrinting();
 
   static Comparator<PptSlice> arityVarnameComparator = new PptSlice.ArityVarnameComparator();
@@ -4136,6 +4219,16 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Creates the initial equality view for this ppt, in which all variables are in a single equality
+   * set.
+   */
+  public void create_equality_view() {
+    PptSliceEquality new_equality_view = new PptSliceEquality(this);
+    new_equality_view.instantiate_invariants();
+    equality_view = new_equality_view;
+  }
+
+  /**
    * Cleans up the ppt so that its invariants can be merged from other ppts. Not normally necessary
    * unless the merge is taking place over multiple ppts maps based on different data. This allows a
    * ppt to have its invariants recalculated.
@@ -4646,11 +4739,7 @@ public class PptTopLevel extends Ppt {
   /** Is this is an exit ppt (combined or specific)? */
   @Pure
   public boolean is_exit() {
-    if (type != null) {
-      return (type == PptType.EXIT) || (type == PptType.SUBEXIT);
-    } else {
-      return ppt_name.isExitPoint();
-    }
+    return (type == PptType.EXIT) || (type == PptType.SUBEXIT);
   }
 
   /**
@@ -4660,48 +4749,46 @@ public class PptTopLevel extends Ppt {
    */
   @Pure
   public boolean is_enter() {
-    if (type != null) {
-      return (type == PptType.ENTER);
-    } else {
-      return ppt_name.isEnterPoint();
-    }
+    return type == PptType.ENTER;
   }
 
   /** Is this a combined exit point? */
   @Pure
   public boolean is_combined_exit() {
-    if (type != null) {
-      return (type == PptType.EXIT);
-    } else {
-      return ppt_name.isCombinedExitPoint();
-    }
+    return type == PptType.EXIT;
   }
 
   /** Is this a numbered (specific) exit point? */
   @Pure
   public boolean is_subexit() {
-    if (type != null) {
-      return (type == PptType.SUBEXIT);
-    } else {
-      return ppt_name.isExitPoint() && !ppt_name.isCombinedExitPoint();
-    }
+    return type == PptType.SUBEXIT;
+  }
+
+  /**
+   * Returns true if this is a leaf of the dataflow hierarchy, which obtains its invariants directly
+   * from samples rather than by merging them from its children.
+   *
+   * <p>The leaves are the numbered exit points ({@link PptType#SUBEXIT}) and the general program
+   * points ({@link PptType#POINT}). This ensures that arbitrarily named program points such as
+   * :::POINT (used by convertcsv.pl) are leaves.
+   *
+   * @return true if this is a leaf of the dataflow hierarchy
+   */
+  @Pure
+  public boolean is_dataflow_leaf() {
+    return (type == PptType.SUBEXIT) || (type == PptType.POINT);
   }
 
   /** Is this a ppt that represents an object? */
   @Pure
   public boolean is_object() {
-    if (type != null) {
-      return (type == PptType.OBJECT);
-    } else {
-      return ppt_name.isObjectInstanceSynthetic();
-    }
+    return type == PptType.OBJECT;
   }
 
   /** Is this a ppt that represents a class? */
-  @EnsuresNonNullIf(result = true, expression = "type")
   @Pure
   public boolean is_class() {
-    return (type != null && type == PptType.CLASS);
+    return type == PptType.CLASS;
   }
 
   public String var_names() {
