@@ -47,16 +47,6 @@ public final class VarInfoAux implements Cloneable, Serializable {
    */
   public static final String NULL_TERMINATING = "nullTerminating";
 
-  /**
-   * True if this variable is a parameter to a method, or derived from a parameter to a method. By
-   * default, if p is a parameter, then some EXIT invariants related to p aren't printed. However,
-   * this does not affect the computation of invariants.
-   *
-   * <p>Frontends are responsible for setting if p is a parameter and if p.a is a parameter. In
-   * Java, p.a is not a parameter, whereas in IOA, it is.
-   */
-  public static final String IS_PARAM = "isParam";
-
   /** True if repeated elements can exist in this collection. */
   public static final String HAS_DUPLICATES = "hasDuplicates";
 
@@ -129,7 +119,6 @@ public final class VarInfoAux implements Cloneable, Serializable {
     defaultMap.put(HAS_SIZE, TRUE);
     defaultMap.put(HAS_NULL, TRUE);
     defaultMap.put(NULL_TERMINATING, TRUE);
-    defaultMap.put(IS_PARAM, FALSE);
     defaultMap.put(PACKAGE_NAME, NO_PACKAGE_NAME);
     defaultMap.put(IS_STRUCT, FALSE);
     defaultMap.put(IS_NON_NULL, FALSE);
@@ -481,17 +470,6 @@ public final class VarInfoAux implements Cloneable, Serializable {
   @Pure
   public boolean nullTerminating() {
     return getFlag(NULL_TERMINATING);
-  }
-
-  /**
-   * See {@link #IS_PARAM}.
-   *
-   * @see #IS_PARAM
-   */
-  @SuppressWarnings("keyfor") // IS_PARAM is always a key
-  @Pure
-  public boolean isParam() {
-    return getFlag(IS_PARAM);
   }
 
   /**
