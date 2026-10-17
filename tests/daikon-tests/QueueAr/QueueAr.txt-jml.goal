@@ -24,6 +24,15 @@ daikon.Quant.getElement_Object(this.theArray, this.currentSize) == daikon.Quant.
 daikon.Quant.getElement_Object(this.theArray, this.currentSize) == daikon.Quant.getElement_Object(this.theArray, \old(capacity)-1)
 daikon.Quant.eltsEqual(this.theArray, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(this.theArray), null)
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -89,6 +98,15 @@ daikon.Quant.getElement_Object(this.theArray, this.currentSize) == daikon.Quant.
 daikon.Quant.getElement_Object(this.theArray, this.currentSize) == daikon.Quant.getElement_Object(this.theArray, \old(this.back))
 daikon.Quant.eltsEqual(this.theArray, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(this.theArray), null)
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -146,6 +164,15 @@ assignable this.theArray[this.currentSize-1], this.theArray[this.front-1], this.
 \result == \old(daikon.Quant.getElement_Object(this.theArray, this.back))
 daikon.Quant.eltsEqual(this.theArray, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(this.theArray), null)
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 \result == null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -184,6 +211,15 @@ this.back == \old(this.back)
 (this.currentSize == 0)  <==>  (daikon.Quant.getElement_Object(this.theArray, this.back) == null)
 (this.currentSize == 0)  ==>  ((!(this.back == 0)) || (daikon.Quant.size(this.theArray)-1 == 0))
 (this.currentSize == 0)  ==>  ((!(this.back == 0)) || (this.front == 0))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (this.currentSize == 0)  ==>  (("oneOf.java.jpp: SEQUENCE unimplemented" != null))
 (this.currentSize == 0)  ==>  (("oneOf.java.jpp: SEQUENCE unimplemented" != null))
 (this.currentSize == 0)  ==>  (\old(daikon.Quant.getElement_Object(this.theArray, \new(this.currentSize))) == null)
@@ -236,6 +272,15 @@ this.back == \old(this.back)
 (this.currentSize == 0)  <==>  (\result == true)
 (this.currentSize == 0)  ==>  ((!(this.back == 0)) || (daikon.Quant.size(this.theArray)-1 == 0))
 (this.currentSize == 0)  ==>  ((!(this.back == 0)) || (this.front == 0))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (this.currentSize == 0)  ==>  (("oneOf.java.jpp: SEQUENCE unimplemented" != null))
 (this.currentSize == 0)  ==>  (("oneOf.java.jpp: SEQUENCE unimplemented" != null))
 (this.currentSize == 0)  ==>  (this.currentSize <= daikon.Quant.size(this.theArray)-1)
@@ -304,6 +349,15 @@ daikon.Quant.getElement_Object(this.theArray, this.currentSize) == daikon.Quant.
 daikon.Quant.getElement_Object(this.theArray, this.currentSize) == daikon.Quant.getElement_Object(this.theArray, \old(this.back))
 daikon.Quant.eltsEqual(this.theArray, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(this.theArray), null)
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
