@@ -12,20 +12,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import org.plumelib.util.FilesPlume;
 
 /**
- * This class's main method can be used to update both the target files of SplitterFactoryTest and
- * the code of the SplitterFactoryTest itself.
+ * This class's main method writes the code of SplitterFactoryTest. When passed {@code
+ * --update-goals}, it also overwrites the goal files of SplitterFactoryTest with the splitter files
+ * that the current SplitterFactory produces.
  *
- * <p>To use this program to update SplitterFactoryTest and the target files, run
- *
- * <pre>    \rm -f targets/*.java.goal SplitterFactoryTest.java</pre>
- *
- * Then simply run the main method without any arguments in the daikon/java directory, and then
- * re-compile the SplitterFactoryTest.
+ * <p>To update the goal files, run {@code make update-splitter-goals} in the daikon/java directory,
+ * then examine the differences in the goal files (for example, with {@code git diff}) before
+ * committing them.
  *
  * <p>To add additional tests to this test program, place the .spinfo and decls files into the
  * "targets" directory then add a call to generateSplitters with the new files. generateSplitters is
@@ -43,14 +42,26 @@ public class SplitterFactoryTestUpdater {
   private SplitterFactoryTestUpdater() {} // blocks public constructor
 
   /**
-   * If one has changed the test cases used below, for best results run {@code rm *.java.goal} while
-   * in the targets directory before running this method. Creates new splitter java files, moves the
-   * new files into target directory, rewrites the code of SplitterFactoryTest to use the new files.
-   * One should recompile SplitterFactoryTest after running this method.
+   * Creates new splitter java files and writes the code of SplitterFactoryTest, which compares
+   * splitter files against the goal files. One should recompile SplitterFactoryTest after running
+   * this method.
    *
-   * @param args are ignored
+   * @param args either empty, or {@code --update-goals} to also replace the goal files in the
+   *     target directory by the new splitter java files
    */
   public static void main(String[] args) {
+    boolean updateGoals;
+    if (args.length == 0) {
+      updateGoals = false;
+    } else if (args.length == 1 && args[0].equals("--update-goals")) {
+      updateGoals = true;
+    } else {
+      System.err.println(
+          "Usage:  java daikon.test.split.SplitterFactoryTestUpdater [--update-goals]");
+      System.exit(1);
+      return;
+    }
+
     // For debugging
     // SplitterFactory.dkconfig_delete_splitters_on_exit = false;
 
@@ -58,7 +69,7 @@ public class SplitterFactoryTestUpdater {
     generateSplitters("Fib.spinfo", "Fib.decls");
     generateSplitters("QueueAr.spinfo", "QueueAr.decls");
     generateSplitters("BigFloat.spinfo", "BigFloat.decls");
-    moveFiles();
+    processFiles(updateGoals);
     writeTestClass();
   }
 
@@ -111,26 +122,48 @@ public class SplitterFactoryTestUpdater {
     }
   }
 
-  /** Moves the generated splitter files from the tempDir to the target Dir. */
-  private static void moveFiles() {
+  /**
+   * Records the class names of the generated splitter files, which are in the tempDir.
+   *
+   * @param updateGoals if true, also replace the goal files in the target directory by the
+   *     generated splitter files
+   */
+  private static void processFiles(boolean updateGoals) {
     File tempDir = new File(SplitterFactory.getTempDir());
     String[] fileNames = tempDir.list();
     if (fileNames == null) {
       throw new Error("tmpdir = " + tempDir + " which is not a directory");
     }
+    // Sort so that the generated test does not depend on the file system's directory order.
+    Arrays.sort(fileNames);
+    if (updateGoals) {
+      // Remove all goal files, so that none remain for splitters that SplitterFactory does not
+      // produce.
+      File[] oldGoals = new File(targetDir).listFiles((dir, name) -> name.endsWith(".java.goal"));
+      if (oldGoals == null) {
+        throw new Error("targetDir = " + targetDir + " which is not a directory");
+      }
+      for (File oldGoal : oldGoals) {
+        if (!oldGoal.delete()) {
+          throw new Error("Failed to delete " + oldGoal);
+        }
+      }
+    }
     for (int i = 0; i < fileNames.length; i++) {
       if (fileNames[i].endsWith(".java")) {
         String fileName = fileNames[i];
-        String fromName = tempDir.getPath() + File.separator + fileName;
-        String toName = targetDir + fileName + ".goal";
-        try {
-          moveFile(fromName, toName);
-        } catch (Error e) {
-          System.out.printf("Failed to move %s to %s%n", fromName, toName);
-          throw e;
-        } catch (RuntimeException e) {
-          System.out.printf("Failed to move %s to %s%n", fromName, toName);
-          throw e;
+        if (updateGoals) {
+          String fromName = tempDir.getPath() + File.separator + fileName;
+          String toName = targetDir + fileName + ".goal";
+          try {
+            moveFile(fromName, toName);
+          } catch (Error e) {
+            System.out.printf("Failed to move %s to %s%n", fromName, toName);
+            throw e;
+          } catch (RuntimeException e) {
+            System.out.printf("Failed to move %s to %s%n", fromName, toName);
+            throw e;
+          }
         }
         String javaFileName = new File(fileName).getName();
         String className = javaFileName.substring(0, javaFileName.length() - ".java".length());
@@ -194,8 +227,10 @@ public class SplitterFactoryTestUpdater {
     ps.println("import gnu.getopt.*;");
     ps.println("import java.io.*;");
     ps.println("import java.util.*;");
-    ps.println("import junit.framework.*;");
+    ps.println("import org.junit.BeforeClass;");
     ps.println("import org.junit.Test;");
+    ps.println("import org.junit.internal.TextListener;");
+    ps.println("import org.junit.runner.JUnitCore;");
     ps.println("import org.plumelib.util.FilesPlume;");
     ps.println("import org.plumelib.util.StringsPlume;");
     ps.println("import org.plumelib.util.UtilPlume;");
@@ -229,11 +264,6 @@ public class SplitterFactoryTestUpdater {
     ps.println("  // java files it produces, changing the order that the setUpTests");
     ps.println("  // commands are run will cause the tests to fail.");
     ps.println();
-    ps.println("  /** Do not instantiate. */");
-    ps.println("  private SplitterFactoryTest() {");
-    ps.println("    throw new Error(\"Do not instantiate\");");
-    ps.println("  }");
-    ps.println();
     ps.println("  private static String targetDir = \"" + targetDir + "\";");
     ps.println();
     ps.println("  private static @Nullable String tempDir = null;");
@@ -242,19 +272,22 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     ps.println("  private static String usage =");
     ps.println("    StringsPlume.joinLines(");
-    ps.println("      \"Usage:  java daikon.tools.CreateSpinfo FILE.java ...\",");
+    ps.println("      \"Usage:  java daikon.test.split.SplitterFactoryTest [OPTION]...\",");
     ps.println(
-        "      \"  -s       Save (do not delete) the splitter java files in the temp directory\",");
-    ps.println("      \"  -h       Display this usage message\");");
+        "      \"  -s          Save (do not delete) the splitter java files in the temp"
+            + " directory\",");
+    ps.println("      \"  -h          Display this usage message\");");
     ps.println();
     ps.println("  /**");
-    ps.println("   * Processes command-line options.");
+    ps.println("   * Runs the tests.");
     ps.println("   *");
     ps.println("   * @param args command-line arguments");
     ps.println("   */");
     ps.println("  public static void main(String[] args) {");
     ps.println("    try {");
-    ps.println("      mainHelper(args);");
+    ps.println("      if (!mainHelper(args)) {");
+    ps.println("        System.exit(1);");
+    ps.println("      }");
     ps.println("    } catch (Daikon.DaikonTerminationException e) {");
     ps.println("      Daikon.handleDaikonTerminationException(e);");
     ps.println("    }");
@@ -262,12 +295,14 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     ps.println("  /**");
     ps.println(
-        "   * Does the work of {@link #main}, but throws an exception rather than calling {@code");
-    ps.println("   * System.exit}.");
+        "   * This does the work of {@link #main(String[])}, but it never calls System.exit,"
+            + " so");
+    ps.println("   * it is appropriate to be called programmatically.");
     ps.println("   *");
-    ps.println("   * @param args command-line arguments");
+    ps.println("   * @param args the command-line arguments; see {@link #usage}");
+    ps.println("   * @return true if all the tests passed");
     ps.println("   */");
-    ps.println("  public static void mainHelper(String[] args) {");
+    ps.println("  public static boolean mainHelper(String[] args) {");
     ps.println("    DaikonGetopt g = new DaikonGetopt(args, \"s\", new LongOpt[0], usage);");
     ps.println("    int c;");
     ps.println("    while ((c = g.getopt()) != -1) {");
@@ -279,6 +314,15 @@ public class SplitterFactoryTestUpdater {
     ps.println("          throw new Daikon.BugInDaikon(\"getopt() returned \" + c);");
     ps.println("      }");
     ps.println("    }");
+    ps.println("    if (g.getOptind() < args.length) {");
+    ps.println("      throw new Daikon.UserError(");
+    ps.println(
+        "          \"Unexpected argument \" + args[g.getOptind()] + \"; run with -h for"
+            + " usage\");");
+    ps.println("    }");
+    ps.println("    JUnitCore junit = new JUnitCore();");
+    ps.println("    junit.addListener(new TextListener(System.out));");
+    ps.println("    return junit.run(SplitterFactoryTest.class).wasSuccessful();");
     ps.println("  }");
     ps.println();
 
@@ -328,13 +372,13 @@ public class SplitterFactoryTestUpdater {
   }
 
   /**
-   * Appends the code to write the static block of code to code. This code is used by the
-   * SplitterFactoryTest to set up the needed files to run the tests on.
+   * Writes the {@code @BeforeClass} method setUpTests to {@code ps}. SplitterFactoryTest uses
+   * setUpTests to generate the splitter files that its tests check.
    */
   public static void appendSetUpTest(PrintStream ps) {
-    ps.println("  private static void setUpTests() {");
-    ps.println("    List<String> spinfoFiles;");
-    ps.println("    List<String> declsFiles;");
+    ps.println("  @BeforeClass");
+    ps.println("  public static void setUpTests() {");
+    ps.println("    SplitterFactory.resetGuid();");
     for (int i = 0; i < spinfoFileLists.size(); i++) {
       ps.println("    createSplitterFiles(");
       ps.println(
@@ -349,7 +393,8 @@ public class SplitterFactoryTestUpdater {
 
   /** Appends the code that executes the test in SplitterFactoryTest to code. */
   private static void appendTests(PrintStream ps) {
-    ps.println("  /** Returns true iff files are the same (ignoring extra white space). */");
+    ps.println(
+        "  /** Fails the test unless the files are the same (ignoring extra white space). */");
     ps.println("  public static void assertEqualFiles(String f1, String f2) {");
     ps.println("    if (!FilesPlume.equalFiles(f1, f2)) {");
     ps.println("      fail(\"Files \" + f1 + \" and \" + f2 + \" differ.\");");
@@ -357,12 +402,18 @@ public class SplitterFactoryTestUpdater {
     ps.println("  }");
     ps.println();
     ps.println("  public static void assertEqualFiles(String f1) {");
-    ps.println("    assertEqualFiles(tempDir + f1, targetDir + f1 + \".goal\");");
+    ps.println("    String goalFile = targetDir + f1 + \".goal\";");
+    ps.println("    if (!new File(goalFile).exists()) {");
+    ps.println(
+        "      fail(\"Goal file \" + goalFile"
+            + " + \" does not exist; run: make update-splitter-goals\");");
+    ps.println("    }");
+    ps.println("    assertEqualFiles(tempDir + f1, goalFile);");
     ps.println("  }");
     ps.println();
     for (String className : classNames) {
       ps.println("  @Test");
-      ps.println("  public static void test" + className + "() {");
+      ps.println("  public void test" + className + "() {");
       ps.println("    assertEqualFiles(\"" + className + ".java\");");
       ps.println("  }");
       ps.println();
