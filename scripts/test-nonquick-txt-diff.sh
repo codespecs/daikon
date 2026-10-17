@@ -13,4 +13,4 @@ export SHELLOPTS
 make showvars compile daikon.jar
 
 make dyncomp-jdk
-make -C tests MPARG=-j1 nonquick-txt-diff results
+make -C tests DAIKON_TEST_JOBS=1 nonquick-txt-diff results
