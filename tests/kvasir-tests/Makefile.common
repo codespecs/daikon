@@ -4,7 +4,9 @@
 ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 endif
-include ${DAIKONDIR}/tests/Makefile.jdk
+# Find Makefile.jdk relative to this file, not via DAIKONDIR, which may name a
+# different Daikon tree.
+include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.jdk
 DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 # Fails when running "clean".
 # $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
@@ -56,8 +58,8 @@ BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := ${JAVA} -ea -Xmx7g -cp ${DAIKON_JAR} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := ${JAVA} -Xmx7g -cp ${DAIKON_JAR} daikon.PrintInvariants
+DAIKON = ${JAVA} -ea -Xmx7g -cp ${DAIKON_JAR} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
+PRINT_INV = ${JAVA} -Xmx7g -cp ${DAIKON_JAR} daikon.PrintInvariants
 
 default: summary-w-daikon
 

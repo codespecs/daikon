@@ -9,13 +9,15 @@
 ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 endif
-include ${DAIKONDIR}/tests/Makefile.jdk
+# Find Makefile.jdk relative to this file, not via DAIKONDIR, which may name a
+# different Daikon tree.
+include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.jdk
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 PROGRAM := $(notdir $(shell pwd))
-DAIKON := ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
-INV_DIFF := ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
+DAIKON = ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
+INV_DIFF = ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 
