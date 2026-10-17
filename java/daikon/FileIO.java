@@ -376,7 +376,8 @@ public final class FileIO {
     VarDefinition vardef = null;
     List<ParentRelation> ppt_parents = new ArrayList<>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf(PptFlags.class);
-    PptType ppt_type = PptType.POINT;
+    // Null if the declaration has no ppt-type record.
+    PptType ppt_type = null;
 
     try {
       // Read the records that define this program point
@@ -504,9 +505,12 @@ public final class FileIO {
     }
 
     // Build the program point
-    PptTopLevel newppt = new PptTopLevel(ppt_name, ppt_type, ppt_parents, ppt_flags, vi_array);
-
-    return newppt;
+    try {
+      return new PptTopLevel(ppt_name, ppt_type, ppt_parents, ppt_flags, vi_array);
+    } catch (IllegalArgumentException e) {
+      decl_error(state, e);
+      throw new Error(); // this can't happen
+    }
   }
 
   /** Parses a ppt parent hierarchy record and returns it. */
