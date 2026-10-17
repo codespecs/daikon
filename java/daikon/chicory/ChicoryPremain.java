@@ -5,6 +5,7 @@ package daikon.chicory;
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
 
 import daikon.Chicory;
+import daikon.Daikon;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -128,6 +129,12 @@ public class ChicoryPremain {
         castNonNull(Runtime.comp_info).read(castNonNull(Chicory.comparability_file));
       } catch (FileNotFoundException e) {
         System.err.printf("%nCould not find comparability file: %s%n", Chicory.comparability_file);
+        Runtime.chicoryLoaderInstantiationError = true;
+        System.exit(1);
+      } catch (IOException | Daikon.UserError e) {
+        System.err.printf(
+            "%nProblem reading comparability file %s: %s%n",
+            Chicory.comparability_file, e.getMessage());
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }
