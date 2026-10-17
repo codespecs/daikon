@@ -46,6 +46,9 @@ REMOVE_TIMING := ../remove-timing.pl
 REMOVE_VARIABLE_COUNT := ../remove-variable-count.pl
 DECLS_2_COMP ?= ${DAIKONDIR}/scripts/decls2comp.py
 RUN_MANY := ../run-many.pl
+# The exit status of the test program on its test inputs.
+EXPECTED_EXIT_STATUS ?= 0
+RUN_KVASIR = sh ../run-kvasir.sh --expected-status '$(EXPECTED_EXIT_STATUS)'
 SORT_DTRACE_INPLACE := perl -Si ${DAIKONDIR}/scripts/sort-dtrace.pl
 SORT_DECLS := ${DAIKONDIR}/scripts/sort-decls-2.py
 INCLUDES ?=
@@ -233,7 +236,7 @@ ifdef TESTS_SCRIPT
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(TESTS_SCRIPT) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	rm -f daikon-output/$(NAME)$(DTRACE_EXT)
 	$(BEFORE_RUN)
-	DTRACEAPPEND=1 perl $(RUN_MANY) $(KVASIR_SCRIPT) <$(TESTS_SCRIPT) >$(NAME).out
+	DTRACEAPPEND=1 perl $(RUN_MANY) --expected-status '$(EXPECTED_EXIT_STATUS)' $(KVASIR_SCRIPT) <$(TESTS_SCRIPT) >$(NAME).out
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -251,12 +254,11 @@ else
 ifdef DTRACE_APPEND
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1
+	$(RUN_KVASIR) $(NAME).decls.out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS)
 	$(BEFORE_RUN)
+	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls --dtrace-file=daikon-output/$(NAME).dtrace --dtrace-append ./$(NAME) $(PROGRAM_ARGS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls --dtrace-file=daikon-output/$(NAME).dtrace --dtrace-append ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1
-	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
+	$(RUN_KVASIR) $(NAME).dyncomp.out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -274,9 +276,9 @@ else
 ifeq ($(COUNTS_ONLY),)
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1
+	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
+	$(RUN_KVASIR) $(NAME).dyncomp.out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -291,15 +293,19 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
 	touch $@
 else
+# pipefail makes a failure of $(ZCAT) (e.g., a truncated trace) fail the recipe.
+ran-kvasir: SHELL := /bin/bash -o pipefail
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out | ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts
+	$(RUN_KVASIR) $(NAME).out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) ./$(NAME) $(PROGRAM_ARGS)
+	$(ZCAT) daikon-output/$(NAME)$(DTRACE_EXT) | perl ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts
+	rm -f daikon-output/$(NAME)$(DTRACE_EXT)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
 	perl -i $(CLEAN_DECLS) $(NAME).counts
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dyncomp --decls-only --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
+	$(RUN_KVASIR) $(NAME).dyncomp.out $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dyncomp --decls-only --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS)
 	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).dyncomp.decls
 	$(DECLS_2_COMP) daikon-output/$(NAME).dyncomp.decls > $(NAME).comp
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
@@ -422,7 +428,7 @@ diffs-w-daikon-if-working:   diffs-w-daikon
 summary-w-daikon-if-working: summary-w-daikon
 
 clean:
-	rm -rf $(NAME) $(DIFF_NAME).*.diff $(NAME).out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts $(NAME).dtrace.gz $(NAME).decls $(NAME).[12].dtrace.gz
+	rm -rf $(NAME) $(DIFF_NAME).*.diff $(NAME).out $(NAME).decls.out $(NAME).dyncomp.out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts $(NAME).dtrace.gz $(NAME).decls $(NAME).[12].dtrace.gz
 	$(CLEAN_SCRIPT)
 
 update-out-goals: $(NAME).out
