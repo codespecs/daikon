@@ -21,6 +21,8 @@ use lib dirname (__FILE__);
 
 # The file `checkargs.pm` appears in the same directory as this script.
 use checkargs;
+# The file `util_daikon.pm` appears in the same directory as this script.
+use util_daikon;
 
 # TODO:
 #   If using "-m interpolate", then what about missing values before the
@@ -66,38 +68,22 @@ my $USAGE =
 ### Subroutines that don't use global variables
 ###
 
-# Parses the provided declaration file.
-# Assumes the declaration file contains no blank lines or comments,
-# and that it contains only one program point.
+# Parses the provided declaration file, which must contain only one
+# program point.
 # Returns an array containing the program point name and the names of
-# variables.
+# non-constant variables (the ones whose values appear in data trace records).
 sub parseDecl ( $ ) {
   my ($inputfile) = check_args(1, @_);
   open(DECLHANDLE, $inputfile) ||
     die("Cannot open declarations file $inputfile");
-  my $declare = <DECLHANDLE>;
-  if ($declare ne "DECLARE\n") {
-    die "Didn't see \"DECLARE\" as first line of declaration file $inputfile";
-  }
-  my $ppt = <DECLHANDLE>;
-  chomp($ppt);
-  my $i = 0;
-  my @varnames;
-  my @varDecType;
-  my @varActType;
-  my @varComparable;
-
-  while (<DECLHANDLE>) {
-    chomp($_);
-    $varnames[$i] = $_;
-    $varDecType[$i] = <DECLHANDLE>;
-    $varActType[$i] = <DECLHANDLE>;
-    $varComparable[$i] = <DECLHANDLE>;
-    $i++;
-  }
+  my @ppts = read_ppt_decls(\*DECLHANDLE, $inputfile);
   close(DECLHANDLE);
-  return ($ppt, @varnames);
-
+  if (scalar(@ppts) > 1) {
+    die "Declaration file $inputfile contains more than one program point";
+  }
+  my $ppt = $ppts[0];
+  my @varnames = map { $$_{name} } grep { !defined($$_{constant}) } @{$$ppt{vars}};
+  return ($$ppt{name}, @varnames);
 }
 
 
@@ -213,13 +199,6 @@ sub getVariableNames ( $ ) {
   }
 
   @csv_varnames = $csv->fields(); # get the parsed fields
-  my $i = 0;
-  foreach my $var (@csv_varnames) {
-    # Remove spaces, double quotes, slashes from the names of variables.
-    $csv_varnames[$i] = formatVarName($csv_varnames[$i]);
-    $i++;
-  }
-
 }
 
 my $varnames_input = <CSVHANDLE>;
@@ -230,6 +209,9 @@ getVariableNames($varnames_input);
 for (my $i=0; $i<scalar(@csv_varnames); $i++) {
   $prevvalues[$i] = 0;          # initialize all previous values to 0
   $isNumber[$i] = 1;            # initialize all types to number
+  if (exists($varNameCsvIndex{$csv_varnames[$i]})) {
+    die "Duplicate column name " . escape_decl($csv_varnames[$i]) . " in $inputfilename";
+  }
   $varNameCsvIndex{$csv_varnames[$i]} = $i;
 }
 
@@ -237,6 +219,18 @@ if (defined($decls_file)) {
   @decl_varnames = @csv_varnames;
 }
 my $num_decl_vars = scalar(@decl_varnames);
+
+# The csv index of each declared variable.  A declared variable matches the
+# csv column with the same name.
+my @decl_csvindex;
+for (my $j = 0; $j < $num_decl_vars; $j++) {
+  my $varname = $decl_varnames[$j];
+  my $csvindex = $varNameCsvIndex{$varname};
+  if (!defined($csvindex)) {
+    die "Declared variable " . escape_decl($varname) . " is not a column of $inputfilename";
+  }
+  $decl_csvindex[$j] = $csvindex;
+}
 
 
 
@@ -263,9 +257,9 @@ sub interpolate () {
     die("Could not open $dtrace_file for output.");
 
   for (my $k = 0; $k < $num_samples; $k++) {
-    print DTRACEHANDLE "\n$programpointname\n";
+    print DTRACEHANDLE "\n" . escape_decl($programpointname) . "\n";
     for (my $j = 0; $j < $num_decl_vars; $j++) {
-      my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
+      my $csvindex = $decl_csvindex[$j];
       if ($variableArray{$csvindex}[$k] eq "") {
         my $m;
         for ($m=1; $m< $num_samples-$k; $m++) {
@@ -300,7 +294,7 @@ sub interpolate () {
           $variableArray{$csvindex}[$k] = $prevvalues[$csvindex];
         }
       }
-      print DTRACEHANDLE "$csv_varnames[$csvindex]\n";
+      print DTRACEHANDLE escape_decl($decl_varnames[$j]) . "\n";
       print DTRACEHANDLE "$variableArray{$csvindex}[$k]\n";
       print DTRACEHANDLE "1\n";
     }
@@ -315,33 +309,6 @@ sub isnumber ( $ ) {
   # The regular expression is from the Perl FAQ.
   return ($num =~ /^([+-]?)(?=\d|\.\d)\d*(\.\d*)?([Ee]([+-]?\d+))?$/);
 }
-
-
-# Removes spaces, double quotes, slashes, (square|curly|regular) brackets
-# from variable names.
-# (This is presumably required by the variable name parsing code.)
-sub formatVarName ( $ ) {
-  my ($input) = check_args(1, @_);
-  my $simplified = $input;
-  # To facilitate commenting out
-  # one or more of these expressions,
-  # each one was written in a separate line.
-  $simplified =~ s/ /_/g;
-  $simplified =~ s/\./_/g;
-  $simplified =~ s/(\"|-|\/)/_/g;
-  $simplified =~ s/(\(|\))//g;
-  $simplified =~ s/(\[|\])//g;
-  $simplified =~ s/(\<|\>)//g;
-  if ($simplified eq $input) {
-    return $input;
-  }
-  $simplified = $input;
-  # Quote backslashes and quotes (in that order)
-  $simplified =~ s/\\/\\\\/g;
-  $simplified =~ s/\"/\\\"/g;
-  return '"' . $simplified . '"';
-}
-
 
 
 
@@ -369,22 +336,19 @@ while (<CSVHANDLE>) {
   my @sample = $csv->fields();  # get the parsed fields
 
   {
-    # Check the number of columns in the csv file.
+    # Check the number of columns in the csv file.  The header line
+    # determines the number of columns.  Some columns might not be
+    # declared variables, such as when a constant variable has a column.
     my $sample_length = scalar(@sample);
-    if ($sample_length > $num_decl_vars) {
-      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
-    }
-    if ($sample_length < $num_decl_vars) {
-      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
-      for (my $z = $sample_length; $z < $num_decl_vars; $z++) {
-        $sample[$z] = "";
-      }
+    my $num_csv_vars = scalar(@csv_varnames);
+    if ($sample_length != $num_csv_vars) {
+      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, but the header line contains $num_csv_vars";
     }
   }
 
-  print DTRACEHANDLE "$programpointname\n";
+  print DTRACEHANDLE escape_decl($programpointname) . "\n";
   for (my $j = 0; $j<$num_decl_vars; $j++) {
-    my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
+    my $csvindex = $decl_csvindex[$j];
     my $value = $sample[$csvindex];
     my $modbit = 1;
 
@@ -416,7 +380,7 @@ while (<CSVHANDLE>) {
         $variableArray{$csvindex}[$num_samples] = $value;
       }
     }
-    print DTRACEHANDLE "$csv_varnames[$csvindex]\n";
+    print DTRACEHANDLE escape_decl($decl_varnames[$j]) . "\n";
     print DTRACEHANDLE "$value\n";
     print DTRACEHANDLE "$modbit\n";
   }
@@ -426,16 +390,18 @@ while (<CSVHANDLE>) {
 }
 
 if (defined($decls_file)) {
-  print DECLSHANDLE "DECLARE\n$programpointname\n";
+  print DECLSHANDLE "decl-version 2.0\n";
+  print DECLSHANDLE "var-comparability none\n\n";
+  print DECLSHANDLE "ppt " . escape_decl($programpointname) . "\n";
+  print DECLSHANDLE "  ppt-type point\n";
   for (my $j = 0; $j<$num_decl_vars; $j++) {
-    my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
-    print DECLSHANDLE "$csv_varnames[$csvindex]\n";
-    if ($isNumber[$csvindex]) {
-      print DECLSHANDLE "double\ndouble\n";
-    } else {
-      print DECLSHANDLE "java.lang.String\njava.lang.String\n";
-    }
-    print DECLSHANDLE "1\n";
+    my $csvindex = $decl_csvindex[$j];
+    my $type = ($isNumber[$csvindex] ? "double" : "java.lang.String");
+    print DECLSHANDLE "  variable " . escape_decl($decl_varnames[$j]) . "\n";
+    print DECLSHANDLE "    var-kind variable\n";
+    print DECLSHANDLE "    dec-type $type\n";
+    print DECLSHANDLE "    rep-type $type\n";
+    print DECLSHANDLE "    comparability 1\n";
   }
 }
 
