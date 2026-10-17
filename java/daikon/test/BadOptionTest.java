@@ -183,6 +183,29 @@ public class BadOptionTest {
         "TraceSelect cannot sample y.dtrace.gz; the trace file must be uncompressed and its name"
             + " must end with \".dtrace\"",
         String.valueOf(e.getMessage()));
+    // TraceSelect passes -o to Daikon itself.
+    e =
+        assertThrows(
+            Daikon.UserError.class,
+            () -> TraceSelect.mainHelper(new String[] {"1", "10", "-o", "r.inv", "x.dtrace"}));
+    assertEquals(
+        "TraceSelect does not accept Daikon's -o option: it writes the invariants of each sample"
+            + " to the sample's file name plus \".inv\"",
+        String.valueOf(e.getMessage()));
+    // An option's value is not the trace file, even if it ends with ".dtrace".
+    e =
+        assertThrows(
+            Daikon.UserError.class,
+            () ->
+                TraceSelect.mainHelper(
+                    new String[] {"20", "10", "--ppt-select-pattern", "x.dtrace"}));
+    assertTrue(String.valueOf(e.getMessage()).startsWith("No .dtrace file name specified"));
+    e =
+        assertThrows(
+            Daikon.UserError.class,
+            () ->
+                TraceSelect.mainHelper(new String[] {"20", "10", "--ppt-select-pattern=x.dtrace"}));
+    assertTrue(String.valueOf(e.getMessage()).startsWith("No .dtrace file name specified"));
   }
 
   /** Tests that tools accept the {@code --help} option that their usage messages document. */

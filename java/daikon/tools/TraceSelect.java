@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import org.checkerframework.dataflow.qual.Pure;
@@ -41,6 +42,30 @@ public class TraceSelect {
 
   /** Matches a negative integer, which is not an option. */
   private static final Pattern NEGATIVE_INTEGER = Pattern.compile("-[0-9]+");
+
+  /**
+   * Daikon command-line options whose value can be the next command-line argument. This must be
+   * kept in sync with the options that {@link daikon.Daikon} declares with {@code
+   * LongOpt.REQUIRED_ARGUMENT}. It omits "-o", which TraceSelect rejects.
+   */
+  private static final Set<String> DAIKON_OPTIONS_WITH_ARGUMENT =
+      Set.of(
+          "--" + daikon.Daikon.format_SWITCH,
+          "--" + daikon.Daikon.files_from_SWITCH,
+          "--" + daikon.Daikon.omit_from_output_SWITCH,
+          "--" + daikon.Daikon.conf_limit_SWITCH,
+          "--" + daikon.Daikon.list_type_SWITCH,
+          "--" + daikon.Daikon.user_defined_invariant_SWITCH,
+          "--" + daikon.Daikon.ppt_regexp_SWITCH,
+          "--" + daikon.Daikon.ppt_omit_regexp_SWITCH,
+          "--" + daikon.Daikon.var_regexp_SWITCH,
+          "--" + daikon.Daikon.var_omit_regexp_SWITCH,
+          "--" + daikon.Daikon.server_SWITCH,
+          "--" + daikon.Daikon.config_SWITCH,
+          "--" + daikon.Daikon.config_option_SWITCH,
+          "--" + daikon.Daikon.debug_SWITCH,
+          "--" + daikon.Daikon.track_SWITCH,
+          "--" + daikon.Daikon.disc_reason_SWITCH);
 
   /** The usage message for this program. */
   private static final String usage =
@@ -134,11 +159,24 @@ public class TraceSelect {
     // The remaining arguments are the Daikon arguments, such as .dtrace and .decls files,
     // "--nohierarchy", or "--format java".  Only the .dtrace file is sampled.  Daikon treats any
     // file whose name contains ".dtrace" as a trace file, so every such file must be the one that
-    // is sampled.
+    // is sampled.  An option or an option's value, such as "--config foo.dtrace" or
+    // "--config=foo.dtrace", is not a file, even if it contains ".dtrace".
     String inputFile = null;
     List<String> daikonArgs = new ArrayList<>();
     for (; i < args.length; i++) {
-      if (args[i].contains(".dtrace")) {
+      if (args[i].startsWith("-o")) {
+        // "-o foo.inv" or "-ofoo.inv".  Daikon rejects a second -o.
+        throw new daikon.Daikon.UserError(
+            "TraceSelect does not accept Daikon's -o option: it writes the invariants of each"
+                + " sample to the sample's file name plus \".inv\"");
+      } else if (DAIKON_OPTIONS_WITH_ARGUMENT.contains(args[i])) {
+        daikonArgs.add(args[i]);
+        if (i + 1 < args.length) {
+          daikonArgs.add(args[++i]);
+        }
+      } else if (args[i].startsWith("-")) {
+        daikonArgs.add(args[i]);
+      } else if (args[i].contains(".dtrace")) {
         if (!args[i].endsWith(".dtrace")) {
           throw new daikon.Daikon.UserError(
               "TraceSelect cannot sample "
