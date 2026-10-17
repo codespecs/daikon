@@ -1220,6 +1220,9 @@ check-serialize:
 
 .PHONY: junit
 junit: daikon/Daikon.class
+	@# This is not a prerequisite, so that "make -j" does not run it concurrently
+	@# with compiling Daikon, whose classes the SplitterFactoryTest rules use.
+	${MAKE} ${AUTO_GENERATED_CLASSES_2}
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
 ifeq (${JAVA24}, 1)
@@ -1227,14 +1230,9 @@ ifeq (${JAVA24}, 1)
 	@# under versions of Java that do not have java.lang.classfile.
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite24
 endif
-
-## TODO:  This target is never used!!!
-junit-all: junit
-	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
-	@# but I'm having trouble with that, apparently due to hard-coded
-	@# directory paths.  And these tests are slow, so we want them to
-	@# be separate anyway.
-	${JAVA_COMMAND} daikon.test.split.SplitterFactoryTest
+	@# SplitterFactoryTest is not in AllTestsSuite, because SplitterFactoryTest
+	@# is generated after the rest of Daikon (including AllTestsSuite) is compiled.
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.split.SplitterFactoryTest
 
 ###
 ### Clover (code coverage)
@@ -1300,6 +1298,13 @@ endif
 # If Java 8, don't run javadoc; a bug in javadoc causes it to crash.
 ifeq (${JAVA8}, 1)
   SKIP_JAVADOC=1
+endif
+
+# Fails if the api target would skip javadoc.
+.PHONY: check-javadoc-enabled
+check-javadoc-enabled:
+ifeq (${SKIP_JAVADOC},1)
+	$(error Javadoc is disabled (Java 8, or SKIP_JAVADOC=1); use Java 11 or later)
 endif
 
 # Build javadoc using the daikon package and all subpackages of daikon.
@@ -1468,15 +1473,30 @@ daikon/test/split/SplitterFactoryTestUpdater.class: daikon/test/split/SplitterFa
 	${JAVAC_COMMAND} $<
 
 ## First, a file not generated via java-cpp.
-daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.class
+# Depending on daikon/Daikon.class regenerates the test whenever Daikon is
+# recompiled, because SplitterFactory determines which splitters the test covers.
+# The rule for daikon/Daikon.class makes this file only after touching
+# daikon/Daikon.class, so this prerequisite does not cause a regress.
+# SPLITTER_UPDATER_ARGS is set by the update-splitter-goals target.
+daikon/test/split/SplitterFactoryTest.java: daikon/Daikon.class \
+		daikon/test/split/SplitterFactoryTestUpdater.class \
+		$(wildcard daikon/test/split/targets/*.spinfo daikon/test/split/targets/*.decls)
 	rm -f $@
 # Has expected errors while compiling splitter files.
 # Suppress output unless whole command fails.
-	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater > /dev/null 2>&1) || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater
+	(${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater ${SPLITTER_UPDATER_ARGS} > /dev/null 2>&1) \
+	  || ${JAVA_COMMAND} daikon.test.split.SplitterFactoryTestUpdater ${SPLITTER_UPDATER_ARGS}
 	chmod a-w $@
 
 ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
 	${JAVAC_COMMAND} ${AUTO_GENERATED_FILES_2}
+
+# Overwrites SplitterFactoryTest's goal files with the current SplitterFactory output.
+# Examine the differences (e.g., with "git diff") before committing them.
+.PHONY: update-splitter-goals
+update-splitter-goals: daikon/Daikon.class daikon/test/split/SplitterFactoryTestUpdater.class
+	rm -f daikon/test/split/SplitterFactoryTest.java
+	${MAKE} SPLITTER_UPDATER_ARGS=--update-goals ${AUTO_GENERATED_CLASSES_2}
 
 # Create the auto-generated files with jpp
 .PHONY: jpp

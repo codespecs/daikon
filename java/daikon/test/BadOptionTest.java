@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import daikon.Daikon;
 import daikon.DaikonGetopt;
 import daikon.PrintInvariants;
+import daikon.SplitDtrace;
 import daikon.UnionInvariants;
 import daikon.tools.DtraceDiff;
 import gnu.getopt.LongOpt;
@@ -153,6 +154,7 @@ public class BadOptionTest {
   public void testHelpOption() {
     assertPrintsUsage(() -> DtraceDiff.mainHelper(new String[] {"--help"}));
     assertPrintsUsage(() -> UnionInvariants.mainHelper(new String[] {"--help"}));
+    assertPrintsUsage(() -> SplitDtrace.mainHelper(new String[] {"-h", "x"}));
   }
 
   /**

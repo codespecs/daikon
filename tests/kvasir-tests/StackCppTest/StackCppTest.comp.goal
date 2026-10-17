@@ -36,6 +36,7 @@ this->next[..].next[0]
 this[0]
 
 Link:::OBJECT
+-1: this this->data this->next this->next[..] this->next[..].data this->next[..].next this->next[..].next->data this->next[..].next->next this->next[..].next->next->data this->next[..].next->next->next this->next[..].next->next->next[0] this->next[..].next->next[0] this->next[..].next[0]
 
 Stack.Stack(char*):::ENTER
 Stack::numStacksCreated
@@ -282,4 +283,5 @@ this->myName
 this->numElements this[0]
 
 Stack:::OBJECT
+-1: this this->head this->head[..] this->head[..].data this->head[..].next this->head[..].next->data this->head[..].next->next this->head[..].next->next->data this->head[..].next->next->next this->head[..].next->next->next[0] this->head[..].next->next[0] this->head[..].next[0] this->myName this->numElements
 
