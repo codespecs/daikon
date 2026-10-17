@@ -12,9 +12,7 @@ import daikon.PptSlice2;
 import daikon.PptSlice3;
 import daikon.PptTopLevel;
 import daikon.ProglangType;
-import daikon.VarComparabilityNone;
 import daikon.VarInfo;
-import daikon.VarInfoAux;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.binary.BinaryInvariant;
@@ -113,9 +111,7 @@ class FormatTestCase {
         if (resultCache == null) {
           resultCache = (String) outputProducer.invoke(inv, outputProducerArgs);
         }
-        if (FileIO.new_decl_format) {
-          resultCache = VarInfo.old_var_names(resultCache);
-        }
+        resultCache = VarInfo.old_var_names(resultCache);
         return resultCache;
       } catch (IllegalAccessException e) {
         throw new RuntimeException(e.toString());
@@ -620,27 +616,22 @@ class FormatTestCase {
     VarInfo result;
     String base_name = new String(new char[] {(char) ('a' + i)});
     String name = base_name + arrayModifier;
-    if (FileIO.new_decl_format) {
-      if (arrayModifier != "") { // interned
-        FileIO.VarDefinition vardef =
-            new FileIO.VarDefinition(base_name, VarInfo.VarKind.VARIABLE, type.elementType());
-        VarInfo hashcode = new VarInfo(vardef);
-        vardef = new FileIO.VarDefinition(base_name + "[..]", VarInfo.VarKind.ARRAY, type);
-        vardef.arr_dims = 1;
-        vardef.enclosing_var_name = base_name;
-        result = new VarInfo(vardef);
-        result.enclosing_var = hashcode;
-        assertNull(result.enclosing_var.enclosing_var);
-        // System.out.printf("Created %s [%s]%n", result, hashcode);
-      } else {
-        FileIO.VarDefinition vardef =
-            new FileIO.VarDefinition(name, VarInfo.VarKind.VARIABLE, type);
-        result = new VarInfo(vardef);
-        assertNull(result.enclosing_var);
-        // System.out.printf("Created %s%n", result);
-      }
+    if (arrayModifier != "") { // interned
+      FileIO.VarDefinition vardef =
+          new FileIO.VarDefinition(base_name, VarInfo.VarKind.VARIABLE, type.elementType());
+      VarInfo hashcode = new VarInfo(vardef);
+      vardef = new FileIO.VarDefinition(base_name + "[..]", VarInfo.VarKind.ARRAY, type);
+      vardef.arr_dims = 1;
+      vardef.enclosing_var_name = base_name;
+      result = new VarInfo(vardef);
+      result.enclosing_var = hashcode;
+      assertNull(result.enclosing_var.enclosing_var);
+      // System.out.printf("Created %s [%s]%n", result, hashcode);
     } else {
-      result = new VarInfo(name, type, type, VarComparabilityNone.it, VarInfoAux.getDefault());
+      FileIO.VarDefinition vardef = new FileIO.VarDefinition(name, VarInfo.VarKind.VARIABLE, type);
+      result = new VarInfo(vardef);
+      assertNull(result.enclosing_var);
+      // System.out.printf("Created %s%n", result);
     }
     return result;
   }
