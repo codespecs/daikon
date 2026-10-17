@@ -3,6 +3,7 @@ package daikon.split;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import daikon.Ppt;
@@ -193,6 +194,18 @@ public class SplitterListTest {
     put(objectB, new Splitter[] {new ConditionSplitter("b > 0")});
     assertEquals(Arrays.asList("a > 0"), conditions(objectA));
     assertEquals(Arrays.asList("b > 0"), conditions(objectB));
+  }
+
+  @Test
+  public void testGetObjectUsesAllIncomplete() {
+    // An incomplete PPT_NAME that contains "OBJECT" makes OBJECT program points use every
+    // incomplete PPT_NAME's splitters.
+    put("splitterlisttest.OBJECTsplit", new Splitter[] {new ConditionSplitter("o > 0")});
+    put("splitterlisttest.Unrelated", new Splitter[] {new ConditionSplitter("u > 0")});
+    assertEquals(Arrays.asList("o > 0", "u > 0"), conditions("splitterlisttest.F:::OBJECT"));
+    // A program point that is not an OBJECT program point does not, even if its name contains
+    // "OBJECT".
+    assertNull(SplitterList.get("splitterlisttest.OBJECTive.run():::EXIT"));
   }
 
   /**
