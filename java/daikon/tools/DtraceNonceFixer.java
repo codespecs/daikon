@@ -6,6 +6,7 @@ import static daikon.tools.nullness.NullnessUtil.castNonNull;
 
 import daikon.DaikonGetopt;
 import daikon.FileIO;
+import daikon.PptName;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,12 +18,11 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
@@ -47,9 +47,6 @@ public class DtraceNonceFixer {
   private DtraceNonceFixer() {
     throw new UnsupportedOperationException("Do not instantiate");
   }
-
-  /** The line that precedes the nonce in a sample. */
-  private static final String NONCE_HEADER = "this_invocation_nonce";
 
   /** The usage message for this program. */
   private static String usage =
@@ -89,7 +86,7 @@ public class DtraceNonceFixer {
       if (files.length == 1) {
         String suffix = files[0].endsWith(".gz") ? ".gz" : "";
         String fixedFilename = files[0] + "_fixed" + suffix;
-        Set<Integer> exitNonces = new HashSet<>();
+        BitSet exitNonces = new BitSet();
         int maxNonce = correctNonces(files[0], fixedFilename, exitNonces);
         addMissingNonces(fixedFilename, files[0] + "_all_fixed" + suffix, maxNonce, exitNonces);
       } else {
@@ -101,20 +98,23 @@ public class DtraceNonceFixer {
         Path dir = castNonNull(outfile.getParent()); // an absolute file path has a parent
         String prefix = outfile.getFileName() + "-";
         String suffix = files[1].endsWith(".gz") ? ".gz" : "";
-        Path tmpFile = createFreshFile(dir, prefix, "-fixed" + suffix);
+        // The intermediate file is not compressed, because it is deleted.
+        Path tmpFile = createFreshFile(dir, prefix, "-fixed");
         Path tmpOutFile = null;
         try {
           tmpOutFile = createFreshFile(dir, prefix, "-all-fixed" + suffix);
-          Set<Integer> exitNonces = new HashSet<>();
+          BitSet exitNonces = new BitSet();
           int maxNonce = correctNonces(files[0], tmpFile.toString(), exitNonces);
           addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce, exitNonces);
           replaceFile(tmpOutFile, outfile);
-        } finally {
-          Files.deleteIfExists(tmpFile);
+        } catch (Throwable e) {
+          deleteAfterFailure(tmpFile, e);
           if (tmpOutFile != null) {
-            Files.deleteIfExists(tmpOutFile);
+            deleteAfterFailure(tmpOutFile, e);
           }
+          throw e;
         }
+        Files.delete(tmpFile);
       }
     } catch (IOException e) {
       throw new UncheckedIOException(e);
@@ -164,6 +164,21 @@ public class DtraceNonceFixer {
   }
 
   /**
+   * Deletes {@code file}, if it exists, after a failure. A problem deleting the file is added to
+   * {@code failure} as a suppressed exception, so that it does not hide {@code failure}.
+   *
+   * @param file the file to delete
+   * @param failure the exception that the caller will throw
+   */
+  private static void deleteAfterFailure(Path file, Throwable failure) {
+    try {
+      Files.deleteIfExists(file);
+    } catch (IOException e) {
+      failure.addSuppressed(e);
+    }
+  }
+
+  /**
    * Moves {@code source} to {@code target}, replacing {@code target} if it exists. If possible, the
    * move is atomic, and the result has the permissions of the original {@code target}.
    *
@@ -196,11 +211,12 @@ public class DtraceNonceFixer {
    * @param inFilename the dtrace file to read
    * @param outFilename the dtrace file to write
    * @param exitNonces a set to which this method adds the nonce of each EXIT or THROWS sample in
-   *     the output
+   *     the output; it is a BitSet because nonces are dense, so a BitSet uses much less memory than
+   *     a set of Integers
    * @return the largest nonce in the output
    * @throws IOException if there is trouble reading or writing a file
    */
-  private static int correctNonces(String inFilename, String outFilename, Set<Integer> exitNonces)
+  private static int correctNonces(String inFilename, String outFilename, BitSet exitNonces)
       throws IOException {
     // maxNonce - the biggest nonce ever found in the file
     int maxNonce = 0;
@@ -231,7 +247,7 @@ public class DtraceNonceFixer {
         int newNonce = non + correctionFactor;
         maxNonce = Math.max(maxNonce, newNonce);
         if (isExit) {
-          exitNonces.add(newNonce);
+          exitNonces.set(newNonce);
         }
         para.printWithNonce(out, newNonce);
       }
@@ -254,8 +270,7 @@ public class DtraceNonceFixer {
    * @throws IOException if there is trouble reading or writing a file
    */
   private static void addMissingNonces(
-      String inFilename, String outFilename, int maxNonce, Set<Integer> exitNonces)
-      throws IOException {
+      String inFilename, String outFilename, int maxNonce, BitSet exitNonces) throws IOException {
     CallStack callStack = new CallStack();
     try (BufferedReader br = FilesPlume.newBufferedFileReader(inFilename);
         PrintWriter out = new PrintWriter(FilesPlume.newBufferedFileWriter(outFilename))) {
@@ -265,12 +280,12 @@ public class DtraceNonceFixer {
           para.print(out);
           continue;
         }
-        String pptName = para.pptName();
+        PptName pptName = para.pptName();
         // This is the same test that Daikon uses in FileIO.compute_orig_variables.
-        boolean isEnter = pptName.endsWith(FileIO.enter_tag);
+        boolean isEnter = pptName.name().endsWith(FileIO.enter_tag);
         boolean isExit = isExitOrThrows(pptName);
         if (para.nonce != -1) {
-          if (isEnter && !exitNonces.contains(para.nonce)) {
+          if (isEnter && !exitNonces.get(para.nonce)) {
             callStack.push(methodName(pptName), para.nonce);
           }
           para.print(out);
@@ -293,27 +308,28 @@ public class DtraceNonceFixer {
 
   /**
    * Returns true if the given program point is an EXIT or THROWS point, which Daikon pairs with an
-   * ENTER point. This is the same test that {@link daikon.PptName#isExitPoint} and {@link
-   * daikon.PptName#isThrowsPoint} perform.
+   * ENTER point.
    *
-   * @param pptName a program point name, which contains ":::"
+   * @param pptName a program point name
    * @return true if {@code pptName} is an EXIT or THROWS point
    */
-  private static boolean isExitOrThrows(String pptName) {
-    int point = pptName.indexOf(FileIO.ppt_tag_separator) + FileIO.ppt_tag_separator.length();
-    return pptName.startsWith(FileIO.exit_suffix, point)
-        || pptName.startsWith(FileIO.throws_suffix, point);
+  private static boolean isExitOrThrows(PptName pptName) {
+    return pptName.isExitPoint() || pptName.isThrowsPoint();
   }
 
   /**
    * Returns the given program point name, without the part starting at ":::".
    *
-   * @param pptName a program point name, which contains ":::"
+   * @param pptName a program point name
    * @return the method part of {@code pptName}
    */
-  private static String methodName(String pptName) {
-    return pptName.substring(0, pptName.indexOf(FileIO.ppt_tag_separator));
+  private static String methodName(PptName pptName) {
+    // The PptName(String) constructor always sets the name without the point.
+    return castNonNull(pptName.getNameWithoutPoint());
   }
+
+  /** The parsed program point names, so that each distinct name is parsed only once. */
+  private static final Map<String, PptName> pptNames = new HashMap<>();
 
   /** A method call whose ENTER sample has been seen, but whose EXIT sample has not. */
   private static final class Call {
@@ -413,6 +429,8 @@ public class DtraceNonceFixer {
       while (i < lines.size() && FileIO.isComment(lines.get(i))) {
         i++;
       }
+      // A line without ":::" does not start a sample, because Daikon rejects a program point name
+      // without ":::" (see the PptName constructor).
       boolean isSample =
           i < lines.size()
               && lines.get(i).contains(FileIO.ppt_tag_separator)
@@ -431,18 +449,24 @@ public class DtraceNonceFixer {
      */
     private static int parseNonce(List<String> lines, int i) {
       // Like Daikon, require the header to be exactly NONCE_HEADER.
-      if (i + 1 >= lines.size() || !lines.get(i + 1).equals(NONCE_HEADER)) {
+      if (i + 1 >= lines.size() || !lines.get(i + 1).equals(FileIO.NONCE_HEADER)) {
         return -1;
       }
       if (i + 2 >= lines.size()) {
-        throw new daikon.Daikon.UserError("No nonce after " + NONCE_HEADER + " in: " + lines);
+        throw new daikon.Daikon.UserError(
+            "No nonce after " + FileIO.NONCE_HEADER + " in: " + lines);
       }
       String nonceString = lines.get(i + 2).trim();
+      int nonce;
       try {
-        return Integer.parseInt(nonceString);
+        nonce = Integer.parseInt(nonceString);
       } catch (NumberFormatException e) {
+        nonce = -1;
+      }
+      if (nonce < 0) {
         throw new daikon.Daikon.UserError("Bad nonce \"" + nonceString + "\" in: " + lines);
       }
+      return nonce;
     }
 
     /**
@@ -460,8 +484,8 @@ public class DtraceNonceFixer {
      *
      * @return the program point name of this sample
      */
-    String pptName() {
-      return lines.get(pptNameIndex);
+    PptName pptName() {
+      return pptNames.computeIfAbsent(lines.get(pptNameIndex), PptName::new);
     }
 
     /**
@@ -489,7 +513,7 @@ public class DtraceNonceFixer {
       for (int i = 0; i <= pptNameIndex; i++) {
         out.println(lines.get(i));
       }
-      out.println(NONCE_HEADER);
+      out.println(FileIO.NONCE_HEADER);
       out.println(newNonce);
       for (int i = rest; i < lines.size(); i++) {
         out.println(lines.get(i));
