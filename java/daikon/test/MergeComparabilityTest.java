@@ -13,11 +13,8 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,11 +22,9 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.junit.Assume;
 import org.junit.Test;
 
 /** Tests for {@link MergeComparability}. */
@@ -211,10 +206,32 @@ public class MergeComparabilityTest {
         expected(ppt("-1", "1", "1")), merge(file(ppt("2", "2", "2")), file(ppt("-1", "3", "3"))));
   }
 
-  /** A variable with no comparability record is comparable to everything. */
+  /**
+   * A variable with no comparability record is comparable to everything, and the output gives it a
+   * comparability record.
+   */
   @Test
   public void testMissingComparability() {
-    assertEquals(expected(ppt(null, "1")), merge(file(ppt(null, "2")), file(ppt("2", "2"))));
+    assertEquals(expected(ppt("-1", "1")), merge(file(ppt(null, "2")), file(ppt("2", "2"))));
+  }
+
+  /**
+   * Distinct negative comparabilities remain distinct, because Daikon puts variables in the same
+   * equality set only if their comparabilities are equal.
+   */
+  @Test
+  public void testDistinctNegatives() {
+    assertEquals(
+        expected(ppt("-1", "-2", "-1", "1[-2]")),
+        merge(file(ppt("-2", "-3", "-2", "4[-3]")), file(ppt("-2", "-3", "-2", "4[-3]"))));
+    // Negative comparabilities that are equal in some file are equal in the output.
+    assertEquals(
+        expected(ppt("-1", "-1", "-1")),
+        merge(file(ppt("-2", "-2", "-3")), file(ppt("-2", "-3", "-3"))));
+    // Daikon treats a variable without a comparability record as having comparability -3.
+    assertEquals(
+        expected(ppt("-1", "-1", "-2")),
+        merge(file(ppt(null, "-3", "-1")), file(ppt(null, "-3", "-1"))));
   }
 
   /**
@@ -223,7 +240,7 @@ public class MergeComparabilityTest {
    */
   @Test
   public void testMissingArrayComparability() {
-    assertEquals(expected(ppt(null, "1")), merge(file(ppt(null, "2")), file(ppt("3[4]", "2"))));
+    assertEquals(expected(ppt("-1", "1")), merge(file(ppt(null, "2")), file(ppt("3[4]", "2"))));
     assertEquals(expected(ppt("-1", "1")), merge(file(ppt("3[4]", "2")), file(ppt(null, "2"))));
   }
 
@@ -270,6 +287,52 @@ public class MergeComparabilityTest {
         merge(
             file(namedPpt("C.m():::ENTER", "2", "3"), namedPpt("C.n():::ENTER", "2", "3")),
             file(namedPpt("C.m():::ENTER", "2", "3"), namedPpt("C.n():::ENTER", "3", "2"))));
+  }
+
+  /**
+   * Comparability is made consistent across the entry, exit, OBJECT, and CLASS program points of a
+   * class, as DynComp does.
+   */
+  @Test
+  public void testHierarchy() {
+    // In file a, x and z are comparable at C.m():::EXIT1; in file b, y and z are.
+    List<String> a =
+        file(
+            namedPpt("C:::CLASS", "1", "2"),
+            namedPpt("C:::OBJECT", "1", "2"),
+            namedPpt("C.m():::ENTER", "1", "2"),
+            namedPpt("C.m():::EXIT1", "1", "2", "1"),
+            namedPpt("C.m():::EXIT2", "1", "2", "1"),
+            namedPpt("C.n():::ENTER", "1", "2"),
+            namedPpt("D.m():::ENTER", "1", "2"));
+    List<String> b =
+        file(
+            namedPpt("C:::CLASS", "1", "2"),
+            namedPpt("C:::OBJECT", "1", "2"),
+            namedPpt("C.m():::ENTER", "1", "2"),
+            namedPpt("C.m():::EXIT1", "1", "2", "2"),
+            namedPpt("C.m():::EXIT2", "1", "2", "2"),
+            namedPpt("C.n():::ENTER", "1", "2"),
+            namedPpt("D.m():::ENTER", "1", "2"));
+    assertEquals(
+        expected(
+            namedPpt("C:::CLASS", "1", "1"),
+            namedPpt("C:::OBJECT", "1", "1"),
+            namedPpt("C.m():::ENTER", "1", "1"),
+            namedPpt("C.m():::EXIT1", "1", "1", "1"),
+            namedPpt("C.m():::EXIT2", "1", "1", "1"),
+            // Comparability flows to an entry point only from the exit points of its method.
+            namedPpt("C.n():::ENTER", "1", "2"),
+            namedPpt("D.m():::ENTER", "1", "2")),
+        merge(a, b));
+  }
+
+  /** Comparability does not flow from a CLASS program point to the OBJECT program point. */
+  @Test
+  public void testHierarchyClassToObject() {
+    List<String> a = file(namedPpt("C:::CLASS", "1", "1"), namedPpt("C:::OBJECT", "1", "2"));
+    assertEquals(
+        expected(namedPpt("C:::CLASS", "1", "1"), namedPpt("C:::OBJECT", "1", "2")), merge(a, a));
   }
 
   /** Program points with different variables cannot be merged. */
@@ -460,15 +523,11 @@ public class MergeComparabilityTest {
   }
 
   /**
-   * A DeclReader that is not for rewriting skips unrecognized records and ignores extra tokens, but
-   * a rewriting DeclReader rejects them.
+   * A DeclReader that is not for rewriting ignores extra tokens, but a rewriting DeclReader rejects
+   * them.
    */
   @Test
   public void testLenientNotForRewriting() {
-    List<String> unknownPptRecord = new ArrayList<>(file(ppt("1")));
-    unknownPptRecord.add(unknownPptRecord.indexOf("variable a"), "new-ppt-record x");
-    List<String> unknownVarRecord = new ArrayList<>(file(ppt("1")));
-    unknownVarRecord.add(unknownVarRecord.size() - 1, "  new-var-record x");
     List<String> extraComparabilityToken = new ArrayList<>(file(ppt("1")));
     extraComparabilityToken.set(
         extraComparabilityToken.indexOf("  comparability 1"), "  comparability 1 x");
@@ -477,18 +536,38 @@ public class MergeComparabilityTest {
     List<String> noColons = new ArrayList<>(file(ppt("1")));
     noColons.set(noColons.indexOf("ppt C.m():::ENTER"), "ppt C.m()");
     for (List<String> lines :
-        Arrays.asList(
-            unknownPptRecord,
-            unknownVarRecord,
-            extraComparabilityToken,
-            extraVariableToken,
-            noColons)) {
+        Arrays.asList(extraComparabilityToken, extraVariableToken, noColons)) {
       assertThrows(Daikon.UserError.class, () -> parse("a", lines));
       DeclReader reader = parse("a", lines, false);
       DeclReader.DeclPpt ppt = reader.ppts.values().iterator().next();
       DeclReader.DeclVarInfo var = castNonNull(ppt.find_var("a"));
       assertEquals("1", castNonNull(var.get_comparability()));
     }
+  }
+
+  /** Records that DeclReader does not recognize are copied to the output. */
+  @Test
+  public void testUnrecognizedRecords() {
+    List<String> a = new ArrayList<>(file(ppt("2", "2")));
+    a.add(a.indexOf("variable a"), "new-ppt-record x");
+    a.add(a.indexOf("variable b"), "  new-var-record y");
+    List<String> expected = new ArrayList<>(expected(ppt("1", "1")));
+    expected.add(expected.indexOf("variable a"), "new-ppt-record x");
+    expected.add(expected.indexOf("variable b"), "  new-var-record y");
+    assertEquals(expected, merge(a, a));
+  }
+
+  /** A ListImplementors record is copied to the output, and it must be the same in every file. */
+  @Test
+  public void testListImplementors() {
+    List<String> a = new ArrayList<>(file(ppt("2", "2")));
+    a.addAll(a.indexOf("ppt C.m():::ENTER"), Arrays.asList("ListImplementors", "p.MyList", ""));
+    List<String> expected = new ArrayList<>(expected(ppt("1", "1")));
+    expected.addAll(
+        expected.indexOf("var-comparability implicit") + 1,
+        Arrays.asList("ListImplementors", "p.MyList"));
+    assertEquals(expected, merge(a, a));
+    assertThrows(Daikon.UserError.class, () -> merge(a, file(ppt("2", "2"))));
   }
 
   /** A DeclReader that is not for rewriting skips a sample record for a variable named "ppt". */
@@ -521,14 +600,6 @@ public class MergeComparabilityTest {
     assertThrows(Daikon.UserError.class, () -> parse("a", lines, false));
   }
 
-  /** A variable record before the first variable of a program point is rejected. */
-  @Test
-  public void testVariableRecordBeforeVariable() {
-    List<String> lines = new ArrayList<>(file(ppt("1")));
-    lines.add(lines.indexOf("variable a"), "  comparability 3");
-    assertThrows(Daikon.UserError.class, () -> parse("a", lines));
-  }
-
   /** A file without a decl-version record, such as an empty file, cannot be rewritten. */
   @Test
   public void testNoDeclVersion() {
@@ -544,24 +615,25 @@ public class MergeComparabilityTest {
     assertThrows(Daikon.UserError.class, () -> parse("a", lines));
   }
 
-  /** Writing through a symbolic link preserves the link and the permissions of its target. */
+  /** An inconsistency in the input files leaves an existing output file unchanged. */
   @Test
-  public void testOutputSymbolicLink() throws IOException {
-    Assume.assumeTrue(FileSystems.getDefault().supportedFileAttributeViews().contains("posix"));
+  public void testOutputFile() throws IOException {
     Path dir = Files.createTempDirectory("MergeComparabilityTest");
     try {
-      Path input = dir.resolve("in.decls-DynComp");
-      Files.write(input, file(ppt("2", "2")));
-      Path target = dir.resolve("target.decls-DynComp");
-      Files.write(target, Collections.singletonList("old"));
-      Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rw-r-----");
-      Files.setPosixFilePermissions(target, permissions);
-      Path link = dir.resolve("link.decls-DynComp");
-      Files.createSymbolicLink(link, castNonNull(target.getFileName()));
-      MergeComparability.mainHelper(new String[] {"-o", link.toString(), input.toString()});
-      assertTrue(Files.isSymbolicLink(link));
-      assertEquals(permissions, Files.getPosixFilePermissions(target));
-      assertTrue(Files.readAllLines(target).contains("  comparability 1"));
+      Path a = dir.resolve("a.decls-DynComp");
+      Files.write(a, file(ppt("2", "2")));
+      Path b = dir.resolve("b.decls-DynComp");
+      Files.write(b, file(ppt("2", "2", "2")));
+      Path output = dir.resolve("merged.decls-DynComp");
+      MergeComparability.mainHelper(new String[] {"-o", output.toString(), a.toString()});
+      List<String> merged = Files.readAllLines(output);
+      assertTrue(merged.contains("  comparability 1"));
+      assertThrows(
+          Daikon.UserError.class,
+          () ->
+              MergeComparability.mainHelper(
+                  new String[] {"-o", output.toString(), a.toString(), b.toString()}));
+      assertEquals(merged, Files.readAllLines(output));
     } finally {
       try (Stream<Path> paths = Files.walk(dir)) {
         for (Path p : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList())) {

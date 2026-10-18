@@ -40,13 +40,16 @@ public class DeclReader {
    * faithfully rewritten: a file that is not a version 2.0 declaration file, records (such as
    * sample records in a .dtrace file) that are neither header records nor declarations, a header
    * record that appears more than once, a program point that is declared more than once, a variable
-   * that is declared more than once in a program point, and a variable with more than one
-   * comparability record.
+   * that is declared more than once in a program point, a variable with more than one comparability
+   * record, and extra tokens at the end of a "variable" or "comparability" record.
    *
    * <p>If false, this reader skips everything other than program point declarations; within a
-   * declaration, it skips records that it does not recognize and ignores extra tokens at the end of
-   * a "variable" or "comparability" record; and a later declaration of a program point, of a
-   * variable, or of a comparability replaces an earlier one.
+   * declaration, it ignores extra tokens at the end of a "variable" or "comparability" record; and
+   * a later declaration of a program point, of a variable, or of a comparability replaces an
+   * earlier one.
+   *
+   * <p>In either case, this reader does not check the records of a declaration other than the
+   * "ppt", "variable", "dec-type", "rep-type", and "comparability" records.
    */
   private final boolean forRewriting;
 
@@ -55,47 +58,15 @@ public class DeclReader {
 
   /**
    * The header records, such as "decl-version 2.0", in the order they appear in the input. In each
-   * record, the tokens are separated by a single space; comments and blank lines are omitted.
+   * record, the tokens are separated by a single space; comments and blank lines are omitted. A
+   * "ListImplementors" record consists of its lines, separated by line separators.
    */
   public List<String> header = new ArrayList<>();
 
   /** The keywords of the header records. */
   private static final Set<String> HEADER_KEYWORDS =
-      new HashSet<>(Arrays.asList("decl-version", "var-comparability", "input-language"));
-
-  /**
-   * The keywords of the records that may appear in a program point declaration before its first
-   * variable. A rewriting reader rejects any other record there. This must be kept in sync with
-   * {@code FileIO.read_ppt_decl}.
-   */
-  private static final Set<String> PPT_KEYWORDS =
-      new HashSet<>(Arrays.asList("parent", "flags", "ppt-type"));
-
-  /**
-   * The keywords of the records that may appear in a variable declaration after its "variable"
-   * record. A rewriting reader rejects any other record there. This must be kept in sync with
-   * {@code FileIO.read_ppt_decl}.
-   */
-  private static final Set<String> VAR_KEYWORDS =
       new HashSet<>(
-          Arrays.asList(
-              "var-kind",
-              "enclosing-var",
-              "reference-type",
-              "array",
-              "function-args",
-              "rep-type",
-              "dec-type",
-              "flags",
-              "lang-flags",
-              "parent",
-              "comparability",
-              "constant",
-              "min-value",
-              "max-value",
-              "min-length",
-              "max-length",
-              "valid-values"));
+          Arrays.asList("decl-version", "var-comparability", "input-language", "ListImplementors"));
 
   /** Matches a run of whitespace. */
   private static final Pattern WHITESPACE = Pattern.compile("\\s+");
@@ -192,7 +163,7 @@ public class DeclReader {
      * The lines of the declaration that precede the first variable, starting with the "ppt" line;
      * empty if the DeclReader does not retain the text of declarations.
      */
-    public List<String> declHeaderLines = new ArrayList<>();
+    public List<String> declHeaderLines;
 
     /** Map from variable name to corresponding DeclVarInfo, in declaration order. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
@@ -202,10 +173,13 @@ public class DeclReader {
      *
      * @param name program point name
      * @param filename the file in which this declaration appears
+     * @param forRewriting if true, retain the text of the declaration
      */
-    public DeclPpt(String name, String filename) {
+    public DeclPpt(String name, String filename, boolean forRewriting) {
       this.name = name;
       this.filename = filename;
+      // Avoid allocating a list per program point when the lines are not retained.
+      this.declHeaderLines = forRewriting ? new ArrayList<>() : Collections.emptyList();
     }
 
     /**
@@ -253,8 +227,7 @@ public class DeclReader {
         if (keyword.equals("variable")) {
           break;
         }
-        // A "ppt" record means that the blank line that ends the declaration is missing.
-        if ((forRewriting || keyword.equals("ppt")) && !VAR_KEYWORDS.contains(keyword)) {
+        if (startsBlock(keyword)) {
           reportFileError(
               decl_file, "Unexpected record \"" + record.trim() + "\" in variable " + varName);
         }
@@ -284,7 +257,7 @@ public class DeclReader {
           }
         }
         // All other record types (such as flags and enclosing-var) are not parsed, because no
-        // client needs them.  A reader that is not for rewriting also skips unrecognized records.
+        // client needs them.
         record = decl_file.readLine();
       }
       // push back the variable or blank line record
@@ -401,13 +374,24 @@ public class DeclReader {
   }
 
   /**
+   * Returns true if a record with the given keyword starts a declaration or a header record. Within
+   * a declaration, such a record means that the blank line that ends the declaration is missing.
+   *
+   * @param keyword the first token of a record
+   * @return true if a record with the given keyword starts a declaration or a header record
+   */
+  private static boolean startsBlock(String keyword) {
+    return keyword.equals("ppt") || HEADER_KEYWORDS.contains(keyword);
+  }
+
+  /**
    * Returns the first whitespace-separated token of a record. This is cheaper than {@link
    * #tokenize}.
    *
    * @param record a record, possibly with leading and trailing whitespace
    * @return the first token of the record; the empty string if the record is blank
    */
-  static String firstToken(String record) {
+  public static String firstToken(String record) {
     int length = record.length();
     int start = 0;
     while (start < length && Character.isWhitespace(record.charAt(start))) {
@@ -476,6 +460,16 @@ public class DeclReader {
               reportFileError(decl_file, "Unsupported \"" + record + "\"");
             }
             seenVersion2 = true;
+          } else if (keyword.equals("ListImplementors")) {
+            // The names of the classes follow, one per line, up to a blank line.
+            List<String> lines = new ArrayList<>();
+            lines.add(record);
+            for (String className = decl_file.readLine();
+                className != null && !className.trim().isEmpty();
+                className = decl_file.readLine()) {
+              lines.add(className.trim());
+            }
+            record = String.join(System.lineSeparator(), lines);
           }
           header.add(record);
         } else {
@@ -523,7 +517,7 @@ public class DeclReader {
     if (forRewriting && ppts.containsKey(pptname)) {
       reportFileError(decl_file, "Program point " + pptname + " declared twice");
     }
-    DeclPpt ppt = new DeclPpt(pptname, decl_file.getFileName());
+    DeclPpt ppt = new DeclPpt(pptname, decl_file.getFileName(), forRewriting);
     ppts.put(pptname, ppt);
     if (forRewriting) {
       ppt.declHeaderLines.add(firstLine);
@@ -536,8 +530,7 @@ public class DeclReader {
       if (keyword.isEmpty() || keyword.equals("variable")) {
         break;
       }
-      // A "ppt" record means that the blank line that ends the declaration is missing.
-      if ((forRewriting || keyword.equals("ppt")) && !PPT_KEYWORDS.contains(keyword)) {
+      if (startsBlock(keyword)) {
         reportFileError(
             decl_file,
             "Expected \"variable <VARNAME>\" or a blank line, found \"" + line.trim() + "\"");
@@ -563,9 +556,10 @@ public class DeclReader {
    * Fetches program point declaration for the ppt_name argument.
    *
    * <p>This can return null. Example: when DynComp is run to compute comparability information, it
-   * produces no information (not even a declaration) for program points that are never executed.
-   * But, Chicory outputs a declaration for every program point, and this lookup can fail when using
-   * the --comparability-file=... command-line argument with a file produced by DynComp.
+   * produces no information (not even a declaration) for the program points of classes that are
+   * never loaded. But, Chicory outputs a declaration for every program point, and this lookup can
+   * fail when using the --comparability-file=... command-line argument with a file produced by
+   * DynComp.
    *
    * @param ppt_name name of Ppt to fetch
    * @return the program point declaration

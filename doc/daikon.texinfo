@@ -7033,6 +7033,14 @@ chain of such comparabilities.  For example, if variables @code{x} and
 comparable in another run, then @code{x}, @code{y}, and @code{z} are all
 comparable in the output.
 
+Like DynComp, @command{MergeComparability} makes a variable's
+comparability consistent across related program points.  For example, if
+two variables are comparable at any exit point of a method, then they are
+comparable at every exit point and at the entry point of the method; and
+if two fields are comparable at any entry or exit point of a class's
+methods, then they are comparable at the class's @code{OBJECT} program
+point and at every exit point of the class's methods.
+
 A variable that is comparable to everything in any input file (because
 its comparability is a negative number such as @code{-1}, or because it
 has no @code{comparability} record) is comparable to everything in the
@@ -7041,11 +7049,14 @@ that is negative in any input file is negative in the output.  A chain
 of comparabilities does not pass through such a variable or part:  if
 @code{x} and @code{y} are comparable in one run, and @code{y} is
 comparable to everything in another run, then @code{x} is not thereby
-made comparable to other variables.
+made comparable to other variables.  Variables that are comparable to
+everything are given distinct negative comparabilities in the output,
+except that variables with the same negative comparability in some input
+file have the same negative comparability in the output.
 
 A program point that appears in only some of the input files (for
-example, because it was executed in only some of the runs) appears in
-the output.  A program point that appears in multiple input files must
+example, because its class was loaded in only some of the runs) appears
+in the output.  A program point that appears in multiple input files must
 declare the same variables, in the same order, in each of them.  Its
 declarations must also contain the same records (such as
 @code{dec-type}, @code{rep-type}, and @code{flags}), except for
