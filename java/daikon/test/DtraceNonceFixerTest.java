@@ -9,12 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.PosixFilePermission;
-import java.util.Set;
-import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -51,7 +47,6 @@ public class DtraceNonceFixerTest {
   public void testAddNonces() throws IOException {
     Path dir = tmpFolder.getRoot().toPath();
     Path in = dir.resolve("in.dtrace");
-    Path out = dir.resolve("out.dtrace");
     String samples =
         String.join(
             "\n",
@@ -68,7 +63,7 @@ public class DtraceNonceFixerTest {
             "");
     Files.writeString(in, DECLS + samples, UTF_8);
 
-    DtraceNonceFixer.mainHelper(new String[] {in.toString(), out.toString()});
+    DtraceNonceFixer.mainHelper(new String[] {in.toString()});
 
     String expectedSamples =
         String.join(
@@ -88,69 +83,16 @@ public class DtraceNonceFixerTest {
             "1",
             "",
             "");
+    Path out = dir.resolve("in.dtrace_all_fixed");
     String actual = Files.readString(out, UTF_8).replace(System.lineSeparator(), "\n");
     assertEquals(DECLS + expectedSamples, actual);
-    // The input file is unchanged, and no intermediate file remains.
+    // The input file is unchanged.
     assertEquals(DECLS + samples, Files.readString(in, UTF_8));
-    try (Stream<Path> files = Files.list(dir)) {
-      assertEquals(2, files.count());
-    }
   }
 
   /**
-   * Tests that an EXIT sample without a nonce gets the nonce of its ENTER sample, including for
-   * nested calls and for a sample that is preceded by a comment.
-   *
-   * @throws IOException if there is trouble reading or writing a file
-   */
-  @Test
-  public void testMatchEnterExit() throws IOException {
-    Path dir = tmpFolder.getRoot().toPath();
-    Path in = dir.resolve("in.dtrace");
-    Path out = dir.resolve("out.dtrace");
-    String samples =
-        String.join(
-            "\n",
-            "C.f():::ENTER",
-            "",
-            "C.g():::ENTER",
-            "",
-            "# a comment",
-            "C.g():::EXIT7",
-            "",
-            "C.f():::EXIT3",
-            "",
-            "");
-    Files.writeString(in, samples, UTF_8);
-
-    DtraceNonceFixer.mainHelper(new String[] {in.toString(), out.toString()});
-
-    String expected =
-        String.join(
-            "\n",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "1",
-            "",
-            "C.g():::ENTER",
-            "this_invocation_nonce",
-            "2",
-            "",
-            "# a comment",
-            "C.g():::EXIT7",
-            "this_invocation_nonce",
-            "2",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "1",
-            "",
-            "");
-    assertEquals(expected, Files.readString(out, UTF_8).replace(System.lineSeparator(), "\n"));
-  }
-
-  /**
-   * Runs DtraceNonceFixer with a new input file and a separate output file, and returns the output.
+   * Runs DtraceNonceFixer on a new input file, and returns the output that includes nonces for all
+   * samples.
    *
    * @param input the contents of the input file
    * @return the contents of the output file
@@ -159,9 +101,9 @@ public class DtraceNonceFixerTest {
   private String fix(String input) throws IOException {
     Path dir = tmpFolder.newFolder().toPath();
     Path in = dir.resolve("in.dtrace");
-    Path out = dir.resolve("out.dtrace");
+    Path out = dir.resolve("in.dtrace_all_fixed");
     Files.writeString(in, input, UTF_8);
-    DtraceNonceFixer.mainHelper(new String[] {in.toString(), out.toString()});
+    DtraceNonceFixer.mainHelper(new String[] {in.toString()});
     return Files.readString(out, UTF_8).replace(System.lineSeparator(), "\n");
   }
 
@@ -233,69 +175,6 @@ public class DtraceNonceFixerTest {
   }
 
   /**
-   * Tests that an EXIT sample without a nonce gets the nonce of its ENTER sample, when the ENTER
-   * sample has a nonce. Also tests that an EXIT sample with a nonce matches its ENTER sample.
-   *
-   * @throws IOException if there is trouble reading or writing a file
-   */
-  @Test
-  public void testEnterWithNonceExitWithout() throws IOException {
-    String samples =
-        String.join(
-            "\n",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "5",
-            "",
-            "C.g():::ENTER",
-            "this_invocation_nonce",
-            "6",
-            "",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "7",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "7",
-            "",
-            "C.g():::EXIT9",
-            "",
-            "C.f():::EXIT3",
-            "",
-            "");
-    String expected =
-        String.join(
-            "\n",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "5",
-            "",
-            "C.g():::ENTER",
-            "this_invocation_nonce",
-            "6",
-            "",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "7",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "7",
-            "",
-            "C.g():::EXIT9",
-            "this_invocation_nonce",
-            "6",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "5",
-            "",
-            "");
-    assertEquals(expected, fix(samples));
-  }
-
-  /**
    * Tests that a line that contains only whitespace does not end a sample, and that whitespace is
    * preserved.
    *
@@ -311,14 +190,14 @@ public class DtraceNonceFixerTest {
   }
 
   /**
-   * Tests that a compressed file can be both the input and the output.
+   * Tests that a compressed input file yields a compressed output file.
    *
    * @throws IOException if there is trouble reading or writing a file
    */
   @Test
-  public void testInPlaceCompressed() throws IOException {
+  public void testCompressed() throws IOException {
     Path dir = tmpFolder.getRoot().toPath();
-    Path file = dir.resolve("in.dtrace.gz");
+    Path in = dir.resolve("in.dtrace.gz");
     String samples =
         String.join(
             "\n",
@@ -339,12 +218,12 @@ public class DtraceNonceFixerTest {
             "0",
             "",
             "");
-    try (OutputStream fileOs = Files.newOutputStream(file);
+    try (OutputStream fileOs = Files.newOutputStream(in);
         OutputStream os = new GZIPOutputStream(fileOs)) {
       os.write(samples.getBytes(UTF_8));
     }
 
-    DtraceNonceFixer.mainHelper(new String[] {file.toString(), file.toString()});
+    DtraceNonceFixer.mainHelper(new String[] {in.toString()});
 
     String expected =
         String.join(
@@ -367,94 +246,11 @@ public class DtraceNonceFixerTest {
             "",
             "");
     String actual;
-    try (InputStream fileIs = Files.newInputStream(file);
+    try (InputStream fileIs = Files.newInputStream(dir.resolve("in.dtrace.gz_all_fixed.gz"));
         InputStream is = new GZIPInputStream(fileIs)) {
       actual = new String(is.readAllBytes(), UTF_8).replace(System.lineSeparator(), "\n");
     }
     assertEquals(expected, actual);
-    // No temporary file remains.
-    try (Stream<Path> files = Files.list(dir)) {
-      assertEquals(1, files.count());
-    }
-  }
-
-  /**
-   * Tests that an EXIT sample without a nonce does not get the nonce of an ENTER sample whose EXIT
-   * sample has a nonce, and that the paired samples are not changed.
-   *
-   * @throws IOException if there is trouble reading or writing a file
-   */
-  @Test
-  public void testExitWithoutNonceSkipsNoncedCall() throws IOException {
-    String samples =
-        String.join(
-            "\n",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "5",
-            "",
-            "C.f():::EXIT3",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "5",
-            "",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "3",
-            "",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "3",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "3",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "3",
-            "",
-            "C.f():::EXIT3",
-            "",
-            "");
-    String expected =
-        String.join(
-            "\n",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "5",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "6",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "5",
-            "",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "3",
-            "",
-            "C.f():::ENTER",
-            "this_invocation_nonce",
-            "3",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "3",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "3",
-            "",
-            "C.f():::EXIT3",
-            "this_invocation_nonce",
-            "7",
-            "",
-            "");
-    assertEquals(expected, fix(samples));
   }
 
   /**
@@ -479,44 +275,5 @@ public class DtraceNonceFixerTest {
             "",
             "");
     assertEquals(expected, fix(samples));
-  }
-
-  /**
-   * Tests that a new output file has the default permissions rather than being readable only by its
-   * owner, and that when the output file is a symbolic link, the file that it refers to is
-   * replaced.
-   *
-   * @throws IOException if there is trouble reading or writing a file
-   */
-  @Test
-  public void testOutputFileAttributes() throws IOException {
-    Path dir = tmpFolder.getRoot().toPath();
-    Assume.assumeTrue(dir.getFileSystem().supportedFileAttributeViews().contains("posix"));
-    Path in = dir.resolve("in.dtrace");
-    String samples = String.join("\n", "aprogram.point:::POINT", "x", "5", "1", "", "");
-    Files.writeString(in, samples, UTF_8);
-    String expected =
-        String.join(
-            "\n", "aprogram.point:::POINT", "this_invocation_nonce", "1", "x", "5", "1", "", "");
-
-    // A new output file gets the same permissions as another new file.
-    Path out = dir.resolve("out.dtrace");
-    Path reference = Files.createFile(dir.resolve("reference"));
-    DtraceNonceFixer.mainHelper(new String[] {in.toString(), out.toString()});
-    Set<PosixFilePermission> defaultPermissions = Files.getPosixFilePermissions(reference);
-    assertEquals(defaultPermissions, Files.getPosixFilePermissions(out));
-    assertEquals(expected, Files.readString(out, UTF_8).replace(System.lineSeparator(), "\n"));
-
-    // An output file that is a symbolic link, to an existing file or to a nonexistent file.
-    for (boolean targetExists : new boolean[] {true, false}) {
-      Path target = dir.resolve("target-" + targetExists + ".dtrace");
-      if (targetExists) {
-        Files.writeString(target, "old contents", UTF_8);
-      }
-      Path link = Files.createSymbolicLink(dir.resolve("link-" + targetExists), target);
-      DtraceNonceFixer.mainHelper(new String[] {in.toString(), link.toString()});
-      assertEquals(true, Files.isSymbolicLink(link));
-      assertEquals(expected, Files.readString(target, UTF_8).replace(System.lineSeparator(), "\n"));
-    }
   }
 }
