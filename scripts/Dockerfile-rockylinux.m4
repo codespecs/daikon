@@ -46,8 +46,6 @@ RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
 && rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
 ENV PATH="/jdk-JDKVER/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
-# Azure runs jobs as a non-root user, who must be able to read files in /root.
-RUN chmod -R og+rX /root
 ]])m4_dnl
 if_plus([[
 # The CRB repository contains certain packages, including dependencies of
@@ -105,12 +103,14 @@ RUN dnf -q -y install \
 
 # Install uv (manages Python dependencies).
 RUN echo "installing uv" \
-&& wget -qO- https://astral.sh/uv/install.sh | sh \
-&& find /root -exec chmod +r {} \; \
-&& find /root -type d -exec chmod +x {} \; \
-&& find /root/.local/bin -type f -exec chmod +x {} \;
+&& wget -qO- https://astral.sh/uv/install.sh | sh
 ENV PATH=/root/.local/bin:$PATH
 ]])m4_dnl
+
+# Azure runs jobs as a non-root user, who must be able to read files in /root
+# and run programs installed there.  Rocky Linux makes /root inaccessible to
+# other users.  This step must follow every step that writes to /root.
+RUN chmod -R og+rX /root
 
 # Clean up.
 RUN dnf -q clean all
