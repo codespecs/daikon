@@ -276,4 +276,191 @@ public class DtraceNonceFixerTest {
             "");
     assertEquals(expected, fix(samples));
   }
+
+  /**
+   * Tests that an EXIT sample without a nonce gets the nonce of its ENTER sample, including for
+   * nested calls and for a sample that is preceded by a comment.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testMatchEnterExit() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "",
+            "C.g():::ENTER",
+            "",
+            "# a comment",
+            "C.g():::EXIT7",
+            "",
+            "C.f():::EXIT3",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.g():::ENTER",
+            "this_invocation_nonce",
+            "2",
+            "",
+            "# a comment",
+            "C.g():::EXIT7",
+            "this_invocation_nonce",
+            "2",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
+   * Tests that an EXIT sample without a nonce gets the nonce of its ENTER sample, when the ENTER
+   * sample has a nonce. Also tests that an EXIT sample with a nonce matches its ENTER sample.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testEnterWithNonceExitWithout() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "C.g():::ENTER",
+            "this_invocation_nonce",
+            "6",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "7",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "7",
+            "",
+            "C.g():::EXIT9",
+            "",
+            "C.f():::EXIT3",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "C.g():::ENTER",
+            "this_invocation_nonce",
+            "6",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "7",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "7",
+            "",
+            "C.g():::EXIT9",
+            "this_invocation_nonce",
+            "6",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
+   * Tests that an EXIT sample without a nonce does not get the nonce of an ENTER sample whose EXIT
+   * sample has a nonce, and that the paired samples are not changed.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testExitWithoutNonceSkipsNoncedCall() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "C.f():::EXIT3",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "C.f():::EXIT3",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "6",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "7",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
 }
