@@ -2,6 +2,8 @@
 
 package daikon.tools;
 
+import static daikon.tools.nullness.NullnessUtil.castNonNull;
+
 import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.PptName;
@@ -9,6 +11,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
+import java.nio.file.AtomicMoveNotSupportedException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,10 +47,16 @@ public class DtraceNonceFixer {
   /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
-          "Usage: DtraceNonceFixer FILENAME",
+          "Usage: DtraceNonceFixer FILENAME [OUTFILE]",
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
           "The output file will be FILENAME_fixed and another output included",
-          "nonces for OBJECT and CLASS invocations called FILENAME_all_fixed");
+          "nonces for OBJECT and CLASS invocations called FILENAME_all_fixed.",
+          "If OUTFILE is supplied, the output that includes nonces for all invocations",
+          "is written to OUTFILE instead, and no other output file remains.",
+          "OUTFILE may be the same as FILENAME.");
+
+  /** The maximum number of symbolic links to follow when resolving OUTFILE. */
+  private static final int MAX_SYMBOLIC_LINKS = 40;
 
   public static void main(String[] args) {
     try {
@@ -61,17 +74,125 @@ public class DtraceNonceFixer {
    */
   public static void mainHelper(final String[] args) {
     String[] files = DaikonGetopt.nonOptionArgs(args, usage);
-    if (files.length != 1) {
+    if (files.length != 1 && files.length != 2) {
       throw new daikon.Daikon.UserError(usage);
     }
 
-    String suffix = files[0].endsWith(".gz") ? ".gz" : "";
-    String fixedFilename = files[0] + "_fixed" + suffix;
     try {
-      int maxNonce = correctNonces(files[0], fixedFilename);
-      addMissingNonces(fixedFilename, files[0] + "_all_fixed" + suffix, maxNonce);
+      if (files.length == 1) {
+        String suffix = files[0].endsWith(".gz") ? ".gz" : "";
+        String fixedFilename = files[0] + "_fixed" + suffix;
+        int maxNonce = correctNonces(files[0], fixedFilename);
+        addMissingNonces(fixedFilename, files[0] + "_all_fixed" + suffix, maxNonce);
+      } else {
+        // The temporary files are in OUTFILE's directory, so that the final move can be atomic,
+        // and have fresh names so that they overwrite no existing file.  OUTFILE is not opened
+        // for writing, so if this program fails, OUTFILE (which may be the input) is unchanged.
+        // If OUTFILE is a symbolic link, the file that it refers to is replaced.
+        Path outfile = resolveSymbolicLinks(Path.of(files[1]).toAbsolutePath());
+        Path dir = castNonNull(outfile.getParent()); // an absolute file path has a parent
+        String prefix = outfile.getFileName() + "-";
+        String suffix = files[1].endsWith(".gz") ? ".gz" : "";
+        // The intermediate file is not compressed, because it is deleted.
+        Path tmpFile = createFreshFile(dir, prefix, "-fixed");
+        Path tmpOutFile = null;
+        try {
+          tmpOutFile = createFreshFile(dir, prefix, "-all-fixed" + suffix);
+          int maxNonce = correctNonces(files[0], tmpFile.toString());
+          addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
+          replaceFile(tmpOutFile, outfile);
+        } catch (Throwable e) {
+          deleteAfterFailure(tmpFile, e);
+          if (tmpOutFile != null) {
+            deleteAfterFailure(tmpOutFile, e);
+          }
+          throw e;
+        }
+        Files.delete(tmpFile);
+      }
     } catch (IOException e) {
       throw new UncheckedIOException(e);
+    }
+  }
+
+  /**
+   * Returns the file that {@code file} refers to, following symbolic links. Unlike {@link
+   * Path#toRealPath}, this method also follows a symbolic link to a file that does not exist.
+   *
+   * @param file an absolute file path
+   * @return the file that {@code file} refers to
+   * @throws IOException if there is trouble reading a symbolic link
+   */
+  private static Path resolveSymbolicLinks(Path file) throws IOException {
+    if (Files.exists(file)) {
+      return file.toRealPath();
+    }
+    for (int i = 0; Files.isSymbolicLink(file); i++) {
+      if (i == MAX_SYMBOLIC_LINKS) {
+        throw new daikon.Daikon.UserError("Too many levels of symbolic links: " + file);
+      }
+      file = file.resolveSibling(Files.readSymbolicLink(file));
+    }
+    return file;
+  }
+
+  /**
+   * Creates a new, empty file whose name does not conflict with any existing file. Unlike {@link
+   * Files#createTempFile}, which makes the file readable only by its owner, this method gives the
+   * file the default permissions (which depend on the umask).
+   *
+   * @param dir the directory in which to create the file
+   * @param prefix the start of the file name
+   * @param suffix the end of the file name
+   * @return the new file
+   * @throws IOException if there is trouble creating the file
+   */
+  private static Path createFreshFile(Path dir, String prefix, String suffix) throws IOException {
+    for (int i = 0; ; i++) {
+      try {
+        return Files.createFile(dir.resolve(prefix + i + suffix));
+      } catch (FileAlreadyExistsException e) {
+        // Try the next name.
+      }
+    }
+  }
+
+  /**
+   * Deletes {@code file}, if it exists, after a failure. A problem deleting the file is added to
+   * {@code failure} as a suppressed exception, so that it does not hide {@code failure}.
+   *
+   * @param file the file to delete
+   * @param failure the exception that the caller will throw
+   */
+  private static void deleteAfterFailure(Path file, Throwable failure) {
+    try {
+      Files.deleteIfExists(file);
+    } catch (IOException e) {
+      failure.addSuppressed(e);
+    }
+  }
+
+  /**
+   * Moves {@code source} to {@code target}, replacing {@code target} if it exists. If possible, the
+   * move is atomic, and the result has the permissions of the original {@code target}.
+   *
+   * @param source the file to move
+   * @param target the file to replace
+   * @throws IOException if there is trouble moving the file
+   */
+  private static void replaceFile(Path source, Path target) throws IOException {
+    if (Files.exists(target)) {
+      try {
+        Files.setPosixFilePermissions(source, Files.getPosixFilePermissions(target));
+      } catch (UnsupportedOperationException e) {
+        // The file system does not support POSIX permissions.
+      }
+    }
+    try {
+      Files.move(
+          source, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+    } catch (AtomicMoveNotSupportedException e) {
+      Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
     }
   }
 
