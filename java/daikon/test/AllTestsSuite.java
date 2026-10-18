@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
   daikon.test.BadOptionTest.class,
   daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
   daikon.test.TestAst.class,
+  daikon.split.SplitterFactoryFileNameTest.class,
   daikon.test.config.ConfigurationTest.class,
   daikon.test.config.HtmlToTexinfoTest.class,
   daikon.test.diff.ConsequentCVFPairComparatorTester.class,
