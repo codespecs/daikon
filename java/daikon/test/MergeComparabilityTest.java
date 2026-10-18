@@ -471,16 +471,12 @@ public class MergeComparabilityTest {
     assertThrows(Daikon.UserError.class, () -> parse("a", twice));
   }
 
-  /** A DeclReader that is not for rewriting skips sample records and allows duplicate ppts. */
+  /** A DeclReader that is not for rewriting does not retain the text of declarations. */
   @Test
   public void testNotForRewriting() {
-    List<String> lines = new ArrayList<>(file(ppt("1", "2"), ppt("3", "3")));
-    lines.addAll(Arrays.asList("C.m():::ENTER", "this_invocation_nonce", "0", "a", "3", "1", ""));
-    DeclReader reader = parse("a", lines, false);
-    assertEquals(1, reader.ppts.size());
+    DeclReader reader = parse("a", file(ppt("1")), false);
     DeclReader.DeclPpt ppt = castNonNull(reader.find_ppt("C.m():::ENTER"));
     DeclReader.DeclVarInfo var = castNonNull(ppt.find_var("a"));
-    assertEquals("3", castNonNull(var.get_comparability()));
     assertEquals(Collections.emptyList(), ppt.declHeaderLines);
     assertEquals(Collections.emptyList(), var.lines);
   }
@@ -497,37 +493,11 @@ public class MergeComparabilityTest {
   }
 
   /**
-   * A DeclReader that is not for rewriting allows a variable declared twice and multiple
-   * comparabilities; the last one wins.
+   * A rewriting DeclReader rejects extra tokens and a ppt name without ":::". (A DeclReader that is
+   * not for rewriting accepts them; see {@code DeclReaderTest.testLenient}.)
    */
   @Test
-  public void testDuplicateVariableAndComparabilityNotForRewriting() {
-    List<String> twice = new ArrayList<>(file(ppt("1")));
-    twice.addAll(twice.size() - 1, var("a", "2"));
-    twice.add(twice.size() - 1, "  comparability 3");
-    DeclReader reader = parse("a", twice, false);
-    DeclReader.DeclPpt ppt = castNonNull(reader.find_ppt("C.m():::ENTER"));
-    DeclReader.DeclVarInfo var = castNonNull(ppt.find_var("a"));
-    assertEquals("3", castNonNull(var.get_comparability()));
-  }
-
-  /** A later declaration of a variable keeps the index of the earlier one. */
-  @Test
-  public void testDuplicateVariableIndexNotForRewriting() {
-    List<String> twice = new ArrayList<>(file(ppt("1", "2")));
-    twice.addAll(twice.size() - 1, var("a", "3"));
-    DeclReader reader = parse("a", twice, false);
-    DeclReader.DeclPpt ppt = castNonNull(reader.find_ppt("C.m():::ENTER"));
-    assertEquals(0, castNonNull(ppt.find_var("a")).index);
-    assertEquals(1, castNonNull(ppt.find_var("b")).index);
-  }
-
-  /**
-   * A DeclReader that is not for rewriting ignores extra tokens, but a rewriting DeclReader rejects
-   * them.
-   */
-  @Test
-  public void testLenientNotForRewriting() {
+  public void testExtraTokens() {
     List<String> extraComparabilityToken = new ArrayList<>(file(ppt("1")));
     extraComparabilityToken.set(
         extraComparabilityToken.indexOf("  comparability 1"), "  comparability 1 x");
@@ -538,10 +508,6 @@ public class MergeComparabilityTest {
     for (List<String> lines :
         Arrays.asList(extraComparabilityToken, extraVariableToken, noColons)) {
       assertThrows(Daikon.UserError.class, () -> parse("a", lines));
-      DeclReader reader = parse("a", lines, false);
-      DeclReader.DeclPpt ppt = reader.ppts.values().iterator().next();
-      DeclReader.DeclVarInfo var = castNonNull(ppt.find_var("a"));
-      assertEquals("1", castNonNull(var.get_comparability()));
     }
   }
 
@@ -570,15 +536,6 @@ public class MergeComparabilityTest {
     assertThrows(Daikon.UserError.class, () -> merge(a, file(ppt("2", "2"))));
   }
 
-  /** A DeclReader that is not for rewriting skips a sample record for a variable named "ppt". */
-  @Test
-  public void testSampleVariableNamedPpt() {
-    List<String> lines = new ArrayList<>(file(ppt("1")));
-    lines.addAll(Arrays.asList("C.m():::ENTER", "this_invocation_nonce", "0", "ppt", "3", "1", ""));
-    DeclReader reader = parse("a", lines, false);
-    assertEquals(1, reader.ppts.size());
-  }
-
   /** A program point declaration that is not ended by a blank line is rejected. */
   @Test
   public void testMissingBlankLineBetweenPpts() {
@@ -587,7 +544,6 @@ public class MergeComparabilityTest {
     lines.remove(lines.size() - 1);
     lines.addAll(namedPpt("C.m():::EXIT1", "1"));
     assertThrows(Daikon.UserError.class, () -> parse("a", lines));
-    assertThrows(Daikon.UserError.class, () -> parse("a", lines, false));
   }
 
   /** A "ppt" record within a variable declaration is rejected. */
@@ -597,7 +553,6 @@ public class MergeComparabilityTest {
     lines.remove(lines.size() - 1);
     lines.addAll(namedPpt("C.m():::EXIT1", "1"));
     assertThrows(Daikon.UserError.class, () -> parse("a", lines));
-    assertThrows(Daikon.UserError.class, () -> parse("a", lines, false));
   }
 
   /** A file without a decl-version record, such as an empty file, cannot be rewritten. */

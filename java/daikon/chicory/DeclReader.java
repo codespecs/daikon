@@ -205,6 +205,9 @@ public class DeclReader {
       }
       String varName = firstTokens[1];
       DeclVarInfo previous = vars.get(varName);
+      // The location of the "variable" record.  The EntryReader cannot report a location after the
+      // end of the input, where a missing record is detected.
+      String varLocation = decl_file.getFileName() + " line " + decl_file.getLineNumber();
       if (forRewriting && previous != null) {
         reportFileError(decl_file, "Variable " + varName + " declared twice in ppt " + name);
       }
@@ -266,10 +269,10 @@ public class DeclReader {
       }
 
       if (type == null) {
-        reportFileError(decl_file, "No type for variable " + varName);
+        throw new Daikon.UserError("No dec-type for variable " + varName + " at " + varLocation);
       }
       if (rep_type == null) {
-        reportFileError(decl_file, "No rep-type for variable " + varName);
+        throw new Daikon.UserError("No rep-type for variable " + varName + " at " + varLocation);
       }
 
       // I don't see the point of this interning.  No code seems to take
