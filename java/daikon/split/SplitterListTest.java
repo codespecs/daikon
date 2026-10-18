@@ -3,7 +3,6 @@ package daikon.split;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import daikon.Ppt;
@@ -205,7 +204,7 @@ public class SplitterListTest {
     assertEquals(Arrays.asList("o > 0", "u > 0"), conditions("splitterlisttest.F:::OBJECT"));
     // A program point that is not an OBJECT program point does not, even if its name contains
     // "OBJECT".
-    assertNull(SplitterList.get("splitterlisttest.OBJECTive.run():::EXIT"));
+    assertTrue(SplitterList.get("splitterlisttest.OBJECTive.run():::EXIT") == null);
   }
 
   /**
