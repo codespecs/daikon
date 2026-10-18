@@ -239,3 +239,81 @@ variable return
   min-value 0.75
   max-value 0.75
   comparability 1
+
+# If a.maxvalue < b.minvalue, 'a != b' is suppressed.  The values in the
+# dtrace file violate the declared bounds, so that 'a < b' does not hold.
+ppt nonEqualSuppressed:::ENTER
+ppt-type enter
+
+ppt nonEqualSuppressed:::EXIT1
+ppt-type exit
+variable a
+  var-kind variable
+  dec-type long
+  rep-type int
+  max-value 5000000000
+  comparability 1
+variable b
+  var-kind variable
+  dec-type long
+  rep-type int
+  min-value 5000000001
+  comparability 1
+
+# If a.maxvalue == b.minvalue, 'a != b' is NOT suppressed.
+ppt nonEqualNotSuppressed:::ENTER
+ppt-type enter
+
+ppt nonEqualNotSuppressed:::EXIT1
+ppt-type exit
+variable a
+  var-kind variable
+  dec-type long
+  rep-type int
+  max-value 5000000001
+  comparability 1
+variable b
+  var-kind variable
+  dec-type long
+  rep-type int
+  min-value 5000000001
+  comparability 1
+
+# If a.maxvalue < b.minvalue, 'a != b' is suppressed.  The values in the
+# dtrace file violate the declared bounds, so that 'a < b' does not hold.
+ppt floatNonEqualSuppressed:::ENTER
+ppt-type enter
+
+ppt floatNonEqualSuppressed:::EXIT1
+ppt-type exit
+variable a
+  var-kind variable
+  dec-type double
+  rep-type double
+  max-value 1.5
+  comparability 1
+variable b
+  var-kind variable
+  dec-type double
+  rep-type double
+  min-value 1.75
+  comparability 1
+
+# If a.maxvalue == b.minvalue, 'a != b' is NOT suppressed.
+ppt floatNonEqualNotSuppressed:::ENTER
+ppt-type enter
+
+ppt floatNonEqualNotSuppressed:::EXIT1
+ppt-type exit
+variable a
+  var-kind variable
+  dec-type double
+  rep-type double
+  max-value 1.75
+  comparability 1
+variable b
+  var-kind variable
+  dec-type double
+  rep-type double
+  min-value 1.75
+  comparability 1

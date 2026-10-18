@@ -37,7 +37,6 @@
   #define LESS_THAN_CLASS IntLessThan
   #define GREATER_THAN_CLASS IntGreaterThan
   #define EQUAL_CLASS IntEqual
-  #define AUX_BOUND_TYPE long
   #define GET_AUX_BOUND getLong
 #elif (defined (EQUALFLOAT) || defined(NONEQUALFLOAT) \
     || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) \
@@ -61,7 +60,6 @@
   #define LESS_THAN_CLASS FloatLessThan
   #define GREATER_THAN_CLASS FloatGreaterThan
   #define EQUAL_CLASS FloatEqual
-  #define AUX_BOUND_TYPE double
   #define GET_AUX_BOUND getDouble
 #else
   #define IS_STRING 1
@@ -78,8 +76,6 @@
   #define LESS_THAN_CLASS StringLessThan
   #define GREATER_THAN_CLASS StringGreaterThan
   #define EQUAL_CLASS StringEqual
-  #define AUX_BOUND_TYPE long
-  #define GET_AUX_BOUND getLong
 #endif
 
 #if defined(EQUAL)
@@ -924,6 +920,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     final VarInfo var1 = vis[0];
     final VarInfo var2 = vis[1];
 
+    #if defined(IS_NUMERIC)
     #if defined(EQUAL_OP)
     // If A.minvalue==A.maxvalue==B.minvalue==B.maxvalue, then
     // there's nothing to see here.
@@ -932,7 +929,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
       @SuppressWarnings("all:argument") // EnsuresKeyFor for multiple maps; also https://tinyurl.com/cfissue/2586
-      AUX_BOUND_TYPE minA = var1.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE),
+      PRIMITIVE minA = var1.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE),
           maxA = var1.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE),
           minB = var2.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE),
           maxB = var2.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE);
@@ -947,7 +944,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     #if defined(LESSTHAN_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
     if (var1.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)) {
-      AUX_BOUND_TYPE maxA = var1.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE),
+      PRIMITIVE maxA = var1.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE),
           minB = var2.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE);
 
       #if defined(LESSTHAN_OP)
@@ -969,7 +966,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     #if defined(GREATERTHAN_OP) || defined(GREATEREQUAL_OP) || defined(NONEQUAL_OP)
     if (var1.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-      AUX_BOUND_TYPE maxB = var2.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE),
+      PRIMITIVE maxB = var2.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE),
           minA = var1.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE);
 
       #if defined(GREATERTHAN_OP)
@@ -987,6 +984,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       }
     }
     #endif
+    #endif // defined(IS_NUMERIC)
 
     return super.isObviousStatically(vis);
   }

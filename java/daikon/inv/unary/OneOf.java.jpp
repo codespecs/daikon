@@ -1602,7 +1602,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
           && v.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
         INT min = v.aux.GET_AUX_BOUND(VarInfoAux.MINIMUM_VALUE),
             max = v.aux.GET_AUX_BOUND(VarInfoAux.MAXIMUM_VALUE);
-        if (min == max && min == elts[0]) {
+        if (min == max && EQUALS(min, elts[0])) {
           return new DiscardInfo(
               this,
               DiscardCode.obvious,
