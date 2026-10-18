@@ -49,9 +49,6 @@ make -f tests/kvasir-tests/Makefile.common show-os
 
 make kvasir
 
-# Run the Kvasir tests even if a DynComp test fails.
-status=0
-make -C tests/dyncomp-tests regression-tests || status=$?
-#make -C tests/kvasir-tests regression-tests || status=$?
-make DAIKON_TEST_JOBS=1 -C tests/kvasir-tests regression-tests || status=$?
-exit $status
+make -C tests/dyncomp-tests regression-tests
+#make -C tests/kvasir-tests regression-tests
+make DAIKON_TEST_JOBS=1 -C tests/kvasir-tests regression-tests
