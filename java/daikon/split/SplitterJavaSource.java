@@ -76,6 +76,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = this.statementReplacer.makeReplacements(condition);
     condition = convertVariableNames(condition, className, varInfos);
     Global.debugSplit.fine("modified condition = " + condition);
+    splitObj.setModifiedCondition(condition);
     vars = makeVariableManagerArray(varInfos, condition);
 
     // extra white space at the end of lines used only to increase readability.

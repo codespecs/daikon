@@ -1,12 +1,13 @@
 package daikon.split;
 
+import daikon.FileIO;
 import daikon.Global;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
+import java.util.WeakHashMap;
 import java.util.logging.Level;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -27,7 +28,27 @@ public abstract class SplitterList {
    */
   public static boolean dkconfig_all_splitters = true;
 
+  /**
+   * Maps a splitter to its modified condition (see {@link SplitterObject#getModifiedCondition}).
+   * {@link #get} and {@link #get_all} use this to determine whether two splitters are duplicates.
+   * For a splitter that is not a key, the modified condition is its condition.
+   *
+   * <p>Splitter does not override {@code equals}, so this map compares keys by identity. It is weak
+   * so that it does not retain the splitters that {@link #remove} removes.
+   */
+  private static final WeakHashMap<Splitter, String> modified_conditions = new WeakHashMap<>();
+
   private static final HashMap<String, Splitter[]> ppt_splitters = new LinkedHashMap<>();
+
+  /**
+   * Removes the splitters associated with the given name, which is a name on a PPT_NAME line of a
+   * {@code .spinfo} file.
+   *
+   * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
+   */
+  public static void remove(String pptname) {
+    ppt_splitters.remove(pptname);
+  }
 
   /** Associate an array of splitters with the program point pptname. */
   public static void put(String pptname, Splitter[] splits) {
@@ -58,6 +79,22 @@ public abstract class SplitterList {
       //               + lineSep + " which is " + formatSplitters(get_raw(pptname));
       ppt_splitters.put(pptname, splits);
     }
+  }
+
+  /**
+   * Associate an array of splitters with the program point pptname.
+   *
+   * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param splits the splitters
+   * @param modifiedConditions the modified condition of each splitter (see {@link
+   *     SplitterObject#getModifiedCondition}); the same length as {@code splits}
+   */
+  static void put(String pptname, Splitter[] splits, String[] modifiedConditions) {
+    assert splits.length == modifiedConditions.length;
+    for (int i = 0; i < splits.length; i++) {
+      modified_conditions.put(splits[i], modifiedConditions[i].trim());
+    }
+    put(pptname, splits);
   }
 
   // This is only used by the debugging output in SplitterList.put().
@@ -155,72 +192,166 @@ public abstract class SplitterList {
   // //////////////////////
 
   /**
-   * Returns the splitters associated with this program point name (or null). The resulting
-   * splitters are factories, not instantiated splitters.
+   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file designates the given
+   * program point.
    *
+   * <p>A name that contains ":::", such as "pkg.Foo.bar(int):::EXIT1", is a complete program point
+   * name. It designates the program point of that name, and every program point whose name is it
+   * preceded by a qualifier, such as a package: "Foo.bar(int):::EXIT1" designates
+   * "pkg.Foo.bar(int):::EXIT1" but not "pkg.BigFoo.bar(int):::EXIT1". A name ending with ":::EXIT"
+   * also designates the method's numbered exit points, such as "pkg.Foo.bar(int):::EXIT12".
+   *
+   * <p>Any other name, such as "Foo.bar", designates every program point whose name contains it.
+   *
+   * @param spinfoPptName a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param pptName the name of a program point
+   * @return true if {@code spinfoPptName} designates the program point named {@code pptName}
+   */
+  public static boolean matches(String spinfoPptName, String pptName) {
+    if (!isComplete(spinfoPptName)) {
+      return pptName.contains(spinfoPptName);
+    }
+    if (endsWithQualified(pptName, spinfoPptName)) {
+      return true;
+    }
+    if (spinfoPptName.endsWith(FileIO.exit_tag)) {
+      // Remove the exit number, if any.
+      int end = pptName.length();
+      while (end > 0 && pptName.charAt(end - 1) >= '0' && pptName.charAt(end - 1) <= '9') {
+        end--;
+      }
+      return end < pptName.length() && endsWithQualified(pptName.substring(0, end), spinfoPptName);
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the program point name is the given suffix, possibly preceded by a qualifier:
+   * that is, if the name ends with the suffix, and the character before the suffix, if any, is not
+   * a letter, digit, or underscore.
+   *
+   * @param pptName the name of a program point
+   * @param suffix a complete program point name, which may lack a qualifier such as a package
+   * @return true if {@code pptName} is {@code suffix}, possibly preceded by a qualifier
+   */
+  private static boolean endsWithQualified(String pptName, String suffix) {
+    if (!pptName.endsWith(suffix)) {
+      return false;
+    }
+    int start = pptName.length() - suffix.length();
+    if (start == 0) {
+      return true;
+    }
+    char before = pptName.charAt(start - 1);
+    return !(Character.isLetterOrDigit(before) || before == '_');
+  }
+
+  /**
+   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file is a complete program
+   * point name, which designates only specific program points; see {@link #matches}.
+   *
+   * @param spinfoPptName a name on a PPT_NAME line of a {@code .spinfo} file
+   * @return true if {@code spinfoPptName} is a complete program point name
+   */
+  static boolean isComplete(String spinfoPptName) {
+    return spinfoPptName.contains(FileIO.ppt_tag_separator);
+  }
+
+  /**
+   * Returns the splitters associated with this program point name (or null). The resulting
+   * splitters are factories, not instantiated splitters. The result contains no two duplicate
+   * splitters (see {@link #addUnlessDuplicate}), even if several PPT_NAME lines match the program
+   * point.
+   *
+   * <p>An OBJECT program point also uses every splitter whose PPT_NAME is not a complete program
+   * point name, if any PPT_NAME (complete or not) contains "OBJECT".
+   *
+   * @param pptName the name of a program point
    * @return an array of splitters
    */
   public static Splitter @Nullable [] get(String pptName) {
-    List<Splitter[]> splitterArrays = new ArrayList<>();
-
-    for (String name : ppt_splitters.keySet()) {
-      // name is a ppt name, assumed to begin with "ClassName.functionName"
-      if (pptName.indexOf(name) != -1) {
-        Splitter[] result = get_raw(name);
-        if (result != null) {
-          splitterArrays.add(result);
-        }
-        // For the OBJECT program point, we want to use all the splitters.
-      } else if ((pptName.indexOf("OBJECT") != -1) && (name.indexOf("OBJECT") != -1)) {
-        for (Splitter[] sa : ppt_splitters.values()) {
-          splitterArrays.add(sa);
+    boolean useAllIncomplete = false;
+    if (pptName.endsWith(FileIO.object_tag)) {
+      for (String name : ppt_splitters.keySet()) {
+        if (name.contains("OBJECT")) {
+          useAllIncomplete = true;
+          break;
         }
       }
     }
 
-    if (splitterArrays.isEmpty()) {
+    // Maps a duplicate key to its splitter.  A LinkedHashMap, for deterministic output.
+    Map<String, Splitter> splitters = new LinkedHashMap<>();
+    for (Map.Entry<String, Splitter[]> entry : ppt_splitters.entrySet()) {
+      String name = entry.getKey();
+      if (matches(name, pptName) || (useAllIncomplete && !isComplete(name))) {
+        addUnlessDuplicate(splitters, entry.getValue());
+      }
+    }
+
+    if (splitters.isEmpty()) {
       Global.debugSplit.fine("SplitterList.get found no splitters for " + pptName);
       return null;
     } else {
-      List<Splitter> splitters = new ArrayList<>();
-      for (Splitter[] tempsplitters : splitterArrays) {
-        for (int j = 0; j < tempsplitters.length; j++) {
-          splitters.add(tempsplitters[j]);
-        }
-      }
       Global.debugSplit.fine(
           "SplitterList.get found " + splitters.size() + " splitters for " + pptName);
-      return splitters.toArray(new Splitter[0]);
+      return splitters.values().toArray(new Splitter[0]);
     }
   }
 
   /**
-   * Returns all the splitters in this program, The resulting splitters are factories, not
-   * instantiated splitters.
+   * Adds each splitter to the map, unless the map already contains a duplicate of it. Two splitters
+   * are duplicates if their conditions are the same, both as written and as modified (see {@link
+   * SplitterObject#getModifiedCondition}).
+   *
+   * <p>A splitter's variables are those of the program point for which it was created. Two
+   * splitters whose conditions are the same as written may test different variables, such as "x"
+   * and "this.x", so they are duplicates only if their modified conditions are also the same.
+   *
+   * <p>Two splitters whose conditions differ as written are not duplicates, even if their modified
+   * conditions are the same, such as "isEmpty()" and "size == 0". The name of a conditional program
+   * point contains the condition as written.
+   *
+   * @param splitters maps a key returned by {@link #duplicateKey} to its splitter; side-effected by
+   *     this method
+   * @param toAdd the splitters to add
+   */
+  private static void addUnlessDuplicate(Map<String, Splitter> splitters, Splitter[] toAdd) {
+    for (Splitter splitter : toAdd) {
+      splitters.putIfAbsent(duplicateKey(splitter), splitter);
+    }
+  }
+
+  /**
+   * Returns a string that is equal for two splitters if and only if they are duplicates; see {@link
+   * #addUnlessDuplicate}.
+   *
+   * @param splitter a splitter
+   * @return a key that identifies the splitter's duplicates
+   */
+  private static String duplicateKey(Splitter splitter) {
+    String condition = splitter.condition().trim();
+    String modified = modified_conditions.get(splitter);
+    if (modified == null) {
+      modified = condition;
+    }
+    // A newline cannot appear in a condition, which is one line of a .spinfo file.
+    return condition + "\n" + modified;
+  }
+
+  /**
+   * Returns all the splitters in this program. The resulting splitters are factories, not
+   * instantiated splitters. The result contains no two duplicate splitters (see {@link
+   * #addUnlessDuplicate}).
    *
    * @return an array of splitters
    */
   public static Splitter[] get_all() {
-    List<Splitter> splitters = new ArrayList<>();
+    // Maps a duplicate key to its splitter.  A LinkedHashMap, for deterministic output.
+    Map<String, Splitter> splitters = new LinkedHashMap<>();
     for (Splitter[] splitter_array : ppt_splitters.values()) {
-      for (int i = 0; i < splitter_array.length; i++) {
-        Splitter tempsplitter = splitter_array[i];
-        boolean duplicate = false;
-        // Weed out splitters with the same condition.
-        if (!splitters.isEmpty()) {
-          for (Splitter splitter : splitters) {
-            if (tempsplitter.condition().trim().equals(splitter.condition().trim())) {
-              // System.err.println(" duplicate " + tempsplitter.condition()); System.err.println();
-              duplicate = true;
-              break;
-            }
-          }
-        }
-        if (!duplicate) {
-          splitters.add(tempsplitter);
-        }
-      }
+      addUnlessDuplicate(splitters, splitter_array);
     }
-    return splitters.toArray(new Splitter[0]);
+    return splitters.values().toArray(new Splitter[0]);
   }
 }

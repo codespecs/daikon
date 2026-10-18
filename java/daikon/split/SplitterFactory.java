@@ -116,11 +116,15 @@ public class SplitterFactory {
             // Writes, compiles, and loads the splitter .java files.
             loadSplitters(splitterObjects[i], ppt, statementReplacer);
             List<Splitter> sp = new ArrayList<>();
+            List<String> modifiedConditions = new ArrayList<>();
             for (int k = 0; k < numsplitters; k++) {
               if (splitterObjects[i][k].splitterExists()) {
                 @SuppressWarnings("nullness") // dependent: because splitterExists() = true
                 @NonNull Splitter splitter = splitterObjects[i][k].getSplitter();
+                @SuppressWarnings("nullness") // splitterExists() implies the source was created
+                @NonNull String modifiedCondition = splitterObjects[i][k].getModifiedCondition();
                 sp.add(splitter);
+                modifiedConditions.add(modifiedCondition);
                 numGood++;
               } else {
                 // UNDONE: We should only output the load error if the
@@ -131,7 +135,8 @@ public class SplitterFactory {
             System.out.printf(
                 "%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
             if (!sp.isEmpty()) {
-              SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
+              SplitterList.put(
+                  ppt_name, sp.toArray(new Splitter[0]), modifiedConditions.toArray(new String[0]));
             }
             // delete this entry in the splitter array to prevent it from
             // matching any other Ppts, since the documented behavior is that
@@ -252,16 +257,19 @@ public class SplitterFactory {
     return fileCompiler.compileFiles(fileNames);
   }
 
-  /** Returns true if a Ppt's name matches the given pattern. */
+  /**
+   * Returns true if a Ppt's name matches the given name from a {@code .spinfo} file.
+   *
+   * @param ppt_name a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param ppt a program point
+   * @return true if the program point's name matches {@code ppt_name}
+   */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
+    if (SplitterList.isComplete(ppt_name)) {
+      return SplitterList.matches(ppt_name, ppt.name);
+    }
     if (ppt.name.equals(ppt_name)) {
       return true;
-    }
-    if (ppt_name.endsWith(":::EXIT")) {
-      String regex = Pattern.quote(ppt_name) + "[0-9]+";
-      if (matchPptRegex(regex, ppt)) {
-        return true;
-      }
     }
 
     // Look for corresponding EXIT ppt. This is because the exit ppt usually has
