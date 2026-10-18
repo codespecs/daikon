@@ -30,7 +30,8 @@ Further documentation can be found in:
    no effect.
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
   complete program point name, and it matches only the program point of that
-  name.  A name ending with `:::EXIT` also matches the numbered exit points.
+  name.  The name may omit a qualifier such as the package.  A name ending with
+  `:::EXIT` also matches the numbered exit points.
   Daikon loads a `PPT_NAME`'s conditions only if the name matches some program
   point, so a complete name that matches no program point contributes no
   conditions.  Otherwise, this affects where Daikon uses a condition only if
