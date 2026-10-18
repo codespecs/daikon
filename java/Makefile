@@ -2,12 +2,16 @@
 
 default: daikon
 
+# The directory containing this file.  It is computed before any other file is
+# included, because MAKEFILE_LIST ends with the most recently read makefile.
+JAVA_MAKEFILE_DIR := $(dir $(lastword ${MAKEFILE_LIST}))
+
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
 # Don't let the user override this; it should refer to the current directory.
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
+DAIKONDIR := $(realpath ${JAVA_MAKEFILE_DIR}..)
 
 DAIKONSCRIPTS ?= ${DAIKONDIR}/scripts
 

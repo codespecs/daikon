@@ -9,6 +9,8 @@ EXTRA_OUTPUTS := cbc_d_m.txt cbc_e_m.txt ecb_d_m.txt ecb_e_m.txt ecb_iv.txt \
 ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
 endif
-include ${DAIKONDIR}/tests/Makefile.jdk
+# Find Makefile.jdk relative to this file, not via DAIKONDIR, which may name a
+# different Daikon tree.
+include $(dir $(lastword ${MAKEFILE_LIST}))../../Makefile.jdk
 
 include ../Makefile.common
