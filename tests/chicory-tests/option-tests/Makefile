@@ -21,6 +21,7 @@ DAIKON_ARGS = --no_text_output --no_show_progress --config config.txt --config_o
 CHICORY     = ${DAIKONDIR}/java/ChicoryPremain.jar
 CHICORY_ARGS = --dtrace-file=$(basename $(basename $@)).dtrace
 PREMAIN		= ${CHICORY}
+DCOMP_PREMAIN = ${DAIKONDIR}/java/dcomp_premain.jar
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 TESTS		= online pptsel pptomit nesting stdvis varomit samples misc nomethodcalls
@@ -35,6 +36,9 @@ diffs : $(foreach x, ${TESTS}, $x.daikon.diff)
 
 ${DAIKONDIR}/java/ChicoryPremain.jar:
 	${MAKE} -C ${DAIKONDIR}/java ChicoryPremain.jar
+
+${DAIKONDIR}/java/dcomp_premain.jar:
+	${MAKE} -C ${DAIKONDIR}/java dcomp_premain.jar
 
 # obtain and compile the sources
 compile : ${CLASS_FILES}
@@ -78,10 +82,20 @@ misc.inv.gz : ${CLASS_FILES} ${CHICORY}
 NoMethodCalls.class : NoMethodCalls.java
 	${JAVAC} -g NoMethodCalls.java
 
-# Chicory is run without --daikon so that a failure of the target program
-# (which detects calls to its methods) makes Chicory exit with a non-zero status.
-nomethodcalls.inv.gz : NoMethodCalls.class ${CHICORY}
-	${JAVA} -cp .:${DAIKON_CLASSPATH} daikon.Chicory ${CHICORY_ARGS} --no-method-calls NoMethodCalls
+# DynComp and Chicory each run the target program, which fails if either tool
+# calls its methods.  Chicory is run without --daikon so that such a failure
+# makes Chicory exit with a non-zero status.  The first two commands check that
+# without --no-method-calls, each tool does call the target program's methods
+# (otherwise, this test would pass without exercising --no-method-calls).
+nomethodcalls.inv.gz : NoMethodCalls.class ${CHICORY} ${DCOMP_PREMAIN}
+	! ${JAVA} -cp .:${DAIKON_CLASSPATH} daikon.DynComp --rt-file=NONE \
+	  --decl-file=nomethodcalls-without-option.decls-DynComp NoMethodCalls
+	! ${JAVA} -cp .:${DAIKON_CLASSPATH} daikon.Chicory \
+	  --dtrace-file=nomethodcalls-without-option.dtrace NoMethodCalls
+	${JAVA} -cp .:${DAIKON_CLASSPATH} daikon.DynComp --rt-file=NONE --no-method-calls \
+	  --decl-file=nomethodcalls.decls-DynComp NoMethodCalls
+	${JAVA} -cp .:${DAIKON_CLASSPATH} daikon.Chicory ${CHICORY_ARGS} --no-method-calls \
+	  --comparability-file=nomethodcalls.decls-DynComp NoMethodCalls
 	${JAVA} -cp .:${DAIKON_CLASSPATH} daikon.Daikon ${DAIKON_ARGS} nomethodcalls.dtrace
 
 %.daikon.diff : %.inv.gz %.inv.txt.goal
@@ -95,7 +109,7 @@ update-goals:
 	$(foreach x, ${TESTS}, rm -f $x.daikon.diff; )
 
 clean:
-	/bin/rm -rf *.inv.txt *.inv.gz *.diff *.dtrace *.dtrace.gz \
+	/bin/rm -rf *.inv.txt *.inv.gz *.diff *.dtrace *.dtrace.gz *.decls-DynComp \
 	${CLASS_FILES} ${SRC_FILES} NoMethodCalls*.class
 
 show-vars:

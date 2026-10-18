@@ -161,8 +161,8 @@ public class Chicory implements AutoCloseable {
    * If true, Chicory never calls a method of the target program's objects. For example, Chicory
    * does not output the elements of a {@code java.util.List}, which requires calling its {@code
    * toArray()} method. This degrades Daikon's output, but it prevents Chicory from changing the
-   * behavior of a program whose methods have side effects (or throw exceptions) when Chicory calls
-   * them. This option is incompatible with {@code --purity-file}.
+   * behavior of a program whose methods have side effects when Chicory calls them. This option is
+   * incompatible with {@code --purity-file}.
    */
   @Option("Never call methods of the target program's objects")
   public static boolean no_method_calls = false;

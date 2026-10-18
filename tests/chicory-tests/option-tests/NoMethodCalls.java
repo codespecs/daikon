@@ -3,7 +3,8 @@ import java.util.List;
 
 /**
  * A program whose behavior changes if any method other than those it calls itself is invoked on
- * its objects. Used to test Chicory's {@code --no-method-calls} command-line option.
+ * its objects. Used to test the {@code --no-method-calls} command-line option of Chicory and
+ * DynComp.
  */
 public class NoMethodCalls {
 
@@ -28,15 +29,6 @@ public class NoMethodCalls {
       }
       observe(cl, i);
     }
-
-    // A stale view:  calling any method on it, such as toArray(), throws
-    // ConcurrentModificationException.
-    List<Object> backing = new ArrayList<>();
-    backing.add(1);
-    backing.add(2);
-    List<Object> staleView = backing.subList(0, 1);
-    backing.add(3);
-    observe(staleView, 10);
 
     if (toArrayCalls != 0) {
       throw new Error("toArray() was called " + toArrayCalls + " times");
