@@ -149,12 +149,10 @@ public final class FileCompiler {
         }
         result = compile_source(retry);
         attempted = retry;
-        // If the recompilation succeeded, its output contains no errors, only warnings that were
-        // already reported by an earlier compilation.
-        if (result.failed) {
-          compile_errors =
-              appendWithLineSeparator(compile_errors, withoutCommonPrefix(compile_errors, result));
-        }
+        // Even a successful recompilation may report new warnings:  after a syntax error, javac
+        // does not run the later phases that report warnings such as unchecked conversions.
+        compile_errors =
+            appendWithLineSeparator(compile_errors, withoutCommonPrefix(compile_errors, result));
       }
     }
 

@@ -130,6 +130,24 @@ public class FileCompilerTest {
     assertTrue(errors, errors.contains("TypeError.java:1: error:"));
   }
 
+  /**
+   * After a syntax error, javac reports no warnings for other files, so a warning first appears in
+   * a recompilation, even one that succeeds.
+   */
+  @Test
+  public void testWarningFromSuccessfulRecompilation() throws IOException {
+    List<String> files = new ArrayList<>();
+    files.add(writeSource("SyntaxError", "class SyntaxError { int x = ; }\n"));
+    files.add(writeSource("Warning", "class Warning { java.util.List rawList; }\n"));
+
+    String errors = new FileCompiler(compiler, 60_000).compileFiles(files);
+
+    assertTrue(compiled("Warning"));
+    assertFalse(compiled("SyntaxError"));
+    assertTrue(errors, errors.contains("SyntaxError.java:1: error:"));
+    assertTrue(errors, errors.contains("Warning.java:1: warning:"));
+  }
+
   /** If no file has an error, the result contains only warnings. */
   @Test
   public void testNoErrors() throws IOException {
