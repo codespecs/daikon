@@ -1798,6 +1798,17 @@ public final class Daikon {
    */
   public static void createUpperPpts(PptMap all_ppts) {
 
+    // Make each ppt's comparability at least as coarse as that of each of its children.  Iterate
+    // until nothing changes, because a ppt may be visited before its children, and the hierarchy
+    // may contain cycles.
+    boolean changed;
+    do {
+      changed = false;
+      for (PptTopLevel ppt : all_ppts.pptIterable()) {
+        changed |= ppt.coarsenComparability();
+      }
+    } while (changed);
+
     // Process each ppt that doesn't have a parent
     // (mergeInvs is called on a root, and recursively processes children)
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
