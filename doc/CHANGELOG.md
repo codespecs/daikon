@@ -37,11 +37,11 @@ Further documentation can be found in:
   conditions.  Otherwise, this affects where Daikon uses a condition only if
   indiscriminate splitting is disabled via
   `--config_option daikon.split.SplitterList.all_splitters=false`.
-* ExtractConsequent writes splitting conditions that Daikon can use.
 * `daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
    `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
    or `PERL5LIB`.
 * Removed the Perl front end, dfepl.
+* ExtractConsequent writes splitting conditions that Daikon can use.
 
 Scripts:
 

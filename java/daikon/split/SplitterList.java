@@ -4,10 +4,10 @@ import daikon.FileIO;
 import daikon.Global;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.WeakHashMap;
 import java.util.logging.Level;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -28,15 +28,17 @@ public abstract class SplitterList {
    */
   public static boolean dkconfig_all_splitters = true;
 
-  private static final HashMap<String, Splitter[]> ppt_splitters = new LinkedHashMap<>();
-
   /**
    * Maps a splitter to its modified condition (see {@link SplitterObject#getModifiedCondition}).
    * {@link #get} and {@link #get_all} use this to determine whether two splitters are duplicates.
    * For a splitter that is not a key, the modified condition is its condition.
+   *
+   * <p>Splitter does not override {@code equals}, so this map compares keys by identity. It is weak
+   * so that it does not retain the splitters that {@link #remove} removes.
    */
-  private static final IdentityHashMap<Splitter, String> modified_conditions =
-      new IdentityHashMap<>();
+  private static final WeakHashMap<Splitter, String> modified_conditions = new WeakHashMap<>();
+
+  private static final HashMap<String, Splitter[]> ppt_splitters = new LinkedHashMap<>();
 
   /**
    * Removes the splitters associated with the given name, which is a name on a PPT_NAME line of a
@@ -45,28 +47,7 @@ public abstract class SplitterList {
    * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
    */
   public static void remove(String pptname) {
-    Splitter[] splits = ppt_splitters.remove(pptname);
-    if (splits != null) {
-      for (Splitter splitter : splits) {
-        modified_conditions.remove(splitter);
-      }
-    }
-  }
-
-  /**
-   * Associate an array of splitters with the program point pptname.
-   *
-   * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
-   * @param splits the splitters
-   * @param modifiedConditions the modified condition of each splitter (see {@link
-   *     SplitterObject#getModifiedCondition}); the same length as {@code splits}
-   */
-  static void put(String pptname, Splitter[] splits, String[] modifiedConditions) {
-    assert splits.length == modifiedConditions.length;
-    for (int i = 0; i < splits.length; i++) {
-      modified_conditions.put(splits[i], modifiedConditions[i].trim());
-    }
-    put(pptname, splits);
+    ppt_splitters.remove(pptname);
   }
 
   /** Associate an array of splitters with the program point pptname. */
@@ -98,6 +79,22 @@ public abstract class SplitterList {
       //               + lineSep + " which is " + formatSplitters(get_raw(pptname));
       ppt_splitters.put(pptname, splits);
     }
+  }
+
+  /**
+   * Associate an array of splitters with the program point pptname.
+   *
+   * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param splits the splitters
+   * @param modifiedConditions the modified condition of each splitter (see {@link
+   *     SplitterObject#getModifiedCondition}); the same length as {@code splits}
+   */
+  static void put(String pptname, Splitter[] splits, String[] modifiedConditions) {
+    assert splits.length == modifiedConditions.length;
+    for (int i = 0; i < splits.length; i++) {
+      modified_conditions.put(splits[i], modifiedConditions[i].trim());
+    }
+    put(pptname, splits);
   }
 
   // This is only used by the debugging output in SplitterList.put().
