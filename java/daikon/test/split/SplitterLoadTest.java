@@ -66,10 +66,9 @@ public class SplitterLoadTest {
   private static boolean compilerIsRunnable() {
     String compiler = SplitterFactory.dkconfig_compiler.trim().split(" +")[0];
     try {
-      // In Java 26, `Process` implements `AutoCloseable`, so use try-with-resources.
       @SuppressWarnings({
-        "resourceleak:required.method.not.called",
-        "resourceleak:unneeded.suppression"
+        "resourceleak:required.method.not.called", // Process is AutoCloseable only in Java 26+
+        "resourceleak:unneeded.suppression" // the suppression is needed only in Java 26+
       })
       Process p = new ProcessBuilder(compiler, "-version").redirectErrorStream(true).start();
       try (InputStream in = p.getInputStream()) {
