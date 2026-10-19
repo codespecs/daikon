@@ -2322,7 +2322,7 @@ public final class FileIO {
    * Converts the declaration record version of a name into its correct version. In the declaration
    * record, blanks are encoded as \_ and backslashes as \\.
    */
-  static String unescape_decl(String orig) {
+  private static String unescape_decl(String orig) {
     StringBuilder sb = new StringBuilder(orig.length());
     // The previous escape character was seen just before this position.
     int post_esc = 0;
