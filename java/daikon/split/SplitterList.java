@@ -171,8 +171,8 @@ public abstract class SplitterList {
    * program point.
    *
    * <p>A name that contains ":::", such as "pkg.Foo.bar(int):::EXIT1", is a complete program point
-   * name. It designates the program point of that name, and every program point whose name is it
-   * preceded by a qualifier, such as a package: "Foo.bar(int):::EXIT1" designates
+   * name. It designates the program point of that name, and every program point whose name is that
+   * name preceded by a qualifier, such as a package: "Foo.bar(int):::EXIT1" designates
    * "pkg.Foo.bar(int):::EXIT1" but not "pkg.BigFoo.bar(int):::EXIT1". A name ending with ":::EXIT"
    * also designates the method's numbered exit points, such as "pkg.Foo.bar(int):::EXIT12".
    *
