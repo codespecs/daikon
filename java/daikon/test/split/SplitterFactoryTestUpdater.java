@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.plumelib.util.FilesPlume;
 
 /**
@@ -40,28 +42,39 @@ public class SplitterFactoryTestUpdater {
   private static ArrayList<ArrayList<File>> declsFileLists = new ArrayList<>();
   private static ArrayList<String> classNames = new ArrayList<>();
 
+  /** The class names of the generated splitters that are expected to compile. */
+  private static Set<String> compilingClassNames = new HashSet<>();
+
   /**
-   * The splitters that are expected not to compile. SplitterFactoryTest checks that every other
-   * splitter compiles.
+   * The splitters that are expected not to compile, because their condition refers to a variable
+   * that is not in the decls file. SplitterFactoryTest checks that every other splitter compiles.
+   * Each element is a {@link #splitterKey splitter key}.
    */
   private static final Set<String> nonCompilingSplitters =
       new HashSet<>(
           Arrays.asList(
-              "MapQuick1_StreetNumberSet_StreetNumberSet_0",
-              "MapQuick1_StreetNumberSet_StreetNumberSet_1",
-              "MapQuick1_StreetNumberSet_StreetNumberSet_2",
-              "MapQuick1_StreetNumberSet_StreetNumberSet_3",
-              "MapQuick1_StreetNumberSet_checkRep_4",
-              "MapQuick1_StreetNumberSet_checkRep_5",
-              "MapQuick1_StreetNumberSet_contains_7",
-              "MapQuick1_StreetNumberSet_contains_9",
-              "MapQuick1_StreetNumberSet_contains_10",
-              "MapQuick1_StreetNumberSet_contains_12",
-              "MapQuick1_StreetNumberSet_orderStatistic_14",
-              "MapQuick1_StreetNumberSet_orderStatistic_15",
-              "MapQuick1_StreetNumberSet_size_16",
-              "MapQuick1_StreetNumberSet_size_17",
-              "misc_Fib_main_18"));
+              "MapQuick1_StreetNumberSet_StreetNumberSet: dashLoc == -1",
+              "MapQuick1_StreetNumberSet_StreetNumberSet: items.hasMoreTokens()",
+              "MapQuick1_StreetNumberSet_StreetNumberSet: orig(dashLoc == -1)",
+              "MapQuick1_StreetNumberSet_StreetNumberSet: orig(items.hasMoreTokens())",
+              "MapQuick1_StreetNumberSet_checkRep: i<sets.length",
+              "MapQuick1_StreetNumberSet_checkRep: orig(i<sets.length)",
+              "MapQuick1_StreetNumberSet_contains: i<sets.length",
+              "MapQuick1_StreetNumberSet_contains: orig(i<sets.length)",
+              "MapQuick1_StreetNumberSet_contains: orig(sets[i].contains(sn))",
+              "MapQuick1_StreetNumberSet_contains: sets[i].contains(sn)",
+              "MapQuick1_StreetNumberSet_orderStatistic: i<sets.length",
+              "MapQuick1_StreetNumberSet_orderStatistic: orig(i<sets.length)",
+              "MapQuick1_StreetNumberSet_size: i<sets.length",
+              "MapQuick1_StreetNumberSet_size: orig(i<sets.length)",
+              "misc_Fib_main: i < STEPS"));
+
+  /**
+   * Matches the condition in a splitter's source code. Group 1 is the condition, as a Java string
+   * literal body.
+   */
+  private static final Pattern conditionPattern =
+      Pattern.compile("String condition\\(\\) \\{\\s*return \"(.*)\";");
 
   private SplitterFactoryTestUpdater() {} // blocks public constructor
 
@@ -174,11 +187,18 @@ public class SplitterFactoryTestUpdater {
         }
       }
     }
+    // The elements of nonCompilingSplitters that have not yet matched a generated splitter.
+    Set<String> unmatched = new HashSet<>(nonCompilingSplitters);
     for (int i = 0; i < fileNames.length; i++) {
       if (fileNames[i].endsWith(".java")) {
         String fileName = fileNames[i];
+        String fromName = tempDir.getPath() + File.separator + fileName;
+        String className = fileName.substring(0, fileName.length() - ".java".length());
+        classNames.add(className);
+        if (!unmatched.remove(splitterKey(className, fromName))) {
+          compilingClassNames.add(className);
+        }
         if (updateGoals) {
-          String fromName = tempDir.getPath() + File.separator + fileName;
           String toName = targetDir + fileName + ".goal";
           try {
             moveFile(fromName, toName);
@@ -190,11 +210,29 @@ public class SplitterFactoryTestUpdater {
             throw e;
           }
         }
-        String javaFileName = new File(fileName).getName();
-        String className = javaFileName.substring(0, javaFileName.length() - ".java".length());
-        classNames.add(className);
       }
     }
+    if (!unmatched.isEmpty()) {
+      throw new Error("No splitter matches these nonCompilingSplitters: " + unmatched);
+    }
+  }
+
+  /**
+   * Returns a key that identifies a splitter independently of the sequence number that
+   * SplitterFactory gives it: its class name without the sequence number, then ": ", then its
+   * condition.
+   *
+   * @param className the splitter's class name
+   * @param javaFileName the splitter's source file
+   * @return the key for the splitter
+   */
+  private static String splitterKey(String className, String javaFileName) {
+    String source = FilesPlume.readString(new File(javaFileName).toPath());
+    Matcher m = conditionPattern.matcher(source);
+    if (!m.find()) {
+      throw new Error("No condition found in " + javaFileName);
+    }
+    return className.replaceFirst("_[0-9]+$", "") + ": " + m.group(1);
   }
 
   private static void moveFile(String fromName, String toName) {
@@ -439,7 +477,15 @@ public class SplitterFactoryTestUpdater {
     ps.println("  /** Fails the test unless the splitter class compiled. */");
     ps.println("  public static void assertCompiled(String className) {");
     ps.println("    if (!new File(tempDir + className + \".class\").exists()) {");
-    ps.println("      fail(\"Splitter \" + className + \" did not compile.\");");
+    ps.println("      fail(");
+    ps.println("          \"Splitter \"");
+    ps.println("              + className");
+    ps.println(
+        "              + \" did not compile. To see why, run SplitterFactoryTest with -s, then"
+            + " compile \"");
+    ps.println("              + tempDir");
+    ps.println("              + className");
+    ps.println("              + \".java\");");
     ps.println("    }");
     ps.println("  }");
     ps.println();
@@ -447,7 +493,7 @@ public class SplitterFactoryTestUpdater {
       ps.println("  @Test");
       ps.println("  public void test" + className + "() {");
       ps.println("    assertEqualFiles(\"" + className + ".java\");");
-      if (!nonCompilingSplitters.contains(className)) {
+      if (compilingClassNames.contains(className)) {
         ps.println("    assertCompiled(\"" + className + "\");");
       }
       ps.println("  }");
