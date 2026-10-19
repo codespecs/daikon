@@ -441,7 +441,7 @@ The @file{.decls} file might look like the following.
 @example
 decl-version 2.0
 
-ppt Example.squar:::ENTER
+ppt Example.squar(int,\_boolean):::ENTER
 ppt-type enter
 variable x
   var-kind variable
@@ -456,7 +456,7 @@ variable b
   flags is_param
   comparability 2
 
-ppt Example.squar:::EXIT1
+ppt Example.squar(int,\_boolean):::EXIT1
 ppt-type subexit
 variable x
   var-kind variable
@@ -491,7 +491,7 @@ class Example @{
   int squar(int x, boolean b) @{
     synchronized (daikon.chicory.Runtime.dtrace) @{
       daikon.chicory.Runtime.dtrace.println();
-      daikon.chicory.Runtime.dtrace.println("Example.squar:::ENTER");
+      daikon.chicory.Runtime.dtrace.println("Example.squar(int, boolean):::ENTER");
       daikon.chicory.Runtime.dtrace.println("x");
       daikon.chicory.Runtime.dtrace.println(x);
       daikon.chicory.Runtime.dtrace.println(1);  // modified bit
@@ -506,7 +506,7 @@ class Example @{
     int daikon_return_value = x*x;
     synchronized (daikon.chicory.Runtime.dtrace) @{
       daikon.chicory.Runtime.dtrace.println();
-      daikon.chicory.Runtime.dtrace.println("Example.squar:::EXIT1");
+      daikon.chicory.Runtime.dtrace.println("Example.squar(int, boolean):::EXIT1");
       daikon.chicory.Runtime.dtrace.println("x");
       daikon.chicory.Runtime.dtrace.println(x);
       daikon.chicory.Runtime.dtrace.println(1);  // modified bit
