@@ -459,9 +459,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * Calculates the base name of a variable. The base name of a variable is the part of the variable
-   * with prefix "this." replaced by "this_", and "orig()" replaced * by "orig_". In addition, '.'
-   * are converted to '_'. For example, orig(this.x) goes to orig_this_x. Finally, Java Reserved
-   * words are replaced with appropriate substitutes.
+   * with prefix "this." replaced by "this_", "orig()" replaced by "orig_", and the "[]" or "[..]"
+   * suffix of an array's name removed. In addition, '.' are converted to '_'. For example,
+   * orig(this.x) goes to orig_this_x, and this.theArray[] goes to this_theArray. Finally, Java
+   * Reserved words are replaced with appropriate substitutes.
    *
    * @param varInfo the VarInfo for the variable whose base name is desired
    * @return the base name of the variable represented by varInfo
@@ -481,16 +482,15 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       }
     }
 
-    name = name.replace('.', '_');
-    // Remove the suffix of an array's name, which is "[]" or "[..]" (which the replace above
-    // changes to "[__]").
+    // Remove the suffix of an array's name, which is "[]" or "[..]".
     if (varInfo.type.isArray()) {
-      if (name.endsWith("[__]")) {
+      if (name.endsWith("[..]")) {
         name = name.substring(0, name.length() - 4);
       } else if (name.endsWith("[]")) {
         name = name.substring(0, name.length() - 2);
       }
     }
+    name = name.replace('.', '_');
     return name;
   }
 
@@ -669,9 +669,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * requires: condition is a string representation of a conditional
    *
-   * @return a list of all possible variable names in condition. This attempts not to return method
-   *     names nor the base names of qualified names (why not the latter?). Arrays appear with "[]"
-   *     at the end if their elements or accessed in the condition.
+   * @return a list of all possible variable names in condition, each of which is a single
+   *     identifier. This attempts not to return method names nor the base names of qualified names
+   *     (why not the latter?). An array appears as its bare name, without "[]", even if its
+   *     elements are accessed in the condition.
    */
   private static List<String> findPossibleClassVariables(String condition) throws ParseException {
 
