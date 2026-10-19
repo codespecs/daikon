@@ -20,6 +20,7 @@ The correct way to build the system is to run 'make'.
   #define BASE_IS_INTEGRAL baseIsFloat()
   #define DOUBLE_CAST(x) (x)
   #define BOTH_NAN(x, y) (Double.isNaN(x) && Double.isNaN(y))
+  #define GET_BOUND getDouble
 #else
   #define BASE_INT
   #define ONEOFSCALAR OneOfScalar
@@ -32,6 +33,7 @@ The correct way to build the system is to run 'make'.
   #define BASE_IS_INTEGRAL baseIsIntegral()
   #define DOUBLE_CAST(x) (double)(x)
   #define BOTH_NAN(x, y) false
+  #define GET_BOUND getLong
 #endif
 
 #if defined(LOWER) || defined(ELTLOWER) || defined(LOWERFLOAT) || defined(ELTLOWERFLOAT)
@@ -634,7 +636,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
     #if defined(LOWER) || defined(LOWERFLOAT) || defined(UPPER) || defined(UPPERFLOAT)
     if (var.aux.hasValue(VARINFOAUX_MINIMUM_VALUE)) {
-      int minVal = var.aux.getInt(VARINFOAUX_MINIMUM_VALUE);
+      PRIMITIVE minVal = var.aux.GET_BOUND(VARINFOAUX_MINIMUM_VALUE);
       if (minVal == MIN1) {
         return new DiscardInfo(this, DiscardCode.obvious,
           var.name() + " GTE " + MIN1 + " is already known");

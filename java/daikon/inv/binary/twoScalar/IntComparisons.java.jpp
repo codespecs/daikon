@@ -22,6 +22,7 @@
   #define PRIMITIVENONCOMMENT long
   #define IS_NUMERIC 1
   #define IS_INT 1
+  #define GET_BOUND getLong
   #define ISTYPE isIntegral()
   #define SUPERCLASS TwoScalar
   #define MEMBER Member
@@ -42,6 +43,7 @@
     || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
   #define IS_NUMERIC 1
   #define IS_FLOAT 1
+  #define GET_BOUND getDouble
   #define PRIMITIVE double
   #define PRIMITIVENONCOMMENT double
   #define ISTYPE isFloat()
@@ -915,6 +917,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   @Override
   public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
+    #if defined(IS_NUMERIC)
     final VarInfo var1 = vis[0];
     final VarInfo var2 = vis[1];
 
@@ -926,10 +929,10 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
       @SuppressWarnings("all:argument") // EnsuresKeyFor for multiple maps; also https://tinyurl.com/cfissue/2586
-      int minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE),
-          maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
-          minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE),
-          maxB = var2.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
+      PRIMITIVE minA = var1.aux.GET_BOUND(VarInfoAux.MINIMUM_VALUE),
+          maxA = var1.aux.GET_BOUND(VarInfoAux.MAXIMUM_VALUE),
+          minB = var2.aux.GET_BOUND(VarInfoAux.MINIMUM_VALUE),
+          maxB = var2.aux.GET_BOUND(VarInfoAux.MAXIMUM_VALUE);
 
       if (minA == maxA && maxA == minB && minB == maxB) {
         return new DiscardInfo(
@@ -941,8 +944,8 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     #if defined(LESSTHAN_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
     if (var1.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)) {
-      int maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
-          minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE);
+      PRIMITIVE maxA = var1.aux.GET_BOUND(VarInfoAux.MAXIMUM_VALUE),
+          minB = var2.aux.GET_BOUND(VarInfoAux.MINIMUM_VALUE);
 
       #if defined(LESSTHAN_OP)
       #define DISCARD_OP <
@@ -963,8 +966,8 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
     #if defined(GREATERTHAN_OP) || defined(GREATEREQUAL_OP) || defined(NONEQUAL_OP)
     if (var1.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-      int maxB = var2.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
-          minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE);
+      PRIMITIVE maxB = var2.aux.GET_BOUND(VarInfoAux.MAXIMUM_VALUE),
+          minA = var1.aux.GET_BOUND(VarInfoAux.MINIMUM_VALUE);
 
       #if defined(GREATERTHAN_OP)
       #define DISCARD_OP >
@@ -980,6 +983,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
             var1.name() + " DISCARD_OP " + var2.name() + " is already known");
       }
     }
+    #endif
     #endif
 
     return super.isObviousStatically(vis);
