@@ -1,7 +1,7 @@
 # Common makefile to the diff tests
 
 # Generates two .inv.gz files from two trace files and a decls file,
-# then compares the .inv.gz using invariant diff.  The ouptut must
+# then compares the .inv.gz using invariant diff.  The output must
 # equal the goal output.  This is done for several different options
 # of Diff.
 
