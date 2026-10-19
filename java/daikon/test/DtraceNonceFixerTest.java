@@ -2,7 +2,10 @@ package daikon.test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
+import daikon.Daikon;
 import daikon.tools.DtraceNonceFixer;
 import java.io.IOException;
 import java.io.InputStream;
@@ -351,8 +354,8 @@ public class DtraceNonceFixerTest {
 
   /**
    * Tests that a new output file has the default permissions rather than being readable only by its
-   * owner, and that when the output file is a symbolic link, the file that it refers to is
-   * replaced.
+   * owner, that when the output file is a symbolic link, the file that it refers to is replaced,
+   * and that an output file that is a symbolic link to a nonexistent file is rejected.
    *
    * @throws IOException if there is trouble reading or writing a file
    */
@@ -375,16 +378,19 @@ public class DtraceNonceFixerTest {
     assertEquals(defaultPermissions, Files.getPosixFilePermissions(out));
     assertEquals(expected, Files.readString(out, UTF_8).replace(System.lineSeparator(), "\n"));
 
-    // An output file that is a symbolic link, to an existing file or to a nonexistent file.
-    for (boolean targetExists : new boolean[] {true, false}) {
-      Path target = dir.resolve("target-" + targetExists + ".dtrace");
-      if (targetExists) {
-        Files.writeString(target, "old contents", UTF_8);
-      }
-      Path link = Files.createSymbolicLink(dir.resolve("link-" + targetExists), target);
-      DtraceNonceFixer.mainHelper(new String[] {in.toString(), link.toString()});
-      assertEquals(true, Files.isSymbolicLink(link));
-      assertEquals(expected, Files.readString(target, UTF_8).replace(System.lineSeparator(), "\n"));
-    }
+    // An output file that is a symbolic link to an existing file.
+    Path target = dir.resolve("target.dtrace");
+    Files.writeString(target, "old contents", UTF_8);
+    Path link = Files.createSymbolicLink(dir.resolve("link"), target);
+    DtraceNonceFixer.mainHelper(new String[] {in.toString(), link.toString()});
+    assertTrue(Files.isSymbolicLink(link));
+    assertEquals(expected, Files.readString(target, UTF_8).replace(System.lineSeparator(), "\n"));
+
+    // An output file that is a symbolic link to a nonexistent file.
+    Path dangling = Files.createSymbolicLink(dir.resolve("dangling"), dir.resolve("nonexistent"));
+    assertThrows(
+        Daikon.UserError.class,
+        () -> DtraceNonceFixer.mainHelper(new String[] {in.toString(), dangling.toString()}));
+    assertTrue(Files.isSymbolicLink(dangling));
   }
 }

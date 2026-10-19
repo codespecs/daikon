@@ -55,9 +55,6 @@ public class DtraceNonceFixer {
           "is written to OUTFILE instead, and no other output file remains.",
           "OUTFILE may be the same as FILENAME.");
 
-  /** The maximum number of symbolic links to follow when resolving OUTFILE. */
-  private static final int MAX_SYMBOLIC_LINKS = 40;
-
   public static void main(String[] args) {
     try {
       mainHelper(args);
@@ -89,51 +86,38 @@ public class DtraceNonceFixer {
         // and have fresh names so that they overwrite no existing file.  OUTFILE is not opened
         // for writing, so if this program fails, OUTFILE (which may be the input) is unchanged.
         // If OUTFILE is a symbolic link, the file that it refers to is replaced.
-        Path outfile = resolveSymbolicLinks(Path.of(files[1]).toAbsolutePath());
+        Path outfile = Path.of(files[1]).toAbsolutePath();
+        if (Files.exists(outfile)) {
+          outfile = outfile.toRealPath();
+        } else if (Files.isSymbolicLink(outfile)) {
+          throw new daikon.Daikon.UserError(
+              "OUTFILE is a symbolic link that does not refer to an existing file: " + files[1]);
+        }
         Path dir = castNonNull(outfile.getParent()); // an absolute file path has a parent
         String prefix = outfile.getFileName() + "-";
         String suffix = files[1].endsWith(".gz") ? ".gz" : "";
         // The intermediate file is not compressed, because it is deleted.
         Path tmpFile = createFreshFile(dir, prefix, "-fixed");
-        Path tmpOutFile = null;
         try {
-          tmpOutFile = createFreshFile(dir, prefix, "-all-fixed" + suffix);
-          int maxNonce = correctNonces(files[0], tmpFile.toString());
-          addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
-          replaceFile(tmpOutFile, outfile);
+          Path tmpOutFile = createFreshFile(dir, prefix, "-all-fixed" + suffix);
+          try {
+            int maxNonce = correctNonces(files[0], tmpFile.toString());
+            addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
+            // Delete before replacing OUTFILE, so that no failure occurs after OUTFILE changes.
+            Files.delete(tmpFile);
+            replaceFile(tmpOutFile, outfile);
+          } catch (Throwable e) {
+            deleteAfterFailure(tmpOutFile, e);
+            throw e;
+          }
         } catch (Throwable e) {
           deleteAfterFailure(tmpFile, e);
-          if (tmpOutFile != null) {
-            deleteAfterFailure(tmpOutFile, e);
-          }
           throw e;
         }
-        Files.delete(tmpFile);
       }
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
-  }
-
-  /**
-   * Returns the file that {@code file} refers to, following symbolic links. Unlike {@link
-   * Path#toRealPath}, this method also follows a symbolic link to a file that does not exist.
-   *
-   * @param file an absolute file path
-   * @return the file that {@code file} refers to
-   * @throws IOException if there is trouble reading a symbolic link
-   */
-  private static Path resolveSymbolicLinks(Path file) throws IOException {
-    if (Files.exists(file)) {
-      return file.toRealPath();
-    }
-    for (int i = 0; Files.isSymbolicLink(file); i++) {
-      if (i == MAX_SYMBOLIC_LINKS) {
-        throw new daikon.Daikon.UserError("Too many levels of symbolic links: " + file);
-      }
-      file = file.resolveSibling(Files.readSymbolicLink(file));
-    }
-    return file;
   }
 
   /**
