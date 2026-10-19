@@ -1,10 +1,8 @@
 package daikon.split;
 
 import daikon.tools.jtb.Ast;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import jtb.ParseException;
 import jtb.syntaxtree.Arguments;
@@ -27,16 +25,8 @@ class OrigFixer extends DepthFirstVisitor {
   /** True iff presently visiting the args of "orig()". */
   private boolean withinArgList = false;
 
-  private boolean foundOrig = false;
-
   /** The base names of the variables that may appear in the expression. */
   private final Set<String> baseNames;
-
-  /** The tokens visited by this, in order. */
-  private final List<NodeToken> tokens = new ArrayList<>();
-
-  /** The indices in {@link #tokens} of the tokens within the arguments of "orig()". */
-  private final List<Integer> origArgIndices = new ArrayList<>();
 
   /**
    * Creates a new instance of OrigFixer.
@@ -53,7 +43,7 @@ class OrigFixer extends DepthFirstVisitor {
    * case of multiple names appearing within the argument of "orig()", each name that starts with a
    * variable name is prefixed with "orig_". For example, "orig(x + y &gt; z - 3)" would yield,
    * "orig_x + orig_y &gt; orig_z - 3", and "orig(java.lang.Math.abs(x))" would yield
-   * "java.lang.Math.abs(orig_x)". See {@link #fixNames} for details.
+   * "java.lang.Math.abs(orig_x)". See {@link #visit(Name)} for details.
    *
    * @param expression a valid segment of java code in which "orig()" is being replaced
    * @param baseNames the base names of the variables that may appear in the expression
@@ -64,7 +54,6 @@ class OrigFixer extends DepthFirstVisitor {
     Node root = Visitors.getJtbTree(expression);
     OrigFixer fixer = new OrigFixer(baseNames);
     root.accept(fixer);
-    fixer.fixNames();
     return Ast.format(root);
   }
 
@@ -75,31 +64,23 @@ class OrigFixer extends DepthFirstVisitor {
   @Override
   public void visit(PrimaryExpression n) {
     if (isOrig(n)) {
-      NodeToken origToken = ((Name) n.f0.f0.choice).f0;
-      origToken.tokenImage = "";
-      NodeToken openParen = ((Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).f0;
-      openParen.tokenImage = "";
-      foundOrig = true;
-      super.visit(n);
-      foundOrig = false;
-      NodeToken closeParen = ((Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).f2;
-      closeParen.tokenImage = "";
+      Arguments args = (Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice;
+      ((Name) n.f0.f0.choice).f0.tokenImage = "";
+      args.f0.tokenImage = "";
+      args.f2.tokenImage = "";
+      n.f0.accept(this);
+      // Only the first suffix holds the arguments of "orig()".  Later suffixes, such as the
+      // arguments of a method called on the result of "orig()", are not within them.
+      boolean oldWithinArgList = withinArgList;
+      withinArgList = true;
+      n.f1.elementAt(0).accept(this);
+      withinArgList = oldWithinArgList;
+      for (int i = 1; i < n.f1.size(); i++) {
+        n.f1.elementAt(i).accept(this);
+      }
     } else {
       super.visit(n);
     }
-  }
-
-  /**
-   * This method should not be directly used by users of this class. Marks whether this is presently
-   * visiting the arguments to an instance of "orig()".
-   */
-  @Override
-  public void visit(Arguments n) {
-    // The arguments of a call within the arguments of "orig()" are also within them.
-    boolean oldWithinArgList = withinArgList;
-    withinArgList = foundOrig;
-    super.visit(n);
-    withinArgList = oldWithinArgList;
   }
 
   /**
@@ -118,37 +99,24 @@ class OrigFixer extends DepthFirstVisitor {
   }
 
   /**
-   * This method should not be directly used by users of this class. Records n, and whether it is
-   * within the arguments of "orig()".
+   * This method should not be directly used by users of this class. Prefixes "orig_" to n if it is
+   * within the arguments of "orig()" and starts with a variable name or the name of an orig
+   * variable. For example, "java.lang.Math" is not prefixed. A name that starts with a variable
+   * name is prefixed even if there is no corresponding orig variable, so that the splitter fails to
+   * compile rather than silently using the post-state value.
    */
+  @Override
+  public void visit(Name n) {
+    if (withinArgList && Visitors.variableNameLength(n, baseNames, "orig_", "") > 0) {
+      n.f0.tokenImage = "orig_" + n.f0.tokenImage;
+    }
+    super.visit(n);
+  }
+
+  /** This method should not be directly used by users of this class. */
   @Override
   public void visit(NodeToken n) {
     n.beginColumn = -1;
     n.endColumn = -1;
-    if (withinArgList) {
-      origArgIndices.add(tokens.size());
-    }
-    tokens.add(n);
-  }
-
-  /**
-   * Prefixes "orig_" to each dotted name that starts at a token in {@link #origArgIndices}, unless
-   * the name starts with neither a variable name nor the name of an orig variable. For example,
-   * "java.lang.Math" is not prefixed. A name that starts with a variable name is prefixed even if
-   * there is no corresponding orig variable, so that the splitter fails to compile rather than
-   * silently using the post-state value.
-   */
-  private void fixNames() {
-    for (int i : origArgIndices) {
-      // A dotted name that is preceded by "." is a member of some other expression.
-      if (i > 0 && Visitors.isDot(tokens.get(i - 1))) {
-        continue;
-      }
-      if (PrefixFixer.variableNameEnd(tokens, i, "orig_", baseNames) != -1
-          || PrefixFixer.variableNameEnd(tokens, i, "", baseNames) != -1) {
-        NodeToken token = tokens.get(i);
-        token.tokenImage = "orig_" + token.tokenImage;
-      }
-    }
   }
 }

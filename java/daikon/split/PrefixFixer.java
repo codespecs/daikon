@@ -1,13 +1,13 @@
 package daikon.split;
 
 import daikon.tools.jtb.Ast;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import jtb.ParseException;
+import jtb.syntaxtree.Name;
 import jtb.syntaxtree.Node;
+import jtb.syntaxtree.NodeSequence;
 import jtb.syntaxtree.NodeToken;
 import jtb.visitor.DepthFirstVisitor;
 
@@ -25,9 +25,6 @@ class PrefixFixer extends DepthFirstVisitor {
 
   /** The base names of the variables that may appear in the expression. */
   private final Set<String> baseNames;
-
-  /** The tokens visited by this, in order. */
-  private final List<NodeToken> tokens = new ArrayList<>();
 
   /**
    * Creates a new instance of PrefixFixer to fix "." prefixes.
@@ -49,74 +46,37 @@ class PrefixFixer extends DepthFirstVisitor {
     Node root = Visitors.getJtbTree(expression);
     PrefixFixer fixer = new PrefixFixer(baseNames);
     root.accept(fixer);
-    fixer.fixNames();
     return Ast.format(root);
   }
 
   /**
    * This method should not be directly used by users of this class; however, must be public to
-   * fulfill the visitor interface. Records n.
+   * fulfill the visitor interface. If n starts with a variable name, converts that part of n to the
+   * variable's base name: the first identifier gets the base name as its image, and the other
+   * converted tokens get "".
+   */
+  @Override
+  public void visit(Name n) {
+    int length = Visitors.variableNameLength(n, baseNames, "");
+    for (int k = 1; k < length; k++) {
+      NodeSequence dotAndIdentifier = (NodeSequence) n.f1.elementAt(k - 1);
+      NodeToken dot = (NodeToken) dotAndIdentifier.elementAt(0);
+      NodeToken identifier = (NodeToken) dotAndIdentifier.elementAt(1);
+      n.f0.tokenImage = n.f0.tokenImage + "_" + identifier.tokenImage;
+      dot.tokenImage = "";
+      identifier.tokenImage = "";
+    }
+    super.visit(n);
+  }
+
+  /**
+   * This method should not be directly used by users of this class; however, must be public to
+   * fulfill the visitor interface.
    */
   @Override
   public void visit(NodeToken n) {
     n.beginColumn = -1;
     n.endColumn = -1;
-    tokens.add(n);
     super.visit(n);
-  }
-
-  /**
-   * Converts each dotted name in {@link #tokens} that starts with a variable name. The first token
-   * of the dotted name gets the base name as its image, and the other converted tokens get "".
-   */
-  private void fixNames() {
-    for (int i = 0; i < tokens.size(); i++) {
-      // A dotted name that is preceded by "." is a member of some other expression.
-      if (i > 0 && Visitors.isDot(tokens.get(i - 1))) {
-        continue;
-      }
-      int end = variableNameEnd(tokens, i, "", baseNames);
-      NodeToken first = tokens.get(i);
-      for (int k = i + 2; k <= end; k += 2) {
-        first.tokenImage = first.tokenImage + "_" + tokens.get(k).tokenImage;
-        tokens.get(k - 1).tokenImage = "";
-        tokens.get(k).tokenImage = "";
-      }
-    }
-  }
-
-  /**
-   * Returns the index of the last identifier of the longest prefix of the dotted name that starts
-   * at {@code tokens.get(i)} and is a variable name. A prefix is a variable name if prefix,
-   * followed by the identifiers of the dotted name separated by "_", is in baseNames. A method name
-   * is not part of a dotted name.
-   *
-   * @param tokens the tokens of an expression
-   * @param i the index of the first token of the dotted name
-   * @param prefix the prefix of each base name, such as "orig_", or ""
-   * @param baseNames the base names of the variables that may appear in the expression
-   * @return the index of the last identifier of the longest prefix of the dotted name that is a
-   *     variable name, or -1 if there is none
-   */
-  static int variableNameEnd(List<NodeToken> tokens, int i, String prefix, Set<String> baseNames) {
-    if (!Visitors.isIdentifier(tokens.get(i))) {
-      return -1;
-    }
-    int end = -1;
-    StringBuilder name = new StringBuilder(prefix).append(tokens.get(i).tokenImage);
-    int j = i;
-    while (!(j + 1 < tokens.size() && Visitors.isLParen(tokens.get(j + 1)))) {
-      if (baseNames.contains(name.toString())) {
-        end = j;
-      }
-      if (!(j + 2 < tokens.size()
-          && Visitors.isDot(tokens.get(j + 1))
-          && Visitors.isIdentifier(tokens.get(j + 2)))) {
-        break;
-      }
-      j += 2;
-      name.append('_').append(tokens.get(j).tokenImage);
-    }
-    return end;
   }
 }
