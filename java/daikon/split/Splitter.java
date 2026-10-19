@@ -92,10 +92,12 @@ public abstract class Splitter implements Serializable {
   // directly because a splitter represents an array differently than the program does: an
   // integral or boolean array as a long[] (or an index array as an int[]), a float or double array
   // as a double[], a char array as a String, a String array as a String[], and an array of other
-  // references as a long[] of hashcodes.  Each method has the same semantics as the daikon.Quant
-  // method of the same name, including its default value for a null array.  Because the
-  // representation does not distinguish, for example, an int array from a boolean array,
-  // QuantFixer checks that a method's element type matches the element type of its array argument.
+  // references as a long[] of hashcodes.  Each method returns the same value as the daikon.Quant
+  // method of the same name, including its default value for a null array, but it throws an
+  // exception for an out-of-bounds index, so PptSplitter.choose_conditional puts the sample on
+  // neither side of the split.  Because the representation does not distinguish, for example, an
+  // int array from a boolean array, QuantFixer checks that a method's element type matches the
+  // element type of its array argument.
 
   /**
    * Like {@link daikon.Quant#size(Object)}.
