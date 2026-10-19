@@ -48,7 +48,6 @@ Further documentation can be found in:
   `.inv` files written by earlier versions of Daikon.
   * Removed configuration option `daikon.PrintInvariants.remove_post_vars`, which
     had an effect only for version 1 files.
-* ExtractConsequent writes splitting conditions that Daikon can use.
 
 Scripts:
 

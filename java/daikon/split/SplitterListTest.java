@@ -4,16 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import daikon.Ppt;
-import daikon.PptTopLevel;
-import daikon.ValueTuple;
-import daikon.VarInfo;
-import daikon.inv.DummyInvariant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Test;
@@ -94,62 +88,6 @@ public class SplitterListTest {
     assertFalse(SplitterList.matches("aprogram.point:::POINT", "aprogram.point:::POINT2"));
   }
 
-  /** A splitter that only has a condition. It is its own instantiation. */
-  private static class ConditionSplitter extends Splitter {
-    static final long serialVersionUID = 20261006L;
-
-    /** The condition. */
-    private final String condition;
-
-    /** True if the splitter is valid at every program point; false if at none. */
-    private final boolean valid;
-
-    /**
-     * Creates a new ConditionSplitter that is valid at every program point.
-     *
-     * @param condition the condition
-     */
-    ConditionSplitter(String condition) {
-      this(condition, true);
-    }
-
-    /**
-     * Creates a new ConditionSplitter.
-     *
-     * @param condition the condition
-     * @param valid true if the splitter is valid at every program point; false if at none
-     */
-    ConditionSplitter(String condition, boolean valid) {
-      this.condition = condition;
-      this.valid = valid;
-    }
-
-    @Override
-    public Splitter instantiateSplitter(@UnknownInitialization(Ppt.class) Ppt ppt) {
-      return this;
-    }
-
-    @Override
-    public boolean valid() {
-      return valid;
-    }
-
-    @Override
-    public boolean test(ValueTuple vt) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String condition() {
-      return condition;
-    }
-
-    @Override
-    public @Nullable DummyInvariant getDummyInvariant() {
-      return null;
-    }
-  }
-
   /**
    * Returns the conditions of the splitters that {@link SplitterList#get} returns.
    *
@@ -171,7 +109,6 @@ public class SplitterListTest {
     put(exit, new Splitter[] {new ConditionSplitter("x > 0")});
     put(exit12, new Splitter[] {new ConditionSplitter("x > 0"), new ConditionSplitter("y > 0")});
     assertEquals(Arrays.asList("x > 0"), conditions(exit));
-    // addConditions removes the duplicate.
     assertEquals(Arrays.asList("x > 0", "x > 0", "y > 0"), conditions(exit12));
   }
 
@@ -237,53 +174,5 @@ public class SplitterListTest {
       }
     }
     return result;
-  }
-
-  /**
-   * Returns the conditions of the splitters that {@link SplitterList#get_all} returns, among those
-   * whose condition is in {@code relevant}.
-   *
-   * @param relevant the conditions of interest
-   * @return the conditions of the splitters, among those in {@code relevant}
-   */
-  private static List<String> allConditions(List<String> relevant) {
-    return relevantConditions(SplitterList.get_all(), relevant);
-  }
-
-  @Test
-  public void testGetAll() {
-    put(
-        "splitterlisttest.C.f():::EXIT",
-        new Splitter[] {new ConditionSplitter("c > 0"), new ConditionSplitter("d > 0")});
-    put(
-        "splitterlisttest.D.g():::EXIT",
-        new Splitter[] {new ConditionSplitter(" d > 0"), new ConditionSplitter("e > 0")});
-    List<String> relevant = Arrays.asList("c > 0", "d > 0", " d > 0", "e > 0");
-    // addConditions removes the duplicate.
-    assertEquals(relevant, allConditions(relevant));
-  }
-
-  @Test
-  public void testAddConditionsNoDuplicates() {
-    PptTopLevel ppt = new PptTopLevel("splitterlisttest.E.h():::EXIT", new VarInfo[0]);
-    Splitter invalid = new ConditionSplitter("i > 0", false);
-    // These two might test different variables, such as "i" and "this.i", but the conditional
-    // program points' names would be the same.
-    Splitter valid = new ConditionSplitter("i > 0");
-    Splitter duplicate = new ConditionSplitter(" i > 0");
-    // Conditions that differ as written are not duplicates, even if they mean the same thing.
-    Splitter isEmpty = new ConditionSplitter("isEmpty()");
-    Splitter sizeIsZero = new ConditionSplitter("size == 0");
-    ppt.addConditions(new Splitter[] {invalid, valid, isEmpty, duplicate, sizeIsZero});
-
-    List<PptSplitter> pptSplitters = ppt.splitters;
-    if (pptSplitters == null) {
-      throw new AssertionError("No splitters");
-    }
-    List<@Nullable Splitter> added = new ArrayList<>();
-    for (PptSplitter pptSplitter : pptSplitters) {
-      added.add(pptSplitter.splitter);
-    }
-    assertEquals(Arrays.asList(valid, isEmpty, sizeIsZero), added);
   }
 }

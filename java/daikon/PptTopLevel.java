@@ -85,7 +85,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -2849,16 +2848,6 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /**
-   * Creates a pair of conditional program points for each splitter that is valid at this program
-   * point.
-   *
-   * <p>If several valid splitters have the same condition, this uses only the first of them,
-   * because the name of a conditional program point contains the condition. Such splitters may come
-   * from different PPT_NAME lines or {@code .spinfo} files, and may test different variables.
-   *
-   * @param splits splitter factories
-   */
   public void addConditions(Splitter[] splits) {
 
     debugConditional.fine(
@@ -2874,14 +2863,7 @@ public class PptTopLevel extends Ppt {
 
     // Create a Conditional ppt for each side of each splitter
     splitters = new ArrayList<PptSplitter>(splits.length);
-    // The conditions of the splitters in `splitters`.
-    Set<String> conditions = new HashSet<>();
     for (int ii = 0; ii < splits.length; ii++) {
-      String condition = splits[ii].condition().trim();
-      if (conditions.contains(condition)) {
-        debugConditional.fine("Splitter has a duplicate condition: " + condition);
-        continue;
-      }
       PptSplitter ppt_split = new PptSplitter(this, splits[ii]);
       if (!ppt_split.splitter_valid()) {
         debugConditional.fine(
@@ -2891,7 +2873,6 @@ public class PptTopLevel extends Ppt {
                 + ppt_split.ppts[0].name);
         continue;
       }
-      conditions.add(condition);
       splitters.add(ppt_split);
       if (debugConditional.isLoggable(Level.FINE)) {
         debugConditional.fine("Added PptSplitter: " + ppt_split);
