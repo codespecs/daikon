@@ -36,11 +36,17 @@ public class DtracePartitioner implements Closeable, Partitioner<String, String>
 
   /**
    * @param filename the Daikon trace file to be partitioned
-   * @throws IOException if the file cannot be opened
    */
-  public DtracePartitioner(String filename) throws IOException {
-    this.filename = filename;
-    br = FilesPlume.newBufferedFileReader(filename);
+  public DtracePartitioner(String filename) {
+    try {
+      this.filename = filename;
+      // System.out.printf("trying with file %s%n", filename);
+      br = FilesPlume.newBufferedFileReader(filename);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new Error(e);
+    }
   }
 
   /** Releases resources held by this. */
@@ -55,7 +61,8 @@ public class DtracePartitioner implements Closeable, Partitioner<String, String>
     try {
       return br.ready();
     } catch (IOException e) {
-      throw new UncheckedIOException(e);
+      e.printStackTrace();
+      return false;
     }
   }
 
