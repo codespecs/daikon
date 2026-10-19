@@ -11,10 +11,13 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.StringTokenizer;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.MultiRandSelector;
@@ -34,9 +37,13 @@ public class TraceSelect {
   /** The usage message for this program. */
   private static final String usage =
       StringsPlume.joinLines(
-          "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...",
-          "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace"
-              + " foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
+          "USAGE: TraceSelect num_reps sample_size [options] dtrace_file [Daikon-args]...",
+          "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED -SEED 1000 foo.dtrace"
+              + " foo.decls RatPoly.decls");
+
+  /** The TraceSelect options, in upper case. */
+  private static final Set<String> TRACESELECT_OPTIONS =
+      Set.of("-SEED", "-NOCLEAN", "-INCLUDE_UNRETURNED", "-DO_DIFFS");
 
   /**
    * The entry point of TraceSelect.
@@ -91,6 +98,10 @@ public class TraceSelect {
         includeUnreturned = true;
       } else if (option.equals("-DO_DIFFS")) {
         doDiffs = true;
+      } else if (option.startsWith("-") && !option.startsWith("--")) {
+        // Every Daikon option starts with "--", except "-o", which TraceSelect supplies.
+        throw new daikon.Daikon.UserError(
+            "Unknown TraceSelect option: " + args[i] + daikon.Daikon.lineSep + usage);
       } else {
         break;
       }
@@ -101,6 +112,14 @@ public class TraceSelect {
     String inputFile = null;
     List<String> daikonArgs = new ArrayList<>();
     for (; i < args.length; i++) {
+      if (TRACESELECT_OPTIONS.contains(args[i].toUpperCase(Locale.ENGLISH))) {
+        throw new daikon.Daikon.UserError(
+            "TraceSelect option "
+                + args[i]
+                + " must precede the Daikon arguments"
+                + daikon.Daikon.lineSep
+                + usage);
+      }
       if (args[i].endsWith(".dtrace")) {
         if (inputFile != null) {
           throw new daikon.Daikon.UserError("Only 1 dtrace file for input allowed");
@@ -119,16 +138,18 @@ public class TraceSelect {
 
     System.out.println("*******Processing********");
 
+    List<List<String>> samples;
+    try {
+      samples = selectSamples(inputFile, numReps, numPerSample, rand, includeUnreturned);
+    } catch (IOException e) {
+      throw new daikon.Daikon.UserError(
+          e, "Cannot read trace file " + inputFile + ": " + e.getMessage());
+    }
+
     try {
       for (int rep = 1; rep <= numReps; rep++) {
 
-        List<String> al;
-        try {
-          al = selectSample(inputFile, numPerSample, rand, includeUnreturned);
-        } catch (IOException e) {
-          throw new daikon.Daikon.UserError(
-              e, "Cannot read trace file " + inputFile + ": " + e.getMessage());
-        }
+        List<String> al = samples.get(rep - 1);
 
         String filePrefix = calcOut(inputFile, rep);
 
@@ -144,7 +165,7 @@ public class TraceSelect {
             }
           } catch (IOException e) {
             throw new daikon.Daikon.UserError(
-                "Cannot write sample file " + filePrefix + ": " + e.getMessage());
+                e, "Cannot write sample file " + filePrefix + ": " + e.getMessage());
           }
 
           invokeDaikon(filePrefix, daikonArgs);
@@ -179,36 +200,67 @@ public class TraceSelect {
   }
 
   /**
-   * Randomly selects invocations from a trace file.
+   * Randomly selects several samples of invocations from a trace file. Reads the trace file twice,
+   * regardless of the number of samples.
    *
    * @param inputFile the trace file to sample
-   * @param numPerSample the number of invocations to select for each program point
+   * @param numReps the number of samples to select
+   * @param numPerSample the number of invocations to select for each program point, in each sample
    * @param rand the source of randomness
    * @param includeUnreturned if true, also select invocations that entered a method but did not
    *     exit it normally
-   * @return the selected invocations, each followed by its matching exit, in no particular order
+   * @return the samples. Each sample contains the selected invocations, in no particular order.
+   *     Each ENTER record is followed by its matching EXIT record, if any; an ENTER record without
+   *     an EXIT record appears only if {@code includeUnreturned} is true. OBJECT and CLASS
+   *     records appear alone.
    * @throws IOException if the trace file cannot be read
    */
-  public static List<String> selectSample(
-      String inputFile, int numPerSample, Random rand, boolean includeUnreturned)
+  public static List<List<String>> selectSamples(
+      String inputFile, int numReps, int numPerSample, Random rand, boolean includeUnreturned)
       throws IOException {
     try (DtracePartitioner dec = new DtracePartitioner(inputFile)) {
-      MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, rand, dec);
+      List<MultiRandSelector<String>> selectors = new ArrayList<>(numReps);
+      for (int rep = 0; rep < numReps; rep++) {
+        selectors.add(new MultiRandSelector<>(numPerSample, rand, dec));
+      }
 
       while (dec.hasNext()) {
         // DtracePartitioner returns an empty string for a blank line or for a trailing EXIT.
         String invocation = dec.next();
         if (!invocation.isEmpty()) {
-          mrs.accept(invocation);
+          for (MultiRandSelector<String> mrs : selectors) {
+            mrs.accept(invocation);
+          }
         }
       }
 
-      List<String> al = new ArrayList<>();
-      for (Iterator<String> iter = mrs.valuesIter(); iter.hasNext(); ) {
-        al.add(iter.next());
+      // The selected ENTER, OBJECT, and CLASS records of each sample.
+      List<List<String>> selections = new ArrayList<>(numReps);
+      // The selected records of all the samples.
+      Set<String> allSelected = new HashSet<>();
+      for (MultiRandSelector<String> mrs : selectors) {
+        List<String> selection = new ArrayList<>();
+        for (Iterator<String> iter = mrs.valuesIter(); iter.hasNext(); ) {
+          selection.add(iter.next());
+        }
+        selections.add(selection);
+        allSelected.addAll(selection);
       }
 
-      return dec.patchValues(al, includeUnreturned);
+      Map<String, String> invocations = dec.matchExits(allSelected, includeUnreturned);
+
+      List<List<String>> result = new ArrayList<>(numReps);
+      for (List<String> selection : selections) {
+        List<String> sample = new ArrayList<>();
+        for (String selected : selection) {
+          String invocation = invocations.get(selected);
+          if (invocation != null) {
+            sample.add(invocation);
+          }
+        }
+        result.add(sample);
+      }
+      return result;
     } catch (UncheckedIOException e) {
       // DtracePartitioner's Iterator methods cannot throw IOException.
       throw e.getCause();
@@ -259,8 +311,6 @@ public class TraceSelect {
     System.out.println("Created file: " + dtraceName);
 
     daikon.Daikon.mainHelper(daikonCommandLine(dtraceName, daikonArgs));
-    // Reset the Daikon options, such as --format, so that PrintInvariants uses its defaults.
-    daikon.Daikon.cleanup();
     daikon.PrintInvariants.mainHelper(
         new String[] {"--output", dtraceName + ".txt", dtraceName + ".inv"});
   }
