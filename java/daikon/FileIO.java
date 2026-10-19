@@ -2834,6 +2834,33 @@ public final class FileIO {
       if ((kind == VarKind.FIELD || kind == VarKind.ARRAY) && enclosing_var_name == null) {
         throw new AssertionError("enclosing-var not specified for variable " + name);
       }
+      checkBound("min-value", min_value);
+      checkBound("max-value", max_value);
+    }
+
+    /**
+     * Throws an AssertionError if the given min-value or max-value bound cannot be parsed as a
+     * value of this variable's rep type. An integral variable's bound must be an integer in the
+     * range of a Java long, and a floating-point variable's bound must be a number.
+     *
+     * @param record the name of the record, for the error message
+     * @param bound the bound, or null if none was specified
+     */
+    private void checkBound(String record, @Nullable String bound) {
+      if (bound == null) {
+        return;
+      }
+      try {
+        if (rep_type.baseIsIntegral()) {
+          Long.parseLong(bound);
+        } else if (rep_type.baseIsFloat()) {
+          Double.parseDouble(bound);
+        }
+      } catch (NumberFormatException e) {
+        throw new AssertionError(
+            String.format(
+                "%s '%s' for variable %s is not a valid %s value", record, bound, name, rep_type));
+      }
     }
 
     /** Initialize from the 'variable <em>name</em>' record. Scanner should be pointing at name. */

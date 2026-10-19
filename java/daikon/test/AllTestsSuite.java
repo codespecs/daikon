@@ -30,6 +30,7 @@ import org.junit.runners.Suite;
   daikon.test.ModBitTrackerTest.class,
   daikon.test.ProglangTypeTest.class,
   daikon.test.VarComparabilityTest.class,
+  daikon.test.VarDefinitionBoundTest.class,
   daikon.test.VarInfoNameTest.class,
   daikon.test.inv.InvariantAddAndCheckTester.class,
   daikon.test.TestQuant.class,
