@@ -532,17 +532,22 @@ update-libs:
 
 # The timestamp of Daikon.class indicates the last time the system was recompiled.
 compile compile-java compile-daikon: daikon/Daikon.class
+# Non-empty in a dry run ("make -n").  Make runs a recipe line that uses ${MAKE}
+# even in a dry run, but a dry run does not create daikon/Daikon.class, so a
+# sub-make of its recipe would remake daikon/Daikon.class, without end.  So, in
+# a dry run, that recipe prints its sub-makes instead of running them.
+DRY_RUN := $(findstring n,$(firstword -$(MAKEFLAGS)))
 daikon/Daikon.class: daikon/Daikon.java ${AUTO_GENERATED_FILES} ${JAVA_FILES_FOR_DEPENDENCES}
 	@echo 'echo $${JAVA_FILES} > java_files.txt'
 	@echo ${JAVA_FILES} > java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
 	touch $@
-	${MAKE} rename-dcruntime ${AUTO_GENERATED_CLASSES_2}
+	$(if ${DRY_RUN},echo) ${MAKE} rename-dcruntime ${AUTO_GENERATED_CLASSES_2}
 # on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w
 	@chmod 444 ${AUTO_GENERATED_FILES}
 # These can't be prerequisites because they depend on .class files from Daikon itself.
-	${MAKE} ChicoryPremain.jar dcomp_premain.jar
+	$(if ${DRY_RUN},echo) ${MAKE} ChicoryPremain.jar dcomp_premain.jar
 
 .PHONY: rename-dcruntime
 rename-dcruntime:
