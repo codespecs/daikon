@@ -1,0 +1,11 @@
+PPT_NAME misc.NullComparisons.m
+this.obj == null
+this.objs[1] != null
+this.sign == null
+null != this.sign
+(this.sign) != null && this.obj == null
+this.sign != null && (this.objs[0]) == null
+this.s[0] == null
+this.s[1] == null
+this.objs == null
+this.sign == (null)
