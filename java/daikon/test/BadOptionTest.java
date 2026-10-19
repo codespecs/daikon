@@ -16,6 +16,7 @@ import daikon.tools.TraceSelect;
 import gnu.getopt.LongOpt;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.function.ThrowingRunnable;
 
@@ -36,6 +37,17 @@ public class BadOptionTest {
         new LongOpt("debug", LongOpt.REQUIRED_ARGUMENT, null, 'd'),
         new LongOpt("verbose", LongOpt.NO_ARGUMENT, null, 'v'),
       };
+
+  /**
+   * Resets the Daikon option that {@link #testTraceSelectBadArguments} sets. TraceSelect checks its
+   * Daikon arguments by calling {@code Daikon.read_options}, so its {@code --ppt-select-pattern}
+   * argument sets {@link Daikon#ppt_regexp}, which would make later tests in the same JVM omit
+   * their program points.
+   */
+  @After
+  public void resetDaikonOptions() {
+    Daikon.ppt_regexp = null;
+  }
 
   /** The suffix of every description of a bad command-line option. */
   private static final String USAGE_HINT = "; run with -h for usage";
