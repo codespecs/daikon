@@ -5,3 +5,7 @@ java.lang.Math.abs(this.x) > 1
 java.lang.Math.abs(this.x) > 3
 daikon.Quant.fuzzy.eq(this.x, -2.5)
 Integer.MAX_VALUE > p.count
+orig(p.count) > 2
+java.lang.Integer.MAX_VALUE > orig(p.count)
+((java.lang.Number) java.lang.Double.valueOf(this.x)).intValue() == -2
+java.lang.String.class.getName().length() > p.count
