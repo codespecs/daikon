@@ -182,6 +182,73 @@ public class DtraceNonceFixerTest {
   }
 
   /**
+   * Tests that a concatenated file is corrected even if the first file does not start at nonce 0.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testFirstFileWithoutNonceZero() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            // A second, concatenated file.
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "2",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "2",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
    * Tests that a line that contains only whitespace does not end a sample, and that whitespace is
    * preserved.
    *

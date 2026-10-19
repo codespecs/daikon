@@ -17,9 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
@@ -32,7 +30,7 @@ import org.plumelib.util.StringsPlume;
  * <p>Keep track of all the nonces you see and maintain a record of the highest nonce observed. The
  * next time you see a '0' valued nonce that is not part of an EXIT or THROWS program point, then
  * you know you have reached the beginning of the next dtrace file. Use that as the number to add to
- * the remaining nonces and repeat. This should only require one pass through the file.
+ * the remaining nonces and repeat. The correction requires only one pass through the file.
  *
  * <p>A second pass gives a new nonce to each sample that lacks one, such as an OBJECT or CLASS
  * sample.
@@ -49,9 +47,10 @@ public class DtraceNonceFixer {
       StringsPlume.joinLines(
           "Usage: DtraceNonceFixer FILENAME [OUTFILE]",
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
-          "The output file will be FILENAME_fixed and another output included",
-          "nonces for OBJECT and CLASS invocations called FILENAME_all_fixed.",
-          "If OUTFILE is supplied, the output that includes nonces for all invocations",
+          "Output file FILENAME_fixed renumbers the nonces of concatenated dtrace files",
+          "so that they do not collide.  Output file FILENAME_all_fixed also gives a nonce",
+          "to each sample that lacks one.",
+          "If OUTFILE is supplied, the output that FILENAME_all_fixed would contain",
           "is written to OUTFILE instead, and no other output file remains.",
           "OUTFILE may be the same as FILENAME.");
 
@@ -199,7 +198,8 @@ public class DtraceNonceFixer {
 
       // correctionFactor - the amount to add to each observed nonce
       int correctionFactor = 0;
-      boolean first = true;
+      // seenNonce - whether any sample with a nonce has been seen
+      boolean seenNonce = false;
       Paragraph para;
       while ((para = Paragraph.read(br)) != null) {
         int non = para.nonce;
@@ -207,17 +207,12 @@ public class DtraceNonceFixer {
           para.print(out);
           continue;
         }
-        boolean isExit = isExitOrThrows(para.pptName());
-        // The first legit 0 nonce will have an ENTER and EXIT
-        // seeing a 0 means we have reached the next file
-        if (non == 0 && !isExit) {
-          if (first) {
-            // on the first file, keep the first nonce as 0
-            first = false;
-          } else {
-            correctionFactor = maxNonce + 1;
-          }
+        // A 0 nonce that is not an EXIT or THROWS, after other nonces, means we have reached the
+        // next file. The first file's nonces are unchanged, even if that file does not start at 0.
+        if (non == 0 && seenNonce && !isExitOrThrows(new PptName(para.pptNameLine()))) {
+          correctionFactor = maxNonce + 1;
         }
+        seenNonce = true;
         int newNonce = non + correctionFactor;
         maxNonce = Math.max(maxNonce, newNonce);
         para.printWithNonce(out, newNonce);
@@ -260,9 +255,6 @@ public class DtraceNonceFixer {
   private static boolean isExitOrThrows(PptName pptName) {
     return pptName.isExitPoint() || pptName.isThrowsPoint();
   }
-
-  /** The parsed program point names, so that each distinct name is parsed only once. */
-  private static final Map<String, PptName> pptNames = new HashMap<>();
 
   /** A paragraph of a dtrace file: its lines, up to but not including a blank line. */
   private static final class Paragraph {
@@ -342,12 +334,12 @@ public class DtraceNonceFixer {
     }
 
     /**
-     * Returns the program point name of this sample.
+     * Returns the program point name line of this sample.
      *
-     * @return the program point name of this sample
+     * @return the program point name line of this sample
      */
-    PptName pptName() {
-      return pptNames.computeIfAbsent(lines.get(pptNameIndex), PptName::new);
+    String pptNameLine() {
+      return lines.get(pptNameIndex);
     }
 
     /**
