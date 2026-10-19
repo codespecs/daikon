@@ -93,6 +93,7 @@ class OrigFixer extends DepthFirstVisitor {
   private boolean isOrig(PrimaryExpression n) {
     return ((n.f0.f0.choice instanceof Name)
         && ((Name) n.f0.f0.choice).f0.tokenImage.equals("orig")
+        && !((Name) n.f0.f0.choice).f1.present()
         && (n.f1.size() > 0)
         && (n.f1.elementAt(0) instanceof PrimarySuffix)
         && (((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof Arguments));
@@ -113,10 +114,14 @@ class OrigFixer extends DepthFirstVisitor {
     super.visit(n);
   }
 
-  /** This method should not be directly used by users of this class. */
+  /**
+   * This method should not be directly used by users of this class. Resets the columns of n, so
+   * that {@link Ast#format} does not use the original layout.
+   */
   @Override
   public void visit(NodeToken n) {
     n.beginColumn = -1;
     n.endColumn = -1;
+    super.visit(n);
   }
 }

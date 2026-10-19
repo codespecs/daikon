@@ -59,9 +59,8 @@ class PrefixFixer extends DepthFirstVisitor {
   public void visit(Name n) {
     int length = Visitors.variableNameLength(n, baseNames, "");
     for (int k = 1; k < length; k++) {
-      NodeSequence dotAndIdentifier = (NodeSequence) n.f1.elementAt(k - 1);
-      NodeToken dot = (NodeToken) dotAndIdentifier.elementAt(0);
-      NodeToken identifier = (NodeToken) dotAndIdentifier.elementAt(1);
+      NodeToken dot = (NodeToken) ((NodeSequence) n.f1.elementAt(k - 1)).elementAt(0);
+      NodeToken identifier = Visitors.identifier(n, k);
       n.f0.tokenImage = n.f0.tokenImage + "_" + identifier.tokenImage;
       dot.tokenImage = "";
       identifier.tokenImage = "";
@@ -71,7 +70,8 @@ class PrefixFixer extends DepthFirstVisitor {
 
   /**
    * This method should not be directly used by users of this class; however, must be public to
-   * fulfill the visitor interface.
+   * fulfill the visitor interface. Resets the columns of n, so that {@link Ast#format} does not use
+   * the original layout.
    */
   @Override
   public void visit(NodeToken n) {
