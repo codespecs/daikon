@@ -33,6 +33,7 @@ public final class QualifiedNamesSplitterTest {
     expectedValues.put("orig(java.lang.Math.abs(p.count)) > 0", true);
     expectedValues.put("orig(Integer.MAX_VALUE) > p.count", true);
     expectedValues.put("orig(java.lang.Integer.MAX_VALUE) > p.count", true);
+    expectedValues.put("orig(java.lang.Math.abs(p.count) + p.count) > 2", false);
   }
 
   /**

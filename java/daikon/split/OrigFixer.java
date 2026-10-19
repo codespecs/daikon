@@ -14,8 +14,6 @@ import jtb.syntaxtree.NodeToken;
 import jtb.syntaxtree.PrimaryExpression;
 import jtb.syntaxtree.PrimarySuffix;
 import jtb.visitor.DepthFirstVisitor;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
@@ -31,20 +29,14 @@ class OrigFixer extends DepthFirstVisitor {
 
   private boolean foundOrig = false;
 
-  /** The last NodeToken visited. */
-  private @MonotonicNonNull NodeToken lastToken;
-
-  /** The token visited before lastToken. */
-  private @MonotonicNonNull NodeToken twoTokensAgo;
-
   /** The base names of the variables that may appear in the expression. */
   private final Set<String> baseNames;
 
   /** The tokens visited by this, in order. */
   private final List<NodeToken> tokens = new ArrayList<>();
 
-  /** The indices in {@link #tokens} of the names within "orig()" that may be variable names. */
-  private final List<Integer> origNames = new ArrayList<>();
+  /** The indices in {@link #tokens} of the tokens within the arguments of "orig()". */
+  private final List<Integer> origArgIndices = new ArrayList<>();
 
   /**
    * Creates a new instance of OrigFixer.
@@ -58,9 +50,10 @@ class OrigFixer extends DepthFirstVisitor {
 
   /**
    * Replaces all instance of "orig(variableName) with "orig_variableName" in expression. In the
-   * case of multiple variable names appearing within the argument of "orig()" all variable names
-   * are prefixed with "orig_". For example, "orig(x + y &gt; z - 3)" would yield, "orig_x + orig_y
-   * &gt; orig_z - 3".
+   * case of multiple names appearing within the argument of "orig()", each name that starts with a
+   * variable name is prefixed with "orig_". For example, "orig(x + y &gt; z - 3)" would yield,
+   * "orig_x + orig_y &gt; orig_z - 3", and "orig(java.lang.Math.abs(x))" would yield
+   * "java.lang.Math.abs(orig_x)". See {@link #fixNames} for details.
    *
    * @param expression a valid segment of java code in which "orig()" is being replaced
    * @param baseNames the base names of the variables that may appear in the expression
@@ -88,13 +81,6 @@ class OrigFixer extends DepthFirstVisitor {
       openParen.tokenImage = "";
       foundOrig = true;
       super.visit(n);
-
-      // handle lastToken
-      if (lastToken != null
-          && Visitors.isIdentifier(lastToken)
-          && (twoTokensAgo == null || !Visitors.isDot(twoTokensAgo))) {
-        origNames.add(tokens.size() - 1);
-      }
       foundOrig = false;
       NodeToken closeParen = ((Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).f2;
       closeParen.tokenImage = "";
@@ -109,13 +95,11 @@ class OrigFixer extends DepthFirstVisitor {
    */
   @Override
   public void visit(Arguments n) {
-    if (foundOrig) {
-      withinArgList = true;
-    } else {
-      withinArgList = false;
-    }
+    // The arguments of a call within the arguments of "orig()" are also within them.
+    boolean oldWithinArgList = withinArgList;
+    withinArgList = foundOrig;
     super.visit(n);
-    withinArgList = false;
+    withinArgList = oldWithinArgList;
   }
 
   /**
@@ -134,37 +118,34 @@ class OrigFixer extends DepthFirstVisitor {
   }
 
   /**
-   * This method should not be directly used by users of this class. Updates n to be prefixed with
-   * "orig_" if needed.
+   * This method should not be directly used by users of this class. Records n, and whether it is
+   * within the arguments of "orig()".
    */
   @Override
   public void visit(NodeToken n) {
     n.beginColumn = -1;
     n.endColumn = -1;
-    if (withinArgList && isLastTokenVar(n)) {
-      origNames.add(tokens.size() - 1);
+    if (withinArgList) {
+      origArgIndices.add(tokens.size());
     }
     tokens.add(n);
-    if (lastToken != null) { // test is to quiet the Nullness Checker
-      twoTokensAgo = lastToken;
-    }
-    lastToken = n;
   }
 
-  /** Returns if the last token represents a variable name. */
-  @EnsuresNonNullIf(result = true, expression = "lastToken")
-  @Pure
-  private boolean isLastTokenVar(NodeToken n) {
-    return (lastToken != null
-        && Visitors.isIdentifier(lastToken)
-        && (twoTokensAgo == null || !Visitors.isDot(twoTokensAgo))
-        && !Visitors.isLParen(n));
-  }
-
-  /** Prefixes "orig_" to each name in {@link #origNames} that starts with a variable name. */
+  /**
+   * Prefixes "orig_" to each dotted name that starts at a token in {@link #origArgIndices}, unless
+   * the name starts with neither a variable name nor the name of an orig variable. For example,
+   * "java.lang.Math" is not prefixed. A name that starts with a variable name is prefixed even if
+   * there is no corresponding orig variable, so that the splitter fails to compile rather than
+   * silently using the post-state value.
+   */
   private void fixNames() {
-    for (int i : origNames) {
-      if (PrefixFixer.variableNameEnd(tokens, i, "orig_", baseNames) != -1) {
+    for (int i : origArgIndices) {
+      // A dotted name that is preceded by "." is a member of some other expression.
+      if (i > 0 && Visitors.isDot(tokens.get(i - 1))) {
+        continue;
+      }
+      if (PrefixFixer.variableNameEnd(tokens, i, "orig_", baseNames) != -1
+          || PrefixFixer.variableNameEnd(tokens, i, "", baseNames) != -1) {
         NodeToken token = tokens.get(i);
         token.tokenImage = "orig_" + token.tokenImage;
       }

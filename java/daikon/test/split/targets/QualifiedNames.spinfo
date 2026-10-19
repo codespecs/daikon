@@ -12,3 +12,4 @@ java.lang.String.class.getName().length() > p.count
 orig(java.lang.Math.abs(p.count)) > 0
 orig(Integer.MAX_VALUE) > p.count
 orig(java.lang.Integer.MAX_VALUE) > p.count
+orig(java.lang.Math.abs(p.count) + p.count) > 2
