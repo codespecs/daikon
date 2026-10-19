@@ -41,5 +41,10 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   java-21-openjdk \
   java-21-openjdk-devel
 
+# Azure runs jobs as a non-root user, who must be able to read files in /root
+# and run programs installed there.  Rocky Linux makes /root inaccessible to
+# other users.  This step must follow every step that writes to /root.
+RUN chmod -R og+rX /root
+
 # Clean up.
 RUN dnf -q clean all
