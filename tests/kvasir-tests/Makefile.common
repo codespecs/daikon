@@ -82,6 +82,10 @@ ifeq ($(OS_ID),Rocky)
 endif
 
 ifeq ($(OS_ID),Ubuntu)
+# Ubuntu 26.10 produces the same output as Ubuntu 26.04.
+ifeq ($(OS_REL),26.10)
+	GOAL := goal-Ubuntu2604
+endif
 ifeq ($(OS_REL),26.04)
 	GOAL := goal-Ubuntu2604
 endif
