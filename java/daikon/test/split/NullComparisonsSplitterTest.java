@@ -16,20 +16,6 @@ import org.junit.Test;
  */
 public final class NullComparisonsSplitterTest {
 
-  /** Maps each condition to its value for the values set by {@link #testNullComparisons}. */
-  private static final Map<String, Boolean> expectedValues = new HashMap<>();
-
-  static {
-    expectedValues.put("this.obj == null", true);
-    expectedValues.put("this.objs[1] != null", true);
-    expectedValues.put("this.sign == null", false);
-    expectedValues.put("null != this.sign", true);
-    expectedValues.put("(this.sign) != null && this.obj == null", true);
-    expectedValues.put("this.sign != null && (this.objs[0]) == null", true);
-    expectedValues.put("this.s[0] == null", true);
-    expectedValues.put("this.s[1] == null", false);
-  }
-
   /**
    * Checks that the splitters compile and evaluate to the expected values.
    *
@@ -39,15 +25,35 @@ public final class NullComparisonsSplitterTest {
   public void testNullComparisons() throws IOException {
     PptTopLevel ppt =
         SplitterTestUtils.readPpt("NullComparisons.decls", "misc.NullComparisons.m():::EXIT10");
+    SplitterTestUtils.LoadedSplitters loaded =
+        SplitterTestUtils.load("NullComparisons.spinfo", ppt, "misc.NullComparisons.m");
+
+    // A hashcode of 0 represents null.  Daikon treats a null String as a missing value, so a
+    // splitter is never evaluated on a null this.sign.
     Map<String, Object> values = new HashMap<>();
     values.put("this.sign", "+");
-    // A hashcode of 0 represents null.
     values.put("this.obj", 0L);
     values.put("this.s[..]", new @Nullable String[] {null, "y"});
+    values.put("this.objs", 5L);
     values.put("this.objs[..]", new long[] {0, 7});
-    SplitterTestUtils.LoadedSplitters loaded =
-        SplitterTestUtils.loadAndTest(
-            "NullComparisons.spinfo", ppt, "misc.NullComparisons.m", values);
-    assertEquals(loaded.output, expectedValues, loaded.values);
+    Map<String, Boolean> expected = new HashMap<>();
+    expected.put("this.obj == null", true);
+    expected.put("this.objs[1] != null", true);
+    expected.put("this.sign == null", false);
+    expected.put("null != this.sign", true);
+    expected.put("(this.sign) != null && this.obj == null", true);
+    expected.put("this.sign != null && (this.objs[0]) == null", true);
+    expected.put("this.s[0] == null", true);
+    expected.put("this.s[1] == null", false);
+    expected.put("this.objs == null", false);
+    expected.put("this.sign == (null)", false);
+    assertEquals(loaded.output, expected, loaded.test(values));
+
+    values.put("this.obj", 3L);
+    values.put("this.objs", 0L);
+    expected.put("this.obj == null", false);
+    expected.put("(this.sign) != null && this.obj == null", false);
+    expected.put("this.objs == null", true);
+    assertEquals(loaded.output, expected, loaded.test(values));
   }
 }

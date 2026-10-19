@@ -17,10 +17,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -35,24 +39,45 @@ final class SplitterTestUtils {
   /** The directory that contains the test inputs. */
   static final String targetDir = "daikon/test/split/targets/";
 
-  /** The splitters that were loaded for a program point, and their values. */
+  /** The splitters that were loaded for a program point. */
   static final class LoadedSplitters {
 
     /** The standard output of {@link SplitterFactory#load_splitters}. */
     final String output;
 
-    /** Maps the condition of each splitter that was loaded to its value on a ValueTuple. */
-    final Map<String, Boolean> values;
+    /** The program point to which the splitters apply. */
+    final PptTopLevel ppt;
+
+    /** The splitters that were loaded, instantiated for {@link #ppt}. */
+    final List<Splitter> splitters;
 
     /**
      * Creates a new LoadedSplitters.
      *
      * @param output the standard output of {@link SplitterFactory#load_splitters}
-     * @param values maps the condition of each splitter that was loaded to its value
+     * @param ppt the program point to which the splitters apply
+     * @param splitters the splitters that were loaded, instantiated for ppt
      */
-    LoadedSplitters(String output, Map<String, Boolean> values) {
+    LoadedSplitters(String output, PptTopLevel ppt, List<Splitter> splitters) {
       this.output = output;
-      this.values = values;
+      this.ppt = ppt;
+      this.splitters = splitters;
+    }
+
+    /**
+     * Evaluates each splitter on a ValueTuple.
+     *
+     * @param values maps the name of each variable of {@link #ppt} that the conditions use to its
+     *     value; the other variables are null
+     * @return maps the condition of each splitter to its value
+     */
+    Map<String, Boolean> test(Map<String, Object> values) {
+      ValueTuple vt = makeVt(ppt, values);
+      Map<String, Boolean> results = new LinkedHashMap<>();
+      for (Splitter splitter : splitters) {
+        results.put(splitter.condition(), splitter.test(vt));
+      }
+      return results;
     }
   }
 
@@ -92,21 +117,18 @@ final class SplitterTestUtils {
   }
 
   /**
-   * Compiles and loads the splitters of a spinfo file for a program point, and evaluates each of
-   * them on a ValueTuple. Checks that each splitter is valid. No other test may register splitters
-   * for splitterPptName.
+   * Compiles and loads the splitters of a spinfo file for a program point. Checks that each
+   * splitter is valid and that no two splitters have the same condition. No other test may register
+   * splitters for splitterPptName.
    *
    * @param spinfoFile the name of the spinfo file, in {@link #targetDir}
    * @param ppt the program point to which the splitters apply
    * @param splitterPptName the PPT_NAME of the splitters in the spinfo file
-   * @param values maps the name of each variable of ppt that the conditions use to its value; the
-   *     other variables are null
-   * @return the output of loading the splitters, and the value of each splitter that was loaded
+   * @return the output of loading the splitters, and the splitters that were loaded
    * @throws IOException if the spinfo file cannot be read
    */
   @SuppressWarnings("nullness:contracts.precondition") // parse_spinfofile sets the temp directory
-  static LoadedSplitters loadAndTest(
-      String spinfoFile, PptTopLevel ppt, String splitterPptName, Map<String, Object> values)
+  static LoadedSplitters load(String spinfoFile, PptTopLevel ppt, String splitterPptName)
       throws IOException {
     SpinfoFile spinfo = SplitterFactory.parse_spinfofile(new File(targetDir + spinfoFile));
     PrintStream oldOut = System.out;
@@ -119,19 +141,19 @@ final class SplitterTestUtils {
     }
     String output = new String(out.toByteArray(), StandardCharsets.UTF_8);
 
-    Map<String, Boolean> results = new LinkedHashMap<>();
+    List<Splitter> splitters = new ArrayList<>();
+    Set<String> conditions = new HashSet<>();
     Splitter[] factories = SplitterList.get_raw(splitterPptName);
     if (factories != null) {
-      ValueTuple vt = makeVt(ppt, values);
       for (Splitter factory : factories) {
         String condition = factory.condition();
         Splitter splitter = factory.instantiateSplitter(ppt);
         assertTrue(condition, splitter.valid());
-        Boolean previous = results.put(condition, splitter.test(vt));
-        assertTrue("duplicate condition " + condition, previous == null);
+        assertTrue("duplicate condition " + condition, conditions.add(condition));
+        splitters.add(splitter);
       }
     }
-    return new LoadedSplitters(output, results);
+    return new LoadedSplitters(output, ppt, splitters);
   }
 
   /**
