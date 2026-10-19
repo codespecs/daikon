@@ -4109,6 +4109,7 @@ public class PptTopLevel extends Ppt {
    *
    * @return true if the comparability of any variable changed
    */
+  @SuppressWarnings("interning:not.interned") // test whether coarsen() or remap() made new objects
   boolean coarsenComparability() {
     VarComparability[] newComparability = new VarComparability[var_infos.length];
     for (int i = 0; i < var_infos.length; i++) {
