@@ -984,7 +984,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       }
     }
     #endif
-    #endif
+    #endif // defined(IS_NUMERIC)
 
     return super.isObviousStatically(vis);
   }
