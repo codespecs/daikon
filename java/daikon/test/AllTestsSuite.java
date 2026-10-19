@@ -29,6 +29,7 @@ import org.junit.runners.Suite;
   daikon.test.LinearTernaryCoreTest.class,
   daikon.test.ModBitTrackerTest.class,
   daikon.test.ProglangTypeTest.class,
+  daikon.test.PptTopLevelTypeTest.class,
   daikon.test.VarComparabilityTest.class,
   daikon.test.VarInfoNameTest.class,
   daikon.test.inv.InvariantAddAndCheckTester.class,
