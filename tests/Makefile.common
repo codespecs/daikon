@@ -69,7 +69,8 @@
 # MAIN2_CLASS  = < pkg.ClassName >      ; if loaded by reflection (e.g., JUnit)
 # MAIN_ARGS    = < command line >       ; optional, only relevant if 'generated'
 # JAVA_ARGS    = < -Dfoo=bar ... >      ; optional, only relevant if 'generated' and 'java'
-# TEST_JAVAC_ARGS = < -cp ... >          ; optional; arguments for compiling the test sources
+# TEST_JAVAC_ARGS = < -cp ... >          ; optional; arguments for compiling the test sources;
+#                                        ; defaults to "-cp .:$(JUNIT_CLASSPATH)" if JUNIT_CLASSPATH is set
 # ESC_ON       = { *any* }              ; optional; enables ESC/Java
 # PRESERVE_DECLS = { *any* }            ; optional; reuses previous decls (unless set to "no")
 
@@ -141,17 +142,15 @@ endif
 ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 endif
-# The directory containing this file.  It is used instead of DAIKONDIR to find
-# Makefile.jdk, because DAIKONDIR may be set (by the environment) to a
-# different Daikon tree.
-TESTS_MAKEFILE_COMMON_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
-# COMMON_HERE is where the Makefile.common is located.
-COMMON_HERE?=${DAIKONDIR}/tests
+# COMMON_HERE is where the Makefile.common is located.  It is computed from the
+# location of this file, not from DAIKONDIR, which may name a different Daikon tree.
+ifeq ($(origin COMMON_HERE), undefined)
+  COMMON_HERE := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+endif
 # Test that the directory exists.  There must be a better way to do this.
-COMMON_HERE:=$(wildcard $(COMMON_HERE))
-ifndef COMMON_HERE
-  $(error Test directory ${DAIKONDIR}/tests does not exist)
+ifeq ($(wildcard $(COMMON_HERE)),)
+  $(error Test directory "${COMMON_HERE}" does not exist)
 endif
 
 # Put user-specific changes in your own Makefile.user
@@ -163,7 +162,7 @@ endif
 
 # This is included after Makefile.user, so that Makefile.user can set JAVA_HOME,
 # JAVA, or JAVAC.
-include ${TESTS_MAKEFILE_COMMON_DIR}Makefile.jdk
+include $(COMMON_HERE)/Makefile.jdk
 
 # SOURCES is where all of the source code to be examined is located
 SOURCES?=$(COMMON_HERE)/sources
@@ -195,8 +194,10 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-
 JUNIT_CLASSPATH ?=
+ifneq ($(JUNIT_CLASSPATH),)
+  TEST_JAVAC_ARGS ?= -cp .:$(JUNIT_CLASSPATH)
+endif
 
 JAVALIB_CLASSPATH := ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 

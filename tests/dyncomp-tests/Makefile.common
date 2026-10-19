@@ -2,13 +2,14 @@
 
 # Forked from $DAIKONDIR/tests/kvasir-tests/Makefile.common
 
+# The directory containing this file.  Makefile.jdk is found relative to it,
+# not via DAIKONDIR, which may name a different Daikon tree.
+THIS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 # DAIKONDIR is the clone of the 'daikon' project.
 ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+  DAIKONDIR := $(realpath ${THIS_MAKEFILE_DIR}../..)
 endif
-# Find Makefile.jdk relative to this file, not via DAIKONDIR, which may name a
-# different Daikon tree.
-include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.jdk
+include ${THIS_MAKEFILE_DIR}../Makefile.jdk
 
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64

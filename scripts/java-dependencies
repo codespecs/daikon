@@ -11,7 +11,9 @@
 #   main        -- main files to compile.  Multiple files can be specified
 #                  (in quotes).  Must be full pathname to file.  Path names
 #                  must not contain spaces.
-#   javac       -- java compiler command to use.  Can just be 'javac'
+#   javac       -- java compiler command to use, optionally followed by
+#                  arguments such as "-cp <classpath>".  Can just be 'javac'.
+#                  It is split on spaces, so no element may contain a space.
 #
 #  The list of all files used by <main> is written to standard out.
 

@@ -2,11 +2,12 @@
 # Makefile that runs tests that checks various chicory options.
 #
 
+# The directory containing this file.  Makefile.jdk is found relative to it,
+# not via DAIKONDIR, which may name a different Daikon tree.
+THIS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
-# Find Makefile.jdk relative to this file, not via DAIKONDIR, which may name a
-# different Daikon tree.
-include $(dir $(lastword ${MAKEFILE_LIST}))../../Makefile.jdk
+DAIKONDIR := $(realpath ${THIS_MAKEFILE_DIR}../../..)
+include ${THIS_MAKEFILE_DIR}../../Makefile.jdk
 
 # StackAr sources are used for option testing
 SRC_DIR = ${DAIKONDIR}/tests/sources
