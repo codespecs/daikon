@@ -17,9 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
@@ -32,7 +30,7 @@ import org.plumelib.util.StringsPlume;
  * <p>Keep track of all the nonces you see and maintain a record of the highest nonce observed. The
  * next time you see a '0' valued nonce that is not part of an EXIT or THROWS program point, then
  * you know you have reached the beginning of the next dtrace file. Use that as the number to add to
- * the remaining nonces and repeat. This should only require one pass through the file.
+ * the remaining nonces and repeat. The correction requires only one pass through the file.
  *
  * <p>A second pass gives a new nonce to each sample that lacks one, such as an OBJECT or CLASS
  * sample.
@@ -49,14 +47,12 @@ public class DtraceNonceFixer {
       StringsPlume.joinLines(
           "Usage: DtraceNonceFixer FILENAME [OUTFILE]",
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
-          "The output file will be FILENAME_fixed and another output included",
-          "nonces for OBJECT and CLASS invocations called FILENAME_all_fixed.",
-          "If OUTFILE is supplied, the output that includes nonces for all invocations",
+          "Output file FILENAME_fixed renumbers the nonces of concatenated dtrace files",
+          "so that they do not collide.  Output file FILENAME_all_fixed also gives a nonce",
+          "to each sample that lacks one.",
+          "If OUTFILE is supplied, the output that FILENAME_all_fixed would contain",
           "is written to OUTFILE instead, and no other output file remains.",
           "OUTFILE may be the same as FILENAME.");
-
-  /** The maximum number of symbolic links to follow when resolving OUTFILE. */
-  private static final int MAX_SYMBOLIC_LINKS = 40;
 
   public static void main(String[] args) {
     try {
@@ -89,51 +85,38 @@ public class DtraceNonceFixer {
         // and have fresh names so that they overwrite no existing file.  OUTFILE is not opened
         // for writing, so if this program fails, OUTFILE (which may be the input) is unchanged.
         // If OUTFILE is a symbolic link, the file that it refers to is replaced.
-        Path outfile = resolveSymbolicLinks(Path.of(files[1]).toAbsolutePath());
+        Path outfile = Path.of(files[1]).toAbsolutePath();
+        if (Files.exists(outfile)) {
+          outfile = outfile.toRealPath();
+        } else if (Files.isSymbolicLink(outfile)) {
+          throw new daikon.Daikon.UserError(
+              "OUTFILE is a symbolic link that does not refer to an existing file: " + files[1]);
+        }
         Path dir = castNonNull(outfile.getParent()); // an absolute file path has a parent
         String prefix = outfile.getFileName() + "-";
         String suffix = files[1].endsWith(".gz") ? ".gz" : "";
         // The intermediate file is not compressed, because it is deleted.
         Path tmpFile = createFreshFile(dir, prefix, "-fixed");
-        Path tmpOutFile = null;
         try {
-          tmpOutFile = createFreshFile(dir, prefix, "-all-fixed" + suffix);
-          int maxNonce = correctNonces(files[0], tmpFile.toString());
-          addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
-          replaceFile(tmpOutFile, outfile);
+          Path tmpOutFile = createFreshFile(dir, prefix, "-all-fixed" + suffix);
+          try {
+            int maxNonce = correctNonces(files[0], tmpFile.toString());
+            addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
+            // Delete before replacing OUTFILE, so that no failure occurs after OUTFILE changes.
+            Files.delete(tmpFile);
+            replaceFile(tmpOutFile, outfile);
+          } catch (Throwable e) {
+            deleteAfterFailure(tmpOutFile, e);
+            throw e;
+          }
         } catch (Throwable e) {
           deleteAfterFailure(tmpFile, e);
-          if (tmpOutFile != null) {
-            deleteAfterFailure(tmpOutFile, e);
-          }
           throw e;
         }
-        Files.delete(tmpFile);
       }
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
-  }
-
-  /**
-   * Returns the file that {@code file} refers to, following symbolic links. Unlike {@link
-   * Path#toRealPath}, this method also follows a symbolic link to a file that does not exist.
-   *
-   * @param file an absolute file path
-   * @return the file that {@code file} refers to
-   * @throws IOException if there is trouble reading a symbolic link
-   */
-  private static Path resolveSymbolicLinks(Path file) throws IOException {
-    if (Files.exists(file)) {
-      return file.toRealPath();
-    }
-    for (int i = 0; Files.isSymbolicLink(file); i++) {
-      if (i == MAX_SYMBOLIC_LINKS) {
-        throw new daikon.Daikon.UserError("Too many levels of symbolic links: " + file);
-      }
-      file = file.resolveSibling(Files.readSymbolicLink(file));
-    }
-    return file;
   }
 
   /**
@@ -215,7 +198,8 @@ public class DtraceNonceFixer {
 
       // correctionFactor - the amount to add to each observed nonce
       int correctionFactor = 0;
-      boolean first = true;
+      // seenNonce - whether any sample with a nonce has been seen
+      boolean seenNonce = false;
       Paragraph para;
       while ((para = Paragraph.read(br)) != null) {
         int non = para.nonce;
@@ -223,17 +207,12 @@ public class DtraceNonceFixer {
           para.print(out);
           continue;
         }
-        boolean isExit = isExitOrThrows(para.pptName());
-        // The first legit 0 nonce will have an ENTER and EXIT
-        // seeing a 0 means we have reached the next file
-        if (non == 0 && !isExit) {
-          if (first) {
-            // on the first file, keep the first nonce as 0
-            first = false;
-          } else {
-            correctionFactor = maxNonce + 1;
-          }
+        // A 0 nonce that is not an EXIT or THROWS, after other nonces, means we have reached the
+        // next file. The first file's nonces are unchanged, even if that file does not start at 0.
+        if (non == 0 && seenNonce && !isExitOrThrows(new PptName(para.pptNameLine()))) {
+          correctionFactor = maxNonce + 1;
         }
+        seenNonce = true;
         int newNonce = non + correctionFactor;
         maxNonce = Math.max(maxNonce, newNonce);
         para.printWithNonce(out, newNonce);
@@ -276,9 +255,6 @@ public class DtraceNonceFixer {
   private static boolean isExitOrThrows(PptName pptName) {
     return pptName.isExitPoint() || pptName.isThrowsPoint();
   }
-
-  /** The parsed program point names, so that each distinct name is parsed only once. */
-  private static final Map<String, PptName> pptNames = new HashMap<>();
 
   /** A paragraph of a dtrace file: its lines, up to but not including a blank line. */
   private static final class Paragraph {
@@ -358,12 +334,12 @@ public class DtraceNonceFixer {
     }
 
     /**
-     * Returns the program point name of this sample.
+     * Returns the program point name line of this sample.
      *
-     * @return the program point name of this sample
+     * @return the program point name line of this sample
      */
-    PptName pptName() {
-      return pptNames.computeIfAbsent(lines.get(pptNameIndex), PptName::new);
+    String pptNameLine() {
+      return lines.get(pptNameIndex);
     }
 
     /**
