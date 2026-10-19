@@ -29,7 +29,7 @@ import org.plumelib.util.StringsPlume;
  * <p>Keep track of all the nonces you see and maintain a record of the highest nonce observed. The
  * next time you see a '0' valued nonce that is not part of an EXIT or THROWS program point, then
  * you know you have reached the beginning of the next dtrace file. Use that as the number to add to
- * the remaining nonces and repeat. This should only require one pass through the file.
+ * the remaining nonces and repeat. The correction requires only one pass through the file.
  *
  * <p>A second pass gives a nonce to each sample that lacks one. An EXIT or THROWS sample gets the
  * same nonce as its ENTER sample, which is found the same way that Daikon pairs samples without
@@ -47,8 +47,10 @@ public class DtraceNonceFixer {
       StringsPlume.joinLines(
           "Usage: DtraceNonceFixer FILENAME",
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
-          "The output file will be FILENAME_fixed and another output included",
-          "nonces for OBJECT and CLASS invocations called FILENAME_all_fixed");
+          "Output file FILENAME_fixed renumbers the nonces of concatenated dtrace files",
+          "so that they do not collide.  Output file FILENAME_all_fixed also gives a nonce",
+          "to each sample that lacks one; an EXIT or THROWS sample gets the nonce of its",
+          "ENTER sample.");
 
   public static void main(String[] args) {
     try {
@@ -99,7 +101,8 @@ public class DtraceNonceFixer {
 
       // correctionFactor - the amount to add to each observed nonce
       int correctionFactor = 0;
-      boolean first = true;
+      // seenNonce - whether any sample with a nonce has been seen
+      boolean seenNonce = false;
       Paragraph para;
       while ((para = Paragraph.read(br)) != null) {
         int non = para.nonce;
@@ -107,17 +110,12 @@ public class DtraceNonceFixer {
           para.print(out);
           continue;
         }
-        boolean isExit = isExitOrThrows(para.pptName());
-        // The first legit 0 nonce will have an ENTER and EXIT
-        // seeing a 0 means we have reached the next file
-        if (non == 0 && !isExit) {
-          if (first) {
-            // on the first file, keep the first nonce as 0
-            first = false;
-          } else {
-            correctionFactor = maxNonce + 1;
-          }
+        // A 0 nonce that is not an EXIT or THROWS, after other nonces, means we have reached the
+        // next file. The first file's nonces are unchanged, even if that file does not start at 0.
+        if (non == 0 && seenNonce && !isExitOrThrows(new PptName(para.pptNameLine()))) {
+          correctionFactor = maxNonce + 1;
         }
+        seenNonce = true;
         int newNonce = non + correctionFactor;
         maxNonce = Math.max(maxNonce, newNonce);
         para.printWithNonce(out, newNonce);
@@ -141,6 +139,8 @@ public class DtraceNonceFixer {
   private static void addMissingNonces(String inFilename, String outFilename, int maxNonce)
       throws IOException {
     CallStack callStack = new CallStack();
+    // The parsed program point names, so that each distinct name is parsed only once.
+    Map<String, PptName> pptNames = new HashMap<>();
     try (BufferedReader br = FilesPlume.newBufferedFileReader(inFilename);
         PrintWriter out = new PrintWriter(FilesPlume.newBufferedFileWriter(outFilename))) {
       Paragraph para;
@@ -149,7 +149,7 @@ public class DtraceNonceFixer {
           para.print(out);
           continue;
         }
-        PptName pptName = para.pptName();
+        PptName pptName = pptNames.computeIfAbsent(para.pptNameLine(), PptName::new);
         // This is the same test that Daikon uses in FileIO.compute_orig_variables.
         boolean isEnter = pptName.name().endsWith(FileIO.enter_tag);
         boolean isExit = isExitOrThrows(pptName);
@@ -189,9 +189,6 @@ public class DtraceNonceFixer {
     // The PptName(String) constructor always sets the name without the point.
     return castNonNull(pptName.getNameWithoutPoint());
   }
-
-  /** The parsed program point names, so that each distinct name is parsed only once. */
-  private static final Map<String, PptName> pptNames = new HashMap<>();
 
   /** A method call whose ENTER sample has been seen, but whose EXIT sample has not. */
   private static final class Call {
@@ -335,12 +332,12 @@ public class DtraceNonceFixer {
     }
 
     /**
-     * Returns the program point name of this sample.
+     * Returns the program point name line of this sample.
      *
-     * @return the program point name of this sample
+     * @return the program point name line of this sample
      */
-    PptName pptName() {
-      return pptNames.computeIfAbsent(lines.get(pptNameIndex), PptName::new);
+    String pptNameLine() {
+      return lines.get(pptNameIndex);
     }
 
     /**
