@@ -42,7 +42,6 @@ Further documentation can be found in:
    `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
    or `PERL5LIB`.
 * Removed the Perl front end, dfepl.
-* ExtractConsequent writes splitting conditions that Daikon can use.
 
 Scripts:
 
