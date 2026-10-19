@@ -40,8 +40,7 @@ public final class QualifiedNamesSplitterTest {
     values.put("this.x", -2.5);
     values.put("p.count", 3L);
     SplitterTestUtils.LoadedSplitters loaded =
-        SplitterTestUtils.loadAndTest(
-            "QualifiedNames.spinfo", ppt, "misc.QualifiedNames.m", values);
-    assertEquals(loaded.output, expectedValues, loaded.values);
+        SplitterTestUtils.load("QualifiedNames.spinfo", ppt, "misc.QualifiedNames.m");
+    assertEquals(loaded.output, expectedValues, loaded.test(values));
   }
 }

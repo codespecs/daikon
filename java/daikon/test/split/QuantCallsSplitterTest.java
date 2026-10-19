@@ -80,7 +80,7 @@ public final class QuantCallsSplitterTest {
     values.put("this.objs[..]", new long[] {0, 7});
     values.put("this.sign", "+");
     SplitterTestUtils.LoadedSplitters loaded =
-        SplitterTestUtils.loadAndTest("QuantCalls.spinfo", ppt, pptName, values);
+        SplitterTestUtils.load("QuantCalls.spinfo", ppt, pptName);
     String output = loaded.output;
 
     for (String condition : untranslatableConditions) {
@@ -97,6 +97,6 @@ public final class QuantCallsSplitterTest {
         output.contains(
             "Cannot translate daikon.Quant.getElement_int(this_d,0): the element type of"
                 + " this.d[..] is not the one that the method expects"));
-    assertEquals(output, expectedValues, loaded.values);
+    assertEquals(output, expectedValues, loaded.test(values));
   }
 }

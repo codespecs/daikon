@@ -7,3 +7,5 @@ null != this.sign
 this.sign != null && (this.objs[0]) == null
 this.s[0] == null
 this.s[1] == null
+this.objs == null
+this.sign == (null)
