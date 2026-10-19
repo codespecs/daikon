@@ -3,9 +3,11 @@ package daikon.test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import daikon.PptConditional;
 import daikon.PptTopLevel;
 import daikon.PptTopLevel.PptType;
 import daikon.VarInfo;
+import daikon.split.misc.ReturnTrueSplitter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -38,6 +40,16 @@ public class PptTopLevelTypeTest {
   }
 
   /**
+   * Sets the type of a program point to null, as an earlier version of Daikon could.
+   *
+   * @param ppt a program point
+   */
+  @SuppressWarnings("nullness:assignment") // an earlier version of Daikon could leave the type null
+  private static void clearType(PptTopLevel ppt) {
+    ppt.type = null;
+  }
+
+  /**
    * A .inv file written by an earlier version of Daikon may have no type for a program point, or
    * the type EXIT for a numbered exit. Reading it gives the program point the type that its name
    * indicates.
@@ -51,10 +63,20 @@ public class PptTopLevelTypeTest {
     assertFalse(read.is_combined_exit());
 
     PptTopLevel enter = new PptTopLevel("Foo.bar():::ENTER", new VarInfo[0]);
-    @SuppressWarnings("nullness") // an earlier version of Daikon could leave the type null
-    PptType noType = null;
-    enter.type = noType;
+    clearType(enter);
     read = serializeAndDeserialize(enter);
     assertTrue(read.is_enter());
+  }
+
+  /** Reading a conditional program point keeps its parent's type. */
+  @Test
+  public void testTypeOfDeserializedConditionalPpt() throws IOException, ClassNotFoundException {
+    PptTopLevel combinedExit = new PptTopLevel("Foo.bar():::EXIT", new VarInfo[0]);
+    PptConditional conditional =
+        new PptConditional(combinedExit, new ReturnTrueSplitter(), false);
+    assertTrue(conditional.is_combined_exit());
+    PptTopLevel read = serializeAndDeserialize(conditional);
+    assertTrue(read.is_combined_exit());
+    assertFalse(read.is_subexit());
   }
 }

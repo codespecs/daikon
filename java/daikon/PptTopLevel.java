@@ -436,6 +436,11 @@ public class PptTopLevel extends Ppt {
   /** Restore/Create interns when reading serialized object. */
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
+    // A conditional program point has its parent's type, which its name (the parent's name with
+    // ";condition=..." appended) does not indicate.
+    if (this instanceof PptConditional) {
+      return;
+    }
     // A .inv file written by an earlier version of Daikon may have no type for a program point,
     // or the type EXIT for a numbered exit.  The predicates such as is_subexit use only the type.
     try {
