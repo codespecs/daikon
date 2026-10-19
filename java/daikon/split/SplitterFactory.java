@@ -197,11 +197,13 @@ public class SplitterFactory {
         fileContents = splitterWriter.getFileText();
       } catch (ParseException | TokenMgrError e) {
         // TokenMgrError indicates a lexical error in the condition.
+        // load_splitters prints the error.
         splitObj.setError(
-            "Splitter condition cannot be parsed: "
-                + splitObj.condition()
-                + " @ "
-                + splitObj.getPptName());
+            String.join(
+                System.lineSeparator(),
+                "Error in SplitterFactory while writing splitter java file for:",
+                splitObj.condition() + " cannot be parsed:",
+                e.toString()));
         continue;
       }
       @SuppressWarnings("signature") // safe, has been quoted
