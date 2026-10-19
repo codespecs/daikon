@@ -39,30 +39,30 @@ public class VarDefinitionBoundTest {
   /** Tests an integral bound that does not fit in a long. */
   @Test
   public void testIntegralBoundOutOfRange() {
-    AssertionError e =
-        assertThrows(
-            AssertionError.class,
-            () -> vardef(ProglangType.INT, null, "18446744073709551615").checkRep());
+    VarDefinition vardef = vardef(ProglangType.INT, null, "18446744073709551615");
+    AssertionError e = assertThrows(AssertionError.class, vardef::checkRep);
     assertEquals(
         "max-value '18446744073709551615' for variable x is not a valid int value",
-        e.getMessage());
+        String.valueOf(e.getMessage()));
   }
 
   /** Tests an integral bound that is not an integer. */
   @Test
   public void testIntegralBoundNotInteger() {
-    AssertionError e =
-        assertThrows(
-            AssertionError.class, () -> vardef(ProglangType.INT, "100.0", null).checkRep());
-    assertEquals("min-value '100.0' for variable x is not a valid int value", e.getMessage());
+    VarDefinition vardef = vardef(ProglangType.INT, "100.0", null);
+    AssertionError e = assertThrows(AssertionError.class, vardef::checkRep);
+    assertEquals(
+        "min-value '100.0' for variable x is not a valid int value",
+        String.valueOf(e.getMessage()));
   }
 
   /** Tests a floating-point bound that is not a number. */
   @Test
   public void testFloatBoundNotNumber() {
-    AssertionError e =
-        assertThrows(
-            AssertionError.class, () -> vardef(ProglangType.DOUBLE, "abc", null).checkRep());
-    assertEquals("min-value 'abc' for variable x is not a valid double value", e.getMessage());
+    VarDefinition vardef = vardef(ProglangType.DOUBLE, "abc", null);
+    AssertionError e = assertThrows(AssertionError.class, vardef::checkRep);
+    assertEquals(
+        "min-value 'abc' for variable x is not a valid double value",
+        String.valueOf(e.getMessage()));
   }
 }

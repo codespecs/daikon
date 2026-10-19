@@ -917,10 +917,10 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   @Override
   public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
+    #if defined(IS_NUMERIC)
     final VarInfo var1 = vis[0];
     final VarInfo var2 = vis[1];
 
-    #if defined(IS_NUMERIC)
     #if defined(EQUAL_OP)
     // If A.minvalue==A.maxvalue==B.minvalue==B.maxvalue, then
     // there's nothing to see here.
