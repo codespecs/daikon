@@ -2673,16 +2673,22 @@ public final class Daikon {
 
           // Read each ppt name from the file
           for (String line = fp.readLine(); line != null; line = fp.readLine()) {
-            if (line.equals("") || FileIO.isComment(line)) {
-              continue;
+            String ppt_name;
+            if (line.equals("DECLARE")) {
+              // In the version 1 format, the line after "DECLARE" is the ppt name.
+              ppt_name = fp.readLine();
+              if (ppt_name == null) {
+                throw new Daikon.UserError("File " + file + " terminated prematurely");
+              }
+            } else {
+              ppt_name = FileIO.declared_ppt_name(line);
+              if (ppt_name == null) {
+                continue;
+              }
             }
-            if (!line.equals("DECLARE")) {
+            // GLOBAL, OBJECT, and CLASS ppts are always included; see FileIO.ppt_included.
+            if (FileIO.is_parent_only_ppt_name(ppt_name)) {
               continue;
-            }
-            // Just read "DECLARE", so next line has ppt name.
-            String ppt_name = fp.readLine();
-            if (ppt_name == null) {
-              throw new Daikon.UserError("File " + file + " terminated prematurely");
             }
             ppts.add(ppt_name);
           }
