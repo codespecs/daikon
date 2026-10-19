@@ -82,9 +82,11 @@ class PrefixFixer extends DepthFirstVisitor {
       String baseName = null;
       int end = i; // index of the last identifier of baseName
       int j = i;
+      // A method name is not part of a variable name.
       while (j + 2 < tokens.size()
           && Visitors.isDot(tokens.get(j + 1))
-          && Visitors.isIdentifier(tokens.get(j + 2))) {
+          && Visitors.isIdentifier(tokens.get(j + 2))
+          && !(j + 3 < tokens.size() && Visitors.isLParen(tokens.get(j + 3)))) {
         j += 2;
         name.append('_').append(tokens.get(j).tokenImage);
         if (baseNames.contains(name.toString())) {
