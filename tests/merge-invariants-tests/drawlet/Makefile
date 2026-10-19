@@ -8,13 +8,14 @@
 # to recreate them.  If we should need to recreate them, the source
 # files are in drawlet_src.zip in this directory
 
+# The directory containing this file.  Makefile.jdk is found relative to it,
+# not via DAIKONDIR, which may name a different Daikon tree.
+THIS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 # DAIKONDIR is the clone of the 'daikon' project.
 ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
+  DAIKONDIR := $(realpath ${THIS_MAKEFILE_DIR}../../..)
 endif
-# Find Makefile.jdk relative to this file, not via DAIKONDIR, which may name a
-# different Daikon tree.
-include $(dir $(lastword ${MAKEFILE_LIST}))../../Makefile.jdk
+include ${THIS_MAKEFILE_DIR}../../Makefile.jdk
 
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
 # A prerequisite that changes whenever Daikon is rebuilt: Daikon.class if the

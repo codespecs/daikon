@@ -2,4 +2,3 @@
 
 # need junit.jar on classpath to compile all junit references
 JUNIT_CLASSPATH := ${DAIKONDIR}/java/lib/*
-TEST_JAVAC_ARGS := -cp .:$(JUNIT_CLASSPATH)
