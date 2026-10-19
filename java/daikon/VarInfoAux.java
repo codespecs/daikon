@@ -401,6 +401,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * Returns the long value associated with a key, assuming it is defined. It is recommended to
    * check that it is defined first with {@link #hasValue(String)}.
    *
+   * @param key the key
+   * @return the long value associated with the key
    * @throws RuntimeException if the key is not defined
    * @throws NumberFormatException if the value of the key cannot be parsed as a long
    * @see #hasValue(String)
@@ -417,6 +419,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * Returns the double value associated with a key, assuming it is defined. It is recommended to
    * check that it is defined first with {@link #hasValue(String)}.
    *
+   * @param key the key
+   * @return the double value associated with the key
    * @throws RuntimeException if the key is not defined
    * @throws NumberFormatException if the value of the key cannot be parsed as a double
    * @see #hasValue(String)

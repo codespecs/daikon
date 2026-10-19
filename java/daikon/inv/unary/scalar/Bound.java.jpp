@@ -15,13 +15,13 @@ The correct way to build the system is to run 'make'.
   #define SUBSEQUENCE SubSequenceFloat
   #define INT(x) x ## Float
   #define PRIMITIVE double
-  #define GET_AUX_BOUND getDouble
-  #define AUX_BOUND_EQUALS(a, b) Global.fuzzy.eq(a, b)
   #define NUMWRAPPER Double
   #define LONGVALUE doubleValue()
   #define BASE_IS_INTEGRAL baseIsFloat()
   #define DOUBLE_CAST(x) (x)
   #define BOTH_NAN(x, y) (Double.isNaN(x) && Double.isNaN(y))
+  #define GET_BOUND getDouble
+  #define AUX_BOUND_EQUALS(a, b) Global.fuzzy.eq(a, b)
 #else
   #define BASE_INT
   #define ONEOFSCALAR OneOfScalar
@@ -29,13 +29,13 @@ The correct way to build the system is to run 'make'.
   #define SUBSEQUENCE SubSequence
   #define INT(x) x
   #define PRIMITIVE long
-  #define GET_AUX_BOUND getLong
-  #define AUX_BOUND_EQUALS(a, b) ((a) == (b))
   #define NUMWRAPPER Long
   #define LONGVALUE longValue()
   #define BASE_IS_INTEGRAL baseIsIntegral()
   #define DOUBLE_CAST(x) (double)(x)
   #define BOTH_NAN(x, y) false
+  #define GET_BOUND getLong
+  #define AUX_BOUND_EQUALS(a, b) ((a) == (b))
 #endif
 
 #if defined(LOWER) || defined(ELTLOWER) || defined(LOWERFLOAT) || defined(ELTLOWERFLOAT)
@@ -638,7 +638,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
     #if defined(LOWER) || defined(LOWERFLOAT) || defined(UPPER) || defined(UPPERFLOAT)
     if (var.aux.hasValue(VARINFOAUX_MINIMUM_VALUE)) {
-      PRIMITIVE minVal = var.aux.GET_AUX_BOUND(VARINFOAUX_MINIMUM_VALUE);
+      PRIMITIVE minVal = var.aux.GET_BOUND(VARINFOAUX_MINIMUM_VALUE);
       if (AUX_BOUND_EQUALS(minVal, MIN1)) {
         return new DiscardInfo(this, DiscardCode.obvious,
           var.name() + " GTE " + MIN1 + " is already known");
