@@ -120,15 +120,11 @@ public class SplitterFactory {
             // Writes, compiles, and loads the splitter .java files.
             loadSplitters(splitterObjects[i], ppt, statementReplacer);
             List<Splitter> sp = new ArrayList<>();
-            List<String> modifiedConditions = new ArrayList<>();
             for (int k = 0; k < numsplitters; k++) {
               if (splitterObjects[i][k].splitterExists()) {
                 @SuppressWarnings("nullness") // dependent: because splitterExists() = true
                 @NonNull Splitter splitter = splitterObjects[i][k].getSplitter();
-                @SuppressWarnings("nullness") // splitterExists() implies the source was created
-                @NonNull String modifiedCondition = splitterObjects[i][k].getModifiedCondition();
                 sp.add(splitter);
-                modifiedConditions.add(modifiedCondition);
                 numGood++;
               } else {
                 // UNDONE: We should only output the load error if the
@@ -139,8 +135,7 @@ public class SplitterFactory {
             System.out.printf(
                 "%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
             if (!sp.isEmpty()) {
-              SplitterList.put(
-                  ppt_name, sp.toArray(new Splitter[0]), modifiedConditions.toArray(new String[0]));
+              SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
             }
             // delete this entry in the splitter array to prevent it from
             // matching any other Ppts, since the documented behavior is that

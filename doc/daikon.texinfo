@@ -2486,9 +2486,10 @@ daikon.split.SplitterList.all_splitters = false
 @end example
 
 The default, called @dfn{indiscriminate splitting}, is to use every
-condition at every
+loaded condition at every
 program point, regardless of where in the @file{.spinfo} file the
-condition appeared.
+condition appeared.  A condition is loaded only if its @var{pptname}
+matches at least one program point (@pxref{Splitter info file format}).
 
 The advantage of indiscriminate splitting is that a condition that is
 useful at one program point may also be useful at another --- if the

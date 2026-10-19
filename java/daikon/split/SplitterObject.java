@@ -25,14 +25,6 @@ public class SplitterObject implements Comparable<SplitterObject> {
 
   private @MonotonicNonNull Splitter splitter;
   private String condition; // the condition
-
-  /**
-   * The condition, with the REPLACE statements of its {@code .spinfo} file applied and its variable
-   * names converted to those of the program point for which this splitter is created; or null if
-   * the splitter's source has not been created.
-   */
-  private @Nullable String modifiedCondition = null;
-
   private @BinaryName String className = "Unassigned"; // the Java classname of this Splitter
   private String directory; // the directory where it resides
   private String pptName; // the program point with which it is associated
@@ -243,28 +235,6 @@ public class SplitterObject implements Comparable<SplitterObject> {
    */
   public String condition() {
     return this.condition;
-  }
-
-  /**
-   * Sets the modified condition; see {@link #getModifiedCondition}.
-   *
-   * @param modifiedCondition the condition, with the REPLACE statements of its {@code .spinfo} file
-   *     applied and its variable names converted to those of the program point for which this
-   *     splitter is created
-   */
-  public void setModifiedCondition(String modifiedCondition) {
-    this.modifiedCondition = modifiedCondition;
-  }
-
-  /**
-   * Returns the condition, with the REPLACE statements of its {@code .spinfo} file applied and its
-   * variable names converted to those of the program point for which this splitter is created. It
-   * determines which variables the splitter tests.
-   *
-   * @return the modified condition, or null if the splitter's source has not been created
-   */
-  public @Nullable String getModifiedCondition() {
-    return this.modifiedCondition;
   }
 
   public void setTestString(String testString) {
