@@ -30,6 +30,9 @@ public final class QualifiedNamesSplitterTest {
     expectedValues.put(
         "((java.lang.Number) java.lang.Double.valueOf(this.x)).intValue() == -2", true);
     expectedValues.put("java.lang.String.class.getName().length() > p.count", true);
+    expectedValues.put("orig(java.lang.Math.abs(p.count)) > 0", true);
+    expectedValues.put("orig(Integer.MAX_VALUE) > p.count", true);
+    expectedValues.put("orig(java.lang.Integer.MAX_VALUE) > p.count", true);
   }
 
   /**
@@ -47,6 +50,7 @@ public final class QualifiedNamesSplitterTest {
     values.put("p.count", 3L);
     values.put("orig(p.count)", 1L);
     values.put("java.lang.Integer.MAX_VALUE", (long) Integer.MAX_VALUE);
+    values.put("orig(java.lang.Integer.MAX_VALUE)", (long) Integer.MAX_VALUE);
     SplitterTestUtils.LoadedSplitters loaded =
         SplitterTestUtils.loadAndTest(
             "QualifiedNames.spinfo", ppt, "misc.QualifiedNames.m", values);

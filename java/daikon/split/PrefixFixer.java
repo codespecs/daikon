@@ -70,37 +70,53 @@ class PrefixFixer extends DepthFirstVisitor {
    * of the dotted name gets the base name as its image, and the other converted tokens get "".
    */
   private void fixNames() {
-    int i = 0;
-    while (i < tokens.size()) {
+    for (int i = 0; i < tokens.size(); i++) {
       // A dotted name that is preceded by "." is a member of some other expression.
-      if (!Visitors.isIdentifier(tokens.get(i)) || (i > 0 && Visitors.isDot(tokens.get(i - 1)))) {
-        i++;
+      if (i > 0 && Visitors.isDot(tokens.get(i - 1))) {
         continue;
       }
-      // Find the longest prefix of the dotted name that is a base name.
-      StringBuilder name = new StringBuilder(tokens.get(i).tokenImage);
-      String baseName = null;
-      int end = i; // index of the last identifier of baseName
-      int j = i;
-      // A method name is not part of a variable name.
-      while (j + 2 < tokens.size()
-          && Visitors.isDot(tokens.get(j + 1))
-          && Visitors.isIdentifier(tokens.get(j + 2))
-          && !(j + 3 < tokens.size() && Visitors.isLParen(tokens.get(j + 3)))) {
-        j += 2;
-        name.append('_').append(tokens.get(j).tokenImage);
-        if (baseNames.contains(name.toString())) {
-          baseName = name.toString();
-          end = j;
-        }
+      int end = variableNameEnd(tokens, i, "", baseNames);
+      NodeToken first = tokens.get(i);
+      for (int k = i + 2; k <= end; k += 2) {
+        first.tokenImage = first.tokenImage + "_" + tokens.get(k).tokenImage;
+        tokens.get(k - 1).tokenImage = "";
+        tokens.get(k).tokenImage = "";
       }
-      if (baseName != null) {
-        tokens.get(i).tokenImage = baseName;
-        for (int k = i + 1; k <= end; k++) {
-          tokens.get(k).tokenImage = "";
-        }
-      }
-      i = j + 1;
     }
+  }
+
+  /**
+   * Returns the index of the last identifier of the longest prefix of the dotted name that starts
+   * at {@code tokens.get(i)} and is a variable name. A prefix is a variable name if prefix,
+   * followed by the identifiers of the dotted name separated by "_", is in baseNames. A method name
+   * is not part of a dotted name.
+   *
+   * @param tokens the tokens of an expression
+   * @param i the index of the first token of the dotted name
+   * @param prefix the prefix of each base name, such as "orig_", or ""
+   * @param baseNames the base names of the variables that may appear in the expression
+   * @return the index of the last identifier of the longest prefix of the dotted name that is a
+   *     variable name, or -1 if there is none
+   */
+  static int variableNameEnd(List<NodeToken> tokens, int i, String prefix, Set<String> baseNames) {
+    if (!Visitors.isIdentifier(tokens.get(i))) {
+      return -1;
+    }
+    int end = -1;
+    StringBuilder name = new StringBuilder(prefix).append(tokens.get(i).tokenImage);
+    int j = i;
+    while (!(j + 1 < tokens.size() && Visitors.isLParen(tokens.get(j + 1)))) {
+      if (baseNames.contains(name.toString())) {
+        end = j;
+      }
+      if (!(j + 2 < tokens.size()
+          && Visitors.isDot(tokens.get(j + 1))
+          && Visitors.isIdentifier(tokens.get(j + 2)))) {
+        break;
+      }
+      j += 2;
+      name.append('_').append(tokens.get(j).tokenImage);
+    }
+    return end;
   }
 }

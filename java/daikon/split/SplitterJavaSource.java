@@ -331,12 +331,12 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * Returns a version of this condition in which the variable names are converted to the names that
-   * will be used by the java class written to fileText. Instances of "this." are removed. A dotted
-   * name that starts with a variable name, such as "pkg.Cls.staticField" or "varName.publicField",
-   * is converted to the name of the longest such variable, with "_" separating the parts. Other
-   * dotted names, such as "java.lang.Math.abs", are not changed. Instances of "orig(variableName)"
-   * are replaced by instances of "orig_variableName". For example "orig(varName.publicField)" would
-   * yield "orig_varName_publicField".
+   * will be used by the java class written to fileText. Instances of "this." are replaced by
+   * "this_". A dotted name that starts with a variable name, such as "pkg.Cls.staticField" or
+   * "varName.publicField", is converted to the name of the longest such variable, with "_"
+   * separating the parts. Other dotted names, such as "java.lang.Math.abs", are not changed.
+   * Instances of "orig(variableName)" are replaced by instances of "orig_variableName". For example
+   * "orig(varName.publicField)" would yield "orig_varName_publicField".
    *
    * @param condition a string representation of a conditional statement
    * @return a version of the conditional with the variable names converted
@@ -349,8 +349,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     // time.  (All the parsing is hidden in the static methods.)
     condition = NameFixer.fixUnqualifiedMemberNames(condition, className, varInfos);
     condition = ThisFixer.fixThisUsage(condition, varInfos);
-    condition = OrigFixer.fixOrig(condition);
     String[] baseNames = getBaseNames(varInfos);
+    condition = OrigFixer.fixOrig(condition, baseNames);
     condition = PrefixFixer.fixPrefix(condition, baseNames);
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)

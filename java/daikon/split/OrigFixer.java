@@ -1,6 +1,11 @@
 package daikon.split;
 
 import daikon.tools.jtb.Ast;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import jtb.ParseException;
 import jtb.syntaxtree.Arguments;
 import jtb.syntaxtree.Name;
@@ -15,7 +20,9 @@ import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * OrigFixer is a visitor for a jtb syntax tree that replaces instances of "orig()" with "orig_".
- * For example, {@code orig(x) < y} would yield {@code orig_x < y}.
+ * For example, {@code orig(x) < y} would yield {@code orig_x < y}. Names that do not start with a
+ * variable name are not affected. For example, {@code orig(java.lang.Math.abs(x))} would yield
+ * {@code java.lang.Math.abs(orig_x)}.
  */
 class OrigFixer extends DepthFirstVisitor {
 
@@ -30,9 +37,23 @@ class OrigFixer extends DepthFirstVisitor {
   /** The token visited before lastToken. */
   private @MonotonicNonNull NodeToken twoTokensAgo;
 
-  /** Blocks public constructor. */
-  private OrigFixer() {
+  /** The base names of the variables that may appear in the expression. */
+  private final Set<String> baseNames;
+
+  /** The tokens visited by this, in order. */
+  private final List<NodeToken> tokens = new ArrayList<>();
+
+  /** The indices in {@link #tokens} of the names within "orig()" that may be variable names. */
+  private final List<Integer> origNames = new ArrayList<>();
+
+  /**
+   * Creates a new instance of OrigFixer.
+   *
+   * @param baseNames the base names of the variables that may appear in the expression
+   */
+  private OrigFixer(String[] baseNames) {
     super();
+    this.baseNames = new HashSet<>(Arrays.asList(baseNames));
   }
 
   /**
@@ -42,13 +63,15 @@ class OrigFixer extends DepthFirstVisitor {
    * &gt; orig_z - 3".
    *
    * @param expression a valid segment of java code in which "orig()" is being replaced
+   * @param baseNames the base names of the variables that may appear in the expression
    * @return condition with all instances of "orig()" replaced
    * @throws ParseException if expression is not valid java code
    */
-  public static String fixOrig(String expression) throws ParseException {
+  public static String fixOrig(String expression, String[] baseNames) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
-    OrigFixer fixer = new OrigFixer();
+    OrigFixer fixer = new OrigFixer(baseNames);
     root.accept(fixer);
+    fixer.fixNames();
     return Ast.format(root);
   }
 
@@ -70,7 +93,7 @@ class OrigFixer extends DepthFirstVisitor {
       if (lastToken != null
           && Visitors.isIdentifier(lastToken)
           && (twoTokensAgo == null || !Visitors.isDot(twoTokensAgo))) {
-        lastToken.tokenImage = "orig_" + lastToken.tokenImage;
+        origNames.add(tokens.size() - 1);
       }
       foundOrig = false;
       NodeToken closeParen = ((Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).f2;
@@ -119,8 +142,9 @@ class OrigFixer extends DepthFirstVisitor {
     n.beginColumn = -1;
     n.endColumn = -1;
     if (withinArgList && isLastTokenVar(n)) {
-      lastToken.tokenImage = "orig_" + lastToken.tokenImage;
+      origNames.add(tokens.size() - 1);
     }
+    tokens.add(n);
     if (lastToken != null) { // test is to quiet the Nullness Checker
       twoTokensAgo = lastToken;
     }
@@ -135,5 +159,15 @@ class OrigFixer extends DepthFirstVisitor {
         && Visitors.isIdentifier(lastToken)
         && (twoTokensAgo == null || !Visitors.isDot(twoTokensAgo))
         && !Visitors.isLParen(n));
+  }
+
+  /** Prefixes "orig_" to each name in {@link #origNames} that starts with a variable name. */
+  private void fixNames() {
+    for (int i : origNames) {
+      if (PrefixFixer.variableNameEnd(tokens, i, "orig_", baseNames) != -1) {
+        NodeToken token = tokens.get(i);
+        token.tokenImage = "orig_" + token.tokenImage;
+      }
+    }
   }
 }
