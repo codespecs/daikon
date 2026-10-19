@@ -7,11 +7,14 @@
 # data, so the merged invariants should be the same as the invariants produced
 # from both trace files directly.
 
+# The directory containing this file.  Makefile.jdk is found relative to it,
+# not via DAIKONDIR, which may name a different Daikon tree.
+THIS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 # DAIKONDIR is the clone of the 'daikon' project.
 ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
+  DAIKONDIR := $(realpath ${THIS_MAKEFILE_DIR}../../..)
 endif
-include ${DAIKONDIR}/tests/Makefile.jdk
+include ${THIS_MAKEFILE_DIR}../../Makefile.jdk
 
 DAIKON_ARGS = --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
 # A prerequisite that changes whenever Daikon is rebuilt: Daikon.class if the
