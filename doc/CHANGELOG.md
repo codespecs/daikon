@@ -47,11 +47,6 @@ Further documentation can be found in:
   `.inv` files written by earlier versions of Daikon.
   * Removed configuration option `daikon.PrintInvariants.remove_post_vars`, which
     had an effect only for version 1 files.
-  * Removed scripts that processed only version 1 files:  `auxinfo.pl`,
-    `clean-decls.php`, `copy_comparable.pl`, `decls2comp-1.0.py`,
-    `decls-lackwit-disjoint.pl`, `dfec-to-kvasir.py`, `dfec-to-kvasir-dtrace.py`,
-    `dtrace-rm-decls.php`, `find_comparable.pl`, `find_globals.pl`,
-    `generate-dec-types.py`, `lwpp.pl`, `lwpp-init.pl`, and `set_decl_type.pl`.
 * ExtractConsequent writes splitting conditions that Daikon can use.
 
 Scripts:
