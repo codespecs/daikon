@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.plumelib.util.FilesPlume;
 
 /**
@@ -38,6 +39,29 @@ public class SplitterFactoryTestUpdater {
   private static ArrayList<ArrayList<File>> spinfoFileLists = new ArrayList<>();
   private static ArrayList<ArrayList<File>> declsFileLists = new ArrayList<>();
   private static ArrayList<String> classNames = new ArrayList<>();
+
+  /**
+   * The splitters that are expected not to compile. SplitterFactoryTest checks that every other
+   * splitter compiles.
+   */
+  private static final Set<String> nonCompilingSplitters =
+      new HashSet<>(
+          Arrays.asList(
+              "MapQuick1_StreetNumberSet_StreetNumberSet_0",
+              "MapQuick1_StreetNumberSet_StreetNumberSet_1",
+              "MapQuick1_StreetNumberSet_StreetNumberSet_2",
+              "MapQuick1_StreetNumberSet_StreetNumberSet_3",
+              "MapQuick1_StreetNumberSet_checkRep_4",
+              "MapQuick1_StreetNumberSet_checkRep_5",
+              "MapQuick1_StreetNumberSet_contains_7",
+              "MapQuick1_StreetNumberSet_contains_9",
+              "MapQuick1_StreetNumberSet_contains_10",
+              "MapQuick1_StreetNumberSet_contains_12",
+              "MapQuick1_StreetNumberSet_orderStatistic_14",
+              "MapQuick1_StreetNumberSet_orderStatistic_15",
+              "MapQuick1_StreetNumberSet_size_16",
+              "MapQuick1_StreetNumberSet_size_17",
+              "misc_Fib_main_18"));
 
   private SplitterFactoryTestUpdater() {} // blocks public constructor
 
@@ -69,6 +93,7 @@ public class SplitterFactoryTestUpdater {
     generateSplitters("Fib.spinfo", "Fib.decls");
     generateSplitters("QueueAr.spinfo", "QueueAr.decls");
     generateSplitters("BigFloat.spinfo", "BigFloat.decls");
+    generateSplitters("CharBuf.spinfo", "CharBuf.decls");
     processFiles(updateGoals);
     writeTestClass();
   }
@@ -251,8 +276,8 @@ public class SplitterFactoryTestUpdater {
     ps.println(
         " * directly test the Java files produced by the load_splitters method by comparing them");
     ps.println(
-        " * against goal files. Note that it is normal for some classes not to compile during");
-    ps.println(" * this test.");
+        " * against goal files. They also check that each splitter compiles, except the ones in");
+    ps.println(" * SplitterFactoryTestUpdater.nonCompilingSplitters.");
     ps.println(" *");
     ps.println(" * <p>These tests assume that the goal files are contained in the directory:");
     ps.println(" * \"" + targetDir + "\"");
@@ -411,10 +436,20 @@ public class SplitterFactoryTestUpdater {
     ps.println("    assertEqualFiles(tempDir + f1, goalFile);");
     ps.println("  }");
     ps.println();
+    ps.println("  /** Fails the test unless the splitter class compiled. */");
+    ps.println("  public static void assertCompiled(String className) {");
+    ps.println("    if (!new File(tempDir + className + \".class\").exists()) {");
+    ps.println("      fail(\"Splitter \" + className + \" did not compile.\");");
+    ps.println("    }");
+    ps.println("  }");
+    ps.println();
     for (String className : classNames) {
       ps.println("  @Test");
       ps.println("  public void test" + className + "() {");
       ps.println("    assertEqualFiles(\"" + className + ".java\");");
+      if (!nonCompilingSplitters.contains(className)) {
+        ps.println("    assertCompiled(\"" + className + "\");");
+      }
       ps.println("  }");
       ps.println();
     }

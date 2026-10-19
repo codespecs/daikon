@@ -1,0 +1,3 @@
+PPT_NAME misc.CharBuf.isEmpty
+buf.length == 0
+buf[0] == 'a'
