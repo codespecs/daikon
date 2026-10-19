@@ -29,6 +29,16 @@ public abstract class SplitterList {
 
   private static final HashMap<String, Splitter[]> ppt_splitters = new LinkedHashMap<>();
 
+  /**
+   * Removes the splitters associated with the given name, which is a name on a PPT_NAME line of a
+   * {@code .spinfo} file.
+   *
+   * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
+   */
+  public static void remove(String pptname) {
+    ppt_splitters.remove(pptname);
+  }
+
   /** Associate an array of splitters with the program point pptname. */
   public static void put(String pptname, Splitter[] splits) {
     // for (int i = 0; i<splits.length; i++) {
@@ -156,7 +166,9 @@ public abstract class SplitterList {
 
   /**
    * Returns the splitters associated with this program point name (or null). The resulting
-   * splitters are factories, not instantiated splitters.
+   * splitters are factories, not instantiated splitters. The result may contain several splitters
+   * with the same condition; {@link daikon.PptTopLevel#addConditions} uses only the first one that
+   * is valid.
    *
    * @return an array of splitters
    */
@@ -195,31 +207,16 @@ public abstract class SplitterList {
   }
 
   /**
-   * Returns all the splitters in this program, The resulting splitters are factories, not
-   * instantiated splitters.
+   * Returns all the splitters in this program. The resulting splitters are factories, not
+   * instantiated splitters. The result may contain several splitters with the same condition;
+   * {@link daikon.PptTopLevel#addConditions} uses only the first one that is valid.
    *
    * @return an array of splitters
    */
   public static Splitter[] get_all() {
     List<Splitter> splitters = new ArrayList<>();
     for (Splitter[] splitter_array : ppt_splitters.values()) {
-      for (int i = 0; i < splitter_array.length; i++) {
-        Splitter tempsplitter = splitter_array[i];
-        boolean duplicate = false;
-        // Weed out splitters with the same condition.
-        if (!splitters.isEmpty()) {
-          for (Splitter splitter : splitters) {
-            if (tempsplitter.condition().trim().equals(splitter.condition().trim())) {
-              // System.err.println(" duplicate " + tempsplitter.condition()); System.err.println();
-              duplicate = true;
-              break;
-            }
-          }
-        }
-        if (!duplicate) {
-          splitters.add(tempsplitter);
-        }
-      }
+      splitters.addAll(Arrays.asList(splitter_array));
     }
     return splitters.toArray(new Splitter[0]);
   }
