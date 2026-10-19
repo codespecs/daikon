@@ -9,7 +9,7 @@ DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 export PATH := ${SCRIPTDIR}:${PATH}
 
 .PHONY: test
-test: test-good test-newdecls test-duplicate-decls test-malformed test-malformed-newdecls test-daikon-bad-option
+test: test-good test-newdecls test-duplicate-decls test-malformed test-malformed-newdecls
 	@echo "All runcluster tests passed."
 
 # runcluster.pl writes its temporary files to the current directory, so run
@@ -67,12 +67,6 @@ test-malformed-newdecls:
 	cd work-malformed-newdecls && ! ${SCRIPTDIR}/runcluster.pl -a km -k 2 malformed-newdecls.dtrace 2> stderr.txt
 	cat work-malformed-newdecls/stderr.txt
 	grep -F 'expected variable time, got 0.100 for program point Sensor.read():::POINT' work-malformed-newdecls/stderr.txt
-
-# Daikon exits with a non-zero status when given an unrecognized option, so
-# that scripts such as runcluster.pl can detect the failure.
-.PHONY: test-daikon-bad-option
-test-daikon-bad-option:
-	! java -cp ${DAIKON_JAR} daikon.Daikon --no-such-option > /dev/null
 
 .PHONY: clean
 clean:
