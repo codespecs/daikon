@@ -160,6 +160,15 @@ public class TraceSelect {
       }
     }
 
+    // invokeDaikon supplies its own "-o" option for each sample.
+    // Daikon's getopt accepts both "-o file" and "-ofile".
+    for (int i = daikonArgStart; i < args.length; i++) {
+      if (args[i].startsWith("-o")) {
+        throw new daikon.Daikon.UserError(
+            "TraceSelect does not permit the Daikon -o option: " + args[i]);
+      }
+    }
+
     // if no seed provided, use default Random() constructor
     if (randObj == null) {
       randObj = new Random();
