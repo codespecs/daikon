@@ -25,6 +25,14 @@ JAR ?= jar
 
 BuildJDKTool = BuildJDK
 
+# Non-empty when make does not run recipes:  "make -n" (dry run), "make -q"
+# (question), or "make -t" (touch).  Make still runs a recipe line that uses
+# ${MAKE} in those modes.  A sub-make that remakes a target in such a mode must
+# not regress by remaking a prerequisite that the parent make did not create.
+# See the rule for daikon/Daikon.class.
+MAKEFLAGS_SHORT := $(firstword -$(MAKEFLAGS))
+NO_RECIPES := $(findstring n,${MAKEFLAGS_SHORT})$(findstring q,${MAKEFLAGS_SHORT})$(findstring t,${MAKEFLAGS_SHORT})
+
 ifeq ($(shell uname), Darwin)
   JAVA_HOME ?= $(shell /usr/libexec/java_home)
 else
@@ -532,22 +540,22 @@ update-libs:
 
 # The timestamp of Daikon.class indicates the last time the system was recompiled.
 compile compile-java compile-daikon: daikon/Daikon.class
-# Non-empty in a dry run ("make -n").  Make runs a recipe line that uses ${MAKE}
-# even in a dry run, but a dry run does not create daikon/Daikon.class, so a
-# sub-make of its recipe would remake daikon/Daikon.class, without end.  So, in
-# a dry run, that recipe prints its sub-makes instead of running them.
-DRY_RUN := $(findstring n,$(firstword -$(MAKEFLAGS)))
 daikon/Daikon.class: daikon/Daikon.java ${AUTO_GENERATED_FILES} ${JAVA_FILES_FOR_DEPENDENCES}
 	@echo 'echo $${JAVA_FILES} > java_files.txt'
 	@echo ${JAVA_FILES} > java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
 	touch $@
-	$(if ${DRY_RUN},echo) ${MAKE} rename-dcruntime ${AUTO_GENERATED_CLASSES_2}
+# When make does not run recipes, daikon/Daikon.class remains out of date, so a
+# sub-make would remake daikon/Daikon.class (and run this recipe again), without
+# end.  "-W" makes the sub-make treat daikon/Daikon.class as just modified, so
+# it does not remake daikon/Daikon.class but still reports the work that depends
+# on it.
+	${MAKE} $(if ${NO_RECIPES},-W $@) rename-dcruntime ${AUTO_GENERATED_CLASSES_2}
 # on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w
 	@chmod 444 ${AUTO_GENERATED_FILES}
 # These can't be prerequisites because they depend on .class files from Daikon itself.
-	$(if ${DRY_RUN},echo) ${MAKE} ChicoryPremain.jar dcomp_premain.jar
+	${MAKE} $(if ${NO_RECIPES},-W $@) ChicoryPremain.jar dcomp_premain.jar
 
 .PHONY: rename-dcruntime
 rename-dcruntime:
@@ -1481,7 +1489,9 @@ daikon/test/split/SplitterFactoryTestUpdater.class: daikon/test/split/SplitterFa
 # Depending on daikon/Daikon.class regenerates the test whenever Daikon is
 # recompiled, because SplitterFactory determines which splitters the test covers.
 # The rule for daikon/Daikon.class makes this file only after touching
-# daikon/Daikon.class, so this prerequisite does not cause a regress.
+# daikon/Daikon.class (or, when make does not run recipes, passing "-W
+# daikon/Daikon.class"; see NO_RECIPES), so this prerequisite does not cause a
+# regress.
 # SPLITTER_UPDATER_ARGS is set by the update-splitter-goals target.
 daikon/test/split/SplitterFactoryTest.java: daikon/Daikon.class \
 		daikon/test/split/SplitterFactoryTestUpdater.class \
