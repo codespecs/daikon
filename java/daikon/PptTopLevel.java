@@ -449,8 +449,8 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns the type that a program point with the given name and declared type should have.
    *
-   * <p>A program point that has no declared type (as in a version 1 decls file, or a version 2
-   * decls file that omits the ppt-type record) gets its type from its name:
+   * <p>A program point that has no declared type (as in a decls file that omits the ppt-type
+   * record) gets its type from its name:
    *
    * <ul>
    *   <li>foo:::ENTER is an {@link PptType#ENTER},
