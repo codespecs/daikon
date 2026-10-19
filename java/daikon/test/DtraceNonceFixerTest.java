@@ -9,8 +9,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.Set;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -275,5 +279,112 @@ public class DtraceNonceFixerTest {
             "",
             "");
     assertEquals(expected, fix(samples));
+  }
+
+  /**
+   * Tests that a compressed file can be both the input and the output.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testInPlaceCompressed() throws IOException {
+    Path dir = tmpFolder.getRoot().toPath();
+    Path file = dir.resolve("in.dtrace.gz");
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "");
+    try (OutputStream fileOs = Files.newOutputStream(file);
+        OutputStream os = new GZIPOutputStream(fileOs)) {
+      os.write(samples.getBytes(UTF_8));
+    }
+
+    DtraceNonceFixer.mainHelper(new String[] {file.toString(), file.toString()});
+
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "");
+    String actual;
+    try (InputStream fileIs = Files.newInputStream(file);
+        InputStream is = new GZIPInputStream(fileIs)) {
+      actual = new String(is.readAllBytes(), UTF_8).replace(System.lineSeparator(), "\n");
+    }
+    assertEquals(expected, actual);
+    // No temporary file remains.
+    try (Stream<Path> files = Files.list(dir)) {
+      assertEquals(1, files.count());
+    }
+  }
+
+  /**
+   * Tests that a new output file has the default permissions rather than being readable only by its
+   * owner, and that when the output file is a symbolic link, the file that it refers to is
+   * replaced.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testOutputFileAttributes() throws IOException {
+    Path dir = tmpFolder.getRoot().toPath();
+    Assume.assumeTrue(dir.getFileSystem().supportedFileAttributeViews().contains("posix"));
+    Path in = dir.resolve("in.dtrace");
+    String samples = String.join("\n", "aprogram.point:::POINT", "x", "5", "1", "", "");
+    Files.writeString(in, samples, UTF_8);
+    String expected =
+        String.join(
+            "\n", "aprogram.point:::POINT", "this_invocation_nonce", "1", "x", "5", "1", "", "");
+
+    // A new output file gets the same permissions as another new file.
+    Path out = dir.resolve("out.dtrace");
+    Path reference = Files.createFile(dir.resolve("reference"));
+    DtraceNonceFixer.mainHelper(new String[] {in.toString(), out.toString()});
+    Set<PosixFilePermission> defaultPermissions = Files.getPosixFilePermissions(reference);
+    assertEquals(defaultPermissions, Files.getPosixFilePermissions(out));
+    assertEquals(expected, Files.readString(out, UTF_8).replace(System.lineSeparator(), "\n"));
+
+    // An output file that is a symbolic link, to an existing file or to a nonexistent file.
+    for (boolean targetExists : new boolean[] {true, false}) {
+      Path target = dir.resolve("target-" + targetExists + ".dtrace");
+      if (targetExists) {
+        Files.writeString(target, "old contents", UTF_8);
+      }
+      Path link = Files.createSymbolicLink(dir.resolve("link-" + targetExists), target);
+      DtraceNonceFixer.mainHelper(new String[] {in.toString(), link.toString()});
+      assertEquals(true, Files.isSymbolicLink(link));
+      assertEquals(expected, Files.readString(target, UTF_8).replace(System.lineSeparator(), "\n"));
+    }
   }
 }
