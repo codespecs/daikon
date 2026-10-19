@@ -148,6 +148,23 @@ public class FileCompilerTest {
     assertTrue(errors, errors.contains("Warning.java:1: warning:"));
   }
 
+  /**
+   * With {@code -Werror}, a warning makes the compilation fail without reporting an error in any
+   * file. The file with the warning must be excluded so that the other files are compiled.
+   */
+  @Test
+  public void testWerror() throws IOException {
+    List<String> files = new ArrayList<>();
+    files.add(writeSource("Good", "class Good {}\n"));
+    files.add(writeSource("Warning", "class Warning { java.util.List rawList; }\n"));
+
+    String errors = new FileCompiler(compiler + " -Werror", 60_000).compileFiles(files);
+
+    assertTrue(compiled("Good"));
+    assertFalse(compiled("Warning"));
+    assertTrue(errors, errors.contains("Warning.java:1: warning:"));
+  }
+
   /** If no file has an error, the result contains only warnings. */
   @Test
   public void testNoErrors() throws IOException {

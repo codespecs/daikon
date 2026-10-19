@@ -36,10 +36,10 @@ public final class FileCompiler {
   public static Runtime runtime = java.lang.Runtime.getRuntime();
 
   /**
-   * Matches javac error messages, but not warnings. Match group 1 is the complete filename of the
-   * Java source file that contains the error.
+   * Matches javac error and warning messages. Match group 1 is the complete filename of the Java
+   * source file that contains the error or warning, and match group 2 is "error" or "warning".
    */
-  static @Regex(1) Pattern java_filename_pattern;
+  static @Regex(2) Pattern java_filename_pattern;
 
   /**
    * External command used to compile Java files, and command-line arguments. Guaranteed to be
@@ -52,16 +52,15 @@ public final class FileCompiler {
 
   static {
     try {
-      @Regex(1) String java_filename_re
+      @Regex(2) String java_filename_re
           // A javac error message may consist of several lines of output.
           // The first line has the form "FILENAME.java:LINENUMBER: error: MESSAGE";
           // the additional lines of information do not.  A warning has the form
-          // "FILENAME.java:LINENUMBER: warning: MESSAGE" and is not matched, because
-          // a file with only warnings can be compiled.
+          // "FILENAME.java:LINENUMBER: warning: MESSAGE".
           // (?m) turns on MULTILINE mode so "^" matches the start of each
           // line output by javac.  The filename may contain spaces, but it
           // does not start with whitespace.
-          = "(?m)^(\\S.*?\\.java):[0-9]+: error:";
+          = "(?m)^(\\S.*?\\.java):[0-9]+: (error|warning):";
       java_filename_pattern = Pattern.compile(java_filename_re);
     } catch (PatternSyntaxException me) {
       me.printStackTrace();
@@ -326,17 +325,29 @@ public final class FileCompiler {
    * necessary when compiling with javac because javac does not compile any of the files supplied to
    * it if some of them contain errors. So some "good" files end up not being compiled.
    *
+   * <p>A file with only warnings can be compiled, so it is not added, unless {@code errorString}
+   * reports no error in any file. In that case, the warnings caused the failure (for example,
+   * because javac was run with {@code -Werror}), and the files with warnings are added.
+   *
    * @param errorString the error output of javac
    * @param errorFiles the set of normalized paths of files with errors; is side-effected
    */
   private static void addFilesWithErrors(String errorString, Set<String> errorFiles) {
+    Set<String> filesWithErrors = new HashSet<>();
+    Set<String> filesWithWarnings = new HashSet<>();
     Matcher m = java_filename_pattern.matcher(errorString);
     while (m.find()) {
       @SuppressWarnings(
           "nullness") // Regex Checker imprecision: find() guarantees that group 1 exists
-      @NonNull String errorFileName = m.group(1);
-      errorFiles.add(normalizePath(errorFileName));
+      @NonNull String fileName = m.group(1);
+      String path = normalizePath(fileName);
+      if ("error".equals(m.group(2))) {
+        filesWithErrors.add(path);
+      } else {
+        filesWithWarnings.add(path);
+      }
     }
+    errorFiles.addAll(filesWithErrors.isEmpty() ? filesWithWarnings : filesWithErrors);
   }
 
   /**
