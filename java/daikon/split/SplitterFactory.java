@@ -316,12 +316,12 @@ public class SplitterFactory {
 
   /**
    * Returns the part of a splitter file name that comes from a program point name. It is ppt_name
-   * with every character other than an ASCII letter, digit, "_", or "$" replaced by "_". If
-   * ppt_name is long, only a prefix of it is used, so that the file name does not exceed the file
-   * system's limit.
+   * with every character other than an ASCII letter, digit, "_", or "$" replaced by "_", and with
+   * a leading digit replaced by "_". If ppt_name is long, only a prefix of it is used, so that the
+   * file name does not exceed the file system's limit. Accessible for the purpose of testing.
    *
    * @param ppt_name the name of the Ppt that the splitter Java file will be used with
-   * @return an ASCII string that is a valid part of a Java identifier
+   * @return an ASCII string that is a valid Java identifier, or the empty string
    */
   public static String fileNamePrefix(String ppt_name) {
     int length = Math.min(ppt_name.length(), MAX_FILE_NAME_PREFIX_LENGTH);
@@ -331,7 +331,7 @@ public class SplitterFactory {
       boolean valid =
           (c >= 'a' && c <= 'z')
               || (c >= 'A' && c <= 'Z')
-              || (c >= '0' && c <= '9')
+              || (i > 0 && c >= '0' && c <= '9')
               || c == '_'
               || c == '$';
       result[i] = valid ? c : '_';
