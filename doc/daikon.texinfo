@@ -2417,13 +2417,18 @@ List.add(} will match only the @code{add} method.
 
 If @var{pptname} contains @samp{:::}, then it is a complete program
 point name, such as @samp{pkg.List.add(Object):::EXIT12}, and it
-matches only the program point of that name.  As a special case, a
+matches only the program point of that name.  The name may omit a
+qualifier such as the package, so @samp{List.add(Object):::EXIT12}
+matches @samp{pkg.List.add(Object):::EXIT12} but not
+@samp{pkg.MyList.add(Object):::EXIT12}.  As a special case, a
 name that ends with @samp{:::EXIT} also matches the method's numbered
-exit points, such as @samp{:::EXIT12}.  By default, Daikon uses every
-condition at every program point, regardless of @var{pptname}; to use
-each condition only at the program points that its @var{pptname}
-matches, disable indiscriminate splitting (@pxref{Indiscriminate
-splitting}).
+exit points, such as @samp{:::EXIT12}.  Daikon loads the conditions
+for a @var{pptname} only if @var{pptname} matches at least one program
+point, so the conditions for a complete name that matches no program
+point are never used.  By default, Daikon uses every loaded condition at
+every program point, regardless of @var{pptname}; to use each condition
+only at the program points that its @var{pptname} matches, disable
+indiscriminate splitting (@pxref{Indiscriminate splitting}).
 
 Each condition is a Java expression of boolean type.  All variables
 that appear in the condition must also appear in the declaration of

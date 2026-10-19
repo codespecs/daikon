@@ -30,10 +30,13 @@ Further documentation can be found in:
    no effect.
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
   complete program point name, and it matches only the program point of that
-  name.  A name ending with `:::EXIT` also matches the numbered exit points.
-  This affects where Daikon uses a condition only if indiscriminate splitting
-  is disabled via `--config_option daikon.split.SplitterList.all_splitters=false`.
-* ExtractConsequent writes splitting conditions that Daikon can use.
+  name.  The name may omit a qualifier such as the package.  A name ending with
+  `:::EXIT` also matches the numbered exit points.
+  Daikon loads a `PPT_NAME`'s conditions only if the name matches some program
+  point, so a complete name that matches no program point contributes no
+  conditions.  Otherwise, this affects where Daikon uses a condition only if
+  indiscriminate splitting is disabled via
+  `--config_option daikon.split.SplitterList.all_splitters=false`.
 * `daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
    `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
    or `PERL5LIB`.
@@ -49,6 +52,7 @@ Further documentation can be found in:
     `decls-lackwit-disjoint.pl`, `dfec-to-kvasir.py`, `dfec-to-kvasir-dtrace.py`,
     `dtrace-rm-decls.php`, `find_comparable.pl`, `find_globals.pl`,
     `generate-dec-types.py`, `lwpp.pl`, `lwpp-init.pl`, and `set_decl_type.pl`.
+* ExtractConsequent writes splitting conditions that Daikon can use.
 
 Scripts:
 

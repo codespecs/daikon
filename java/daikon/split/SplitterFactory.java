@@ -120,11 +120,15 @@ public class SplitterFactory {
             // Writes, compiles, and loads the splitter .java files.
             loadSplitters(splitterObjects[i], ppt, statementReplacer);
             List<Splitter> sp = new ArrayList<>();
+            List<String> modifiedConditions = new ArrayList<>();
             for (int k = 0; k < numsplitters; k++) {
               if (splitterObjects[i][k].splitterExists()) {
                 @SuppressWarnings("nullness") // dependent: because splitterExists() = true
                 @NonNull Splitter splitter = splitterObjects[i][k].getSplitter();
+                @SuppressWarnings("nullness") // splitterExists() implies the source was created
+                @NonNull String modifiedCondition = splitterObjects[i][k].getModifiedCondition();
                 sp.add(splitter);
+                modifiedConditions.add(modifiedCondition);
                 numGood++;
               } else {
                 // UNDONE: We should only output the load error if the
@@ -135,7 +139,8 @@ public class SplitterFactory {
             System.out.printf(
                 "%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
             if (!sp.isEmpty()) {
-              SplitterList.put(ppt_name, sp.toArray(new Splitter[0]), statementReplacer);
+              SplitterList.put(
+                  ppt_name, sp.toArray(new Splitter[0]), modifiedConditions.toArray(new String[0]));
             }
             // delete this entry in the splitter array to prevent it from
             // matching any other Ppts, since the documented behavior is that
@@ -330,52 +335,19 @@ public class SplitterFactory {
   }
 
   /**
-   * The maximum length, in UTF-8 bytes, of the part of a splitter file name that comes from the
-   * program point name. Many file systems limit a file name to 255 bytes, which must also
-   * accommodate the guid and the ".class" suffix.
-   */
-  private static final int MAX_FILE_NAME_PREFIX_BYTES = 200;
-
-  /**
    * Returns a file name for a splitter file to be used with a Ppt with the name, ppt_name. The file
    * name is ppt_name with all characters which are invalid for use in a java file name (such as
    * ".") replaced with "_". Then "_guid" is append to the end. For example if ppt_name is
    * "myPackage.myClass.someMethod" and guid = 12, then the following would be returned:
-   * "myPackage_myClass_someMethod_12". If ppt_name is long, only a prefix of it is used, so that
-   * the file name does not exceed the file system's limit; the guid makes the file name unique.
+   * "myPackage_myClass_someMethod_12".
    *
    * @param ppt_name the name of the Ppt that the splitter Java file will be used with
    */
   private static String getFileName(String ppt_name) {
-    String splitterName = truncateToUtf8Bytes(clean(ppt_name), MAX_FILE_NAME_PREFIX_BYTES);
+    String splitterName = clean(ppt_name);
     splitterName = splitterName + "_" + guid;
     guid++;
     return splitterName;
-  }
-
-  /**
-   * Returns the longest prefix of the given string whose UTF-8 encoding is at most the given number
-   * of bytes. The prefix does not end in the middle of a surrogate pair.
-   *
-   * @param str a string
-   * @param maxBytes the maximum length of the result's UTF-8 encoding
-   * @return the longest prefix of {@code str} whose UTF-8 encoding is at most {@code maxBytes}
-   *     bytes
-   */
-  static String truncateToUtf8Bytes(String str, int maxBytes) {
-    int bytes = 0;
-    int end = 0;
-    while (end < str.length()) {
-      int codePoint = str.codePointAt(end);
-      int codePointBytes =
-          codePoint < 0x80 ? 1 : codePoint < 0x800 ? 2 : codePoint < 0x10000 ? 3 : 4;
-      if (bytes + codePointBytes > maxBytes) {
-        break;
-      }
-      bytes += codePointBytes;
-      end += Character.charCount(codePoint);
-    }
-    return str.substring(0, end);
   }
 
   /**

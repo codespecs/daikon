@@ -81,6 +81,19 @@ public class ExtractConsequentTest {
   }
 
   @Test
+  public void testReplaceResult() {
+    assertEquals("return > 0", ExtractConsequent.replaceResult("\\result > 0"));
+    assertEquals(
+        "return.x == return.y", ExtractConsequent.replaceResult("\\result.x == \\result.y"));
+    assertEquals("\\resultx > 0", ExtractConsequent.replaceResult("\\resultx > 0"));
+    assertEquals(
+        "s.equals(\"\\\\result\")", ExtractConsequent.replaceResult("s.equals(\"\\\\result\")"));
+    assertEquals(
+        "return.equals(\"\\\\result\") && return != null",
+        ExtractConsequent.replaceResult("\\result.equals(\"\\\\result\") && \\result != null"));
+  }
+
+  @Test
   public void testOrigPattern() {
     assertTrue(ExtractConsequent.orig_pattern.matcher("orig(x) > 0").find());
     assertTrue(ExtractConsequent.orig_pattern.matcher("x == orig (y)").find());

@@ -77,9 +77,35 @@ public class ExtractConsequent {
     // placeholder and remove the dispreferred form.
     final @Nullable String fakeFor;
 
-    HashedConsequent(Invariant inv, @Nullable String fakeFor) {
+    // The invariant in each output format.  They are computed once, because each condition may be
+    // written for several program points.
+
+    /** The invariant in Java format, as returned by {@link #javaFormat}. */
+    final String javaStr;
+
+    /** The invariant in Daikon format. */
+    final String daikonStr;
+
+    /** The invariant in ESC format. */
+    final String escStr;
+
+    /** The invariant in Simplify format. */
+    final String simplifyStr;
+
+    /**
+     * Creates a HashedConsequent.
+     *
+     * @param inv the invariant
+     * @param javaStr the invariant in Java format, as returned by {@link #javaFormat}
+     * @param fakeFor the dispreferred form of the invariant, or null
+     */
+    HashedConsequent(Invariant inv, String javaStr, @Nullable String fakeFor) {
       this.inv = inv;
       this.fakeFor = fakeFor;
+      this.javaStr = javaStr;
+      this.daikonStr = inv.format_using(OutputFormat.DAIKON);
+      this.escStr = inv.format_using(OutputFormat.ESCJAVA);
+      this.simplifyStr = inv.format_using(OutputFormat.SIMPLIFY);
     }
   }
 
@@ -254,22 +280,48 @@ public class ExtractConsequent {
    */
   static boolean isUnmodified(Invariant inv, PptTopLevel exitPpt) {
     for (VarInfo vi : inv.ppt.var_infos) {
-      VarInfo post = exitPpt.find_var_by_name(vi.name());
-      VarInfo orig = exitPpt.find_var_by_name(vi.prestate_name());
-      if (post == null || orig == null) {
-        return false;
-      }
-      // A variable's equalitySet is null if Daikon did not compute equality sets at the ppt.
-      if (post.equalitySet == null || orig.equalitySet == null) {
-        return false;
-      }
-      // Equal variables are usually in the same equality set, but undoOpts replaces equality sets
-      // by equality invariants.
-      if (!(post.isEqualTo(orig) || exitPpt.is_equal(post, orig))) {
+      if (!isUnmodified(vi, exitPpt)) {
         return false;
       }
     }
     return true;
+  }
+
+  /**
+   * Returns true if the variable, which is at an entry point, exists at the given exit point and
+   * has the same value there as on entry.
+   *
+   * @param vi a variable at an entry point
+   * @param exitPpt an exit point of the same method
+   * @return true if {@code vi} exists and is unmodified at {@code exitPpt}
+   */
+  private static boolean isUnmodified(VarInfo vi, PptTopLevel exitPpt) {
+    VarInfo post = exitPpt.find_var_by_name(vi.name());
+    if (post == null) {
+      return false;
+    }
+    if (vi.isDerived()) {
+      // A derived variable's value is a function of its bases.  Its pre-state version is named
+      // for its bases' pre-state versions, such as "size(orig(this.a[]))", so there is no
+      // variable named "orig(size(this.a[]))" to compare it to.
+      for (VarInfo base : vi.derived.getBases()) {
+        if (!isUnmodified(base, exitPpt)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    VarInfo orig = exitPpt.find_var_by_name(vi.prestate_name());
+    if (orig == null) {
+      return false;
+    }
+    // A variable's equalitySet is null if Daikon did not compute equality sets at the ppt.
+    if (post.equalitySet == null || orig.equalitySet == null) {
+      return false;
+    }
+    // Equal variables are usually in the same equality set, but undoOpts replaces equality sets
+    // by equality invariants.
+    return post.isEqualTo(orig) || exitPpt.is_equal(post, orig);
   }
 
   /**
@@ -299,11 +351,8 @@ public class ExtractConsequent {
         if (cond.fakeFor != null || !filter.test(cond.inv)) {
           continue;
         }
-        String javaStr = javaFormat(cond.inv);
-        String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
-        String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
-        String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
-        allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
+        allConds.add(
+            combineDummy(condIndex, "<dummy> " + cond.daikonStr, cond.escStr, cond.simplifyStr));
         if (count > 0) {
           conjunctionJava.append(" && ");
           conjunctionDaikon.append(" and ");
@@ -311,10 +360,10 @@ public class ExtractConsequent {
           conjunctionSimplify.append(" ");
         }
         count++;
-        conjunctionJava.append(parenthesizeIfNeeded(javaStr));
-        conjunctionDaikon.append(parenthesizeIfNeeded(daikonStr));
-        conjunctionESC.append(parenthesizeIfNeeded(escStr));
-        conjunctionSimplify.append(simplifyStr);
+        conjunctionJava.append(parenthesizeIfNeeded(cond.javaStr));
+        conjunctionDaikon.append(parenthesizeIfNeeded(cond.daikonStr));
+        conjunctionESC.append(parenthesizeIfNeeded(cond.escStr));
+        conjunctionSimplify.append(cond.simplifyStr);
       }
       conjunctionSimplify.append(")");
       String conj = conjunctionJava.toString();
@@ -343,7 +392,27 @@ public class ExtractConsequent {
    * @return the invariant formatted as a splitting condition
    */
   static String javaFormat(Invariant inv) {
-    return result_pattern.matcher(inv.format_using(OutputFormat.JAVA)).replaceAll("return");
+    return replaceResult(inv.format_using(OutputFormat.JAVA));
+  }
+
+  /**
+   * Returns the given Java expression, with each "\result" written as "return". A "\result" within
+   * a string or character literal is unchanged.
+   *
+   * @param expr a Java expression
+   * @return the expression, with the return value written as "return"
+   */
+  static String replaceResult(String expr) {
+    StringBuilder result = new StringBuilder();
+    Matcher m = literal_pattern.matcher(expr);
+    int start = 0;
+    while (m.find()) {
+      result.append(result_pattern.matcher(expr.substring(start, m.start())).replaceAll("return"));
+      result.append(m.group());
+      start = m.end();
+    }
+    result.append(result_pattern.matcher(expr.substring(start)).replaceAll("return"));
+    return result.toString();
   }
 
   /**
@@ -518,10 +587,10 @@ public class ExtractConsequent {
         }
         String cluster_key = clusterKey(cluster_inv);
         String fake_inv_string = simplify_inequalities(inv_string);
-        HashedConsequent real = new HashedConsequent(inv, null);
+        HashedConsequent real = new HashedConsequent(inv, inv_string, null);
         if (!fake_inv_string.equals(inv_string)) {
           // For instance, inv_string is "x != y", fake_inv_string is "x == y"
-          HashedConsequent fake = new HashedConsequent(inv, inv_string);
+          HashedConsequent fake = new HashedConsequent(inv, inv_string, inv_string);
           boolean added = store_invariant(cluster_key, fake_inv_string, fake, pptname);
           if (!added) {
             // We couldn't add "x == y", (when we're "x != y") because
