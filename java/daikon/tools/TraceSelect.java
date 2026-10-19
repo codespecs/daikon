@@ -169,6 +169,13 @@ public class TraceSelect {
         throw new daikon.Daikon.UserError(
             "TraceSelect does not accept Daikon's -o option: it writes the invariants of each"
                 + " sample to the sample's file name plus \".inv\"");
+      } else if (TRACESELECT_OPTION.matcher(args[i]).matches()) {
+        // A TraceSelect option after a Daikon argument, as in "foo.dtrace -NOCLEAN".  Daikon
+        // would reject it with a message that does not mention TraceSelect.
+        throw new daikon.Daikon.UserError(
+            "TraceSelect option "
+                + args[i]
+                + " must precede the Daikon arguments, such as the .dtrace file");
       } else if (DAIKON_OPTIONS_WITH_ARGUMENT.contains(args[i])) {
         daikonArgs.add(args[i]);
         if (i + 1 < args.length) {
