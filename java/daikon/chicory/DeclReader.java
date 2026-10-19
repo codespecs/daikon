@@ -8,6 +8,7 @@ import daikon.plumelib.util.FilesPlume;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,7 +32,8 @@ import org.checkerframework.dataflow.qual.TerminatesExecution;
  *
  * <p>DeclReader parses only the records that its clients need. A DeclReader that is created for
  * rewriting also retains the text of every declaration, so a client can write a declaration with
- * some of its records changed.
+ * some of its records changed. If the header record "var-comparability none" precedes a
+ * declaration, then the comparabilities in that declaration are ignored.
  */
 public class DeclReader {
 
@@ -67,6 +69,35 @@ public class DeclReader {
   private static final Set<String> HEADER_KEYWORDS =
       new HashSet<>(
           Arrays.asList("decl-version", "var-comparability", "input-language", "ListImplementors"));
+
+  /**
+   * The keywords of the records that are permitted only within a variable. The keywords "parent"
+   * and "flags" are omitted, because they are also permitted before the first variable.
+   */
+  private static final Set<String> VARIABLE_KEYWORDS =
+      new HashSet<>(
+          Arrays.asList(
+              "var-kind",
+              "enclosing-var",
+              "reference-type",
+              "array",
+              "function-args",
+              "rep-type",
+              "dec-type",
+              "lang-flags",
+              "comparability",
+              "constant",
+              "min-value",
+              "max-value",
+              "min-length",
+              "max-length",
+              "valid-values"));
+
+  /**
+   * True if the most recent "var-comparability" header record in the file being read is
+   * "var-comparability none".
+   */
+  private boolean comparabilityNone = false;
 
   /** Matches a run of whitespace. */
   private static final Pattern WHITESPACE = Pattern.compile("\\s+");
@@ -360,7 +391,7 @@ public class DeclReader {
    * @param record a record, possibly with leading and trailing whitespace
    * @return the tokens of the record; a single empty string if the record is blank
    */
-  public static String[] tokenize(String record) {
+  private static String[] tokenize(String record) {
     return tokenize(record, 0);
   }
 
@@ -372,7 +403,7 @@ public class DeclReader {
    * @param limit the maximum number of tokens, or 0 for no limit
    * @return the tokens of the record; a single empty string if the record is blank
    */
-  public static String[] tokenize(String record, int limit) {
+  private static String[] tokenize(String record, int limit) {
     return WHITESPACE.split(record.trim(), limit);
   }
 
@@ -433,6 +464,7 @@ public class DeclReader {
       boolean seenVersion2 = false;
       // The keywords of the header records read so far.
       Set<String> seenHeaderKeywords = new HashSet<>();
+      comparabilityNone = false;
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
         // Most lines of a .dtrace file are skipped, so avoid tokenizing each line.
         String keyword = firstToken(line);
@@ -463,6 +495,9 @@ public class DeclReader {
               reportFileError(decl_file, "Unsupported \"" + record + "\"");
             }
             seenVersion2 = true;
+          } else if (keyword.equals("var-comparability")) {
+            String[] tokens = tokenize(line);
+            comparabilityNone = tokens.length >= 2 && tokens[1].equals("none");
           } else if (keyword.equals("ListImplementors")) {
             // The names of the classes follow, one per line, up to a blank line.
             List<String> lines = new ArrayList<>();
@@ -492,6 +527,12 @@ public class DeclReader {
         // number after the end of the input.
         throw new Daikon.UserError("No \"decl-version 2.0\" record in " + filename);
       }
+    } catch (UncheckedIOException e) {
+      throw e.getCause();
+    } catch (Daikon.UserError e) {
+      throw e;
+    } catch (RuntimeException e) {
+      throw new Error("Error reading declaration file " + filename, e);
     }
   }
 
@@ -533,7 +574,7 @@ public class DeclReader {
       if (keyword.isEmpty() || keyword.equals("variable")) {
         break;
       }
-      if (startsBlock(keyword)) {
+      if (startsBlock(keyword) || VARIABLE_KEYWORDS.contains(keyword)) {
         reportFileError(
             decl_file,
             "Expected \"variable <VARNAME>\" or a blank line, found \"" + line.trim() + "\"");
@@ -548,7 +589,10 @@ public class DeclReader {
     // are terminated by a blank line.
     while ((line != null) && !line.trim().isEmpty()) {
       decl_file.putback(line);
-      ppt.read_var(decl_file, forRewriting);
+      DeclVarInfo var = ppt.read_var(decl_file, forRewriting);
+      if (comparabilityNone) {
+        var.comparability = null;
+      }
       line = decl_file.readLine();
     }
 

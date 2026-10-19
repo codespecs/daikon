@@ -258,4 +258,22 @@ public class DeclReaderTest {
     lines.remove("  rep-type int");
     assertThrows(Daikon.UserError.class, () -> parse(lines));
   }
+
+  /** The comparabilities in a file whose header is "var-comparability none" are ignored. */
+  @Test
+  public void testComparabilityNone() {
+    List<String> lines = new ArrayList<>(file(ppt("22", "22")));
+    lines.set(lines.indexOf("var-comparability implicit"), "var-comparability none");
+    DeclReader reader = parse(lines);
+    assertTrue(comparability(reader, "a") == null);
+    assertTrue(comparability(reader, "b") == null);
+  }
+
+  /** A variable-level record before the first variable is rejected. */
+  @Test
+  public void testVariableRecordBeforeVariable() {
+    List<String> lines = new ArrayList<>(file(ppt("1", "2")));
+    lines.remove("variable a");
+    assertThrows(Daikon.UserError.class, () -> parse(lines));
+  }
 }
