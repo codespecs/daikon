@@ -2,8 +2,8 @@ package daikon.test;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import daikon.Daikon;
 import daikon.chicory.DeclReader;
@@ -115,6 +115,17 @@ public class DeclReaderTest {
     return castNonNull(ppt.find_var(varName)).get_comparability();
   }
 
+  /**
+   * Returns the comparability of a variable in program point "C.m():::ENTER", which must have one.
+   *
+   * @param reader a DeclReader that has read a file
+   * @param varName the variable name
+   * @return the comparability of the variable
+   */
+  private static String nnComparability(DeclReader reader, String varName) {
+    return castNonNull(comparability(reader, varName));
+  }
+
   /** DeclReader skips sample records, and a later declaration of a ppt replaces an earlier one. */
   @Test
   public void testSampleRecordsAndDuplicatePpt() {
@@ -122,7 +133,7 @@ public class DeclReaderTest {
     lines.addAll(Arrays.asList("C.m():::ENTER", "this_invocation_nonce", "0", "a", "3", "1", ""));
     DeclReader reader = parse(lines);
     assertEquals(1, reader.ppts.size());
-    assertEquals("3", comparability(reader, "a"));
+    assertEquals("3", nnComparability(reader, "a"));
   }
 
   /** Any number of records, such as parent and flags records, may precede the first variable. */
@@ -133,8 +144,8 @@ public class DeclReaderTest {
     lines.add(index, "parent parent C:::OBJECT 1");
     lines.add(index, "flags static");
     DeclReader reader = parse(lines);
-    assertEquals("1", comparability(reader, "a"));
-    assertEquals("2", comparability(reader, "b"));
+    assertEquals("1", nnComparability(reader, "a"));
+    assertEquals("2", nnComparability(reader, "b"));
   }
 
   /** A program point with no variables is permitted. */
@@ -149,8 +160,8 @@ public class DeclReaderTest {
   @Test
   public void testMissingComparability() {
     DeclReader reader = parse(file(ppt(null, "2")));
-    assertNull(comparability(reader, "a"));
-    assertEquals("2", comparability(reader, "b"));
+    assertTrue(comparability(reader, "a") == null);
+    assertEquals("2", nnComparability(reader, "b"));
   }
 
   /** A later declaration of a variable or of a comparability replaces an earlier one. */
@@ -159,7 +170,7 @@ public class DeclReaderTest {
     List<String> twice = new ArrayList<>(file(ppt("1")));
     twice.addAll(twice.size() - 1, var("a", "2"));
     twice.add(twice.size() - 1, "  comparability 3");
-    assertEquals("3", comparability(parse(twice), "a"));
+    assertEquals("3", nnComparability(parse(twice), "a"));
   }
 
   /** A later declaration of a variable keeps the index of the earlier one. */
@@ -196,7 +207,7 @@ public class DeclReaderTest {
       DeclReader reader = parse(lines);
       DeclReader.DeclPpt ppt = reader.ppts.values().iterator().next();
       DeclReader.DeclVarInfo var = castNonNull(ppt.find_var("a"));
-      assertEquals("1", var.get_comparability());
+      assertEquals("1", castNonNull(var.get_comparability()));
     }
   }
 
@@ -208,8 +219,8 @@ public class DeclReaderTest {
     lines.set(lines.indexOf("variable a"), "variable\ta");
     lines.set(lines.indexOf("  comparability 2"), "\tcomparability  2");
     DeclReader reader = parse(lines);
-    assertEquals("2", comparability(reader, "a"));
-    assertEquals("3", comparability(reader, "b"));
+    assertEquals("2", nnComparability(reader, "a"));
+    assertEquals("3", nnComparability(reader, "b"));
   }
 
   /** DeclReader skips a sample record for a variable named "ppt". */

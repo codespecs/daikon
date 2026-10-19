@@ -533,7 +533,8 @@ public class MergeComparabilityTest {
         expected.indexOf("var-comparability implicit") + 1,
         Arrays.asList("ListImplementors", "p.MyList"));
     assertEquals(expected, merge(a, a));
-    assertThrows(Daikon.UserError.class, () -> merge(a, file(ppt("2", "2"))));
+    List<String> b = file(ppt("2", "2"));
+    assertThrows(Daikon.UserError.class, () -> merge(a, b));
   }
 
   /** A program point declaration that is not ended by a blank line is rejected. */
