@@ -52,6 +52,7 @@ make kvasir
 # Run the Kvasir tests even if a DynComp test fails.
 status=0
 make -C tests/dyncomp-tests regression-tests || status=$?
-#make -C tests/kvasir-tests regression-tests || status=$?
+# Run the Kvasir tests one at a time, so that several builds can run
+# simultaneously on one machine (see pull request #374).
 make DAIKON_TEST_JOBS=1 -C tests/kvasir-tests regression-tests || status=$?
 exit $status

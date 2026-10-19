@@ -25,7 +25,7 @@ default: summary
 # Variables used by Makefile.results.
 REGRESSION_TESTS_ARGS = --jobs=${DAIKON_TEST_JOBS} ${MPARG}
 REGRESSION_TESTS_TARGET = nightly-tests__diffs-w-daikon
-REGRESSION_SUMMARY_TARGET = nightly-summary-only-w-daikon
+REGRESSION_SUMMARY_TARGET = nightly-report-w-daikon
 
 summary: default-projects__diffs
 	${MAKE} summary-only
@@ -51,6 +51,9 @@ nightly-summary-w-daikon: nightly-tests__diffs-w-daikon
 nightly-summary-only: nightly-tests__summary__quietly
 
 nightly-summary-only-w-daikon: nightly-tests__summary-w-daikon__quietly
+
+# Like nightly-summary-only-w-daikon, but runs no tests.
+nightly-report-w-daikon: nightly-tests__report-w-daikon__quietly
 
 clean diffs invs update-goals:
 	${MAKE} default-projects__$@
@@ -83,7 +86,9 @@ pgbovine-tests__%: do-Apples__% do-DerivedComparability__% do-FloatTest__% \
 do-%__quietly:
 	@${MAKE} --jobs=1 --no-print-directory -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
 
+# --no-keep-going: within one test directory, stop at the first error, even
+# under "make -k" (which the regression-tests target uses).
 do-%:
-	@${MAKE} --jobs=1 -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
+	@${MAKE} --jobs=1 --no-keep-going -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
 
-include ../kvasir-tests/Makefile.results
+include ${DAIKON_TESTS_DIR}Makefile.results
