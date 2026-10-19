@@ -67,9 +67,6 @@ OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 # bogus goal to force goal_name to try all paths
 GOAL := DUMMY
 
-$(info OS_ID="$(OS_ID)")
-$(info OS_REL="$(OS_REL)")
-
 ifeq ($(OS_ID),CentOS)
 $(warning !!Daikon no longer tests on CentOS!!)
 endif
@@ -396,7 +393,7 @@ diffs-w-daikon: diffs $(INV_DIFFS)
 
 # Reports whether each of the diff files $(1) is empty.  Remakes no file.
 define REPORT_DIFFS
-	@echo -e "\t["$$(basename `pwd`)"]"
+	@printf '\t[%s]\n' "$$(basename `pwd`)"
 	@for file in $(1); do \
 	  if [ ! -e $$file ]; then \
 	    echo "MISSING $$file"; \

@@ -278,7 +278,7 @@ diffs-w-daikon: diffs $(INV_DIFFS)
 
 # Reports whether each of the diff files $(1) is empty.  Remakes no file.
 define REPORT_DIFFS
-	@echo -e "\t["$$(basename `pwd`)"]"
+	@printf '\t[%s]\n' "$$(basename `pwd`)"
 	@for file in $(1); do \
 	  if [ ! -e $$file ]; then \
 	    echo "MISSING $$file"; \
