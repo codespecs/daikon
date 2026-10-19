@@ -1,0 +1,47 @@
+package daikon.test.split;
+
+import static org.junit.Assert.assertEquals;
+
+import daikon.PptTopLevel;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import org.junit.Test;
+
+/**
+ * Compiles, loads, and evaluates the splitters for the conditions in QualifiedNames.spinfo, which
+ * contain names that do not start with a variable name, such as "java.lang.Math.abs".
+ */
+public final class QualifiedNamesSplitterTest {
+
+  /** Maps each condition to its value for the values set by {@link #testQualifiedNames}. */
+  private static final Map<String, Boolean> expectedValues = new HashMap<>();
+
+  static {
+    expectedValues.put("this.x < 0", true);
+    expectedValues.put("p.count > 2", true);
+    expectedValues.put("java.lang.Math.abs(this.x) > 1", true);
+    expectedValues.put("java.lang.Math.abs(this.x) > 3", false);
+    expectedValues.put("daikon.Quant.fuzzy.eq(this.x, -2.5)", true);
+    expectedValues.put("Integer.MAX_VALUE > p.count", true);
+  }
+
+  /**
+   * Checks that the splitters compile and evaluate to the expected values.
+   *
+   * @throws IOException if a test input cannot be read
+   */
+  @Test
+  public void testQualifiedNames() throws IOException {
+    PptTopLevel ppt =
+        SplitterTestUtils.readPpt(
+            "QualifiedNames.decls", "misc.QualifiedNames.m(misc.QualifiedNames):::EXIT10");
+    Map<String, Object> values = new HashMap<>();
+    values.put("this.x", -2.5);
+    values.put("p.count", 3L);
+    SplitterTestUtils.LoadedSplitters loaded =
+        SplitterTestUtils.loadAndTest(
+            "QualifiedNames.spinfo", ppt, "misc.QualifiedNames.m", values);
+    assertEquals(loaded.output, expectedValues, loaded.values);
+  }
+}

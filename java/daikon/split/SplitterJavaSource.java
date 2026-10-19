@@ -350,10 +350,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = NameFixer.fixUnqualifiedMemberNames(condition, className, varInfos);
     condition = ThisFixer.fixThisUsage(condition, varInfos);
     condition = OrigFixer.fixOrig(condition);
-    condition = PrefixFixer.fixPrefix(condition);
+    String[] baseNames = getBaseNames(varInfos);
+    condition = PrefixFixer.fixPrefix(condition, baseNames);
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
-    String[] baseNames = getBaseNames(varInfos);
     condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
     return condition;
   }

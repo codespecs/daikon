@@ -1,0 +1,7 @@
+PPT_NAME misc.QualifiedNames.m
+this.x < 0
+p.count > 2
+java.lang.Math.abs(this.x) > 1
+java.lang.Math.abs(this.x) > 3
+daikon.Quant.fuzzy.eq(this.x, -2.5)
+Integer.MAX_VALUE > p.count
