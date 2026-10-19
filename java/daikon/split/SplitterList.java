@@ -37,7 +37,7 @@ public abstract class SplitterList {
    *
    * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
    */
-  static void remove(String pptname) {
+  public static void remove(String pptname) {
     ppt_splitters.remove(pptname);
   }
 
