@@ -4501,7 +4501,7 @@ interactions between values.  Thus, DynComp only tracks dataflow. (@option{=none
 @item --dyncomp-unhandled-ops=panic
 @itemx --dyncomp-unhandled-ops=warn
 
-By default, if DynComp encounters a binary, ternary, or quaternary
+By default, if DynComp encounters a unary, binary, ternary, or quaternary
 Valgrind VEX IR operator that it does not handle, it prints the name of
 the operator and stops.  (@option{=panic})  Please report such a failure
 (@pxref{Reporting problems}).  When @option{--dyncomp-interactions} is
@@ -4512,9 +4512,11 @@ operator.
 
 Alternatively, DynComp can print a warning the first time it encounters
 each such operator and continue, approximating the operator.
-(@option{=warn})  The approximation ignores operands that appear to be
-rounding modes, shift amounts, or lane indices; the remaining operands
-are the data operands.  The approximation is:
+(@option{=warn})  The result of a unary operator gets the tag of its
+operand, as for a copy.  For any other operator, the approximation
+ignores operands that appear to be rounding modes, shift amounts, or
+lane indices; the remaining operands are the data operands.  The
+approximation is:
 
 @itemize @bullet
 @item
