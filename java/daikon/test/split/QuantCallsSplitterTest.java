@@ -26,7 +26,7 @@ public final class QuantCallsSplitterTest {
     "daikon.Quant.size(this.h) > daikon.Quant.getElement_int(this.d, 0)"
   };
 
-  /** Maps each translatable condition to its value for the values set by {@link #testQuantCalls}. */
+  /** Maps each translatable condition to its value for the values in {@link #testQuantCalls}. */
   private static final Map<String, Boolean> expectedValues = new HashMap<>();
 
   static {
@@ -64,7 +64,8 @@ public final class QuantCallsSplitterTest {
    */
   @Test
   public void testQuantCalls() throws IOException {
-    PptTopLevel ppt = SplitterTestUtils.readPpt("QuantCalls.decls", "misc.QuantCalls.m(int):::EXIT10");
+    PptTopLevel ppt =
+        SplitterTestUtils.readPpt("QuantCalls.decls", "misc.QuantCalls.m(int):::EXIT10");
     Map<String, Object> values = new HashMap<>();
     values.put("i", 1L);
     values.put("this.a[..]", new long[] {5, -3, 7});
