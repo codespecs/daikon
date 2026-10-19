@@ -19,6 +19,7 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Member;
 import java.net.URL;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -127,14 +128,14 @@ public class ChicoryPremain {
       Runtime.comp_info = new DeclReader();
       try {
         castNonNull(Runtime.comp_info).read(castNonNull(Chicory.comparability_file));
-      } catch (FileNotFoundException e) {
+      } catch (FileNotFoundException | NoSuchFileException e) {
         System.err.printf("%nCould not find comparability file: %s%n", Chicory.comparability_file);
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       } catch (IOException | Daikon.UserError e) {
         System.err.printf(
             "%nProblem reading comparability file %s: %s%n",
-            Chicory.comparability_file, e.getMessage());
+            Chicory.comparability_file, (e.getMessage() != null) ? e.getMessage() : e.toString());
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }

@@ -8,6 +8,7 @@ import daikon.plumelib.util.FilesPlume;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +31,8 @@ import org.checkerframework.dataflow.qual.TerminatesExecution;
  * "variable", "dec-type", "rep-type", and "comparability" records, which are the ones that its
  * clients need, and it skips the others. It ignores extra tokens at the end of a "variable" or
  * "comparability" record. A later declaration of a program point, of a variable, or of a
- * comparability replaces an earlier one.
+ * comparability replaces an earlier one. If the header record "var-comparability none" precedes a
+ * declaration, then the comparabilities in that declaration are ignored.
  */
 public class DeclReader {
 
@@ -41,6 +43,35 @@ public class DeclReader {
   private static final Set<String> HEADER_KEYWORDS =
       new HashSet<>(
           Arrays.asList("decl-version", "var-comparability", "input-language", "ListImplementors"));
+
+  /**
+   * The keywords of the records that are permitted only within a variable. The keywords "parent"
+   * and "flags" are omitted, because they are also permitted before the first variable.
+   */
+  private static final Set<String> VARIABLE_KEYWORDS =
+      new HashSet<>(
+          Arrays.asList(
+              "var-kind",
+              "enclosing-var",
+              "reference-type",
+              "array",
+              "function-args",
+              "rep-type",
+              "dec-type",
+              "lang-flags",
+              "comparability",
+              "constant",
+              "min-value",
+              "max-value",
+              "min-length",
+              "max-length",
+              "valid-values"));
+
+  /**
+   * True if the most recent "var-comparability" header record in the file being read is
+   * "var-comparability none".
+   */
+  private boolean comparabilityNone = false;
 
   /** Matches a run of whitespace. */
   private static final Pattern WHITESPACE = Pattern.compile("\\s+");
@@ -264,7 +295,7 @@ public class DeclReader {
    * @param record a record, possibly with leading and trailing whitespace
    * @return the tokens of the record; a single empty string if the record is blank
    */
-  public static String[] tokenize(String record) {
+  private static String[] tokenize(String record) {
     return tokenize(record, 0);
   }
 
@@ -276,7 +307,7 @@ public class DeclReader {
    * @param limit the maximum number of tokens, or 0 for no limit
    * @return the tokens of the record; a single empty string if the record is blank
    */
-  public static String[] tokenize(String record, int limit) {
+  private static String[] tokenize(String record, int limit) {
     return WHITESPACE.split(record.trim(), limit);
   }
 
@@ -298,7 +329,7 @@ public class DeclReader {
    * @param record a record, possibly with leading and trailing whitespace
    * @return the first token of the record; the empty string if the record is blank
    */
-  public static String firstToken(String record) {
+  private static String firstToken(String record) {
     int length = record.length();
     int start = 0;
     while (start < length && Character.isWhitespace(record.charAt(start))) {
@@ -334,15 +365,26 @@ public class DeclReader {
     try (EntryReader decl_file =
         new EntryReader(
             reader, filename, EntryFormat.DEFAULT, new CommentFormat("^(//|#).*"), null)) {
+      comparabilityNone = false;
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
         // Most lines of a .dtrace file are skipped, so avoid tokenizing each line.  In a .dtrace
         // file, a line that is exactly "ppt" is the name of a variable in a sample record.
-        if (firstToken(line).equals("ppt") && !line.trim().equals("ppt")) {
+        String keyword = firstToken(line);
+        if (keyword.equals("ppt") && !line.trim().equals("ppt")) {
           decl_file.putback(line);
           read_decl(decl_file);
+        } else if (keyword.equals("var-comparability")) {
+          String[] tokens = tokenize(line);
+          comparabilityNone = tokens.length >= 2 && tokens[1].equals("none");
         }
         // Skip any other record, such as a header record or a sample record in a .dtrace file.
       }
+    } catch (UncheckedIOException e) {
+      throw e.getCause();
+    } catch (Daikon.UserError e) {
+      throw e;
+    } catch (RuntimeException e) {
+      throw new Error("Error reading declaration file " + filename, e);
     }
   }
 
@@ -375,7 +417,7 @@ public class DeclReader {
       if (keyword.isEmpty() || keyword.equals("variable")) {
         break;
       }
-      if (startsBlock(keyword)) {
+      if (startsBlock(keyword) || VARIABLE_KEYWORDS.contains(keyword)) {
         reportFileError(
             decl_file,
             "Expected \"variable <VARNAME>\" or a blank line, found \"" + line.trim() + "\"");
@@ -387,7 +429,10 @@ public class DeclReader {
     // are terminated by a blank line.
     while ((line != null) && !line.trim().isEmpty()) {
       decl_file.putback(line);
-      ppt.read_var(decl_file);
+      DeclVarInfo var = ppt.read_var(decl_file);
+      if (comparabilityNone) {
+        var.comparability = null;
+      }
       line = decl_file.readLine();
     }
 
