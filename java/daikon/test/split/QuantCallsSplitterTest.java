@@ -19,10 +19,12 @@ public final class QuantCallsSplitterTest {
   /** The name of the program point to which the splitters apply. */
   private static final String pptName = "misc.QuantCalls.m";
 
-  /** The conditions that cannot be translated, because they apply a method to an array. */
+  /**
+   * The conditions that cannot be translated, because they apply a daikon.Quant method to a variable
+   * whose elements are not available to the splitter or have the wrong type.
+   */
   private static final String[] untranslatableConditions = {
     "daikon.Quant.getElement_boolean(this.a, 0)",
-    "java.util.Arrays.equals(this.a, this.b)",
     "daikon.Quant.size(this.h) > daikon.Quant.getElement_int(this.d, 0)"
   };
 
@@ -54,6 +56,7 @@ public final class QuantCallsSplitterTest {
     expectedValues.put("this.obj == null", true);
     expectedValues.put(
         "daikon.Quant.getElement_Object(this.objs, i) != null && this.objs[0] == null", true);
+    expectedValues.put("java.util.Arrays.equals(this.a, this.b)", false);
   }
 
   /**
@@ -86,7 +89,6 @@ public final class QuantCallsSplitterTest {
     for (String condition : untranslatableConditions) {
       assertTrue(output, output.contains(condition + " cannot be parsed or translated:"));
     }
-    assertTrue(output, output.contains("the splitter cannot pass the array this.a to a method"));
     assertTrue(
         output,
         output.contains(
