@@ -161,7 +161,8 @@ class ArrayFixer extends DepthFirstVisitor {
   /**
    * Adds "_identity" or "_array" to the last token visited, if needed. The "_array" suffix is
    * needed if the elements of the array are accessed or if the array is passed to a method;
-   * otherwise, the "_identity" suffix is needed.
+   * otherwise, the "_identity" suffix is needed. If the elements are needed but the program point
+   * has no variable for them, records an error instead.
    *
    * @param nextIsSelector true if the next token is "[" or "."
    */
@@ -176,13 +177,15 @@ class ArrayFixer extends DepthFirstVisitor {
     if (nextIsSelector || isArgument) {
       if (lastTokenElements != null) {
         addSuffix(lastToken, "_array");
-      } else if (isArgument) {
+      } else {
         assert lastTokenIdentity != null
             : "@AssumeAssertion(nullness): lastTokenElements is null, so lastTokenIdentity is not";
+        String use =
+            isArgument
+                ? "pass the array " + lastTokenIdentity.name() + " to a method"
+                : "use the elements or length of the array " + lastTokenIdentity.name();
         errors.add(
-            "Cannot pass the array "
-                + lastTokenIdentity.name()
-                + " to a method, because the program point has no variable for its elements");
+            "Cannot " + use + ", because the program point has no variable for its elements");
       }
     } else if (lastTokenIdentity != null) {
       addSuffix(lastToken, "_identity");
