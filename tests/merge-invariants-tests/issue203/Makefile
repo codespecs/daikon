@@ -11,8 +11,10 @@
 # is given Issue203Incomparable.decls, in which this.x and this.y are
 # incomparable at the method ppts, but they are comparable in the runs.
 
-# The directory containing this file.  Makefile.jdk is found relative to it,
-# not via DAIKONDIR, which may name a different Daikon tree.
+# The directory containing this file.  The test infrastructure, Makefile.jdk,
+# is found relative to it.  DAIKONDIR names the Daikon that is tested, which
+# may be a different Daikon tree (as in ../../Makefile.common) that lacks
+# Makefile.jdk.
 THIS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 # DAIKONDIR is the clone of the 'daikon' project.
 ifeq ($(origin DAIKONDIR), undefined)
