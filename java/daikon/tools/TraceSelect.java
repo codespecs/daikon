@@ -42,6 +42,10 @@ public class TraceSelect {
    */
   private static final Pattern TRACESELECT_OPTION = Pattern.compile("-[A-Z_]{2,}");
 
+  /** The TraceSelect options, in upper case. TraceSelect ignores the case of an option. */
+  private static final Set<String> TRACESELECT_OPTIONS =
+      Set.of("-SEED", "-NOCLEAN", "-INCLUDE_UNRETURNED", "-DO_DIFFS");
+
   /** Matches a negative integer, which is not an option. */
   private static final Pattern NEGATIVE_INTEGER = Pattern.compile("-[0-9]+");
 
@@ -171,9 +175,11 @@ public class TraceSelect {
         throw new daikon.Daikon.UserError(
             "TraceSelect does not accept Daikon's -o option: it writes the invariants of each"
                 + " sample to the sample's file name plus \".inv\"");
-      } else if (TRACESELECT_OPTION.matcher(args[i]).matches()) {
-        // A TraceSelect option after a Daikon argument, as in "foo.dtrace -NOCLEAN".  Daikon
-        // would reject it with a message that does not mention TraceSelect.
+      } else if (TRACESELECT_OPTION.matcher(args[i]).matches()
+          || TRACESELECT_OPTIONS.contains(args[i].toUpperCase(Locale.ENGLISH))) {
+        // A TraceSelect option after a Daikon argument, as in "foo.dtrace -NOCLEAN" or
+        // "foo.dtrace -noclean".  Daikon would reject it with a message that does not mention
+        // TraceSelect.
         throw new daikon.Daikon.UserError(
             "TraceSelect option "
                 + args[i]

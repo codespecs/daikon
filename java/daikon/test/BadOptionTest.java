@@ -194,6 +194,14 @@ public class BadOptionTest {
     assertEquals(
         "TraceSelect option -NOCLEAN must precede the Daikon arguments, such as the .dtrace file",
         String.valueOf(e.getMessage()));
+    // TraceSelect ignores the case of an option.
+    e =
+        assertThrows(
+            Daikon.UserError.class,
+            () -> TraceSelect.mainHelper(new String[] {"20", "10", "x.dtrace", "-noclean"}));
+    assertEquals(
+        "TraceSelect option -noclean must precede the Daikon arguments, such as the .dtrace file",
+        String.valueOf(e.getMessage()));
     // Daikon would read a compressed trace in full, in every sample run.
     e =
         assertThrows(
