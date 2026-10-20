@@ -312,7 +312,9 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    */
   @SuppressWarnings("interning:not.interned") // test whether remap() created a new object
   VarComparabilityImplicit remap(Map<Integer, Integer> groups) {
-    int newBase = findGroup(base, groups);
+    // groups may map a child's negative set to another negative set.  Do not apply that to this
+    // program point's own negative sets, which are already comparable to everything.
+    int newBase = (base < 0) ? base : findGroup(base, groups);
     VarComparabilityImplicit @Nullable [] oldIndexTypes = indexTypes;
     VarComparabilityImplicit @Nullable [] newIndexTypes = oldIndexTypes;
     if (oldIndexTypes != null) {
