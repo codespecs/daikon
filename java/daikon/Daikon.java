@@ -1801,18 +1801,19 @@ public final class Daikon {
 
     // Make each ppt's comparability at least as coarse as that of each of its children and of its
     // conditional ppts.  Conditional ppts can have children too, so visit them as well.  Visit
-    // children before parents, so that in an acyclic hierarchy each ppt is visited once.  USER
-    // relations, if enabled (PptRelation.dkconfig_enable_object_user), can make the hierarchy
-    // cyclic: for example, if classes A and B each have a field of the other's type, then each
-    // OBJECT ppt is a parent of the other.  So, revisit the parents of each ppt whose comparability
-    // changes.
+    // children before parents, so that usually each ppt is visited once.  But a ppt may need to be
+    // revisited:  a ppt and its conditional ppts depend on one another, and USER relations, if
+    // enabled (PptRelation.dkconfig_enable_object_user), can make the hierarchy cyclic (for
+    // example, if classes A and B each have a field of the other's type, then each OBJECT ppt is a
+    // parent of the other).  So, revisit the parents of each ppt whose comparability changes.
     Set<PptTopLevel> worklist = new LinkedHashSet<>();
     // In MergeInvariants, some children are in other PptMaps; do not visit them.
-    Set<PptTopLevel> unvisited = new HashSet<>();
+    List<PptTopLevel> allPpts = new ArrayList<>();
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
-      unvisited.add(ppt);
+      allPpts.add(ppt);
     }
-    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
+    Set<PptTopLevel> unvisited = new HashSet<>(allPpts);
+    for (PptTopLevel ppt : allPpts) {
       addChildrenFirst(ppt, unvisited, worklist);
     }
     while (!worklist.isEmpty()) {
@@ -1830,6 +1831,10 @@ public final class Daikon {
               worklist.add(rel.parent);
             }
           }
+        }
+        // Only the conditional ppts of a ppt's first splitter have a PPT_PPTCOND relation to it.
+        if (ppt instanceof PptConditional) {
+          worklist.add(((PptConditional) ppt).parent);
         }
       }
     }
@@ -1867,6 +1872,22 @@ public final class Daikon {
     }
     if (!ppt.children.isEmpty()) {
       worklist.add(ppt);
+    }
+  }
+
+  /**
+   * Initializes the partial order hierarchy among the given ppts, according to the format of the
+   * declarations that were read.
+   *
+   * @param all_ppts the ppts, whose declarations have been read
+   */
+  public static void init_hierarchy(PptMap all_ppts) {
+    assert FileIO.new_decl_format != null
+        : "@AssumeAssertion(nullness): read declarations, so new_decl_format is set";
+    if (FileIO.new_decl_format) {
+      PptRelation.init_hierarchy_new(all_ppts);
+    } else {
+      PptRelation.init_hierarchy(all_ppts);
     }
   }
 
@@ -2481,13 +2502,7 @@ public final class Daikon {
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
     startTime = System.nanoTime();
-    assert FileIO.new_decl_format != null
-        : "@AssumeAssertion(nullness): read data, so new_decl_format is set";
-    if (FileIO.new_decl_format) {
-      PptRelation.init_hierarchy_new(all_ppts);
-    } else {
-      PptRelation.init_hierarchy(all_ppts);
-    }
+    init_hierarchy(all_ppts);
     duration = System.nanoTime() - startTime;
     debugProgress.fine(
         "Init Hierarchy ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
