@@ -316,8 +316,8 @@ public class SplitterFactory {
 
   /**
    * Returns the part of a splitter file name that comes from a program point name. It is ppt_name
-   * with every character other than an ASCII letter, digit, "_", or "$" replaced by "_", and with
-   * a leading digit replaced by "_". If ppt_name is long, only a prefix of it is used, so that the
+   * with every character other than an ASCII letter, digit, "_", or "$" replaced by "_", and with a
+   * leading digit replaced by "_". If ppt_name is long, only a prefix of it is used, so that the
    * file name does not exceed the file system's limit. Accessible for the purpose of testing.
    *
    * @param ppt_name the name of the Ppt that the splitter Java file will be used with
