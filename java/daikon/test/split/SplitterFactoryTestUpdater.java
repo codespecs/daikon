@@ -146,9 +146,6 @@ public class SplitterFactoryTestUpdater {
     try {
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
-      // Calling readDecls in a loop instead of calling
-      // read_data_trace_files allows us to mix version 1 and
-      // version 2 decls file formats.
       for (String declsFile : decls) {
         SplitterTestUtils.readDecls(targetDir + declsFile, allPpts);
       }
