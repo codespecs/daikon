@@ -1798,16 +1798,31 @@ public final class Daikon {
    */
   public static void createUpperPpts(PptMap all_ppts) {
 
-    // Make each ppt's comparability at least as coarse as that of each of its children.  Iterate
-    // until nothing changes, because a ppt may be visited before its children, and the hierarchy
-    // may contain cycles.
-    boolean changed;
-    do {
-      changed = false;
-      for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        changed |= ppt.coarsenComparability();
+    // Make each ppt's comparability at least as coarse as that of each of its children.  Visit
+    // conditional ppts too, because they have children in MergeInvariants.  A ppt may be visited
+    // before its children, so revisit the parents of each ppt whose comparability changes.
+    Set<PptTopLevel> worklist = new LinkedHashSet<>();
+    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
+      if (!ppt.children.isEmpty()) {
+        worklist.add(ppt);
       }
-    } while (changed);
+    }
+    while (!worklist.isEmpty()) {
+      Iterator<PptTopLevel> itor = worklist.iterator();
+      PptTopLevel ppt = itor.next();
+      itor.remove();
+      if (ppt.coarsenComparability()) {
+        // coarsenComparability also changed the comparability of ppt's conditional ppts.
+        for (PptRelation rel : ppt.parents) {
+          worklist.add(rel.parent);
+        }
+        for (PptConditional pptCond : ppt.cond_iterable()) {
+          for (PptRelation rel : pptCond.parents) {
+            worklist.add(rel.parent);
+          }
+        }
+      }
+    }
 
     // Process each ppt that doesn't have a parent
     // (mergeInvs is called on a root, and recursively processes children)

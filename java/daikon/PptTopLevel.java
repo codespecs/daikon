@@ -4103,42 +4103,39 @@ public class PptTopLevel extends Ppt {
    * (for example, always equal) in a child may be incomparable here; then the invariants merged
    * from the children could not be represented here.
    *
-   * <p>This must be called before this program point's invariants are created. It must be called
-   * repeatedly, over every program point, until it returns false, so that comparability propagates
-   * from each descendant to every ancestor.
+   * <p>This must be called before this program point's invariants are created. Whenever it returns
+   * true, it must be called again on each parent of this program point and of its conditional
+   * program points, so that comparability propagates from each descendant to every ancestor.
    *
    * @return true if the comparability of any variable changed
    */
-  @SuppressWarnings("interning:not.interned") // test whether coarsen() or remap() made new objects
+  @SuppressWarnings("interning:not.interned") // test whether remap() made a new object
   boolean coarsenComparability() {
-    VarComparability[] newComparability = new VarComparability[var_infos.length];
-    for (int i = 0; i < var_infos.length; i++) {
-      newComparability[i] = var_infos[i].comparability;
-    }
     // A union-find structure over the comparable sets at this program point.
     Map<Integer, Integer> groups = new HashMap<>();
     for (PptRelation rel : children) {
       Map<Integer, Integer> childToParentSet = new HashMap<>();
       for (VarInfo childVar : rel.child.var_infos) {
         VarInfo parentVar = rel.parentVar(childVar);
-        if (parentVar == null) {
-          continue;
-        }
-        int i = parentVar.varinfo_index;
-        if (newComparability[i] instanceof VarComparabilityImplicit
+        if (parentVar != null
+            && parentVar.comparability instanceof VarComparabilityImplicit
             && childVar.comparability instanceof VarComparabilityImplicit) {
-          newComparability[i] =
-              VarComparabilityImplicit.coarsen(
-                  (VarComparabilityImplicit) newComparability[i],
-                  (VarComparabilityImplicit) childVar.comparability,
-                  childToParentSet,
-                  groups);
+          VarComparabilityImplicit.mergeSets(
+              (VarComparabilityImplicit) parentVar.comparability,
+              (VarComparabilityImplicit) childVar.comparability,
+              childToParentSet,
+              groups);
         }
       }
     }
+    if (groups.isEmpty()) {
+      return false;
+    }
 
+    VarComparability[] newComparability = new VarComparability[var_infos.length];
     boolean changed = false;
     for (int i = 0; i < var_infos.length; i++) {
+      newComparability[i] = var_infos[i].comparability;
       if (newComparability[i] instanceof VarComparabilityImplicit) {
         newComparability[i] = ((VarComparabilityImplicit) newComparability[i]).remap(groups);
       }

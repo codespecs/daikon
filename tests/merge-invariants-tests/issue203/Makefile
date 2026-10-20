@@ -6,6 +6,10 @@
 # children's comparability (see PptTopLevel.coarsenComparability), not on the
 # data, so the merged invariants should be the same as the invariants produced
 # from both trace files directly.
+#
+# The *-spinfo targets test the same thing, with splitters.  MergeInvariants
+# is given Issue203Incomparable.decls, in which this.x and this.y are
+# incomparable at the method ppts, but they are comparable in the runs.
 
 # The directory containing this file.  Makefile.jdk is found relative to it,
 # not via DAIKONDIR, which may name a different Daikon tree.
@@ -28,7 +32,7 @@ endif
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
-diffs: daikon.txt.diff
+diffs: daikon.txt.diff daikon-spinfo.txt.diff
 daikon.txt.diff: combined.inv.gz merge.inv.gz
 	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants combined.inv.gz > combined.txt
 	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants merge.inv.gz > merge.txt
@@ -47,6 +51,23 @@ combined.inv.gz: ${DAIKON} Issue203.decls Run1.dtrace.gz Run2.dtrace.gz
 Run%.inv.gz: ${DAIKON} Issue203.decls Run%.dtrace.gz
 	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon -o $@ ${DAIKON_ARGS} \
 	  Issue203.decls Run$*.dtrace.gz
+
+daikon-spinfo.txt.diff: combined-spinfo.inv.gz merge-spinfo.inv.gz
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants combined-spinfo.inv.gz > combined-spinfo.txt
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants merge-spinfo.inv.gz > merge-spinfo.txt
+	diff -u combined-spinfo.txt merge-spinfo.txt > daikon-spinfo.txt.diff || (cat daikon-spinfo.txt.diff && false)
+
+merge-spinfo.inv.gz: ${DAIKON} Issue203Incomparable.decls Issue203.spinfo Run1-spinfo.inv.gz Run2-spinfo.inv.gz
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.MergeInvariants -o merge-spinfo.inv.gz \
+	  Issue203Incomparable.decls Issue203.spinfo Run1-spinfo.inv.gz Run2-spinfo.inv.gz
+
+combined-spinfo.inv.gz: ${DAIKON} Issue203.decls Issue203.spinfo Run1.dtrace.gz Run2.dtrace.gz
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon -o combined-spinfo.inv.gz ${DAIKON_ARGS} \
+	  Issue203.decls Issue203.spinfo Run1.dtrace.gz Run2.dtrace.gz
+
+Run%-spinfo.inv.gz: ${DAIKON} Issue203.decls Issue203.spinfo Run%.dtrace.gz
+	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon -o $@ ${DAIKON_ARGS} \
+	  Issue203.decls Issue203.spinfo Run$*.dtrace.gz
 
 update-goals:
 

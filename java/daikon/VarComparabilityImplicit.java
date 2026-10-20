@@ -46,6 +46,13 @@ public final class VarComparabilityImplicit extends VarComparability implements 
 
   public static final VarComparabilityImplicit unknown = new VarComparabilityImplicit(-3, null, 0);
 
+  /**
+   * The comparable set whose variables are comparable to everything. In a union-find structure
+   * built by {@link #mergeSets}, it is the representative of every set that contains it, because
+   * it is smaller than every other set.
+   */
+  private static final int ALWAYS_COMPARABLE = -1;
+
   private VarComparabilityImplicit(
       int base, VarComparabilityImplicit @Nullable [] indexTypes, int dimensions) {
     this.base = base;
@@ -188,12 +195,14 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   /**
-   * Returns a comparability like {@code parent}, but coarsened so that the parent variable is
-   * comparable to every parent variable whose child variable is comparable to {@code child}.
-   * Wherever {@code child} is comparable to everything, so is the result.
+   * Records in {@code groups} the comparable sets that must be merged at a parent program point so
+   * that the parent variable is comparable to every parent variable whose child variable is
+   * comparable to {@code child}. Wherever {@code child} is comparable to everything, the parent's
+   * comparable set is merged with {@link #ALWAYS_COMPARABLE}, so that every variable in it becomes
+   * comparable to everything.
    *
-   * <p>This method records in {@code groups} the comparable sets that must be merged at the parent;
-   * the caller applies them by calling {@link #remap} after every variable has been processed.
+   * <p>The caller applies the merges by calling {@link #remap} after every variable has been
+   * processed.
    *
    * @param parent the comparability of a variable at a parent program point
    * @param child the comparability of the corresponding variable at a child program point
@@ -201,51 +210,34 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    *     whose variables correspond to child variables in that set; updated by this method
    * @param groups a union-find structure over the parent's comparable sets, as used by {@link
    *     #findGroup}; updated by this method
-   * @return a comparability like {@code parent}, but comparable to everything wherever {@code
-   *     child} is
    */
-  @SuppressWarnings("interning:not.interned") // test whether coarsen() created a new object
-  static VarComparabilityImplicit coarsen(
+  static void mergeSets(
       VarComparabilityImplicit parent,
       VarComparabilityImplicit child,
       Map<Integer, Integer> childToParentSet,
       Map<Integer, Integer> groups) {
     if (parent.dimensions != child.dimensions) {
       // The variables have different types, so their comparabilities cannot be related.
-      return parent;
+      return;
     }
-    VarComparabilityImplicit @Nullable [] newIndexTypes = parent.indexTypes;
     for (int i = 0; i < parent.dimensions; i++) {
-      VarComparabilityImplicit parentIndexType = (VarComparabilityImplicit) parent.indexType(i);
-      VarComparabilityImplicit newIndexType =
-          coarsen(
-              parentIndexType,
-              (VarComparabilityImplicit) child.indexType(i),
-              childToParentSet,
-              groups);
-      if (newIndexType != parentIndexType) {
-        assert newIndexTypes != null : "@AssumeAssertion(nullness): dependent: dimensions > 0";
-        if (newIndexTypes == parent.indexTypes) {
-          newIndexTypes = newIndexTypes.clone();
-        }
-        newIndexTypes[i] = newIndexType;
+      mergeSets(
+          (VarComparabilityImplicit) parent.indexType(i),
+          (VarComparabilityImplicit) child.indexType(i),
+          childToParentSet,
+          groups);
+    }
+    if (parent.base < 0) {
+      return;
+    }
+    if (child.base < 0) {
+      union(parent.base, ALWAYS_COMPARABLE, groups);
+    } else {
+      Integer parentSet = childToParentSet.putIfAbsent(child.base, parent.base);
+      if (parentSet != null) {
+        union(parentSet, parent.base, groups);
       }
     }
-    int newBase = parent.base;
-    if (parent.base >= 0) {
-      if (child.base < 0) {
-        newBase = child.base;
-      } else {
-        Integer parentSet = childToParentSet.putIfAbsent(child.base, parent.base);
-        if (parentSet != null) {
-          union(parentSet, parent.base, groups);
-        }
-      }
-    }
-    if (newBase == parent.base && newIndexTypes == parent.indexTypes) {
-      return parent;
-    }
-    return new VarComparabilityImplicit(newBase, newIndexTypes, parent.dimensions);
   }
 
   /**
@@ -258,7 +250,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   private static void union(int set1, int set2, Map<Integer, Integer> groups) {
     int group1 = findGroup(set1, groups);
     int group2 = findGroup(set2, groups);
-    // Use the smaller value as the representative, for deterministic results.
+    // Use the smaller value as the representative, for deterministic results and so that
+    // ALWAYS_COMPARABLE is the representative of every group that contains it.
     if (group1 < group2) {
       groups.put(group2, group1);
     } else if (group2 < group1) {
@@ -293,7 +286,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    * Returns a comparability like this one, but with each comparable set replaced by its
    * representative in {@code groups}.
    *
-   * @param groups a union-find structure over comparable sets, as built by {@link #coarsen}
+   * @param groups a union-find structure over comparable sets, as built by {@link #mergeSets}
    * @return a comparability like this one, with each comparable set replaced by its representative
    */
   @SuppressWarnings("interning:not.interned") // test whether remap() created a new object
