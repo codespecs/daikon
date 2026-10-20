@@ -10,7 +10,7 @@ ppt upperBoundSuppressed:::ENTER
 ppt-type enter
 
 ppt upperBoundSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type long
@@ -23,7 +23,7 @@ ppt upperBoundNotSuppressed:::ENTER
 ppt-type enter
 
 ppt upperBoundNotSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type long
@@ -36,7 +36,7 @@ ppt lowerBoundSuppressed:::ENTER
 ppt-type enter
 
 ppt lowerBoundSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type long
@@ -49,7 +49,7 @@ ppt lowerBoundNotSuppressed:::ENTER
 ppt-type enter
 
 ppt lowerBoundNotSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type long
@@ -63,7 +63,7 @@ ppt constantMinMaxMatch:::ENTER
 ppt-type enter
 
 ppt constantMinMaxMatch:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable return
   var-kind return
   dec-type long
@@ -78,7 +78,7 @@ ppt constantMinMaxDifferent:::ENTER
 ppt-type enter
 
 ppt constantMinMaxDifferent:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable return
   var-kind return
   dec-type long
@@ -92,7 +92,7 @@ ppt constantPairMinMaxMatch:::ENTER
 ppt-type enter
 
 ppt constantPairMinMaxMatch:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type long
@@ -113,7 +113,7 @@ ppt variableGreaterSuppressed:::ENTER
 ppt-type enter
 
 ppt variableGreaterSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type long
@@ -132,7 +132,7 @@ ppt variableGreaterNotSuppressed:::ENTER
 ppt-type enter
 
 ppt variableGreaterNotSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type long
@@ -151,7 +151,7 @@ ppt floatLowerBoundSuppressed:::ENTER
 ppt-type enter
 
 ppt floatLowerBoundSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type double
@@ -164,7 +164,7 @@ ppt floatLowerBoundNotSuppressed:::ENTER
 ppt-type enter
 
 ppt floatLowerBoundNotSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type double
@@ -177,7 +177,7 @@ ppt floatLessSuppressed:::ENTER
 ppt-type enter
 
 ppt floatLessSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type double
@@ -196,7 +196,7 @@ ppt floatLessNotSuppressed:::ENTER
 ppt-type enter
 
 ppt floatLessNotSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type double
@@ -216,7 +216,7 @@ ppt floatConstantMinMaxMatch:::ENTER
 ppt-type enter
 
 ppt floatConstantMinMaxMatch:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable return
   var-kind return
   dec-type double
@@ -231,7 +231,7 @@ ppt floatConstantMinMaxDifferent:::ENTER
 ppt-type enter
 
 ppt floatConstantMinMaxDifferent:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable return
   var-kind return
   dec-type double
@@ -246,7 +246,7 @@ ppt nonEqualSuppressed:::ENTER
 ppt-type enter
 
 ppt nonEqualSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type long
@@ -265,7 +265,7 @@ ppt nonEqualNotSuppressed:::ENTER
 ppt-type enter
 
 ppt nonEqualNotSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type long
@@ -285,7 +285,7 @@ ppt floatNonEqualSuppressed:::ENTER
 ppt-type enter
 
 ppt floatNonEqualSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type double
@@ -304,7 +304,7 @@ ppt floatNonEqualNotSuppressed:::ENTER
 ppt-type enter
 
 ppt floatNonEqualNotSuppressed:::EXIT1
-ppt-type exit
+ppt-type subexit
 variable a
   var-kind variable
   dec-type double

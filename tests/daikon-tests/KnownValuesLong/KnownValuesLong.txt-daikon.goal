@@ -1,47 +1,47 @@
 ===========================================================================
-constantMinMaxDifferent:::EXIT1
+constantMinMaxDifferent:::EXIT
 return == 5000000000L
 ===========================================================================
-constantMinMaxMatch:::EXIT1
+constantMinMaxMatch:::EXIT
 ===========================================================================
-constantPairMinMaxMatch:::EXIT1
+constantPairMinMaxMatch:::EXIT
 ===========================================================================
-floatConstantMinMaxDifferent:::EXIT1
+floatConstantMinMaxDifferent:::EXIT
 return == 0.25
 ===========================================================================
-floatConstantMinMaxMatch:::EXIT1
+floatConstantMinMaxMatch:::EXIT
 ===========================================================================
-floatLessNotSuppressed:::EXIT1
+floatLessNotSuppressed:::EXIT
 a < b
 ===========================================================================
-floatLessSuppressed:::EXIT1
+floatLessSuppressed:::EXIT
 ===========================================================================
-floatLowerBoundNotSuppressed:::EXIT1
+floatLowerBoundNotSuppressed:::EXIT
 a >= 0.5
 ===========================================================================
-floatLowerBoundSuppressed:::EXIT1
+floatLowerBoundSuppressed:::EXIT
 ===========================================================================
-floatNonEqualNotSuppressed:::EXIT1
+floatNonEqualNotSuppressed:::EXIT
 a != b
 ===========================================================================
-floatNonEqualSuppressed:::EXIT1
+floatNonEqualSuppressed:::EXIT
 ===========================================================================
-lowerBoundNotSuppressed:::EXIT1
+lowerBoundNotSuppressed:::EXIT
 a >= 100
 ===========================================================================
-lowerBoundSuppressed:::EXIT1
+lowerBoundSuppressed:::EXIT
 ===========================================================================
-nonEqualNotSuppressed:::EXIT1
+nonEqualNotSuppressed:::EXIT
 a != b
 ===========================================================================
-nonEqualSuppressed:::EXIT1
+nonEqualSuppressed:::EXIT
 ===========================================================================
-upperBoundNotSuppressed:::EXIT1
+upperBoundNotSuppressed:::EXIT
 a <= 106
 ===========================================================================
-upperBoundSuppressed:::EXIT1
+upperBoundSuppressed:::EXIT
 ===========================================================================
-variableGreaterNotSuppressed:::EXIT1
+variableGreaterNotSuppressed:::EXIT
 a > b
 ===========================================================================
-variableGreaterSuppressed:::EXIT1
+variableGreaterSuppressed:::EXIT
