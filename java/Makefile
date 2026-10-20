@@ -25,14 +25,6 @@ JAR ?= jar
 
 BuildJDKTool = BuildJDK
 
-# Non-empty when make does not run recipes:  "make -n" (dry run), "make -q"
-# (question), or "make -t" (touch).  Make still runs a recipe line that uses
-# ${MAKE} in those modes.  A sub-make that remakes a target in such a mode must
-# not regress by remaking a prerequisite that the parent make did not create.
-# See the rule for daikon/Daikon.class.
-MAKEFLAGS_SHORT := $(firstword -$(MAKEFLAGS))
-NO_RECIPES := $(findstring n,${MAKEFLAGS_SHORT})$(findstring q,${MAKEFLAGS_SHORT})$(findstring t,${MAKEFLAGS_SHORT})
-
 ifeq ($(shell uname), Darwin)
   JAVA_HOME ?= $(shell /usr/libexec/java_home)
 else
@@ -537,6 +529,14 @@ update-libs:
 ###########################################################################
 ### Compilation targets
 ###
+
+# Non-empty when make does not run recipes:  "make -n" (dry run), "make -q"
+# (question), or "make -t" (touch).  Make still runs a recipe line that uses
+# ${MAKE} in those modes.  A sub-make that remakes a target in such a mode must
+# not regress by remaking a prerequisite that the parent make did not create.
+# See the rule for daikon/Daikon.class, below.
+MAKEFLAGS_SHORT := $(firstword -$(MAKEFLAGS))
+NO_RECIPES := $(findstring n,${MAKEFLAGS_SHORT})$(findstring q,${MAKEFLAGS_SHORT})$(findstring t,${MAKEFLAGS_SHORT})
 
 # The timestamp of Daikon.class indicates the last time the system was recompiled.
 compile compile-java compile-daikon: daikon/Daikon.class
