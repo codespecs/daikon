@@ -72,8 +72,7 @@ public class PptTopLevelTypeTest {
   @Test
   public void testTypeOfDeserializedConditionalPpt() throws IOException, ClassNotFoundException {
     PptTopLevel combinedExit = new PptTopLevel("Foo.bar():::EXIT", new VarInfo[0]);
-    PptConditional conditional =
-        new PptConditional(combinedExit, new ReturnTrueSplitter(), false);
+    PptConditional conditional = new PptConditional(combinedExit, new ReturnTrueSplitter(), false);
     assertTrue(conditional.is_combined_exit());
     PptTopLevel read = serializeAndDeserialize(conditional);
     assertTrue(read.is_combined_exit());
