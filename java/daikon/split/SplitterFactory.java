@@ -202,7 +202,7 @@ public class SplitterFactory {
             String.join(
                 System.lineSeparator(),
                 "Error in SplitterFactory while writing splitter java file for:",
-                splitObj.condition() + " cannot be parsed:",
+                splitObj.condition() + " cannot be parsed or translated:",
                 e.toString()));
         continue;
       }
