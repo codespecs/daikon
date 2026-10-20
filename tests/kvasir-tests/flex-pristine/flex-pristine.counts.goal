@@ -1,7 +1,7 @@
 ..action_define() ENTER/723: 1 EXIT0/723: 1
 ..add_accept() ENTER/723: 6 EXIT0/723: 6
 ..add_action() ENTER/720: 85 EXIT0/720: 85
-..addsym() ENTER/798: 1 EXIT0/801: 1
+..addsym() ENTER/801: 1 EXIT0/804: 1
 ..allocate_array() ENTER/723: 83 EXIT0/729: 83
 ..bldtbl() ENTER/735: 45 EXIT0/735: 45
 ..bubble() ENTER/726: 52 EXIT0/726: 52
@@ -12,7 +12,7 @@
 ..check_for_backing_up() ENTER/726: 43 EXIT0/726: 43
 ..check_options() ENTER/735: 1 EXIT0/735: 1
 ..cmptmps() ENTER/717: 1 EXIT0/717: 1
-..copy_string() ENTER/717: 2 EXIT0/720: 2
+..copy_string() ENTER/720: 2 EXIT0/723: 2
 ..cre8ecs() ENTER/732: 2 EXIT0/735: 2
 ..dataend() ENTER/717: 7 EXIT0/717: 7
 ..dataflush() ENTER/717: 59 EXIT0/717: 59
@@ -34,7 +34,7 @@
 ..gen_start_state() ENTER/732: 2 EXIT0/732: 2
 ..genecs() ENTER/732: 1 EXIT0/732: 1
 ..gentabs() ENTER/732: 1 EXIT0/732: 1
-..hashfunct() ENTER/720: 1 EXIT0/723: 1
+..hashfunct() ENTER/723: 1 EXIT0/726: 1
 ..indent_put2s() ENTER/738: 3 EXIT0/738: 3
 ..indent_puts() ENTER/735: 63 EXIT0/735: 63
 ..inittbl() ENTER/717: 1 EXIT0/717: 1
@@ -50,7 +50,7 @@
 ..mkdeftbl() ENTER/717: 1 EXIT0/717: 1
 ..mkeccl() ENTER/750: 3 EXIT0/750: 3
 ..mkechar() ENTER/732: 89 EXIT0/732: 89
-..mkentry() ENTER/729: 46 EXIT0/729: 46
+..mkentry() ENTER/735: 46 EXIT0/735: 46
 ..mkprot() ENTER/729: 2 EXIT0/729: 2
 ..mkstate() ENTER/720: 63 EXIT0/723: 63
 ..mktemplate() ENTER/729: 1 EXIT0/729: 1
