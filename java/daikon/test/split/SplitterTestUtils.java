@@ -91,6 +91,23 @@ final class SplitterTestUtils {
    */
   static PptTopLevel readPpt(String declsFile, String pptName) throws IOException {
     PptMap ppts = new PptMap();
+    readDecls(targetDir + declsFile, ppts);
+    PptTopLevel ppt = ppts.get(pptName);
+    if (ppt == null) {
+      throw new AssertionError("No program point " + pptName + " in " + ppts.nameStringSet());
+    }
+    return ppt;
+  }
+
+  /**
+   * Reads a decls file into a PptMap. The decls file may use a different format than previously
+   * read decls files, and its program points and variables are not filtered.
+   *
+   * @param declsFile the name of the decls file
+   * @param ppts the PptMap to which to add the program points of declsFile
+   * @throws IOException if the decls file cannot be read
+   */
+  static void readDecls(String declsFile, PptMap ppts) throws IOException {
     FileIO.resetNewDeclFormat();
     // Other tests may have set the patterns that filter the program points and variables.
     Pattern oldPptRegexp = Daikon.ppt_regexp;
@@ -102,18 +119,13 @@ final class SplitterTestUtils {
     Daikon.var_regexp = null;
     Daikon.var_omit_regexp = null;
     try {
-      FileIO.read_data_trace_file(targetDir + declsFile, ppts);
+      FileIO.read_data_trace_file(declsFile, ppts);
     } finally {
       Daikon.ppt_regexp = oldPptRegexp;
       Daikon.ppt_omit_regexp = oldPptOmitRegexp;
       Daikon.var_regexp = oldVarRegexp;
       Daikon.var_omit_regexp = oldVarOmitRegexp;
     }
-    PptTopLevel ppt = ppts.get(pptName);
-    if (ppt == null) {
-      throw new AssertionError("No program point " + pptName + " in " + ppts.nameStringSet());
-    }
-    return ppt;
   }
 
   /**
