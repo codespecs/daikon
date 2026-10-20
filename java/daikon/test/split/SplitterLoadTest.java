@@ -39,11 +39,17 @@ public class SplitterLoadTest {
   /** Creates a SplitterLoadTest. */
   public SplitterLoadTest() {}
 
-  /** The directory containing the decls file. */
+  /** The directory containing the decls files. */
   private static final String targetDir = "daikon/test/split/targets/";
+
+  /** The decls file that declares {@link #pptName}. It is in the old decls format. */
+  private static final String declsFile = "QueueAr.decls";
 
   /** The name of the program point whose splitters are tested. */
   private static final String pptName = "DataStructures.QueueAr.isEmpty";
+
+  /** The full name of the program point whose splitters are tested. */
+  private static final String fullPptName = pptName + "():::EXIT47";
 
   /** A splitter condition that is valid for {@link #pptName}. */
   private static final String goodCondition = "currentSize == 0";
@@ -139,22 +145,46 @@ public class SplitterLoadTest {
 
   /**
    * A splitter that passes an array to a method, possibly within parentheses, within a cast, or as
-   * a branch of a conditional expression, passes the elements of the array.
+   * a branch of a conditional expression, passes the elements of the array. A splitter that passes
+   * an array whose elements are not available is reported as untranslatable.
    */
   @Test
   public void testArrayArgument() throws IOException {
-    List<String> conditions =
+    // Quant.noDups has overloads only for arrays, so these conditions compile only if the elements
+    // of this.a are passed.
+    List<String> goodConditions =
         List.of(
-            "String.valueOf(this.theArray).isEmpty()",
-            "String.valueOf((this.theArray)).isEmpty()",
-            "String.valueOf((Object) this.theArray).isEmpty()",
-            "String.valueOf(currentSize == 0 ? this.theArray : orig(this.theArray)).isEmpty()",
-            "String.valueOf(this.theArray == orig(this.theArray)).isEmpty()",
-            "this.theArray[0] == 0 && this.theArray.length == 3");
-    SplitterObject[] splitters = loadSplitters(conditions, s -> {});
-    for (SplitterObject splitter : splitters) {
-      assertTrue(splitter.getError(), splitter.splitterExists());
+            "Quant.noDups(this.a)",
+            "Quant.noDups((this.a))",
+            "Quant.noDups((long[]) this.a)",
+            "Quant.noDups(this.n == 0 ? this.a : this.a)",
+            "String.valueOf(this.a == this.b).isEmpty()",
+            "this.a[0] == 0 && this.a.length == 3");
+    // this.b has no variable for its elements.
+    String noElementsCondition = "Quant.noDups(this.b) || Quant.noDups(this.b)";
+    List<String> conditions = new ArrayList<>(goodConditions);
+    conditions.add(noElementsCondition);
+
+    SplitterObject[] splitters =
+        loadSplitters(
+            "ArrayArgument.decls",
+            "misc.ArrayArgument.test",
+            "misc.ArrayArgument.test():::EXIT10",
+            conditions,
+            s -> {});
+    for (int i = 0; i < goodConditions.size(); i++) {
+      assertTrue(splitters[i].getError(), splitters[i].splitterExists());
     }
+    SplitterObject noElements = splitters[goodConditions.size()];
+    assertFalse(noElements.splitterExists());
+    String error = noElements.getError();
+    assertTrue(error, error.contains("cannot be parsed or translated"));
+    String message =
+        "Cannot pass the array this.b to a method, because the program point has no variable for"
+            + " its elements";
+    // The error is reported once, though this.b is passed twice.
+    assertEquals(error, error.indexOf(message), error.lastIndexOf(message));
+    assertTrue(error, error.contains(message));
   }
 
   /**
@@ -198,6 +228,27 @@ public class SplitterLoadTest {
    */
   private static SplitterObject[] loadSplitters(
       List<String> conditions, Consumer<SplitterObject[]> modifier) throws IOException {
+    return loadSplitters(declsFile, pptName, fullPptName, conditions, modifier);
+  }
+
+  /**
+   * Creates splitters with the given conditions for a program point, then writes, compiles, and
+   * loads them. Leaves no splitters registered in {@link SplitterList}.
+   *
+   * @param declsFile the decls file, in {@link #targetDir}, that declares the program point
+   * @param pptName the name of the program point, as it appears in a spinfo file
+   * @param fullPptName the full name of the program point
+   * @param conditions the splitter conditions
+   * @param modifier a function that modifies the splitters before they are loaded
+   * @return the splitters, in the same order as {@code conditions}
+   */
+  private static SplitterObject[] loadSplitters(
+      String declsFile,
+      String pptName,
+      String fullPptName,
+      List<String> conditions,
+      Consumer<SplitterObject[]> modifier)
+      throws IOException {
     Path spinfo = Files.createTempFile("SplitterLoadTest", ".spinfo");
     try {
       List<String> lines = new ArrayList<>();
@@ -221,7 +272,7 @@ public class SplitterLoadTest {
       boolean oldSuppress = PptSplitter.dkconfig_suppressSplitterErrors;
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       try {
-        PptTopLevel ppt = readPpt();
+        PptTopLevel ppt = readPpt(declsFile, fullPptName);
         SplitterFactory.load_splitters(ppt, Collections.singletonList(spfile));
       } finally {
         FileIO.new_decl_format = oldNewDeclFormat;
@@ -237,9 +288,11 @@ public class SplitterLoadTest {
   /**
    * Reads the program point to which the splitters apply.
    *
+   * @param declsFile the decls file, in {@link #targetDir}, that declares the program point
+   * @param fullPptName the full name of the program point
    * @return the program point to which the splitters apply
    */
-  private static PptTopLevel readPpt() throws IOException {
+  private static PptTopLevel readPpt(String declsFile, String fullPptName) throws IOException {
     PptMap allPpts = new PptMap();
     // Other tests may have set program point filters, which would prevent reading the decls.
     Pattern oldPptRegexp = Daikon.ppt_regexp;
@@ -250,13 +303,13 @@ public class SplitterLoadTest {
     Daikon.ppt_max_name = null;
     try {
       FileIO.resetNewDeclFormat();
-      FileIO.read_data_trace_file(targetDir + "QueueAr.decls", allPpts);
+      FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
     } finally {
       Daikon.ppt_regexp = oldPptRegexp;
       Daikon.ppt_omit_regexp = oldPptOmitRegexp;
       Daikon.ppt_max_name = oldPptMaxName;
     }
-    PptTopLevel ppt = allPpts.get(pptName + "():::EXIT47");
+    PptTopLevel ppt = allPpts.get(fullPptName);
     assertNotNull(ppt);
     return ppt;
   }
