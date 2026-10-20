@@ -137,20 +137,35 @@ class NullReplacer extends DepthFirstVisitor {
 
   /**
    * Returns true if the splitter represents the expression whose tokens are given as a reference:
-   * that is, if the expression is a String variable, or an element of a String array such as {@code
-   * a[i]}.
+   * that is, if the expression is a String variable; an element of a String array such as {@code
+   * a[i]}; or a method call whose receiver is such an expression, such as {@code a[i].trim()}.
    *
    * @param tokens the tokens of an expression, without enclosing parentheses
    * @return true if the splitter represents the expression as a reference
    */
   private boolean isReference(NodeToken[] tokens) {
-    if (tokens.length == 1) {
+    int last = tokens.length - 1;
+    if (last == 0) {
       return referenceExpressions.contains(tokens[0].tokenImage);
     }
-    return tokens.length >= 4
+    if (last >= 3
         && Visitors.isLBracket(tokens[1])
-        && matchingIndex(tokens, 1) == tokens.length - 1
-        && referenceExpressions.contains(tokens[0].tokenImage + "[]");
+        && matchingIndex(tokens, 1) == last
+        && referenceExpressions.contains(tokens[0].tokenImage + "[]")) {
+      return true;
+    }
+    // A method call: the receiver, ".", the method name, and the parenthesized arguments.
+    for (int open = 3; open < last; open++) {
+      if (Visitors.isLParen(tokens[open]) && matchingIndex(tokens, open) == last) {
+        if (!(Visitors.isIdentifier(tokens[open - 1]) && Visitors.isDot(tokens[open - 2]))) {
+          return false;
+        }
+        @SuppressWarnings("nullness:assignment") // open - 2 < tokens.length, so not padded
+        NodeToken[] receiver = Arrays.copyOfRange(tokens, 0, open - 2);
+        return isReference(stripParens(receiver));
+      }
+    }
+    return false;
   }
 
   /**
