@@ -138,28 +138,23 @@ public class SplitterLoadTest {
   }
 
   /**
-   * A splitter that passes an array to a method must be reported as untranslatable, and it must not
-   * prevent the other splitters from being compiled and loaded.
+   * A splitter that passes an array to a method, possibly within parentheses, within a cast, or as
+   * a branch of a conditional expression, passes the elements of the array.
    */
   @Test
   public void testArrayArgument() throws IOException {
-    SplitterObject[] splitters =
-        loadSplitters(
-            List.of(goodCondition, "java.util.Arrays.equals(this.theArray, this.theArray)"),
-            s -> {});
-    SplitterObject good = splitters[0];
-    SplitterObject arrayArgument = splitters[1];
-
-    assertTrue(good.getError(), good.splitterExists());
-    assertFalse(arrayArgument.splitterExists());
-    assertTrue(
-        arrayArgument.getError(),
-        arrayArgument.getError().contains("cannot be parsed or translated"));
-    assertTrue(
-        arrayArgument.getError(),
-        arrayArgument
-            .getError()
-            .contains("the splitter cannot pass the array this.theArray to a method"));
+    List<String> conditions =
+        List.of(
+            "String.valueOf(this.theArray).isEmpty()",
+            "String.valueOf((this.theArray)).isEmpty()",
+            "String.valueOf((Object) this.theArray).isEmpty()",
+            "String.valueOf(currentSize == 0 ? this.theArray : orig(this.theArray)).isEmpty()",
+            "String.valueOf(this.theArray == orig(this.theArray)).isEmpty()",
+            "this.theArray[0] == 0 && this.theArray.length == 3");
+    SplitterObject[] splitters = loadSplitters(conditions, s -> {});
+    for (SplitterObject splitter : splitters) {
+      assertTrue(splitter.getError(), splitter.splitterExists());
+    }
   }
 
   /**

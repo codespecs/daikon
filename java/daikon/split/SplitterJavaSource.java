@@ -482,11 +482,13 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     }
 
     name = name.replace('.', '_');
-    // originally array names in type infos end in "[..]"
-    // but the replace above will change it to "[__]".   (markro)
+    // Array names end in "[]", or in "[..]" in the old decls format; the replace above changes
+    // the latter to "[__]".
     if (varInfo.type.isArray()) {
       if (name.endsWith("[__]")) {
         name = name.substring(0, name.length() - 4);
+      } else if (name.endsWith("[]")) {
+        name = name.substring(0, name.length() - 2);
       }
     }
     return name;
