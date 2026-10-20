@@ -46,13 +46,6 @@ public final class VarComparabilityImplicit extends VarComparability implements 
 
   public static final VarComparabilityImplicit unknown = new VarComparabilityImplicit(-3, null, 0);
 
-  /**
-   * The comparable set whose variables are comparable to everything. In a union-find structure
-   * built by {@link #mergeSets}, it is the representative of every set that contains it, because it
-   * is smaller than every other set.
-   */
-  private static final int ALWAYS_COMPARABLE = -1;
-
   private VarComparabilityImplicit(
       int base, VarComparabilityImplicit @Nullable [] indexTypes, int dimensions) {
     this.base = base;
@@ -195,11 +188,39 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   /**
+   * If both comparabilities are implicit, records in {@code groups} the comparable sets that must
+   * be merged at a parent program point. Otherwise, does nothing. See {@link
+   * #mergeSets(VarComparabilityImplicit, VarComparabilityImplicit, Map, Map)}.
+   *
+   * @param parent the comparability of a variable at a parent program point
+   * @param child the comparability of the corresponding variable at a child program point
+   * @param childToParentSet maps each comparable set at the child to a comparable set at the parent
+   *     whose variables correspond to child variables in that set; updated by this method
+   * @param groups a union-find structure over the parent's comparable sets, as used by {@link
+   *     #findGroup}; updated by this method
+   */
+  static void mergeSets(
+      VarComparability parent,
+      VarComparability child,
+      Map<Integer, Integer> childToParentSet,
+      Map<Integer, Integer> groups) {
+    if (parent instanceof VarComparabilityImplicit && child instanceof VarComparabilityImplicit) {
+      mergeSets(
+          (VarComparabilityImplicit) parent,
+          (VarComparabilityImplicit) child,
+          childToParentSet,
+          groups);
+    }
+  }
+
+  /**
    * Records in {@code groups} the comparable sets that must be merged at a parent program point so
    * that the parent variable is comparable to every parent variable whose child variable is
-   * comparable to {@code child}. Wherever {@code child} is comparable to everything, the parent's
-   * comparable set is merged with {@link #ALWAYS_COMPARABLE}, so that every variable in it becomes
-   * comparable to everything.
+   * comparable to {@code child}. Wherever {@code child} is comparable to everything (its set is
+   * negative), the parent's comparable set is merged with the child's negative set, so that every
+   * variable in it becomes comparable to everything. A negative set means the same thing at every
+   * program point, so the parent variable can share an equality set with the parent variables whose
+   * child variables are in that negative set.
    *
    * <p>The caller applies the merges by calling {@link #remap} after every variable has been
    * processed.
@@ -231,7 +252,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
       return;
     }
     if (child.base < 0) {
-      union(parent.base, ALWAYS_COMPARABLE, groups);
+      union(parent.base, child.base, groups);
     } else {
       Integer parentSet = childToParentSet.putIfAbsent(child.base, parent.base);
       if (parentSet != null) {
@@ -250,8 +271,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   private static void union(int set1, int set2, Map<Integer, Integer> groups) {
     int group1 = findGroup(set1, groups);
     int group2 = findGroup(set2, groups);
-    // Use the smaller value as the representative, for deterministic results and so that
-    // ALWAYS_COMPARABLE is the representative of every group that contains it.
+    // Use the smaller value as the representative, for deterministic results and so that a group
+    // that contains a negative set, whose variables are comparable to everything, is negative.
     if (group1 < group2) {
       groups.put(group2, group1);
     } else if (group2 < group1) {
@@ -291,7 +312,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    */
   @SuppressWarnings("interning:not.interned") // test whether remap() created a new object
   VarComparabilityImplicit remap(Map<Integer, Integer> groups) {
-    int newBase = (base < 0) ? base : findGroup(base, groups);
+    int newBase = findGroup(base, groups);
     VarComparabilityImplicit @Nullable [] oldIndexTypes = indexTypes;
     VarComparabilityImplicit @Nullable [] newIndexTypes = oldIndexTypes;
     if (oldIndexTypes != null) {

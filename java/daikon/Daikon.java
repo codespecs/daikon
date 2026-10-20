@@ -1801,12 +1801,19 @@ public final class Daikon {
 
     // Make each ppt's comparability at least as coarse as that of each of its children and of its
     // conditional ppts.  Conditional ppts can have children too, so visit them as well.  Visit
-    // children before parents, so that usually each ppt is visited once; but the hierarchy may
-    // contain cycles, so revisit the parents of each ppt whose comparability changes.
+    // children before parents, so that in an acyclic hierarchy each ppt is visited once.  USER
+    // relations, if enabled (PptRelation.dkconfig_enable_object_user), can make the hierarchy
+    // cyclic: for example, if classes A and B each have a field of the other's type, then each
+    // OBJECT ppt is a parent of the other.  So, revisit the parents of each ppt whose comparability
+    // changes.
     Set<PptTopLevel> worklist = new LinkedHashSet<>();
-    Set<PptTopLevel> visited = new HashSet<>();
+    // In MergeInvariants, some children are in other PptMaps; do not visit them.
+    Set<PptTopLevel> unvisited = new HashSet<>();
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
-      addChildrenFirst(ppt, visited, worklist);
+      unvisited.add(ppt);
+    }
+    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
+      addChildrenFirst(ppt, unvisited, worklist);
     }
     while (!worklist.isEmpty()) {
       Iterator<PptTopLevel> itor = worklist.iterator();
@@ -1840,22 +1847,23 @@ public final class Daikon {
 
   /**
    * Adds to {@code worklist} each ppt that has children, among {@code ppt}, its conditional ppts,
-   * and their descendants, each after its descendants. Does nothing for a ppt in {@code visited}.
+   * and their descendants, each after its descendants. Does nothing for a ppt not in {@code
+   * unvisited}.
    *
    * @param ppt a program point
-   * @param visited the ppts already visited; updated by this method
+   * @param unvisited the ppts that may still be visited; updated by this method
    * @param worklist the ppts to coarsen the comparability of; updated by this method
    */
   private static void addChildrenFirst(
-      PptTopLevel ppt, Set<PptTopLevel> visited, Set<PptTopLevel> worklist) {
-    if (!visited.add(ppt)) {
+      PptTopLevel ppt, Set<PptTopLevel> unvisited, Set<PptTopLevel> worklist) {
+    if (!unvisited.remove(ppt)) {
       return;
     }
     for (PptRelation rel : ppt.children) {
-      addChildrenFirst(rel.child, visited, worklist);
+      addChildrenFirst(rel.child, unvisited, worklist);
     }
     for (PptConditional pptCond : ppt.cond_iterable()) {
-      addChildrenFirst(pptCond, visited, worklist);
+      addChildrenFirst(pptCond, unvisited, worklist);
     }
     if (!ppt.children.isEmpty()) {
       worklist.add(ppt);
