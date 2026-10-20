@@ -41,10 +41,6 @@ public class TraceSelect {
           "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED -SEED 1000 foo.dtrace"
               + " foo.decls RatPoly.decls");
 
-  /** The TraceSelect options, in upper case. */
-  private static final Set<String> TRACESELECT_OPTIONS =
-      Set.of("-SEED", "-NOCLEAN", "-INCLUDE_UNRETURNED", "-DO_DIFFS");
-
   /**
    * The entry point of TraceSelect.
    *
@@ -98,10 +94,6 @@ public class TraceSelect {
         includeUnreturned = true;
       } else if (option.equals("-DO_DIFFS")) {
         doDiffs = true;
-      } else if (option.startsWith("-") && !option.startsWith("--")) {
-        // Every Daikon option starts with "--", except "-o", which TraceSelect supplies.
-        throw new daikon.Daikon.UserError(
-            "Unknown TraceSelect option: " + args[i] + daikon.Daikon.lineSep + usage);
       } else {
         break;
       }
@@ -112,14 +104,6 @@ public class TraceSelect {
     String inputFile = null;
     List<String> daikonArgs = new ArrayList<>();
     for (; i < args.length; i++) {
-      if (TRACESELECT_OPTIONS.contains(args[i].toUpperCase(Locale.ENGLISH))) {
-        throw new daikon.Daikon.UserError(
-            "TraceSelect option "
-                + args[i]
-                + " must precede the Daikon arguments"
-                + daikon.Daikon.lineSep
-                + usage);
-      }
       if (args[i].endsWith(".dtrace")) {
         if (inputFile != null) {
           throw new daikon.Daikon.UserError("Only 1 dtrace file for input allowed");

@@ -2,10 +2,7 @@ package daikon.test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
 
-import daikon.Daikon;
 import daikon.tools.TraceSelect;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -132,27 +129,5 @@ public class TraceSelectTest {
     } finally {
       deleteRecursively(dir);
     }
-  }
-
-  /** Tests that a misspelled TraceSelect option is rejected. */
-  @Test
-  public void testUnknownOption() {
-    Daikon.UserError e =
-        assertThrows(
-            Daikon.UserError.class,
-            () -> TraceSelect.mainHelper(new String[] {"2", "5", "-NOCLEANN", "foo.dtrace"}));
-    assertTrue(e.getMessage(), e.getMessage().startsWith("Unknown TraceSelect option: -NOCLEANN"));
-  }
-
-  /** Tests that a TraceSelect option after the Daikon arguments is rejected. */
-  @Test
-  public void testMisplacedOption() {
-    Daikon.UserError e =
-        assertThrows(
-            Daikon.UserError.class,
-            () -> TraceSelect.mainHelper(new String[] {"2", "5", "foo.dtrace", "-NOCLEAN"}));
-    assertTrue(
-        e.getMessage(),
-        e.getMessage().startsWith("TraceSelect option -NOCLEAN must precede the Daikon arguments"));
   }
 }
