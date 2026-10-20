@@ -8,10 +8,6 @@
 # CHECKED_JAVA_HOME, which are not yet set; to pass arguments such as a
 # classpath to javac, set TEST_JAVAC_ARGS instead.
 
-# Some Makefiles include this file twice, directly and via another file.
-ifndef MAKEFILE_JDK_INCLUDED
-MAKEFILE_JDK_INCLUDED := 1
-
 ifdef JAVAC
   ifeq ($(shell command -v $(firstword ${JAVAC})),)
     $(error JAVAC=${JAVAC} is not an executable command)
@@ -36,5 +32,3 @@ endif
 
 JAVA  ?= ${CHECKED_JAVA_HOME}/bin/java
 JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac
-
-endif
