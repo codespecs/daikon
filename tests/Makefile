@@ -80,6 +80,8 @@ very-clean: clean
 
 # output display; can be called from children (they will set BASE)
 BASE?=chicory-tests daikon-tests diff-tests merge-invariants-tests parser-tests dyncomp-tests
+# removes fields before the size (ie, permissions, owner, group).
+PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; print "$$1\t$$2\t$$3\n"; if ($$1 > 0) { $$failure++; } END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
 # args to 'find' program, to find files containing results
 RESULTS_PATTERN :=    -name '*.txt-*.diff' \
                    -o -name '*.checker.diff' \
@@ -96,11 +98,20 @@ RESULTS_PATTERN :=    -name '*.txt-*.diff' \
                    -o -name '*.invs.diff' \
                    -o -name '*xcheck.diff' \
                    -o -name '*daikon.diff'
-# The summary lists passing tests too; summary2 relies on that.
-RESULTS_PRINT_PASSING = 1
-include ${DAIKON_TESTS_DIR}Makefile.results
+results_header:
+	@echo ""
+	@echo "=== RESULTS ==="
+	@echo ""
 
-summary: summary_list
+results_cat:
+	@find ${BASE} ${RESULTS_PATTERN} -print0 | xargs -0 cat
+
+results: results_header results_cat summary
+
+summary:
+	@ls -l `find ${BASE} ${RESULTS_PATTERN}` \
+	  | perl -pe 's|\Q${BASE}|.|;' \
+	  | ${PERL_CLEANUP_LS_OUTPUT}
 
 summary2: # omit pristine tests
 	@${MAKE} --no-print-directory summary | egrep -v '^0' || echo 'No differences'
