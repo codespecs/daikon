@@ -5,9 +5,10 @@ import daikon.split.*;
 public final class misc_QuantCalls_m_47 extends Splitter {
 
   public String condition() {
-    return "isEmpty()";
+    return "daikon.Quant.size(this.a) == i";
   }
 
+  VarInfo i_varinfo; // i
   VarInfo this_a_array_varinfo; // this.a[..]
 
   static DummyInvariant dummyInvFactory;
@@ -15,6 +16,7 @@ public final class misc_QuantCalls_m_47 extends Splitter {
 
   public misc_QuantCalls_m_47() { }
   public misc_QuantCalls_m_47(Ppt ppt) {
+    i_varinfo = ppt.find_var_by_name("i");
     this_a_array_varinfo = ppt.find_var_by_name("this.a[..]");
   }
 
@@ -23,17 +25,19 @@ public final class misc_QuantCalls_m_47 extends Splitter {
   }
 
   public boolean valid() {
-    return (this_a_array_varinfo != null);
+    return (i_varinfo != null) && (this_a_array_varinfo != null);
   }
 
   public boolean test(ValueTuple vt) {
-    /* writeTestBody: 1 declarations */
+    /* writeTestBody: 2 declarations */
+    long i = i_varinfo.getIntValue(vt);
     long[] this_a_array = this_a_array_varinfo.getIntArrayValue(vt);
-    return(size(this_a_array)==0);
+    return(size(this_a_array)==i);
   }
 
   public String repr() {
     return "misc_QuantCalls_m_47: "
+      + "i_varinfo = " + i_varinfo.repr() + " "
       + "this_a_array_varinfo = " + this_a_array_varinfo.repr() + " "
       ;
   }
@@ -44,9 +48,10 @@ public final class misc_QuantCalls_m_47 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
+    VarInfo i_vi = ppt.find_var_by_name("i");
     VarInfo this_a_array_vi = ppt.find_var_by_name("this.a[..]");
-    if (this_a_array_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_a_array_vi});
+    if (i_vi != null && this_a_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {i_vi, this_a_array_vi});
     }
   }
 

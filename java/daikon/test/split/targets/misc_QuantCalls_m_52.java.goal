@@ -5,7 +5,7 @@ import daikon.split.*;
 public final class misc_QuantCalls_m_52 extends Splitter {
 
   public String condition() {
-    return "daikon.Quant.getElement_String(this.s, 0) == null";
+    return "\"x\".equals(daikon.Quant.getElement_String(this.s, 0))";
   }
 
   VarInfo this_s_array_varinfo; // this.s[..]
@@ -29,7 +29,7 @@ public final class misc_QuantCalls_m_52 extends Splitter {
   public boolean test(ValueTuple vt) {
     /* writeTestBody: 1 declarations */
     java.lang.String[] this_s_array = this_s_array_varinfo.getStringArrayValue(vt);
-    return(getElement_String(this_s_array,0)==null);
+    return("x".equals(getElement_String(this_s_array,0)));
   }
 
   public String repr() {

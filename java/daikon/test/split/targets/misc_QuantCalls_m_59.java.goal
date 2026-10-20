@@ -5,19 +5,17 @@ import daikon.split.*;
 public final class misc_QuantCalls_m_59 extends Splitter {
 
   public String condition() {
-    return "daikon.Quant.getElement_Object(this.objs, i) != null && this.objs[0] == null";
+    return "daikon.Quant.getElement_String(this.s, 0).trim() != null";
   }
 
-  VarInfo i_varinfo; // i
-  VarInfo this_objs_array_varinfo; // this.objs[..]
+  VarInfo this_s_array_varinfo; // this.s[..]
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
   public misc_QuantCalls_m_59() { }
   public misc_QuantCalls_m_59(Ppt ppt) {
-    i_varinfo = ppt.find_var_by_name("i");
-    this_objs_array_varinfo = ppt.find_var_by_name("this.objs[..]");
+    this_s_array_varinfo = ppt.find_var_by_name("this.s[..]");
   }
 
   public Splitter instantiateSplitter(Ppt ppt) {
@@ -25,20 +23,18 @@ public final class misc_QuantCalls_m_59 extends Splitter {
   }
 
   public boolean valid() {
-    return (i_varinfo != null) && (this_objs_array_varinfo != null);
+    return (this_s_array_varinfo != null);
   }
 
   public boolean test(ValueTuple vt) {
-    /* writeTestBody: 2 declarations */
-    long i = i_varinfo.getIntValue(vt);
-    long[] this_objs_array = this_objs_array_varinfo.getIntArrayValue(vt);
-    return(getElement_Object(this_objs_array,i)!=0&&this_objs_array[0]==0);
+    /* writeTestBody: 1 declarations */
+    java.lang.String[] this_s_array = this_s_array_varinfo.getStringArrayValue(vt);
+    return(getElement_String(this_s_array,0).trim()!=null);
   }
 
   public String repr() {
     return "misc_QuantCalls_m_59: "
-      + "i_varinfo = " + i_varinfo.repr() + " "
-      + "this_objs_array_varinfo = " + this_objs_array_varinfo.repr() + " "
+      + "this_s_array_varinfo = " + this_s_array_varinfo.repr() + " "
       ;
   }
 
@@ -48,10 +44,9 @@ public final class misc_QuantCalls_m_59 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
-    VarInfo i_vi = ppt.find_var_by_name("i");
-    VarInfo this_objs_array_vi = ppt.find_var_by_name("this.objs[..]");
-    if (i_vi != null && this_objs_array_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {i_vi, this_objs_array_vi});
+    VarInfo this_s_array_vi = ppt.find_var_by_name("this.s[..]");
+    if (this_s_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_s_array_vi});
     }
   }
 

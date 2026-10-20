@@ -2,7 +2,7 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.split.*;
 
-public final class misc_CharBuf_isEmpty_63 extends Splitter {
+public final class misc_CharBuf_isEmpty_44 extends Splitter {
 
   public String condition() {
     return "buf.length == 0";
@@ -13,13 +13,13 @@ public final class misc_CharBuf_isEmpty_63 extends Splitter {
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
-  public misc_CharBuf_isEmpty_63() { }
-  public misc_CharBuf_isEmpty_63(Ppt ppt) {
+  public misc_CharBuf_isEmpty_44() { }
+  public misc_CharBuf_isEmpty_44(Ppt ppt) {
     this_buf_array_varinfo = ppt.find_var_by_name("this.buf[..]");
   }
 
   public Splitter instantiateSplitter(Ppt ppt) {
-    return new misc_CharBuf_isEmpty_63(ppt);
+    return new misc_CharBuf_isEmpty_44(ppt);
   }
 
   public boolean valid() {
@@ -33,7 +33,7 @@ public final class misc_CharBuf_isEmpty_63 extends Splitter {
   }
 
   public String repr() {
-    return "misc_CharBuf_isEmpty_63: "
+    return "misc_CharBuf_isEmpty_44: "
       + "this_buf_array_varinfo = " + this_buf_array_varinfo.repr() + " "
       ;
   }
