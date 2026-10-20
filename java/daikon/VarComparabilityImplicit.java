@@ -48,8 +48,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
 
   /**
    * The comparable set whose variables are comparable to everything. In a union-find structure
-   * built by {@link #mergeSets}, it is the representative of every set that contains it, because
-   * it is smaller than every other set.
+   * built by {@link #mergeSets}, it is the representative of every set that contains it, because it
+   * is smaller than every other set.
    */
   private static final int ALWAYS_COMPARABLE = -1;
 

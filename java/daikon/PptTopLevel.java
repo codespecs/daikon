@@ -4114,18 +4114,29 @@ public class PptTopLevel extends Ppt {
     // A union-find structure over the comparable sets at this program point.
     Map<Integer, Integer> groups = new HashMap<>();
     for (PptRelation rel : children) {
+      if (rel.getRelationType() == PptRelationType.PPT_PPTCOND && rel.child.children.isEmpty()) {
+        // The conditional program point's comparability is a copy of this program point's.
+        continue;
+      }
       Map<Integer, Integer> childToParentSet = new HashMap<>();
       for (VarInfo childVar : rel.child.var_infos) {
         VarInfo parentVar = rel.parentVar(childVar);
-        if (parentVar != null
-            && parentVar.comparability instanceof VarComparabilityImplicit
-            && childVar.comparability instanceof VarComparabilityImplicit) {
-          VarComparabilityImplicit.mergeSets(
-              (VarComparabilityImplicit) parentVar.comparability,
-              (VarComparabilityImplicit) childVar.comparability,
-              childToParentSet,
-              groups);
+        if (parentVar != null) {
+          mergeComparableSets(parentVar, childVar, childToParentSet, groups);
         }
+      }
+    }
+    // The conditional program points get this program point's comparability below.  Their own
+    // children may have coarsened their comparability, so merge it in first, lest it be lost.  A
+    // conditional program point with no children has a copy of this program point's comparability.
+    for (PptConditional pptCond : cond_iterable()) {
+      assert pptCond.var_infos.length == var_infos.length : pptCond.name();
+      if (pptCond.children.isEmpty()) {
+        continue;
+      }
+      Map<Integer, Integer> condToParentSet = new HashMap<>();
+      for (int i = 0; i < var_infos.length; i++) {
+        mergeComparableSets(var_infos[i], pptCond.var_infos[i], condToParentSet, groups);
       }
     }
     if (groups.isEmpty()) {
@@ -4146,17 +4157,44 @@ public class PptTopLevel extends Ppt {
     if (!changed) {
       return false;
     }
+    assert equality_view == null
+        : "coarsening comparability after creating invariants at " + name();
 
     for (int i = 0; i < var_infos.length; i++) {
       var_infos[i].comparability = newComparability[i];
     }
     for (PptConditional pptCond : cond_iterable()) {
-      assert pptCond.var_infos.length == var_infos.length : pptCond.name();
       for (int i = 0; i < var_infos.length; i++) {
         pptCond.var_infos[i].comparability = newComparability[i];
       }
     }
     return true;
+  }
+
+  /**
+   * If both variables have implicit comparability, records in {@code groups} the comparable sets
+   * that must be merged at the parent program point. See {@link
+   * VarComparabilityImplicit#mergeSets}.
+   *
+   * @param parentVar a variable at a parent program point
+   * @param childVar the corresponding variable at a child program point
+   * @param childToParentSet maps each comparable set at the child to a comparable set at the
+   *     parent; updated by this method
+   * @param groups a union-find structure over the parent's comparable sets; updated by this method
+   */
+  private static void mergeComparableSets(
+      VarInfo parentVar,
+      VarInfo childVar,
+      Map<Integer, Integer> childToParentSet,
+      Map<Integer, Integer> groups) {
+    if (parentVar.comparability instanceof VarComparabilityImplicit
+        && childVar.comparability instanceof VarComparabilityImplicit) {
+      VarComparabilityImplicit.mergeSets(
+          (VarComparabilityImplicit) parentVar.comparability,
+          (VarComparabilityImplicit) childVar.comparability,
+          childToParentSet,
+          groups);
+    }
   }
 
   /**

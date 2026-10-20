@@ -1794,18 +1794,19 @@ public final class Daikon {
 
   /**
    * Creates invariants for upper program points by merging together the invariants from all of the
-   * lower points.
+   * lower points. First, coarsens the comparability of each upper program point so that the merged
+   * invariants can be represented there.
    */
   public static void createUpperPpts(PptMap all_ppts) {
 
-    // Make each ppt's comparability at least as coarse as that of each of its children.  Visit
-    // conditional ppts too, because they have children in MergeInvariants.  A ppt may be visited
-    // before its children, so revisit the parents of each ppt whose comparability changes.
+    // Make each ppt's comparability at least as coarse as that of each of its children and of its
+    // conditional ppts.  Conditional ppts can have children too, so visit them as well.  Visit
+    // children before parents, so that usually each ppt is visited once; but the hierarchy may
+    // contain cycles, so revisit the parents of each ppt whose comparability changes.
     Set<PptTopLevel> worklist = new LinkedHashSet<>();
+    Set<PptTopLevel> visited = new HashSet<>();
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
-      if (!ppt.children.isEmpty()) {
-        worklist.add(ppt);
-      }
+      addChildrenFirst(ppt, visited, worklist);
     }
     while (!worklist.isEmpty()) {
       Iterator<PptTopLevel> itor = worklist.iterator();
@@ -1818,7 +1819,9 @@ public final class Daikon {
         }
         for (PptConditional pptCond : ppt.cond_iterable()) {
           for (PptRelation rel : pptCond.parents) {
-            worklist.add(rel.parent);
+            if (rel.parent != ppt) {
+              worklist.add(rel.parent);
+            }
           }
         }
       }
@@ -1832,6 +1835,30 @@ public final class Daikon {
       if (ppt.parents.isEmpty()) {
         ppt.mergeInvs();
       }
+    }
+  }
+
+  /**
+   * Adds to {@code worklist} each ppt that has children, among {@code ppt}, its conditional ppts,
+   * and their descendants, each after its descendants. Does nothing for a ppt in {@code visited}.
+   *
+   * @param ppt a program point
+   * @param visited the ppts already visited; updated by this method
+   * @param worklist the ppts to coarsen the comparability of; updated by this method
+   */
+  private static void addChildrenFirst(
+      PptTopLevel ppt, Set<PptTopLevel> visited, Set<PptTopLevel> worklist) {
+    if (!visited.add(ppt)) {
+      return;
+    }
+    for (PptRelation rel : ppt.children) {
+      addChildrenFirst(rel.child, visited, worklist);
+    }
+    for (PptConditional pptCond : ppt.cond_iterable()) {
+      addChildrenFirst(pptCond, visited, worklist);
+    }
+    if (!ppt.children.isEmpty()) {
+      worklist.add(ppt);
     }
   }
 

@@ -32,11 +32,15 @@ endif
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
+.DELETE_ON_ERROR:
+
+# A failing diff is left in a *-failed.diff file for inspection.
 diffs: daikon.txt.diff daikon-spinfo.txt.diff
 daikon.txt.diff: combined.inv.gz merge.inv.gz
 	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants combined.inv.gz > combined.txt
 	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants merge.inv.gz > merge.txt
-	diff -u combined.txt merge.txt > daikon.txt.diff || (cat daikon.txt.diff && false)
+	diff -u combined.txt merge.txt > daikon.txt-failed.diff || (cat daikon.txt-failed.diff && false)
+	mv daikon.txt-failed.diff daikon.txt.diff
 
 # Build the merged version of the invariant file from the individual inv files
 merge.inv.gz: ${DAIKON} Run1.inv.gz Run2.inv.gz
@@ -55,7 +59,8 @@ Run%.inv.gz: ${DAIKON} Issue203.decls Run%.dtrace.gz
 daikon-spinfo.txt.diff: combined-spinfo.inv.gz merge-spinfo.inv.gz
 	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants combined-spinfo.inv.gz > combined-spinfo.txt
 	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants merge-spinfo.inv.gz > merge-spinfo.txt
-	diff -u combined-spinfo.txt merge-spinfo.txt > daikon-spinfo.txt.diff || (cat daikon-spinfo.txt.diff && false)
+	diff -u combined-spinfo.txt merge-spinfo.txt > daikon-spinfo.txt-failed.diff || (cat daikon-spinfo.txt-failed.diff && false)
+	mv daikon-spinfo.txt-failed.diff daikon-spinfo.txt.diff
 
 merge-spinfo.inv.gz: ${DAIKON} Issue203Incomparable.decls Issue203.spinfo Run1-spinfo.inv.gz Run2-spinfo.inv.gz
 	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.MergeInvariants -o merge-spinfo.inv.gz \
