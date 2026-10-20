@@ -124,7 +124,8 @@ public class SplitDtraceTest {
             assertThrows(
                 Daikon.UserError.class,
                 () -> SplitDtrace.mainHelper(new String[] {input.toString()}));
-        assertTrue(e.getMessage(), e.getMessage().contains("version 1 format"));
+        String message = String.valueOf(e.getMessage());
+        assertTrue(message, message.contains("version 1 format"));
         assertFalse(Files.exists(output));
       } finally {
         Files.deleteIfExists(input);
