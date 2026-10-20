@@ -16,6 +16,7 @@ import jtb.syntaxtree.NodeListOptional;
 import jtb.syntaxtree.NodeOptional;
 import jtb.syntaxtree.NodeSequence;
 import jtb.syntaxtree.NodeToken;
+import jtb.syntaxtree.PrimaryExpression;
 import jtb.syntaxtree.PrimaryPrefix;
 import jtb.visitor.DepthFirstVisitor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -173,19 +174,20 @@ class ArrayFixer extends DepthFirstVisitor {
     assert lastToken != null
         : "@AssumeAssertion(nullness): dependent: because lastTokenIdentity or lastTokenElements is"
             + " non-null";
-    boolean isArgument = !nextIsSelector && isArgument(lastToken);
-    if (nextIsSelector || isArgument) {
+    Use use = nextIsSelector ? Use.SELECTED : use(lastToken);
+    boolean isArgument = use == Use.ARGUMENT;
+    if (use != Use.OTHER) {
       if (lastTokenElements != null) {
         addSuffix(lastToken, "_array");
       } else {
         assert lastTokenIdentity != null
             : "@AssumeAssertion(nullness): lastTokenElements is null, so lastTokenIdentity is not";
-        String use =
+        String what =
             isArgument
                 ? "pass the array " + lastTokenIdentity.name() + " to a method"
                 : "use the elements or length of the array " + lastTokenIdentity.name();
         errors.add(
-            "Cannot " + use + ", because the program point has no variable for its elements");
+            "Cannot " + what + ", because the program point has no variable for its elements");
       }
     } else if (lastTokenIdentity != null) {
       addSuffix(lastToken, "_identity");
@@ -206,22 +208,37 @@ class ArrayFixer extends DepthFirstVisitor {
     columnshiftline = token.beginLine;
   }
 
+  /** How the value of an expression is used. */
+  private enum Use {
+    /** The value is passed to a method or constructor. */
+    ARGUMENT,
+    /** The value is followed by a selector, such as "[...]" or ".length". */
+    SELECTED,
+    /** Any other use. */
+    OTHER
+  }
+
   /**
-   * Returns true if the value of token is passed to a method or constructor: that is, token is an
-   * argument, possibly within parentheses, within a cast, or as a branch of a conditional
+   * Returns how the value of token is used. The value of token is also the value of an enclosing
+   * expression that puts it within parentheses, within a cast, or as a branch of a conditional
    * expression.
    *
    * @param token a token
-   * @return true if the value of token is passed to a method or constructor
+   * @return how the value of token is used
    */
   @SuppressWarnings("interning:not.interned") // syntax tree nodes are compared by identity
-  private static boolean isArgument(NodeToken token) {
+  private static Use use(NodeToken token) {
     // The node whose value is the value of token.
     Node value = token;
     Node child = token;
     for (Node parent = token.getParent(); parent != null; parent = parent.getParent()) {
       if (parent instanceof ArgumentList) {
-        return true;
+        return Use.ARGUMENT;
+      }
+      if (parent instanceof PrimaryExpression
+          && child == ((PrimaryExpression) parent).f0
+          && ((PrimaryExpression) parent).f1.present()) {
+        return Use.SELECTED;
       }
       if (!(parent instanceof NodeChoice
           || parent instanceof NodeList
@@ -238,13 +255,13 @@ class ArrayFixer extends DepthFirstVisitor {
                 // The choice "(" Expression() ")".
                 || (parent instanceof PrimaryPrefix && ((PrimaryPrefix) parent).f0.which == 4);
         if (!sameValue) {
-          return false;
+          return Use.OTHER;
         }
         value = parent;
       }
       child = parent;
     }
-    return false;
+    return Use.OTHER;
   }
 
   /**

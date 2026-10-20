@@ -206,6 +206,16 @@ public class SplitterFactory {
                 splitObj.condition() + " cannot be parsed or translated:",
                 message != null ? message : e.toString()));
         continue;
+      } catch (RuntimeException e) {
+        // A bug in translating this condition must not prevent the other splitters from loading.
+        debug.fine(e.toString());
+        splitObj.setError(
+            String.join(
+                System.lineSeparator(),
+                "Error in SplitterFactory while writing splitter java file for:",
+                splitObj.condition() + " cannot be translated:",
+                e.toString()));
+        continue;
       }
       @SuppressWarnings("signature") // safe, has been quoted
       @BinaryName String fileName_bn = fileName;

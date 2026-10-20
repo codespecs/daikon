@@ -32,7 +32,10 @@ import java.util.regex.Pattern;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/** Tests loading of splitters when some of the splitters for a program point are erroneous. */
+/**
+ * Tests loading of splitters when some of the splitters for a program point are erroneous, and
+ * tests translation of splitter conditions that use arrays.
+ */
 @SuppressWarnings("nullness") // testing code
 public class SplitterLoadTest {
 
@@ -159,7 +162,8 @@ public class SplitterLoadTest {
             "Quant.noDups((long[]) this.a)",
             "Quant.noDups(this.n == 0 ? this.a : this.a)",
             "String.valueOf(this.a == this.b).isEmpty()",
-            "this.a[0] == 0 && this.a.length == 3");
+            "this.a[0] == 0 && this.a.length == 3",
+            "(this.a)[0] == 0 && (this.a).length == 3");
     // this.b has no variable for its elements.
     String noElementsCondition = "Quant.noDups(this.b) || Quant.noDups(this.b)";
     List<String> conditions = new ArrayList<>(goodConditions);
