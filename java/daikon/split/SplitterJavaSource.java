@@ -205,9 +205,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         get_expr = "getDoubleValue(vt)";
       } else if (type.equals("double[]")) {
         get_expr = "getDoubleArrayValue(vt)";
-      } else if (type.equals("String")
-          || type.equals("java.lang.String")
-          || type.equals("char[]")) {
+      } else if (type.equals("String") || type.equals("java.lang.String")) {
         type = "String";
         get_expr = "getStringValue(vt)";
       } else if (type.equals("String[]") || type.equals("java.lang.String[]")) {
@@ -457,39 +455,31 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     return name;
   }
 
+  /** Matches the "[]" or "[..]" suffix of an array variable's name. */
+  private static final Pattern arraySuffixPattern = Pattern.compile("\\[(\\.\\.)?\\]$");
+
   /**
-   * Calculates the base name of a variable. The base name of a variable is the part of the variable
-   * with prefix "this." replaced by "this_", and "orig()" replaced * by "orig_". In addition, '.'
-   * are converted to '_'. For example, orig(this.x) goes to orig_this_x. Finally, Java Reserved
-   * words are replaced with appropriate substitutes.
+   * Calculates the base name of a variable. The base name of a variable is its name with "orig(x)"
+   * replaced by "orig_x", the "[]" or "[..]" suffix of an array's name removed, and each '.'
+   * replaced by '_'. For example, orig(this.x) goes to orig_this_x, and this.theArray[] goes to
+   * this_theArray. Java reserved words are replaced with appropriate substitutes.
+   *
+   * <p>Brackets that are not a suffix are retained. For example, the base name of this.a[].b is
+   * this_a[]_b, which is not an identifier. That is harmless, because no Java expression in a
+   * splitting condition can refer to such a variable.
    *
    * @param varInfo the VarInfo for the variable whose base name is desired
    * @return the base name of the variable represented by varInfo
    */
   private static String getBaseName(VarInfo varInfo) {
-    String name = varInfo.name();
-    name = replaceReservedWords(name);
-    if (name.length() > 5 && name.substring(0, 5).equals("orig(") && name.endsWith(")")) {
-      name = name.substring(5, name.length() - 1);
-      if (name.startsWith("this.")) {
-        name = "this_" + name.substring(5);
-      }
-      name = "orig_" + name;
-    } else {
-      if (name.startsWith("this.")) {
-        name = "this_" + name.substring(5);
-      }
+    String name = replaceReservedWords(varInfo.name());
+    if (name.startsWith("orig(") && name.endsWith(")")) {
+      name = "orig_" + name.substring(5, name.length() - 1);
     }
-
-    name = name.replace('.', '_');
-    // originally array names in type infos end in "[..]"
-    // but the replace above will change it to "[__]".   (markro)
     if (varInfo.type.isArray()) {
-      if (name.endsWith("[__]")) {
-        name = name.substring(0, name.length() - 4);
-      }
+      name = arraySuffixPattern.matcher(name).replaceFirst("");
     }
-    return name;
+    return name.replace('.', '_');
   }
 
   /**
@@ -535,8 +525,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   private static String getVarType(VarInfo varInfo) {
     if (varInfo.file_rep_type == ProglangType.HASHCODE) {
       return "int";
-    } else if ((varInfo.type == ProglangType.CHAR_ARRAY)
-        || (varInfo.type == ProglangType.BOOLEAN)
+    } else if ((varInfo.type == ProglangType.BOOLEAN)
         || (varInfo.type == ProglangType.DOUBLE)
         || (varInfo.type == ProglangType.DOUBLE_ARRAY)) {
       return varInfo.type.format();
@@ -667,9 +656,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * requires: condition is a string representation of a conditional
    *
-   * @return a list of all possible variable names in condition. This attempts not to return method
-   *     names nor the base names of qualified names (why not the latter?). Arrays appear with "[]"
-   *     at the end if their elements or accessed in the condition.
+   * @return a list of all possible variable names in condition, each of which is a single
+   *     identifier. This attempts not to return method names nor the base names of qualified names
+   *     (why not the latter?). Because ArrayFixer has already processed the condition, an array
+   *     appears as its compilable name, such as "this_theArray_array" or "this_theArray_identity".
    */
   private static List<String> findPossibleClassVariables(String condition) throws ParseException {
 
