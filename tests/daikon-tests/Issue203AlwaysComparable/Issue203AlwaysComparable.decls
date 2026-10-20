@@ -2,11 +2,11 @@ decl-version 2.0
 var-comparability implicit
 
 # this.x, this.y, and this.q are comparable at the method ppts, and this.x and
-# this.y are always equal.  At the OBJECT ppt, this.y (comparability -1) is
-# comparable to everything, but this.x and this.q are incomparable.  this.x and
-# this.y are in the same equality set at the OBJECT ppt, so both become
-# comparable to everything, regardless of which is the equality set's leader,
-# and this.x < this.q is reported.
+# this.y are always equal.  At the OBJECT ppt, this.y is declared comparable to
+# everything (comparability -1), but this.x and this.q are declared
+# incomparable.  Daikon makes this.x and this.q comparable at the OBJECT ppt,
+# because they are comparable at its children, so this.x < this.q is reported.
+# this.y remains comparable to everything.
 
 ppt C:::OBJECT
 ppt-type object

@@ -1,11 +1,12 @@
 decl-version 2.0
 var-comparability implicit
 
-# x and y are comparable at the method ppts but not at the OBJECT ppt.  They
-# are always equal, so they are in the same equality set at the OBJECT ppt,
-# with leader x.  w is comparable to all of them at the method ppts, but only
-# to y at the OBJECT ppt.  Since x and y are equal, x and w must be comparable
-# at the OBJECT ppt, so that the OBJECT ppt has the invariant x < w.
+# x, y, and w are comparable at the method ppts.  At the OBJECT ppt, y and w are
+# declared comparable, but x is declared incomparable to both.  Daikon makes x,
+# y, and w comparable at the OBJECT ppt, because they are comparable at its
+# children.  x and y are always equal, so they are in the same equality set at
+# the OBJECT ppt, with leader x.  Because x is comparable to w there, the OBJECT
+# ppt has the invariant x < w.
 ppt C:::OBJECT
 ppt-type object
 variable this
