@@ -564,7 +564,7 @@ public final class FileIO {
   }
 
   /** The error message for a file in the obsolete version 1 format. */
-  private static final String obsoleteFormatMessage =
+  static final String obsoleteFormatMessage =
       "File is in the version 1 format, which is no longer supported."
           + " Re-generate it with a current front end, which produces version 2 files.";
 
