@@ -47,6 +47,8 @@ public final class NullComparisonsSplitterTest {
     expected.put("this.s[1] == null", false);
     expected.put("this.objs == null", false);
     expected.put("this.sign == (null)", false);
+    expected.put("this.sign.trim() != null", true);
+    expected.put("null == (this.s[1]).trim()", false);
     assertEquals(loaded.output, expected, loaded.test(values));
 
     values.put("this.obj", 3L);
