@@ -2841,8 +2841,8 @@ inside a record.
 @cindex declaration format
 @cindex @file{.decls} file
 
-The trace file (or declaration file) first states the declaration file format
-version number (@pxref{Declaration version}).
+The trace file (or declaration file) may first state the declaration file
+format version number (@pxref{Declaration version}).
 It may also specify some other information about the file
 (@pxref{Declaration-related records}).
 Then, it defines each program point and its variables.
@@ -2879,7 +2879,8 @@ Some additional details about the declaration file format appear in file
 @node          Declaration version
 @subsubsection Declaration version
 
-The declaration version record must be the first record in the file.
+If a file has a declaration version record, it must be the first record in the
+file.
 
 The declaration version record is as follows:
 @example
