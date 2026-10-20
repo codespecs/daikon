@@ -20,8 +20,8 @@ public final class QuantCallsSplitterTest {
   private static final String pptName = "misc.QuantCalls.m";
 
   /**
-   * The conditions that cannot be translated, because they apply a daikon.Quant method to a variable
-   * whose elements are not available to the splitter or have the wrong type.
+   * The conditions that cannot be translated, because they apply a daikon.Quant method to a
+   * variable whose elements are not available to the splitter or have the wrong type.
    */
   private static final String[] untranslatableConditions = {
     "daikon.Quant.getElement_boolean(this.a, 0)",
