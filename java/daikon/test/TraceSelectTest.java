@@ -113,9 +113,7 @@ public class TraceSelectTest {
       Path trace = writeTrace(dir);
       Path decls = dir.resolve("trace.decls");
       Files.writeString(decls, DECLS, UTF_8);
-      String[] args = {
-        "2", "5", "-SEED", "1000", "-NOCLEAN", trace.toString(), decls.toString()
-      };
+      String[] args = {"2", "5", "-SEED", "1000", "-NOCLEAN", trace.toString(), decls.toString()};
       Path sample1 = dir.resolve("trace1.dtrace");
       Path sample2 = dir.resolve("trace2.dtrace");
 

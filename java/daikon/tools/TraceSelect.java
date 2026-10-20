@@ -302,8 +302,8 @@ public class TraceSelect {
    *     exit it normally
    * @return the samples. Each sample contains the selected invocations, in no particular order.
    *     Each ENTER record is followed by its matching EXIT record, if any; an ENTER record without
-   *     an EXIT record appears only if {@code includeUnreturned} is true. OBJECT and CLASS
-   *     records appear alone.
+   *     an EXIT record appears only if {@code includeUnreturned} is true. OBJECT and CLASS records
+   *     appear alone.
    * @throws IOException if the trace file cannot be read
    */
   public static List<List<String>> selectSamples(
