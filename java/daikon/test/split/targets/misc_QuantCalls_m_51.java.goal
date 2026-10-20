@@ -5,17 +5,21 @@ import daikon.split.*;
 public final class misc_QuantCalls_m_51 extends Splitter {
 
   public String condition() {
-    return "daikon.Quant.getElement_char(this.str, 0) == 'a' && daikon.Quant.size(this.str) > 1";
+    return "daikon.Quant.getElement_double(this.d, Math.max(i, 0)) > java.lang.Math.abs(this.x)";
   }
 
-  VarInfo this_str_array_varinfo; // this.str
+  VarInfo i_varinfo; // i
+  VarInfo this_x_varinfo; // this.x
+  VarInfo this_d_array_varinfo; // this.d[..]
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
   public misc_QuantCalls_m_51() { }
   public misc_QuantCalls_m_51(Ppt ppt) {
-    this_str_array_varinfo = ppt.find_var_by_name("this.str");
+    i_varinfo = ppt.find_var_by_name("i");
+    this_x_varinfo = ppt.find_var_by_name("this.x");
+    this_d_array_varinfo = ppt.find_var_by_name("this.d[..]");
   }
 
   public Splitter instantiateSplitter(Ppt ppt) {
@@ -23,18 +27,22 @@ public final class misc_QuantCalls_m_51 extends Splitter {
   }
 
   public boolean valid() {
-    return (this_str_array_varinfo != null);
+    return (i_varinfo != null) && (this_x_varinfo != null) && (this_d_array_varinfo != null);
   }
 
   public boolean test(ValueTuple vt) {
-    /* writeTestBody: 1 declarations */
-    String this_str_array = this_str_array_varinfo.getStringValue(vt);
-    return(getElement_char(this_str_array,0)=='a'&&size(this_str_array)>1);
+    /* writeTestBody: 3 declarations */
+    long i = i_varinfo.getIntValue(vt);
+    double this_x = this_x_varinfo.getDoubleValue(vt);
+    double[] this_d_array = this_d_array_varinfo.getDoubleArrayValue(vt);
+    return(getElement_double(this_d_array,Math.max(i,0))>java.lang.Math.abs(this_x));
   }
 
   public String repr() {
     return "misc_QuantCalls_m_51: "
-      + "this_str_array_varinfo = " + this_str_array_varinfo.repr() + " "
+      + "i_varinfo = " + i_varinfo.repr() + " "
+      + "this_x_varinfo = " + this_x_varinfo.repr() + " "
+      + "this_d_array_varinfo = " + this_d_array_varinfo.repr() + " "
       ;
   }
 
@@ -44,9 +52,11 @@ public final class misc_QuantCalls_m_51 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
-    VarInfo this_str_array_vi = ppt.find_var_by_name("this.str");
-    if (this_str_array_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_str_array_vi});
+    VarInfo i_vi = ppt.find_var_by_name("i");
+    VarInfo this_x_vi = ppt.find_var_by_name("this.x");
+    VarInfo this_d_array_vi = ppt.find_var_by_name("this.d[..]");
+    if (i_vi != null && this_x_vi != null && this_d_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {i_vi, this_x_vi, this_d_array_vi});
     }
   }
 

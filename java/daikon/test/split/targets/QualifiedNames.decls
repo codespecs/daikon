@@ -1,7 +1,8 @@
 decl-version 2.0
 
 // Declarations for a class whose fields are used in splitting conditions together with names
-// that do not start with a variable name, such as java.lang.Math.abs.
+// that do not start with a variable name, such as java.lang.Math.abs.  The static field
+// java.lang.Integer.MAX_VALUE shares its first identifier with those names.
 
 var-comparability none
 
@@ -31,6 +32,11 @@ ppt misc.QualifiedNames.m(misc.QualifiedNames):::ENTER
     dec-type int
     rep-type int
     comparability 22
+  variable java.lang.Integer.MAX_VALUE
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 22
 
 ppt misc.QualifiedNames.m(misc.QualifiedNames):::EXIT10
   ppt-type subexit
@@ -55,6 +61,11 @@ ppt misc.QualifiedNames.m(misc.QualifiedNames):::EXIT10
   variable p.count
     var-kind field count
     enclosing-var p
+    dec-type int
+    rep-type int
+    comparability 22
+  variable java.lang.Integer.MAX_VALUE
+    var-kind variable
     dec-type int
     rep-type int
     comparability 22

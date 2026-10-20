@@ -2,39 +2,39 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.split.*;
 
-public final class misc_CharBuf_isEmpty_64 extends Splitter {
+public final class misc_QuantCalls_m_60 extends Splitter {
 
   public String condition() {
-    return "buf[0] == 'a'";
+    return "this.obj == null";
   }
 
-  VarInfo this_buf_array_varinfo; // this.buf[..]
+  VarInfo this_obj_varinfo; // this.obj
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
-  public misc_CharBuf_isEmpty_64() { }
-  public misc_CharBuf_isEmpty_64(Ppt ppt) {
-    this_buf_array_varinfo = ppt.find_var_by_name("this.buf[..]");
+  public misc_QuantCalls_m_60() { }
+  public misc_QuantCalls_m_60(Ppt ppt) {
+    this_obj_varinfo = ppt.find_var_by_name("this.obj");
   }
 
   public Splitter instantiateSplitter(Ppt ppt) {
-    return new misc_CharBuf_isEmpty_64(ppt);
+    return new misc_QuantCalls_m_60(ppt);
   }
 
   public boolean valid() {
-    return (this_buf_array_varinfo != null);
+    return (this_obj_varinfo != null);
   }
 
   public boolean test(ValueTuple vt) {
     /* writeTestBody: 1 declarations */
-    long[] this_buf_array = this_buf_array_varinfo.getIntArrayValue(vt);
-    return(this_buf_array[0]=='a');
+    long this_obj = this_obj_varinfo.getIntValue(vt);
+    return(this_obj==0);
   }
 
   public String repr() {
-    return "misc_CharBuf_isEmpty_64: "
-      + "this_buf_array_varinfo = " + this_buf_array_varinfo.repr() + " "
+    return "misc_QuantCalls_m_60: "
+      + "this_obj_varinfo = " + this_obj_varinfo.repr() + " "
       ;
   }
 
@@ -44,9 +44,9 @@ public final class misc_CharBuf_isEmpty_64 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
-    VarInfo this_buf_array_vi = ppt.find_var_by_name("this.buf[..]");
-    if (this_buf_array_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_buf_array_vi});
+    VarInfo this_obj_vi = ppt.find_var_by_name("this.obj");
+    if (this_obj_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_obj_vi});
     }
   }
 

@@ -138,6 +138,31 @@ public class SplitterLoadTest {
   }
 
   /**
+   * A splitter that passes an array to a method must be reported as untranslatable, and it must not
+   * prevent the other splitters from being compiled and loaded.
+   */
+  @Test
+  public void testArrayArgument() throws IOException {
+    SplitterObject[] splitters =
+        loadSplitters(
+            List.of(goodCondition, "java.util.Arrays.equals(this.theArray, this.theArray)"),
+            s -> {});
+    SplitterObject good = splitters[0];
+    SplitterObject arrayArgument = splitters[1];
+
+    assertTrue(good.getError(), good.splitterExists());
+    assertFalse(arrayArgument.splitterExists());
+    assertTrue(
+        arrayArgument.getError(),
+        arrayArgument.getError().contains("cannot be parsed or translated"));
+    assertTrue(
+        arrayArgument.getError(),
+        arrayArgument
+            .getError()
+            .contains("the splitter cannot pass the array this.theArray to a method"));
+  }
+
+  /**
    * A splitter whose source file cannot be written must not prevent the other splitters from being
    * compiled and loaded.
    */

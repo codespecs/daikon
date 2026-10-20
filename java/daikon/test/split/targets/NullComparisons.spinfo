@@ -9,3 +9,5 @@ this.s[0] == null
 this.s[1] == null
 this.objs == null
 this.sign == (null)
+this.sign.trim() != null
+null == (this.s[1]).trim()

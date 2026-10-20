@@ -5,17 +5,19 @@ import daikon.split.*;
 public final class misc_QuantCalls_m_58 extends Splitter {
 
   public String condition() {
-    return "this.obj == null";
+    return "this.sign != null && (daikon.Quant.getElement_String(this.s, 0)) == null";
   }
 
-  VarInfo this_obj_varinfo; // this.obj
+  VarInfo this_s_array_varinfo; // this.s[..]
+  VarInfo this_sign_varinfo; // this.sign
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
   public misc_QuantCalls_m_58() { }
   public misc_QuantCalls_m_58(Ppt ppt) {
-    this_obj_varinfo = ppt.find_var_by_name("this.obj");
+    this_s_array_varinfo = ppt.find_var_by_name("this.s[..]");
+    this_sign_varinfo = ppt.find_var_by_name("this.sign");
   }
 
   public Splitter instantiateSplitter(Ppt ppt) {
@@ -23,18 +25,20 @@ public final class misc_QuantCalls_m_58 extends Splitter {
   }
 
   public boolean valid() {
-    return (this_obj_varinfo != null);
+    return (this_s_array_varinfo != null) && (this_sign_varinfo != null);
   }
 
   public boolean test(ValueTuple vt) {
-    /* writeTestBody: 1 declarations */
-    long this_obj = this_obj_varinfo.getIntValue(vt);
-    return(this_obj==0);
+    /* writeTestBody: 2 declarations */
+    java.lang.String[] this_s_array = this_s_array_varinfo.getStringArrayValue(vt);
+    String this_sign = this_sign_varinfo.getStringValue(vt);
+    return(this_sign!=null&&(getElement_String(this_s_array,0))==null);
   }
 
   public String repr() {
     return "misc_QuantCalls_m_58: "
-      + "this_obj_varinfo = " + this_obj_varinfo.repr() + " "
+      + "this_s_array_varinfo = " + this_s_array_varinfo.repr() + " "
+      + "this_sign_varinfo = " + this_sign_varinfo.repr() + " "
       ;
   }
 
@@ -44,9 +48,10 @@ public final class misc_QuantCalls_m_58 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
-    VarInfo this_obj_vi = ppt.find_var_by_name("this.obj");
-    if (this_obj_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_obj_vi});
+    VarInfo this_s_array_vi = ppt.find_var_by_name("this.s[..]");
+    VarInfo this_sign_vi = ppt.find_var_by_name("this.sign");
+    if (this_s_array_vi != null && this_sign_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_s_array_vi, this_sign_vi});
     }
   }
 
