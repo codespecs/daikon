@@ -53,6 +53,9 @@ public final class NullComparisonsSplitterTest {
     expected.put("String.valueOf(this.s[0]) != null", true);
     expected.put("this.sign.equals(null)", false);
     expected.put("((String) this.sign) == null", false);
+    expected.put("(this.sign != null ? this.obj : this.objs) == null", true);
+    expected.put("this.obj == (this.objs == null ? null : this.obj)", true);
+    expected.put("(this.sign != null ? null : this.obj) == null", true);
     assertEquals(loaded.output, expected, loaded.test(values));
 
     values.put("this.obj", 3L);
@@ -60,6 +63,8 @@ public final class NullComparisonsSplitterTest {
     expected.put("this.obj == null", false);
     expected.put("(this.sign) != null && this.obj == null", false);
     expected.put("this.objs == null", true);
+    expected.put("(this.sign != null ? this.obj : this.objs) == null", false);
+    expected.put("this.obj == (this.objs == null ? null : this.obj)", false);
     assertEquals(loaded.output, expected, loaded.test(values));
   }
 }

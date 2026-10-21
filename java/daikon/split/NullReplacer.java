@@ -9,8 +9,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import jtb.ParseException;
+import jtb.syntaxtree.ConditionalExpression;
 import jtb.syntaxtree.EqualityExpression;
 import jtb.syntaxtree.Node;
 import jtb.syntaxtree.NodeSequence;
@@ -23,11 +25,15 @@ import jtb.visitor.DepthFirstVisitor;
  * of the string "null".
  *
  * <p>A splitter represents some references by their hashcode, which is 0 for null. A "null" is
- * replaced only if it is compared, by "==" or "!=", with a variable that the splitter represents as
- * a hashcode or with an element of an array of hashcodes. Every other "null" is left unchanged:
- * for example, one that is compared with a String, or one that is passed as an argument. For
- * example, in {@code this_next == null && this_name != null}, where {@code this_next} is a hashcode
- * and {@code this_name} is a String, the first "null" is replaced and the second "null" is not.
+ * replaced only if it stands for a hashcode: that is, if it is compared, by "==" or "!=", with an
+ * expression that the splitter represents as a hashcode, or if it is a branch of a conditional
+ * expression ("?:") whose other branch is such an expression. An expression that the splitter
+ * represents as a hashcode is a hashcode variable, an element of an array of hashcodes, or a
+ * conditional expression whose branches are each such an expression or a replaced "null". Every
+ * other "null" is left unchanged: for example, one that is compared with a String, or one that is
+ * passed as an argument. For example, in {@code this_next == null && this_name != null}, where
+ * {@code this_next} is a hashcode and {@code this_name} is a String, the first "null" is replaced
+ * and the second "null" is not.
  *
  * <p>NullReplacer runs after the other fixers, because it recognizes the names that they produce.
  */
@@ -50,8 +56,14 @@ class NullReplacer extends DepthFirstVisitor {
    */
   private final Set<String> hashcodeExpressions = new HashSet<>();
 
-  /** The null literals that are replaced, because they are compared with a hashcode. */
+  /** The null literals that are replaced, because they stand for a hashcode. */
   private final Set<NodeToken> hashcodeNulls = Collections.newSetFromMap(new IdentityHashMap<>());
+
+  /**
+   * The conditional expressions that the splitter represents as a hashcode. Each maps the first
+   * token of the conditional expression to its last token.
+   */
+  private final Map<NodeToken, NodeToken> hashcodeConditionals = new IdentityHashMap<>();
 
   /**
    * Creates a new NullReplacer.
@@ -81,32 +93,70 @@ class NullReplacer extends DepthFirstVisitor {
   public static String replaceNull(String expression, VarInfo[] varInfos) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     NullReplacer replacer = new NullReplacer(varInfos);
+    root.accept(replacer.new HashcodeNullFinder());
     root.accept(replacer);
     return Ast.format(root);
   }
 
   /**
-   * This method should not be directly used by user of this class; however it must be public to
-   * fulfill the visitor interface. Records the null literals in n that are compared with an
-   * expression that the splitter represents as a hashcode.
+   * Records the null literals that stand for a hashcode, and the conditional expressions that the
+   * splitter represents as a hashcode. It visits the subexpressions of an expression before the
+   * expression itself, so that it classifies each conditional expression before the expressions
+   * that contain it.
    */
-  @Override
-  public void visit(EqualityExpression n) {
-    List<NodeToken[]> operands = new ArrayList<>();
-    operands.add(TokenExtractor.extractTokens(n.f0));
-    for (Node operatorAndOperand : n.f1.nodes) {
-      operands.add(TokenExtractor.extractTokens(((NodeSequence) operatorAndOperand).elementAt(1)));
-    }
-    for (int i = 0; i + 1 < operands.size(); i++) {
-      NodeToken[] left = stripParens(operands.get(i));
-      NodeToken[] right = stripParens(operands.get(i + 1));
-      if (isNullLiteral(left) && isHashcode(right)) {
-        hashcodeNulls.add(left[0]);
-      } else if (isNullLiteral(right) && isHashcode(left)) {
-        hashcodeNulls.add(right[0]);
+  private class HashcodeNullFinder extends DepthFirstVisitor {
+
+    /**
+     * This method should not be directly used by user of this class; however it must be public to
+     * fulfill the visitor interface. Records the null literals in n that are compared with an
+     * expression that the splitter represents as a hashcode.
+     */
+    @Override
+    public void visit(EqualityExpression n) {
+      super.visit(n);
+      List<NodeToken[]> operands = new ArrayList<>();
+      operands.add(TokenExtractor.extractTokens(n.f0));
+      for (Node operatorAndOperand : n.f1.nodes) {
+        operands.add(TokenExtractor.extractTokens(((NodeSequence) operatorAndOperand).elementAt(1)));
+      }
+      for (int i = 0; i + 1 < operands.size(); i++) {
+        NodeToken[] left = stripParens(operands.get(i));
+        NodeToken[] right = stripParens(operands.get(i + 1));
+        if (isNullLiteral(left) && isHashcode(right)) {
+          hashcodeNulls.add(left[0]);
+        } else if (isNullLiteral(right) && isHashcode(left)) {
+          hashcodeNulls.add(right[0]);
+        }
       }
     }
-    super.visit(n);
+
+    /**
+     * This method should not be directly used by user of this class; however it must be public to
+     * fulfill the visitor interface. If n is a conditional expression with a branch that the
+     * splitter represents as a hashcode, and the other branch is too or is null, then records n and
+     * its null branch.
+     */
+    @Override
+    public void visit(ConditionalExpression n) {
+      super.visit(n);
+      NodeSequence branches = (NodeSequence) n.f1.node;
+      if (branches == null) {
+        return;
+      }
+      NodeToken[] thenBranch = stripParens(TokenExtractor.extractTokens(branches.elementAt(1)));
+      NodeToken[] elseBranch = stripParens(TokenExtractor.extractTokens(branches.elementAt(3)));
+      boolean thenIsHashcode = isHashcode(thenBranch);
+      boolean elseIsHashcode = isHashcode(elseBranch);
+      if (thenIsHashcode && isNullLiteral(elseBranch)) {
+        hashcodeNulls.add(elseBranch[0]);
+      } else if (elseIsHashcode && isNullLiteral(thenBranch)) {
+        hashcodeNulls.add(thenBranch[0]);
+      } else if (!(thenIsHashcode && elseIsHashcode)) {
+        return;
+      }
+      NodeToken[] tokens = TokenExtractor.extractTokens(n);
+      hashcodeConditionals.put(tokens[0], tokens[tokens.length - 1]);
+    }
   }
 
   /**
@@ -138,9 +188,10 @@ class NullReplacer extends DepthFirstVisitor {
 
   /**
    * Returns true if the splitter represents the expression whose tokens are given as a hashcode:
-   * that is, if the expression is a hashcode variable or an element of a hashcode array such as
-   * {@code a[i]}. No other expression is a hashcode, because a hashcode is a number, whose fields
-   * and methods cannot be used.
+   * that is, if the expression is a hashcode variable, an element of a hashcode array such as
+   * {@code a[i]}, or a conditional expression that HashcodeNullFinder has recorded. No other
+   * expression is a hashcode, because a hashcode is a number, whose fields and methods cannot be
+   * used.
    *
    * @param tokens the tokens of an expression, without enclosing parentheses
    * @return true if the splitter represents the expression as a hashcode
@@ -149,6 +200,9 @@ class NullReplacer extends DepthFirstVisitor {
     int last = tokens.length - 1;
     if (last == 0) {
       return hashcodeExpressions.contains(tokens[0].tokenImage);
+    }
+    if (last > 0 && hashcodeConditionals.get(tokens[0]) == tokens[last]) {
+      return true;
     }
     return last >= 3
         && Visitors.isLBracket(tokens[1])
@@ -181,8 +235,8 @@ class NullReplacer extends DepthFirstVisitor {
 
   /**
    * This method should not be directly used by user of this class; however it must be public to
-   * fulfill the visitor interface. If n represents null and is compared with an expression that
-   * the splitter represents as a hashcode, then it is replaced by "0".
+   * fulfill the visitor interface. If n represents a null that stands for a hashcode, then it is
+   * replaced by "0".
    */
   @Override
   public void visit(NodeToken n) {
