@@ -7,11 +7,10 @@ import daikon.tools.TraceSelect;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
 import org.junit.Test;
+import org.plumelib.util.FilesPlume;
 
 /** Tests the TraceSelect tool. */
 public class TraceSelectTest {
@@ -68,20 +67,6 @@ public class TraceSelectTest {
     return trace;
   }
 
-  /**
-   * Deletes a directory and its contents.
-   *
-   * @param dir the directory to delete
-   * @throws IOException if a file cannot be deleted
-   */
-  private static void deleteRecursively(Path dir) throws IOException {
-    try (Stream<Path> paths = Files.walk(dir)) {
-      for (Path p : paths.sorted(Comparator.reverseOrder()).toList()) {
-        Files.delete(p);
-      }
-    }
-  }
-
   /** Tests that sampling twice with the same seed selects the same invocations. */
   @Test
   public void testSameSeedSameSample() throws IOException {
@@ -101,7 +86,7 @@ public class TraceSelectTest {
       }
       assertEquals(samples1, samples2);
     } finally {
-      deleteRecursively(dir);
+      FilesPlume.deleteDir(dir.toFile());
     }
   }
 
@@ -125,7 +110,7 @@ public class TraceSelectTest {
       assertEquals(firstRunSample1, Files.readString(sample1, UTF_8));
       assertEquals(firstRunSample2, Files.readString(sample2, UTF_8));
     } finally {
-      deleteRecursively(dir);
+      FilesPlume.deleteDir(dir.toFile());
     }
   }
 }
