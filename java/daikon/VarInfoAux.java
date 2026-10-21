@@ -382,10 +382,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the integer value associated with a key, assuming it is defined. It is recommended to
-   * check that it is defined first with {@link #hasValue(String)}.
+   * Returns the integer value associated with a key.
    *
-   * @throws RuntimeException if the key is not defined
+   * @param key the key, which must be defined
    * @throws NumberFormatException if the value of the key cannot be parsed as an integer
    * @see #hasValue(String)
    */
@@ -398,12 +397,10 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the long value associated with a key, assuming it is defined. It is recommended to
-   * check that it is defined first with {@link #hasValue(String)}.
+   * Returns the long value associated with a key.
    *
-   * @param key the key
+   * @param key the key, which must be defined
    * @return the long value associated with the key
-   * @throws RuntimeException if the key is not defined
    * @throws NumberFormatException if the value of the key cannot be parsed as a long
    * @see #hasValue(String)
    */
@@ -416,12 +413,10 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the double value associated with a key, assuming it is defined. It is recommended to
-   * check that it is defined first with {@link #hasValue(String)}.
+   * Returns the double value associated with a key.
    *
-   * @param key the key
+   * @param key the key, which must be defined
    * @return the double value associated with the key
-   * @throws RuntimeException if the key is not defined
    * @throws NumberFormatException if the value of the key cannot be parsed as a double
    * @see #hasValue(String)
    */
@@ -434,10 +429,11 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the string array associated with a key, assuming it is defined. It is recommended to
-   * check that it is defined first with {@link #hasValue(String)}.
+   * Returns the string array associated with a key. The value is a space-separated list of
+   * double-quoted strings.
    *
-   * @throws RuntimeException if the key is not defined
+   * @param key the key, which must be defined
+   * @return the trimmed contents of the double-quoted strings in the value associated with the key
    * @see #hasValue(String)
    */
   public String[] getList(@KeyFor("this.map") String key) {
