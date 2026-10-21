@@ -22,6 +22,7 @@ import org.junit.runners.Suite;
   daikon.test.diff.PrintDifferingInvariantsVisitorTester.class,
   daikon.test.diff.UnionVisitorTester.class,
   daikon.test.diff.XorVisitorTester.class,
+  daikon.test.split.FileCompilerTest.class,
   daikon.test.InvariantFormatTester.class,
   daikon.test.SampleTester.class,
   daikon.test.inv.InvariantTester.class,
