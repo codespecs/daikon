@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import jtb.ParseException;
 import jtb.syntaxtree.ConditionalExpression;
@@ -51,8 +50,8 @@ class NullReplacer extends DepthFirstVisitor {
 
   /**
    * The expressions that the splitter represents as a hashcode. Each is the compilable name of a
-   * hashcode variable, or the compilable name of a hashcode array followed by "[]", which stands for
-   * an element of that array.
+   * hashcode variable, or the compilable name of a hashcode array followed by "[]", which stands
+   * for an element of that array.
    */
   private final Set<String> hashcodeExpressions = new HashSet<>();
 
@@ -63,7 +62,8 @@ class NullReplacer extends DepthFirstVisitor {
    * The conditional expressions that the splitter represents as a hashcode. Each maps the first
    * token of the conditional expression to its last token.
    */
-  private final Map<NodeToken, NodeToken> hashcodeConditionals = new IdentityHashMap<>();
+  private final IdentityHashMap<NodeToken, NodeToken> hashcodeConditionals =
+      new IdentityHashMap<>();
 
   /**
    * Creates a new NullReplacer.
@@ -117,7 +117,8 @@ class NullReplacer extends DepthFirstVisitor {
       List<NodeToken[]> operands = new ArrayList<>();
       operands.add(TokenExtractor.extractTokens(n.f0));
       for (Node operatorAndOperand : n.f1.nodes) {
-        operands.add(TokenExtractor.extractTokens(((NodeSequence) operatorAndOperand).elementAt(1)));
+        operands.add(
+            TokenExtractor.extractTokens(((NodeSequence) operatorAndOperand).elementAt(1)));
       }
       for (int i = 0; i + 1 < operands.size(); i++) {
         NodeToken[] left = stripParens(operands.get(i));
@@ -196,6 +197,7 @@ class NullReplacer extends DepthFirstVisitor {
    * @param tokens the tokens of an expression, without enclosing parentheses
    * @return true if the splitter represents the expression as a hashcode
    */
+  @SuppressWarnings("interning:not.interned") // NodeTokens are compared by identity
   private boolean isHashcode(NodeToken[] tokens) {
     int last = tokens.length - 1;
     if (last == 0) {
