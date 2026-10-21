@@ -5,7 +5,6 @@ import daikon.inv.DummyInvariant;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.NoSuchFileException;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -85,6 +84,12 @@ public class SplitterObject implements Comparable<SplitterObject> {
               "This indicates a possible problem with configuration option",
               "daikon.split.SplitterFactory.compiler whose value is: "
                   + SplitterFactory.dkconfig_compiler));
+    } catch (ClassFormatError cfe) {
+      // For example, a class file that was truncated because its compilation was killed.
+      if (!PptSplitter.dkconfig_suppressSplitterErrors) {
+        System.out.println("Malformed class file " + fileName + ": " + cfe);
+      }
+      return null;
     }
   }
 
@@ -92,16 +97,17 @@ public class SplitterObject implements Comparable<SplitterObject> {
   public void load() {
     Class<?> tempClass = defineSplitterClass(className, getFullClassPath());
     if (tempClass != null) {
+      Splitter newSplitter;
       try {
-        splitter = (Splitter) tempClass.getDeclaredConstructor().newInstance();
-      } catch (ClassFormatError
-          | IllegalAccessException
-          | InstantiationException
-          | InvocationTargetException
-          | NoSuchMethodException e) {
-        e.printStackTrace(System.out);
-        throw new Error("Trying to invoke " + tempClass + " constructor", e);
+        newSplitter = (Splitter) tempClass.getDeclaredConstructor().newInstance();
+      } catch (ReflectiveOperationException | LinkageError | RuntimeException e) {
+        // LinkageError includes VerifyError and ExceptionInInitializerError.
+        // RuntimeException includes ClassCastException.
+        errorMessage = "Cannot instantiate " + tempClass + " for " + this.toString() + ": " + e;
+        exists = false;
+        return;
       }
+      splitter = newSplitter;
       DummyInvariant dummy =
           new @Prototype
           DummyInvariant(
@@ -118,7 +124,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       exists = true;
     } else {
       errorMessage =
-          "No class data for " + this.toString() + ", to be loaded from " + getFullClassPath();
+          "Cannot load the class for " + this.toString() + " from " + getFullClassPath();
       exists = false;
     }
   }
