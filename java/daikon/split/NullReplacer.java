@@ -22,11 +22,12 @@ import jtb.visitor.DepthFirstVisitor;
  * expression. Note: "null" is only referring to the java reserved word "null" not to any instances
  * of the string "null".
  *
- * <p>A splitter represents a reference by its hashcode, which is 0 for null, except that it
- * represents a String or an element of a String array as a reference. Therefore, a "null" that is
- * compared with such a reference is not replaced. For example, in {@code this_next == null &&
- * this_name != null}, where {@code this_next} is a hashcode and {@code this_name} is a String, only
- * the first "null" is replaced. Every other "null" is replaced.
+ * <p>A splitter usually represents a reference by its hashcode, which is 0 for null. The exceptions
+ * are a String, an element of a String array, and a method call on either of those: the splitter
+ * represents each of them as a reference. A "null" that is compared with one of those expressions
+ * is not replaced; all other occurrences of "null" are replaced. For example, in {@code this_next
+ * == null && this_name != null}, where {@code this_next} is a hashcode and {@code this_name} is a
+ * String, the first "null" is replaced and the second "null" is not.
  *
  * <p>NullReplacer runs after the other fixers, because it recognizes the names that they produce.
  */
