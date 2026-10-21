@@ -3012,6 +3012,13 @@ types are related to the program point hierarchy (see @ref{Dataflow hierarchy}).
 The @code{ppt-name} of a program point whose type is @code{class},
 @code{object}, @code{enter}, @code{throws}, or @code{global} must have the
 form given above for that type.
+The @code{ppt-name} of a program point whose type is @code{exit} or
+@code{subexit} must end with @code{:::EXIT} (a combined exit) or with
+@code{:::EXIT<id>} (a numbered exit).  Daikon gives the program point the
+type that its name indicates, so a numbered exit that is declared as an
+@code{exit} is a @code{subexit}, and vice versa.
+Daikon rejects a declaration whose @code{ppt-name} does not conform to its
+type.
 
 A @code{point} program point is one that is @emph{not} involved in a
 program point hierarchy.   This is normally used when the input is not

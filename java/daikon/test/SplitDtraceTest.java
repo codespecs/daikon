@@ -63,8 +63,30 @@ public class SplitDtraceTest {
    */
   @Test
   public void testVersion2() throws IOException {
-    String enter = "C.m(int):::ENTER";
-    String exit = "C.m(int):::EXIT1";
+    checkSecondHalf("C.m(int):::ENTER", "C.m(int):::EXIT1");
+  }
+
+  /**
+   * Tests that SplitDtrace treats a sample as a sample, even if the name of its program point
+   * starts with the keyword of a header record.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testPptNameStartingWithKeyword() throws IOException {
+    checkSecondHalf("decl-version.C.m(int):::ENTER", "var-comparability.C.m(int):::EXIT1");
+    checkSecondHalf("input-language.C.m(int):::ENTER", "input-language.C.m(int):::EXIT1");
+  }
+
+  /**
+   * Checks that SplitDtrace writes the header records and declarations of a version 2 file with an
+   * entry and an exit program point, and the second half of its samples.
+   *
+   * @param enter the name of the entry program point
+   * @param exit the name of the exit program point
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  private static void checkSecondHalf(String enter, String exit) throws IOException {
     StringJoiner dtrace = new StringJoiner(System.lineSeparator());
     dtrace.add("// A comment");
     dtrace.add("");
