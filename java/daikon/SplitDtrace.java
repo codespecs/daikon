@@ -73,14 +73,17 @@ public final class SplitDtrace {
     int recNum = 0;
     try (BufferedReader reader = getStream(filename)) {
       ArrayList<String> rec = new ArrayList<>();
+      boolean version2 = false;
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
           break;
         }
-        if (isDeclare(rec)) {
+        if (isHeader(rec)) {
+          version2 = isVersion2(rec, version2);
+        } else if (isDeclare(rec, version2)) {
           declNum++;
-        } else if (!isHeader(rec)) {
+        } else {
           recNum++;
         }
       }
@@ -108,16 +111,18 @@ public final class SplitDtrace {
       int currRecCount = 0;
       HashSet<Integer> nonceSet = new HashSet<>();
       ArrayList<String> rec = new ArrayList<>();
+      boolean version2 = false;
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
           break;
         }
         if (isHeader(rec)) {
+          version2 = isVersion2(rec, version2);
           writeRec(writer, rec);
           continue;
         }
-        boolean isDecl = isDeclare(rec);
+        boolean isDecl = isDeclare(rec, version2);
         if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
           boolean shouldWrite = true;
           if (!isDecl) {
@@ -183,16 +188,36 @@ public final class SplitDtrace {
   }
 
   /**
-   * Returns true if the given line starts a program point declaration.
+   * Returns true if the given record is a program point declaration. As in {@link FileIO}, the
+   * file's declaration version determines the form of a declaration, because the name of a program
+   * point in a version 1 sample may start with "ppt ".
    *
-   * @param res a line from a .decls or .dtrace file
-   * @return true if the given line starts a program point declaration
+   * @param res the lines of a record from a .decls or .dtrace file
+   * @param version2 true if the file is in the version 2 format
+   * @return true if the given record is a program point declaration
    */
   @Pure
-  static boolean isDeclare(List<String> res) {
+  static boolean isDeclare(List<String> res, boolean version2) {
     String line = res.get(0);
     // A version 1 declaration starts with "DECLARE", and a version 2 declaration with "ppt".
-    return line.equals("DECLARE") || line.startsWith("ppt ");
+    return version2 ? line.startsWith("ppt ") : line.equals("DECLARE");
+  }
+
+  /**
+   * Returns whether the file is in the version 2 format, after the given header record.
+   *
+   * @param res the lines of a header record
+   * @param version2 true if the file is in the version 2 format, according to the records before
+   *     this one
+   * @return true if the file is in the version 2 format, according to the records up to this one
+   */
+  @Pure
+  static boolean isVersion2(List<String> res, boolean version2) {
+    String[] words = res.get(0).trim().split("\\s+");
+    if (words.length == 2 && words[0].equals("decl-version")) {
+      return words[1].equals("2.0");
+    }
+    return version2;
   }
 
   /**

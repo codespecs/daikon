@@ -97,4 +97,55 @@ public class SplitDtraceTest {
       Files.delete(dir);
     }
   }
+
+  /**
+   * Returns a declaration of a ppt with one variable, in the version 1 format.
+   *
+   * @param pptName the name of the ppt
+   * @return a declaration of a ppt with one variable
+   */
+  private static String declarationVersion1(String pptName) {
+    return String.join(System.lineSeparator(), "DECLARE", pptName, "x", "int", "int", "1", "");
+  }
+
+  /**
+   * Tests that SplitDtrace treats a sample of a version 1 file as a sample, even if the name of its
+   * ppt starts with "ppt ", like a version 2 declaration.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testVersion1PptNameStartingWithPpt() throws IOException {
+    String enter = "ppt C.m(int):::ENTER";
+    String exit = "ppt C.m(int):::EXIT1";
+    StringJoiner dtrace = new StringJoiner(System.lineSeparator());
+    dtrace.add("decl-version 1.0");
+    dtrace.add("");
+    dtrace.add(declarationVersion1(enter));
+    dtrace.add(declarationVersion1(exit));
+    for (int nonce = 1; nonce <= 4; nonce++) {
+      dtrace.add(sample(enter, nonce));
+      dtrace.add(sample(exit, nonce));
+    }
+
+    Path dir = Files.createTempDirectory("SplitDtraceTest");
+    try {
+      Path input = dir.resolve("test.dtrace");
+      Path output = dir.resolve("test.second-half.dtrace");
+      Files.write(input, dtrace.toString().getBytes(UTF_8));
+      SplitDtrace.mainHelper(new String[] {input.toString()});
+
+      String result = new String(Files.readAllBytes(output), UTF_8);
+      String nl = System.lineSeparator();
+      assertTrue(result, result.contains("DECLARE" + nl + enter + nl));
+      assertTrue(result, result.contains("DECLARE" + nl + exit + nl));
+      assertFalse(result, result.contains("this_invocation_nonce" + nl + "2" + nl));
+      assertTrue(result, result.contains("this_invocation_nonce" + nl + "3" + nl));
+      assertTrue(result, result.contains("this_invocation_nonce" + nl + "4" + nl));
+      Files.delete(input);
+      Files.delete(output);
+    } finally {
+      Files.delete(dir);
+    }
+  }
 }
