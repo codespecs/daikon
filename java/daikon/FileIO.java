@@ -481,12 +481,11 @@ public final class FileIO {
     }
 
     // Build the program point
-    try {
-      return new PptTopLevel(ppt_name, ppt_type, ppt_parents, ppt_flags, vi_array);
-    } catch (IllegalArgumentException e) {
-      decl_error(state, e);
-      throw new Error(); // this can't happen
+    String type_error = PptTopLevel.type_error(ppt_name, ppt_type);
+    if (type_error != null) {
+      decl_error(state, "%s", type_error);
     }
+    return new PptTopLevel(ppt_name, ppt_type, ppt_parents, ppt_flags, vi_array);
   }
 
   /** Parses a ppt parent hierarchy record and returns it. */
