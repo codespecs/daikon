@@ -429,11 +429,13 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the string array associated with a key. The value is a space-separated list of
-   * double-quoted strings.
+   * Returns the string array associated with a key. The value is a whitespace-separated list of
+   * double-quoted strings, which {@link #parse(String)} produces from a bracketed list such as
+   * {@code [a b]}.
    *
    * @param key the key, which must be defined
    * @return the trimmed contents of the double-quoted strings in the value associated with the key
+   * @throws IllegalStateException if the value was not written as a bracketed list
    * @see #hasValue(String)
    */
   public String[] getList(@KeyFor("this.map") String key) {
@@ -447,15 +449,17 @@ public final class VarInfoAux implements Cloneable, Serializable {
       tok.whitespaceChars(' ', ' ');
       ArrayList<String> lValues = new ArrayList<>();
 
-      int tokInfo = tok.nextToken();
-      while (tokInfo != StreamTokenizer.TT_EOF) {
+      for (int tokInfo = tok.nextToken();
+          tokInfo != StreamTokenizer.TT_EOF;
+          tokInfo = tok.nextToken()) {
         if (tok.ttype != '"') {
-          continue;
+          throw new IllegalStateException(
+              String.format(
+                  "Value for key '%s' must be a bracketed list, such as [a b]: %s", key, sValue));
         }
         assert tok.sval != null
-            : "@AssumeAssertion(nullness)"; // tok.type == '"' guarantees not null
+            : "@AssumeAssertion(nullness)"; // tok.ttype == '"' guarantees not null
         lValues.add(tok.sval.trim());
-        tokInfo = tok.nextToken();
       }
       return lValues.toArray(new String[] {});
     } catch (IOException ex) {
