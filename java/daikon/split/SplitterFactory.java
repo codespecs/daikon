@@ -21,6 +21,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.checker.signature.qual.BinaryName;
+import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
 
 /**
@@ -58,8 +59,8 @@ public class SplitterFactory {
       = "javac -nowarn -source 8 -target 8 -classpath " + System.getProperty("java.class.path");
 
   /**
-   * Positive integer. Specifies the Splitter compilation timeout, in seconds, after which the
-   * compilation process is terminated and retried, on the assumption that it has hung.
+   * Positive integer. Specifies the timeout for each Splitter compilation, in seconds. If a
+   * compilation takes longer, Daikon assumes that the compiler has hung, and Daikon exits.
    */
   public static int dkconfig_compile_timeout = 20;
 
@@ -170,7 +171,7 @@ public class SplitterFactory {
    * splitterObjects.
    *
    * @param splitterObjects are the splitterObjects for ppt
-   * @param ppt the Ppt for these splitterObjects
+   * @param ppt the program point for these splitterObjects
    * @param statementReplacer a StatementReplacer for the replace statements to be used in these
    *     splitterObjects
    */
@@ -186,8 +187,7 @@ public class SplitterFactory {
     // The splitters whose source files were written successfully.
     // Splitters that were not written must not be compiled or loaded.
     List<SplitterObject> writtenSplitters = new ArrayList<>();
-    for (int i = 0; i < splitterObjects.length; i++) {
-      SplitterObject splitObj = splitterObjects[i];
+    for (SplitterObject splitObj : splitterObjects) {
       String fileName = getFileName(splitObj.getPptName());
       StringBuilder fileContents;
       try {
@@ -255,10 +255,8 @@ public class SplitterFactory {
       Global.debugSplit.fine("<<exit>>  loadSplitters: no splitters were written");
       return;
     }
-    List<String> writtenSourcePaths = new ArrayList<>(writtenSplitters.size());
-    for (SplitterObject splitObj : writtenSplitters) {
-      writtenSourcePaths.add(splitObj.getFullSourcePath());
-    }
+    List<String> writtenSourcePaths =
+        CollectionsPlume.mapList(SplitterObject::getFullSourcePath, writtenSplitters);
     String errorOutput = null;
     try {
       errorOutput = compileFiles(writtenSourcePaths);
@@ -289,8 +287,8 @@ public class SplitterFactory {
    */
   private static String compileFiles(List<String> fileNames) throws IOException {
     // We delay setting fileCompiler until now because we want to permit
-    // the user to set the dkconfig_compiler variable.  Note that our
-    // timeout is specified in seconds, but the parameter to FileCompiler
+    // the user to set the dkconfig_compiler variable.  Note that
+    // dkconfig_compile_timeout is specified in seconds, but the parameter to FileCompiler
     // is specified in milliseconds.
     if (fileCompiler == null) {
       fileCompiler = new FileCompiler(dkconfig_compiler, 1000 * (long) dkconfig_compile_timeout);
