@@ -6,6 +6,7 @@ import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.PptName;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
@@ -84,8 +85,11 @@ public class DtraceNonceFixer {
   private static int renumberNonces(String inFilename, String outFilename) throws IOException {
     // maxNonce - the biggest nonce ever found in the file
     int maxNonce = 0;
+    // The BufferedWriter, not the PrintWriter, is the resource, so that closing it (which, for a
+    // compressed file, writes the trailer) throws IOException on failure.
     try (BufferedReader br = FilesPlume.newBufferedFileReader(inFilename);
-        PrintWriter out = new PrintWriter(FilesPlume.newBufferedFileWriter(outFilename))) {
+        BufferedWriter bw = FilesPlume.newBufferedFileWriter(outFilename)) {
+      PrintWriter out = new PrintWriter(bw);
 
       // correctionFactor - the amount to add to each observed nonce
       int correctionFactor = 0;
@@ -108,6 +112,7 @@ public class DtraceNonceFixer {
         para.printWithNonce(out, newNonce);
         maxNonce = Math.max(maxNonce, newNonce);
       }
+      checkError(out, outFilename);
     }
     return maxNonce;
   }
@@ -124,7 +129,8 @@ public class DtraceNonceFixer {
   private static void addMissingNonces(String inFilename, String outFilename, int maxNonce)
       throws IOException {
     try (BufferedReader br = FilesPlume.newBufferedFileReader(inFilename);
-        PrintWriter out = new PrintWriter(FilesPlume.newBufferedFileWriter(outFilename))) {
+        BufferedWriter bw = FilesPlume.newBufferedFileWriter(outFilename)) {
+      PrintWriter out = new PrintWriter(bw);
       Paragraph para;
       while ((para = Paragraph.read(br)) != null) {
         if (para.isSample() && para.nonce == -1) {
@@ -133,6 +139,21 @@ public class DtraceNonceFixer {
           para.print(out);
         }
       }
+      checkError(out, outFilename);
+    }
+  }
+
+  /**
+   * Flushes {@code out} and throws an exception if {@code out} has encountered an error. A
+   * PrintWriter records errors rather than throwing IOException.
+   *
+   * @param out the PrintWriter to check
+   * @param filename the file that {@code out} writes, for the error message
+   * @throws IOException if {@code out} has encountered an error
+   */
+  private static void checkError(PrintWriter out, String filename) throws IOException {
+    if (out.checkError()) {
+      throw new IOException("Error writing " + filename);
     }
   }
 
