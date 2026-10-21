@@ -123,8 +123,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       errorMessage = "Splitter exists " + this.toString();
       exists = true;
     } else {
-      errorMessage =
-          "Cannot load the class for " + this.toString() + " from " + getFullClassPath();
+      errorMessage = "Cannot load the class for " + this.toString() + " from " + getFullClassPath();
       exists = false;
     }
   }
