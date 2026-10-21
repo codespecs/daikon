@@ -551,8 +551,6 @@ public class PptTopLevel extends Ppt {
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
-  @SuppressWarnings(
-      "nullness:fields.uninitialized") // violates invariants; also uses helper function
   public PptTopLevel(String name, VarInfo[] var_infos) {
     this(name, type_from_name(new PptName(name)), var_infos);
   }
