@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import daikon.PptTopLevel;
+import daikon.split.PptSplitter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,8 +83,15 @@ public final class QuantCallsSplitterTest {
     values.put("this.obj", 0L);
     values.put("this.objs[..]", new long[] {0, 7});
     values.put("this.sign", "+");
-    SplitterTestUtils.LoadedSplitters loaded =
-        SplitterTestUtils.load("QuantCalls.spinfo", ppt, pptName);
+    // Report the untranslatable conditions, which this test checks for.
+    boolean oldSuppress = PptSplitter.dkconfig_suppressSplitterErrors;
+    PptSplitter.dkconfig_suppressSplitterErrors = false;
+    SplitterTestUtils.LoadedSplitters loaded;
+    try {
+      loaded = SplitterTestUtils.load("QuantCalls.spinfo", ppt, pptName);
+    } finally {
+      PptSplitter.dkconfig_suppressSplitterErrors = oldSuppress;
+    }
     String output = loaded.output;
 
     for (String condition : untranslatableConditions) {

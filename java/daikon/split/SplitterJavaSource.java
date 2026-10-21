@@ -336,7 +336,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Instances of "orig(variableName)" are replaced by instances of "orig_variableName". For example
    * "orig(varName.publicField)" would yield "orig_varName_publicField". Calls to daikon.Quant
    * methods that access arrays are replaced (see {@link QuantFixer}), and instances of "null" that
-   * the splitter represents as a hashcode are replaced by "0" (see {@link NullReplacer}).
+   * are compared with a hashcode are replaced by "0" (see {@link NullReplacer}).
    *
    * @param condition a string representation of a conditional statement
    * @return a version of the conditional with the variable names converted
