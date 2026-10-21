@@ -17,16 +17,9 @@ import org.plumelib.util.StringsPlume;
 
 /**
  * This tool fixes a Dtrace file whose invocation nonces became inaccurate as a result of a {@code
- * cat} command combining multiple dtrace files. Every dtrace file besides the first will have the
- * invocation nonces increased by the "correct" amount, determined in the following way:
- *
- * <p>Keep track of all the nonces you see and maintain a record of the highest nonce observed. The
- * next time you see a '0' valued nonce that is not part of an EXIT or THROWS program point, then
- * you know you have reached the beginning of the next dtrace file. Use that as the number to add to
- * the remaining nonces and repeat. The correction requires only one pass through the file.
- *
- * <p>A second pass gives a new nonce to each sample that lacks one, such as an OBJECT or CLASS
- * sample.
+ * cat} command combining multiple dtrace files. It renumbers the nonces of each concatenated file
+ * after the first so that they do not collide with nonces of earlier files, and it gives a new
+ * nonce to each sample that lacks one.
  */
 public class DtraceNonceFixer {
 
@@ -56,7 +49,7 @@ public class DtraceNonceFixer {
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called programmatically.
    *
-   * @param args command-line arguments, like those of {@link #main}
+   * @param args command-line arguments: a single dtrace file, or {@code -h} or {@code --help}
    */
   public static void mainHelper(final String[] args) {
     String[] files = DaikonGetopt.nonOptionArgs(args, usage);
@@ -67,7 +60,10 @@ public class DtraceNonceFixer {
     String suffix = files[0].endsWith(".gz") ? ".gz" : "";
     String fixedFilename = files[0] + "_fixed" + suffix;
     try {
-      int maxNonce = correctNonces(files[0], fixedFilename);
+      // First pass: renumber the nonces of each concatenated file after the first.
+      // Second pass: give a new nonce to each sample that lacks one, such as an OBJECT or CLASS
+      // sample.
+      int maxNonce = renumberNonces(files[0], fixedFilename);
       addMissingNonces(fixedFilename, files[0] + "_all_fixed" + suffix, maxNonce);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
@@ -85,7 +81,7 @@ public class DtraceNonceFixer {
    * @return the largest nonce in the output
    * @throws IOException if there is trouble reading or writing a file
    */
-  private static int correctNonces(String inFilename, String outFilename) throws IOException {
+  private static int renumberNonces(String inFilename, String outFilename) throws IOException {
     // maxNonce - the biggest nonce ever found in the file
     int maxNonce = 0;
     try (BufferedReader br = FilesPlume.newBufferedFileReader(inFilename);
@@ -97,20 +93,20 @@ public class DtraceNonceFixer {
       boolean seenNonce = false;
       Paragraph para;
       while ((para = Paragraph.read(br)) != null) {
-        int non = para.nonce;
-        if (non == -1) {
+        int oldNonce = para.nonce;
+        if (oldNonce == -1) {
           para.print(out);
           continue;
         }
         // A 0 nonce that is not an EXIT or THROWS, after other nonces, means we have reached the
         // next file. The first file's nonces are unchanged, even if that file does not start at 0.
-        if (non == 0 && seenNonce && !isExitOrThrows(new PptName(para.pptNameLine()))) {
+        if (oldNonce == 0 && seenNonce && !isExitOrThrows(new PptName(para.pptNameLine()))) {
           correctionFactor = maxNonce + 1;
         }
         seenNonce = true;
-        int newNonce = non + correctionFactor;
-        maxNonce = Math.max(maxNonce, newNonce);
+        int newNonce = oldNonce + correctionFactor;
         para.printWithNonce(out, newNonce);
+        maxNonce = Math.max(maxNonce, newNonce);
       }
     }
     return maxNonce;
@@ -178,8 +174,10 @@ public class DtraceNonceFixer {
       while (i < lines.size() && FileIO.isComment(lines.get(i))) {
         i++;
       }
-      // A line without ":::" does not start a sample, because Daikon rejects a program point name
-      // without ":::" (see the PptName constructor).
+      // A paragraph is a sample if its first non-comment line contains ":::" and is not a
+      // declaration header ("ppt ...").  The first line of every other kind of record (such as
+      // "decl-version", "DECLARE", or "VarComparability") lacks ":::", and Daikon rejects a sample
+      // whose program point name lacks ":::" (see the PptName constructor).
       boolean isSample =
           i < lines.size()
               && lines.get(i).contains(FileIO.ppt_tag_separator)
@@ -189,11 +187,11 @@ public class DtraceNonceFixer {
     }
 
     /**
-     * Returns the nonce of the sample whose program point name is at index {@code i}, or -1 if the
-     * sample has no nonce. The nonce header, if any, directly follows the program point name.
+     * Returns the nonce of the sample whose program point name is {@code lines.get(i)}, or -1 if
+     * the sample has no nonce. The nonce header, if any, directly follows the program point name.
      *
-     * @param lines the lines of a sample
-     * @param i the index of the program point name in {@code lines}
+     * @param lines the lines of a paragraph that is a sample, possibly starting with comment lines
+     * @param i the index in {@code lines} of the program point name
      * @return the nonce of the sample, or -1
      */
     private static int parseNonce(List<String> lines, int i) {
@@ -258,13 +256,13 @@ public class DtraceNonceFixer {
      * @param newNonce the nonce to print
      */
     void printWithNonce(PrintWriter out, int newNonce) {
-      int rest = (nonce == -1) ? pptNameIndex + 1 : pptNameIndex + 3;
+      int postNonceIndex = (nonce == -1) ? pptNameIndex + 1 : pptNameIndex + 3;
       for (int i = 0; i <= pptNameIndex; i++) {
         out.println(lines.get(i));
       }
       out.println(FileIO.NONCE_HEADER);
       out.println(newNonce);
-      for (int i = rest; i < lines.size(); i++) {
+      for (int i = postNonceIndex; i < lines.size(); i++) {
         out.println(lines.get(i));
       }
       out.println();
