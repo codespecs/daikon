@@ -61,9 +61,9 @@ public class DtraceNonceFixer {
     String fixedFilename = files[0] + "_fixed" + suffix;
     try {
       // First pass: renumber the nonces of each concatenated file after the first.
+      int maxNonce = renumberNonces(files[0], fixedFilename);
       // Second pass: give a new nonce to each sample that lacks one, such as an OBJECT or CLASS
       // sample.
-      int maxNonce = renumberNonces(files[0], fixedFilename);
       addMissingNonces(fixedFilename, files[0] + "_all_fixed" + suffix, maxNonce);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
