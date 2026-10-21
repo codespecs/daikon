@@ -32,6 +32,7 @@ import org.junit.runners.Suite;
   daikon.test.ProglangTypeTest.class,
   daikon.test.VarComparabilityTest.class,
   daikon.test.VarInfoNameTest.class,
+  daikon.test.VarInfoAuxTest.class,
   daikon.test.inv.InvariantAddAndCheckTester.class,
   daikon.test.TestQuant.class,
   daikon.test.TestAnnotate.class,
