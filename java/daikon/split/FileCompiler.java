@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +41,13 @@ public final class FileCompiler {
    * source file that contains the error or warning, and match group 2 is "error" or "warning".
    */
   static @Regex(2) Pattern java_filename_pattern;
+
+  /**
+   * Matches the first line of a javac error message that is not about any one file, such as an
+   * invalid command-line option.
+   */
+  private static final Pattern javac_file_independent_error_pattern =
+      Pattern.compile("(?m)^error: ");
 
   /**
    * External command used to compile Java files, and command-line arguments. Guaranteed to be
@@ -114,6 +122,14 @@ public final class FileCompiler {
   /**
    * Compiles the files given by fileNames. Returns the error output.
    *
+   * <p>Every file that the compiler can compile on its own is compiled, even if other files have
+   * compilation errors. This assumes that the files do not depend on one another, that the compiler
+   * writes each class file next to its source file, and that no class file for any of the files
+   * exists before this method is called. (A file whose class file exists is treated as compiled.)
+   *
+   * <p>Each error is reported once. A warning about a file that is compiled again, because another
+   * file had an error, may be reported more than once.
+   *
    * @param fileNames paths to the files to be compiled as Strings
    * @return the error output from compiling the files
    * @throws IOException if there is a problem reading a file
@@ -122,37 +138,66 @@ public final class FileCompiler {
 
     // System.out.printf("compileFiles: %s%n", fileNames);
 
-    // Start a process to compile all of the files (in one command)
-    CompileResult result = compile_source(fileNames);
-    String compile_errors = result.errorOutput();
+    String compile_errors = "";
 
-    // javac tends to stop without completing the compilation if there
-    // is an error in one of the files.  Remove all the erring files
-    // and recompile only the good ones.  javac reports errors in phases:  for
-    // example, after a syntax error it does not report type errors.  So, a
-    // recompilation may reveal errors in other files, and recompilation is
-    // repeated until it succeeds or no more files can be excluded.
-    if (result.failed && compiler[0].indexOf("javac") != -1) {
-      // The files in which javac has reported an error, in normalized form.
-      Set<String> errorFiles = new HashSet<>();
-      List<String> attempted = fileNames;
-      while (result.failed) {
-        // javac writes its diagnostics to standard error, so only standard error is searched for
-        // the names of files with errors.
-        addFilesWithErrors(result.stderr, errorFiles);
-        List<String> retry = filesToRetry(attempted, errorFiles);
-        // If no file was excluded, recompiling would only repeat the previous compilation.  That
-        // happens, for example, if the failure is not attributable to any particular file.
-        if (retry.isEmpty() || retry.size() == attempted.size()) {
-          break;
-        }
-        result = compile_source(retry);
-        attempted = retry;
-        // Even a successful recompilation may report new warnings:  after a syntax error, javac
-        // does not run the later phases that report warnings such as unchecked conversions.
-        compile_errors =
-            appendWithLineSeparator(compile_errors, withoutCommonPrefix(compile_errors, result));
+    // javac compiles no file at all if any of its arguments does not exist.
+    List<String> candidates = new ArrayList<>();
+    List<String> missingFiles = new ArrayList<>();
+    for (String sourceFileName : fileNames) {
+      if (fileExists(sourceFileName)) {
+        candidates.add(sourceFileName);
+      } else {
+        missingFiles.add(sourceFileName);
       }
+    }
+
+    // javac compiles nothing if any file has an error.  Furthermore, javac reports errors in
+    // phases:  for example, after a syntax error in one file, it does not report type errors in
+    // other files.  Therefore, repeatedly compile the files that have neither been compiled nor
+    // been reported to have errors, until compilation succeeds or makes no progress.
+    while (!candidates.isEmpty()) {
+      CompileResult result = compile_source(candidates);
+      // Even a successful recompilation may report new warnings:  after a syntax error, javac
+      // does not run the later phases that report warnings such as unchecked conversions.
+      String output = withoutCommonPrefix(compile_errors, result);
+      if (!result.failed) {
+        compile_errors = appendWithLineSeparator(compile_errors, output);
+        break;
+      }
+      // javac writes its diagnostics to standard error, so only standard error is searched for the
+      // names of files with errors.
+      Set<String> errorFiles = filesWithErrors(result.stderr);
+      List<String> retry = filesToRetry(candidates, errorFiles);
+      if (retry.size() == candidates.size()) {
+        // No progress:  no file was compiled, and the output did not identify any file that has
+        // errors (perhaps the compiler is not javac).  Compile each file on its own, unless the
+        // error is not about any one file, in which case it would recur for every file.
+        if (candidates.size() > 1
+            && !javac_file_independent_error_pattern.matcher(result.stderr).find()) {
+          // The compilation of each file on its own reports that file's errors, so discard
+          // output, which would duplicate them.
+          for (String sourceFileName : candidates) {
+            CompileResult singleResult = compile_source(Collections.singletonList(sourceFileName));
+            compile_errors =
+                appendWithLineSeparator(
+                    compile_errors, withoutCommonPrefix(compile_errors, singleResult));
+          }
+        } else {
+          compile_errors = appendWithLineSeparator(compile_errors, output);
+        }
+        break;
+      }
+      // If no file was identified as having errors, then every error in output is about a file in
+      // retry, which will be compiled again.  Discard output, which would duplicate those errors.
+      if (!errorFiles.isEmpty()) {
+        compile_errors = appendWithLineSeparator(compile_errors, output);
+      }
+      candidates = retry;
+    }
+
+    for (String missingFile : missingFiles) {
+      compile_errors =
+          appendWithLineSeparator(compile_errors, "error: file not found: " + missingFile);
     }
 
     return compile_errors;
@@ -321,18 +366,20 @@ public final class FileCompiler {
   }
 
   /**
-   * Adds to {@code errorFiles} the files in which {@code errorString} reports an error. This is
-   * necessary when compiling with javac because javac does not compile any of the files supplied to
-   * it if some of them contain errors. So some "good" files end up not being compiled.
+   * Returns the files in which {@code errorString} reports an error. This is necessary when
+   * compiling with javac because javac does not compile any of the files supplied to it if some of
+   * them contain errors. So some "good" files end up not being compiled.
    *
-   * <p>A file with only warnings can be compiled, so it is not added, unless {@code errorString}
+   * <p>A file with only warnings can be compiled, so it is not returned, unless {@code errorString}
    * reports no error in any file. In that case, the warnings caused the failure (for example,
-   * because javac was run with {@code -Werror}), and the files with warnings are added.
+   * because javac was run with {@code -Werror}), and the files with warnings are returned.
+   *
+   * <p>Recognizes only javac's messages, and only those that are in English.
    *
    * @param errorString the error output of javac
-   * @param errorFiles the set of normalized paths of files with errors; is side-effected
+   * @return the normalized paths of the files with errors
    */
-  private static void addFilesWithErrors(String errorString, Set<String> errorFiles) {
+  private static Set<String> filesWithErrors(String errorString) {
     Set<String> filesWithErrors = new HashSet<>();
     Set<String> filesWithWarnings = new HashSet<>();
     Matcher m = java_filename_pattern.matcher(errorString);
@@ -347,7 +394,7 @@ public final class FileCompiler {
         filesWithWarnings.add(path);
       }
     }
-    errorFiles.addAll(filesWithErrors.isEmpty() ? filesWithWarnings : filesWithErrors);
+    return filesWithErrors.isEmpty() ? filesWithWarnings : filesWithErrors;
   }
 
   /**
