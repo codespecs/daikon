@@ -127,7 +127,7 @@ public class SplitterFactory {
                 @NonNull Splitter splitter = splitterObjects[i][k].getSplitter();
                 sp.add(splitter);
                 numGood++;
-              } else {
+              } else if (!PptSplitter.dkconfig_suppressSplitterErrors) {
                 // UNDONE: We should only output the load error if the
                 // compile was successful.
                 System.out.println(splitterObjects[i][k].getError());
