@@ -4,11 +4,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -32,8 +36,18 @@ public final class FileCompiler {
   /** The Runtime of the JVM. */
   public static Runtime runtime = java.lang.Runtime.getRuntime();
 
-  /** Matches the names of Java source files. Match group 1 is the complete filename. */
-  static @Regex(1) Pattern java_filename_pattern;
+  /**
+   * Matches the first line of a javac error message. Match group 1 is the name of the file that
+   * contains the error.
+   */
+  static @Regex(1) Pattern javac_error_pattern;
+
+  /**
+   * Matches the first line of a javac error message that is not about any one file, such as an
+   * invalid command-line option.
+   */
+  private static final Pattern javac_file_independent_error_pattern =
+      Pattern.compile("(?m)^error: ");
 
   /**
    * External command used to compile Java files, and command-line arguments. Guaranteed to be
@@ -46,17 +60,14 @@ public final class FileCompiler {
 
   static {
     try {
-      @Regex(1) String java_filename_re
+      @Regex(1) String javac_error_re
           // A javac error message may consist of several lines of output.
-          // The filename will be found at the beginning of the first line,
-          // the additional lines of information will all be indented.
-          // (?m) turns on MULTILINE mode so the first "^" matches the
-          // start of each error line output by javac. The blank space after
-          // the second "^" is intentional; together with the first "^", this
-          // says a filename can only be found at the start of a non-indented
-          // line as noted above.
-          = "(?m)^([^ ]+?\\.java)";
-      java_filename_pattern = Pattern.compile(java_filename_re);
+          // The first line has the form "FILENAME:LINENUMBER: error: MESSAGE".
+          // Warnings, which have the form "FILENAME:LINENUMBER: warning: MESSAGE",
+          // must not match, because a file with only warnings compiles.
+          // (?m) turns on MULTILINE mode so "^" matches the start of each line.
+          = "(?m)^(.+?\\.java):[0-9]+: error:";
+      javac_error_pattern = Pattern.compile(javac_error_re);
     } catch (PatternSyntaxException me) {
       me.printStackTrace();
       throw new Error("Error in regexp", me);
@@ -109,6 +120,11 @@ public final class FileCompiler {
   /**
    * Compiles the files given by fileNames. Returns the error output.
    *
+   * <p>Every file that the compiler can compile on its own is compiled, even if other files have
+   * compilation errors. This assumes that the files do not depend on one another, that the compiler
+   * writes each class file next to its source file, and that no class file for any of the files
+   * exists before this method is called. (A file whose class file exists is treated as compiled.)
+   *
    * @param fileNames paths to the files to be compiled as Strings
    * @return the error output from compiling the files
    * @throws IOException if there is a problem reading a file
@@ -117,17 +133,59 @@ public final class FileCompiler {
 
     // System.out.printf("compileFiles: %s%n", fileNames);
 
-    // Start a process to compile all of the files (in one command)
-    String compile_errors = compile_source(fileNames);
+    StringBuilder compile_errors = new StringBuilder();
 
-    // javac tends to stop without completing the compilation if there
-    // is an error in one of the files.  Remove all the erring files
-    // and recompile only the good ones.
-    if (compiler[0].indexOf("javac") != -1) {
-      recompile_without_errors(fileNames, compile_errors);
+    // A compiler may not produce class files for some good files if other files have errors.  For
+    // example, javac stops after parsing if any file has a syntax error, so it does not report type
+    // errors and does not produce any class files.  Therefore, repeatedly compile the files that
+    // have neither been compiled nor been reported to have errors.
+
+    // The files that have not been compiled and are not known to have errors.
+    List<String> candidates = new ArrayList<>();
+    for (String sourceFileName : fileNames) {
+      if (fileExists(sourceFileName)) {
+        candidates.add(sourceFileName);
+      } else {
+        // javac compiles no file at all if any file does not exist.
+        compile_errors.append("error: file not found: " + sourceFileName + System.lineSeparator());
+      }
+    }
+    while (!candidates.isEmpty()) {
+      String round_errors = compile_source(candidates);
+      Set<String> errorFiles = filesWithErrors(round_errors);
+      List<String> remaining = new ArrayList<>();
+      for (String sourceFileName : candidates) {
+        if (!fileExists(getClassFilePath(sourceFileName))
+            && !errorFiles.contains(normalizePath(sourceFileName))) {
+          remaining.add(sourceFileName);
+        }
+      }
+      if (remaining.size() == candidates.size()) {
+        // No progress:  no file was compiled, and the error output did not identify any file that
+        // has errors (perhaps the compiler is not javac).  Compile each file on its own, unless
+        // the error is not about any one file, in which case it would recur for every file.
+        if (remaining.size() > 1
+            && !javac_file_independent_error_pattern.matcher(round_errors).find()) {
+          // The compilation of each file on its own reports that file's errors, so discard
+          // round_errors, which would duplicate them.
+          for (String sourceFileName : remaining) {
+            compile_errors.append(compile_source(Collections.singletonList(sourceFileName)));
+          }
+        } else {
+          compile_errors.append(round_errors);
+        }
+        break;
+      }
+      // If no file was identified as having errors, then every error in round_errors is about a
+      // file in remaining, which will be compiled again.  Discard round_errors, which would
+      // duplicate those errors.
+      if (!errorFiles.isEmpty()) {
+        compile_errors.append(round_errors);
+      }
+      candidates = remaining;
     }
 
-    return compile_errors;
+    return compile_errors.toString();
   }
 
   /**
@@ -217,42 +275,39 @@ public final class FileCompiler {
   }
 
   /**
-   * Examine the errorString to identify the files that cannot compile, then recompile all the other
-   * files. This function is necessary when compiling with javac because javac does not compile all
-   * the files supplied to it if some of them contain errors. So some "good" files end up not being
-   * compiled.
+   * Returns the files that javac reports as having errors. Recognizes only javac's error messages,
+   * and only those that are in English.
    *
-   * @param fileNames all the files that were attempted to be compiled
-   * @param errorString the error string that indicates which files could not be compiled
+   * @param errorString the error output of the compiler
+   * @return the normalized paths (see {@link #normalizePath}) of the files that have errors
    */
-  private void recompile_without_errors(List<String> fileNames, String errorString)
-      throws IOException {
-    // search the error string and extract the files with errors.
-    if (errorString != null) {
-      HashSet<String> errorClasses = new HashSet<>();
-      Matcher m = java_filename_pattern.matcher(errorString);
-      while (m.find()) {
-        @SuppressWarnings(
-            "nullness") // Regex Checker imprecision: find() guarantees that group 1 exists
-        @NonNull String sansExtension = m.group(1);
-        errorClasses.add(sansExtension);
-      }
-      // Collect all the files that were not compiled into retry
-      List<String> retry = new ArrayList<>();
-      for (String sourceFileName : fileNames) {
-        sourceFileName = sourceFileName.trim();
-        String classFilePath = getClassFilePath(sourceFileName);
-        if (!fileExists(classFilePath)) {
-          if (!errorClasses.contains(sourceFileName)) {
-            retry.add(sourceFileName);
-          }
-        }
-      }
-
-      if (!retry.isEmpty()) {
-        compile_source(retry);
+  private static Set<String> filesWithErrors(String errorString) {
+    Set<String> result = new HashSet<>();
+    Matcher m = javac_error_pattern.matcher(errorString);
+    while (m.find()) {
+      @SuppressWarnings(
+          "nullness" // Regex Checker imprecision: find() guarantees that group 1 exists
+      )
+      @NonNull String fileName = m.group(1);
+      try {
+        result.add(normalizePath(fileName));
+      } catch (InvalidPathException e) {
+        // The match is not a file name.  Ignore it.
       }
     }
+    return result;
+  }
+
+  /**
+   * Returns an absolute, normalized version of the given path, so that different ways of writing
+   * the same path compare as equal.
+   *
+   * @param path a path
+   * @return an absolute, normalized version of the path
+   * @throws InvalidPathException if the argument is not a valid path
+   */
+  private static String normalizePath(String path) {
+    return Path.of(path).toAbsolutePath().normalize().toString();
   }
 
   /**
