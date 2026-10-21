@@ -205,9 +205,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         get_expr = "getDoubleValue(vt)";
       } else if (type.equals("double[]")) {
         get_expr = "getDoubleArrayValue(vt)";
-      } else if (type.equals("String")
-          || type.equals("java.lang.String")
-          || type.equals("char[]")) {
+      } else if (type.equals("String") || type.equals("java.lang.String")) {
         type = "String";
         get_expr = "getStringValue(vt)";
       } else if (type.equals("String[]") || type.equals("java.lang.String[]")) {
@@ -535,8 +533,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   private static String getVarType(VarInfo varInfo) {
     if (varInfo.file_rep_type == ProglangType.HASHCODE) {
       return "int";
-    } else if ((varInfo.type == ProglangType.CHAR_ARRAY)
-        || (varInfo.type == ProglangType.BOOLEAN)
+    } else if ((varInfo.type == ProglangType.BOOLEAN)
         || (varInfo.type == ProglangType.DOUBLE)
         || (varInfo.type == ProglangType.DOUBLE_ARRAY)) {
       return varInfo.type.format();
