@@ -423,12 +423,13 @@ public class PptTopLevel extends Ppt {
     super(var_infos);
 
     this.name = name;
-    if (!name.contains(":::")) {
-      name += ":::" + (type == null ? PptType.POINT : type);
-    }
-    this.ppt_name = new PptName(name);
+    this.ppt_name = ppt_name_for(name, type);
     this.flags = flags;
-    this.type = normalize_type(ppt_name, type);
+    PptType normalized_type = normalize_type(ppt_name, type);
+    if (normalized_type == null) {
+      throw new IllegalArgumentException(type_error(name, type));
+    }
+    this.type = normalized_type;
     this.parent_relations = parents;
     init_vars();
   }
@@ -436,6 +437,66 @@ public class PptTopLevel extends Ppt {
   /** Restore/Create interns when reading serialized object. */
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
+  }
+
+  /**
+   * Returns the PptName for a program point with the given name and declared type. A name that
+   * lacks ":::" gets ":::" and the type appended.
+   *
+   * @param name the name of the program point
+   * @param type the declared type of the program point, or null if none was declared
+   * @return the PptName for the program point
+   */
+  private static PptName ppt_name_for(String name, @Nullable PptType type) {
+    if (!name.contains(":::")) {
+      name += ":::" + (type == null ? PptType.POINT : type);
+    }
+    return new PptName(name);
+  }
+
+  /**
+   * Returns an error message if the declared type of a program point does not conform to its name.
+   * See {@link #normalize_type} for the conformance rules.
+   *
+   * @param name the name of the program point
+   * @param type the declared type of the program point, or null if none was declared
+   * @return an error message, or null if the type conforms to the name
+   */
+  public static @Nullable String type_error(String name, @Nullable PptType type) {
+    PptName ppt_name = ppt_name_for(name, type);
+    if (type == null || normalize_type(ppt_name, type) != null) {
+      return null;
+    }
+    return String.format(
+        "Program point %s has type %s, but its name does not conform to that type",
+        ppt_name.getName(), type.toString().toLowerCase(Locale.ROOT));
+  }
+
+  /**
+   * Returns the type that a program point with the given name has if no type is declared. See
+   * {@link #normalize_type}.
+   *
+   * @param ppt_name the name of the program point
+   * @return the type indicated by the name
+   */
+  private static PptType type_from_name(PptName ppt_name) {
+    if (ppt_name.isEnterPoint()) {
+      return PptType.ENTER;
+    } else if (ppt_name.isCombinedExitPoint()) {
+      return PptType.EXIT;
+    } else if (ppt_name.isNumberedExitPoint()) {
+      return PptType.SUBEXIT;
+    } else if (ppt_name.isObjectInstanceSynthetic()) {
+      return PptType.OBJECT;
+    } else if (ppt_name.isClassStaticSynthetic()) {
+      return PptType.CLASS;
+    } else if (ppt_name.isThrowsPoint()) {
+      return PptType.THROWS;
+    } else if (ppt_name.isGlobalPoint()) {
+      return PptType.GLOBAL;
+    } else {
+      return PptType.POINT;
+    }
   }
 
   /**
@@ -467,78 +528,46 @@ public class PptTopLevel extends Ppt {
    *
    * @param ppt_name the name of the program point
    * @param type the declared type of the program point, or null if none was declared
-   * @return the type that the program point should have
-   * @throws IllegalArgumentException if the declared type does not conform to the name
+   * @return the type that the program point should have, or null if the declared type does not
+   *     conform to the name
    */
-  private static PptType normalize_type(PptName ppt_name, @Nullable PptType type) {
+  private static @Nullable PptType normalize_type(PptName ppt_name, @Nullable PptType type) {
+    PptType name_type = type_from_name(ppt_name);
     if (type == null) {
-      if (ppt_name.isEnterPoint()) {
-        return PptType.ENTER;
-      } else if (ppt_name.isCombinedExitPoint()) {
-        return PptType.EXIT;
-      } else if (ppt_name.isNumberedExitPoint()) {
-        return PptType.SUBEXIT;
-      } else if (ppt_name.isObjectInstanceSynthetic()) {
-        return PptType.OBJECT;
-      } else if (ppt_name.isClassStaticSynthetic()) {
-        return PptType.CLASS;
-      } else if (ppt_name.isThrowsPoint()) {
-        return PptType.THROWS;
-      } else if (ppt_name.isGlobalPoint()) {
-        return PptType.GLOBAL;
-      } else {
-        return PptType.POINT;
-      }
+      return name_type;
     }
-
-    boolean conforms;
     switch (type) {
       case POINT:
         return type;
-      case ENTER:
-        conforms = ppt_name.isEnterPoint();
-        break;
       case EXIT:
       case SUBEXIT:
-        if (ppt_name.isCombinedExitPoint()) {
-          return PptType.EXIT;
-        } else if (ppt_name.isNumberedExitPoint()) {
-          return PptType.SUBEXIT;
-        }
-        conforms = false;
-        break;
-      case OBJECT:
-        conforms = ppt_name.isObjectInstanceSynthetic();
-        break;
-      case CLASS:
-        conforms = ppt_name.isClassStaticSynthetic();
-        break;
-      case THROWS:
-        conforms = ppt_name.isThrowsPoint();
-        break;
-      case GLOBAL:
-        conforms = ppt_name.isGlobalPoint();
-        break;
+        return (name_type == PptType.EXIT || name_type == PptType.SUBEXIT) ? name_type : null;
       default:
-        throw new Error("Unexpected program point type " + type);
+        return (type == name_type) ? type : null;
     }
-    if (!conforms) {
-      throw new IllegalArgumentException(
-          String.format(
-              "Program point %s has type %s, but its name does not conform to that type",
-              ppt_name.getName(), type.toString().toLowerCase(Locale.ROOT)));
-    }
-    return type;
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
+  public PptTopLevel(String name, VarInfo[] var_infos) {
+    this(name, type_from_name(new PptName(name)), var_infos);
+  }
+
+  /**
+   * Creates a program point with the given type, which is not checked against the name. Used by
+   * PptConditional, whose name (its parent's name with ";condition=..." appended) does not indicate
+   * its type. Violates invariants.
+   *
+   * @param name the name of the program point
+   * @param type the type of the program point
+   * @param var_infos the variables of the program point
+   */
   @SuppressWarnings(
       "nullness:fields.uninitialized") // violates invariants; also uses helper function
-  public PptTopLevel(String name, VarInfo[] var_infos) {
+  protected PptTopLevel(String name, PptType type, VarInfo[] var_infos) {
     super(var_infos);
     this.name = name;
     ppt_name = new PptName(name);
-    type = normalize_type(ppt_name, null);
+    this.type = type;
     init_vars();
   }
 
