@@ -159,6 +159,7 @@ public class Premain {
     // side effect: They cause the corresponding class to be loaded. This helps
     // Instrument.transform() avoid ClassCircularityErrors during initialization.
     DaikonVariableInfo.std_visibility = DynComp.std_visibility;
+    DaikonVariableInfo.no_method_calls = DynComp.no_method_calls;
     DCRuntime.depth = DynComp.nesting_depth;
     // daikon.chicory.Instrument#shouldIgnore is shared by Chicory and DynComp.
     // It uses the Chicory Runtime copy of the patterns.
