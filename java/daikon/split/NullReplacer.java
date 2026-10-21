@@ -22,12 +22,12 @@ import jtb.visitor.DepthFirstVisitor;
  * expression. Note: "null" is only referring to the java reserved word "null" not to any instances
  * of the string "null".
  *
- * <p>A splitter usually represents a reference by its hashcode, which is 0 for null. The exceptions
- * are a String, an element of a String array, and a method call on either of those: the splitter
- * represents each of them as a reference. A "null" that is compared with one of those expressions
- * is not replaced; all other occurrences of "null" are replaced. For example, in {@code this_next
- * == null && this_name != null}, where {@code this_next} is a hashcode and {@code this_name} is a
- * String, the first "null" is replaced and the second "null" is not.
+ * <p>A splitter represents some references by their hashcode, which is 0 for null. A "null" is
+ * replaced only if it is compared, by "==" or "!=", with a variable that the splitter represents as
+ * a hashcode or with an element of an array of hashcodes. Every other "null" is left unchanged:
+ * for example, one that is compared with a String, or one that is passed as an argument. For
+ * example, in {@code this_next == null && this_name != null}, where {@code this_next} is a hashcode
+ * and {@code this_name} is a String, the first "null" is replaced and the second "null" is not.
  *
  * <p>NullReplacer runs after the other fixers, because it recognizes the names that they produce.
  */
@@ -44,14 +44,14 @@ class NullReplacer extends DepthFirstVisitor {
   //    column shifting being needed, applies only to specified line
 
   /**
-   * The expressions that the splitter represents as a reference. Each is the compilable name of a
-   * String variable, or the compilable name of a String array followed by "[]", which stands for an
-   * element of that array.
+   * The expressions that the splitter represents as a hashcode. Each is the compilable name of a
+   * hashcode variable, or the compilable name of a hashcode array followed by "[]", which stands for
+   * an element of that array.
    */
-  private final Set<String> referenceExpressions = new HashSet<>();
+  private final Set<String> hashcodeExpressions = new HashSet<>();
 
-  /** The null literals that are not replaced, because they are compared with a reference. */
-  private final Set<NodeToken> referenceNulls = Collections.newSetFromMap(new IdentityHashMap<>());
+  /** The null literals that are replaced, because they are compared with a hashcode. */
+  private final Set<NodeToken> hashcodeNulls = Collections.newSetFromMap(new IdentityHashMap<>());
 
   /**
    * Creates a new NullReplacer.
@@ -62,10 +62,10 @@ class NullReplacer extends DepthFirstVisitor {
     super();
     for (VarInfo varInfo : varInfos) {
       String name = SplitterJavaSource.compilableName(varInfo);
-      if (varInfo.file_rep_type == ProglangType.STRING) {
-        referenceExpressions.add(name);
-      } else if (varInfo.file_rep_type == ProglangType.STRING_ARRAY) {
-        referenceExpressions.add(name + "[]");
+      if (varInfo.file_rep_type == ProglangType.HASHCODE) {
+        hashcodeExpressions.add(name);
+      } else if (varInfo.file_rep_type == ProglangType.HASHCODE_ARRAY) {
+        hashcodeExpressions.add(name + "[]");
       }
     }
   }
@@ -88,7 +88,7 @@ class NullReplacer extends DepthFirstVisitor {
   /**
    * This method should not be directly used by user of this class; however it must be public to
    * fulfill the visitor interface. Records the null literals in n that are compared with an
-   * expression that the splitter represents as a reference.
+   * expression that the splitter represents as a hashcode.
    */
   @Override
   public void visit(EqualityExpression n) {
@@ -100,10 +100,10 @@ class NullReplacer extends DepthFirstVisitor {
     for (int i = 0; i + 1 < operands.size(); i++) {
       NodeToken[] left = stripParens(operands.get(i));
       NodeToken[] right = stripParens(operands.get(i + 1));
-      if (isNullLiteral(left) && isReference(right)) {
-        referenceNulls.add(left[0]);
-      } else if (isNullLiteral(right) && isReference(left)) {
-        referenceNulls.add(right[0]);
+      if (isNullLiteral(left) && isHashcode(right)) {
+        hashcodeNulls.add(left[0]);
+      } else if (isNullLiteral(right) && isHashcode(left)) {
+        hashcodeNulls.add(right[0]);
       }
     }
     super.visit(n);
@@ -137,36 +137,23 @@ class NullReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Returns true if the splitter represents the expression whose tokens are given as a reference:
-   * that is, if the expression is a String variable; an element of a String array such as {@code
-   * a[i]}; or a method call whose receiver is such an expression, such as {@code a[i].trim()}.
+   * Returns true if the splitter represents the expression whose tokens are given as a hashcode:
+   * that is, if the expression is a hashcode variable or an element of a hashcode array such as
+   * {@code a[i]}. No other expression is a hashcode, because a hashcode is a number, whose fields
+   * and methods cannot be used.
    *
    * @param tokens the tokens of an expression, without enclosing parentheses
-   * @return true if the splitter represents the expression as a reference
+   * @return true if the splitter represents the expression as a hashcode
    */
-  private boolean isReference(NodeToken[] tokens) {
+  private boolean isHashcode(NodeToken[] tokens) {
     int last = tokens.length - 1;
     if (last == 0) {
-      return referenceExpressions.contains(tokens[0].tokenImage);
+      return hashcodeExpressions.contains(tokens[0].tokenImage);
     }
-    if (last >= 3
+    return last >= 3
         && Visitors.isLBracket(tokens[1])
         && matchingIndex(tokens, 1) == last
-        && referenceExpressions.contains(tokens[0].tokenImage + "[]")) {
-      return true;
-    }
-    // A method call: the receiver, ".", the method name, and the parenthesized arguments.
-    for (int open = 3; open < last; open++) {
-      if (Visitors.isLParen(tokens[open]) && matchingIndex(tokens, open) == last) {
-        if (!(Visitors.isIdentifier(tokens[open - 1]) && Visitors.isDot(tokens[open - 2]))) {
-          return false;
-        }
-        @SuppressWarnings("nullness:assignment") // open - 2 < tokens.length, so not padded
-        NodeToken[] receiver = Arrays.copyOfRange(tokens, 0, open - 2);
-        return isReference(stripParens(receiver));
-      }
-    }
-    return false;
+        && hashcodeExpressions.contains(tokens[0].tokenImage + "[]");
   }
 
   /**
@@ -194,8 +181,8 @@ class NullReplacer extends DepthFirstVisitor {
 
   /**
    * This method should not be directly used by user of this class; however it must be public to
-   * fulfill the visitor interface. If n represents null then it is replaced by "0", unless n is
-   * compared with an expression that the splitter represents as a reference.
+   * fulfill the visitor interface. If n represents null and is compared with an expression that
+   * the splitter represents as a hashcode, then it is replaced by "0".
    */
   @Override
   public void visit(NodeToken n) {
@@ -205,7 +192,7 @@ class NullReplacer extends DepthFirstVisitor {
       columnshift = 0;
       columnshiftline = -1;
     }
-    if (Visitors.isNull(n) && !referenceNulls.contains(n)) {
+    if (hashcodeNulls.contains(n)) {
       columnshift = columnshift + 3;
       n.tokenImage = "0";
       columnshiftline = n.beginLine;

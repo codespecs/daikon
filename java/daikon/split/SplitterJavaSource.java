@@ -337,7 +337,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * variable name are removed and appended to the end of variable name with a "_" separating the
    * two parts. Instances of "orig(variableName)" are replaced by instances of "orig_variableName".
    * For example "orig(varName.publicField)" would yield "orig_varName_publicField". Instances of
-   * "null" that the splitter represents as a hashcode are replaced by "0" (see {@link
+   * "null" that are compared with a hashcode are replaced by "0" (see {@link
    * NullReplacer}).
    *
    * @param condition a string representation of a conditional statement
