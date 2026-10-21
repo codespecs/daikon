@@ -382,10 +382,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the integer value associated with a key, assuming it is defined. It is recommended to
-   * check that it is defined first with {@link #hasValue(String)}.
+   * Returns the integer value associated with a key.
    *
-   * @throws RuntimeException if the key is not defined
+   * @param key the key, which must be defined
    * @throws NumberFormatException if the value of the key cannot be parsed as an integer
    * @see #hasValue(String)
    */
@@ -398,12 +397,10 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the long value associated with a key, assuming it is defined. It is recommended to
-   * check that it is defined first with {@link #hasValue(String)}.
+   * Returns the long value associated with a key.
    *
-   * @param key the key
+   * @param key the key, which must be defined
    * @return the long value associated with the key
-   * @throws RuntimeException if the key is not defined
    * @throws NumberFormatException if the value of the key cannot be parsed as a long
    * @see #hasValue(String)
    */
@@ -416,12 +413,10 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the double value associated with a key, assuming it is defined. It is recommended to
-   * check that it is defined first with {@link #hasValue(String)}.
+   * Returns the double value associated with a key.
    *
-   * @param key the key
+   * @param key the key, which must be defined
    * @return the double value associated with the key
-   * @throws RuntimeException if the key is not defined
    * @throws NumberFormatException if the value of the key cannot be parsed as a double
    * @see #hasValue(String)
    */
@@ -434,10 +429,13 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the string array associated with a key, assuming it is defined. It is recommended to
-   * check that it is defined first with {@link #hasValue(String)}.
+   * Returns the string array associated with a key. The value is a whitespace-separated list of
+   * double-quoted strings, which {@link #parse(String)} produces from a bracketed list such as
+   * {@code [a b]}.
    *
-   * @throws RuntimeException if the key is not defined
+   * @param key the key, which must be defined
+   * @return the trimmed contents of the double-quoted strings in the value associated with the key
+   * @throws IllegalStateException if the value was not written as a bracketed list
    * @see #hasValue(String)
    */
   public String[] getList(@KeyFor("this.map") String key) {
@@ -451,15 +449,17 @@ public final class VarInfoAux implements Cloneable, Serializable {
       tok.whitespaceChars(' ', ' ');
       ArrayList<String> lValues = new ArrayList<>();
 
-      int tokInfo = tok.nextToken();
-      while (tokInfo != StreamTokenizer.TT_EOF) {
+      for (int tokInfo = tok.nextToken();
+          tokInfo != StreamTokenizer.TT_EOF;
+          tokInfo = tok.nextToken()) {
         if (tok.ttype != '"') {
-          continue;
+          throw new IllegalStateException(
+              String.format(
+                  "Value for key '%s' must be a bracketed list, such as [a b]: %s", key, sValue));
         }
         assert tok.sval != null
-            : "@AssumeAssertion(nullness)"; // tok.type == '"' guarantees not null
+            : "@AssumeAssertion(nullness)"; // tok.ttype == '"' guarantees not null
         lValues.add(tok.sval.trim());
-        tokInfo = tok.nextToken();
       }
       return lValues.toArray(new String[] {});
     } catch (IOException ex) {
