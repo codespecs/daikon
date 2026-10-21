@@ -85,8 +85,6 @@ public class DtraceNonceFixer {
   private static int renumberNonces(String inFilename, String outFilename) throws IOException {
     // maxNonce - the biggest nonce ever found in the file
     int maxNonce = 0;
-    // The BufferedWriter, not the PrintWriter, is the resource, so that closing it (which, for a
-    // compressed file, writes the trailer) throws IOException on failure.
     try (BufferedReader br = FilesPlume.newBufferedFileReader(inFilename);
         BufferedWriter bw = FilesPlume.newBufferedFileWriter(outFilename)) {
       PrintWriter out = new PrintWriter(bw);
@@ -112,7 +110,7 @@ public class DtraceNonceFixer {
         para.printWithNonce(out, newNonce);
         maxNonce = Math.max(maxNonce, newNonce);
       }
-      checkError(out, outFilename);
+      throwIfError(out, outFilename);
     }
     return maxNonce;
   }
@@ -139,19 +137,22 @@ public class DtraceNonceFixer {
           para.print(out);
         }
       }
-      checkError(out, outFilename);
+      throwIfError(out, outFilename);
     }
   }
 
   /**
    * Flushes {@code out} and throws an exception if {@code out} has encountered an error. A
-   * PrintWriter records errors rather than throwing IOException.
+   * PrintWriter records errors rather than throwing IOException. Therefore, a caller should make
+   * the PrintWriter's underlying writer, not the PrintWriter, the try-with-resources resource, so
+   * that closing it (which, for a compressed file, writes the trailer) throws IOException on
+   * failure.
    *
    * @param out the PrintWriter to check
    * @param filename the file that {@code out} writes, for the error message
    * @throws IOException if {@code out} has encountered an error
    */
-  private static void checkError(PrintWriter out, String filename) throws IOException {
+  private static void throwIfError(PrintWriter out, String filename) throws IOException {
     if (out.checkError()) {
       throw new IOException("Error writing " + filename);
     }
