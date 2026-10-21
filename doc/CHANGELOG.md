@@ -54,6 +54,12 @@ Fjalar/Kvasir:
   print a warning and continue, rather than stop, when it encounters a VEX IR
   operation that it does not handle.
 
+Chicory and DynComp:
+
+* New command-line option `--no-method-calls` makes Chicory and DynComp never
+  call methods of the target program's objects, such as calling `toArray()` on
+  a list.
+
 ## Version 5.9.0 (September 1, 2026)
 
 * All Daikon tools now work with Java 8-26.
