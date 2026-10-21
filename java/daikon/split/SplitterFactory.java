@@ -270,9 +270,6 @@ public class SplitterFactory {
   /**
    * Compiles the files given by fileNames. Return the error output.
    *
-   * <p>Every file that compiles on its own is compiled, even if other files have compilation
-   * errors.
-   *
    * @return the error output from compiling the files
    * @param fileNames paths to the files to be compiled as Strings
    * @throws IOException if there is a problem reading a file
