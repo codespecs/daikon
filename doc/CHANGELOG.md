@@ -54,6 +54,12 @@ Scripts:
   `dtrace-rm-decls.php`, `find_comparable.pl`, `find_globals.pl`,
   `generate-dec-types.py`, `lwpp.pl`, `lwpp-init.pl`, and `set_decl_type.pl`.
 
+Chicory and DynComp:
+
+* New command-line option `--no-method-calls` makes Chicory and DynComp never
+  call methods of the target program's objects, such as calling `toArray()` on
+  a list.
+
 ## Version 5.9.0 (September 1, 2026)
 
 * All Daikon tools now work with Java 8-26.
