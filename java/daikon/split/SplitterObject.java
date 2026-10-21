@@ -22,7 +22,7 @@ import typequals.prototype.qual.Prototype;
  */
 public class SplitterObject implements Comparable<SplitterObject> {
 
-  private @MonotonicNonNull Splitter splitter;
+  private @Nullable Splitter splitter;
   private String condition; // the condition
   private @BinaryName String className = "Unassigned"; // the Java classname of this Splitter
   private String directory; // the directory where it resides
@@ -95,6 +95,9 @@ public class SplitterObject implements Comparable<SplitterObject> {
 
   /** Sets the "splitter" field of this object to a newly-instantiated object. */
   public void load() {
+    // Clear any splitter from an earlier call, in case this call fails.
+    splitter = null;
+    exists = false;
     Class<?> tempClass = defineSplitterClass(className, getFullClassPath());
     if (tempClass != null) {
       Splitter newSplitter;
@@ -104,7 +107,6 @@ public class SplitterObject implements Comparable<SplitterObject> {
         // LinkageError includes VerifyError and ExceptionInInitializerError.
         // RuntimeException includes ClassCastException.
         errorMessage = "Cannot instantiate " + tempClass + " for " + this.toString() + ": " + e;
-        exists = false;
         return;
       }
       splitter = newSplitter;
@@ -124,7 +126,6 @@ public class SplitterObject implements Comparable<SplitterObject> {
       exists = true;
     } else {
       errorMessage = "Cannot load the class for " + this.toString() + " from " + getFullClassPath();
-      exists = false;
     }
   }
 
