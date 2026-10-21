@@ -19,6 +19,7 @@ javautil.ArrayList17:::OBJECT
     Variables: this javautil.ArrayList17.serialVersionUID javautil.ArrayList17.DEFAULT_CAPACITY javautil.ArrayList17.EMPTY_ELEMENTDATA javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() javautil.ArrayList17.EMPTY_ELEMENTDATA[] javautil.ArrayList17.EMPTY_ELEMENTDATA[].getClass().getName() this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.size javautil.ArrayList17.MAX_ARRAY_SIZE this.modCount size(javautil.ArrayList17.EMPTY_ELEMENTDATA[]) size(javautil.ArrayList17.EMPTY_ELEMENTDATA[])-1 size(this.elementData[]) size(this.elementData[])-1 javautil.ArrayList17.EMPTY_ELEMENTDATA[this.size] javautil.ArrayList17.EMPTY_ELEMENTDATA[this.size-1] javautil.ArrayList17.EMPTY_ELEMENTDATA[this.size..] javautil.ArrayList17.EMPTY_ELEMENTDATA[this.size+1..] javautil.ArrayList17.EMPTY_ELEMENTDATA[0..this.size] javautil.ArrayList17.EMPTY_ELEMENTDATA[0..this.size-1] this.elementData[this.size] this.elementData[this.size-1] this.elementData[this.size..] this.elementData[this.size+1..] this.elementData[0..this.size] this.elementData[0..this.size-1]
 javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == this.elementData.getClass().getName()
 this.elementData != null
+All the elements of this.elementData[].getClass().getName() have LENGTH=17
 this.size >= 0
 this.modCount >= 0
 daikon.Quant.size(this.elementData)-1 != 0
