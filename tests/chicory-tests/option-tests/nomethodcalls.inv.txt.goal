@@ -1,0 +1,26 @@
+===========================================================================
+NoMethodCalls$CountingList:::OBJECT
+===========================================================================
+NoMethodCalls$CountingList.CountingList():::EXIT
+===========================================================================
+NoMethodCalls:::CLASS
+NoMethodCalls.toArrayCalls == 0
+===========================================================================
+NoMethodCalls.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass().getName() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+NoMethodCalls.main(java.lang.String[]):::EXIT
+NoMethodCalls.toArrayCalls == orig(NoMethodCalls.toArrayCalls)
+args[] == orig(args[])
+args[] == []
+args[].toString == []
+===========================================================================
+NoMethodCalls.observe(java.util.List, int):::ENTER
+list.getClass().getName() == NoMethodCalls$CountingList.class
+===========================================================================
+NoMethodCalls.observe(java.util.List, int):::EXIT
+NoMethodCalls.toArrayCalls == orig(NoMethodCalls.toArrayCalls)
+return - orig(x) - 1 == 0
