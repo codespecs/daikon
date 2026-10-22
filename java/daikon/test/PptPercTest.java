@@ -30,7 +30,13 @@ public class PptPercTest {
       Method setupPptPerc =
           Daikon.class.getDeclaredMethod("setup_ppt_perc", Collection.class, int.class);
       setupPptPerc.setAccessible(true);
-      return (String) setupPptPerc.invoke(null, Collections.singletonList(file.toFile()), pptPerc);
+      @SuppressWarnings("nullness:argument") // static method, so null first arg is OK
+      String result =
+          (String) setupPptPerc.invoke(null, Collections.singletonList(file.toFile()), pptPerc);
+      if (result == null) {
+        throw new AssertionError("setup_ppt_perc returned null for ppt_perc " + pptPerc);
+      }
+      return result;
     } finally {
       Files.delete(file);
     }
