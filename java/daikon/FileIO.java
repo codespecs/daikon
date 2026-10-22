@@ -214,14 +214,17 @@ public final class FileIO {
   // modified since this program point was last executed.
   static HashMap<PptTopLevel, String[]> ppt_to_value_reps = new HashMap<>();
 
-  // For debugging purposes: printing out a modified trace file with
-  // changed modbits.
+  /** For debugging purposes: printing out a modified trace file with changed modbits. */
   private static boolean to_write_nonce = false;
+
+  /** The line that precedes the nonce in a sample. */
   private static final String NONCE_HEADER = "this_invocation_nonce";
+
+  /** The current nonce value. */
   private static String nonce_value = "no nonce (yet)";
 
-  // (This implementation as a public static variable is a bit unclean.)
-  // Number of ignored declarations.
+  /** Number of ignored declarations. */
+  // This implementation as a public static variable is a bit unclean.
   public static int omitted_declarations = 0;
 
   // Logging Categories

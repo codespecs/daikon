@@ -120,7 +120,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       errorMessage =
           "No class data for "
               + this.toString()
-              + ", to be loaded from "
+              + ", tried to load from "
               + directory
               + className
               + ".class";

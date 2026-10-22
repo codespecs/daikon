@@ -166,7 +166,7 @@ public class SplitterFactory {
    * splitterObjects.
    *
    * @param splitterObjects are the splitterObjects for ppt
-   * @param ppt the Ppt for these splitterObjects
+   * @param ppt the program point for these splitterObjects
    * @param statementReplacer a StatementReplacer for the replace statements to be used in these
    *     splitterObjects
    */
@@ -227,8 +227,8 @@ public class SplitterFactory {
           "Errors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
-    for (int i = 0; i < splitterObjects.length; i++) {
-      splitterObjects[i].load();
+    for (SplitterObject splitObj : splitterObjects) {
+      splitObj.load();
     }
 
     Global.debugSplit.fine("<<exit>>  loadSplitters");
@@ -242,10 +242,9 @@ public class SplitterFactory {
    * @throws IOException if there is a problem reading a file
    */
   private static String compileFiles(List<String> fileNames) throws IOException {
-    // We delay setting fileCompiler until now because we want to permit
-    // the user to set the dkconfig_compiler variable.  Note that our
-    // timeout is specified in seconds, but the parameter to FileCompiler
-    // is specified in milliseconds.
+    // We delay setting fileCompiler until now because we want to permit the user to set the
+    // dkconfig_compiler variable.  Note that dkconfig_compile_timeout timeout is specified in
+    // seconds, but the parameter to FileCompiler is specified in milliseconds.
     if (fileCompiler == null) {
       fileCompiler = new FileCompiler(dkconfig_compiler, 1000 * (long) dkconfig_compile_timeout);
     }
