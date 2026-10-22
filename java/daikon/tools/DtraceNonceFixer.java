@@ -111,10 +111,10 @@ public class DtraceNonceFixer {
         // A 0 nonce that is not an EXIT or THROWS, after other nonces, means we have reached the
         // next file. The first file's nonces are unchanged, even if that file does not start at 0.
         if (oldNonce == 0 && seenNonce && !isExitOrThrows(new PptName(para.pptNameLine()))) {
-          correctionFactor = maxNonce + 1;
+          correctionFactor = addNonces(maxNonce, 1);
         }
         seenNonce = true;
-        int newNonce = oldNonce + correctionFactor;
+        int newNonce = addNonces(oldNonce, correctionFactor);
         para.printWithNonce(out, newNonce);
         maxNonce = Math.max(maxNonce, newNonce);
       }
@@ -153,15 +153,16 @@ public class DtraceNonceFixer {
         // This is the same test that Daikon uses in FileIO.compute_orig_variables.
         boolean isEnter = pptName.name().endsWith(FileIO.enter_tag);
         boolean isExit = isExitOrThrows(pptName);
+        Integer enterNonce = isExit ? callStack.matchMethod(methodName(pptName)) : null;
         int nonce;
-        if (isEnter) {
-          nonce = ++maxNonce;
-          callStack.push(methodName(pptName), nonce);
-        } else if (isExit) {
-          Integer enterNonce = callStack.matchMethod(methodName(pptName));
-          nonce = (enterNonce != null) ? enterNonce : ++maxNonce;
+        if (enterNonce != null) {
+          nonce = enterNonce;
         } else {
-          nonce = ++maxNonce;
+          maxNonce = addNonces(maxNonce, 1);
+          nonce = maxNonce;
+          if (isEnter) {
+            callStack.push(methodName(pptName), nonce);
+          }
         }
         para.printWithNonce(out, nonce);
       }
@@ -183,6 +184,22 @@ public class DtraceNonceFixer {
   private static void throwIfError(PrintWriter out, String filename) throws IOException {
     if (out.checkError()) {
       throw new IOException("Error writing " + filename);
+    }
+  }
+
+  /**
+   * Returns {@code a + b}.
+   *
+   * @param a a nonce or an amount to add to a nonce
+   * @param b a nonce or an amount to add to a nonce
+   * @return {@code a + b}
+   * @throws daikon.Daikon.UserError if {@code a + b} exceeds the range of an int
+   */
+  private static int addNonces(int a, int b) {
+    try {
+      return Math.addExact(a, b);
+    } catch (ArithmeticException e) {
+      throw new daikon.Daikon.UserError("Nonce exceeds " + Integer.MAX_VALUE);
     }
   }
 
@@ -306,16 +323,31 @@ public class DtraceNonceFixer {
       while (i < lines.size() && FileIO.isComment(lines.get(i))) {
         i++;
       }
-      // A paragraph is a sample if its first non-comment line contains ":::" and is not a
-      // declaration header ("ppt ...").  The first line of every other kind of record (such as
-      // "decl-version", "DECLARE", or "VarComparability") lacks ":::", and Daikon rejects a sample
-      // whose program point name lacks ":::" (see the PptName constructor).
+      // A paragraph is a sample if its first non-comment line contains ":::" and is not the
+      // header of another kind of record.  Like Daikon (see FileIO.read_data_trace_record), check
+      // for a record header first.  The first line of every other kind of record (such as
+      // "DECLARE" or "VarComparability") lacks ":::", and Daikon rejects a sample whose program
+      // point name lacks ":::" (see the PptName constructor).
       boolean isSample =
           i < lines.size()
-              && lines.get(i).contains(FileIO.ppt_tag_separator)
-              && !lines.get(i).startsWith("ppt ");
+              && !isRecordHeader(lines.get(i))
+              && lines.get(i).contains(FileIO.ppt_tag_separator);
       this.pptNameIndex = isSample ? i : -1;
       this.nonce = isSample ? parseNonce(lines, i) : -1;
+    }
+
+    /**
+     * Returns true if {@code line} starts a record, other than a sample, whose first line may
+     * contain ":::".
+     *
+     * @param line the first non-comment line of a paragraph
+     * @return true if {@code line} starts a record that is not a sample
+     */
+    private static boolean isRecordHeader(String line) {
+      return line.startsWith("decl-version")
+          || line.startsWith("input-language")
+          || line.startsWith("ppt ")
+          || line.startsWith("var-comparability");
     }
 
     /**
