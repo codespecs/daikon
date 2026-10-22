@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
+import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
@@ -140,10 +141,9 @@ public class VarDefinitionBoundTest {
     }
     Files.write(declsFile.toPath(), decls.toString().getBytes(StandardCharsets.UTF_8));
     FileIO.resetNewDeclFormat();
+    List<File> files = Collections.singletonList(declsFile);
     Daikon.UserError e =
-        assertThrows(
-            Daikon.UserError.class,
-            () -> FileIO.read_declaration_files(Collections.singletonList(declsFile)));
+        assertThrows(Daikon.UserError.class, () -> FileIO.read_declaration_files(files));
     return String.valueOf(e.getMessage());
   }
 
