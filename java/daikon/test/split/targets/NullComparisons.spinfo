@@ -1,0 +1,20 @@
+PPT_NAME misc.NullComparisons.m
+this.obj == null
+this.objs[1] != null
+this.sign == null
+null != this.sign
+(this.sign) != null && this.obj == null
+this.sign != null && (this.objs[0]) == null
+this.s[0] == null
+this.s[1] == null
+this.objs == null
+this.sign == (null)
+this.sign.trim() != null
+null == (this.s[1]).trim()
+String.valueOf(this.s[0]).equals(String.valueOf((Object) null))
+String.valueOf(this.s[0]) != null
+this.sign.equals(null)
+((String) this.sign) == null
+(this.sign != null ? this.obj : this.objs) == null
+this.obj == (this.objs == null ? null : this.obj)
+(this.sign != null ? null : this.obj) == null
