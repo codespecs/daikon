@@ -195,16 +195,12 @@ public class SplitterLoadTest {
       }
       modifier.accept(result);
 
-      // Reading the decls file sets FileIO.new_decl_format, which writing the splitters uses.
-      // Restore it afterward, so that it does not affect other tests.
-      Boolean oldNewDeclFormat = FileIO.new_decl_format;
       boolean oldSuppress = PptSplitter.dkconfig_suppressSplitterErrors;
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       try {
         PptTopLevel ppt = readPpt();
         SplitterFactory.load_splitters(ppt, Collections.singletonList(spfile));
       } finally {
-        FileIO.new_decl_format = oldNewDeclFormat;
         PptSplitter.dkconfig_suppressSplitterErrors = oldSuppress;
         SplitterList.remove(pptName);
       }
