@@ -6,11 +6,11 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.StringTokenizer;
 import org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -36,17 +36,11 @@ public class DtracePartitioner implements Closeable, Partitioner<String, String>
 
   /**
    * @param filename the Daikon trace file to be partitioned
+   * @throws IOException if the file cannot be opened
    */
-  public DtracePartitioner(String filename) {
-    try {
-      this.filename = filename;
-      // System.out.printf("trying with file %s%n", filename);
-      br = FilesPlume.newBufferedFileReader(filename);
-
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw new Error(e);
-    }
+  public DtracePartitioner(String filename) throws IOException {
+    this.filename = filename;
+    br = FilesPlume.newBufferedFileReader(filename);
   }
 
   /** Releases resources held by this. */
@@ -61,8 +55,7 @@ public class DtracePartitioner implements Closeable, Partitioner<String, String>
     try {
       return br.ready();
     } catch (IOException e) {
-      e.printStackTrace();
-      return false;
+      throw new UncheckedIOException(e);
     }
   }
 
@@ -143,63 +136,60 @@ public class DtracePartitioner implements Closeable, Partitioner<String, String>
    */
   @CreatesMustCallFor("this")
   public List<String> patchValues(List<String> enters, boolean includeUnreturnedEnters) {
-    try {
-      System.out.println("Entering patchValues");
-      // Keep a list of enters that are so far unmatched
-      Set<String> unreturned = new HashSet<>(enters);
+    return new ArrayList<>(matchExits(enters, includeUnreturnedEnters).values());
+  }
 
-      // Build a hashmap of values to watch
-      HashMap<Object /*String or Integer*/, String> nonceMap = new HashMap<>();
+  /**
+   * Finds the exits that correspond to enters. Reads the trace file once.
+   *
+   * @param enters ENTER, OBJECT, and CLASS records
+   * @param includeUnreturnedEnters if true, the result includes the ENTER records that have no
+   *     corresponding EXIT record
+   * @return a map from each element of {@code enters} to its full invocation: an ENTER record
+   *     followed by its EXIT record, or an OBJECT or CLASS record by itself. If {@code
+   *     includeUnreturnedEnters} is true, also maps each ENTER record that has no EXIT record to
+   *     itself.
+   */
+  @CreatesMustCallFor("this")
+  public Map<String, String> matchExits(
+      Collection<String> enters, boolean includeUnreturnedEnters) {
+    try {
+      System.out.println("Entering matchExits");
+      Map<String, String> result = new HashMap<>();
+
+      // Maps nonces --> ENTER half of invocation
+      Map<Integer, String> nonceMap = new HashMap<>();
       for (String enterStr : enters) {
-        // it could be an OBJECT or CLASS invocation ppt, ignore those
-        // by putting them in the HashMap to themselves, they'll
-        // be reaped up later
+        // it could be an OBJECT or CLASS invocation ppt, which has no EXIT
         if (enterStr.indexOf("ENTER") == -1) {
-          nonceMap.put(enterStr, enterStr);
-          // no way for OBJECT or CLASS to be unresolved
-          unreturned.remove(enterStr);
+          result.put(enterStr, enterStr);
           continue;
         }
-
-        // get the nonce of this invocation and use it
-        // as the key in the nonceMap, which maps
-        // nonces --> ENTER half of invocation
-        int theNonce = calcNonce(enterStr);
-        nonceMap.put(theNonce, enterStr);
+        nonceMap.put(calcNonce(enterStr), enterStr);
       }
 
       br.close();
-      // look for EXIT half of invocations and augment
-      // the values of nonceMap so that the map eventually
-      // maps nonces --> full invocations with ENTER / EXIT
+      // look for EXIT half of invocations
       br = FilesPlume.newBufferedFileReader(filename);
       while (br.ready()) {
         String nextInvo = grabNextInvocation();
         if (nextInvo.indexOf("EXIT") == -1) {
           continue;
         }
-        int invoNonce = calcNonce(nextInvo);
-        Integer key = invoNonce;
-        String enterInvo = nonceMap.get(key);
+        String enterInvo = nonceMap.get(calcNonce(nextInvo));
         if (enterInvo != null) {
-          nonceMap.put(key, enterInvo + lineSep + nextInvo);
-          unreturned.remove(enterInvo);
+          result.put(enterInvo, enterInvo + lineSep + nextInvo);
         }
       }
 
-      // Return a list of all the invocations where matching ENTER and
-      // EXIT points were found as well as the OBJECT and CLASS
-      // invocations.
-      ArrayList<String> al = new ArrayList<>();
-      for (String s : nonceMap.values()) {
-        al.add(s);
-      }
       // add in the invocations that were never resolved because no
       // matching EXIT invocation exists.
-      if (!includeUnreturnedEnters) {
-        al.removeAll(unreturned);
+      if (includeUnreturnedEnters) {
+        for (String enterInvo : nonceMap.values()) {
+          result.putIfAbsent(enterInvo, enterInvo);
+        }
       }
-      return al;
+      return result;
 
     } catch (IOException e) {
       throw new UncheckedIOException(e);
