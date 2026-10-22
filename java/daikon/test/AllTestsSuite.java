@@ -39,6 +39,7 @@ import org.junit.runners.Suite;
   daikon.test.TestQuant.class,
   daikon.test.TestAnnotate.class,
   daikon.test.DtraceDiffTester.class,
+  daikon.test.PptPercTest.class,
   daikon.test.SplitDtraceTest.class,
   daikon.test.split.NullComparisonsSplitterTest.class,
   daikon.test.split.SplitterLoadTest.class,
