@@ -3314,6 +3314,25 @@ One way to create a @file{.pure} file is to run the Purity Analysis Kit
 the @option{--daikon-purity-file} when running the Purity Analysis Kit,
 it writes a file that can be supplied to Chicory.
 
+@item --no-method-calls
+@cindex side effects, of Chicory
+When this switch is on, Chicory never calls a method of the target
+program's objects.  By default, Chicory outputs the elements of each
+variable whose declared type is @code{java.util.List} or a type that
+names @code{java.util.List} in its @code{implements} or @code{extends}
+clause.  To obtain the elements, Chicory calls the list's
+@code{toArray()} method.  If @code{toArray()} has side effects, then
+running the program under Chicory changes the program's behavior.  (If
+@code{toArray()} throws an exception, Chicory catches it and outputs
+the elements as nonsensical;
+@pxref{Nonsensical values,,,developer,Daikon Developer Manual}.)
+Supplying @option{--no-method-calls} prevents such changes, but it degrades Daikon's output, because Daikon has fewer
+variables to generalize over:  Chicory outputs the identity (hash
+code) of each list but not its elements.  This option may not be
+combined with @option{--purity-file}.  If you run DynComp before
+Chicory, supply @option{--no-method-calls} to DynComp as well
+(@pxref{DynComp for Java options}).
+
 @end table
 
 
@@ -3932,6 +3951,12 @@ yield less accurate results.
 When this switch is on, DynComp traverses exactly those fields that are
 visible from a given program point.  For an example, see @ref{Variables
 in Chicory output}.
+
+@item --no-method-calls
+When this switch is on, DynComp never calls a method of the target
+program's objects.  For details, see the @option{--no-method-calls}
+option to Chicory (@pxref{Chicory options}).  If you supply
+@option{--no-method-calls} to Chicory, supply it to DynComp as well.
 
 @item --nesting-depth=@var{n}
 Depth to which to examine structure components (default 2).  This
