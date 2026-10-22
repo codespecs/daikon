@@ -19,7 +19,7 @@ import jtb.syntaxtree.NodeToken;
 import jtb.visitor.DepthFirstVisitor;
 
 /**
- * NullReplacer is a JTB syntax tree visitor that replaces {@code null} with {@code 0}, whin it
+ * NullReplacer is a JTB syntax tree visitor that replaces {@code null} with {@code 0}, when it
  * stands for a hashcode.
  */
 class NullReplacer extends DepthFirstVisitor {
