@@ -66,6 +66,12 @@ class Visitors implements JavaParserConstants {
     return n.kind == LBRACKET;
   }
 
+  /** Returns true if n represents a right bracket, "]". */
+  @Pure
+  public static boolean isRBracket(NodeToken n) {
+    return n.kind == RBRACKET;
+  }
+
   /** Returns true if n represents a dot, ".". */
   @Pure
   public static boolean isDot(NodeToken n) {
@@ -82,6 +88,12 @@ class Visitors implements JavaParserConstants {
   @Pure
   public static boolean isLParen(NodeToken n) {
     return n.kind == LPAREN;
+  }
+
+  /** Returns true if n represents a right parenthesis, ")". */
+  @Pure
+  public static boolean isRParen(NodeToken n) {
+    return n.kind == RPAREN;
   }
 
   /** Returns true if n represents the java reserved word "null". */

@@ -109,7 +109,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     skipLine();
     add("  public boolean test(ValueTuple vt) {");
     writeTestBody();
-    add("    return(" + NullReplacer.replaceNull(condition) + ");");
+    add("    return(" + condition + ");");
     add("  }");
     skipLine();
     add("  public String repr() {");
@@ -334,7 +334,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * "varName.publicField", is converted to the name of the longest such variable, with "_"
    * separating the parts. Other dotted names, such as "java.lang.Math.abs", are not changed.
    * Instances of "orig(variableName)" are replaced by instances of "orig_variableName". For example
-   * "orig(varName.publicField)" would yield "orig_varName_publicField".
+   * "orig(varName.publicField)" would yield "orig_varName_publicField". Instances of "null" that
+   * are compared with a hashcode are replaced by "0" (see {@link NullReplacer}).
    *
    * @param condition a string representation of a conditional statement
    * @return a version of the conditional with the variable names converted
@@ -353,6 +354,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
     condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
+    // NullReplacer must run last, because it recognizes the compilable names of variables.
+    condition = NullReplacer.replaceNull(condition, varInfos);
     return condition;
   }
 
@@ -443,7 +446,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo of the variable whose compilable name is desired
    * @return the name of the variable represented by varInfo in a compilable form
    */
-  private static String compilableName(VarInfo varInfo) {
+  static String compilableName(VarInfo varInfo) {
     String name = getBaseName(varInfo);
     if (varInfo.type.isArray()) {
       if (varInfo.file_rep_type == ProglangType.HASHCODE) {
