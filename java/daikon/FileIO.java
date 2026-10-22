@@ -197,7 +197,10 @@ public final class FileIO {
   // For debugging purposes: printing out a modified trace file with
   // changed modbits.
   private static boolean to_write_nonce = false;
-  private static final String NONCE_HEADER = "this_invocation_nonce";
+
+  /** The line that precedes the nonce in a sample. */
+  public static final String NONCE_HEADER = "this_invocation_nonce";
+
   private static String nonce_value = "no nonce (yet)";
 
   // (This implementation as a public static variable is a bit unclean.)
