@@ -211,6 +211,23 @@ public class BadOptionTest {
         "Unrecognized TraceSelect option -NOCLAEN; the options are -SEED, -NOCLEAN,"
             + " -INCLUDE_UNRETURNED, and -DO_DIFFS",
         String.valueOf(e.getMessage()));
+    // TraceSelect ignores the case of an option, including a misspelled one.
+    e =
+        assertThrows(
+            Daikon.UserError.class,
+            () -> TraceSelect.mainHelper(new String[] {"20", "10", "-noclaen", "x.dtrace"}));
+    assertEquals(
+        "Unrecognized TraceSelect option -noclaen; the options are -SEED, -NOCLEAN,"
+            + " -INCLUDE_UNRETURNED, and -DO_DIFFS",
+        String.valueOf(e.getMessage()));
+    // Daikon's -o option, even with its value attached, is not a misspelled TraceSelect option.
+    e =
+        assertThrows(
+            Daikon.UserError.class,
+            () -> TraceSelect.mainHelper(new String[] {"20", "10", "-ofoo", "x.dtrace"}));
+    assertTrue(
+        String.valueOf(e.getMessage()),
+        String.valueOf(e.getMessage()).startsWith("TraceSelect does not accept Daikon's -o"));
     // TraceSelect options must precede the Daikon arguments.
     e =
         assertThrows(

@@ -154,7 +154,9 @@ public class TraceSelect {
         includeUnreturned = true;
       } else if (option.equals("-DO_DIFFS")) {
         doDiffs = true;
-      } else if (TRACESELECT_OPTION.matcher(args[i]).matches()) {
+      } else if (TRACESELECT_OPTION.matcher(option).matches() && !args[i].startsWith("-o")) {
+        // A misspelled TraceSelect option, in any case, such as "-NOCLAEN" or "-noclaen".  An
+        // argument that starts with "-o" is Daikon's -o option, which is rejected below.
         throw new daikon.Daikon.UserError(
             "Unrecognized TraceSelect option "
                 + args[i]
