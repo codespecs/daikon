@@ -40,6 +40,7 @@ import org.junit.runners.Suite;
   daikon.test.TestAnnotate.class,
   daikon.test.DtraceDiffTester.class,
   daikon.test.split.QualifiedNamesSplitterTest.class,
+  daikon.test.DtraceNonceFixerTest.class,
   daikon.test.split.NullComparisonsSplitterTest.class,
   daikon.test.split.SplitterLoadTest.class,
   // daikon.test.split.SplitterFactoryTest is not in this suite, because it is generated after the
