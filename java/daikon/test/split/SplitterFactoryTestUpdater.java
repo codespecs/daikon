@@ -1,7 +1,6 @@
 package daikon.test.split;
 
 import daikon.Daikon;
-import daikon.FileIO;
 import daikon.PptMap;
 import daikon.split.PptSplitter;
 import daikon.split.SplitterFactory;
@@ -69,6 +68,7 @@ public class SplitterFactoryTestUpdater {
     generateSplitters("Fib.spinfo", "Fib.decls");
     generateSplitters("QueueAr.spinfo", "QueueAr.decls");
     generateSplitters("BigFloat.spinfo", "BigFloat.decls");
+    generateSplitters("CharBuf.spinfo", "CharBuf.decls");
     processFiles(updateGoals);
     writeTestClass();
   }
@@ -108,10 +108,8 @@ public class SplitterFactoryTestUpdater {
     try {
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
-      // An earlier read in this JVM may have set the decl format.
-      FileIO.resetNewDeclFormat();
       for (String declsFile : decls) {
-        FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
+        SplitterTestUtils.readDecls(targetDir + declsFile, allPpts);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -347,11 +345,9 @@ public class SplitterFactoryTestUpdater {
     ps.println("      }");
     ps.println("      PptSplitter.dkconfig_suppressSplitterErrors = true;");
     ps.println("      Daikon.create_splitters(spFiles);");
-    ps.println("      // An earlier read in this JVM may have set the decl format.");
-    ps.println("      FileIO.resetNewDeclFormat();");
     ps.println("      for (String declsFile : decls) {");
     ps.println(
-        "        FileIO.read_data_trace_file(declsFile, allPpts);"); // invoked for side effects
+        "        SplitterTestUtils.readDecls(declsFile, allPpts);"); // invoked for side effects
     ps.println("      }");
     ps.println("      tempDir = SplitterFactory.getTempDir();");
     ps.println("    } catch (IOException e) {");
