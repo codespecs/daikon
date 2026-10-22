@@ -47,6 +47,7 @@ import org.junit.runners.Suite;
   daikon.test.split.QualifiedNamesSplitterTest.class,
   daikon.test.split.QuantCallsSplitterTest.class,
   daikon.test.split.SplitterLoadTest.class,
+  daikon.test.split.SplitterFactoryFileNameTest.class,
   // daikon.test.split.SplitterFactoryTest is not in this suite, because it is generated after the
   // rest of Daikon (including this class) is compiled.  The Makefile's "junit" target runs it
   // separately.
