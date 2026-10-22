@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,7 +45,7 @@ public class TraceSelect {
 
   /** The TraceSelect options, in upper case. TraceSelect ignores the case of an option. */
   private static final Set<String> TRACESELECT_OPTIONS =
-      Set.of("-SEED", "-NOCLEAN", "-INCLUDE_UNRETURNED", "-DO_DIFFS");
+      new HashSet<>(Arrays.asList("-SEED", "-NOCLEAN", "-INCLUDE_UNRETURNED", "-DO_DIFFS"));
 
   /** Matches a negative integer, which is not an option. */
   private static final Pattern NEGATIVE_INTEGER = Pattern.compile("-[0-9]+");
@@ -55,23 +56,24 @@ public class TraceSelect {
    * LongOpt.REQUIRED_ARGUMENT}. It omits "-o", which TraceSelect rejects.
    */
   private static final Set<String> DAIKON_OPTIONS_WITH_ARGUMENT =
-      Set.of(
-          "--" + daikon.Daikon.format_SWITCH,
-          "--" + daikon.Daikon.files_from_SWITCH,
-          "--" + daikon.Daikon.omit_from_output_SWITCH,
-          "--" + daikon.Daikon.conf_limit_SWITCH,
-          "--" + daikon.Daikon.list_type_SWITCH,
-          "--" + daikon.Daikon.user_defined_invariant_SWITCH,
-          "--" + daikon.Daikon.ppt_regexp_SWITCH,
-          "--" + daikon.Daikon.ppt_omit_regexp_SWITCH,
-          "--" + daikon.Daikon.var_regexp_SWITCH,
-          "--" + daikon.Daikon.var_omit_regexp_SWITCH,
-          "--" + daikon.Daikon.server_SWITCH,
-          "--" + daikon.Daikon.config_SWITCH,
-          "--" + daikon.Daikon.config_option_SWITCH,
-          "--" + daikon.Daikon.debug_SWITCH,
-          "--" + daikon.Daikon.track_SWITCH,
-          "--" + daikon.Daikon.disc_reason_SWITCH);
+      new HashSet<>(
+          Arrays.asList(
+              "--" + daikon.Daikon.format_SWITCH,
+              "--" + daikon.Daikon.files_from_SWITCH,
+              "--" + daikon.Daikon.omit_from_output_SWITCH,
+              "--" + daikon.Daikon.conf_limit_SWITCH,
+              "--" + daikon.Daikon.list_type_SWITCH,
+              "--" + daikon.Daikon.user_defined_invariant_SWITCH,
+              "--" + daikon.Daikon.ppt_regexp_SWITCH,
+              "--" + daikon.Daikon.ppt_omit_regexp_SWITCH,
+              "--" + daikon.Daikon.var_regexp_SWITCH,
+              "--" + daikon.Daikon.var_omit_regexp_SWITCH,
+              "--" + daikon.Daikon.server_SWITCH,
+              "--" + daikon.Daikon.config_SWITCH,
+              "--" + daikon.Daikon.config_option_SWITCH,
+              "--" + daikon.Daikon.debug_SWITCH,
+              "--" + daikon.Daikon.track_SWITCH,
+              "--" + daikon.Daikon.disc_reason_SWITCH));
 
   /** The usage message for this program. */
   private static final String usage =

@@ -15,7 +15,10 @@ import daikon.tools.DtraceDiff;
 import daikon.tools.TraceSelect;
 import gnu.getopt.LongOpt;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.function.ThrowingRunnable;
@@ -39,14 +42,15 @@ public class BadOptionTest {
       };
 
   /**
-   * Resets the Daikon option that {@link #testTraceSelectBadArguments} sets. TraceSelect checks its
-   * Daikon arguments by calling {@code Daikon.read_options}, so its {@code --ppt-select-pattern}
-   * argument sets {@link Daikon#ppt_regexp}, which would make later tests in the same JVM omit
-   * their program points.
+   * Resets the Daikon options that the TraceSelect tests set. TraceSelect checks its Daikon
+   * arguments by calling {@code Daikon.read_options}, so, for example, a {@code
+   * --ppt-select-pattern} argument sets {@link Daikon#ppt_regexp}, which would make later tests in
+   * the same JVM omit their program points, and the {@code -o} option that TraceSelect passes to
+   * Daikon sets {@link Daikon#inv_file}.
    */
   @After
   public void resetDaikonOptions() {
-    Daikon.ppt_regexp = null;
+    Daikon.cleanup();
   }
 
   /** The suffix of every description of a bad command-line option. */
@@ -166,6 +170,27 @@ public class BadOptionTest {
   /** Tests that TraceSelect rejects bad arguments before doing any sampling. */
   @Test
   public void testTraceSelectBadArguments() {
+    assertEquals(
+        "Too few arguments; run with -h for usage",
+        String.valueOf(
+            assertThrows(Daikon.UserError.class, () -> TraceSelect.mainHelper(new String[] {"20"}))
+                .getMessage()));
+    assertEquals(
+        "-SEED requires an argument",
+        String.valueOf(
+            assertThrows(
+                    Daikon.UserError.class,
+                    () -> TraceSelect.mainHelper(new String[] {"20", "10", "-SEED"}))
+                .getMessage()));
+    assertEquals(
+        "-SEED requires an integer argument, not abc",
+        String.valueOf(
+            assertThrows(
+                    Daikon.UserError.class,
+                    () ->
+                        TraceSelect.mainHelper(
+                            new String[] {"20", "10", "-SEED", "abc", "x.dtrace"}))
+                .getMessage()));
     assertBadOption(
         "num_reps must be a positive integer, not 0",
         () -> TraceSelect.mainHelper(new String[] {"0", "10", "x.dtrace"}));
@@ -234,6 +259,30 @@ public class BadOptionTest {
             () ->
                 TraceSelect.mainHelper(new String[] {"20", "10", "--ppt-select-pattern=x.dtrace"}));
     assertTrue(String.valueOf(e.getMessage()).startsWith("No .dtrace file name specified"));
+  }
+
+  /**
+   * Tests that TraceSelect reports a trace file that does not exist, before doing any sampling.
+   *
+   * @throws IOException if there is trouble creating or deleting the temporary directory
+   */
+  @Test
+  public void testTraceSelectMissingTraceFile() throws IOException {
+    Path dir = Files.createTempDirectory("BadOptionTest");
+    String dtrace = dir.resolve("missing.dtrace").toString();
+    PrintStream oldOut = System.out;
+    System.setOut(new PrintStream(new ByteArrayOutputStream(), true, UTF_8));
+    try {
+      Daikon.UserError e =
+          assertThrows(
+              Daikon.UserError.class,
+              () -> TraceSelect.mainHelper(new String[] {"1", "10", dtrace}));
+      // Daikon.read_options, which TraceSelect calls to check its Daikon arguments, reports it.
+      assertEquals("File " + dtrace + " not found.", String.valueOf(e.getMessage()));
+    } finally {
+      System.setOut(oldOut);
+      Files.delete(dir);
+    }
   }
 
   /** Tests that tools accept the {@code --help} option that their usage messages document. */
