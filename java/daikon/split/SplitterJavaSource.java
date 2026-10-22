@@ -109,7 +109,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     skipLine();
     add("  public boolean test(ValueTuple vt) {");
     writeTestBody();
-    add("    return(" + NullReplacer.replaceNull(condition) + ");");
+    add("    return(" + condition + ");");
     add("  }");
     skipLine();
     add("  public String repr() {");
@@ -205,9 +205,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         get_expr = "getDoubleValue(vt)";
       } else if (type.equals("double[]")) {
         get_expr = "getDoubleArrayValue(vt)";
-      } else if (type.equals("String")
-          || type.equals("java.lang.String")
-          || type.equals("char[]")) {
+      } else if (type.equals("String") || type.equals("java.lang.String")) {
         type = "String";
         get_expr = "getStringValue(vt)";
       } else if (type.equals("String[]") || type.equals("java.lang.String[]")) {
@@ -336,7 +334,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * variable name with a "_" separating the two parts. Instances of a public field name suffixing a
    * variable name are removed and appended to the end of variable name with a "_" separating the
    * two parts. Instances of "orig(variableName)" are replaced by instances of "orig_variableName".
-   * For example "orig(varName.publicField)" would yield "orig_varName_publicField".
+   * For example "orig(varName.publicField)" would yield "orig_varName_publicField". Instances of
+   * "null" that are compared with a hashcode are replaced by "0" (see {@link NullReplacer}).
    *
    * @param condition a string representation of a conditional statement
    * @return a version of the conditional with the variable names converted
@@ -355,6 +354,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     // variable, we should prepend the classname.  (markro)
     String[] baseNames = getBaseNames(varInfos);
     condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
+    // NullReplacer must run last, because it recognizes the compilable names of variables.
+    condition = NullReplacer.replaceNull(condition, varInfos);
     return condition;
   }
 
@@ -445,7 +446,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo of the variable whose compilable name is desired
    * @return the name of the variable represented by varInfo in a compilable form
    */
-  private static String compilableName(VarInfo varInfo) {
+  static String compilableName(VarInfo varInfo) {
     String name = getBaseName(varInfo);
     if (varInfo.type.isArray()) {
       if (varInfo.file_rep_type == ProglangType.HASHCODE) {
@@ -535,8 +536,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   private static String getVarType(VarInfo varInfo) {
     if (varInfo.file_rep_type == ProglangType.HASHCODE) {
       return "int";
-    } else if ((varInfo.type == ProglangType.CHAR_ARRAY)
-        || (varInfo.type == ProglangType.BOOLEAN)
+    } else if ((varInfo.type == ProglangType.BOOLEAN)
         || (varInfo.type == ProglangType.DOUBLE)
         || (varInfo.type == ProglangType.DOUBLE_ARRAY)) {
       return varInfo.type.format();
