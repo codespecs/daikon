@@ -460,4 +460,76 @@ public class DtraceNonceFixerTest {
         () -> DtraceNonceFixer.mainHelper(new String[] {in.toString(), dangling.toString()}));
     assertTrue(Files.isSymbolicLink(dangling));
   }
+
+  /**
+   * Tests that ENTER and EXIT samples without nonces do not get nonces, because Daikon pairs them
+   * by their order in the file, and that other samples without nonces get nonces.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testCallPointsWithoutNonces() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "",
+            "C.f():::THROWS",
+            "",
+            "C.f():::ENTER",
+            "",
+            "C.f():::EXIT3",
+            "",
+            "aprogram.point:::POINT",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "",
+            "C.f():::THROWS",
+            "",
+            "C.f():::ENTER",
+            "",
+            "C.f():::EXIT3",
+            "",
+            "aprogram.point:::POINT",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
+   * Tests that a record header that contains ":::" is not treated as a sample.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testRecordHeaderWithPptTagSeparator() throws IOException {
+    String input = String.join("\n", "input-language Java:::POINT", "", "");
+    assertEquals(input, fix(input));
+  }
+
+  /**
+   * Tests that a nonce that exceeds the range of an int is reported as an error.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testNonceOverflow() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            String.valueOf(Integer.MAX_VALUE),
+            "",
+            "aprogram.point:::POINT",
+            "",
+            "");
+    assertThrows(Daikon.UserError.class, () -> fix(samples));
+  }
 }
