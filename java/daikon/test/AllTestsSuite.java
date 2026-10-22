@@ -42,12 +42,11 @@ import org.junit.runners.Suite;
   daikon.test.TestAnnotate.class,
   daikon.test.DtraceDiffTester.class,
   daikon.test.DtraceNonceFixerTest.class,
-  daikon.test.PptPercTest.class,
+  daikon.test.SplitDtraceTest.class,
   daikon.test.split.NullComparisonsSplitterTest.class,
   daikon.test.split.QualifiedNamesSplitterTest.class,
   daikon.test.split.QuantCallsSplitterTest.class,
   daikon.test.split.SplitterLoadTest.class,
-  daikon.test.SplitDtraceTest.class,
   // daikon.test.split.SplitterFactoryTest is not in this suite, because it is generated after the
   // rest of Daikon (including this class) is compiled.  The Makefile's "junit" target runs it
   // separately.
