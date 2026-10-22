@@ -20,7 +20,9 @@ import org.plumelib.util.StringsPlume;
  * This tool fixes a Dtrace file whose invocation nonces became inaccurate as a result of a {@code
  * cat} command combining multiple dtrace files. It renumbers the nonces of each concatenated file
  * after the first so that they do not collide with nonces of earlier files, and it gives a new
- * nonce to each sample that lacks one.
+ * nonce to each sample that lacks one, other than an ENTER, EXIT, or THROWS sample. (Daikon pairs
+ * nonce-less ENTER and EXIT samples by their order in the file; giving each one a different nonce
+ * would prevent Daikon from pairing them.)
  */
 public class DtraceNonceFixer {
 
@@ -36,7 +38,7 @@ public class DtraceNonceFixer {
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
           "Output file FILENAME_fixed renumbers the nonces of concatenated dtrace files",
           "so that they do not collide.  Output file FILENAME_all_fixed also gives a nonce",
-          "to each sample that lacks one.");
+          "to each sample that lacks one, other than an ENTER, EXIT, or THROWS sample.");
 
   public static void main(String[] args) {
     try {
@@ -103,10 +105,10 @@ public class DtraceNonceFixer {
         // A 0 nonce that is not an EXIT or THROWS, after other nonces, means we have reached the
         // next file. The first file's nonces are unchanged, even if that file does not start at 0.
         if (oldNonce == 0 && seenNonce && !isExitOrThrows(new PptName(para.pptNameLine()))) {
-          correctionFactor = maxNonce + 1;
+          correctionFactor = addNonces(maxNonce, 1);
         }
         seenNonce = true;
-        int newNonce = oldNonce + correctionFactor;
+        int newNonce = addNonces(oldNonce, correctionFactor);
         para.printWithNonce(out, newNonce);
         maxNonce = Math.max(maxNonce, newNonce);
       }
@@ -117,7 +119,8 @@ public class DtraceNonceFixer {
 
   /**
    * Copies {@code inFilename} to {@code outFilename}, giving a new nonce to each sample that lacks
-   * one, such as an OBJECT or CLASS sample. Each new nonce is larger than {@code maxNonce}.
+   * one, such as an OBJECT or CLASS sample, other than an ENTER, EXIT, or THROWS sample. Each new
+   * nonce is larger than {@code maxNonce}.
    *
    * @param inFilename the dtrace file to read
    * @param outFilename the dtrace file to write
@@ -131,8 +134,9 @@ public class DtraceNonceFixer {
       PrintWriter out = new PrintWriter(bw);
       Paragraph para;
       while ((para = Paragraph.read(br)) != null) {
-        if (para.isSample() && para.nonce == -1) {
-          para.printWithNonce(out, ++maxNonce);
+        if (para.isSample() && para.nonce == -1 && !isCallPoint(new PptName(para.pptNameLine()))) {
+          maxNonce = addNonces(maxNonce, 1);
+          para.printWithNonce(out, maxNonce);
         } else {
           para.print(out);
         }
@@ -156,6 +160,33 @@ public class DtraceNonceFixer {
     if (out.checkError()) {
       throw new IOException("Error writing " + filename);
     }
+  }
+
+  /**
+   * Returns {@code a + b}.
+   *
+   * @param a a nonce or an amount to add to a nonce
+   * @param b a nonce or an amount to add to a nonce
+   * @return {@code a + b}
+   * @throws daikon.Daikon.UserError if {@code a + b} exceeds the range of an int
+   */
+  private static int addNonces(int a, int b) {
+    try {
+      return Math.addExact(a, b);
+    } catch (ArithmeticException e) {
+      throw new daikon.Daikon.UserError("Nonce exceeds " + Integer.MAX_VALUE);
+    }
+  }
+
+  /**
+   * Returns true if the given program point is an ENTER, EXIT, or THROWS point. Daikon pairs each
+   * EXIT or THROWS sample with an ENTER sample.
+   *
+   * @param pptName a program point name
+   * @return true if {@code pptName} is an ENTER, EXIT, or THROWS point
+   */
+  private static boolean isCallPoint(PptName pptName) {
+    return pptName.isEnterPoint() || isExitOrThrows(pptName);
   }
 
   /**
@@ -196,16 +227,31 @@ public class DtraceNonceFixer {
       while (i < lines.size() && FileIO.isComment(lines.get(i))) {
         i++;
       }
-      // A paragraph is a sample if its first non-comment line contains ":::" and is not a
-      // declaration header ("ppt ...").  The first line of every other kind of record (such as
-      // "decl-version", "DECLARE", or "VarComparability") lacks ":::", and Daikon rejects a sample
-      // whose program point name lacks ":::" (see the PptName constructor).
+      // A paragraph is a sample if its first non-comment line contains ":::" and is not the
+      // header of another kind of record.  Like Daikon (see FileIO.read_data_trace_record), check
+      // for a record header first.  The first line of every other kind of record (such as
+      // "DECLARE" or "VarComparability") lacks ":::", and Daikon rejects a sample whose program
+      // point name lacks ":::" (see the PptName constructor).
       boolean isSample =
           i < lines.size()
-              && lines.get(i).contains(FileIO.ppt_tag_separator)
-              && !lines.get(i).startsWith("ppt ");
+              && !isRecordHeader(lines.get(i))
+              && lines.get(i).contains(FileIO.ppt_tag_separator);
       this.pptNameIndex = isSample ? i : -1;
       this.nonce = isSample ? parseNonce(lines, i) : -1;
+    }
+
+    /**
+     * Returns true if {@code line} starts a record, other than a sample, whose first line may
+     * contain ":::".
+     *
+     * @param line the first non-comment line of a paragraph
+     * @return true if {@code line} starts a record that is not a sample
+     */
+    private static boolean isRecordHeader(String line) {
+      return line.startsWith("decl-version")
+          || line.startsWith("input-language")
+          || line.startsWith("ppt ")
+          || line.startsWith("var-comparability");
     }
 
     /**
