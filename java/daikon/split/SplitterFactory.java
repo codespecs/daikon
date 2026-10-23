@@ -286,10 +286,9 @@ public class SplitterFactory {
    * @throws IOException if there is a problem reading a file
    */
   private static String compileFiles(List<String> fileNames) throws IOException {
-    // We delay setting fileCompiler until now because we want to permit
-    // the user to set the dkconfig_compiler variable.  Note that
-    // dkconfig_compile_timeout is specified in seconds, but the parameter to FileCompiler
-    // is specified in milliseconds.
+    // We delay setting fileCompiler until now because we want to permit the user to set the
+    // dkconfig_compiler variable.  Note that dkconfig_compile_timeout is specified in seconds, but
+    // the parameter to FileCompiler is specified in milliseconds.
     if (fileCompiler == null) {
       fileCompiler = new FileCompiler(dkconfig_compiler, 1000 * (long) dkconfig_compile_timeout);
     }
@@ -336,36 +335,51 @@ public class SplitterFactory {
   }
 
   /**
+   * The maximum length of the part of a splitter file name that comes from the program point name.
+   * Many file systems limit a file name to 255 bytes, which must also accommodate the guid and the
+   * ".class" suffix. The file name is ASCII, so its length in characters equals its length in
+   * bytes.
+   */
+  private static final int MAX_FILE_NAME_PREFIX_LENGTH = 200;
+
+  /**
    * Returns a file name for a splitter file to be used with a Ppt with the name, ppt_name. The file
-   * name is ppt_name with all characters which are invalid for use in a java file name (such as
-   * ".") replaced with "_". Then "_guid" is append to the end. For example if ppt_name is
+   * name is {@link #fileNamePrefix}(ppt_name) followed by "_guid". For example if ppt_name is
    * "myPackage.myClass.someMethod" and guid = 12, then the following would be returned:
-   * "myPackage_myClass_someMethod_12".
+   * "myPackage_myClass_someMethod_12". The guid makes the file name unique.
    *
    * @param ppt_name the name of the Ppt that the splitter Java file will be used with
+   * @return a file name for a splitter file
    */
   private static String getFileName(String ppt_name) {
-    String splitterName = clean(ppt_name);
-    splitterName = splitterName + "_" + guid;
+    String splitterName = fileNamePrefix(ppt_name) + "_" + guid;
     guid++;
     return splitterName;
   }
 
   /**
-   * Cleans str by replacing all characters that are not valid java identifier parts with "_".
+   * Returns the part of a splitter file name that comes from a program point name. It is ppt_name
+   * with every character other than an ASCII letter, digit, "_", or "$" replaced by "_", and with a
+   * leading digit replaced by "_". If ppt_name is long, only a prefix of it is used, so that the
+   * file name does not exceed the file system's limit. Accessible for the purpose of testing.
    *
-   * @param str the string to be cleaned
-   * @return str with all non-Java-identifier parts replaced with "_"
+   * @param ppt_name the name of the Ppt that the splitter Java file will be used with
+   * @return an ASCII string that is a valid Java identifier, or the empty string
    */
-  private static String clean(String str) {
-    char[] cleaned = str.toCharArray();
-    for (int i = 0; i < cleaned.length; i++) {
-      char c = cleaned[i];
-      if (!Character.isJavaIdentifierPart(c)) {
-        cleaned[i] = '_';
-      }
+  public static String fileNamePrefix(String ppt_name) {
+    int length = Math.min(ppt_name.length(), MAX_FILE_NAME_PREFIX_LENGTH);
+    char[] result = new char[length];
+    for (int i = 0; i < length; i++) {
+      char c = ppt_name.charAt(i);
+      boolean valid =
+          (c >= 'a' && c <= 'z')
+              || (c >= 'A' && c <= 'Z')
+              || (i > 0 && c >= '0' && c <= '9')
+              || c == '_'
+              || c == '$';
+      result[i] = valid ? c : '_';
     }
-    return new String(cleaned);
+    return new String(result);
   }
 
   /**
