@@ -19,6 +19,8 @@ import org.junit.runners.Suite;
   daikon.test.SampleTester.class,
   daikon.test.SplitDtraceTest.class,
   daikon.test.TestAnnotate.class,
+  daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
+  daikon.test.TraceSelectTest.class,
   daikon.test.TestAst.class,
   daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
   daikon.test.TestQuant.class,
