@@ -1,8 +1,10 @@
+# The directory containing this file.  It is computed before any other file is
+# included, because MAKEFILE_LIST ends with the most recently read makefile.
+DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
+
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
-
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
 
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
