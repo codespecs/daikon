@@ -69,25 +69,19 @@ public final class SplitDtrace {
       throw new Daikon.UserError(
           "Filename must end with .dtrace or .dtrace.gz: filename=" + filename);
     }
-    int declNum = 1;
+    int declNum = 0;
     int recNum = 0;
     try (BufferedReader reader = getStream(filename)) {
       ArrayList<String> rec = new ArrayList<>();
-      while (true) {
-        readRec(reader, rec);
-        if (rec.isEmpty()) {
-          throw new Daikon.UserError("No DECLARE record in " + filename);
-        }
-        if (isDeclare(rec)) {
-          break;
-        }
-      }
+      boolean version2 = false;
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
           break;
         }
-        if (isDeclare(rec)) {
+        if (isHeader(rec)) {
+          version2 = isVersion2(rec, version2);
+        } else if (isDeclare(rec, version2)) {
           declNum++;
         } else {
           recNum++;
@@ -98,7 +92,7 @@ public final class SplitDtrace {
     }
 
     System.out.println(
-        "Number of DECLARE statements: " + declNum + " and number of records is: " + recNum);
+        "Number of declarations: " + declNum + " and number of records is: " + recNum);
 
     // DecimalFormat formatter = new DecimalFormat("000");
     // for (int i = 1; i<=100; i++) writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
@@ -117,22 +111,18 @@ public final class SplitDtrace {
       int currRecCount = 0;
       HashSet<Integer> nonceSet = new HashSet<>();
       ArrayList<String> rec = new ArrayList<>();
-      while (true) {
-        readRec(reader, rec);
-        if (isDeclare(rec)) {
-          writer.newLine();
-        }
-        writeRec(writer, rec);
-        if (isDeclare(rec)) {
-          break;
-        }
-      }
+      boolean version2 = false;
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
           break;
         }
-        boolean isDecl = isDeclare(rec);
+        if (isHeader(rec)) {
+          version2 = isVersion2(rec, version2);
+          writeRec(writer, rec);
+          continue;
+        }
+        boolean isDecl = isDeclare(rec, version2);
         if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
           boolean shouldWrite = true;
           if (!isDecl) {
@@ -198,14 +188,48 @@ public final class SplitDtrace {
   }
 
   /**
-   * Returns true if the given line starts a program point declaration.
+   * Returns true if the given record is a program point declaration. As in {@link FileIO}, the
+   * file's declaration version determines the form of a declaration, because the name of a program
+   * point in a version 1 sample may start with "ppt ".
    *
-   * @param res a line from a .decls or .dtrace file
-   * @return true if the given line starts a program point declaration
+   * @param res the lines of a record from a .decls or .dtrace file
+   * @param version2 true if the file is in the version 2 format
+   * @return true if the given record is a program point declaration
    */
   @Pure
-  static boolean isDeclare(List<String> res) {
-    return res.get(0).equals("DECLARE");
+  static boolean isDeclare(List<String> res, boolean version2) {
+    String line = res.get(0);
+    // A version 1 declaration starts with "DECLARE", and a version 2 declaration with "ppt".
+    return version2 ? line.startsWith("ppt ") : line.equals("DECLARE");
+  }
+
+  /**
+   * Returns whether the file is in the version 2 format, after the given header record.
+   *
+   * @param res the lines of a header record
+   * @param version2 true if the file is in the version 2 format, according to the records before
+   *     this one
+   * @return true if the file is in the version 2 format, according to the records up to this one
+   */
+  @Pure
+  static boolean isVersion2(List<String> res, boolean version2) {
+    String[] words = res.get(0).trim().split("\\s+");
+    if (words.length == 2 && words[0].equals("decl-version")) {
+      return words[1].equals("2.0");
+    }
+    return version2;
+  }
+
+  /**
+   * Returns true if the given record is a file header record, such as a comment or "decl-version",
+   * rather than a declaration or a sample.
+   *
+   * @param res the lines of a record from a .decls or .dtrace file
+   * @return true if the given record is a file header record
+   */
+  @Pure
+  static boolean isHeader(List<String> res) {
+    return FileIO.is_header_record(res.get(0));
   }
 
   /**
@@ -248,6 +272,17 @@ public final class SplitDtrace {
         break;
       }
     } // eat white space
+    if (line != null && FileIO.isComment(line)) {
+      // As in FileIO, a comment record ends at the first line that is not a comment, even if no
+      // blank line follows the comment.  Otherwise, a sample that immediately follows a comment
+      // would be part of a header record, which writeDtrace copies whether or not the sample is
+      // in the selected part of the file.
+      res.add(line.trim());
+      while (FileIO.nextLineIsComment(reader)) {
+        res.add(reader.readLine().trim());
+      }
+      return;
+    }
     while (line != null) {
       line = line.trim();
       if (isEmpty(line)) {
