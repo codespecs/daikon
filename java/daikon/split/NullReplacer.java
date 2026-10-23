@@ -19,22 +19,8 @@ import jtb.syntaxtree.NodeToken;
 import jtb.visitor.DepthFirstVisitor;
 
 /**
- * NullReplacer is a JTB syntax tree visitor that replaces instances of "null" with "0" in a given
- * expression. Note: "null" is only referring to the java reserved word "null" not to any instances
- * of the string "null".
- *
- * <p>A splitter represents some references by their hashcode, which is 0 for null. A "null" is
- * replaced only if it stands for a hashcode: that is, if it is compared, by "==" or "!=", with an
- * expression that the splitter represents as a hashcode, or if it is a branch of a conditional
- * expression ("?:") whose other branch is such an expression. An expression that the splitter
- * represents as a hashcode is a hashcode variable, an element of an array of hashcodes, or a
- * conditional expression whose branches are each such an expression or a replaced "null". Every
- * other "null" is left unchanged: for example, one that is compared with a String, or one that is
- * passed as an argument. For example, in {@code this_next == null && this_name != null}, where
- * {@code this_next} is a hashcode and {@code this_name} is a String, the first "null" is replaced
- * and the second "null" is not.
- *
- * <p>NullReplacer runs after the other fixers, because it recognizes the names that they produce.
+ * NullReplacer is a JTB syntax tree visitor that replaces {@code null} with {@code 0}, when it
+ * stands for a hashcode.
  */
 class NullReplacer extends DepthFirstVisitor {
 
@@ -83,11 +69,11 @@ class NullReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Replaces instances of "null" with "0" (see class description).
+   * Replaces instances of {@code null} with {@code 0} (see class description).
    *
    * @param expression a valid java expression, whose variables have their compilable names
    * @param varInfos the VarInfos of the variables that may appear in the expression
-   * @return expression with instances of null replaced by instances of "0"
+   * @return expression with instances of null replaced by instances of {@code 0}
    * @throws ParseException if expression is not a valid java expression
    */
   public static String replaceNull(String expression, VarInfo[] varInfos) throws ParseException {
@@ -238,7 +224,7 @@ class NullReplacer extends DepthFirstVisitor {
   /**
    * This method should not be directly used by user of this class; however it must be public to
    * fulfill the visitor interface. If n represents a null that stands for a hashcode, then it is
-   * replaced by "0".
+   * replaced by {@code 0}.
    */
   @Override
   public void visit(NodeToken n) {
