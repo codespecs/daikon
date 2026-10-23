@@ -3,6 +3,7 @@ package daikon.tools;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import daikon.DaikonGetopt;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,6 +21,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.MultiRandSelector;
 import org.plumelib.util.StringsPlume;
@@ -34,12 +37,58 @@ public class TraceSelect {
     throw new UnsupportedOperationException("Do not instantiate");
   }
 
+  /**
+   * Matches an argument that has the form of a TraceSelect option: a hyphen followed by capital
+   * letters and underscores. No Daikon argument has this form.
+   */
+  private static final Pattern TRACESELECT_OPTION = Pattern.compile("-[A-Z_]{2,}");
+
+  /** The TraceSelect options, in upper case. TraceSelect ignores the case of an option. */
+  private static final Set<String> TRACESELECT_OPTIONS =
+      new HashSet<>(Arrays.asList("-SEED", "-NOCLEAN", "-INCLUDE_UNRETURNED", "-DO_DIFFS"));
+
+  /** Matches a negative integer, which is not an option. */
+  private static final Pattern NEGATIVE_INTEGER = Pattern.compile("-[0-9]+");
+
+  /**
+   * Daikon command-line options whose value can be the next command-line argument. This must be
+   * kept in sync with the options that {@link daikon.Daikon} declares with {@code
+   * LongOpt.REQUIRED_ARGUMENT}. It omits "-o", which TraceSelect rejects.
+   */
+  private static final Set<String> DAIKON_OPTIONS_WITH_ARGUMENT =
+      new HashSet<>(
+          Arrays.asList(
+              "--" + daikon.Daikon.format_SWITCH,
+              "--" + daikon.Daikon.files_from_SWITCH,
+              "--" + daikon.Daikon.omit_from_output_SWITCH,
+              "--" + daikon.Daikon.conf_limit_SWITCH,
+              "--" + daikon.Daikon.list_type_SWITCH,
+              "--" + daikon.Daikon.user_defined_invariant_SWITCH,
+              "--" + daikon.Daikon.ppt_regexp_SWITCH,
+              "--" + daikon.Daikon.ppt_omit_regexp_SWITCH,
+              "--" + daikon.Daikon.var_regexp_SWITCH,
+              "--" + daikon.Daikon.var_omit_regexp_SWITCH,
+              "--" + daikon.Daikon.server_SWITCH,
+              "--" + daikon.Daikon.config_SWITCH,
+              "--" + daikon.Daikon.config_option_SWITCH,
+              "--" + daikon.Daikon.debug_SWITCH,
+              "--" + daikon.Daikon.track_SWITCH,
+              "--" + daikon.Daikon.disc_reason_SWITCH));
+
   /** The usage message for this program. */
   private static final String usage =
       StringsPlume.joinLines(
-          "USAGE: TraceSelect num_reps sample_size [options] dtrace_file [Daikon-args]...",
+          "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...",
+          "num_reps and sample_size must be positive integers.",
+          "The options are -SEED n, -NOCLEAN, -INCLUDE_UNRETURNED, and -DO_DIFFS.",
+          "The Daikon-args start with the first argument that is not one of those options.",
+          "Exactly one of the Daikon-args must be a .dtrace file; it is the file to sample.",
+          "The Daikon-args must not include -o, which TraceSelect supplies for each sample.",
           "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED -SEED 1000 foo.dtrace"
-              + " foo.decls RatPoly.decls");
+              + " foo.decls RatPoly.decls",
+          "",
+          "The Daikon-args are:",
+          daikon.Daikon.usage);
 
   /**
    * The entry point of TraceSelect.
@@ -61,12 +110,18 @@ public class TraceSelect {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(String[] args) {
-    if (args.length == 0) {
-      throw new daikon.Daikon.UserError("No arguments found." + daikon.Daikon.lineSep + usage);
+    // Handles -h and --help before num_reps.  A negative num_reps is left for parsePositiveInt to
+    // report.
+    if (args.length == 0 || !NEGATIVE_INTEGER.matcher(args[0]).matches()) {
+      args = DaikonGetopt.argsAfterLeadingOptions(args, usage);
     }
 
-    int numReps = Integer.parseInt(args[0]);
-    int numPerSample = Integer.parseInt(args[1]);
+    if (args.length < 2) {
+      throw new daikon.Daikon.UserError("Too few arguments; run with -h for usage");
+    }
+
+    int numReps = parsePositiveInt("num_reps", args[0]);
+    int numPerSample = parsePositiveInt("sample_size", args[1]);
 
     // If true, delete the trace samples after the invariants from them have been generated.
     boolean clean = true;
@@ -87,24 +142,67 @@ public class TraceSelect {
         if (i + 1 >= args.length) {
           throw new daikon.Daikon.UserError("-SEED requires an argument");
         }
-        rand = new Random(Long.parseLong(args[++i]));
+        String seed = args[++i];
+        try {
+          rand = new Random(Long.parseLong(seed));
+        } catch (NumberFormatException e) {
+          throw new daikon.Daikon.UserError("-SEED requires an integer argument, not " + seed);
+        }
       } else if (option.equals("-NOCLEAN")) {
         clean = false;
       } else if (option.equals("-INCLUDE_UNRETURNED")) {
         includeUnreturned = true;
       } else if (option.equals("-DO_DIFFS")) {
         doDiffs = true;
+      } else if (TRACESELECT_OPTION.matcher(option).matches() && !args[i].startsWith("-o")) {
+        // A misspelled TraceSelect option, in any case, such as "-NOCLAEN" or "-noclaen".  An
+        // argument that starts with "-o" is Daikon's -o option, which is rejected below.
+        throw new daikon.Daikon.UserError(
+            "Unrecognized TraceSelect option "
+                + args[i]
+                + "; the options are -SEED, -NOCLEAN, -INCLUDE_UNRETURNED, and -DO_DIFFS");
       } else {
         break;
       }
     }
 
     // The remaining arguments are the Daikon arguments, such as .dtrace and .decls files,
-    // "--nohierarchy", or "--format java".  Only the .dtrace file is sampled.
+    // "--nohierarchy", or "--format java".  Only the .dtrace file is sampled.  Daikon treats any
+    // file whose name contains ".dtrace" as a trace file, so every such file must be the one that
+    // is sampled.  An option or an option's value, such as "--config foo.dtrace" or
+    // "--config=foo.dtrace", is not a file, even if it contains ".dtrace".
     String inputFile = null;
     List<String> daikonArgs = new ArrayList<>();
     for (; i < args.length; i++) {
-      if (args[i].endsWith(".dtrace")) {
+      if (args[i].startsWith("-o")) {
+        // "-o foo.inv" or "-ofoo.inv".  Daikon rejects a second -o.
+        throw new daikon.Daikon.UserError(
+            "TraceSelect does not accept Daikon's -o option: it writes the invariants of each"
+                + " sample to the sample's file name plus \".inv\"");
+      } else if (TRACESELECT_OPTION.matcher(args[i]).matches()
+          || TRACESELECT_OPTIONS.contains(args[i].toUpperCase(Locale.ENGLISH))) {
+        // A TraceSelect option after a Daikon argument, as in "foo.dtrace -NOCLEAN" or
+        // "foo.dtrace -noclean".  Daikon would reject it with a message that does not mention
+        // TraceSelect.
+        throw new daikon.Daikon.UserError(
+            "TraceSelect option "
+                + args[i]
+                + " must precede the Daikon arguments, such as the .dtrace file");
+      } else if (DAIKON_OPTIONS_WITH_ARGUMENT.contains(args[i])) {
+        daikonArgs.add(args[i]);
+        if (i + 1 < args.length) {
+          daikonArgs.add(args[++i]);
+        }
+      } else if (args[i].startsWith("-")) {
+        daikonArgs.add(args[i]);
+      } else if (args[i].contains(".dtrace")) {
+        if (!args[i].endsWith(".dtrace")) {
+          throw new daikon.Daikon.UserError(
+              "TraceSelect cannot sample "
+                  + args[i]
+                  + "; the trace file must be uncompressed and its name must end with"
+                  + " \".dtrace\"");
+        }
         if (inputFile != null) {
           throw new daikon.Daikon.UserError("Only 1 dtrace file for input allowed");
         }
@@ -113,8 +211,21 @@ public class TraceSelect {
         daikonArgs.add(args[i]);
       }
     }
+
+    // Check the Daikon arguments before doing any sampling, so that a bad argument is reported
+    // immediately.  This also handles -h and --help.  When there is a trace file, the arguments
+    // are the same as those of a sample's Daikon run, except for the .dtrace file, which does not
+    // exist yet.
+    if (inputFile != null || !daikonArgs.isEmpty()) {
+      checkDaikonArgs(
+          (inputFile == null)
+              ? daikonArgs.toArray(new String[0])
+              : daikonCommandLine(inputFile, daikonArgs));
+    }
     if (inputFile == null) {
-      throw new daikon.Daikon.UserError("No .dtrace file name specified");
+      throw new daikon.Daikon.UserError(
+          "No .dtrace file name specified (the trace file must be uncompressed and its name must"
+              + " end with \".dtrace\")");
     }
 
     // The .inv file for each sample, from the first sample to the last.
@@ -252,6 +363,28 @@ public class TraceSelect {
   }
 
   /**
+   * Parses a command-line argument that must be a positive integer.
+   *
+   * @param name the name of the argument, for use in error messages
+   * @param arg the command-line argument
+   * @return the integer value of the argument
+   * @throws daikon.Daikon.UserError if the argument is not a positive integer
+   */
+  private static int parsePositiveInt(String name, String arg) {
+    int result;
+    try {
+      result = Integer.parseInt(arg);
+    } catch (NumberFormatException e) {
+      result = 0;
+    }
+    if (result <= 0) {
+      throw new daikon.Daikon.UserError(
+          name + " must be a positive integer, not " + arg + "; run with -h for usage");
+    }
+    return result;
+  }
+
+  /**
    * Deletes the file with the given name, if it exists. A failed deletion is not fatal; it produces
    * a warning on standard output. Tolerates a name that is not a legal file path.
    *
@@ -263,6 +396,24 @@ public class TraceSelect {
     } catch (IOException | InvalidPathException e) {
       System.out.println("Warning: could not delete " + fileName + ": " + e.getMessage());
     }
+  }
+
+  /**
+   * Checks Daikon command-line arguments by passing them to {@link daikon.Daikon#read_options}.
+   * Handles -h and --help.
+   *
+   * <p>Like {@link daikon.Daikon#mainHelper}, this first calls {@link daikon.Daikon#cleanup},
+   * because {@code read_options} rejects some options, such as {@code -o}, if the corresponding
+   * static field is already set.
+   *
+   * @param args the Daikon command-line arguments
+   * @throws daikon.Daikon.NormalTermination after printing the usage message, if an argument
+   *     requests it
+   * @throws daikon.Daikon.UserError if an argument is bad
+   */
+  private static void checkDaikonArgs(String[] args) {
+    daikon.Daikon.cleanup();
+    daikon.Daikon.read_options(args, usage);
   }
 
   /**

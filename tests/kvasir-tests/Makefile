@@ -17,11 +17,10 @@ include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.jobs
 
 default: summary-w-daikon
 
-.PHONY: regression-tests
-regression-tests:
-	${MAKE} --jobs=${DAIKON_TEST_JOBS} ${MPARG} nightly-tests__diffs-w-daikon-if-working
-	${MAKE} nightly-summary-only-w-daikon
-	@${MAKE} --no-print-directory results
+# Variables used by Makefile.results.
+REGRESSION_TESTS_ARGS = --jobs=${DAIKON_TEST_JOBS} ${MPARG}
+REGRESSION_TESTS_TARGET = nightly-tests__diffs-w-daikon-if-working
+REGRESSION_SUMMARY_TARGET = nightly-report-w-daikon
 
 summary: default-projects__diffs
 	${MAKE} summary-only
@@ -57,6 +56,9 @@ nightly-summary-w-daikon: nightly-tests__diffs-w-daikon-if-working
 nightly-summary-only: nightly-tests__summary-if-working__quietly
 
 nightly-summary-only-w-daikon: nightly-tests__summary-w-daikon-if-working__quietly
+
+# Like nightly-summary-only-w-daikon, but runs no tests.
+nightly-report-w-daikon: nightly-tests__report-w-daikon__quietly
 
 clean diffs invs update-goals:
 	${MAKE} default-projects__$@
@@ -137,24 +139,9 @@ medium-crypto-tests__%: do-rijndael__%
 do-%__quietly:
 	@${MAKE} --jobs=1 --no-print-directory -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
 
+# --no-keep-going: within one test directory, stop at the first error, even
+# under "make -k" (which the regression-tests target uses).
 do-%:
-	@${MAKE} --jobs=1 -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
+	@${MAKE} --jobs=1 --no-keep-going -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
 
-# removes fields before the size (ie, permissions, owner, group).
-PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; if ($$1 > 0) { $$failure++; print "$$1\t$$2\t$$3\n";} END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
-# args to 'find' program, to find files containing results
-RESULTS_PATTERN :=    -name '*.diff'
-
-results_header:
-	@echo ""
-	@echo "=== RESULTS ==="
-
-results_cat:
-	@find . ${RESULTS_PATTERN} -print0 | xargs -0 cat
-
-results: results_header results_cat summary_list
-
-summary_list:
-	@ls -l `find . ${RESULTS_PATTERN}` \
-	  | perl -pe 's|\Q${BASE}|.|;' \
-	  | ${PERL_CLEANUP_LS_OUTPUT}
+include ${DAIKON_TESTS_DIR}Makefile.results
