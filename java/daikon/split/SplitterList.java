@@ -166,7 +166,9 @@ public abstract class SplitterList {
 
   /**
    * Returns the splitters associated with this program point name (or null). The resulting
-   * splitters are factories, not instantiated splitters.
+   * splitters are factories, not instantiated splitters. The result may contain several splitters
+   * with the same condition; {@link daikon.PptTopLevel#addConditions} uses only the first one that
+   * is valid.
    *
    * @return an array of splitters
    */
@@ -205,31 +207,16 @@ public abstract class SplitterList {
   }
 
   /**
-   * Returns all the splitters in this program, The resulting splitters are factories, not
-   * instantiated splitters.
+   * Returns all the splitters in this program. The resulting splitters are factories, not
+   * instantiated splitters. The result may contain several splitters with the same condition;
+   * {@link daikon.PptTopLevel#addConditions} uses only the first one that is valid.
    *
    * @return an array of splitters
    */
   public static Splitter[] get_all() {
     List<Splitter> splitters = new ArrayList<>();
     for (Splitter[] splitter_array : ppt_splitters.values()) {
-      for (int i = 0; i < splitter_array.length; i++) {
-        Splitter tempsplitter = splitter_array[i];
-        boolean duplicate = false;
-        // Weed out splitters with the same condition.
-        if (!splitters.isEmpty()) {
-          for (Splitter splitter : splitters) {
-            if (tempsplitter.condition().trim().equals(splitter.condition().trim())) {
-              // System.err.println(" duplicate " + tempsplitter.condition()); System.err.println();
-              duplicate = true;
-              break;
-            }
-          }
-        }
-        if (!duplicate) {
-          splitters.add(tempsplitter);
-        }
-      }
+      splitters.addAll(Arrays.asList(splitter_array));
     }
     return splitters.toArray(new Splitter[0]);
   }
