@@ -143,6 +143,7 @@ public class DtraceNonceFixer {
    * @param target the file to replace
    * @throws IOException if there is trouble moving the file
    */
+  // TODO: When Daikon uses a version of plume-util that has FilesP.replaceFile, use it instead.
   private static void replaceFile(Path source, Path target) throws IOException {
     if (Files.exists(target)) {
       try {
