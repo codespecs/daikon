@@ -272,6 +272,17 @@ public final class SplitDtrace {
         break;
       }
     } // eat white space
+    if (line != null && FileIO.isComment(line)) {
+      // As in FileIO, a comment record ends at the first line that is not a comment, even if no
+      // blank line follows the comment.  Otherwise, a sample that immediately follows a comment
+      // would be part of a header record, which writeDtrace copies whether or not the sample is
+      // in the selected part of the file.
+      res.add(line.trim());
+      while (FileIO.nextLineIsComment(reader)) {
+        res.add(reader.readLine().trim());
+      }
+      return;
+    }
     while (line != null) {
       line = line.trim();
       if (isEmpty(line)) {

@@ -370,6 +370,11 @@ public final class FileIO {
       decl_error(state, "ppt name expected in '%s'", line);
       throw new Error(); // this can't happen
     }
+    // Reject anything after the ppt name, as for the other records.
+    Scanner ppt_scanner = new Scanner(line);
+    ppt_scanner.next(); // "ppt"
+    ppt_scanner.next(); // the ppt name
+    need_eol(state, ppt_scanner);
 
     // Information that will populate the new program point.
     Map<String, VarDefinition> varmap = new LinkedHashMap<>();
