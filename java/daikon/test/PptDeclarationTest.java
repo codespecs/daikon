@@ -44,10 +44,15 @@ public class PptDeclarationTest {
             "");
     Files.write(declsFile.toPath(), decls.getBytes(StandardCharsets.UTF_8));
     FileIO.resetNewDeclFormat();
-    List<File> files = Collections.singletonList(declsFile);
-    Daikon.UserError e =
-        assertThrows(Daikon.UserError.class, () -> FileIO.read_declaration_files(files));
-    String message = String.valueOf(e.getMessage());
-    assertTrue(message, message.startsWith("'unexpected' found where end-of-line expected"));
+    try {
+      List<File> files = Collections.singletonList(declsFile);
+      Daikon.UserError e =
+          assertThrows(Daikon.UserError.class, () -> FileIO.read_declaration_files(files));
+      String message = String.valueOf(e.getMessage());
+      assertTrue(message, message.startsWith("'unexpected' found where end-of-line expected"));
+    } finally {
+      // Reading the file set the declaration format; do not let it affect later tests.
+      FileIO.resetNewDeclFormat();
+    }
   }
 }
