@@ -54,7 +54,6 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.KeyFor;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.plumelib.util.RegexUtil;
@@ -260,22 +259,22 @@ public final class PrintInvariants {
   // even in that case, which means to output a discard-reason for every
   // invariant.
   /** Output discard reasons for this class. If null, output discard reasons for all classes. */
-  private static @MonotonicNonNull String discClass = null;
+  private static @Nullable String discClass = null;
 
   /**
    * Comma-separated variable names. Output discard reasons if those are the variables. If null,
    * output discard reasons for all variable tuples.
    */
-  private static @MonotonicNonNull String discVars = null;
+  private static @Nullable String discVars = null;
 
   /**
    * Output discard reasons for this program point. If null, output discard reasons for all program
    * points.
    */
-  private static @MonotonicNonNull String discPpt = null;
+  private static @Nullable String discPpt = null;
 
-  /** The usage message for this program. */
-  private static String usage =
+  /** The usage message for this program, before any {@code --disc_reason} option changes it. */
+  private static final String defaultUsage =
       StringsPlume.joinLines(
           "Usage: java daikon.PrintInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
@@ -298,6 +297,9 @@ public final class PrintInvariants {
           "      Print debug info on the specified invariant class, vars, and ppt",
           "  --" + Daikon.wrap_xml_SWITCH,
           "      Print extra info about invariants, and wrap in XML tags");
+
+  /** The usage message for this program. */
+  private static String usage = defaultUsage;
 
   /** See the documentation for this class. */
   public static void main(final String[] args)
@@ -325,6 +327,9 @@ public final class PrintInvariants {
           OptionalDataException,
           IOException,
           ClassNotFoundException {
+
+    // Cleanup from any previous runs of PrintInvariants or Daikon
+    cleanup();
 
     LongOpt[] longopts =
         new LongOpt[] {
@@ -489,7 +494,27 @@ public final class PrintInvariants {
       assert out_stream != null
           : "@AssumeAssertion(nullness): flush() does not affect any global variables";
       out_stream.close();
+      out_stream = null;
     }
+  }
+
+  /**
+   * Resets the static fields that {@link #mainHelper} sets from command-line options, and those of
+   * {@link Daikon}, so that a later call to {@link #mainHelper} uses the defaults.
+   */
+  public static void cleanup() {
+    Daikon.cleanup();
+
+    // Reset statics.  These must match the settings where they are declared.
+    ppt_regexp = null;
+    print_discarded_invariants = false;
+    discClass = null;
+    discVars = null;
+    discPpt = null;
+    usage = defaultUsage;
+    wrap_xml = false;
+    print_csharp_metadata = false;
+    out_stream = null;
   }
 
   /**
