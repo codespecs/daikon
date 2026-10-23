@@ -9,12 +9,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -26,18 +30,40 @@ import org.checkerframework.dataflow.qual.TerminatesExecution;
  * points and the variables for each program point. Only version 2.0 declaration files are
  * supported.
  *
- * <p>DeclReader skips everything other than program point declarations, so it can also read a
- * .dtrace file that contains declarations. Within a declaration, it parses only the "ppt",
- * "variable", "dec-type", "rep-type", and "comparability" records, which are the ones that its
- * clients need, and it skips the others. It ignores extra tokens at the end of a "variable" or
- * "comparability" record. A later declaration of a program point, of a variable, or of a
- * comparability replaces an earlier one. If the header record "var-comparability none" precedes a
+ * <p>DeclReader parses only the records that its clients need. A DeclReader that is created for
+ * rewriting also retains the text of every declaration, so a client can write a declaration with
+ * some of its records changed. If the header record "var-comparability none" precedes a
  * declaration, then the comparabilities in that declaration are ignored.
  */
 public class DeclReader {
 
+  /**
+   * If true, this reader retains the text of every declaration, and it rejects input that cannot be
+   * faithfully rewritten: a file that is not a version 2.0 declaration file, records (such as
+   * sample records in a .dtrace file) that are neither header records nor declarations, a header
+   * record that appears more than once, a program point that is declared more than once, a variable
+   * that is declared more than once in a program point, a variable with more than one comparability
+   * record, and extra tokens at the end of a "variable" or "comparability" record.
+   *
+   * <p>If false, this reader skips everything other than program point declarations; within a
+   * declaration, it ignores extra tokens at the end of a "variable" or "comparability" record; and
+   * a later declaration of a program point, of a variable, or of a comparability replaces an
+   * earlier one.
+   *
+   * <p>In either case, this reader does not check the records of a declaration other than the
+   * "ppt", "variable", "dec-type", "rep-type", and "comparability" records.
+   */
+  private final boolean forRewriting;
+
   /** Map from ppt name to corresponding DeclPpt, in the order the ppts appear in the input. */
   public HashMap<String, DeclPpt> ppts = new LinkedHashMap<>();
+
+  /**
+   * The header records, such as "decl-version 2.0", in the order they appear in the input. In each
+   * record, the tokens are separated by a single space; comments and blank lines are omitted. A
+   * "ListImplementors" record consists of its lines, separated by line separators.
+   */
+  public List<String> header = new ArrayList<>();
 
   /** The keywords of the header records. */
   private static final Set<String> HEADER_KEYWORDS =
@@ -91,6 +117,15 @@ public class DeclReader {
     public int index;
 
     /**
+     * The lines of the declaration, starting with the "variable" line; empty if the DeclReader does
+     * not retain the text of declarations.
+     */
+    public List<String> lines;
+
+    /** The index in {@link #lines} of the comparability record, or -1 if there is none. */
+    public int comparabilityLine;
+
+    /**
      * Creates a new DeclVarInfo.
      *
      * @param name the variable name
@@ -98,14 +133,24 @@ public class DeclReader {
      * @param rep_type the representation type
      * @param comparability the comparability, or null
      * @param index the index of the variable within its program point
+     * @param lines the lines of the declaration
+     * @param comparabilityLine the index in {@code lines} of the comparability record, or -1
      */
     public DeclVarInfo(
-        String name, String type, String rep_type, @Nullable String comparability, int index) {
+        String name,
+        String type,
+        String rep_type,
+        @Nullable String comparability,
+        int index,
+        List<String> lines,
+        int comparabilityLine) {
       this.name = name;
       this.type = type;
       this.rep_type = rep_type;
       this.comparability = comparability;
       this.index = index;
+      this.lines = lines;
+      this.comparabilityLine = comparabilityLine;
     }
 
     /**
@@ -137,9 +182,19 @@ public class DeclReader {
    * Information about the program point that is contained in the decl file. This consists of the
    * ppt name and a list of the declared variables.
    */
+  @UsesObjectEquals
   public static class DeclPpt {
     /** Program point name. */
     public String name;
+
+    /** The file in which this declaration appears. */
+    public String filename;
+
+    /**
+     * The lines of the declaration that precede the first variable, starting with the "ppt" line;
+     * empty if the DeclReader does not retain the text of declarations.
+     */
+    public List<String> declHeaderLines;
 
     /** Map from variable name to corresponding DeclVarInfo, in declaration order. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
@@ -148,9 +203,14 @@ public class DeclReader {
      * DeclPpt constructor.
      *
      * @param name program point name
+     * @param filename the file in which this declaration appears
+     * @param forRewriting if true, retain the text of the declaration
      */
-    public DeclPpt(String name) {
+    public DeclPpt(String name, String filename, boolean forRewriting) {
       this.name = name;
+      this.filename = filename;
+      // Avoid allocating a list per program point when the lines are not retained.
+      this.declHeaderLines = forRewriting ? new ArrayList<>() : Collections.emptyList();
     }
 
     /**
@@ -158,17 +218,20 @@ public class DeclReader {
      * before the variable name.
      *
      * @param decl_file where to read data from
+     * @param forRewriting if true, retain the text of the declaration and reject input that cannot
+     *     be faithfully rewritten; see {@link DeclReader#forRewriting}
      * @return DeclVarInfo for the program point variable
      * @throws IOException if there is trouble reading the file
      */
-    public DeclVarInfo read_var(EntryReader decl_file) throws IOException {
+    public DeclVarInfo read_var(EntryReader decl_file, boolean forRewriting) throws IOException {
 
       String firstLine = decl_file.readLine();
       if (firstLine == null) {
         reportFileError(decl_file, "Expected \"variable <VARNAME>\", found end of file");
       }
       String[] firstTokens = tokenize(firstLine);
-      if (!(firstTokens[0].equals("variable") && firstTokens.length >= 2)) {
+      if (!(firstTokens[0].equals("variable")
+          && (forRewriting ? firstTokens.length == 2 : firstTokens.length >= 2))) {
         reportFileError(decl_file, "Expected \"variable <VARNAME>\", found \"" + firstLine + "\"");
       }
       String varName = firstTokens[1];
@@ -176,10 +239,19 @@ public class DeclReader {
       // The location of the "variable" record.  The EntryReader cannot report a location after the
       // end of the input, where a missing record is detected.
       String varLocation = decl_file.getFileName() + " line " + decl_file.getLineNumber();
+      if (forRewriting && previous != null) {
+        reportFileError(decl_file, "Variable " + varName + " declared twice in ppt " + name);
+      }
 
+      // Avoid allocating a list per variable when the lines are not retained.
+      List<String> lines = forRewriting ? new ArrayList<>() : Collections.emptyList();
+      if (forRewriting) {
+        lines.add(firstLine);
+      }
       String type = null;
       String rep_type = null;
       String comparability = null;
+      int comparabilityLine = -1;
 
       // read variable data records until next variable or blank line
       String record = decl_file.readLine();
@@ -193,6 +265,9 @@ public class DeclReader {
           reportFileError(
               decl_file, "Unexpected record \"" + record.trim() + "\" in variable " + varName);
         }
+        if (forRewriting) {
+          lines.add(record);
+        }
         if (keyword.equals("dec-type")) {
           if (tokens.length < 2) {
             reportFileError(decl_file, "\"dec-type\" not followed by a type");
@@ -204,13 +279,19 @@ public class DeclReader {
           }
           rep_type = recordValue(tokens);
         } else if (keyword.equals("comparability")) {
-          if (tokens.length < 2) {
+          if (forRewriting && comparability != null) {
+            reportFileError(decl_file, "Multiple comparability records for variable " + varName);
+          }
+          if (forRewriting ? tokens.length != 2 : tokens.length < 2) {
             reportFileError(decl_file, "Malformed comparability record \"" + record.trim() + "\"");
           }
           comparability = tokens[1];
+          if (forRewriting) {
+            comparabilityLine = lines.size() - 1;
+          }
         }
-        // All other record types (such as flags and enclosing-var) are skipped, because no client
-        // needs them.
+        // All other record types (such as flags and enclosing-var) are not parsed, because no
+        // client needs them.
         record = decl_file.readLine();
       }
       // push back the variable or blank line record
@@ -234,7 +315,9 @@ public class DeclReader {
               rep_type.intern(),
               (comparability == null) ? null : comparability.intern(),
               // A later declaration of a variable replaces an earlier one, in the same position.
-              (previous == null) ? vars.size() : previous.index);
+              (previous == null) ? vars.size() : previous.index,
+              lines,
+              comparabilityLine);
       vars.put(varName, var);
       return var;
     }
@@ -284,9 +367,22 @@ public class DeclReader {
     }
   }
 
-  /** Create a new DeclReader. */
+  /**
+   * Create a new DeclReader that does not retain the text of declarations and that skips everything
+   * other than program point declarations.
+   */
   public DeclReader() {
-    // This constructor is intentionally empty.
+    this(false);
+  }
+
+  /**
+   * Create a new DeclReader.
+   *
+   * @param forRewriting if true, retain the text of every declaration and reject input that cannot
+   *     be faithfully rewritten; see {@link #forRewriting}
+   */
+  public DeclReader(boolean forRewriting) {
+    this.forRewriting = forRewriting;
   }
 
   /**
@@ -329,7 +425,7 @@ public class DeclReader {
    * @param record a record, possibly with leading and trailing whitespace
    * @return the first token of the record; the empty string if the record is blank
    */
-  private static String firstToken(String record) {
+  public static String firstToken(String record) {
     int length = record.length();
     int start = 0;
     while (start < length && Character.isWhitespace(record.charAt(start))) {
@@ -365,19 +461,71 @@ public class DeclReader {
     try (EntryReader decl_file =
         new EntryReader(
             reader, filename, EntryFormat.DEFAULT, new CommentFormat("^(//|#).*"), null)) {
+      boolean seenVersion2 = false;
+      // The keywords of the header records read so far.
+      Set<String> seenHeaderKeywords = new HashSet<>();
       comparabilityNone = false;
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
-        // Most lines of a .dtrace file are skipped, so avoid tokenizing each line.  In a .dtrace
-        // file, a line that is exactly "ppt" is the name of a variable in a sample record.
+        // Most lines of a .dtrace file are skipped, so avoid tokenizing each line.
         String keyword = firstToken(line);
-        if (keyword.equals("ppt") && !line.trim().equals("ppt")) {
+        if (keyword.isEmpty()) {
+          continue;
+        }
+        // In a .dtrace file, a line that is exactly "ppt" is the name of a variable in a sample
+        // record.  A rewriting reader rejects it in read_decl.
+        if (keyword.equals("ppt") && (forRewriting || !line.trim().equals("ppt"))) {
+          if (forRewriting && !seenVersion2) {
+            reportFileError(decl_file, "Program point declaration precedes \"decl-version 2.0\"");
+          }
           decl_file.putback(line);
           read_decl(decl_file);
-        } else if (keyword.equals("var-comparability")) {
-          String[] tokens = tokenize(line);
-          comparabilityNone = tokens.length >= 2 && tokens[1].equals("none");
+          continue;
         }
-        // Skip any other record, such as a header record or a sample record in a .dtrace file.
+        if (!forRewriting && !HEADER_KEYWORDS.contains(keyword)) {
+          // Skip the record.  For example, it is a sample record in a .dtrace file.
+          continue;
+        }
+        String record = String.join(" ", tokenize(line));
+        if (HEADER_KEYWORDS.contains(keyword)) {
+          if (forRewriting && !seenHeaderKeywords.add(keyword)) {
+            reportFileError(decl_file, "Multiple \"" + keyword + "\" records");
+          }
+          if (keyword.equals("decl-version")) {
+            if (forRewriting && !record.equals("decl-version 2.0")) {
+              reportFileError(decl_file, "Unsupported \"" + record + "\"");
+            }
+            seenVersion2 = true;
+          } else if (keyword.equals("var-comparability")) {
+            String[] tokens = tokenize(line);
+            comparabilityNone = tokens.length >= 2 && tokens[1].equals("none");
+          } else if (keyword.equals("ListImplementors")) {
+            // The names of the classes follow, one per line, up to a blank line.
+            List<String> lines = new ArrayList<>();
+            lines.add(record);
+            for (String className = decl_file.readLine();
+                className != null && !className.trim().isEmpty();
+                className = decl_file.readLine()) {
+              lines.add(className.trim());
+            }
+            record = String.join(System.lineSeparator(), lines);
+          }
+          header.add(record);
+        } else {
+          // This reader is for rewriting, so it rejects the record.
+          if (record.equals("DECLARE")) {
+            reportFileError(decl_file, "Only version 2.0 declaration files are supported");
+          }
+          if (!seenVersion2) {
+            reportFileError(decl_file, "Expected \"decl-version 2.0\", found \"" + record + "\"");
+          }
+          // For example, a sample record in a .dtrace file.
+          reportFileError(decl_file, "Expected a declaration, found \"" + record + "\"");
+        }
+      }
+      if (forRewriting && !seenVersion2) {
+        // For example, the file is empty.  The EntryReader cannot report a file name or line
+        // number after the end of the input.
+        throw new Daikon.UserError("No \"decl-version 2.0\" record in " + filename);
       }
     } catch (UncheckedIOException e) {
       throw e.getCause();
@@ -407,10 +555,19 @@ public class DeclReader {
       reportFileError(decl_file, "Expected \"ppt <PPTNAME>\", found \"" + firstLine + "\"");
     }
     String pptname = tokens[1];
-    DeclPpt ppt = new DeclPpt(pptname);
+    if (forRewriting && !pptname.contains(":::")) {
+      reportFileError(decl_file, "Program point name \"" + pptname + "\" does not contain \":::\"");
+    }
+    if (forRewriting && ppts.containsKey(pptname)) {
+      reportFileError(decl_file, "Program point " + pptname + " declared twice");
+    }
+    DeclPpt ppt = new DeclPpt(pptname, decl_file.getFileName(), forRewriting);
     ppts.put(pptname, ppt);
+    if (forRewriting) {
+      ppt.declHeaderLines.add(firstLine);
+    }
 
-    // Skip the records, such as ppt-type, that precede the first variable.  No client needs them.
+    // Read the records, such as ppt-type, that precede the first variable.
     String line = decl_file.readLine();
     while (line != null) {
       String keyword = firstToken(line);
@@ -422,6 +579,9 @@ public class DeclReader {
             decl_file,
             "Expected \"variable <VARNAME>\" or a blank line, found \"" + line.trim() + "\"");
       }
+      if (forRewriting) {
+        ppt.declHeaderLines.add(line);
+      }
       line = decl_file.readLine();
     }
 
@@ -429,7 +589,7 @@ public class DeclReader {
     // are terminated by a blank line.
     while ((line != null) && !line.trim().isEmpty()) {
       decl_file.putback(line);
-      DeclVarInfo var = ppt.read_var(decl_file);
+      DeclVarInfo var = ppt.read_var(decl_file, forRewriting);
       if (comparabilityNone) {
         var.comparability = null;
       }

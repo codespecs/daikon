@@ -1,0 +1,869 @@
+package daikon.tools;
+
+import daikon.Daikon;
+import daikon.PptName;
+import daikon.VarComparabilityImplicit;
+import daikon.chicory.DeclReader;
+import daikon.chicory.DeclReader.DeclPpt;
+import daikon.chicory.DeclReader.DeclVarInfo;
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.plumelib.util.FilesPlume;
+import org.plumelib.util.StringsPlume;
+
+/**
+ * MergeComparability merges the comparability information in multiple declaration files, such as
+ * the {@code .decls-DynComp} files produced by multiple runs of DynComp, into a single declaration
+ * file.
+ *
+ * <p>Two variables at a program point are comparable in the output if they are comparable in any of
+ * the input files, or if they are related by a chain of such comparabilities. That is, the
+ * comparability sets of the output are the finest partition that is coarser than the partition in
+ * every input file.
+ *
+ * <p>Like DynComp, MergeComparability makes a variable's comparability consistent across related
+ * program points. For example, if two variables are comparable at any exit point of a method, then
+ * they are comparable at every exit point and at the entry point of the method. See {@link
+ * #mergeHierarchy}.
+ *
+ * <p>A variable that is comparable to everything in any input file, because it has a scalar
+ * negative comparability such as "-1" or has no comparability record, is comparable to everything
+ * in the output. Likewise, a component of an array comparability (the element or an index) that is
+ * negative in any input file is negative in the output. A chain of comparabilities does not pass
+ * through a variable or component that is comparable to everything: if x and y are comparable in
+ * one input file and y is comparable to everything in another, then x does not thereby become
+ * comparable to other variables. Two variables or components that are comparable to everything have
+ * the same negative comparability in the output if they have the same negative comparability in
+ * some input file, or if they are related by a chain of such equalities; Daikon permits only such
+ * variables to be in the same equality set.
+ *
+ * <p>A program point that appears in only some of the input files appears in the output. (For
+ * example, DynComp produces no declaration for the program points of a class that was never
+ * loaded.) A program point that appears in multiple input files must declare the same variables, in
+ * the same order, in each of them, and its declarations must contain the same records, other than
+ * comparability records. Each program point in the output is a copy of its first declaration in the
+ * input files, except that the comparability records are changed, and a comparability record is
+ * added to each variable that has none.
+ */
+public final class MergeComparability {
+
+  /** Do not instantiate. */
+  private MergeComparability() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
+  /** The system-specific line separator. */
+  private static final String lineSep = System.lineSeparator();
+
+  /** The usage message for this program. */
+  private static String usage =
+      StringsPlume.joinLines(
+          "Usage: java daikon.tools.MergeComparability -o OUTFILE DECLFILE [DECLFILE ...]",
+          "Merges the comparability information in the declaration files (such as",
+          "the .decls-DynComp files output by multiple runs of DynComp) and writes",
+          "the result to OUTFILE.",
+          "  -h, --" + Daikon.help_SWITCH,
+          "      Display this usage message",
+          "  -o, --output FILE",
+          "      Write the merged declarations to FILE (required)");
+
+  /**
+   * Entry point for the MergeComparability program.
+   *
+   * @param args command-line arguments
+   */
+  public static void main(String[] args) {
+    try {
+      mainHelper(args);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
+    }
+  }
+
+  /**
+   * This does the work of {@link #main(String[])}, but it never calls System.exit (as
+   * Daikon.handleDaikonTerminationException does), so it is appropriate to be called
+   * programmatically.
+   *
+   * @param args command-line arguments, like those of {@link #main}
+   */
+  public static void mainHelper(String[] args) {
+    String outputFilename = null;
+
+    LongOpt[] longopts =
+        new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 'h'),
+          new LongOpt("output", LongOpt.REQUIRED_ARGUMENT, null, 'o'),
+        };
+    Getopt g = new Getopt("daikon.tools.MergeComparability", args, "ho:", longopts);
+    int c;
+    while ((c = g.getopt()) != -1) {
+      switch (c) {
+        case 'h':
+          System.out.println(usage);
+          throw new Daikon.NormalTermination();
+        case 'o':
+          if (outputFilename != null) {
+            throw new Daikon.UserError("Multiple output files supplied on command line");
+          }
+          outputFilename = Daikon.getOptarg(g);
+          break;
+        case '?':
+          // getopt() already printed an error
+          throw new Daikon.UserError(usage);
+        default:
+          throw new Daikon.UserError("getopt() returned " + c);
+      }
+    }
+
+    int fileIndex = g.getOptind();
+    if (outputFilename == null) {
+      throw new Daikon.UserError("No output file specified (use -o)" + lineSep + usage);
+    }
+    if (fileIndex == args.length) {
+      throw new Daikon.UserError("No input files specified" + lineSep + usage);
+    }
+
+    Map<String, DeclReader> declFiles = new LinkedHashMap<>();
+    for (int i = fileIndex; i < args.length; i++) {
+      declFiles.put(args[i], readDeclFile(args[i]));
+    }
+
+    // Merge before opening the output file, so that an inconsistency in the input files does not
+    // destroy an existing output file.
+    List<MergedPpt> merged = mergePpts(declFiles);
+    PrintWriter pw;
+    try {
+      pw = new PrintWriter(FilesPlume.newBufferedFileWriter(outputFilename));
+    } catch (IOException e) {
+      throw new Daikon.UserError(e, "Problem writing " + outputFilename);
+    }
+    try {
+      write(declFiles, merged, pw);
+    } finally {
+      pw.close();
+    }
+    // A PrintWriter does not throw exceptions, but records whether any write failed.
+    if (pw.checkError()) {
+      throw new Daikon.UserError("Problem writing " + outputFilename);
+    }
+  }
+
+  /**
+   * Reads a declaration file.
+   *
+   * @param filename the file to read
+   * @return the contents of the file
+   */
+  public static DeclReader readDeclFile(String filename) {
+    DeclReader result = new DeclReader(true);
+    try {
+      result.read(new File(filename));
+    } catch (IOException e) {
+      throw new Daikon.UserError(e, "Problem reading " + filename);
+    }
+    return result;
+  }
+
+  /**
+   * Parses an implicit comparability, such as "3" or "3[4]".
+   *
+   * @param ppt the program point declaration in which the comparability appears, used in error
+   *     messages
+   * @param var the variable whose comparability to parse; must have a comparability
+   * @return the base comparability followed by the comparabilities of the indices
+   */
+  static int[] parseComparability(DeclPpt ppt, DeclVarInfo var) {
+    String rep = var.comparability;
+    if (rep == null) {
+      throw new IllegalArgumentException("Variable " + var.name + " has no comparability");
+    }
+    try {
+      return VarComparabilityImplicit.parseComponents(rep);
+    } catch (IllegalArgumentException e) {
+      throw new Daikon.UserError(
+          e,
+          String.format(
+              "%s: program point %s: variable %s: malformed comparability \"%s\"",
+              ppt.filename, ppt.name, var.name, rep));
+    }
+  }
+
+  /**
+   * Formats a comparability as it is written in a declaration file.
+   *
+   * @param comparability the base comparability followed by the comparabilities of the indices
+   * @return the comparability, as written in a declaration file, such as "3" or "3[4]"
+   */
+  static String formatComparability(int[] comparability) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(comparability[0]);
+    for (int i = 1; i < comparability.length; i++) {
+      sb.append('[').append(comparability[i]).append(']');
+    }
+    return sb.toString();
+  }
+
+  // Merging
+
+  /**
+   * Merges the declaration files and writes the result.
+   *
+   * @param declFiles map from file name to the contents of that declaration file; must be non-empty
+   * @param pw where to write the merged declarations
+   */
+  public static void merge(Map<String, DeclReader> declFiles, PrintWriter pw) {
+    write(declFiles, mergePpts(declFiles), pw);
+  }
+
+  /**
+   * Merges the declaration files.
+   *
+   * @param declFiles map from file name to the contents of that declaration file; must be non-empty
+   * @return the merged program points, in the order they first appear in the declaration files
+   */
+  static List<MergedPpt> mergePpts(Map<String, DeclReader> declFiles) {
+    Map.Entry<String, DeclReader> first = declFiles.entrySet().iterator().next();
+    List<String> header = first.getValue().header;
+    for (Map.Entry<String, DeclReader> entry : declFiles.entrySet()) {
+      // A file without a var-comparability record uses implicit comparability.  Because every file
+      // uses implicit comparability, the var-comparability records need no consistency check.
+      String varComparability = findRecord(entry.getValue().header, "var-comparability");
+      if (varComparability != null && !varComparability.equals("var-comparability implicit")) {
+        throw new Daikon.UserError(
+            String.format(
+                "%s: \"%s\": only implicit comparability can be merged",
+                entry.getKey(), varComparability));
+      }
+      for (String keyword : new String[] {"decl-version", "input-language", "ListImplementors"}) {
+        String expected = findRecord(header, keyword);
+        String actual = findRecord(entry.getValue().header, keyword);
+        if (!Objects.equals(expected, actual)) {
+          throw new Daikon.UserError(
+              String.format(
+                  "Inconsistent headers: %s has \"%s\" but %s has \"%s\"",
+                  first.getKey(), expected, entry.getKey(), actual));
+        }
+      }
+    }
+
+    // Map from program point name to all its declarations, in order.
+    Map<String, List<DeclPpt>> pptDecls = new LinkedHashMap<>();
+    for (DeclReader declFile : declFiles.values()) {
+      for (DeclPpt ppt : declFile.ppts.values()) {
+        pptDecls.computeIfAbsent(ppt.name, k -> new ArrayList<>()).add(ppt);
+      }
+    }
+    List<MergedPpt> result = new ArrayList<>(pptDecls.size());
+    for (List<DeclPpt> decls : pptDecls.values()) {
+      result.add(new MergedPpt(decls));
+    }
+    mergeHierarchy(result);
+    return result;
+  }
+
+  /**
+   * Writes the merged declarations.
+   *
+   * @param declFiles map from file name to the contents of that declaration file; must be non-empty
+   * @param merged the merged program points, as returned by {@link #mergePpts}
+   * @param pw where to write the merged declarations
+   */
+  static void write(Map<String, DeclReader> declFiles, List<MergedPpt> merged, PrintWriter pw) {
+    pw.println("// Declarations written by daikon.tools.MergeComparability, merging:");
+    for (String filename : declFiles.keySet()) {
+      pw.println("//   " + filename);
+    }
+    pw.println();
+    for (String record : declFiles.values().iterator().next().header) {
+      pw.println(record);
+    }
+    pw.println();
+
+    for (MergedPpt ppt : merged) {
+      int[][] comparabilities = ppt.comparabilities();
+      for (String line : ppt.template.declHeaderLines) {
+        pw.println(line);
+      }
+      for (int v = 0; v < ppt.numVars; v++) {
+        DeclVarInfo var = ppt.templateVars.get(v);
+        String record = "comparability " + formatComparability(comparabilities[v]);
+        for (int j = 0; j < var.lines.size(); j++) {
+          String line = var.lines.get(j);
+          pw.println(j == var.comparabilityLine ? leadingWhitespace(line) + record : line);
+        }
+        if (var.comparabilityLine == -1) {
+          // Daikon treats a variable without a comparability record as having comparability -3,
+          // which might be the merged comparability of an unrelated variable.
+          String indent = (var.lines.size() > 1) ? leadingWhitespace(var.lines.get(1)) : "  ";
+          pw.println(indent + record);
+        }
+      }
+      pw.println();
+    }
+  }
+
+  /**
+   * Returns the whitespace at the beginning of a line.
+   *
+   * @param line a line
+   * @return the whitespace at the beginning of the line
+   */
+  private static String leadingWhitespace(String line) {
+    int i = 0;
+    while (i < line.length() && Character.isWhitespace(line.charAt(i))) {
+      i++;
+    }
+    return line.substring(0, i);
+  }
+
+  /**
+   * Returns the header record with the given keyword, or null if there is none.
+   *
+   * @param header the header records of a declaration file, as stored in {@link DeclReader#header}
+   * @param keyword the first token of a record, such as "decl-version"
+   * @return the header record with the given keyword, or null
+   */
+  private static @Nullable String findRecord(List<String> header, String keyword) {
+    for (String record : header) {
+      if (DeclReader.firstToken(record).equals(keyword)) {
+        return record;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Returns the records of a declaration other than its first line and its comparability record,
+   * with whitespace normalized outside of string literals, in sorted order. The flags in a "flags"
+   * record are also sorted, because their order is not significant.
+   *
+   * @param lines the lines of a declaration
+   * @param comparabilityLine the index in {@code lines} of the comparability record, or -1
+   * @return the records other than the first line and the comparability record
+   */
+  private static List<String> otherRecords(List<String> lines, int comparabilityLine) {
+    List<String> result = new ArrayList<>(lines.size());
+    for (int j = 1; j < lines.size(); j++) {
+      if (j != comparabilityLine) {
+        List<String> tokens = tokenizeRespectingQuotes(lines.get(j));
+        if (!tokens.isEmpty() && tokens.get(0).equals("flags")) {
+          Collections.sort(tokens.subList(1, tokens.size()));
+        }
+        result.add(String.join(" ", tokens));
+      }
+    }
+    Collections.sort(result);
+    return result;
+  }
+
+  /**
+   * Splits a record into whitespace-separated tokens. A string literal, which starts and ends with
+   * a double quote, is part of a token even if it contains whitespace. Within a string literal, a
+   * backslash escapes the next character.
+   *
+   * @param record a record, possibly with leading and trailing whitespace
+   * @return the tokens of the record; empty if the record is blank
+   */
+  public static List<String> tokenizeRespectingQuotes(String record) {
+    List<String> result = new ArrayList<>();
+    StringBuilder token = new StringBuilder();
+    boolean inString = false;
+    for (int i = 0; i < record.length(); i++) {
+      char ch = record.charAt(i);
+      if (inString) {
+        token.append(ch);
+        if (ch == '\\' && i + 1 < record.length()) {
+          token.append(record.charAt(++i));
+        } else if (ch == '"') {
+          inString = false;
+        }
+      } else if (Character.isWhitespace(ch)) {
+        if (token.length() > 0) {
+          result.add(token.toString());
+          token.setLength(0);
+        }
+      } else {
+        token.append(ch);
+        if (ch == '"') {
+          inString = true;
+        }
+      }
+    }
+    if (token.length() > 0) {
+      result.add(token.toString());
+    }
+    return result;
+  }
+
+  /**
+   * Throws an exception if two declarations of the same program point or variable have different
+   * records.
+   *
+   * @param what the program point or variable, used in the error message, such as "Program point
+   *     C.m():::ENTER"
+   * @param expected the records in {@code template}, as returned by {@link #otherRecords}
+   * @param actual the records in {@code ppt}, as returned by {@link #otherRecords}
+   * @param template the first declaration of the program point
+   * @param ppt another declaration of the program point
+   */
+  private static void checkSameRecords(
+      String what, List<String> expected, List<String> actual, DeclPpt template, DeclPpt ppt) {
+    if (actual.equals(expected)) {
+      return;
+    }
+    List<String> onlyExpected = new ArrayList<>(expected);
+    List<String> onlyActual = new ArrayList<>(actual);
+    for (String record : actual) {
+      onlyExpected.remove(record);
+    }
+    for (String record : expected) {
+      onlyActual.remove(record);
+    }
+    throw new Daikon.UserError(
+        String.format(
+            "%s has records %s in %s but %s in %s",
+            what, onlyExpected, template.filename, onlyActual, ppt.filename));
+  }
+
+  /**
+   * Makes a variable have the same comparability at related program points, as DynComp does (see
+   * {@code DCRuntime.merge_class_comparability}): if two variables are comparable at any exit point
+   * of a method, they are comparable at every exit point and at the entry point of that method; and
+   * if two variables are comparable at any entry or exit point of a class's methods, they are
+   * comparable at the class's OBJECT program point, and then at every exit point and entry point
+   * and at the class's CLASS program point. Variables are related by name.
+   *
+   * @param ppts the merged program points
+   */
+  static void mergeHierarchy(List<MergedPpt> ppts) {
+    // Map from class name to the program points of the class.
+    Map<String, ClassPpts> classes = new LinkedHashMap<>();
+    for (MergedPpt ppt : ppts) {
+      PptName name = new PptName(ppt.template.name);
+      String className = name.getFullClassName();
+      ClassPpts classPpts =
+          classes.computeIfAbsent((className == null) ? "" : className, k -> new ClassPpts());
+      if (name.isObjectInstanceSynthetic()) {
+        classPpts.objectPpt = ppt;
+      } else if (name.isClassStaticSynthetic()) {
+        classPpts.classPpt = ppt;
+      } else if (name.isEnterPoint() || name.isExitPoint()) {
+        MethodPpts methodPpts =
+            classPpts.methods.computeIfAbsent(
+                String.valueOf(name.getNameWithoutPoint()), k -> new MethodPpts());
+        if (name.isEnterPoint()) {
+          methodPpts.enterPpt = ppt;
+        } else {
+          methodPpts.exitPpts.add(ppt);
+        }
+      }
+    }
+
+    for (ClassPpts classPpts : classes.values()) {
+      MergedPpt objectPpt = classPpts.objectPpt;
+      for (MethodPpts methodPpts : classPpts.methods.values()) {
+        // DynComp computes a single comparability for all the exit points of a method.
+        List<MergedPpt> exitPpts = methodPpts.exitPpts;
+        if (!exitPpts.isEmpty()) {
+          MergedPpt firstExit = exitPpts.get(0);
+          for (MergedPpt exitPpt : exitPpts) {
+            firstExit.mergeFrom(exitPpt);
+          }
+          for (MergedPpt exitPpt : exitPpts) {
+            exitPpt.mergeFrom(firstExit);
+          }
+        }
+        MergedPpt enterPpt = methodPpts.enterPpt;
+        for (MergedPpt exitPpt : exitPpts) {
+          if (enterPpt != null) {
+            enterPpt.mergeFrom(exitPpt);
+          }
+          if (objectPpt != null) {
+            objectPpt.mergeFrom(exitPpt);
+          }
+        }
+        if (enterPpt != null && objectPpt != null) {
+          objectPpt.mergeFrom(enterPpt);
+        }
+      }
+      if (objectPpt != null) {
+        for (MethodPpts methodPpts : classPpts.methods.values()) {
+          for (MergedPpt exitPpt : methodPpts.exitPpts) {
+            exitPpt.mergeFrom(objectPpt);
+          }
+        }
+      }
+      for (MethodPpts methodPpts : classPpts.methods.values()) {
+        MergedPpt enterPpt = methodPpts.enterPpt;
+        if (enterPpt != null) {
+          // DynComp merges the OBJECT point into the exit point and then the exit point into the
+          // entry point, even for a method whose declarations have no exit point, such as one that
+          // never returns normally.
+          if (objectPpt != null) {
+            enterPpt.mergeFrom(objectPpt);
+          }
+          for (MergedPpt exitPpt : methodPpts.exitPpts) {
+            enterPpt.mergeFrom(exitPpt);
+          }
+        }
+      }
+      MergedPpt classPpt = classPpts.classPpt;
+      if (classPpt != null && objectPpt != null) {
+        classPpt.mergeFrom(objectPpt);
+      }
+    }
+  }
+
+  /** The program points of a class. */
+  private static final class ClassPpts {
+    /** The OBJECT program point, or null if there is none. */
+    @Nullable MergedPpt objectPpt;
+
+    /** The CLASS program point, or null if there is none. */
+    @Nullable MergedPpt classPpt;
+
+    /** Map from method name, without the point, to the program points of the method. */
+    final Map<String, MethodPpts> methods = new LinkedHashMap<>();
+
+    /** Creates a new ClassPpts with no program points. */
+    ClassPpts() {}
+  }
+
+  /** The program points of a method. */
+  private static final class MethodPpts {
+    /** The entry program point, or null if there is none. */
+    @Nullable MergedPpt enterPpt;
+
+    /** The exit program points. */
+    final List<MergedPpt> exitPpts = new ArrayList<>();
+
+    /** Creates a new MethodPpts with no program points. */
+    MethodPpts() {}
+  }
+
+  /**
+   * The comparabilities of the variables of a program point, merged from multiple declarations of
+   * the program point.
+   *
+   * <p>Each part of each variable's comparability (the base, and the index for each array
+   * dimension) is a "slot". A slot is universal if it is comparable to everything (negative) in
+   * some declaration, or if its variable is comparable to everything in some declaration, or if
+   * {@link #mergeFrom} makes it universal because a same-named variable is universal at a related
+   * program point. A slot that is universal in some declaration is not unioned with any
+   * non-universal slot, so a chain of comparabilities does not pass through it. A slot that {@link
+   * #mergeFrom} makes universal is not unioned with any further slot, but it keeps the unions that
+   * the declarations of this program point made before.
+   */
+  static final class MergedPpt {
+    /** The first declaration of the program point, which the output copies. */
+    final DeclPpt template;
+
+    /** The variables of {@link #template}, in order. */
+    final List<DeclVarInfo> templateVars;
+
+    /** The number of variables. */
+    final int numVars;
+
+    /**
+     * The number of parts of each variable's comparability: 1 plus the number of array dimensions.
+     * It is 0 for a variable that is comparable to everything in every declaration.
+     */
+    final int[] numParts;
+
+    /** slotStart[v] is the index of variable v's first slot. */
+    final int[] slotStart;
+
+    /** universalVar[v] is true if variable v is comparable to everything in some declaration. */
+    final boolean[] universalVar;
+
+    /** universal[s] is true if slot s is universal. */
+    final boolean[] universal;
+
+    /** Relates the non-universal slots that are comparable. */
+    final UnionFind comparable;
+
+    /**
+     * Relates the universal slots and variables that have the same negative comparability, which
+     * Daikon permits to be in the same equality set. Index s is slot s, and index {@code
+     * universal.length + v} is variable v.
+     */
+    final UnionFind sameNegative;
+
+    /**
+     * Merges the comparabilities in multiple declarations of the same program point.
+     *
+     * @param decls the declarations of one program point; must be non-empty
+     */
+    MergedPpt(List<DeclPpt> decls) {
+      template = decls.get(0);
+      templateVars = new ArrayList<>(template.vars.values());
+      numVars = templateVars.size();
+
+      // comparabilities.get(d)[v] is the parsed comparability of variable v in declaration d, or
+      // null if that variable has no comparability record in declaration d.
+      List<int[] @Nullable []> comparabilities = new ArrayList<>(decls.size());
+      // Check consistency and determine the number of parts of each variable's comparability.
+      numParts = new int[numVars];
+      universalVar = new boolean[numVars];
+      List<String> templateHeaderRecords = otherRecords(template.declHeaderLines, -1);
+      List<List<String>> templateVarRecords = new ArrayList<>(numVars);
+      for (DeclVarInfo var : templateVars) {
+        templateVarRecords.add(otherRecords(var.lines, var.comparabilityLine));
+      }
+      for (DeclPpt ppt : decls) {
+        boolean isTemplate = (ppt == template);
+        if (!isTemplate) {
+          checkSameRecords(
+              "Program point " + ppt.name,
+              templateHeaderRecords,
+              otherRecords(ppt.declHeaderLines, -1),
+              template,
+              ppt);
+        }
+        List<DeclVarInfo> vars = isTemplate ? templateVars : new ArrayList<>(ppt.vars.values());
+        if (vars.size() != numVars) {
+          throw new Daikon.UserError(
+              String.format(
+                  "Program point %s has %d variables in %s but %d variables in %s",
+                  ppt.name, numVars, template.filename, vars.size(), ppt.filename));
+        }
+        int[] @Nullable [] pptComparabilities = new int[numVars][];
+        for (int v = 0; v < numVars; v++) {
+          DeclVarInfo var = vars.get(v);
+          if (!isTemplate) {
+            DeclVarInfo expected = templateVars.get(v);
+            if (!var.name.equals(expected.name)) {
+              throw new Daikon.UserError(
+                  String.format(
+                      "Program point %s: variable %d is %s in %s but %s in %s",
+                      ppt.name, v + 1, expected.name, template.filename, var.name, ppt.filename));
+            }
+            checkSameRecords(
+                "Program point " + ppt.name + ": variable " + var.name,
+                templateVarRecords.get(v),
+                otherRecords(var.lines, var.comparabilityLine),
+                template,
+                ppt);
+          }
+          int @Nullable [] comparability =
+              (var.comparability == null) ? null : parseComparability(ppt, var);
+          pptComparabilities[v] = comparability;
+          // A scalar negative comparability, like the absence of a comparability, makes the
+          // variable comparable to everything, including variables with any number of array
+          // dimensions.
+          if (comparability == null || isScalarNegative(comparability)) {
+            universalVar[v] = true;
+            continue;
+          }
+          if (numParts[v] == 0) {
+            numParts[v] = comparability.length;
+          } else if (numParts[v] != comparability.length) {
+            throw new Daikon.UserError(
+                String.format(
+                    "Program point %s: variable %s has comparabilities with different numbers of"
+                        + " array dimensions, such as in %s",
+                    ppt.name, var.name, ppt.filename));
+          }
+        }
+        comparabilities.add(pptComparabilities);
+      }
+
+      slotStart = new int[numVars + 1];
+      for (int v = 0; v < numVars; v++) {
+        slotStart[v + 1] = slotStart[v] + numParts[v];
+      }
+      int numSlots = slotStart[numVars];
+
+      universal = new boolean[numSlots];
+      for (int[] @Nullable [] pptComparabilities : comparabilities) {
+        for (int v = 0; v < numVars; v++) {
+          int[] comparability = pptComparabilities[v];
+          for (int p = 0; p < numParts[v]; p++) {
+            if (universalVar[v] || (comparability != null && comparability[p] < 0)) {
+              universal[slotStart[v] + p] = true;
+            }
+          }
+        }
+      }
+
+      // Union the slots, or the variables, that have the same comparability within some
+      // declaration.
+      comparable = new UnionFind(numSlots);
+      sameNegative = new UnionFind(numSlots + numVars);
+      for (int[] @Nullable [] pptComparabilities : comparabilities) {
+        // Map from a non-negative comparability value to the first non-universal slot with that
+        // value, and from a negative comparability value to the first universal slot or variable
+        // with that value.
+        Map<Integer, Integer> representative = new HashMap<>();
+        for (int v = 0; v < numVars; v++) {
+          int[] comparability = pptComparabilities[v];
+          if (universalVar[v]) {
+            // An array comparability says nothing about the variable as a whole.
+            if (comparability == null) {
+              unionByValue(sameNegative, representative, MISSING_COMPARABILITY, numSlots + v);
+            } else if (isScalarNegative(comparability)) {
+              unionByValue(sameNegative, representative, comparability[0], numSlots + v);
+            }
+            continue;
+          }
+          assert comparability != null : "@AssumeAssertion(nullness): not universalVar[v]";
+          for (int p = 0; p < numParts[v]; p++) {
+            int slot = slotStart[v] + p;
+            if (!universal[slot]) {
+              unionByValue(comparable, representative, comparability[p], slot);
+            } else if (comparability[p] < 0) {
+              unionByValue(sameNegative, representative, comparability[p], slot);
+            }
+          }
+        }
+      }
+    }
+
+    /**
+     * Unions an element with the first element that has the same comparability value.
+     *
+     * @param uf the union-find structure in which to union
+     * @param representative map from a comparability value to the first element with that value;
+     *     side-effected
+     * @param value the comparability value of {@code element}
+     * @param element an element of {@code uf}
+     */
+    private static void unionByValue(
+        UnionFind uf, Map<Integer, Integer> representative, int value, int element) {
+      Integer rep = representative.putIfAbsent(value, element);
+      if (rep != null) {
+        uf.union(rep, element);
+      }
+    }
+
+    /**
+     * Makes comparable the non-universal slots of this program point whose same-named variables are
+     * comparable in {@code src}, and makes universal the variables and slots whose same-named
+     * variables are universal in {@code src}: a variable that is comparable to everything in {@code
+     * src} is comparable to every same-named variable. The comparabilities of {@code src} are
+     * unchanged.
+     *
+     * @param src another program point
+     */
+    void mergeFrom(MergedPpt src) {
+      int numSlots = universal.length;
+      int srcNumSlots = src.universal.length;
+      // Map from a root in src.comparable to the first slot of this with that root.
+      Map<Integer, Integer> representative = new HashMap<>();
+      // Map from a root in src.sameNegative to the first element of this with that root.
+      Map<Integer, Integer> negativeRepresentative = new HashMap<>();
+      for (int v = 0; v < numVars; v++) {
+        DeclVarInfo srcVar = src.template.vars.get(templateVars.get(v).name);
+        if (srcVar == null) {
+          continue;
+        }
+        int srcV = srcVar.index;
+        if (src.universalVar[srcV]) {
+          universalVar[v] = true;
+          unionByValue(
+              sameNegative,
+              negativeRepresentative,
+              src.sameNegative.find(srcNumSlots + srcV),
+              numSlots + v);
+          continue;
+        }
+        if (universalVar[v] || numParts[v] != src.numParts[srcV]) {
+          continue;
+        }
+        for (int p = 0; p < numParts[v]; p++) {
+          int slot = slotStart[v] + p;
+          int srcSlot = src.slotStart[srcV] + p;
+          if (src.universal[srcSlot]) {
+            universal[slot] = true;
+            unionByValue(
+                sameNegative, negativeRepresentative, src.sameNegative.find(srcSlot), slot);
+          } else if (!universal[slot]) {
+            unionByValue(comparable, representative, src.comparable.find(srcSlot), slot);
+          }
+        }
+      }
+    }
+
+    /**
+     * Returns the merged comparabilities. The equivalence classes of non-universal slots are
+     * numbered 1, 2, ..., and those of universal slots and variables are numbered -1, -2, ..., in
+     * order of first appearance.
+     *
+     * @return for each variable, its merged comparability, in the representation returned by {@link
+     *     #parseComparability}; a scalar negative comparability if some declaration has no
+     *     comparability or a scalar negative comparability for the variable
+     */
+    int[][] comparabilities() {
+      int numSlots = universal.length;
+      // positiveNumber[root] is the output comparability of the class of non-universal slots whose
+      // root in comparable is root, and negativeNumber[root] that of the class of universal slots
+      // and variables whose root in sameNegative is root; 0 if not yet assigned.  They are
+      // separate because mergeFrom can make universal a slot that comparable already relates to
+      // non-universal slots, so a slot can be a root in both.
+      int[] positiveNumber = new int[numSlots];
+      int[] negativeNumber = new int[numSlots + numVars];
+      int nextPositive = 1;
+      int nextNegative = -1;
+      int[][] result = new int[numVars][];
+      for (int v = 0; v < numVars; v++) {
+        if (universalVar[v]) {
+          // A negative comparability such as "-1[-1]" would not be comparable to scalars.
+          int root = sameNegative.find(numSlots + v);
+          if (negativeNumber[root] == 0) {
+            negativeNumber[root] = nextNegative--;
+          }
+          result[v] = new int[] {negativeNumber[root]};
+          continue;
+        }
+        result[v] = new int[numParts[v]];
+        for (int p = 0; p < numParts[v]; p++) {
+          int slot = slotStart[v] + p;
+          if (universal[slot]) {
+            int root = sameNegative.find(slot);
+            if (negativeNumber[root] == 0) {
+              negativeNumber[root] = nextNegative--;
+            }
+            result[v][p] = negativeNumber[root];
+          } else {
+            int root = comparable.find(slot);
+            if (positiveNumber[root] == 0) {
+              positiveNumber[root] = nextPositive++;
+            }
+            result[v][p] = positiveNumber[root];
+          }
+        }
+      }
+      return result;
+    }
+  }
+
+  /**
+   * The comparability that Daikon uses for a variable that has no comparability record; see {@code
+   * VarComparabilityImplicit.unknown}.
+   */
+  private static final int MISSING_COMPARABILITY = -3;
+
+  /**
+   * Returns true if the comparability is a scalar negative comparability, which makes a variable
+   * comparable to everything.
+   *
+   * @param comparability a comparability, in the representation returned by {@link
+   *     #parseComparability}
+   * @return true if the comparability is a scalar negative comparability
+   */
+  private static boolean isScalarNegative(int[] comparability) {
+    return comparability.length == 1 && comparability[0] < 0;
+  }
+}

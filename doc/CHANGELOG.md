@@ -28,6 +28,8 @@ Further documentation can be found in:
    with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
+* New tool `daikon.tools.MergeComparability` merges the comparability
+  information from multiple runs of DynComp.
 * Chicory's `--comparability-file` command-line option accepts any version
    2.0 declaration file, such as one written by Chicory, rather than only one
    written by DynComp.  A variable with no `comparability` record is
