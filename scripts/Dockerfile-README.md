@@ -51,15 +51,12 @@ To create all the Docker images and upload them to Docker Hub, run, from
 this directory (`scripts/`):
 
 ```sh
-make -k docker-images && git push
+make docker-images && git push
 ```
 
 The Makefile builds the images one at a time, even if you pass `-j`,
 because building them in parallel can exhaust memory, disk space, or Docker
-Hub rate limits.  `-k` continues after a failure, so a
-single run builds and uploads every image that can be built and reports
-every failure.  If any image fails, `git push` does not run; fix the problem
-and re-run the command, which rebuilds and re-uploads all the images.
+Hub rate limits.
 
 To create and upload one image, run, for example:
 
