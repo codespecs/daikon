@@ -72,8 +72,8 @@ docker-images: ${DOCKER_IMAGES}
 .NOTPARALLEL: docker-images
 
 # The Dockerfiles copy no files into the image, so build with no context.
-# --pull and --no-cache ensure that the image contains the latest base image
-# and packages, rather than stale cached layers.
+# --pull ensures that the image uses the latest base image.  Docker reuses
+# cached layers, so re-running is fast when nothing has changed.
 # The image must match the committed Dockerfile, which make might have just
 # regenerated from the .m4 files.  "git diff" does not report an untracked
 # file, such as a Dockerfile for a JDK version just added to DOCKERFILE_JDKS,
@@ -81,7 +81,7 @@ docker-images: ${DOCKER_IMAGES}
 ${DOCKER_IMAGES}: docker-image-%: Dockerfile-%
 	git ls-files --error-unmatch -- $< > /dev/null 2>&1 || { echo "$< is not committed; commit it first" >&2; exit 1; }
 	git diff --quiet HEAD -- $< || { echo "$< differs from the committed version; commit it first" >&2; exit 1; }
-	docker -l warn build --pull --no-cache --progress=plain -t ${DOCKER_IMAGE} - < $<
+	docker -l warn build --pull --progress=plain -t ${DOCKER_IMAGE} - < $<
 	docker -l warn push --quiet ${DOCKER_IMAGE}
 
 ## Delegation to other Makefiles (gross)

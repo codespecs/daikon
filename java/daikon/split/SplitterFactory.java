@@ -198,11 +198,22 @@ public class SplitterFactory {
       } catch (ParseException | TokenMgrError e) {
         // TokenMgrError indicates a lexical error in the condition.
         // load_splitters prints the error.
+        String message = e.getMessage();
         splitObj.setError(
             String.join(
                 System.lineSeparator(),
                 "Error in SplitterFactory while writing splitter java file for:",
-                splitObj.condition() + " cannot be parsed:",
+                splitObj.condition() + " cannot be parsed or translated:",
+                message != null ? message : e.toString()));
+        continue;
+      } catch (RuntimeException e) {
+        // A bug in translating this condition must not prevent the other splitters from loading.
+        debug.fine(e.toString());
+        splitObj.setError(
+            String.join(
+                System.lineSeparator(),
+                "Error in SplitterFactory while writing splitter java file for:",
+                splitObj.condition() + " cannot be translated:",
                 e.toString()));
         continue;
       }

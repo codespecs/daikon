@@ -2438,6 +2438,15 @@ is intended to operate.)  The automatically generated Splitter source
 code fails to compile (but Daikon proceeds without it) if a variable
 name in a condition is not found at the matching program point.
 
+In a condition, an array may represent the array's identity (if it is
+compared with @code{==} or @code{!=}) or its elements (if it is indexed,
+its @code{length} is used, or it is passed to a method).  The elements are
+represented as an array of @code{long}, @code{double}, or @code{String}.
+For example, in @samp{a == b} the arrays are compared by identity, and in
+@samp{Quant.noDups(a)} the elements of @code{a} are passed to
+@code{Quant.noDups}.  A condition that uses the elements of an array is
+untranslatable at a program point that has no variable for those elements.
+
 An indented lines beginning with @samp{DAIKON_FORMAT},
 @samp{JAVA_FORMAT}, @samp{ESC_FORMAT}, or @samp{SIMPLIFY_FORMAT}
 @c UNDONE is there a @samp{CSHARPCONTRACT_FORMAT}?
