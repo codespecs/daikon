@@ -7055,8 +7055,12 @@ multiple declaration files into a single declaration file.  It is
 typically used when you have run DynComp (@pxref{DynComp for Java} or
 @ref{DynComp for C/C++}) multiple times, such as on different test
 inputs, and you want a single comparability file that reflects all of
-the runs.  The output can be passed to Chicory's
-@option{--comparability-file} option or to Daikon.
+the runs.  For the output of DynComp for Java, pass the merged file to
+Chicory's @option{--comparability-file} option (@pxref{DynComp for
+Java}); as with any DynComp for Java output, passing it directly to
+Daikon leads to a declaration format error.  For the output of DynComp
+for C/C++, pass the merged @file{.decls} file to Daikon, along with the
+@file{.dtrace} files (@pxref{DynComp for C/C++}).
 
 @command{MergeComparability} is invoked as follows:
 @example
