@@ -5,6 +5,9 @@
 # The including Makefile locates this file via $(lastword $(MAKEFILE_LIST)),
 # so its include line must precede any other include in that Makefile.
 
+# The tests/ directory, ending in "/".  It is used to include Makefile.results.
+DAIKON_TESTS_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+
 # To produce incremental output, invoke make as: make MPARG=-Otarget ...
 ifeq (4.0,$(firstword $(sort ${MAKE_VERSION} 4.0)))
   # Version 4.0 or higher
@@ -14,7 +17,7 @@ else
 endif
 
 ifndef PLUME_SCRIPTS
-  PLUME_SCRIPTS := $(or ${DAIKONDIR},$(realpath $(dir $(lastword $(MAKEFILE_LIST)))..))/.utils/plume-scripts
+  PLUME_SCRIPTS := $(or ${DAIKONDIR},$(realpath ${DAIKON_TESTS_DIR}..))/.utils/plume-scripts
 endif
 
 # DAIKON_TEST_JOBS is the number of tests to run in parallel.
