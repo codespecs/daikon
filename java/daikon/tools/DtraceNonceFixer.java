@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
 import java.nio.file.AtomicMoveNotSupportedException;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -43,11 +42,10 @@ public class DtraceNonceFixer {
       StringsPlume.joinLines(
           "Usage: DtraceNonceFixer FILENAME [OUTFILE]",
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
-          "Output file FILENAME_fixed renumbers the nonces of concatenated dtrace files",
-          "so that they do not collide.  Output file FILENAME_all_fixed also gives a nonce",
-          "to each sample that lacks one, other than an ENTER, EXIT, or THROWS sample.",
-          "If OUTFILE is supplied, the output that FILENAME_all_fixed would contain",
-          "is written to OUTFILE instead, and no other output file remains.",
+          "It renumbers the nonces of concatenated dtrace files so that they do not collide,",
+          "and it gives a nonce to each sample that lacks one, other than an ENTER, EXIT, or",
+          "THROWS sample.  The result is written to OUTFILE, which defaults to",
+          "FILENAME_all_fixed (plus \".gz\" if FILENAME ends with \".gz\").",
           "OUTFILE may be the same as FILENAME.");
 
   public static void main(String[] args) {
@@ -62,83 +60,63 @@ public class DtraceNonceFixer {
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called programmatically.
    *
-   * @param args command-line arguments: a single dtrace file, or {@code -h} or {@code --help}
+   * @param args command-line arguments: a dtrace file and an optional output file, or {@code -h} or
+   *     {@code --help}
    */
   public static void mainHelper(final String[] args) {
     String[] files = DaikonGetopt.nonOptionArgs(args, usage);
     if (files.length != 1 && files.length != 2) {
       throw new daikon.Daikon.UserError(usage);
     }
+    String infileName = files[0];
+    String outfileName =
+        (files.length == 2)
+            ? files[1]
+            : infileName + "_all_fixed" + (infileName.endsWith(".gz") ? ".gz" : "");
 
     try {
-      if (files.length == 1) {
-        String suffix = files[0].endsWith(".gz") ? ".gz" : "";
-        String fixedFilename = files[0] + "_fixed" + suffix;
-        // First pass: renumber the nonces of each concatenated file after the first.
-        int maxNonce = renumberNonces(files[0], fixedFilename);
-        // Second pass: give a new nonce to each sample that lacks one, such as an OBJECT or CLASS
-        // sample.
-        addMissingNonces(fixedFilename, files[0] + "_all_fixed" + suffix, maxNonce);
-      } else {
-        // The temporary files are in OUTFILE's directory, so that the final move can be atomic,
-        // and have fresh names so that they overwrite no existing file.  OUTFILE is not opened
-        // for writing, so if this program fails, OUTFILE (which may be the input) is unchanged.
-        // If OUTFILE is a symbolic link, the file that it refers to is replaced.
-        Path outfile = Path.of(files[1]).toAbsolutePath();
-        if (Files.exists(outfile)) {
-          outfile = outfile.toRealPath();
-        } else if (Files.isSymbolicLink(outfile)) {
-          throw new daikon.Daikon.UserError(
-              "OUTFILE is a symbolic link that does not refer to an existing file: " + files[1]);
-        }
-        Path dir = castNonNull(outfile.getParent()); // an absolute file path has a parent
-        String prefix = outfile.getFileName() + "-";
-        String suffix = files[1].endsWith(".gz") ? ".gz" : "";
-        // The intermediate file is not compressed, because it is deleted.
-        Path tmpFile = createFreshFile(dir, prefix, "-fixed");
+      // The temporary files are in the output file's directory, so that the final move can be
+      // atomic, and have fresh names so that they overwrite no existing file.  The output file is
+      // not opened for writing, so if this program fails, the output file (which may be the input)
+      // is unchanged.  If the output file is a symbolic link, the file that it refers to is
+      // replaced.
+      Path outfile = Path.of(outfileName).toAbsolutePath();
+      if (Files.exists(outfile)) {
+        outfile = outfile.toRealPath();
+      } else if (Files.isSymbolicLink(outfile)) {
+        throw new daikon.Daikon.UserError(
+            "Output file is a symbolic link that does not refer to an existing file: "
+                + outfileName);
+      }
+      Path dir = castNonNull(outfile.getParent()); // an absolute file path has a parent
+      String prefix = outfile.getFileName() + "-";
+      String suffix = outfileName.endsWith(".gz") ? ".gz" : "";
+      // Unlike Files.createTempFile, which makes the file readable only by its owner,
+      // FilesPlume.createTempFile gives the file the default permissions (which depend on the
+      // umask).  The intermediate file is not compressed, because it is deleted.
+      Path tmpFile = FilesPlume.createTempFile(dir, prefix, "-fixed");
+      try {
+        Path tmpOutFile = FilesPlume.createTempFile(dir, prefix, "-all-fixed" + suffix);
         try {
-          Path tmpOutFile = createFreshFile(dir, prefix, "-all-fixed" + suffix);
-          try {
-            // First pass: renumber the nonces of each concatenated file after the first.
-            int maxNonce = renumberNonces(files[0], tmpFile.toString());
-            // Second pass: give a new nonce to each sample that lacks one, such as an OBJECT or
-            // CLASS sample.
-            addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
-            // Delete before replacing OUTFILE, so that no failure occurs after OUTFILE changes.
-            Files.delete(tmpFile);
-            replaceFile(tmpOutFile, outfile);
-          } catch (Throwable e) {
-            deleteAfterFailure(tmpOutFile, e);
-            throw e;
-          }
+          // First pass: renumber the nonces of each concatenated file after the first.
+          int maxNonce = renumberNonces(infileName, tmpFile.toString());
+          // Second pass: give a new nonce to each sample that lacks one, such as an OBJECT or
+          // CLASS sample.
+          addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
+          // Delete before replacing the output file, so that no failure occurs after the output
+          // file changes.
+          Files.delete(tmpFile);
+          replaceFile(tmpOutFile, outfile);
         } catch (Throwable e) {
-          deleteAfterFailure(tmpFile, e);
+          deleteAfterFailure(tmpOutFile, e);
           throw e;
         }
+      } catch (Throwable e) {
+        deleteAfterFailure(tmpFile, e);
+        throw e;
       }
     } catch (IOException e) {
       throw new UncheckedIOException(e);
-    }
-  }
-
-  /**
-   * Creates a new, empty file whose name does not conflict with any existing file. Unlike {@link
-   * Files#createTempFile}, which makes the file readable only by its owner, this method gives the
-   * file the default permissions (which depend on the umask).
-   *
-   * @param dir the directory in which to create the file
-   * @param prefix the start of the file name
-   * @param suffix the end of the file name
-   * @return the new file
-   * @throws IOException if there is trouble creating the file
-   */
-  private static Path createFreshFile(Path dir, String prefix, String suffix) throws IOException {
-    for (int i = 0; ; i++) {
-      try {
-        return Files.createFile(dir.resolve(prefix + i + suffix));
-      } catch (FileAlreadyExistsException e) {
-        // Try the next name.
-      }
     }
   }
 
@@ -165,6 +143,7 @@ public class DtraceNonceFixer {
    * @param target the file to replace
    * @throws IOException if there is trouble moving the file
    */
+  // TODO: When Daikon uses a version of plume-util that has FilesP.replaceFile, use it instead.
   private static void replaceFile(Path source, Path target) throws IOException {
     if (Files.exists(target)) {
       try {

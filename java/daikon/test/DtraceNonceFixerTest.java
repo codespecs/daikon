@@ -95,6 +95,10 @@ public class DtraceNonceFixerTest {
     assertEquals(DECLS + expectedSamples, actual);
     // The input file is unchanged.
     assertEquals(DECLS + samples, Files.readString(in, UTF_8));
+    // No temporary file remains.
+    try (Stream<Path> files = Files.list(dir)) {
+      assertEquals(2, files.count());
+    }
   }
 
   /**
