@@ -508,6 +508,12 @@ public final class MergeComparability {
       for (MethodPpts methodPpts : classPpts.methods.values()) {
         MergedPpt enterPpt = methodPpts.enterPpt;
         if (enterPpt != null) {
+          // DynComp merges the OBJECT point into the exit point and then the exit point into the
+          // entry point, even for a method whose declarations have no exit point, such as one that
+          // never returns normally.
+          if (objectPpt != null) {
+            enterPpt.mergeFrom(objectPpt);
+          }
           for (MergedPpt exitPpt : methodPpts.exitPpts) {
             enterPpt.mergeFrom(exitPpt);
           }
@@ -553,9 +559,12 @@ public final class MergeComparability {
    *
    * <p>Each part of each variable's comparability (the base, and the index for each array
    * dimension) is a "slot". A slot is universal if it is comparable to everything (negative) in
-   * some declaration, or if its variable is comparable to everything in some declaration. A
-   * universal slot is not unioned with any non-universal slot, so a chain of comparabilities does
-   * not pass through it.
+   * some declaration, or if its variable is comparable to everything in some declaration, or if
+   * {@link #mergeFrom} makes it universal because a same-named variable is universal at a related
+   * program point. A slot that is universal in some declaration is not unioned with any
+   * non-universal slot, so a chain of comparabilities does not pass through it. A slot that {@link
+   * #mergeFrom} makes universal is not unioned with any further slot, but it keeps the unions that
+   * the declarations of this program point made before.
    */
   static final class MergedPpt {
     /** The first declaration of the program point, which the output copies. */
@@ -741,26 +750,46 @@ public final class MergeComparability {
 
     /**
      * Makes comparable the non-universal slots of this program point whose same-named variables are
-     * comparable in {@code src}. The comparabilities of {@code src} are unchanged.
+     * comparable in {@code src}, and makes universal the variables and slots whose same-named
+     * variables are universal in {@code src}: a variable that is comparable to everything in {@code
+     * src} is comparable to every same-named variable. The comparabilities of {@code src} are
+     * unchanged.
      *
      * @param src another program point
      */
     void mergeFrom(MergedPpt src) {
+      int numSlots = universal.length;
+      int srcNumSlots = src.universal.length;
       // Map from a root in src.comparable to the first slot of this with that root.
       Map<Integer, Integer> representative = new HashMap<>();
+      // Map from a root in src.sameNegative to the first element of this with that root.
+      Map<Integer, Integer> negativeRepresentative = new HashMap<>();
       for (int v = 0; v < numVars; v++) {
         DeclVarInfo srcVar = src.template.vars.get(templateVars.get(v).name);
         if (srcVar == null) {
           continue;
         }
         int srcV = srcVar.index;
-        if (universalVar[v] || src.universalVar[srcV] || numParts[v] != src.numParts[srcV]) {
+        if (src.universalVar[srcV]) {
+          universalVar[v] = true;
+          unionByValue(
+              sameNegative,
+              negativeRepresentative,
+              src.sameNegative.find(srcNumSlots + srcV),
+              numSlots + v);
+          continue;
+        }
+        if (universalVar[v] || numParts[v] != src.numParts[srcV]) {
           continue;
         }
         for (int p = 0; p < numParts[v]; p++) {
           int slot = slotStart[v] + p;
           int srcSlot = src.slotStart[srcV] + p;
-          if (!universal[slot] && !src.universal[srcSlot]) {
+          if (src.universal[srcSlot]) {
+            universal[slot] = true;
+            unionByValue(
+                sameNegative, negativeRepresentative, src.sameNegative.find(srcSlot), slot);
+          } else if (!universal[slot]) {
             unionByValue(comparable, representative, src.comparable.find(srcSlot), slot);
           }
         }
@@ -778,11 +807,13 @@ public final class MergeComparability {
      */
     int[][] comparabilities() {
       int numSlots = universal.length;
-      // classNumber[root] is the output comparability of the class whose root is root, or 0 if not
-      // yet assigned.  The roots of comparable and of sameNegative are disjoint, because
-      // comparable relates only non-universal slots and sameNegative relates only universal slots
-      // and variables.
-      int[] classNumber = new int[numSlots + numVars];
+      // positiveNumber[root] is the output comparability of the class of non-universal slots whose
+      // root in comparable is root, and negativeNumber[root] that of the class of universal slots
+      // and variables whose root in sameNegative is root; 0 if not yet assigned.  They are
+      // separate because mergeFrom can make universal a slot that comparable already relates to
+      // non-universal slots, so a slot can be a root in both.
+      int[] positiveNumber = new int[numSlots];
+      int[] negativeNumber = new int[numSlots + numVars];
       int nextPositive = 1;
       int nextNegative = -1;
       int[][] result = new int[numVars][];
@@ -790,10 +821,10 @@ public final class MergeComparability {
         if (universalVar[v]) {
           // A negative comparability such as "-1[-1]" would not be comparable to scalars.
           int root = sameNegative.find(numSlots + v);
-          if (classNumber[root] == 0) {
-            classNumber[root] = nextNegative--;
+          if (negativeNumber[root] == 0) {
+            negativeNumber[root] = nextNegative--;
           }
-          result[v] = new int[] {classNumber[root]};
+          result[v] = new int[] {negativeNumber[root]};
           continue;
         }
         result[v] = new int[numParts[v]];
@@ -801,16 +832,16 @@ public final class MergeComparability {
           int slot = slotStart[v] + p;
           if (universal[slot]) {
             int root = sameNegative.find(slot);
-            if (classNumber[root] == 0) {
-              classNumber[root] = nextNegative--;
+            if (negativeNumber[root] == 0) {
+              negativeNumber[root] = nextNegative--;
             }
-            result[v][p] = classNumber[root];
+            result[v][p] = negativeNumber[root];
           } else {
             int root = comparable.find(slot);
-            if (classNumber[root] == 0) {
-              classNumber[root] = nextPositive++;
+            if (positiveNumber[root] == 0) {
+              positiveNumber[root] = nextPositive++;
             }
-            result[v][p] = classNumber[root];
+            result[v][p] = positiveNumber[root];
           }
         }
       }

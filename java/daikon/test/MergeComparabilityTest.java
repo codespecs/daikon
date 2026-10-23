@@ -321,10 +321,30 @@ public class MergeComparabilityTest {
             namedPpt("C.m():::ENTER", "1", "1"),
             namedPpt("C.m():::EXIT1", "1", "1", "1"),
             namedPpt("C.m():::EXIT2", "1", "1", "1"),
-            // Comparability flows to an entry point only from the exit points of its method.
-            namedPpt("C.n():::ENTER", "1", "2"),
+            // C.n() has no exit point, but as in DynComp, comparability flows to its entry point
+            // from the OBJECT point.  D is a different class.
+            namedPpt("C.n():::ENTER", "1", "1"),
             namedPpt("D.m():::ENTER", "1", "2")),
         merge(a, b));
+  }
+
+  /**
+   * A variable that is comparable to everything at an exit point is comparable to everything at the
+   * entry point, as are the same-named variables at the other exit points.
+   */
+  @Test
+  public void testHierarchyUniversal() {
+    List<String> a =
+        file(
+            namedPpt("C.m():::ENTER", "1", "2"),
+            namedPpt("C.m():::EXIT1", "-1", "2"),
+            namedPpt("C.m():::EXIT2", "1", "2"));
+    assertEquals(
+        expected(
+            namedPpt("C.m():::ENTER", "-1", "1"),
+            namedPpt("C.m():::EXIT1", "-1", "1"),
+            namedPpt("C.m():::EXIT2", "-1", "1")),
+        merge(a, a));
   }
 
   /** Comparability does not flow from a CLASS program point to the OBJECT program point. */
@@ -584,6 +604,20 @@ public class MergeComparabilityTest {
       MergeComparability.mainHelper(new String[] {"-o", output.toString(), a.toString()});
       List<String> merged = Files.readAllLines(output);
       assertTrue(merged.contains("  comparability 1"));
+      // Two compatible files are merged:  c and d are comparable only in the second file.
+      Path c = dir.resolve("c.decls-DynComp");
+      Files.write(c, file(ppt("2", "3")));
+      Path d = dir.resolve("d.decls-DynComp");
+      Files.write(d, file(ppt("4", "4")));
+      Path cdOutput = dir.resolve("cd.decls-DynComp");
+      MergeComparability.mainHelper(
+          new String[] {"-o", cdOutput.toString(), c.toString(), d.toString()});
+      List<String> cdMerged = Files.readAllLines(cdOutput);
+      assertEquals(
+          cdMerged.toString(),
+          2,
+          cdMerged.stream().filter(line -> line.equals("  comparability 1")).count());
+      assertTrue(cdMerged.toString(), cdMerged.contains("//   " + d));
       assertThrows(
           Daikon.UserError.class,
           () ->
