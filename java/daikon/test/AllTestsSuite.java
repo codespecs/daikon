@@ -21,6 +21,7 @@ import org.junit.runners.Suite;
   daikon.test.diff.UnionVisitorTester.class,
   daikon.test.diff.XorVisitorTester.class,
   daikon.test.DtraceDiffTester.class,
+  daikon.test.DtraceNonceFixerTest.class,
   daikon.test.InvariantFormatTester.class,
   daikon.test.inv.InvariantAddAndCheckTester.class,
   daikon.test.inv.InvariantTester.class,
@@ -34,6 +35,7 @@ import org.junit.runners.Suite;
   daikon.test.SampleTester.class,
   daikon.test.split.FileCompilerTest.class,
   daikon.test.split.NullComparisonsSplitterTest.class,
+  daikon.test.split.SplitterFactoryFileNameTest.class,
   daikon.test.split.SplitterLoadTest.class,
   daikon.test.TestAnnotate.class,
   daikon.test.TestAst.class,
@@ -41,6 +43,7 @@ import org.junit.runners.Suite;
   daikon.test.TestQuant.class,
   daikon.test.TraceSelectTest.class,
   daikon.test.VarComparabilityTest.class,
+  daikon.test.VarDefinitionBoundTest.class,
   daikon.test.VarInfoAuxTest.class,
   daikon.test.VarInfoNameTest.class,
   // daikon.test.split.SplitterFactoryTest is not in this suite, because it is generated after the
