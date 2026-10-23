@@ -286,10 +286,9 @@ public class SplitterFactory {
    * @throws IOException if there is a problem reading a file
    */
   private static String compileFiles(List<String> fileNames) throws IOException {
-    // We delay setting fileCompiler until now because we want to permit
-    // the user to set the dkconfig_compiler variable.  Note that
-    // dkconfig_compile_timeout is specified in seconds, but the parameter to FileCompiler
-    // is specified in milliseconds.
+    // We delay setting fileCompiler until now because we want to permit the user to set the
+    // dkconfig_compiler variable.  Note that dkconfig_compile_timeout is specified in seconds, but
+    // the parameter to FileCompiler is specified in milliseconds.
     if (fileCompiler == null) {
       fileCompiler = new FileCompiler(dkconfig_compiler, 1000 * (long) dkconfig_compile_timeout);
     }
