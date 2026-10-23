@@ -5,6 +5,7 @@ package daikon.chicory;
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
 
 import daikon.Chicory;
+import daikon.Daikon;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -18,6 +19,7 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Member;
 import java.net.URL;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -121,13 +123,20 @@ public class ChicoryPremain {
     Runtime.ppt_select_pattern = Chicory.ppt_select_pattern;
     Runtime.sample_start = Chicory.sample_start;
     DaikonVariableInfo.std_visibility = Chicory.std_visibility;
+    DaikonVariableInfo.no_method_calls = Chicory.no_method_calls;
     DaikonVariableInfo.debug_vars.enabled = Chicory.debug_decl_print;
     if (Chicory.comparability_file != null) {
       Runtime.comp_info = new DeclReader();
       try {
         castNonNull(Runtime.comp_info).read(castNonNull(Chicory.comparability_file));
-      } catch (FileNotFoundException e) {
+      } catch (FileNotFoundException | NoSuchFileException e) {
         System.err.printf("%nCould not find comparability file: %s%n", Chicory.comparability_file);
+        Runtime.chicoryLoaderInstantiationError = true;
+        System.exit(1);
+      } catch (IOException | Daikon.UserError e) {
+        System.err.printf(
+            "%nProblem reading comparability file %s: %s%n",
+            Chicory.comparability_file, (e.getMessage() != null) ? e.getMessage() : e.toString());
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }
