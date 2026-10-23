@@ -2423,6 +2423,15 @@ is intended to operate.)  The automatically generated Splitter source
 code fails to compile (but Daikon proceeds without it) if a variable
 name in a condition is not found at the matching program point.
 
+In a condition, an array may represent the array's identity (if it is
+compared with @code{==} or @code{!=}) or its elements (if it is indexed,
+its @code{length} is used, or it is passed to a method).  The elements are
+represented as an array of @code{long}, @code{double}, or @code{String}.
+For example, in @samp{a == b} the arrays are compared by identity, and in
+@samp{Quant.noDups(a)} the elements of @code{a} are passed to
+@code{Quant.noDups}.  A condition that uses the elements of an array is
+untranslatable at a program point that has no variable for those elements.
+
 An indented lines beginning with @samp{DAIKON_FORMAT},
 @samp{JAVA_FORMAT}, @samp{ESC_FORMAT}, or @samp{SIMPLIFY_FORMAT}
 @c UNDONE is there a @samp{CSHARPCONTRACT_FORMAT}?
@@ -2788,6 +2797,10 @@ The @var{daikon_options} are the same options that can be provided to the
 
 The @var{options} for @command{TraceSelect} are:
 @table @option
+
+@item -SEED @var{n}
+Use the integer @var{n} as the seed for random selection, so that repeated
+runs select the same samples.
 
 @item -NOCLEAN
 Don't delete the temporary trace samples created by the random
@@ -8712,7 +8725,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  fd Linux's GNUC mkdir tmp gunzip xf li dkconfig CreateSpinfo
 @c  LocalWords:  ParameterDoclet CreateSpinfoC un biconditional addAll isFull
 @c  LocalWords:  smallexample simpleStack currentSize jtb ParseException kmeans
-@c  LocalWords:  runcluster xm ALG xmeans TraceSelect NOCLEAN DIFFS MergeESC pp
+@c  LocalWords:  runcluster xm ALG xmeans TraceSelect NOCLEAN DIFFS SEED MergeESC pp
 @c  LocalWords:  escannotated jmlannotated dbcannotated Annnotate xml INVINFO
 @c  LocalWords:  ubs Throwable throwable rethrown WriteViolationFile MyProg
 @c  LocalWords:  callMethod isInstrumented getInvariants INVS ijmp exin wp
