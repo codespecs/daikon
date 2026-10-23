@@ -6,7 +6,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import daikon.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import junit.framework.*;
 import org.junit.Test;
 
@@ -72,6 +74,22 @@ public final class TestQuant {
         new int[] {-1, 2, 3, 4, 5});
     assert_arrays_equals(
         Quant.concat(new int[] {-1, 2, 3, 4}, new int[] {5}), new int[] {-1, 2, 3, 4, 5});
+  }
+
+  @Test
+  public void test_getElement() {
+    int[] a = new int[] {10, 20, 30};
+    assertEquals(20, Quant.getElement_int(a, 1));
+    assertEquals(Integer.MAX_VALUE, Quant.getElement_int(a, -1));
+    assertEquals(Integer.MAX_VALUE, Quant.getElement_int(a, 3));
+    assertEquals(Integer.MAX_VALUE, Quant.getElement_int((int[]) null, 0));
+    Object o = a;
+    assertEquals(30, Quant.getElement_int(o, 2));
+    assertEquals(Integer.MAX_VALUE, Quant.getElement_int(o, 3));
+    List<String> list = new ArrayList<>(Arrays.asList("x", "y"));
+    assertEquals("y", Quant.getElement_String(list, 1));
+    assertNull(Quant.getElement_String(list, 2));
+    assertNull(Quant.getElement_Object(new Object[] {"x"}, -1));
   }
 
   @Test
