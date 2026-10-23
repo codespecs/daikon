@@ -83,11 +83,11 @@ class NullReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Replaces instances of "null" with "0" (see class description).
+   * Replaces instances of {@code null} with {@code 0} (see class description).
    *
    * @param expression a valid java expression, whose variables have their compilable names
    * @param varInfos the VarInfos of the variables that may appear in the expression
-   * @return expression with instances of null replaced by instances of "0"
+   * @return expression with instances of null replaced by instances of {@code 0}
    * @throws ParseException if expression is not a valid java expression
    */
   public static String replaceNull(String expression, VarInfo[] varInfos) throws ParseException {
@@ -246,7 +246,7 @@ class NullReplacer extends DepthFirstVisitor {
   /**
    * This method should not be directly used by user of this class; however it must be public to
    * fulfill the visitor interface. If n represents a null that stands for a hashcode, then it is
-   * replaced by "0".
+   * replaced by {@code 0}.
    */
   @Override
   public void visit(NodeToken n) {
