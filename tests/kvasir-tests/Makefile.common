@@ -1,10 +1,13 @@
 # This is a -*- makefile -*-, Emacs.
 
+# The directory containing this file.  Makefile.jdk is found relative to it,
+# not via DAIKONDIR, which may name a different Daikon tree.
+THIS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 # DAIKONDIR is the clone of the 'daikon' project.
 ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+  DAIKONDIR := $(realpath ${THIS_MAKEFILE_DIR}../..)
 endif
-include ${DAIKONDIR}/tests/Makefile.jdk
+include ${THIS_MAKEFILE_DIR}../Makefile.jdk
 DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 # Fails when running "clean".
 # $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
