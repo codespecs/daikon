@@ -275,6 +275,8 @@ class ArrayFixer extends DepthFirstVisitor {
   private static boolean hasSameTokens(Node n1, Node n2) {
     NodeToken[] tokens1 = TokenExtractor.extractTokens(n1);
     NodeToken[] tokens2 = TokenExtractor.extractTokens(n2);
+    // A node's tokens are a contiguous run of the token stream, so equal endpoints imply equal
+    // tokens.
     return tokens1[0] == tokens2[0] && tokens1[tokens1.length - 1] == tokens2[tokens2.length - 1];
   }
 
