@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   daikon.chicory.RuntimeTest.class,
+  daikon.split.SplitterListTest.class,
   daikon.test.BadOptionTest.class,
   daikon.test.config.ConfigurationTest.class,
   daikon.test.config.HtmlToTexinfoTest.class,
@@ -46,6 +47,7 @@ import org.junit.runners.Suite;
   daikon.test.VarDefinitionBoundTest.class,
   daikon.test.VarInfoAuxTest.class,
   daikon.test.VarInfoNameTest.class,
+  daikon.tools.ExtractConsequentTest.class,
   // daikon.test.split.SplitterFactoryTest is not in this suite, because it is generated after the
   // rest of Daikon (including this class) is compiled.  The Makefile's "junit" target runs it
   // separately.

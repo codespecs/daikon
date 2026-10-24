@@ -28,10 +28,6 @@ Further documentation can be found in:
    with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
-* Chicory's `--comparability-file` command-line option accepts any version
-   2.0 declaration file, such as one written by Chicory, rather than only one
-   written by DynComp.  A variable with no `comparability` record is
-   comparable to every other variable.
 * `daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
    `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
    or `PERL5LIB`.
