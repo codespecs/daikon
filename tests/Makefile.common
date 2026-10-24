@@ -225,33 +225,7 @@ export LC_ALL=C
 
 default: help
 
-# The general form of a Java version number prior to Java 9
-# is 1.n.n_n. For Java 9 or later it is n.n.n.n.
-# Currently, we only look for the release number, which is
-# the first 'n' in either case.
-# Note that version 11 (or 21 or ...) requires the 'start' anchor below
-# to make the old vs. new test work properly.
-
-JAVA_VERSION_STRING := $(shell ${JAVAC} -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-startJVS := $(shell echo start${JAVA_VERSION_STRING})
-ifneq (,$(findstring start1.8,$(startJVS)))
-  JAVA_RELEASE_NUMBER := 8
-else
-  # Old Java releases (e.g. 1.7) will set JAVA_RELEASE_NUMBER to 1.
-  # This will cause the JAVA8_OR_NEWER test to fail as desired.
-  JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
-endif
-
-JAVA23_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 23)
-JAVA21_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
-JAVA19_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 19)
-JAVA17_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 17)
-JAVA11_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 11)
-JAVA8_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 8)
-
-ifneq (${JAVA8_OR_NEWER}, 1)
-    $(error Must use Java version 8 or later; found ${JAVA_RELEASE_NUMBER} in ${JAVA_VERSION_STRING})
-endif
+# java-home.mk sets the JAVANN_OR_NEWER variables used below.
 
 # goal_name is a function that will be called like "$(call goal_name, FILENAME)"
 # to compute goal filename extension.
@@ -1402,7 +1376,6 @@ showvars:
 	@echo "JAVA19_OR_NEWER     =" ${JAVA19_OR_NEWER}
 	@echo "JAVA17_OR_NEWER     =" ${JAVA17_OR_NEWER}
 	@echo "JAVA11_OR_NEWER     =" ${JAVA11_OR_NEWER}
-	@echo "JAVA8_OR_NEWER      =" ${JAVA8_OR_NEWER}
 
 	@echo "CLASSPATH           =" ${CLASSPATH}
 	@echo "DAIKON_TESTS_CLASSPATH =" ${DAIKON_TESTS_CLASSPATH}
