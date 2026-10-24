@@ -140,7 +140,6 @@ public class VarDefinitionBoundTest {
       decls.append("  ").append(varRecord).append("\n");
     }
     Files.write(declsFile.toPath(), decls.toString().getBytes(StandardCharsets.UTF_8));
-    FileIO.resetNewDeclFormat();
     List<File> files = Collections.singletonList(declsFile);
     Daikon.UserError e =
         assertThrows(Daikon.UserError.class, () -> FileIO.read_declaration_files(files));
