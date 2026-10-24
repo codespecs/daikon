@@ -2,6 +2,8 @@
 
 package daikon.tools;
 
+import static daikon.tools.nullness.NullnessUtil.castNonNull;
+
 import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.PptName;
@@ -10,6 +12,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
+import java.nio.file.AtomicMoveNotSupportedException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -34,11 +40,13 @@ public class DtraceNonceFixer {
   /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
-          "Usage: DtraceNonceFixer FILENAME",
+          "Usage: DtraceNonceFixer FILENAME [OUTFILE]",
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
-          "Output file FILENAME_fixed renumbers the nonces of concatenated dtrace files",
-          "so that they do not collide.  Output file FILENAME_all_fixed also gives a nonce",
-          "to each sample that lacks one, other than an ENTER, EXIT, or THROWS sample.");
+          "It renumbers the nonces of concatenated dtrace files so that they do not collide,",
+          "and it gives a nonce to each sample that lacks one, other than an ENTER, EXIT, or",
+          "THROWS sample.  The result is written to OUTFILE, which defaults to",
+          "FILENAME_all_fixed (plus \".gz\" if FILENAME ends with \".gz\").",
+          "OUTFILE may be the same as FILENAME.");
 
   public static void main(String[] args) {
     try {
@@ -52,24 +60,103 @@ public class DtraceNonceFixer {
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called programmatically.
    *
-   * @param args command-line arguments: a single dtrace file, or {@code -h} or {@code --help}
+   * @param args command-line arguments: a dtrace file and an optional output file, or {@code -h} or
+   *     {@code --help}
    */
   public static void mainHelper(final String[] args) {
     String[] files = DaikonGetopt.nonOptionArgs(args, usage);
-    if (files.length != 1) {
+    if (files.length != 1 && files.length != 2) {
       throw new daikon.Daikon.UserError(usage);
     }
+    String infileName = files[0];
+    String outfileName =
+        (files.length == 2)
+            ? files[1]
+            : infileName + "_all_fixed" + (infileName.endsWith(".gz") ? ".gz" : "");
 
-    String suffix = files[0].endsWith(".gz") ? ".gz" : "";
-    String fixedFilename = files[0] + "_fixed" + suffix;
     try {
-      // First pass: renumber the nonces of each concatenated file after the first.
-      int maxNonce = renumberNonces(files[0], fixedFilename);
-      // Second pass: give a new nonce to each sample that lacks one, such as an OBJECT or CLASS
-      // sample.
-      addMissingNonces(fixedFilename, files[0] + "_all_fixed" + suffix, maxNonce);
+      // The temporary files are in the output file's directory, so that the final move can be
+      // atomic, and have fresh names so that they overwrite no existing file.  The output file is
+      // not opened for writing, so if this program fails, the output file (which may be the input)
+      // is unchanged.  If the output file is a symbolic link, the file that it refers to is
+      // replaced.
+      Path outfile = Path.of(outfileName).toAbsolutePath();
+      if (Files.exists(outfile)) {
+        outfile = outfile.toRealPath();
+      } else if (Files.isSymbolicLink(outfile)) {
+        throw new daikon.Daikon.UserError(
+            "Output file is a symbolic link that does not refer to an existing file: "
+                + outfileName);
+      }
+      Path dir = castNonNull(outfile.getParent()); // an absolute file path has a parent
+      String prefix = outfile.getFileName() + "-";
+      String suffix = outfileName.endsWith(".gz") ? ".gz" : "";
+      // Unlike Files.createTempFile, which makes the file readable only by its owner,
+      // FilesPlume.createTempFile gives the file the default permissions (which depend on the
+      // umask).  The intermediate file is not compressed, because it is deleted.
+      Path tmpFile = FilesPlume.createTempFile(dir, prefix, "-fixed");
+      try {
+        Path tmpOutFile = FilesPlume.createTempFile(dir, prefix, "-all-fixed" + suffix);
+        try {
+          // First pass: renumber the nonces of each concatenated file after the first.
+          int maxNonce = renumberNonces(infileName, tmpFile.toString());
+          // Second pass: give a new nonce to each sample that lacks one, such as an OBJECT or
+          // CLASS sample.
+          addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
+          // Delete before replacing the output file, so that no failure occurs after the output
+          // file changes.
+          Files.delete(tmpFile);
+          replaceFile(tmpOutFile, outfile);
+        } catch (Throwable e) {
+          deleteAfterFailure(tmpOutFile, e);
+          throw e;
+        }
+      } catch (Throwable e) {
+        deleteAfterFailure(tmpFile, e);
+        throw e;
+      }
     } catch (IOException e) {
       throw new UncheckedIOException(e);
+    }
+  }
+
+  /**
+   * Deletes {@code file}, if it exists, after a failure. A problem deleting the file is added to
+   * {@code failure} as a suppressed exception, so that it does not hide {@code failure}.
+   *
+   * @param file the file to delete
+   * @param failure the exception that the caller will throw
+   */
+  private static void deleteAfterFailure(Path file, Throwable failure) {
+    try {
+      Files.deleteIfExists(file);
+    } catch (IOException e) {
+      failure.addSuppressed(e);
+    }
+  }
+
+  /**
+   * Moves {@code source} to {@code target}, replacing {@code target} if it exists. If possible, the
+   * move is atomic, and the result has the permissions of the original {@code target}.
+   *
+   * @param source the file to move
+   * @param target the file to replace
+   * @throws IOException if there is trouble moving the file
+   */
+  // TODO: When Daikon uses a version of plume-util that has FilesP.replaceFile, use it instead.
+  private static void replaceFile(Path source, Path target) throws IOException {
+    if (Files.exists(target)) {
+      try {
+        Files.setPosixFilePermissions(source, Files.getPosixFilePermissions(target));
+      } catch (UnsupportedOperationException e) {
+        // The file system does not support POSIX permissions.
+      }
+    }
+    try {
+      Files.move(
+          source, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+    } catch (AtomicMoveNotSupportedException e) {
+      Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
     }
   }
 

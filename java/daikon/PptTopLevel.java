@@ -187,7 +187,11 @@ public class PptTopLevel extends Ppt {
     OBJECT,
     ENTER,
     EXIT,
-    SUBEXIT
+    SUBEXIT,
+    /** A :::THROWS program point. Daikon assigns this type based on the program point's name. */
+    THROWS,
+    /** A :::GLOBAL program point. Daikon assigns this type based on the program point's name. */
+    GLOBAL
   }
 
   /** Type of this program point. */
@@ -499,6 +503,10 @@ public class PptTopLevel extends Ppt {
       return PptType.OBJECT;
     } else if (ppt_name.isClassStaticSynthetic()) {
       return PptType.CLASS;
+    } else if (ppt_name.isThrowsPoint()) {
+      return PptType.THROWS;
+    } else if (ppt_name.isGlobalPoint()) {
+      return PptType.GLOBAL;
     } else {
       return PptType.POINT;
     }
@@ -507,15 +515,17 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns the type that a program point with the given name and declared type should have.
    *
-   * <p>A program point that has no declared type (as in a version 1 decls file, or a version 2
-   * decls file that omits the ppt-type record) gets its type from its name:
+   * <p>A program point that has no declared type (as in a decls file that omits the ppt-type
+   * record) gets its type from its name:
    *
    * <ul>
    *   <li>foo:::ENTER is an {@link PptType#ENTER},
    *   <li>a combined exit point, foo:::EXIT, is an {@link PptType#EXIT},
    *   <li>a numbered exit point such as foo:::EXIT22 is a {@link PptType#SUBEXIT},
    *   <li>Foo:::OBJECT is an {@link PptType#OBJECT},
-   *   <li>Foo:::CLASS is a {@link PptType#CLASS}, and
+   *   <li>Foo:::CLASS is a {@link PptType#CLASS},
+   *   <li>foo:::THROWS is a {@link PptType#THROWS},
+   *   <li>:::GLOBAL is a {@link PptType#GLOBAL}, and
    *   <li>any other program point is a generic {@link PptType#POINT}.
    * </ul>
    *
@@ -526,8 +536,8 @@ public class PptTopLevel extends Ppt {
    * <p>A program point that is declared with any other type keeps that type. Its name must conform
    * to the type, except for {@link PptType#POINT}, which permits any name.
    *
-   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, etc. agree with one
-   * another and with the program point's name.
+   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, is_dataflow_leaf, etc.
+   * agree with one another and with the program point's name.
    *
    * @param ppt_name the name of the program point
    * @param type the declared type of the program point, or null if none was declared
@@ -3494,22 +3504,6 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /**
-   * Simplify the names of variables before printing them. For example, "orig(a[post(i)])" might
-   * change into "orig(a[i+1])". We might want to switch off this behavior, depending on various
-   * heuristics. We'll have to try it and see which output we like best. In any case, we have to do
-   * this for ESC output, since ESC doesn't have anything like post().
-   */
-  public void simplify_variable_names() {
-    for (VarInfo vi : var_infos) {
-      // String original = vi.name();
-      vi.simplify_expression();
-      // if (!original.equals (vi.name()))
-      //   System.out.printf("modified var from %s to %s%n", original,
-      //                      vi.name());
-    }
-  }
-
   public static final Comparator<Invariant> icfp = new Invariant.InvariantComparatorForPrinting();
 
   static Comparator<PptSlice> arityVarnameComparator = new PptSlice.ArityVarnameComparator();
@@ -4267,6 +4261,16 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Creates the initial equality view for this ppt, in which all variables are in a single equality
+   * set.
+   */
+  public void create_equality_view() {
+    PptSliceEquality new_equality_view = new PptSliceEquality(this);
+    new_equality_view.instantiate_invariants();
+    equality_view = new_equality_view;
+  }
+
+  /**
    * Cleans up the ppt so that its invariants can be merged from other ppts. Not normally necessary
    * unless the merge is taking place over multiple ppts maps based on different data. This allows a
    * ppt to have its invariants recalculated.
@@ -4800,6 +4804,21 @@ public class PptTopLevel extends Ppt {
   @Pure
   public boolean is_subexit() {
     return type == PptType.SUBEXIT;
+  }
+
+  /**
+   * Returns true if this is a leaf of the dataflow hierarchy, which obtains its invariants directly
+   * from samples rather than by merging them from its children.
+   *
+   * <p>The leaves are the numbered exit points ({@link PptType#SUBEXIT}) and the general program
+   * points ({@link PptType#POINT}). This ensures that arbitrarily named program points such as
+   * :::POINT (used by convertcsv.pl) are leaves.
+   *
+   * @return true if this is a leaf of the dataflow hierarchy
+   */
+  @Pure
+  public boolean is_dataflow_leaf() {
+    return (type == PptType.SUBEXIT) || (type == PptType.POINT);
   }
 
   /** Is this a ppt that represents an object? */
