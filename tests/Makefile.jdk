@@ -5,7 +5,7 @@
 # If JAVAC is set, JAVA_HOME is the JDK that contains that javac, so that the
 # tests are compiled, run, and compared to goal files for the same JDK.
 # A Makefile.user that sets JAVAC must not refer to JAVA_HOME or
-# CHECKED_JAVA_HOME, which are not yet set; to pass arguments such as a
+# JAVA_HOME_OR_ERROR, which are not yet set; to pass arguments such as a
 # classpath to javac, set TEST_JAVAC_ARGS instead.
 
 ifdef JAVAC
@@ -30,5 +30,5 @@ ifdef JAVAC_JAVA_HOME
   endif
 endif
 
-JAVA  ?= ${CHECKED_JAVA_HOME}/bin/java
-JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac
+JAVA  ?= ${JAVA_HOME_OR_ERROR}/bin/java
+JAVAC ?= ${JAVA_HOME_OR_ERROR}/bin/javac

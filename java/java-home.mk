@@ -1,6 +1,6 @@
 # Makefile fragment that sets JAVA_HOME to a JDK, version 8 or later.  It uses
 # the existing value of JAVA_HOME if that is a JDK, and otherwise the JDK that
-# contains the javac on the PATH.  It also sets CHECKED_JAVA_HOME (see below),
+# contains the javac on the PATH.  It also sets JAVA_HOME_OR_ERROR (see below),
 # JAVA_VERSION_STRING_WITH_EA (e.g., "27-ea"), JAVA_VERSION_STRING (e.g., "27"
 # or "1.8.0_402"), JAVA_RELEASE_NUMBER (e.g., "27" or "8"), and JAVANN_OR_NEWER
 # (e.g., JAVA21_OR_NEWER), all for the JDK at JAVA_HOME.  It puts the JDK's bin/
@@ -42,8 +42,8 @@ ifneq ($(word 2,${JAVA_HOME}),)
 endif
 
 ifneq ($(if ${JAVA_HOME},$(wildcard ${JAVA_HOME}/bin/javac)),)
-# Commands that run a JDK tool use CHECKED_JAVA_HOME.
-CHECKED_JAVA_HOME := ${JAVA_HOME}
+# Commands that run a JDK tool use JAVA_HOME_OR_ERROR.
+JAVA_HOME_OR_ERROR := ${JAVA_HOME}
 
 # The output of `javac -version` is like "javac 27-ea", "javac 25.0.1", or
 # "javac 1.8.0_402".  It may be preceded by lines such as
@@ -72,13 +72,13 @@ endif
 export PATH
 
 else
-# Expanding CHECKED_JAVA_HOME reports the missing JDK.  This happens only when a
-# command that runs a JDK tool is expanded, so targets that do not run one (such
-# as "clean") work without a JDK.
+# Expanding JAVA_HOME_OR_ERROR reports the missing JDK.  This happens only when
+# a command that runs a JDK tool is expanded, so targets that do not run one
+# (such as "clean") work without a JDK.
 ifdef JAVA_HOME_FROM_PATH
-  CHECKED_JAVA_HOME = $(error No JDK found; set JAVA_HOME to a JDK or put javac on the PATH)
+  JAVA_HOME_OR_ERROR = $(error No JDK found; set JAVA_HOME to a JDK or put javac on the PATH)
 else
-  CHECKED_JAVA_HOME = $(error JAVA_HOME="${JAVA_HOME}" is not a JDK (it has no bin/javac))
+  JAVA_HOME_OR_ERROR = $(error JAVA_HOME="${JAVA_HOME}" is not a JDK (it has no bin/javac))
 endif
 JAVA_RELEASE_NUMBER := 0
 JAVA_RELEASES_THROUGH_CURRENT :=

@@ -22,12 +22,12 @@ USER ?= daikonbuild
 
 # These use the JDK at JAVA_HOME, which java-home.mk sets, so that they agree
 # with JAVA_RELEASE_NUMBER.  ("?=" defines a recursively expanded variable.)
-JAVA ?= ${CHECKED_JAVA_HOME}/bin/java -ea
+JAVA ?= ${JAVA_HOME_OR_ERROR}/bin/java -ea
 # For debugging, add -verbose flag to javac command
-# JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac -g -Xlint:unchecked
-JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac
-JAVADOC ?= ${CHECKED_JAVA_HOME}/bin/javadoc
-JAR ?= ${CHECKED_JAVA_HOME}/bin/jar
+# JAVAC ?= ${JAVA_HOME_OR_ERROR}/bin/javac -g -Xlint:unchecked
+JAVAC ?= ${JAVA_HOME_OR_ERROR}/bin/javac
+JAVADOC ?= ${JAVA_HOME_OR_ERROR}/bin/javadoc
+JAR ?= ${JAVA_HOME_OR_ERROR}/bin/jar
 
 BuildJDKTool = BuildJDK
 
@@ -1285,7 +1285,7 @@ javadoc: api
 .PHONY: api
 api: ${PLUME_SCRIPTS} ../.utils/html-tools ${AUTO_GENERATED_FILES}
 ifeq (${SKIP_JAVADOC},1)
-	${CHECKED_JAVA_HOME}/bin/java -version
+	${JAVA_HOME_OR_ERROR}/bin/java -version
 	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
 	@echo Skipping javadoc on JDK 1.8 because of https://bugs.openjdk.java.net/browse/JDK-8215542
 else
@@ -1304,7 +1304,7 @@ endif
 # Then, you need to do binary search on that file.
 api-test-each: ${PLUME_SCRIPTS} ../.utils/html-tools ${AUTO_GENERATED_FILES}
 ifeq (${SKIP_JAVADOC},1)
-	${CHECKED_JAVA_HOME}/bin/java -version
+	${JAVA_HOME_OR_ERROR}/bin/java -version
 	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
 	@echo Skipping javadoc on JDK 1.8 because of https://bugs.openjdk.java.net/browse/JDK-8215542
 else
