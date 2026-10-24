@@ -101,14 +101,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 # Dockerfile sets the PATH instead.
 # Download the installer to a file because a failure on the left side of a
 # pipe would not fail the build.
-# Azure runs jobs as a non-root user, who must be able to read files in /root
-# and run programs installed there.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && echo "installing uv" \
 && wget -qO /tmp/uv-install.sh https://astral.sh/uv/install.sh \
 && UV_NO_MODIFY_PATH=1 sh /tmp/uv-install.sh \
-&& rm /tmp/uv-install.sh \
-&& chmod -R og+rX /root
+&& rm /tmp/uv-install.sh
 ENV PATH=/root/.local/bin:$PATH
 
 ## `apt` installs a very old version of gradle (see `apt-cache policy gradle`).
@@ -122,6 +119,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && rm gradle-9.8.0-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
 ]])m4_dnl
+
+# Azure runs jobs as a non-root user, who must be able to read files in /root
+# and run programs installed there.  /root is inaccessible to other users.
+# This step must follow every step that writes to /root.
+RUN chmod -R og+rX /root
 
 # Clean up.
 RUN export DEBIAN_FRONTEND=noninteractive \
