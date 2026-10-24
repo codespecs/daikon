@@ -156,4 +156,50 @@ public class SplitDtraceTest {
       }
     }
   }
+
+  /**
+   * Tests that a comment immediately followed by a sample, with no blank line between them, does
+   * not make SplitDtrace copy the sample when it is not in the selected half.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testCommentBeforeSample() throws IOException {
+    String enter = "C.m(int):::ENTER";
+    String exit = "C.m(int):::EXIT1";
+    StringJoiner dtrace = new StringJoiner(System.lineSeparator());
+    dtrace.add("decl-version 2.0");
+    dtrace.add("var-comparability implicit");
+    dtrace.add("");
+    dtrace.add(declaration(enter, "enter"));
+    dtrace.add(declaration(exit, "subexit"));
+    for (int nonce = 1; nonce <= 4; nonce++) {
+      if (nonce == 2) {
+        // A comment that immediately precedes a sample in the first half.
+        dtrace.add("// A comment" + System.lineSeparator() + sample(enter, nonce));
+      } else {
+        dtrace.add(sample(enter, nonce));
+      }
+      dtrace.add(sample(exit, nonce));
+    }
+
+    Path dir = Files.createTempDirectory("SplitDtraceTest");
+    try {
+      Path input = dir.resolve("test.dtrace");
+      Path output = dir.resolve("test.second-half.dtrace");
+      Files.write(input, dtrace.toString().getBytes(UTF_8));
+      SplitDtrace.mainHelper(new String[] {input.toString()});
+
+      String result = new String(Files.readAllBytes(output), UTF_8);
+      String nl = System.lineSeparator();
+      assertTrue(result, result.contains("// A comment" + nl));
+      assertFalse(result, result.contains("this_invocation_nonce" + nl + "2" + nl));
+      assertTrue(result, result.contains("this_invocation_nonce" + nl + "3" + nl));
+      assertTrue(result, result.contains("this_invocation_nonce" + nl + "4" + nl));
+      Files.delete(input);
+      Files.delete(output);
+    } finally {
+      Files.delete(dir);
+    }
+  }
 }
