@@ -30,6 +30,7 @@ import org.junit.runners.Suite;
   daikon.test.inv.unary.sequence.OneOfSequenceTester.class,
   daikon.test.LinearTernaryCoreTest.class,
   daikon.test.ModBitTrackerTest.class,
+  daikon.test.PptDeclarationTest.class,
   daikon.test.PptTopLevelTypeTest.class,
   daikon.test.ProglangTypeTest.class,
   daikon.test.SampleTester.class,
