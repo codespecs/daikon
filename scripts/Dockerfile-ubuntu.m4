@@ -96,14 +96,19 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ruff
 
 # Install uv (manages Python dependencies).
-# UV_NO_MODIFY_PATH=1 keeps the installer from writing /root/.local/bin/env,
-# a script for shells to source; on the PATH, it would shadow /usr/bin/env.
+# UV_NO_MODIFY_PATH=1 keeps the installer from editing shell startup files and
+# from writing /root/.local/bin/env, a script for those files to source.  This
+# Dockerfile sets the PATH instead.
+# Download the installer to a file because a failure on the left side of a
+# pipe would not fail the build.
+# Azure runs jobs as a non-root user, who must be able to read files in /root
+# and run programs installed there.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && echo "installing uv" \
-&& wget -qO- https://astral.sh/uv/install.sh | UV_NO_MODIFY_PATH=1 sh \
-&& find /root -exec chmod +r {} \; \
-&& find /root -type d -exec chmod +x {} \; \
-&& find /root/.local/bin -type f -exec chmod +x {} \;
+&& wget -qO /tmp/uv-install.sh https://astral.sh/uv/install.sh \
+&& UV_NO_MODIFY_PATH=1 sh /tmp/uv-install.sh \
+&& rm /tmp/uv-install.sh \
+&& chmod -R og+rX /root
 ENV PATH=/root/.local/bin:$PATH
 
 ## `apt` installs a very old version of gradle (see `apt-cache policy gradle`).
