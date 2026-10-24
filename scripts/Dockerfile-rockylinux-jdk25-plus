@@ -99,8 +99,10 @@ RUN dnf -q -y install \
 && PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ruff
 
 # Install uv (manages Python dependencies).
+# UV_NO_MODIFY_PATH=1 keeps the installer from writing /root/.local/bin/env,
+# a script for shells to source; on the PATH, it would shadow /usr/bin/env.
 RUN echo "installing uv" \
-&& wget -qO- https://astral.sh/uv/install.sh | sh
+&& wget -qO- https://astral.sh/uv/install.sh | UV_NO_MODIFY_PATH=1 sh
 ENV PATH=/root/.local/bin:$PATH
 
 # Azure runs jobs as a non-root user, who must be able to read files in /root
