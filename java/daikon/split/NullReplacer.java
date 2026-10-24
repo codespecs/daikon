@@ -19,8 +19,22 @@ import jtb.syntaxtree.NodeToken;
 import jtb.visitor.DepthFirstVisitor;
 
 /**
- * NullReplacer is a JTB syntax tree visitor that replaces {@code null} with {@code 0}, when it
- * stands for a hashcode.
+ * NullReplacer is a JTB syntax tree visitor that replaces instances of "null" with "0" in a given
+ * expression. Note: "null" is only referring to the java reserved word "null" not to any instances
+ * of the string "null".
+ *
+ * <p>A splitter represents some references by their hashcode, which is 0 for null. A "null" is
+ * replaced only if it stands for a hashcode: that is, if it is compared, by "==" or "!=", with an
+ * expression that the splitter represents as a hashcode, or if it is a branch of a conditional
+ * expression ("?:") whose other branch is such an expression. An expression that the splitter
+ * represents as a hashcode is a hashcode variable, an element of an array of hashcodes, a call
+ * {@code getElement_Object(a, i)} on an array of hashcodes, or a conditional expression whose
+ * branches are each such an expression or a replaced "null". Every other "null" is left unchanged:
+ * for example, one that is compared with a String, or one that is passed as an argument. For
+ * example, in {@code this_next == null && this_name != null}, where {@code this_next} is a hashcode
+ * and {@code this_name} is a String, the first "null" is replaced and the second "null" is not.
+ *
+ * <p>NullReplacer runs after the other fixers, because it recognizes the names that they produce.
  */
 class NullReplacer extends DepthFirstVisitor {
 
@@ -176,9 +190,9 @@ class NullReplacer extends DepthFirstVisitor {
   /**
    * Returns true if the splitter represents the expression whose tokens are given as a hashcode:
    * that is, if the expression is a hashcode variable, an element of a hashcode array such as
-   * {@code a[i]}, or a conditional expression that HashcodeNullFinder has recorded. No other
-   * expression is a hashcode, because a hashcode is a number, whose fields and methods cannot be
-   * used.
+   * {@code a[i]}, a call {@code getElement_Object(a, i)} on an array of hashcodes, or a conditional
+   * expression that HashcodeNullFinder has recorded. No other expression is a hashcode, because a
+   * hashcode is a number, whose fields and methods cannot be used.
    *
    * @param tokens the tokens of an expression, without enclosing parentheses
    * @return true if the splitter represents the expression as a hashcode
@@ -190,6 +204,14 @@ class NullReplacer extends DepthFirstVisitor {
       return hashcodeExpressions.contains(tokens[0].tokenImage);
     }
     if (last > 0 && hashcodeConditionals.get(tokens[0]) == tokens[last]) {
+      return true;
+    }
+    if (last >= 5
+        && tokens[0].tokenImage.equals("getElement_Object")
+        && Visitors.isLParen(tokens[1])
+        && matchingIndex(tokens, 1) == last
+        && tokens[3].tokenImage.equals(",")
+        && hashcodeExpressions.contains(tokens[2].tokenImage + "[]")) {
       return true;
     }
     return last >= 3
