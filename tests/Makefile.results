@@ -1,0 +1,59 @@
+# This is a -*- makefile -*-, Emacs
+#
+# Targets for running a test suite and reporting its results.
+# Included by tests/Makefile, tests/kvasir-tests/Makefile, and
+# tests/dyncomp-tests/Makefile, via ${DAIKON_TESTS_DIR} from Makefile.jobs.
+#
+# The including Makefile may set, before including this file:
+#   BASE: the directories that contain the results files (default: .)
+#   RESULTS_PATTERN: args to 'find', to find files containing results
+#     (default: all .diff files)
+#   RESULTS_PRINT_PASSING: if nonempty, the summary lists passing tests too
+# To get the regression-tests target, the including Makefile also sets:
+#   REGRESSION_TESTS_TARGET: the target that runs the tests and creates the .diff files
+#   REGRESSION_TESTS_ARGS: extra arguments to make, when making REGRESSION_TESTS_TARGET (optional)
+#   REGRESSION_SUMMARY_TARGET: the target that summarizes each test; it must not run any test
+
+BASE ?= .
+RESULTS_PATTERN ?= -name '*.diff'
+RESULTS_PRINT_PASSING ?=
+
+ifdef REGRESSION_TESTS_TARGET
+REGRESSION_TESTS_ARGS ?=
+
+.PHONY: regression-tests
+# The .diff files and the ran-kvasir stamp files are deleted first, so that
+# every test runs again and a test that crashes does not leave behind a .diff
+# file from an earlier run.  The deletion is a separate recipe line, because
+# make runs any line that contains $(MAKE) even under "make -n".
+# -k keeps one failing test from preventing the others from running.
+# The results are always printed.
+regression-tests:
+	@find . \( ${RESULTS_PATTERN} -o -name ran-kvasir \) -delete
+	@status=0; \
+	${MAKE} -k ${REGRESSION_TESTS_ARGS} ${REGRESSION_TESTS_TARGET} || status=$$?; \
+	${MAKE} ${REGRESSION_SUMMARY_TARGET} || status=$$?; \
+	${MAKE} --no-print-directory results TESTS_STATUS=$$status || status=$$?; \
+	exit $$status
+endif
+
+# Nonzero if building the tests failed, such as when a Kvasir run crashed.
+# A crashed test produces no .diff files.
+TESTS_STATUS ?= 0
+
+# removes fields before the size (ie, permissions, owner, group).
+PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; if ($$1 > 0) { $$failure++; } if ($$1 > 0 || "${RESULTS_PRINT_PASSING}") { print "$$1\t$$2\t$$3\n"; } END { if ($$failure == 1) { print "1 test failed.\n"; } elsif ($$failure) { print "$$failure tests failed.\n"; } if (${TESTS_STATUS}) { print "Some tests failed to run, so they have no diffs; see the errors above.\n"; } exit 1 if $$failure || ${TESTS_STATUS}; print "All tests succeeded.\n"; }'
+
+results_header:
+	@echo ""
+	@echo "=== RESULTS ==="
+
+results_cat:
+	@find ${BASE} \( ${RESULTS_PATTERN} \) -print0 | xargs -0 cat
+
+results: results_header results_cat summary_list
+
+summary_list:
+	@find ${BASE} \( ${RESULTS_PATTERN} \) -exec ls -l {} + \
+	  | perl -pe 's|\Q${BASE}|.|;' \
+	  | ${PERL_CLEANUP_LS_OUTPUT}

@@ -2,7 +2,10 @@
 # Read Makefile in parent directory to see what this all means
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
+# See tests/Makefile.common for why this does not use '?='.
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../..)
+endif
 SCRIPTS=${DAIKONDIR}/scripts
 
 # Help system
@@ -69,7 +72,7 @@ javautil-%: do-Vector-% do-ArrayList13-% do-ArrayList17-%
 	@echo ${HR}
 large-%: # do-Flex-% do-JML-%
 	@echo ${HR}
-new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-NonZeroLargeRange-% do-NotOrdered-% do-baseline-% do-junit-% do-junit5-% do-ncalc-% do-agora-%
+new-%: do-KnownValues-% do-KnownValuesLong-% do-KnownValuesNewDecls-% do-NonZeroLargeRange-% do-NotOrdered-% do-baseline-% do-junit-% do-junit5-% do-ncalc-% do-agora-%
 	@echo ${HR}
 
 # Extra groupings

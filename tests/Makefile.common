@@ -69,6 +69,8 @@
 # MAIN2_CLASS  = < pkg.ClassName >      ; if loaded by reflection (e.g., JUnit)
 # MAIN_ARGS    = < command line >       ; optional, only relevant if 'generated'
 # JAVA_ARGS    = < -Dfoo=bar ... >      ; optional, only relevant if 'generated' and 'java'
+# TEST_JAVAC_ARGS = < -cp ... >          ; optional; arguments for compiling the test sources;
+#                                        ; defaults to "-cp .:$(JUNIT_CLASSPATH)" if JUNIT_CLASSPATH is set
 # ESC_ON       = { *any* }              ; optional; enables ESC/Java
 # PRESERVE_DECLS = { *any* }            ; optional; reuses previous decls (unless set to "no")
 
@@ -76,7 +78,6 @@
 TRACE_SOURCE?=generated
 INSTRUMENT?=infer
 SOURCE_LANGUAGE?=java
-DECL_FORMAT?=new
 
 NO_CSHARP=1
 
@@ -141,12 +142,14 @@ ifeq ($(origin DAIKONDIR), undefined)
   DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 endif
 
-# COMMON_HERE is where the Makefile.common is located.
-COMMON_HERE?=${DAIKONDIR}/tests
+# COMMON_HERE is where the Makefile.common is located.  It is computed from the
+# location of this file, not from DAIKONDIR, which may name a different Daikon tree.
+ifeq ($(origin COMMON_HERE), undefined)
+  COMMON_HERE := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+endif
 # Test that the directory exists.  There must be a better way to do this.
-COMMON_HERE:=$(wildcard $(COMMON_HERE))
-ifndef COMMON_HERE
-  $(error Test directory ${DAIKONDIR}/tests does not exist)
+ifeq ($(wildcard $(COMMON_HERE)),)
+  $(error Test directory "${COMMON_HERE}" does not exist)
 endif
 
 # Put user-specific changes in your own Makefile.user
@@ -155,6 +158,10 @@ endif
 # The file can be in the project dir, or in the tests dir, or both.
 -include Makefile.user
 -include $(COMMON_HERE)/Makefile.user
+
+# This is included after Makefile.user, so that Makefile.user can set JAVA_HOME,
+# JAVA, or JAVAC.
+include $(COMMON_HERE)/Makefile.jdk
 
 # SOURCES is where all of the source code to be examined is located
 SOURCES?=$(COMMON_HERE)/sources
@@ -186,21 +193,10 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-ifeq ($(shell uname), Darwin)
-  JAVA_HOME ?= $(/usr/libexec/java_home)
-else
-ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
-  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
-else
-  $(info Failure: Here is the output of: which javac)
-  $(info $(shell which javac))
-  $(error 'which javac' had exit status 1)
-endif
-endif
-JAVA  := ${JAVA_HOME}/bin/java
-JAVAC ?= ${JAVA_HOME}/bin/javac
-
 JUNIT_CLASSPATH ?=
+ifneq ($(JUNIT_CLASSPATH),)
+  TEST_JAVAC_ARGS ?= -cp .:$(JUNIT_CLASSPATH)
+endif
 
 JAVALIB_CLASSPATH := ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 
@@ -209,7 +205,7 @@ DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daiko
 export DAIKON_TESTS_CLASSPATH := .:$(JAVALIB_CLASSPATH):$(SCRATCH_FOR_DAIKON):$(JUNIT_CLASSPATH):$(DAIKON_CLASSPATH)
 
 # Dynamic instrumentation based java front end command.
-CHICORY := $(JAVA) -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.Chicory
+CHICORY = $(JAVA) -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.Chicory
 CHICORY_EXEC := ${DAIKONDIR}/java/daikon/Chicory.class
 
 # As of JDK 1.3 (and 1.4, I think), don't use "-server" here.
@@ -228,33 +224,7 @@ export LC_ALL=C
 
 default: help
 
-# The general form of a Java version number prior to Java 9
-# is 1.n.n_n. For Java 9 or later it is n.n.n.n.
-# Currently, we only look for the release number, which is
-# the first 'n' in either case.
-# Note that version 11 (or 21 or ...) requires the 'start' anchor below
-# to make the old vs. new test work properly.
-
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-startJVS := $(shell echo start${JAVA_VERSION_STRING})
-ifneq (,$(findstring start1.8,$(startJVS)))
-  JAVA_RELEASE_NUMBER := 8
-else
-  # Old Java releases (e.g. 1.7) will set JAVA_RELEASE_NUMBER to 1.
-  # This will cause the JAVA8_OR_NEWER test to fail as desired.
-  JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
-endif
-
-JAVA23_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 23)
-JAVA21_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
-JAVA19_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 19)
-JAVA17_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 17)
-JAVA11_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 11)
-JAVA8_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 8)
-
-ifneq (${JAVA8_OR_NEWER}, 1)
-    $(error Must use Java version 8 or later; found ${JAVA_RELEASE_NUMBER} in ${JAVA_VERSION_STRING})
-endif
+# java-home.mk sets the JAVANN_OR_NEWER variables used below.
 
 # goal_name is a function that will be called like "$(call goal_name, FILENAME)"
 # to compute goal filename extension.
@@ -300,14 +270,9 @@ ifeq (,$(findstring --config,$(DAIKON_OPTIONS)))
   DAIKON_OPTIONS := $(DAIKON_OPTIONS) --config ../config.txt
 endif
 
-# If specified, setup for the old declaration format
-ifeq (old,${DECL_FORMAT})
-  CHICORY := $(CHICORY) --new_decl_format=false
-endif
-
 # "make PROFILE_JAVA=1 <target>" to get profile information
 ifdef PROFILE_JAVA
-RUN_JAVA:=$(RUN_JAVA) -Xrunhprof:cpu=samples,file=${PROJECT_FILE}.profile.txt,depth=3
+RUN_JAVA += -Xrunhprof:cpu=samples,file=${PROJECT_FILE}.profile.txt,depth=3
 endif
 
 # To turn off Simplify, put this in the project's own Makefile, after
@@ -431,7 +396,7 @@ ${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists ./Makefile $(MAIN_JAVA) $(MAIN2_
 	@echo
 	@echo "### figure out the necessary files (${PROJECT_FILE})"
 	@echo
-	${DAIKONDIR}/scripts/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" "$(JAVAC)" \
+	${DAIKONDIR}/scripts/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" "$(JAVAC) $(TEST_JAVAC_ARGS)" \
 		> $(ALL_LIST_FILE)
 
 
@@ -565,7 +530,7 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
 	# Calls the sub-make only if the variable EXTRA_TARGET is not empty
 	if [ -n "${EXTRA_TARGET}" ]; then ${MAKE} -C "${CWD}" extra-target; fi
-	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
+	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} ${TEST_JAVAC_ARGS} -g `cat $(ALL_LIST_FILE)`
 	export LD_LIBRARY_PATH="${CWD}" && \
 	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
 	export LD_LIBRARY_PATH="${CWD}" && \
@@ -612,7 +577,7 @@ test-run: ${SCRATCH_FOR_DAIKON}/.copy-timestamp
 	@echo
 	@echo "### test-run (${PROJECT_FILE})"
 	@echo
-	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
+	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} ${TEST_JAVAC_ARGS} -g `cat $(ALL_LIST_FILE)`
 	${RUN_JAVA} ${JAVA_ARGS} ${JUNIT} ${MAIN_CLASS} ${MAIN_ARGS}
 
 # generate invariants from the dtrace, decls, etc. data
@@ -710,7 +675,7 @@ ${PROJECT_FILE}.txt-chicory.diff: $(call goal_name,${PROJECT_FILE}.txt-chicory) 
 	@echo
 ifeq ($(SKIP_DTRACE_DIFF),)
 	-rm -f $@
-	-java -cp "${DAIKON_TESTS_CLASSPATH}" -ea daikon.tools.DtraceDiff \
+	-${JAVA} -cp "${DAIKON_TESTS_CLASSPATH}" -ea daikon.tools.DtraceDiff \
 		$(call goal_name,${PROJECT_FILE}.txt-chicory) \
 	    ${PROJECT_FILE}.txt-chicory.dtrace > $@ 2>&1
 	cat $@
@@ -1159,7 +1124,7 @@ merged/.merged-esc: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_V
 	mkdir -p merged
 	tar cf - -C ${SOURCES} `cat ${ALL_LIST_FILE}` | tar -xf - -C $(CWD)/merged
 #	For use with daikon.tools.MergeESC.  Must compile first for MergeESC.
-	cd merged && ${JAVAC} `find . $(FINDARGS) -name '*.java'`
+	cd merged && ${JAVAC} ${TEST_JAVAC_ARGS} `find . $(FINDARGS) -name '*.java'`
 	echo INST_LIST_FILE = ${INST_LIST_FILE}
 	cd merged && ${MERGE_ESC} \
 		${MERGE_ESC_OPTIONS} ${USER_MERGE_ESC_OPTIONS} \
@@ -1186,7 +1151,7 @@ merged/.merged-jml: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_V
 	mkdir -p merged
 	tar -cf - -C ${SOURCES} `cat ${ALL_LIST_FILE}`  | tar xf - -C $(CWD)/merged
 #	For use with daikon.tools.MergeESC.  Must compile first for MergeESC.
-	cd merged && ${JAVAC} `find . $(FINDARGS) -name '*.java'`
+	cd merged && ${JAVAC} ${TEST_JAVAC_ARGS} `find . $(FINDARGS) -name '*.java'`
 	cd merged && ${MERGE_ESC} --format jml \
 		${MERGE_ESC_OPTIONS} ${USER_MERGE_ESC_OPTIONS} \
 		${INV_FILE} \
@@ -1295,9 +1260,9 @@ $(RTC_SCRATCH)/violations.txt: $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
 	@echo
 	@echo "### run runtime-check tool (${PROJECT_FILE})"
 	@echo
-	cd scratch && java -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.tools.runtimechecker.Main instrument --directory $(RTC_SCRATCH) \
+	cd scratch && ${JAVA} -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.tools.runtimechecker.Main instrument --directory $(RTC_SCRATCH) \
 		--make_all_fields_public ${INV_FILE} `cat $(INST_LIST_FILE)`
-	cd $(RTC_SCRATCH) && ${JAVAC} -g `find . $(FINDARGS) -name '*.java'`
+	cd $(RTC_SCRATCH) && ${JAVAC} ${TEST_JAVAC_ARGS} -g `find . $(FINDARGS) -name '*.java'`
 	cd $(RTC_SCRATCH) && ${JAVA} -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.tools.runtimechecker.WriteViolationFile $(RTC_USER_FLAGS) \
 		$(subst /,.,${MAIN_CLASS}) ${MAIN_ARGS}
 rtc-diff: rtc-violations.txt.diff
@@ -1405,7 +1370,6 @@ showvars:
 	@echo "JAVA19_OR_NEWER     =" ${JAVA19_OR_NEWER}
 	@echo "JAVA17_OR_NEWER     =" ${JAVA17_OR_NEWER}
 	@echo "JAVA11_OR_NEWER     =" ${JAVA11_OR_NEWER}
-	@echo "JAVA8_OR_NEWER      =" ${JAVA8_OR_NEWER}
 
 	@echo "CLASSPATH           =" ${CLASSPATH}
 	@echo "DAIKON_TESTS_CLASSPATH =" ${DAIKON_TESTS_CLASSPATH}

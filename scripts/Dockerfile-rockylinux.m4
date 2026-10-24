@@ -35,18 +35,17 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 # Install the JDK.
-m4_ifelse(jdk_packaged, 1, [[RUN dnf -q -y upgrade && dnf -q -y install \
+m4_ifelse(jdk_packaged_by_every_os, 1, [[RUN dnf -q -y upgrade && dnf -q -y install \
   java-JDKVER-openjdk \
   java-JDKVER-openjdk-devel
-m4_ifelse(jdk_at_least(25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk
-]])]], [[# The java-JDKVER-openjdk* packages do not yet exist, so download the JDK.
+m4_ifelse(m4_eval(JDKVER >= 25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk
+]])]], [[# Not every OS packages a non-LTS JDK, so download the JDK.
 # RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz https://download.oracle.com/java/JDKVER/latest/jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
 RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
 && tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
 && rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
 ENV PATH="/jdk-JDKVER/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
-RUN chmod og+rx /root
 ]])m4_dnl
 if_plus([[
 # The CRB repository contains certain packages, including dependencies of
@@ -58,9 +57,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
   devscripts-checkbashisms \
   gcc-c++ \
-  graphviz \
-  netpbm \
-  netpbm-progs \
+  gdb \
   python3 \
   python3-distutils-extra \
   ShellCheck \
@@ -68,6 +65,14 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   texinfo-tex \
   texlive \
   yamllint
+
+# Valgrind's gdbserver regression tests, run by Fjalar's CI, need gdb (above)
+# and glibc's debugging information.  (On Ubuntu, that is package libc6-dbg.)
+# `dnf debuginfo-install` is in dnf-plugins-core.  It can succeed without
+# installing anything, so check that glibc-debuginfo got installed.
+RUN dnf -q -y config-manager --set-enabled baseos-debuginfo \
+&& dnf -q -y upgrade && dnf -q -y debuginfo-install glibc \
+&& rpm -q glibc-debuginfo
 
 ## Other ways to install gradle:
 ##  * The `dnf` package repository has a very old version of gradle.
@@ -98,12 +103,14 @@ RUN dnf -q -y install \
 
 # Install uv (manages Python dependencies).
 RUN echo "installing uv" \
-&& wget -qO- https://astral.sh/uv/install.sh | sh \
-&& find /root -exec chmod +r {} \; \
-&& find /root -type d -exec chmod +x {} \; \
-&& find /root/.local/bin -type f -exec chmod +x {} \;
+&& wget -qO- https://astral.sh/uv/install.sh | sh
 ENV PATH=/root/.local/bin:$PATH
 ]])m4_dnl
+
+# Azure runs jobs as a non-root user, who must be able to read files in /root
+# and run programs installed there.  Rocky Linux makes /root inaccessible to
+# other users.  This step must follow every step that writes to /root.
+RUN chmod -R og+rX /root
 
 # Clean up.
 RUN dnf -q clean all

@@ -214,14 +214,17 @@ public final class FileIO {
   // modified since this program point was last executed.
   static HashMap<PptTopLevel, String[]> ppt_to_value_reps = new HashMap<>();
 
-  // For debugging purposes: printing out a modified trace file with
-  // changed modbits.
+  /** For debugging purposes: printing out a modified trace file with changed modbits. */
   private static boolean to_write_nonce = false;
-  private static final String NONCE_HEADER = "this_invocation_nonce";
+
+  /** The line that precedes the nonce in a sample. */
+  public static final String NONCE_HEADER = "this_invocation_nonce";
+
+  /** The current nonce value. */
   private static String nonce_value = "no nonce (yet)";
 
-  // (This implementation as a public static variable is a bit unclean.)
-  // Number of ignored declarations.
+  /** Number of ignored declarations. */
+  // This implementation as a public static variable is a bit unclean.
   public static int omitted_declarations = 0;
 
   // Logging Categories
@@ -376,7 +379,8 @@ public final class FileIO {
     VarDefinition vardef = null;
     List<ParentRelation> ppt_parents = new ArrayList<>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf(PptFlags.class);
-    PptType ppt_type = PptType.POINT;
+    // Null if the declaration has no ppt-type record.
+    PptType ppt_type = null;
 
     try {
       // Read the records that define this program point
@@ -504,9 +508,11 @@ public final class FileIO {
     }
 
     // Build the program point
-    PptTopLevel newppt = new PptTopLevel(ppt_name, ppt_type, ppt_parents, ppt_flags, vi_array);
-
-    return newppt;
+    String type_error = PptTopLevel.type_error(ppt_name, ppt_type);
+    if (type_error != null) {
+      decl_error(state, "%s", type_error);
+    }
+    return new PptTopLevel(ppt_name, ppt_type, ppt_parents, ppt_flags, vi_array);
   }
 
   /** Parses a ppt parent hierarchy record and returns it. */
@@ -2816,11 +2822,11 @@ public final class FileIO {
       assert (arr_dims == 0) || (arr_dims == 1)
           : String.format(
               "array dimensions==%s, should be 0 or 1, for variable %s", arr_dims, name);
-      assert !rep_type.isArray() || arr_dims == 1
-          : String.format("array dimensions is 0, should be 1, for variable %s", name);
       if (rep_type == null) {
         throw new AssertionError("missing rep-type information for variable " + name);
       }
+      assert !rep_type.isArray() || arr_dims == 1
+          : String.format("array dimensions is 0, should be 1, for variable %s", name);
       if (declared_type == null) {
         throw new AssertionError("missing dec-type information for variable " + name);
       }
@@ -2834,6 +2840,68 @@ public final class FileIO {
       if ((kind == VarKind.FIELD || kind == VarKind.ARRAY) && enclosing_var_name == null) {
         throw new AssertionError("enclosing-var not specified for variable " + name);
       }
+      checkBound("min-value", min_value);
+      checkBound("max-value", max_value);
+    }
+
+    /**
+     * Throws an AssertionError if the given min-value or max-value bound is not valid for this
+     * variable's rep type. Only a variable whose (element) rep type is integral or floating-point
+     * may have a bound. An integral variable's bound must be an integer in the range of a Java
+     * long, and a floating-point variable's bound must be a number other than NaN. These are the
+     * values that {@link VarInfoAux#getLong} and {@link VarInfoAux#getDouble} accept.
+     *
+     * @param record the name of the record, for the error message
+     * @param bound the bound, or null if none was specified
+     */
+    private void checkBound(String record, @Nullable String bound) {
+      if (bound == null) {
+        return;
+      }
+      if (!rep_type.baseIsIntegral() && !rep_type.baseIsFloat()) {
+        throw new AssertionError(
+            String.format(
+                "%s is not permitted for variable %s, whose rep type is %s",
+                record, name, rep_type));
+      }
+      @Nullable NumberFormatException cause = null;
+      try {
+        if (rep_type.baseIsIntegral()) {
+          Long.parseLong(bound);
+          return;
+        } else if (!Double.isNaN(Double.parseDouble(bound))) {
+          return;
+        }
+      } catch (NumberFormatException e) {
+        cause = e;
+      }
+      throw new AssertionError(
+          String.format(
+              "%s '%s' for variable %s is not a valid %s value",
+              record, bound, name, rep_type.base()),
+          cause);
+    }
+
+    /**
+     * Parses a min-value or max-value record. If this variable's rep type is already known, checks
+     * the bound now, so that an error message reports the line of the bound record. Otherwise,
+     * {@link #checkRep} checks it.
+     *
+     * @param scanner the scanner, pointing at the bound
+     * @param record the name of the record
+     * @return the bound
+     */
+    private @Interned String parse_bound(Scanner scanner, String record) {
+      @Interned String bound = need(scanner, record);
+      need_eol(scanner);
+      if (rep_type != null) {
+        try {
+          checkBound(record, bound);
+        } catch (AssertionError e) {
+          decl_error(state, e);
+        }
+      }
+      return bound;
     }
 
     /** Initialize from the 'variable <em>name</em>' record. Scanner should be pointing at name. */
@@ -3036,14 +3104,12 @@ public final class FileIO {
 
     /** Parse a minimum value record. */
     public void parse_min_value(Scanner scanner) {
-      this.min_value = need(scanner, "minimum value");
-      need_eol(scanner);
+      this.min_value = parse_bound(scanner, "min-value");
     }
 
     /** Parse a maximum value record. */
     public void parse_max_value(Scanner scanner) {
-      this.max_value = need(scanner, "maximum value");
-      need_eol(scanner);
+      this.max_value = parse_bound(scanner, "max-value");
     }
 
     /** Parse a minimum length record. */

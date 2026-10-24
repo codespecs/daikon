@@ -2,14 +2,14 @@ package daikon.tools.jtb;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import daikon.Daikon;
+import daikon.DaikonGetopt;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.UncheckedIOException;
-import java.io.Writer;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.StringJoiner;
 import jtb.cparser.*;
 import jtb.cparser.customvisitor.*;
 import jtb.cparser.syntaxtree.*;
@@ -21,62 +21,130 @@ public class CreateSpinfoC {
     throw new UnsupportedOperationException("Do not instantiate");
   }
 
-  public static void main(String[] args) {
-    if (args.length == 1) {
-      System.out.println("Create spinfo file from file " + args[0] + " . . .");
-    } else {
-      System.out.println("C Parser Version 0.1Alpha:  Usage is one of:");
-      System.out.println("         java CreateSpinfoC < inputfile");
-      System.out.println("OR");
-      System.out.println("         java CreateSpinfoC inputfile");
-      return;
-    }
-    try {
-      String fileName = args[0].substring(0, args[0].lastIndexOf('.'));
-      File temp = new File(fileName + ".temp");
-      // filter out the '\f' characters in the file
-      try (Reader reader = Files.newBufferedReader(Paths.get(args[0]), UTF_8);
-          Writer writer = Files.newBufferedWriter(temp.toPath(), UTF_8)) {
-        int c;
-        while ((c = reader.read()) != -1) {
-          if (c != '\f') {
-            writer.write(c);
-          }
-        }
-      } catch (IOException e) {
-        System.out.println(e.getMessage());
-        if (temp != null) {
-          temp.delete();
-        }
-        System.exit(1);
-        throw new Error("unreachable");
-      }
-      try (FileInputStream fis = new FileInputStream(temp)) {
-        @SuppressWarnings("UnusedVariable") // sets static variables for TranslationUnit()
-        CParser parser = new CParser(fis);
-      } catch (IOException e) {
-        throw new UncheckedIOException("problem reading " + temp, e);
-      }
-      TranslationUnit root = CParser.TranslationUnit();
-      StringFinder finder = new StringFinder();
-      temp.delete();
-      root.accept(finder);
+  /** The usage message for this program. */
+  private static final String usage =
+      "C Parser Version 0.1Alpha:  Usage:  java daikon.tools.jtb.CreateSpinfoC inputfile ...";
 
-      ConditionPrinter printer;
-      try {
-        printer = new ConditionPrinter(fileName + ".spinfo");
-        printer.setActualStrings(finder.functionStringMapping);
-        printer.setStringArrays(finder.stringMatrices);
-        root.accept(printer);
-        printer.close();
-      } catch (IOException e) {
-        System.out.println("File IO Error");
-        System.out.println(e.getMessage());
-      }
-      System.out.println("CreateSpinfoC:  C program parsed successfully.");
-    } catch (ParseException e) {
-      System.out.println("CreateSpinfoC encountered errors during parse.");
-      System.out.println(e.getMessage());
+  // CParser is a static parser, so it can be constructed only once.  Each parse reinitializes it.
+  static {
+    @SuppressWarnings("UnusedVariable") // sets static variables for CParser.TranslationUnit()
+    CParser parser = new CParser(new StringReader(""));
+  }
+
+  /**
+   * The entry point for CreateSpinfoC.
+   *
+   * @param args the names of the C files
+   */
+  public static void main(String[] args) {
+    try {
+      mainHelper(args);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
+  }
+
+  /**
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called programmatically.
+   *
+   * @param args command-line arguments, like those of {@link #main}
+   */
+  public static void mainHelper(String[] args) {
+    String[] files = DaikonGetopt.nonOptionArgs(args, usage);
+    if (files.length == 0) {
+      throw new Daikon.UserError(usage);
+    }
+    // Process every file, even if an earlier one fails.
+    StringJoiner errors = new StringJoiner(Daikon.lineSep);
+    // The first unexpected exception, which indicates a bug in CreateSpinfoC or its parser.
+    RuntimeException bug = null;
+    for (String inputFile : files) {
+      try {
+        processFile(inputFile);
+      } catch (Daikon.UserError e) {
+        errors.add(String.valueOf(e.getMessage()));
+      } catch (RuntimeException e) {
+        errors.add("Problem processing " + inputFile + ": " + e);
+        if (bug == null) {
+          bug = e;
+        }
+      }
+    }
+    if (bug != null) {
+      throw new Daikon.BugInDaikon(errors.toString(), bug);
+    }
+    if (errors.length() != 0) {
+      throw new Daikon.UserError(errors.toString());
+    }
+  }
+
+  /**
+   * Creates a .spinfo file from the given C file. For input file {@code foo.c}, the output file is
+   * {@code foo.spinfo}.
+   *
+   * @param inputFile the name of the C file
+   */
+  private static void processFile(String inputFile) {
+    int dotPos = inputFile.lastIndexOf('.');
+    // On Windows, both '/' and '\\' are separators.
+    int separatorPos =
+        Math.max(inputFile.lastIndexOf('/'), inputFile.lastIndexOf(File.separatorChar));
+    if (dotPos <= separatorPos) {
+      throw new Daikon.UserError(
+          "File name has no extension: " + inputFile + Daikon.lineSep + usage);
+    }
+    String fileName = inputFile.substring(0, dotPos);
+    System.out.println("Create spinfo file from file " + inputFile + " . . .");
+    String contents;
+    try {
+      contents = new String(Files.readAllBytes(Paths.get(inputFile)), UTF_8);
+    } catch (IOException e) {
+      throw new Daikon.UserError(e, "Problem reading " + inputFile + ": " + e);
+    }
+    // The parser does not accept '\f' characters.
+    contents = contents.replace("\f", "");
+
+    TranslationUnit root;
+    try {
+      CParser.ReInit(new StringReader(contents));
+      root = CParser.TranslationUnit();
+    } catch (ParseException | TokenMgrError e) {
+      throw new Daikon.UserError(e, "CreateSpinfoC encountered errors while parsing " + inputFile);
+    }
+    StringFinder finder = new StringFinder();
+    root.accept(finder);
+
+    String spinfoFile = fileName + ".spinfo";
+    ConditionPrinter printer;
+    try {
+      printer = new ConditionPrinter(spinfoFile);
+    } catch (IOException e) {
+      throw new Daikon.UserError(e, "Problem writing " + spinfoFile + ": " + e);
+    }
+    // The file is now open and truncated, so delete it if writing fails rather than leave a partial
+    // .spinfo file.
+    boolean written = false;
+    try {
+      // When Daikon requires Java 9 or later, simplify this to:
+      //   try (printer) {
+      //     printer.setActualStrings(finder.functionStringMapping);
+      //     printer.setStringArrays(finder.stringMatrices);
+      //     root.accept(printer);
+      //   }
+      try (ConditionPrinter p = printer) {
+        p.setActualStrings(finder.functionStringMapping);
+        p.setStringArrays(finder.stringMatrices);
+        root.accept(p);
+      }
+      written = true;
+    } catch (IOException e) {
+      throw new Daikon.UserError(e, "Problem writing " + spinfoFile + ": " + e);
+    } finally {
+      if (!written) {
+        new File(spinfoFile).delete();
+      }
+    }
+    System.out.println("CreateSpinfoC:  C program parsed successfully.");
   }
 }

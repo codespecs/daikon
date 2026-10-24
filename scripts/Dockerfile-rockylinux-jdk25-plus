@@ -54,9 +54,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
   devscripts-checkbashisms \
   gcc-c++ \
-  graphviz \
-  netpbm \
-  netpbm-progs \
+  gdb \
   python3 \
   python3-distutils-extra \
   ShellCheck \
@@ -64,6 +62,14 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   texinfo-tex \
   texlive \
   yamllint
+
+# Valgrind's gdbserver regression tests, run by Fjalar's CI, need gdb (above)
+# and glibc's debugging information.  (On Ubuntu, that is package libc6-dbg.)
+# `dnf debuginfo-install` is in dnf-plugins-core.  It can succeed without
+# installing anything, so check that glibc-debuginfo got installed.
+RUN dnf -q -y config-manager --set-enabled baseos-debuginfo \
+&& dnf -q -y upgrade && dnf -q -y debuginfo-install glibc \
+&& rpm -q glibc-debuginfo
 
 ## Other ways to install gradle:
 ##  * The `dnf` package repository has a very old version of gradle.
@@ -94,11 +100,13 @@ RUN dnf -q -y install \
 
 # Install uv (manages Python dependencies).
 RUN echo "installing uv" \
-&& wget -qO- https://astral.sh/uv/install.sh | sh \
-&& find /root -exec chmod +r {} \; \
-&& find /root -type d -exec chmod +x {} \; \
-&& find /root/.local/bin -type f -exec chmod +x {} \;
+&& wget -qO- https://astral.sh/uv/install.sh | sh
 ENV PATH=/root/.local/bin:$PATH
+
+# Azure runs jobs as a non-root user, who must be able to read files in /root
+# and run programs installed there.  Rocky Linux makes /root inaccessible to
+# other users.  This step must follow every step that writes to /root.
+RUN chmod -R og+rX /root
 
 # Clean up.
 RUN dnf -q clean all

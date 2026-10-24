@@ -31,8 +31,17 @@ public class Printer extends DepthFirstVisitor {
     buffer.append(n.tokenImage);
   }
 
+  /**
+   * Closes the output file.
+   *
+   * @throws IOException if any write to the output file failed
+   */
   public void close() throws IOException {
     out.close();
+    // PrintWriter does not throw exceptions, so check whether any write, flush, or close failed.
+    if (out.checkError()) {
+      throw new IOException("write failed");
+    }
   }
 
   public void println() {

@@ -25,16 +25,7 @@ help-recurse-list:
 	@echo " which are ones that have been selected as useful tests.)"
 	@echo ""
 
-# To produce incremental output, invoke make as: make MPARG=-Otarget ...
-# To not run in parallel, invoke make as: make MPARG=-j1 ...
-ifeq (4.0,$(firstword $(sort ${MAKE_VERSION} 4.0)))
-  # Version 4.0 or higher
-  MPARG ?= -Orecurse
-else
-  MPARG ?=
-endif
-
-PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+include $(dir $(lastword $(MAKEFILE_LIST)))Makefile.jobs
 
 all diffs: txt-diff non-txt-diff dyncomp-tests results
 
@@ -51,12 +42,7 @@ esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff tx
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	${MAKE} pat-daikon-tests-$@
 pat-daikon-tests-%:
-# Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
-	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $*; \
-	else \
-	  ${MAKE} -C daikon-tests --jobs=4 ${MPARG} $*; \
-	fi
+	${MAKE} -C daikon-tests --jobs=${DAIKON_TEST_JOBS} ${MPARG} $*
 
 list-targets:
 	${MAKE} -C daikon-tests list-targets
@@ -94,8 +80,6 @@ very-clean: clean
 
 # output display; can be called from children (they will set BASE)
 BASE?=chicory-tests daikon-tests diff-tests merge-invariants-tests parser-tests dyncomp-tests
-# removes fields before the size (ie, permissions, owner, group).
-PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; print "$$1\t$$2\t$$3\n"; if ($$1 > 0) { $$failure++; } END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
 # args to 'find' program, to find files containing results
 RESULTS_PATTERN :=    -name '*.txt-*.diff' \
                    -o -name '*.checker.diff' \
@@ -112,20 +96,11 @@ RESULTS_PATTERN :=    -name '*.txt-*.diff' \
                    -o -name '*.invs.diff' \
                    -o -name '*xcheck.diff' \
                    -o -name '*daikon.diff'
-results_header:
-	@echo ""
-	@echo "=== RESULTS ==="
-	@echo ""
+# The summary lists passing tests too; summary2 relies on that.
+RESULTS_PRINT_PASSING = 1
+include ${DAIKON_TESTS_DIR}Makefile.results
 
-results_cat:
-	@find ${BASE} ${RESULTS_PATTERN} -print0 | xargs -0 cat
-
-results: results_header results_cat summary
-
-summary:
-	@ls -l `find ${BASE} ${RESULTS_PATTERN}` \
-	  | perl -pe 's|\Q${BASE}|.|;' \
-	  | ${PERL_CLEANUP_LS_OUTPUT}
+summary: summary_list
 
 summary2: # omit pristine tests
 	@${MAKE} --no-print-directory summary | egrep -v '^0' || echo 'No differences'

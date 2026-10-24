@@ -93,6 +93,15 @@ public class DynComp {
   @Option("Use standard visibility")
   public static boolean std_visibility = false;
 
+  /**
+   * If true, DynComp never calls a method of the target program's objects. For example, DynComp
+   * does not process the elements of a {@code java.util.List}, which requires calling its {@code
+   * toArray()} method. When running Chicory with {@code --no-method-calls}, supply this option to
+   * DynComp as well.
+   */
+  @Option("Never call methods of the target program's objects")
+  public static boolean no_method_calls = false;
+
   /** Depth to which to examine structure components. */
   @Option("Variable nesting depth")
   public static int nesting_depth = 2;
@@ -179,7 +188,7 @@ public class DynComp {
   public static void check_args(Options options, String[] targetArgs) {
     if (help) {
       options.printUsage();
-      System.exit(1);
+      System.exit(0);
     }
     if (nesting_depth < 0) {
       System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);
