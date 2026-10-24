@@ -4543,9 +4543,9 @@ subsequent runs to reduce the time required to generate the @file{.trace}
 file(s).
 
 @item --dyncomp-interactions=all
-@item --dyncomp-interactions=units
-@item --dyncomp-interactions=comparisons
-@item --dyncomp-interactions=none
+@itemx --dyncomp-interactions=units
+@itemx --dyncomp-interactions=comparisons
+@itemx --dyncomp-interactions=none
 
 By default, DynComp considers any binary operation as an interaction
 between its two operands. (@option{=all})
@@ -4561,6 +4561,44 @@ y} or @code{x != y}). (@option{=comparisons})
 
 Finally, you may specify that no binary operations qualify as
 interactions between values.  Thus, DynComp only tracks dataflow. (@option{=none})
+
+@item --dyncomp-unhandled-ops=panic
+@itemx --dyncomp-unhandled-ops=warn
+
+By default, if DynComp encounters a unary, binary, ternary, or quaternary
+Valgrind VEX IR operator that it does not handle, it prints the name of
+the operator and stops.  (@option{=panic})  Please report such a failure
+(@pxref{Reporting problems}).  When @option{--dyncomp-interactions} is
+@option{comparisons} or @option{none}, DynComp treats every ternary and
+quaternary operator as a non-interaction without examining it, so it
+does not stop at (or warn about) an unhandled ternary or quaternary
+operator.
+
+Alternatively, DynComp can print a warning the first time it encounters
+each such operator and continue, approximating the operator.
+(@option{=warn})  The result of a unary operator gets the tag of its
+operand, as for a copy.  For any other operator, the approximation
+ignores operands that appear to be rounding modes, shift amounts, or
+lane indices; the remaining operands are the data operands.  The
+approximation is:
+
+@itemize @bullet
+@item
+If @option{--dyncomp-interactions} is @option{none}, the operator is a
+non-interaction.
+@item
+Otherwise, if the operator produces a boolean and has exactly 2 data
+operands, it is a comparison of those operands:  they become comparable,
+and the result is comparable to nothing.
+@item
+Otherwise, if @option{--dyncomp-interactions} is @option{units} or
+@option{comparisons}, the operator is a non-interaction.
+@item
+Otherwise, the operator is an interaction:  its data operands and its
+result all become comparable.
+@end itemize
+
+The resulting comparability sets may be imprecise.
 
 @item --dyncomp-approximate-literals
 
