@@ -1,10 +1,13 @@
 # This is a -*- makefile -*-, Emacs.
 
+# The directory containing this file.  Makefile.jdk is found relative to it,
+# not via DAIKONDIR, which may name a different Daikon tree.
+THIS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 # DAIKONDIR is the clone of the 'daikon' project.
 ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+  DAIKONDIR := $(realpath ${THIS_MAKEFILE_DIR}../..)
 endif
-include ${DAIKONDIR}/tests/Makefile.jdk
+include ${THIS_MAKEFILE_DIR}../Makefile.jdk
 DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 # Fails when running "clean".
 # $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
@@ -59,8 +62,8 @@ BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := ${JAVA} -ea -Xmx7g -cp ${DAIKON_JAR} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := ${JAVA} -Xmx7g -cp ${DAIKON_JAR} daikon.PrintInvariants
+DAIKON = ${JAVA} -ea -Xmx7g -cp ${DAIKON_JAR} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
+PRINT_INV = ${JAVA} -Xmx7g -cp ${DAIKON_JAR} daikon.PrintInvariants
 
 default: summary-w-daikon
 
@@ -69,9 +72,6 @@ OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release | cut -d " " 
 OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 # bogus goal to force goal_name to try all paths
 GOAL := DUMMY
-
-$(info OS_ID="$(OS_ID)")
-$(info OS_REL="$(OS_REL)")
 
 ifeq ($(OS_ID),CentOS)
 $(warning !!Daikon no longer tests on CentOS!!)
@@ -404,27 +404,30 @@ diffs: $(DIFF_FILES)
 
 diffs-w-daikon: diffs $(INV_DIFFS)
 
-summary: diffs
-	@echo -e "\t["$$(basename `pwd`)"]"
-	@for file in $(DIFF_FILES); do \
-	  if [ -s $$file ]; then \
+# Reports whether each of the diff files $(1) is empty.  Remakes no file.
+define REPORT_DIFFS
+	@printf '\t[%s]\n' "$$(basename `pwd`)"
+	@for file in $(1); do \
+	  if [ ! -e $$file ]; then \
+	    echo "MISSING $$file"; \
+	  elif [ -s $$file ]; then \
 	    echo "FAILED  $$file"; \
 	    cat $$file; \
 	  else \
 	    echo "OK      $$file"; \
 	  fi; \
 	done
+endef
+
+summary: diffs
+	$(call REPORT_DIFFS,$(DIFF_FILES))
 
 summary-w-daikon: diffs-w-daikon
-	@echo -e "\t["$$(basename `pwd`)"]"
-	@for file in $(DIFF_FILES) $(INV_DIFFS); do \
-	  if [ -s $$file ]; then \
-	    echo "FAILED  $$file"; \
-	    cat $$file; \
-	  else \
-	    echo "OK      $$file"; \
-	  fi; \
-	done
+	$(call REPORT_DIFFS,$(DIFF_FILES) $(INV_DIFFS))
+
+# Like summary-w-daikon, but runs no test.  A test that failed to run is MISSING.
+report-w-daikon:
+	$(call REPORT_DIFFS,$(DIFF_FILES) $(INV_DIFFS))
 
 diffs-if-working:            diffs
 summary-if-working:          summary

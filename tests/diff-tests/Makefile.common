@@ -5,17 +5,20 @@
 # equal the goal output.  This is done for several different options
 # of Diff.
 
+# The directory containing this file.  Makefile.jdk is found relative to it,
+# not via DAIKONDIR, which may name a different Daikon tree.
+THIS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 # DAIKONDIR is the clone of the 'daikon' project.
 ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+  DAIKONDIR := $(realpath ${THIS_MAKEFILE_DIR}../..)
 endif
-include ${DAIKONDIR}/tests/Makefile.jdk
+include ${THIS_MAKEFILE_DIR}../Makefile.jdk
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 PROGRAM := $(notdir $(shell pwd))
-DAIKON := ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
-INV_DIFF := ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
+DAIKON = ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
+INV_DIFF = ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 

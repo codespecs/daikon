@@ -8,6 +8,7 @@ public final class DataStructures_QueueAr_isFull_21 extends Splitter {
     return "currentSize == theArray.length";
   }
 
+  VarInfo this_theArray_array_varinfo; // this.theArray[]
   VarInfo this_currentSize_varinfo; // this.currentSize
 
   static DummyInvariant dummyInvFactory;
@@ -15,6 +16,7 @@ public final class DataStructures_QueueAr_isFull_21 extends Splitter {
 
   public DataStructures_QueueAr_isFull_21() { }
   public DataStructures_QueueAr_isFull_21(Ppt ppt) {
+    this_theArray_array_varinfo = ppt.find_var_by_name("this.theArray[]");
     this_currentSize_varinfo = ppt.find_var_by_name("this.currentSize");
   }
 
@@ -23,17 +25,19 @@ public final class DataStructures_QueueAr_isFull_21 extends Splitter {
   }
 
   public boolean valid() {
-    return (this_currentSize_varinfo != null);
+    return (this_theArray_array_varinfo != null) && (this_currentSize_varinfo != null);
   }
 
   public boolean test(ValueTuple vt) {
-    /* writeTestBody: 1 declarations */
+    /* writeTestBody: 2 declarations */
+    long[] this_theArray_array = this_theArray_array_varinfo.getIntArrayValue(vt);
     long this_currentSize = this_currentSize_varinfo.getIntValue(vt);
-    return(this_currentSize==this_theArray.length);
+    return(this_currentSize==this_theArray_array.length);
   }
 
   public String repr() {
     return "DataStructures_QueueAr_isFull_21: "
+      + "this_theArray_array_varinfo = " + this_theArray_array_varinfo.repr() + " "
       + "this_currentSize_varinfo = " + this_currentSize_varinfo.repr() + " "
       ;
   }
@@ -44,9 +48,10 @@ public final class DataStructures_QueueAr_isFull_21 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
+    VarInfo this_theArray_array_vi = ppt.find_var_by_name("this.theArray[]");
     VarInfo this_currentSize_vi = ppt.find_var_by_name("this.currentSize");
-    if (this_currentSize_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_currentSize_vi});
+    if (this_theArray_array_vi != null && this_currentSize_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_theArray_array_vi, this_currentSize_vi});
     }
   }
 
