@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   daikon.chicory.RuntimeTest.class,
+  daikon.split.SplitterListTest.class,
   daikon.test.BadOptionTest.class,
   daikon.test.config.ConfigurationTest.class,
   daikon.test.config.HtmlToTexinfoTest.class,
