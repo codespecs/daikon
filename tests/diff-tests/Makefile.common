@@ -17,8 +17,8 @@ include ${THIS_MAKEFILE_DIR}../Makefile.jdk
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 PROGRAM := $(notdir $(shell pwd))
-DAIKON := ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
-INV_DIFF := ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
+DAIKON = ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
+INV_DIFF = ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 
