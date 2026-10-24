@@ -22,12 +22,12 @@ USER ?= daikonbuild
 
 # These use the JDK at JAVA_HOME, which java-home.mk sets, so that they agree
 # with JAVA_RELEASE_NUMBER.  ("?=" defines a recursively expanded variable.)
-JAVA ?= ${JAVA_HOME}/bin/java -ea
+JAVA ?= ${JAVA_HOME_OR_ERROR}/bin/java -ea
 # For debugging, add -verbose flag to javac command
-# JAVAC ?= ${JAVA_HOME}/bin/javac -g -Xlint:unchecked
-JAVAC ?= ${JAVA_HOME}/bin/javac
-JAVADOC ?= ${JAVA_HOME}/bin/javadoc
-JAR ?= ${JAVA_HOME}/bin/jar
+# JAVAC ?= ${JAVA_HOME_OR_ERROR}/bin/javac -g -Xlint:unchecked
+JAVAC ?= ${JAVA_HOME_OR_ERROR}/bin/javac
+JAVADOC ?= ${JAVA_HOME_OR_ERROR}/bin/javadoc
+JAR ?= ${JAVA_HOME_OR_ERROR}/bin/jar
 
 BuildJDKTool = BuildJDK
 
@@ -136,9 +136,9 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
   DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar
 endif
 
-JAVADOC_COMMAND := ${JAVADOC} -cp ${DAIKON_CLASSPATH}
-JAVAC_COMMAND := ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
-JAVA_COMMAND := ${JAVA} -cp ${DAIKON_CLASSPATH}
+JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
+JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
+JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 
 DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/java-getopt-*.jar):$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
@@ -1212,7 +1212,7 @@ endif
 ###
 
 CLOVER := ${HOME}/clover
-CLOVER_CMD := ${JAVA_COMMAND} -cp ${CLOVER}/clover-1.3.1/lib/clover.jar \
+CLOVER_CMD = ${JAVA_COMMAND} -cp ${CLOVER}/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
 CLOVER_CP := $(subst ${DAIKONDIR}/java,${CLOVER}/java,${DAIKON_CLASSPATH})
 CLOVER_CP := ${CLOVER_CP}:${CLOVER}/clover-1.3.1/lib/clover.jar
@@ -1285,7 +1285,7 @@ javadoc: api
 .PHONY: api
 api: ${PLUME_SCRIPTS} ../.utils/html-tools ${AUTO_GENERATED_FILES}
 ifeq (${SKIP_JAVADOC},1)
-	${JAVA_HOME}/bin/java -version
+	${JAVA_HOME_OR_ERROR}/bin/java -version
 	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
 	@echo Skipping javadoc on JDK 1.8 because of https://bugs.openjdk.java.net/browse/JDK-8215542
 else
@@ -1304,7 +1304,7 @@ endif
 # Then, you need to do binary search on that file.
 api-test-each: ${PLUME_SCRIPTS} ../.utils/html-tools ${AUTO_GENERATED_FILES}
 ifeq (${SKIP_JAVADOC},1)
-	${JAVA_HOME}/bin/java -version
+	${JAVA_HOME_OR_ERROR}/bin/java -version
 	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
 	@echo Skipping javadoc on JDK 1.8 because of https://bugs.openjdk.java.net/browse/JDK-8215542
 else

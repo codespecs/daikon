@@ -1,10 +1,11 @@
 # Makefile fragment that sets JAVA_HOME to a JDK, version 8 or later.  It uses
 # the existing value of JAVA_HOME if that is a JDK, and otherwise the JDK that
-# contains the javac on the PATH.  It also sets JAVA_VERSION_STRING_WITH_EA
-# (e.g., "27-ea"), JAVA_VERSION_STRING (e.g., "27" or "1.8.0_402"),
-# JAVA_RELEASE_NUMBER (e.g., "27" or "8"), and JAVANN_OR_NEWER (e.g.,
-# JAVA21_OR_NEWER), all for the JDK at JAVA_HOME.  It puts the JDK's bin/
+# contains the javac on the PATH.  It also sets JAVA_HOME_OR_ERROR (see below),
+# JAVA_VERSION_STRING_WITH_EA (e.g., "27-ea"), JAVA_VERSION_STRING (e.g., "27"
+# or "1.8.0_402"), JAVA_RELEASE_NUMBER (e.g., "27" or "8"), and JAVANN_OR_NEWER
+# (e.g., JAVA21_OR_NEWER), all for the JDK at JAVA_HOME.  It puts the JDK's bin/
 # directory at the front of the PATH.
+# If there is no JDK, JAVA_RELEASE_NUMBER is 0 and every JAVANN_OR_NEWER is 0.
 # It is included by java/Makefile, tests/Makefile.jdk, and ../Makefile.
 
 # For JDK 8, java.home is the jre/ subdirectory of the JDK, and a user's
@@ -38,13 +39,11 @@ endif
 # Make splits values on spaces, and many recipes use ${JAVA_HOME} unquoted.
 ifneq ($(word 2,${JAVA_HOME}),)
   $(error JAVA_HOME="${JAVA_HOME}" contains a space; use a path without spaces, such as a symbolic link to the JDK)
-else ifeq ($(if ${JAVA_HOME},$(wildcard ${JAVA_HOME}/bin/javac)),)
-  ifdef JAVA_HOME_FROM_PATH
-    $(error No JDK found; set JAVA_HOME to a JDK or put javac on the PATH)
-  else
-    $(error JAVA_HOME="${JAVA_HOME}" is not a JDK (it has no bin/javac))
-  endif
 endif
+
+ifneq ($(if ${JAVA_HOME},$(wildcard ${JAVA_HOME}/bin/javac)),)
+# Commands that run a JDK tool use JAVA_HOME_OR_ERROR.
+JAVA_HOME_OR_ERROR := ${JAVA_HOME}
 
 # The output of `javac -version` is like "javac 27-ea", "javac 25.0.1", or
 # "javac 1.8.0_402".  It may be preceded by lines such as
@@ -64,6 +63,27 @@ JAVA_RELEASES_THROUGH_CURRENT := $(shell seq 8 '${JAVA_RELEASE_NUMBER}' 2>/dev/n
 ifeq ($(filter ${JAVA_RELEASE_NUMBER},${JAVA_RELEASES_THROUGH_CURRENT}),)
   $(error Java 8 or later is required; "${JAVA_HOME}/bin/javac -version" yields "${JAVA_VERSION_STRING_WITH_EA}")
 endif
+
+# Helper scripts that run "java" or "javac" use the JDK at JAVA_HOME.
+# "override" applies this assignment to "make PATH=...".
+ifneq ($(firstword $(subst :, ,${PATH})),${JAVA_HOME}/bin)
+  override PATH := ${JAVA_HOME}/bin:${PATH}
+endif
+export PATH
+
+else
+# Expanding JAVA_HOME_OR_ERROR reports the missing JDK.  This happens only when
+# a command that runs a JDK tool is expanded, so targets that do not run one
+# (such as "clean") work without a JDK.
+ifdef JAVA_HOME_FROM_PATH
+  JAVA_HOME_OR_ERROR = $(error No JDK found; set JAVA_HOME to a JDK or put javac on the PATH)
+else
+  JAVA_HOME_OR_ERROR = $(error JAVA_HOME="${JAVA_HOME}" is not a JDK (it has no bin/javac))
+endif
+JAVA_RELEASE_NUMBER := 0
+JAVA_RELEASES_THROUGH_CURRENT :=
+endif
+
 # JAVANN_OR_NEWER is 1 if JAVA_RELEASE_NUMBER is at least NN, and 0 otherwise.
 java_or_newer = $(if $(filter $1,${JAVA_RELEASES_THROUGH_CURRENT}),1,0)
 JAVA11_OR_NEWER := $(call java_or_newer,11)
@@ -78,9 +98,3 @@ JAVA26_OR_NEWER := $(call java_or_newer,26)
 
 # Commands run by make, including recursive invocations of make, use this value.
 export JAVA_HOME
-# Helper scripts that run "java" or "javac" use the JDK at JAVA_HOME.
-# "override" applies this assignment to "make PATH=...".
-ifneq ($(firstword $(subst :, ,${PATH})),${JAVA_HOME}/bin)
-  override PATH := ${JAVA_HOME}/bin:${PATH}
-endif
-export PATH

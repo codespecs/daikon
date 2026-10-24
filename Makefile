@@ -30,7 +30,7 @@ endif
 # been expanded; recipes should use ${JDK_BIN} rather than those variables.
 # JDK_BIN does not redefine itself, because make's expansion of a variable can
 # misbehave if the variable is redefined during that expansion.
-JDK_BIN = $(if ${JAVA_HOME_MK_READ},,$(eval include ${DAIKONDIR}/java/java-home.mk)$(eval JAVA_HOME_MK_READ := 1))${JAVA_HOME}/bin
+JDK_BIN = $(if ${JAVA_HOME_MK_READ},,$(eval include ${DAIKONDIR}/java/java-home.mk)$(eval JAVA_HOME_MK_READ := 1))${JAVA_HOME_OR_ERROR}/bin
 
 
 ##########################################################################
