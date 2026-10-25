@@ -53,6 +53,11 @@ RUN curl --silent -o jdk-27_linux-x64_bin.tar.gz https://download.java.net/java/
 ENV PATH="/jdk-27/bin:$PATH"
 ENV JAVA27_HOME=/jdk-27
 
+# Azure runs jobs as a non-root user, who must be able to read files in /root
+# and run programs installed there.  /root is inaccessible to other users.
+# This step must follow every step that writes to /root.
+RUN chmod -R og+rX /root
+
 # Clean up.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy autoremove \
