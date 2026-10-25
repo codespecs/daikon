@@ -144,10 +144,11 @@ public class SplitterListTest {
   @Test
   public void testGetObjectUsesAllIncomplete() {
     // An incomplete PPT_NAME that contains "OBJECT" makes OBJECT program points use every
-    // incomplete PPT_NAME's splitters.
+    // incomplete PPT_NAME's splitters, each once.
     put("splitterlisttest.OBJECTsplit", new Splitter[] {new ConditionSplitter("o > 0")});
+    put("splitterlisttest.OBJECTsplit2", new Splitter[] {new ConditionSplitter("p > 0")});
     put("splitterlisttest.Unrelated", new Splitter[] {new ConditionSplitter("u > 0")});
-    List<String> relevant = Arrays.asList("o > 0", "u > 0");
+    List<String> relevant = Arrays.asList("o > 0", "p > 0", "u > 0");
     assertEquals(
         relevant, relevantConditions(SplitterList.get("splitterlisttest.F:::OBJECT"), relevant));
     // A program point that is not an OBJECT program point does not, even if its name contains
