@@ -1,9 +1,12 @@
-package daikon.split;
+package daikon.test.split;
 
 import static org.junit.Assert.assertEquals;
 
 import daikon.PptTopLevel;
 import daikon.VarInfo;
+import daikon.split.PptSplitter;
+import daikon.split.Splitter;
+import daikon.split.SplitterList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -167,8 +167,7 @@ public abstract class SplitterList {
   /**
    * Returns the splitters associated with this program point name (or null). The resulting
    * splitters are factories, not instantiated splitters. The result may contain several splitters
-   * with the same condition; {@link daikon.PptTopLevel#addConditions} uses only the first one that
-   * is valid.
+   * with the same condition.
    *
    * @return an array of splitters
    */
@@ -208,8 +207,7 @@ public abstract class SplitterList {
 
   /**
    * Returns all the splitters in this program. The resulting splitters are factories, not
-   * instantiated splitters. The result may contain several splitters with the same condition;
-   * {@link daikon.PptTopLevel#addConditions} uses only the first one that is valid.
+   * instantiated splitters. The result may contain several splitters with the same condition.
    *
    * @return an array of splitters
    */
