@@ -2,6 +2,7 @@ package daikon.test.split;
 
 import static org.junit.Assert.assertEquals;
 
+import daikon.PptName;
 import daikon.PptTopLevel;
 import daikon.VarInfo;
 import daikon.split.PptSplitter;
@@ -86,7 +87,43 @@ public class SplitterDuplicatesTest {
     Splitter isEmpty = new ConditionSplitter("isEmpty()");
     Splitter sizeIsZero = new ConditionSplitter("size == 0");
     ppt.addConditions(new Splitter[] {invalid, valid, isEmpty, duplicate, sizeIsZero});
+    assertEquals(Arrays.asList(valid, isEmpty, sizeIsZero), addedSplitters(ppt));
+  }
 
+  @Test
+  public void testAddConditionsPrefersSameMethod() {
+    PptTopLevel ppt = new PptTopLevel("splitterduplicatestest.F.m(int):::ENTER", new VarInfo[0]);
+    String sameMethod = "splitterduplicatestest.F.m(int):::EXIT";
+    String otherMethod = "splitterduplicatestest.G.n(java.lang.String):::EXIT";
+    Splitter argOther = compiledFor(new ConditionSplitter("arg == 0"), otherMethod);
+    Splitter notCompiled = new ConditionSplitter("y > 0");
+    Splitter argSame = compiledFor(new ConditionSplitter("arg == 0"), sameMethod);
+    // A splitter compiled for the same method is not preferred if it is invalid.
+    Splitter xSameInvalid = compiledFor(new ConditionSplitter("x > 0", false), sameMethod);
+    Splitter xOther = compiledFor(new ConditionSplitter("x > 0"), otherMethod);
+    ppt.addConditions(new Splitter[] {argOther, notCompiled, argSame, xSameInvalid, xOther});
+    assertEquals(Arrays.asList(notCompiled, argSame, xOther), addedSplitters(ppt));
+  }
+
+  /**
+   * Records that a splitter was compiled for the given program point.
+   *
+   * @param splitter a splitter
+   * @param pptName the name of the program point that the splitter was compiled for
+   * @return the splitter
+   */
+  private static Splitter compiledFor(Splitter splitter, String pptName) {
+    splitter.setCompiledFor(new PptName(pptName));
+    return splitter;
+  }
+
+  /**
+   * Returns the splitters that {@link PptTopLevel#addConditions} added to a program point.
+   *
+   * @param ppt a program point
+   * @return the splitters that were added to the program point
+   */
+  private static List<@Nullable Splitter> addedSplitters(PptTopLevel ppt) {
     List<PptSplitter> pptSplitters = ppt.splitters;
     if (pptSplitters == null) {
       throw new AssertionError("No splitters");
@@ -95,6 +132,6 @@ public class SplitterDuplicatesTest {
     for (PptSplitter pptSplitter : pptSplitters) {
       added.add(pptSplitter.splitter);
     }
-    assertEquals(Arrays.asList(valid, isEmpty, sizeIsZero), added);
+    return added;
   }
 }

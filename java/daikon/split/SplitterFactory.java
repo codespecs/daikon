@@ -125,6 +125,7 @@ public class SplitterFactory {
               if (splitterObjects[i][k].splitterExists()) {
                 @SuppressWarnings("nullness") // dependent: because splitterExists() = true
                 @NonNull Splitter splitter = splitterObjects[i][k].getSplitter();
+                splitter.setCompiledFor(ppt.ppt_name);
                 sp.add(splitter);
                 numGood++;
               } else if (!PptSplitter.dkconfig_suppressSplitterErrors) {

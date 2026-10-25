@@ -207,8 +207,7 @@ public abstract class SplitterList {
 
   /**
    * Returns all the splitters in this program. The resulting splitters are factories, not
-   * instantiated splitters. The result may contain several splitters with the same condition
-   * text.
+   * instantiated splitters. The result may contain several splitters with the same condition text.
    *
    * @return an array of splitters
    */

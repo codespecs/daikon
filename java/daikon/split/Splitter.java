@@ -1,6 +1,7 @@
 package daikon.split;
 
 import daikon.Ppt;
+import daikon.PptName;
 import daikon.PptTopLevel;
 import daikon.ValueTuple;
 import daikon.inv.DummyInvariant;
@@ -52,6 +53,32 @@ public abstract class Splitter implements Serializable {
    */
   public boolean instantiated() {
     return instantiated;
+  }
+
+  /**
+   * The program point whose variables this splitter's condition was compiled against, or null if
+   * this splitter was not compiled from a {@code .spinfo} file.
+   */
+  private @Nullable PptName compiledFor = null;
+
+  /**
+   * Returns the program point whose variables this splitter's condition was compiled against, or
+   * null if this splitter was not compiled from a {@code .spinfo} file.
+   *
+   * @return the program point whose variables this splitter's condition was compiled against
+   */
+  public @Nullable PptName getCompiledFor() {
+    return compiledFor;
+  }
+
+  /**
+   * Records the program point whose variables this splitter's condition was compiled against.
+   *
+   * @param compiledFor the program point whose variables this splitter's condition was compiled
+   *     against
+   */
+  public void setCompiledFor(PptName compiledFor) {
+    this.compiledFor = compiledFor;
   }
 
   /**

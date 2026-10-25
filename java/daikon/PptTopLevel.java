@@ -2877,11 +2877,16 @@ public class PptTopLevel extends Ppt {
    * Creates a pair of conditional program points for each splitter that is valid at this program
    * point.
    *
-   * <p>If several valid splitters have the same condition text, this uses only the first of them.
-   * Such splitters may come from different PPT_NAME lines or {@code .spinfo} files, because by
-   * default every splitter is applied at every program point (see {@link
-   * SplitterList#dkconfig_all_splitters}). They may test different variables: for example, in
+   * <p>If several valid splitters have the same condition text, this uses only one of them, because
+   * the name of a conditional program point contains the condition text. Such duplicates arise
+   * because by default every splitter is applied at every program point (see {@link
+   * SplitterList#dkconfig_all_splitters}). Using only one of them can lose information, because
+   * splitters with the same text may have been compiled for different program points, where a given
+   * variable name may refer to a different variable or have a different type. For example, in
    * {@code i > 0}, one may test parameter {@code i} and another may test field {@code this.i}.
+   *
+   * <p>This uses the first such splitter that was compiled for a program point of this program
+   * point's method (or class), if there is one. Otherwise, it uses the first such splitter.
    *
    * @param splits splitter factories
    */
@@ -2900,6 +2905,13 @@ public class PptTopLevel extends Ppt {
 
     // Create a Conditional ppt for each side of each splitter
     splitters = new ArrayList<PptSplitter>(splits.length);
+    // The conditions of the valid splitters that were compiled for this program point's method.
+    Set<String> sameMethodConditions = new HashSet<>();
+    for (Splitter split : splits) {
+      if (compiledForSameMethod(split) && split.instantiateSplitter(this).valid()) {
+        sameMethodConditions.add(split.condition().trim());
+      }
+    }
     // The conditions of the splitters in `splitters`. A conditional program point's name contains
     // its splitter's condition text, so splitters with the same condition text would clash.
     Set<String> conditions = new HashSet<>();
@@ -2907,6 +2919,12 @@ public class PptTopLevel extends Ppt {
       String condition = splits[ii].condition().trim();
       if (conditions.contains(condition)) {
         debugConditional.fine("Splitter has a duplicate condition: " + condition);
+        continue;
+      }
+      if (sameMethodConditions.contains(condition) && !compiledForSameMethod(splits[ii])) {
+        debugConditional.fine(
+            "Splitter was compiled for a different method than another with condition: "
+                + condition);
         continue;
       }
       PptSplitter ppt_split = new PptSplitter(this, splits[ii]);
@@ -2924,6 +2942,21 @@ public class PptTopLevel extends Ppt {
         debugConditional.fine("Added PptSplitter: " + ppt_split);
       }
     }
+  }
+
+  /**
+   * Returns true if the given splitter was compiled for a program point of this program point's
+   * method (or class).
+   *
+   * @param splitter a splitter
+   * @return true if the splitter was compiled for a program point of this program point's method
+   */
+  private boolean compiledForSameMethod(Splitter splitter) {
+    PptName compiledFor = splitter.getCompiledFor();
+    String nameWithoutPoint = ppt_name.getNameWithoutPoint();
+    return compiledFor != null
+        && nameWithoutPoint != null
+        && nameWithoutPoint.equals(compiledFor.getNameWithoutPoint());
   }
 
   @Pure
