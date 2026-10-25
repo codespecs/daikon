@@ -4,8 +4,11 @@ import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import daikon.Daikon;
+import daikon.FileIO;
 import daikon.tools.DtraceDiff;
 import java.net.URL;
+import java.util.regex.Pattern;
 import junit.framework.TestSuite;
 import org.junit.Test;
 
@@ -24,12 +27,40 @@ public class DtraceDiffTester {
 
   private static boolean diff(String file1, String file2) {
     // System.out.println("Diff: " + file1 + " " + file2);
-    return DtraceDiff.mainTester(new String[] {find(file1), find(file2)});
+    return mainTester(new String[] {find(file1), find(file2)});
   }
 
   private static boolean diff(String option, String optval, String file1, String file2) {
     // System.out.println("Diff: " + file1 + " " + file2);
-    return DtraceDiff.mainTester(new String[] {option, optval, find(file1), find(file2)});
+    return mainTester(new String[] {option, optval, find(file1), find(file2)});
+  }
+
+  /**
+   * Calls {@link DtraceDiff#mainTester}, then restores the global variables that it sets, so that
+   * they do not affect later calls or other tests.
+   *
+   * @param args command-line arguments for DtraceDiff
+   * @return true if DtraceDiff completed without an error
+   */
+  private static boolean mainTester(String[] args) {
+    Pattern oldPptRegexp = Daikon.ppt_regexp;
+    Pattern oldPptOmitRegexp = Daikon.ppt_omit_regexp;
+    Pattern oldVarRegexp = Daikon.var_regexp;
+    Pattern oldVarOmitRegexp = Daikon.var_omit_regexp;
+    Boolean oldNewDeclFormat = FileIO.new_decl_format;
+    try {
+      return DtraceDiff.mainTester(args);
+    } finally {
+      Daikon.ppt_regexp = oldPptRegexp;
+      Daikon.ppt_omit_regexp = oldPptOmitRegexp;
+      Daikon.var_regexp = oldVarRegexp;
+      Daikon.var_omit_regexp = oldVarOmitRegexp;
+      if (oldNewDeclFormat == null) {
+        FileIO.resetNewDeclFormat();
+      } else {
+        FileIO.new_decl_format = oldNewDeclFormat;
+      }
+    }
   }
 
   /**
