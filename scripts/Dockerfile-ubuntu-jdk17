@@ -52,6 +52,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   openjdk-17-jdk \
 && update-java-alternatives --set java-1.17.0-openjdk-amd64
 
+# Azure runs jobs as a non-root user, who must be able to read files in /root
+# and run programs installed there.  /root is inaccessible to other users.
+# This step must follow every step that writes to /root.
+RUN chmod -R og+rX /root
+
 # Clean up.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy autoremove \
