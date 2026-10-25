@@ -130,6 +130,9 @@ public class InvariantAddAndCheckTester {
     // should all be comparable)
     Daikon.ignore_comparability = true;
 
+    // This test creates variables in the old decl format.
+    FileIO.new_decl_format = false;
+
     // run the actual test
 
     if (!execute()) {
