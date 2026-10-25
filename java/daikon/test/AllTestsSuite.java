@@ -36,6 +36,7 @@ import org.junit.runners.Suite;
   daikon.test.split.NullComparisonsSplitterTest.class,
   daikon.test.split.QualifiedNamesSplitterTest.class,
   daikon.test.split.SplitterFactoryFileNameTest.class,
+  daikon.test.split.SplitterListTest.class,
   daikon.test.split.SplitterLoadTest.class,
   daikon.test.TestAnnotate.class,
   daikon.test.TestAst.class,
