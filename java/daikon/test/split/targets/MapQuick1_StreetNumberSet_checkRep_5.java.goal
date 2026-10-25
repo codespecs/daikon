@@ -27,7 +27,7 @@ public final class MapQuick1_StreetNumberSet_checkRep_5 extends Splitter {
 
   public boolean test(ValueTuple vt) {
     /* writeTestBody: 0 declarations */
-    return(orig_i<orig_sets.length);
+    return(i<sets.length);
   }
 
   public String repr() {
