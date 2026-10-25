@@ -2877,11 +2877,11 @@ public class PptTopLevel extends Ppt {
    * Creates a pair of conditional program points for each splitter that is valid at this program
    * point.
    *
-   * <p>If several valid splitters have the same condition text, this uses only the first of them,
-   * because the name of a conditional program point contains the condition text. Such splitters may
-   * come from different PPT_NAME lines or {@code .spinfo} files, because by default every splitter
-   * is applied at every program point (see {@link SplitterList#dkconfig_all_splitters}). They may
-   * test different variables, because each was compiled for the program point its PPT_NAME matched.
+   * <p>If several valid splitters have the same condition text, this uses only the first of them.
+   * Such splitters may come from different PPT_NAME lines or {@code .spinfo} files, because by
+   * default every splitter is applied at every program point (see {@link
+   * SplitterList#dkconfig_all_splitters}). They may test different variables: for example, in
+   * {@code i > 0}, one may test parameter {@code i} and another may test field {@code this.i}.
    *
    * @param splits splitter factories
    */
@@ -2900,7 +2900,8 @@ public class PptTopLevel extends Ppt {
 
     // Create a Conditional ppt for each side of each splitter
     splitters = new ArrayList<PptSplitter>(splits.length);
-    // The conditions of the splitters in `splitters`.
+    // The conditions of the splitters in `splitters`. A conditional program point's name contains
+    // its splitter's condition text, so splitters with the same condition text would clash.
     Set<String> conditions = new HashSet<>();
     for (int ii = 0; ii < splits.length; ii++) {
       String condition = splits[ii].condition().trim();
