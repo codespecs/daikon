@@ -27,7 +27,7 @@ public final class MapQuick1_StreetNumberSet_StreetNumberSet_2 extends Splitter 
 
   public boolean test(ValueTuple vt) {
     /* writeTestBody: 0 declarations */
-    return(orig_dashLoc==-1);
+    return(dashLoc==-1);
   }
 
   public String repr() {
