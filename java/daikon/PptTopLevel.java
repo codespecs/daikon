@@ -2883,7 +2883,8 @@ public class PptTopLevel extends Ppt {
    * SplitterList#dkconfig_all_splitters}). Using only one of them can lose information, because
    * splitters with the same text may have been compiled for different program points, where a given
    * variable name may refer to a different variable or have a different type. For example, in
-   * {@code i > 0}, one may test parameter {@code i} and another may test field {@code this.i}.
+   * {@code i > 0}, a splitter compiled for one program point may test parameter {@code i} and a
+   * splitter compiled for another program point may test field {@code this.i}.
    *
    * <p>This uses the first such splitter that was compiled for a program point of this program
    * point's method (or class), if there is one. Otherwise, it uses the first such splitter.
