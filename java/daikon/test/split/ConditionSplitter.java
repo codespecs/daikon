@@ -1,12 +1,13 @@
-package daikon.split;
+package daikon.test.split;
 
 import daikon.Ppt;
 import daikon.ValueTuple;
 import daikon.inv.DummyInvariant;
+import daikon.split.Splitter;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-/** A splitter that only has a condition, for use in tests. It is its own instantiation. */
+/** A splitter that only has a condition. It is its own instantiation. */
 class ConditionSplitter extends Splitter {
   static final long serialVersionUID = 20261006L;
 
