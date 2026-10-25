@@ -130,8 +130,7 @@ final class SplitterTestUtils {
 
   /**
    * Compiles and loads the splitters of a spinfo file for a program point. Checks that each
-   * splitter is valid and that no two splitters have the same condition. No other test may register
-   * splitters for splitterPptName.
+   * splitter is valid and that no two splitters have the same condition.
    *
    * @param spinfoFile the name of the spinfo file, in {@link #targetDir}
    * @param ppt the program point to which the splitters apply
@@ -143,29 +142,35 @@ final class SplitterTestUtils {
   static LoadedSplitters load(String spinfoFile, PptTopLevel ppt, String splitterPptName)
       throws IOException {
     SpinfoFile spinfo = SplitterFactory.parse_spinfofile(new File(targetDir + spinfoFile));
-    PrintStream oldOut = System.out;
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    System.setOut(new PrintStream(out, true, StandardCharsets.UTF_8));
+    // Splitters that other tests registered for splitterPptName would be returned below.
+    SplitterList.remove(splitterPptName);
     try {
-      SplitterFactory.load_splitters(ppt, Collections.singletonList(spinfo));
-    } finally {
-      System.setOut(oldOut);
-    }
-    String output = new String(out.toByteArray(), StandardCharsets.UTF_8);
-
-    List<Splitter> splitters = new ArrayList<>();
-    Set<String> conditions = new HashSet<>();
-    Splitter[] factories = SplitterList.get_raw(splitterPptName);
-    if (factories != null) {
-      for (Splitter factory : factories) {
-        String condition = factory.condition();
-        Splitter splitter = factory.instantiateSplitter(ppt);
-        assertTrue(condition, splitter.valid());
-        assertTrue("duplicate condition " + condition, conditions.add(condition));
-        splitters.add(splitter);
+      PrintStream oldOut = System.out;
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      System.setOut(new PrintStream(out, true, StandardCharsets.UTF_8));
+      try {
+        SplitterFactory.load_splitters(ppt, Collections.singletonList(spinfo));
+      } finally {
+        System.setOut(oldOut);
       }
+      String output = new String(out.toByteArray(), StandardCharsets.UTF_8);
+
+      List<Splitter> splitters = new ArrayList<>();
+      Set<String> conditions = new HashSet<>();
+      Splitter[] factories = SplitterList.get_raw(splitterPptName);
+      if (factories != null) {
+        for (Splitter factory : factories) {
+          String condition = factory.condition();
+          Splitter splitter = factory.instantiateSplitter(ppt);
+          assertTrue(condition, splitter.valid());
+          assertTrue("duplicate condition " + condition, conditions.add(condition));
+          splitters.add(splitter);
+        }
+      }
+      return new LoadedSplitters(output, ppt, splitters);
+    } finally {
+      SplitterList.remove(splitterPptName);
     }
-    return new LoadedSplitters(output, ppt, splitters);
   }
 
   /**
