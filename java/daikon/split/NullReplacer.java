@@ -19,9 +19,8 @@ import jtb.syntaxtree.NodeToken;
 import jtb.visitor.DepthFirstVisitor;
 
 /**
- * NullReplacer is a JTB syntax tree visitor that replaces instances of "null" with "0" in a given
- * expression. Note: "null" is only referring to the java reserved word "null" not to any instances
- * of the string "null".
+ * NullReplacer is a JTB syntax tree visitor that replaces {@code null} with {@code 0}, when it
+ * stands for a hashcode.
  *
  * <p>A splitter represents some references by their hashcode, which is 0 for null. A "null" is
  * replaced only if it stands for a hashcode: that is, if it is compared, by "==" or "!=", with an
