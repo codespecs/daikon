@@ -197,7 +197,9 @@ public class SampleTester {
    */
   public void test_samples(String commandFile) throws IOException {
 
-    FileIO.new_decl_format = null;
+    // Do not depend on global state that earlier tests leave behind.
+    Daikon.cleanup();
+    FileIO.resetNewDeclFormat();
 
     try (InputStream commands = getClass().getResourceAsStream(commandFile)) {
       if (commands == null) {
