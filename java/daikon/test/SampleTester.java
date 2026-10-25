@@ -200,6 +200,8 @@ public class SampleTester {
     // Do not depend on global state that earlier tests leave behind.
     Daikon.cleanup();
     FileIO.resetNewDeclFormat();
+    // Daikon.cleanup() discards the prototype invariants, so set them up again.
+    first_decl = true;
 
     try (InputStream commands = getClass().getResourceAsStream(commandFile)) {
       if (commands == null) {
