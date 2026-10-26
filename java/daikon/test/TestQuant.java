@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import daikon.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import junit.framework.*;
 import org.junit.Test;
@@ -89,6 +90,11 @@ public final class TestQuant {
     List<String> list = new ArrayList<>(Arrays.asList("x", "y"));
     assertEquals("y", Quant.getElement_String(list, 1));
     assertNull(Quant.getElement_String(list, 2));
+    List<Integer> intList = new ArrayList<>(Arrays.asList(10, 20));
+    assertEquals(20, Quant.getElement_int(intList, 1));
+    assertEquals(Integer.MAX_VALUE, Quant.getElement_int(intList, 2));
+    assertEquals(Integer.MAX_VALUE, Quant.getElement_int(list, 0));
+    assertEquals(20, Quant.getElement_int(new LinkedHashSet<>(intList), 1));
     assertNull(Quant.getElement_Object(new Object[] {"x"}, -1));
   }
 

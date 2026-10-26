@@ -161,7 +161,8 @@ The correct way to build the system is to run 'make'.
 
   /**
    * Returns the ith element of the array or collection argument. If the argument is null or not an
-   * array or collection, or if i is out of bounds, returns a default value (BAD_VALUE).
+   * array or collection, if i is out of bounds, or if the argument is a collection whose ith element
+   * is not a _TYPE_NAME, returns a default value (BAD_VALUE).
    */
 #if defined(OBJECT) || defined(STRING)
   @SuppressWarnings("interning") // reflection
@@ -171,11 +172,23 @@ The correct way to build the system is to run 'make'.
 #endif
   @Pure
   public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT(Object o, long i) {
-    Object arr = asArray(o);
-    if (arr == null || i < 0 || i >= java.lang.reflect.Array.getLength(arr)) {
+    if (o instanceof Collection<?>) {
+      Object elt = collectionElement((Collection<?>)o, i);
+#if defined(OBJECT)
+      return elt;
+#elif defined(STRING)
+      return (elt instanceof String) ? (String)elt : BAD_VALUE;
+#else
+      return (elt instanceof _TYPE_WRAPPER_NAME) ? (_TYPE_WRAPPER_NAME)elt : BAD_VALUE;
+#endif
+    }
+    if (o == null
+        || !o.getClass().isArray()
+        || i < 0
+        || i >= java.lang.reflect.Array.getLength(o)) {
       return BAD_VALUE; // return default value
     }
-    return ARRAY_GET_NAME(arr, (int)i);
+    return ARRAY_GET_NAME(o, (int)i);
   }
 
   /**
