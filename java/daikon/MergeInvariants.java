@@ -263,7 +263,11 @@ public final class MergeInvariants {
       decl_files.add(decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
       merge_ppts.trimToSize();
-      PptRelation.init_hierarchy(merge_ppts);
+      Daikon.create_combined_exits(merge_ppts);
+      Daikon.init_hierarchy(merge_ppts);
+      for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
+        ppt.clean_for_merge();
+      }
     }
 
     // Create a hierarchy between the merge exitNN points and the
