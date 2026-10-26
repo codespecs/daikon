@@ -171,24 +171,17 @@ The correct way to build the system is to run 'make'.
 #endif
   @Pure
   public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT(Object o, long i) {
-    if (o == null) {
-      return BAD_VALUE; // return default value
-    }
-    java.lang.Class<?> c = o.getClass();
-    Object arr;
-    if (c.isArray()) {
-      arr = o;
-    } else if (o instanceof java.util.AbstractCollection<?>) {
-      arr = ((java.util.AbstractCollection<?>)o).toArray();
-    } else {
-      return BAD_VALUE; // return default value
-    }
-    if (i < 0 || i >= java.lang.reflect.Array.getLength(arr)) {
+    Object arr = asArray(o);
+    if (arr == null || i < 0 || i >= java.lang.reflect.Array.getLength(arr)) {
       return BAD_VALUE; // return default value
     }
     return ARRAY_GET_NAME(arr, (int)i);
   }
 
+  /**
+   * Returns the ith element of the array argument. If the argument is null, or if i is out of
+   * bounds, returns a default value (BAD_VALUE).
+   */
 #if defined(OBJECT) || defined(STRING)
   @SuppressWarnings("interning") // called reflectively
 #endif

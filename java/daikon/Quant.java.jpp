@@ -111,6 +111,24 @@ public final class Quant {
     return o.size();
   }
 
+  /**
+   * Returns the argument if it is an array, or an array of its elements if it is a collection.
+   * Returns null if the argument is null or is neither an array nor a collection.
+   */
+  @SideEffectFree
+  private static @Nullable Object asArray(@Nullable Object o) {
+    if (o == null) {
+      return null;
+    }
+    if (o.getClass().isArray()) {
+      return o;
+    } else if (o instanceof Collection<?>) {
+      return ((Collection<?>)o).toArray();
+    } else {
+      return null;
+    }
+  }
+
   /** True iff the sequence contains no null elements. */
   @EnsuresNonNullIf(result=true, expression="#1")
   @Pure
