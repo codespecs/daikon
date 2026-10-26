@@ -976,6 +976,7 @@ public final class Daikon {
     ppt_omit_regexp = null;
     var_regexp = null;
     var_omit_regexp = null;
+    ppt_max_name = null;
     server_dir = null;
     use_mem_monitor = false;
     userDefinedInvariants.clear();
