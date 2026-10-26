@@ -264,6 +264,9 @@ public final class MergeInvariants {
       merge_ppts.trimToSize();
       Daikon.create_combined_exits(merge_ppts);
       PptRelation.init_hierarchy(merge_ppts);
+      for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
+        ppt.clean_for_merge();
+      }
     }
 
     // Create a hierarchy between the merge leaves (such as exitNN points)
