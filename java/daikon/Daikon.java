@@ -1816,6 +1816,22 @@ public final class Daikon {
     }
   }
 
+  /**
+   * Initializes the partial order hierarchy among the given ppts, according to the format of the
+   * declarations that were read.
+   *
+   * @param all_ppts the ppts, whose declarations have been read
+   */
+  public static void init_hierarchy(PptMap all_ppts) {
+    assert FileIO.new_decl_format != null
+        : "@AssumeAssertion(nullness): read declarations, so new_decl_format is set";
+    if (FileIO.new_decl_format) {
+      PptRelation.init_hierarchy_new(all_ppts);
+    } else {
+      PptRelation.init_hierarchy(all_ppts);
+    }
+  }
+
   /** Setup splitters. Add orig and derived variables. Recursively call init_ppt on splits. */
   public static void init_ppt(PptTopLevel ppt, PptMap all_ppts) {
 
