@@ -370,11 +370,6 @@ public final class FileIO {
       decl_error(state, "ppt name expected in '%s'", line);
       throw new Error(); // this can't happen
     }
-    // Reject anything after the ppt name, as for the other records.
-    Scanner ppt_scanner = new Scanner(line);
-    ppt_scanner.next(); // "ppt"
-    ppt_scanner.next(); // the ppt name
-    need_eol(state, ppt_scanner);
 
     // Information that will populate the new program point.
     Map<String, VarDefinition> varmap = new LinkedHashMap<>();
@@ -1679,7 +1674,7 @@ public final class FileIO {
       // interning bugfix:  no need to intern "line" (after code change to is_declaration_header)
 
       // Check for the file format
-      if (line.startsWith("decl-version")) {
+      if (is_keyword_record(line, "decl-version")) {
         read_decl_version(state, line);
         state.payload = (new_decl_format ? "2.0" : "1.0");
         state.payload = (FileIO.new_decl_format ? "2.0" : "1.0");
@@ -1688,7 +1683,7 @@ public final class FileIO {
       }
 
       // Check for the input language
-      if (line.startsWith("input-language")) {
+      if (is_keyword_record(line, "input-language")) {
         String input_language = read_input_language(state, line);
         state.payload = input_language;
         state.rtype = RecordType.INPUT_LANGUAGE;
@@ -1725,7 +1720,7 @@ public final class FileIO {
         state.rtype = RecordType.DECL;
         return;
       }
-      if (line.equals("VarComparability") || line.startsWith("var-comparability")) {
+      if (line.equals("VarComparability") || is_keyword_record(line, "var-comparability")) {
         state.varcomp_format = read_var_comparability(state, line);
         state.rtype = RecordType.COMPARABILITY;
         return;
@@ -3264,11 +3259,27 @@ public final class FileIO {
   @Pure
   public static boolean is_header_record(String line) {
     return isComment(line)
-        || line.startsWith("decl-version")
-        || line.startsWith("var-comparability")
+        || is_keyword_record(line, "decl-version")
+        || is_keyword_record(line, "var-comparability")
         || line.equals("VarComparability")
-        || line.startsWith("input-language")
+        || is_keyword_record(line, "input-language")
         || line.equals("ListImplementors");
+  }
+
+  /**
+   * Returns true if the line is the given keyword, or the keyword followed by whitespace and its
+   * arguments. A program point name in a sample cannot be such a line, because its blanks are
+   * escaped (see {@link #unescape_decl}), even if the name starts with the keyword.
+   *
+   * @param line the first line of a record in a .decls or .dtrace file
+   * @param keyword a keyword that starts a header record, such as "decl-version"
+   * @return true if the line starts with the keyword as a whole word
+   */
+  @Pure
+  private static boolean is_keyword_record(String line, String keyword) {
+    return line.startsWith(keyword)
+        && (line.length() == keyword.length()
+            || Character.isWhitespace(line.charAt(keyword.length())));
   }
 
   /**
