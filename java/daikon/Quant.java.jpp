@@ -116,6 +116,7 @@ public final class Quant {
    * Returns the ith element of the collection, in iteration order. Returns null if i is out of
    * bounds.
    */
+  @SuppressWarnings("signedness:return") // collection elements are assumed to be signed
   @Pure
   private static @Nullable Object collectionElement(Collection<?> c, long i) {
     if (i < 0 || i >= c.size()) {

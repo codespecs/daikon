@@ -90,7 +90,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(STRING)
   #define GETVALUE(object) (String)object
 #else
-  #define GETVALUE(object) ((_TYPE_WRAPPER_NAME)fieldObj)._TYPE_NAME ## Value()
+  #define GETVALUE(object) ((_TYPE_WRAPPER_NAME)object)._TYPE_NAME ## Value()
 #endif
 #undef ARRAY_GET_NAME
 #if defined(OBJECT)
@@ -179,7 +179,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(STRING)
       return (elt instanceof String) ? (String)elt : BAD_VALUE;
 #else
-      return (elt instanceof _TYPE_WRAPPER_NAME) ? (_TYPE_WRAPPER_NAME)elt : BAD_VALUE;
+      return (elt instanceof _TYPE_WRAPPER_NAME) ? GETVALUE(elt) : BAD_VALUE;
 #endif
     }
     if (o == null
