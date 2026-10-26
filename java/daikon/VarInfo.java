@@ -3532,13 +3532,21 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return old_result;
   }
 
-  /** Returns true if this variable contains a simple variable whose name is varname. */
+  /**
+   * Returns true if this variable contains a simple variable whose name is varname. A pre-state
+   * variable such as "orig(x)" contains "x", as does a variable derived from "x".
+   *
+   * @param varname the name of a simple variable
+   * @return true if this variable contains a simple variable whose name is varname
+   */
   public boolean includes_simple_name(String varname) {
     if (!FileIO.new_decl_format) {
       return var_info_name.includesSimpleName(varname); // vin ok
     }
 
-    if (isDerived()) {
+    if (postState != null) {
+      return postState.includes_simple_name(varname);
+    } else if (isDerived()) {
       for (VarInfo base : derived.getBases()) {
         if (base.includes_simple_name(varname)) {
           return true;
