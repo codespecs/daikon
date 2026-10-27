@@ -192,8 +192,11 @@ public class SessionManager implements Closeable {
     /** The associated session, or null if the thread should shutdown. */
     private @Owning @Nullable @GuardedBy("<self>") Session session = new Session();
 
-    /** True if this has been closed. */
-    private boolean finished = false;
+    /**
+     * True if this has been closed. It is volatile because {@link #close} writes it on one thread
+     * and {@link #run} reads it on the worker thread.
+     */
+    private volatile boolean finished = false;
 
     @Override
     @SuppressWarnings("nullness") // tricky, but I think it's OK
