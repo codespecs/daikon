@@ -111,8 +111,11 @@ public class SessionManager implements Closeable {
   @EnsuresCalledMethods(value = "worker", methods = "close")
   @Override
   public void close(@GuardSatisfied SessionManager this) {
-    worker.close();
-    worker = null;
+    try {
+      worker.close();
+    } finally {
+      worker = null;
+    }
   }
 
   private static @MonotonicNonNull String prover_background = null;
@@ -200,14 +203,17 @@ public class SessionManager implements Closeable {
         synchronized (mgr) {
           mgr.pending = null;
           mgr.notifyAll();
-          try {
-            mgr.wait(0);
-          } catch (InterruptedException e) {
-            // It's OK for a wait() to be interrupted.
+          // Wait for a command, or for close() to set `session` to null.
+          while (session != null && mgr.pending == null) {
+            try {
+              mgr.wait();
+            } catch (InterruptedException e) {
+              // It's OK for a wait() to be interrupted.
+            }
           }
-          assert mgr.pending != null
-              : "@AssumeAssertion(nullness): bug? might not be true if interrupted?";
-          // session != null && mgr.pending != null;
+          if (session == null) {
+            return;
+          }
         }
         error = null;
         try {
@@ -234,10 +240,17 @@ public class SessionManager implements Closeable {
     public void close(@GuardSatisfied Worker this) {
       finished = true;
       final @GuardedBy("<self>") Session tmp = session;
-      synchronized (tmp) {
+      try {
+        // Do not acquire the lock on `tmp`:  a command may hold it while blocked reading from a
+        // hung Simplify process, and only `tmp.close()` can unblock that command.
         tmp.close();
+      } finally {
+        session = null;
+        // Wake the worker thread so that it sees that `session` is null and exits.
+        synchronized (mgr) {
+          mgr.notifyAll();
+        }
       }
-      session = null;
     }
   }
 
