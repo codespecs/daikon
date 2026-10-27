@@ -238,7 +238,7 @@ public class SessionManager implements Closeable {
     @SuppressWarnings({
       "nullness:contracts.precondition.override",
       "builder:required.method.not.called", // operation performed on alias
-      "lock:lock.not.held" // Session.close() is thread-safe
+      "lock:lock.not.held" // must not wait for a command that is blocked on Simplify
     })
     @EnsuresCalledMethods(value = "session", methods = "close")
     @RequiresNonNull("session")
