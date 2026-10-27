@@ -411,8 +411,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     }
   }
 
-  public List<Set<Class<? extends Invariant>>> minimizeClasses(String result)
-      throws SimplifyError {
+  public List<Set<Class<? extends Invariant>>> minimizeClasses(String result) throws SimplifyError {
     List<Lemma> assumptions = new ArrayList<>(lemmas);
     List<Set<Class<? extends Invariant>>> found = new ArrayList<>();
     unAssumeLemmas();
