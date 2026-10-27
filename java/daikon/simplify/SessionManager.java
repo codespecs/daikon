@@ -58,17 +58,19 @@ public class SessionManager implements Closeable {
     worker = new Worker();
     worker.setDaemon(true);
     debugln("Manager: starting worker");
-    synchronized (this) {
-      worker.start();
-      // We won't wake up from this until the worker thread is ready
-      // and wait()ing to accept requests.
-      try {
-        this.wait();
-      } catch (InterruptedException e) {
-        // It's OK for a wait() to be interrupted.
-      }
-    }
+    worker.start();
     debugln("SessionManager created");
+  }
+
+  /**
+   * Returns how long {@link #request} waits for Simplify, in milliseconds, or 0 for no limit.
+   * Simplify enforces {@link Session#dkconfig_simplify_timeout} itself, so this limit is reached
+   * only if Simplify hangs.
+   *
+   * @return how long {@link #request} waits for Simplify, in milliseconds, or 0 for no limit
+   */
+  private static long requestTimeoutMillis() {
+    return 2000L * Session.dkconfig_simplify_timeout;
   }
 
   /** Performs the given command, or times out if too much time elapses. */
@@ -88,11 +90,19 @@ public class SessionManager implements Closeable {
       pending = command;
       // tell the worker to wake up
       this.notifyAll();
-      // wait for worker to finish
-      try {
-        this.wait();
-      } catch (InterruptedException e) {
-        // It's OK for a wait() to be interrupted.
+      // Wait for the worker to finish, for the timeout, or for another thread to close this.
+      long timeoutMillis = requestTimeoutMillis();
+      long deadline = System.currentTimeMillis() + timeoutMillis;
+      while (pending != null && worker != null) {
+        long remainingMillis = deadline - System.currentTimeMillis();
+        if (timeoutMillis != 0 && remainingMillis <= 0) {
+          break;
+        }
+        try {
+          this.wait(timeoutMillis == 0 ? 0 : remainingMillis);
+        } catch (InterruptedException e) {
+          // It's OK for a wait() to be interrupted.
+        }
       }
       // command finished iff the command was nulled out
       if (pending != null) {
@@ -106,11 +116,16 @@ public class SessionManager implements Closeable {
     }
   }
 
-  /** Shutdown this session. No further commands may be executed. */
+  /**
+   * Shutdown this session. No further commands may be executed. Has no effect if already closed.
+   */
   @SuppressWarnings("nullness") // nulling worker for fast failure (& for GC)
   @EnsuresCalledMethods(value = "worker", methods = "close")
   @Override
-  public void close(@GuardSatisfied SessionManager this) {
+  public synchronized void close(@GuardSatisfied SessionManager this) {
+    if (worker == null) {
+      return;
+    }
     try {
       worker.close();
     } finally {
@@ -202,10 +217,10 @@ public class SessionManager implements Closeable {
     @SuppressWarnings("nullness") // tricky, but I think it's OK
     public void run() {
       debugln("Worker: run");
-      while (session != null) {
+      while (true) {
+        final @GuardedBy("<self>") Session s;
+        Cmd command;
         synchronized (mgr) {
-          mgr.pending = null;
-          mgr.notifyAll();
           // Wait for a command, or for close() to set `session` to null.
           while (session != null && mgr.pending == null) {
             try {
@@ -217,18 +232,22 @@ public class SessionManager implements Closeable {
           if (session == null) {
             return;
           }
+          s = session;
+          command = mgr.pending;
         }
         error = null;
         try {
-          // session could also be null at this point, I presume.
-          // That's probably what the catch block is for.
-          mgr.pending.apply(session);
+          command.apply(s);
         } catch (Throwable e) {
           if (finished) {
             return;
           }
           error = e.toString();
           e.printStackTrace();
+        }
+        synchronized (mgr) {
+          mgr.pending = null;
+          mgr.notifyAll();
         }
       }
     }
