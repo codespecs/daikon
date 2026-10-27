@@ -232,7 +232,8 @@ public class SessionManager implements Closeable {
 
     @SuppressWarnings({
       "nullness:contracts.precondition.override",
-      "builder:required.method.not.called" // operation performed on alias
+      "builder:required.method.not.called", // operation performed on alias
+      "lock:lock.not.held" // Session.close() is thread-safe
     })
     @EnsuresCalledMethods(value = "session", methods = "close")
     @RequiresNonNull("session")
@@ -245,10 +246,11 @@ public class SessionManager implements Closeable {
         // hung Simplify process, and only `tmp.close()` can unblock that command.
         tmp.close();
       } finally {
-        session = null;
-        // Wake the worker thread so that it sees that `session` is null and exits.
+        // Wake the worker thread so that it sees that `session` is null and exits.  The worker
+        // cannot proceed until this releases the lock on `mgr`, after `session` is null.
         synchronized (mgr) {
           mgr.notifyAll();
+          session = null;
         }
       }
     }
