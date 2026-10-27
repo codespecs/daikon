@@ -62,17 +62,6 @@ public class SessionManager implements Closeable {
     debugln("SessionManager created");
   }
 
-  /**
-   * Returns how long {@link #request} waits for Simplify, in milliseconds, or 0 for no limit.
-   * Simplify enforces {@link Session#dkconfig_simplify_timeout} itself, so this limit is reached
-   * only if Simplify hangs.
-   *
-   * @return how long {@link #request} waits for Simplify, in milliseconds, or 0 for no limit
-   */
-  private static long requestTimeoutMillis() {
-    return 2000L * Session.dkconfig_simplify_timeout;
-  }
-
   /** Performs the given command, or times out if too much time elapses. */
   public void request(Cmd command) throws TimeoutException {
     assert worker != null : "Cannot use closed SessionManager";
@@ -90,16 +79,10 @@ public class SessionManager implements Closeable {
       pending = command;
       // tell the worker to wake up
       this.notifyAll();
-      // Wait for the worker to finish, for the timeout, or for another thread to close this.
-      long timeoutMillis = requestTimeoutMillis();
-      long deadline = System.currentTimeMillis() + timeoutMillis;
+      // Wait for the worker to finish, or for another thread to close this.
       while (pending != null && worker != null) {
-        long remainingMillis = deadline - System.currentTimeMillis();
-        if (timeoutMillis != 0 && remainingMillis <= 0) {
-          break;
-        }
         try {
-          this.wait(timeoutMillis == 0 ? 0 : remainingMillis);
+          this.wait();
         } catch (InterruptedException e) {
           // It's OK for a wait() to be interrupted.
         }
