@@ -67,7 +67,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    * Boolean. If true, the input to the Simplify theorem prover will also be directed to a file
    * named simplifyN.in (where N is a number starting from 0) in the current directory. Simplify's
    * operation can then be reproduced with a command like {@code Simplify -nosc <simplify0.in}. This
-   * is intended primarily for debugging when Simplify fails.
+   * is intended primarily for debugging when Simplify fails. This option is read when a Simplify
+   * session starts; changing it does not affect a session that is already running.
    */
   public static boolean dkconfig_trace_input = false;
 
@@ -78,9 +79,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   private static int trace_count = 0;
 
   @SuppressWarnings({
-    "resourceleak:required.method.not.called",
-    "resourceleak:unneeded.suppression"
-  }) // `Process.close()` exists in Java 26+.
+    "resourceleak:required.method.not.called", // `Process.close()` exists only in Java 26+.
+    "resourceleak:unneeded.suppression" // `Process.close()` exists only in Java 26+.
+  })
   /* package */ @Owning
   final Process process;
 
@@ -188,9 +189,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
   /** Releases the resources held by this. */
   @SuppressWarnings({
-    "resourceleak:required.method.not.called",
-    "resourceleak:unneeded.suppression"
-  }) // `Process.close()` exists in Java 26+.
+    "resourceleak:required.method.not.called", // `Process.close()` exists only in Java 26+.
+    "resourceleak:unneeded.suppression" // `Process.close()` exists only in Java 26+.
+  })
   @EnsuresCalledMethods(value = "trace_file", methods = "close")
   @Override
   public void close(@GuardSatisfied Session this) {
