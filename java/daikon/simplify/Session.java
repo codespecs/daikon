@@ -191,12 +191,14 @@ import org.checkerframework.checker.nullness.qual.Nullable;
     process.destroyForcibly();
     // In Java 26, `Process` implements `AutoCloseable`, so uncomment `process.close()`.
     // process.close();
-    assert dkconfig_trace_input == (trace_file != null)
-        : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
-            + " dkconfig_trace_input==true";
     if (trace_file != null) {
       trace_file.close();
     }
+    // This assertion follows the call to `close()`, so that `trace_file` is closed even if the
+    // assertion fails.
+    assert dkconfig_trace_input == (trace_file != null)
+        : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
+            + " dkconfig_trace_input==true";
   }
 
   /**
