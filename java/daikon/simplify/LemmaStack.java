@@ -394,7 +394,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     } catch (TimeoutException e) {
       System.err.println("Minimization timed out");
       restartProver();
-      return lemmas;
+      return new ArrayList<>(lemmas);
     }
     return result;
   }
@@ -436,27 +436,26 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
   /**
    * Search for the given lemma in the stack, and then remove it from both our stack and Simplify's.
-   * This is rather inefficient.
+   * The lemmas above it are popped off Simplify's stack and re-assumed.
    */
   public void removeLemma(Lemma bad) throws SimplifyError {
-    unAssumeAll(lemmas);
     int spliceOut = -1;
-    for (int i = 0; i < lemmas.size(); i++) {
-      Lemma lem = lemmas.elementAt(i);
+    for (int i = lemmas.size() - 1; i >= 0; i--) {
       @SuppressWarnings("interning") // value in list
-      boolean isBad = (lem == bad);
+      boolean isBad = (lemmas.elementAt(i) == bad);
       if (isBad) {
         spliceOut = i;
-      } else {
-        try {
-          assume(lem);
-        } catch (TimeoutException e) {
-          throw new SimplifyError("Timeout in contradiction removal");
-        }
+        break;
       }
     }
     assert spliceOut != -1;
+    unAssumeAll(lemmas.subList(spliceOut, lemmas.size()));
     lemmas.removeElementAt(spliceOut);
+    try {
+      assumeAll(lemmas.subList(spliceOut, lemmas.size()));
+    } catch (TimeoutException e) {
+      throw new SimplifyError("Timeout in contradiction removal");
+    }
   }
 
   /** Blow away everything on our stack and Simplify's. */
