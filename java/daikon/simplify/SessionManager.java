@@ -62,7 +62,12 @@ public class SessionManager implements Closeable {
     debugln("SessionManager created");
   }
 
-  /** Performs the given command, or times out if too much time elapses. */
+  /**
+   * Performs the given command.
+   *
+   * @param command the command to perform
+   * @throws TimeoutException if another thread closes this before the command completes
+   */
   public void request(Cmd command) throws TimeoutException {
     assert worker != null : "Cannot use closed SessionManager";
     assert pending == null : "Cannot queue requests";
@@ -87,9 +92,8 @@ public class SessionManager implements Closeable {
           // It's OK for a wait() to be interrupted.
         }
       }
-      // command finished iff the command was nulled out
+      // The command finished iff the worker nulled it out; otherwise, another thread closed this.
       if (pending != null) {
-        close();
         throw new TimeoutException();
       }
       // check for error
