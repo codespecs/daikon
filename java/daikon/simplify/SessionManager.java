@@ -72,7 +72,12 @@ public class SessionManager implements Closeable {
     debugln("SessionManager created");
   }
 
-  /** Performs the given command, or times out if too much time elapses. */
+  /**
+   * Performs the given command.
+   *
+   * @param command the command to perform
+   * @throws TimeoutException if another thread closes this before the command completes
+   */
   public void request(Cmd command) throws TimeoutException {
     assert !closed : "Cannot use closed SessionManager";
     if (debug.isLoggable(FINE)) {
