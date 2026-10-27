@@ -70,12 +70,8 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /** Pop a lemma off Simplify's stack. */
-  private void unAssume() {
-    try {
-      session.request(CmdUndoAssume.single);
-    } catch (TimeoutException e) {
-      throw new Error("Unexpected timeout on (BG_POP)");
-    }
+  private void unAssume() throws TimeoutException {
+    session.request(CmdUndoAssume.single);
   }
 
   /**
@@ -83,8 +79,9 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * things you most recently assumed, but we aren't smart enough to check that.
    *
    * @param invs the lemmas to pop off Simplify's stack
+   * @throws TimeoutException if Simplify times out
    */
-  private void unAssumeAll(List<Lemma> invs) {
+  private void unAssumeAll(List<Lemma> invs) throws TimeoutException {
     for (@SuppressWarnings("UnusedVariable") Lemma lem : invs) {
       unAssume();
     }
@@ -131,9 +128,14 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /** Pop a lemma from our and Simplify's stacks. */
+  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public void popLemma() {
-    unAssume();
     lemmas.pop();
+    try {
+      unAssume();
+    } catch (TimeoutException e) {
+      restartProver();
+    }
   }
 
   /**
@@ -182,20 +184,37 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * Simplify says yes, 'F' if Simplify says no, or '?' if we have to kill Simplify because it won't
    * answer.
    *
+   * <p>If Simplify times out, this restarts it with the assumptions in {@link #lemmas}. Therefore,
+   * call this only when Simplify's stack holds exactly the assumptions in {@link #lemmas};
+   * otherwise, call {@link #checkStringOrTimeout}.
+   *
    * @param str the string to check
    * @return 'T' if Simplify says yes, 'F' if Simplify says no, or '?' if Simplify does not answer
    */
   @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   private char checkString(@UnknownInitialization(LemmaStack.class) LemmaStack this, String str)
       throws SimplifyError {
-    SimpUtil.assert_well_formed(str);
-    CmdCheck cc = new CmdCheck(str);
     try {
-      session.request(cc);
+      return checkStringOrTimeout(str);
     } catch (TimeoutException e) {
       restartProver();
       return '?';
     }
+  }
+
+  /**
+   * Ask Simplify whether a string is a valid statement, given the assumptions on Simplify's stack.
+   *
+   * @param str the string to check
+   * @return 'T' if Simplify says yes, 'F' if Simplify says no, or '?' if Simplify does not know
+   * @throws TimeoutException if Simplify times out
+   */
+  private char checkStringOrTimeout(
+      @UnknownInitialization(LemmaStack.class) LemmaStack this, String str)
+      throws TimeoutException {
+    SimpUtil.assert_well_formed(str);
+    CmdCheck cc = new CmdCheck(str);
+    session.request(cc);
     if (cc.unknown) {
       return '?';
     }
@@ -232,7 +251,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
         assumed++;
       }
     }
-    boolean valid = checkString(conseq) != 'F';
+    boolean valid = checkStringOrTimeout(conseq) != 'F';
     for (int i = 0; i < assumed; i++) {
       unAssume();
     }
@@ -319,11 +338,10 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
         return;
       }
     }
-    int mark = markLevel();
     List<Lemma> filtered = filterByClass(lems, exclude);
-    pushLemmas(filtered);
-    boolean holds = checkString(result) == 'T';
-    popToMark(mark);
+    assumeAll(filtered);
+    boolean holds = checkStringOrTimeout(result) == 'T';
+    unAssumeAll(filtered);
     if (holds) {
       List<Lemma> mini = minimizeAssumptions(filtered.toArray(new Lemma[0]), result);
       Set<Class<? extends Invariant>> used = new HashSet<Class<? extends Invariant>>();
@@ -354,12 +372,13 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     black.add(exclude);
   }
 
+  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public List<Set<Class<? extends Invariant>>> minimizeClasses(String result) {
     List<Lemma> assumptions = new ArrayList<>(lemmas);
     List<Set<Class<? extends Invariant>>> found = new ArrayList<>();
     try {
       unAssumeAll(lemmas);
-      if (checkString(result) == 'F') {
+      if (checkStringOrTimeout(result) == 'F') {
         Set<Class<? extends Invariant>> exclude = new HashSet<Class<? extends Invariant>>();
         Set<Set<Class<? extends Invariant>>> black = new HashSet<Set<Class<? extends Invariant>>>();
         Set<Set<Class<? extends Invariant>>> gray = new HashSet<Set<Class<? extends Invariant>>>();
@@ -370,7 +389,8 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
       }
       assumeAll(lemmas);
     } catch (TimeoutException e) {
-      throw new Error();
+      restartProver();
+      throw new SimplifyError("Timeout in class minimization");
     }
     return found;
   }
@@ -384,9 +404,9 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   private List<Lemma> minimizeReasons(String str) throws SimplifyError {
     assert checkString(str) == 'T';
-    unAssumeAll(lemmas);
     List<Lemma> result;
     try {
+      unAssumeAll(lemmas);
       Lemma[] lemmaAry = lemmas.toArray(new Lemma[0]);
       // shuffle(lemmaAry, new Random());
       result = minimizeAssumptions(lemmaAry, str);
@@ -438,8 +458,8 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * Search for the given lemma in the stack, and then remove it from both our stack and Simplify's.
    * This is rather inefficient.
    */
+  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public void removeLemma(Lemma bad) throws SimplifyError {
-    unAssumeAll(lemmas);
     int spliceOut = -1;
     for (int i = 0; i < lemmas.size(); i++) {
       Lemma lem = lemmas.elementAt(i);
@@ -447,22 +467,29 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
       boolean isBad = (lem == bad);
       if (isBad) {
         spliceOut = i;
-      } else {
-        try {
-          assume(lem);
-        } catch (TimeoutException e) {
-          throw new SimplifyError("Timeout in contradiction removal");
-        }
       }
     }
     assert spliceOut != -1;
+    List<Lemma> oldLemmas = new ArrayList<>(lemmas);
     lemmas.removeElementAt(spliceOut);
+    try {
+      unAssumeAll(oldLemmas);
+      assumeAll(lemmas);
+    } catch (TimeoutException e) {
+      restartProver();
+    }
   }
 
   /** Blow away everything on our stack and Simplify's. */
+  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public void clear() {
-    unAssumeAll(lemmas);
+    List<Lemma> oldLemmas = new ArrayList<>(lemmas);
     lemmas.removeAllElements();
+    try {
+      unAssumeAll(oldLemmas);
+    } catch (TimeoutException e) {
+      restartProver();
+    }
   }
 
   /**
