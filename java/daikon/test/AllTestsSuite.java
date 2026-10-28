@@ -32,6 +32,7 @@ import org.junit.runners.Suite;
   daikon.test.PptTopLevelTypeTest.class,
   daikon.test.ProglangTypeTest.class,
   daikon.test.SampleTester.class,
+  daikon.test.SplitDtraceTest.class,
   daikon.test.split.FileCompilerTest.class,
   daikon.test.split.NullComparisonsSplitterTest.class,
   daikon.test.split.QualifiedNamesSplitterTest.class,
