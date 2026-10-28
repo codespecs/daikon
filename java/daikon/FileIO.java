@@ -371,6 +371,8 @@ public final class FileIO {
       decl_error(state, "found '%s' where 'ppt' expected", record_name);
     }
     String ppt_name = need(state, scanner, "ppt name");
+    // Reject anything after the ppt name, as for the other records.
+    need_eol(state, scanner);
     ppt_name = user_mod_ppt_name(ppt_name);
 
     // Information that will populate the new program point.
