@@ -114,6 +114,7 @@ this.elementData.getClass().getName() == \old(this.elementData.getClass().getNam
 daikon.Quant.pairwiseEqual(this.elementData, \old(this.elementData))
 this.elementCount == \old(this.elementCount)
 this.capacityIncrement == \old(this.capacityIncrement)
+(\result == false)  ==>  (All the elements of this.elementData[].getClass().getName() have LENGTH=16)
 (\result == true)  ==>  (daikon.Quant.memberOf(\old(elem.getClass().getName()) , daikon.Quant.typeArray(this.elementData) ))
 (\result == true)  ==>  (this.elementCount >= 1)
 this.elementData.getClass().getName() != \old(elem.getClass().getName())

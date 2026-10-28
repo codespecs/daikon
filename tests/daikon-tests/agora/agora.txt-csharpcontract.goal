@@ -1,0 +1,645 @@
+===========================================================================
+javautil.Vector13:::CLASS
+===========================================================================
+javautil.Vector13:::OBJECT
+this.elementData != null
+this.elementData.GetType() == typeof(java.lang.Object[])
+this.elementCount >= 0
+this.capacityIncrement >= 0
+Contract.ForAll(this.elementData.Slice(this.elementCount, this.elementData.Count()-1), x => x== null)
+this.elementCount > javautil.Vector13.serialVersionUID
+(!(this.elementData.Count() == 0)) || (this.elementCount == 0)
+this.elementCount <= this.elementData.Count()
+this.capacityIncrement > javautil.Vector13.serialVersionUID
+javautil.Vector13.serialVersionUID < this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.Vector13():::EXIT
+this.elementCount == this.capacityIncrement
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.elementData, x => x== null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.elementData, x => x.getClass().Equals(typeof(null)))
+this.elementCount == 0
+this.elementData.Count() == 10
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.elementData, x => x == this.elementData[this.elementCount])
+===========================================================================
+javautil.Vector13.Vector13(int):::ENTER
+initialCapacity >= 0
+===========================================================================
+javautil.Vector13.Vector13(int):::EXIT
+this.elementCount == this.capacityIncrement
+Contract.OldValue(initialCapacity) == this.elementData.Count()
+Contract.ForAll(this.elementData, x => x== null)
+Contract.ForAll(this.elementData, x => x.getClass().Equals(typeof(null)))
+this.elementCount == 0
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.elementCount <= Contract.OldValue(initialCapacity)
+this.elementCount == (Contract.OldValue(initialCapacity) / javautil.Vector13.serialVersionUID)
+this.elementCount == (this.elementData.Count()-1 / javautil.Vector13.serialVersionUID)
+===========================================================================
+javautil.Vector13.Vector13(int, int):::ENTER
+initialCapacity >= 0
+capacityIncrement >= 0
+===========================================================================
+javautil.Vector13.Vector13(int, int):::EXIT
+this.capacityIncrement == Contract.OldValue(capacityIncrement)
+Contract.OldValue(initialCapacity) == this.elementData.Count()
+Contract.ForAll(this.elementData, x => x== null)
+Contract.ForAll(this.elementData, x => x.getClass().Equals(typeof(null)))
+this.elementCount == 0
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.elementCount <= this.capacityIncrement
+this.elementCount <= Contract.OldValue(initialCapacity)
+this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID)
+this.elementCount == (Contract.OldValue(initialCapacity) / javautil.Vector13.serialVersionUID)
+this.elementCount == (this.elementData.Count()-1 / javautil.Vector13.serialVersionUID)
+===========================================================================
+javautil.Vector13.addElement(java.lang.Object):::ENTER
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: obj.getClass() is printable
+this.elementData.GetType() != obj.GetType()
+===========================================================================
+javautil.Vector13.addElement(java.lang.Object):::EXIT
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.OldValue(obj) == this.elementData[this.elementCount-1]
+Contract.OldValue(obj) == this.elementData[Contract.OldValue(this.elementCount)]
+Contract.ForAll(0, this.elementData.Slice(0, orig(this.elementCount)-1).Count(), i => this.elementData.Slice(0, orig(this.elementCount)-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, orig(this.elementCount)-1)[i]))
+this.elementCount >= 1
+this.elementData.Count() >= 1
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementData.GetType() != Contract.OldValue(obj.GetType())
+Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.OldValue(obj.GetType())))
+this.elementCount - Contract.OldValue(this.elementCount) - 1 == 0
+javautil.Vector13.serialVersionUID < Contract.OldValue(this.elementCount)
+(!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(this.elementCount) == 0)
+Contract.OldValue(this.elementCount) <= this.elementData.Count()-1
+this.elementData.Count() >= Contract.OldValue(this.elementData).Count()
+this.elementData.Count()-1 >= Contract.OldValue(this.elementData).Count()-1
+===========================================================================
+javautil.Vector13.clone():::ENTER
+===========================================================================
+javautil.Vector13.clone():::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.Result<java.lang.Object>() != null
+Contract.Result<java.lang.Object>().GetType() == typeof(javautil.Vector13)
+this.elementData.GetType() != Contract.Result<java.lang.Object>().GetType()
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+===========================================================================
+javautil.Vector13.contains(java.lang.Object):::ENTER
+elem != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: elem.getClass() is printable
+this.elementData.GetType() != elem.GetType()
+===========================================================================
+javautil.Vector13.contains(java.lang.Object):::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+(Contract.Result<boolean>() == true).Implies(() => Contract.Exists(this.elementData.Slice(0, this.elementCount-1), x => x.Equals(Contract.OldValue(elem))))
+(Contract.Result<boolean>() == true).Implies(() => Contract.Exists(this.elementData, x => x.Equals(Contract.OldValue(elem))))
+(Contract.Result<boolean>() == true).Implies(() => Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.OldValue(elem.GetType()))))
+(Contract.Result<boolean>() == true).Implies(() => this.elementCount >= 1)
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementData.GetType() != Contract.OldValue(elem.GetType())
+===========================================================================
+javautil.Vector13.copyInto(java.lang.Object[]):::ENTER
+anArray != null
+Contract.ForAll(0, anArray.Slice(this.elementCount, anArray.Count()-1).Count()-1, i => anArray.Slice(this.elementCount, anArray.Count()-1)[i] == anArray.Slice(this.elementCount, anArray.Count()-1)[i+1])
+this.elementData.GetType() == anArray.GetType()
+(!(anArray.Count() == 0)) || (this.elementCount == 0)
+this.elementCount <= anArray.Count()
+javautil.Vector13.serialVersionUID < anArray.Count()-1
+===========================================================================
+javautil.Vector13.copyInto(java.lang.Object[]):::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.ForAll(0, this.elementData.Slice(0, this.elementCount-1).Count(), i => this.elementData.Slice(0, this.elementCount-1)[i].Equals(anArray.Slice(0, this.elementCount-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(0, orig(this.elementCount)-1).Count(), i => this.elementData.Slice(0, orig(this.elementCount)-1)[i].Equals(anArray.Slice(0, this.elementCount-1)[i]))
+Contract.ForAll(0, anArray.Slice(this.elementCount, anArray.Count()-1).Count(), i => anArray.Slice(this.elementCount, anArray.Count()-1)[i].Equals(Contract.OldValue(anArray).Slice(this.elementCount, Contract.OldValue(anArray).Count()-1)[i]))
+Contract.ForAll(0, anArray.Slice(this.elementCount, anArray.Count()-1).Count(), i => anArray.Slice(this.elementCount, anArray.Count()-1)[i].Equals(Contract.OldValue(anArray).Slice(orig(this.elementCount), Contract.OldValue(anArray).Count()-1)[i]))
+Contract.ForAll(0, anArray.Slice(0, this.elementCount-1).Count(), i => anArray.Slice(0, this.elementCount-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, this.elementCount-1)[i]))
+Contract.ForAll(0, anArray.Slice(0, this.elementCount-1).Count(), i => anArray.Slice(0, this.elementCount-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, orig(this.elementCount)-1)[i]))
+Contract.ForAll(0, anArray.Slice(this.elementCount, anArray.Count()-1).Count()-1, i => anArray.Slice(this.elementCount, anArray.Count()-1)[i] == anArray.Slice(this.elementCount, anArray.Count()-1)[i+1])
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementData.GetType() == Contract.OldValue(anArray.GetType())
+(!(Contract.OldValue(anArray).Count() == 0)) || (this.elementCount == 0)
+this.elementCount <= Contract.OldValue(anArray).Count()
+javautil.Vector13.serialVersionUID < anArray.Count()-1
+===========================================================================
+javautil.Vector13.elementAt(int):::ENTER
+index >= 0
+this.elementCount > index
+javautil.Vector13.serialVersionUID < index
+(!(this.elementData.Count()-1 == 0)) || (index == 0)
+index <= this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.elementAt(int):::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.Result<java.lang.Object>() == this.elementData[Contract.OldValue(index)]
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.elementData[index])
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.elementData[index])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.getClass() is printable
+this.elementData.GetType() != Contract.Result<java.lang.Object>().GetType()
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.Result<java.lang.Object>().GetType()))
+this.elementCount > Contract.OldValue(index)
+(!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(index) == 0)
+Contract.OldValue(index) <= this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.elements():::ENTER
+===========================================================================
+javautil.Vector13.elements():::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.Result<java.util.Enumeration>() != null
+Contract.Result<java.util.Enumeration>().GetType() == typeof(javautil.VectorEnumerator13)
+this.elementData.GetType() != Contract.Result<java.util.Enumeration>().GetType()
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+===========================================================================
+javautil.Vector13.ensureCapacity(int):::ENTER
+minCapacity >= 0
+javautil.Vector13.serialVersionUID < minCapacity
+===========================================================================
+javautil.Vector13.ensureCapacity(int):::EXIT
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.ForAll(0, this.elementData.Slice(0, this.elementCount-1).Count(), i => this.elementData.Slice(0, this.elementCount-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, this.elementCount-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(0, this.elementCount-1).Count(), i => this.elementData.Slice(0, this.elementCount-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, orig(this.elementCount)-1)[i]))
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+Contract.OldValue(this.elementData).IsSubsequence(this.elementData)
+Contract.ForAll(Contract.OldValue(this.elementData), i => this.elementData.Contains(i))
+(!(Contract.OldValue(this.elementData).Count() == 0)) || (this.elementCount == 0)
+this.elementCount <= Contract.OldValue(this.elementData).Count()
+(!(this.elementData.Count() == 0)) || (Contract.OldValue(minCapacity) == 0)
+Contract.OldValue(minCapacity) <= this.elementData.Count()
+(!(this.elementData.Count() == 0)) || (Contract.OldValue(this.elementData).Count() == 0)
+this.elementData.Count() >= Contract.OldValue(this.elementData).Count()
+this.elementData.Count()-1 >= Contract.OldValue(this.elementData).Count()-1
+Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1).IsSubsequence(this.elementData.Slice(this.elementCount, this.elementData.Count()-1))
+===========================================================================
+javautil.Vector13.ensureCapacityHelper(int):::ENTER
+minCapacity >= 1
+this.elementCount < minCapacity
+javautil.Vector13.serialVersionUID < minCapacity
+minCapacity > this.elementData.Count()
+===========================================================================
+javautil.Vector13.ensureCapacityHelper(int):::EXIT
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+this.elementData[this.elementCount] == this.elementData[Contract.OldValue(minCapacity)-1]
+Contract.ForAll(0, this.elementData.Slice(0, this.elementCount-1).Count(), i => this.elementData.Slice(0, this.elementCount-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, this.elementCount-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(0, this.elementCount-1).Count(), i => this.elementData.Slice(0, this.elementCount-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, orig(this.elementCount)-1)[i]))
+this.elementData.Count() >= 1
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+Contract.ForAll(Contract.OldValue(this.elementData), i => this.elementData.Contains(i))
+this.elementCount < Contract.OldValue(minCapacity)
+(!(this.elementData.Count()-1 == 0)) || (this.elementCount == 0)
+this.elementCount <= this.elementData.Count()-1
+(!(Contract.OldValue(this.elementData).Count() == 0)) || (this.elementCount == 0)
+this.elementCount <= Contract.OldValue(this.elementData).Count()
+this.capacityIncrement <= this.elementData.Count()
+Contract.ForAll(Contract.OldValue(this.elementData), i => this.elementData.Slice(0, this.elementCount).Contains(i))
+Contract.OldValue(this.elementData).IsSubsequence(this.elementData.Slice(0, orig(minCapacity)-1))
+Contract.ForAll(Contract.OldValue(this.elementData), i => this.elementData.Slice(0, orig(minCapacity)-1).Contains(i))
+Contract.OldValue(minCapacity) <= this.elementData.Count()
+(!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(this.elementData).Count() == 0)
+this.elementData.Count()-1 >= Contract.OldValue(this.elementData).Count()
+Contract.ForAll(this.elementData.Slice(this.elementCount, this.elementData.Count()-1), x => x == this.elementData[this.elementCount])
+Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1).IsSubsequence(this.elementData.Slice(this.elementCount, this.elementData.Count()-1))
+Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1).IsSubsequence(this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1))
+Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1).IsSubsequence(this.elementData.Slice(this.capacityIncrement, this.elementData.Count()-1))
+Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1).IsSubsequence(this.elementData.Slice(0, orig(minCapacity)-1))
+===========================================================================
+javautil.Vector13.firstElement():::ENTER
+this.elementCount >= 1
+===========================================================================
+javautil.Vector13.firstElement():::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+this.elementCount >= 1
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.getClass() is printable
+this.elementData.GetType() != Contract.Result<java.lang.Object>().GetType()
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+Contract.Exists(this.elementData, x => x.Equals(Contract.Result<java.lang.Object>()))
+Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.Result<java.lang.Object>().GetType()))
+Contract.Exists(this.elementData.Slice(0, this.elementCount-1), x => x.Equals(Contract.Result<java.lang.Object>()))
+===========================================================================
+javautil.Vector13.indexOf(java.lang.Object):::ENTER
+elem != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: elem.getClass() is printable
+this.elementData.GetType() != elem.GetType()
+===========================================================================
+javautil.Vector13.indexOf(java.lang.Object):::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.Result<int>() >= -1
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementData.GetType() != Contract.OldValue(elem.GetType())
+this.elementCount > Contract.Result<int>()
+javautil.Vector13.serialVersionUID < Contract.Result<int>()
+Contract.Result<int>() <= this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.indexOf(java.lang.Object, int):::ENTER
+elem != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: elem.getClass() is printable
+index >= 0
+this.elementData.GetType() != elem.GetType()
+javautil.Vector13.serialVersionUID < index
+===========================================================================
+javautil.Vector13.indexOf(java.lang.Object, int):::EXIT274
+Contract.OldValue(elem) == this.elementData[Contract.Result<int>()]
+Contract.OldValue(elem) == Contract.OldValue(this.elementData[Contract.Result<int>()])
+this.elementCount >= 1
+Contract.Result<int>() >= 0
+Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.OldValue(elem.GetType())))
+this.elementCount > Contract.OldValue(index)
+Contract.Result<int>() >= Contract.OldValue(index)
+(!(this.elementData.Count()-1 == 0)) || (Contract.Result<int>() == 0)
+(!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(index) == 0)
+Contract.OldValue(index) <= this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.indexOf(java.lang.Object, int):::EXIT277
+Contract.Result<int>() == -1
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.capacityIncrement > Contract.Result<int>()
+Contract.Result<int>() < Contract.OldValue(index)
+===========================================================================
+javautil.Vector13.indexOf(java.lang.Object, int):::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+(Contract.Result<int>() == -1).Implies(() => Contract.Result<int>() < Contract.OldValue(index))
+(Contract.Result<int>() == -1).Implies(() => this.capacityIncrement > Contract.Result<int>())
+(Contract.Result<int>() == -1).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(Contract.Result<int>() >= 0).Implies(() => Contract.Result<int>() >= Contract.OldValue(index))
+(Contract.Result<int>() >= 0).Implies(() => (!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(index) == 0))
+(Contract.Result<int>() >= 0).Implies(() => (!(this.elementData.Count()-1 == 0)) || (Contract.Result<int>() == 0))
+(Contract.Result<int>() >= 0).Implies(() => Contract.OldValue(elem) == Contract.OldValue(this.elementData[Contract.Result<int>()]))
+(Contract.Result<int>() >= 0).Implies(() => Contract.OldValue(elem) == this.elementData[Contract.Result<int>()])
+(Contract.Result<int>() >= 0).Implies(() => Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.OldValue(elem.GetType()))))
+(Contract.Result<int>() >= 0).Implies(() => Contract.OldValue(index) <= this.elementData.Count()-1)
+(Contract.Result<int>() >= 0).Implies(() => Contract.OldValue(this.elementData[Contract.Result<int>()]) != null)
+(Contract.Result<int>() >= 0).Implies(() => this.elementCount > Contract.OldValue(index))
+(Contract.Result<int>() >= 0).Implies(() => this.elementCount >= 1)
+(Contract.Result<int>() >= 0).Implies(() => this.elementData[Contract.Result<int>()] != null)
+Contract.Result<int>() >= -1
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementData.GetType() != Contract.OldValue(elem.GetType())
+this.elementCount > Contract.Result<int>()
+javautil.Vector13.serialVersionUID < Contract.Result<int>()
+(!(Contract.Result<int>() == 0)) || (Contract.OldValue(index) == 0)
+Contract.Result<int>() <= this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.insertElementAt(java.lang.Object, int):::ENTER
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: obj.getClass() is printable
+index >= 0
+this.elementData.GetType() != obj.GetType()
+(!(this.elementCount == 0)) || (index == 0)
+this.elementCount >= index
+javautil.Vector13.serialVersionUID < index
+(!(this.elementData.Count() == 0)) || (index == 0)
+index <= this.elementData.Count()
+===========================================================================
+javautil.Vector13.insertElementAt(java.lang.Object, int):::EXIT
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.OldValue(obj) == this.elementData[Contract.OldValue(index)]
+this.elementData[this.elementCount-1] == this.elementData[Contract.OldValue(this.elementCount)]
+Contract.ForAll(0, this.elementData.Slice(0, orig(index)-1).Count(), i => this.elementData.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, index-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(0, orig(index)-1).Count(), i => this.elementData.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, orig(index)-1)[i]))
+this.elementCount >= 1
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementData.GetType() != Contract.OldValue(obj.GetType())
+Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.OldValue(obj.GetType())))
+this.elementCount - Contract.OldValue(this.elementCount) - 1 == 0
+this.elementCount > Contract.OldValue(index)
+javautil.Vector13.serialVersionUID < Contract.OldValue(this.elementCount)
+(!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(this.elementCount) == 0)
+Contract.OldValue(this.elementCount) <= this.elementData.Count()-1
+(!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(index) == 0)
+Contract.OldValue(index) <= this.elementData.Count()-1
+this.elementData.Count() >= Contract.OldValue(this.elementData).Count()
+this.elementData.Count()-1 >= Contract.OldValue(this.elementData).Count()-1
+===========================================================================
+javautil.Vector13.isEmpty():::ENTER
+===========================================================================
+javautil.Vector13.isEmpty():::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+(this.elementCount == 0).Implies(() => Contract.Result<boolean>() == true)
+(this.elementCount == 0).Implies(() => this.elementCount is a pointer)
+(this.elementCount == 0).Implies(() => this.elementCount <= this.capacityIncrement)
+(this.elementCount == 0).Implies(() => this.elementCount == (this.elementData.Count() / javautil.Vector13.serialVersionUID))
+(this.elementCount == 0).Implies(() => this.elementCount == (this.elementData.Count()-1 / javautil.Vector13.serialVersionUID))
+(this.elementCount == 0).Implies(() => this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID))
+(this.elementCount == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.elementCount == 0).Implies(() => Contract.ForAll(this.elementData, x => x== null))
+(this.elementCount == 0).Implies(() => Contract.ForAll(this.elementData, x => x.getClass().Equals(typeof(null))))
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+===========================================================================
+javautil.Vector13.lastElement():::ENTER
+this.elementCount >= 1
+===========================================================================
+javautil.Vector13.lastElement():::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.Result<java.lang.Object>() == this.elementData[this.elementCount-1]
+Contract.Result<java.lang.Object>() == this.elementData[Contract.OldValue(this.elementCount)-1]
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.elementData[this.elementCount-1])
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.elementData[this.elementCount-1])
+this.elementCount >= 1
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.getClass() is printable
+this.elementData.GetType() != Contract.Result<java.lang.Object>().GetType()
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.Result<java.lang.Object>().GetType()))
+===========================================================================
+javautil.Vector13.lastIndexOf(java.lang.Object):::ENTER
+elem != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: elem.getClass() is printable
+this.elementData.GetType() != elem.GetType()
+===========================================================================
+javautil.Vector13.lastIndexOf(java.lang.Object):::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.Result<int>() >= -1
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementData.GetType() != Contract.OldValue(elem.GetType())
+this.elementCount > Contract.Result<int>()
+javautil.Vector13.serialVersionUID < Contract.Result<int>()
+Contract.Result<int>() <= this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.lastIndexOf(java.lang.Object, int):::ENTER
+elem != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: elem.getClass() is printable
+index >= -1
+this.elementData.GetType() != elem.GetType()
+this.elementCount > index
+javautil.Vector13.serialVersionUID < index
+index <= this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT307
+Contract.OldValue(elem) == this.elementData[Contract.Result<int>()]
+Contract.OldValue(elem) == Contract.OldValue(this.elementData[Contract.Result<int>()])
+this.elementCount >= 1
+Contract.Result<int>() >= 0
+Contract.OldValue(index) >= 0
+Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.OldValue(elem.GetType())))
+(!(Contract.OldValue(index) == 0)) || (Contract.Result<int>() == 0)
+(!(this.elementData.Count()-1 == 0)) || (Contract.Result<int>() == 0)
+(!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(index) == 0)
+===========================================================================
+javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT310
+Contract.Result<int>() == -1
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.capacityIncrement > Contract.Result<int>()
+===========================================================================
+javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+(Contract.Result<int>() == -1).Implies(() => Contract.OldValue(index) >= -1)
+(Contract.Result<int>() == -1).Implies(() => this.capacityIncrement > Contract.Result<int>())
+(Contract.Result<int>() == -1).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(Contract.Result<int>() >= 0).Implies(() => (!(Contract.OldValue(index) == 0)) || (Contract.Result<int>() == 0))
+(Contract.Result<int>() >= 0).Implies(() => (!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(index) == 0))
+(Contract.Result<int>() >= 0).Implies(() => (!(this.elementData.Count()-1 == 0)) || (Contract.Result<int>() == 0))
+(Contract.Result<int>() >= 0).Implies(() => Contract.OldValue(elem) == Contract.OldValue(this.elementData[Contract.Result<int>()]))
+(Contract.Result<int>() >= 0).Implies(() => Contract.OldValue(elem) == this.elementData[Contract.Result<int>()])
+(Contract.Result<int>() >= 0).Implies(() => Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.OldValue(elem.GetType()))))
+(Contract.Result<int>() >= 0).Implies(() => Contract.OldValue(index) >= 0)
+(Contract.Result<int>() >= 0).Implies(() => Contract.OldValue(this.elementData[Contract.Result<int>()]) != null)
+(Contract.Result<int>() >= 0).Implies(() => this.elementCount >= 1)
+(Contract.Result<int>() >= 0).Implies(() => this.elementData[Contract.Result<int>()] != null)
+Contract.Result<int>() >= -1
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementData.GetType() != Contract.OldValue(elem.GetType())
+this.elementCount > Contract.Result<int>()
+this.elementCount > Contract.OldValue(index)
+javautil.Vector13.serialVersionUID < Contract.Result<int>()
+Contract.Result<int>() <= Contract.OldValue(index)
+Contract.Result<int>() <= this.elementData.Count()-1
+Contract.OldValue(index) <= this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.removeAllElements():::ENTER
+===========================================================================
+javautil.Vector13.removeAllElements():::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+this.elementData.Count() == Contract.OldValue(this.elementData).Count()
+Contract.ForAll(0, this.elementData.Slice(orig(this.elementCount), this.elementData.Count()-1).Count(), i => this.elementData.Slice(orig(this.elementCount), this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1)[i]))
+Contract.ForAll(this.elementData, x => x== null)
+Contract.ForAll(this.elementData, x => x.getClass().Equals(typeof(null)))
+this.elementCount == 0
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementCount <= this.capacityIncrement
+this.elementCount <= Contract.OldValue(this.elementCount)
+javautil.Vector13.serialVersionUID < Contract.OldValue(this.elementCount)
+(!(this.elementData.Count() == 0)) || (Contract.OldValue(this.elementCount) == 0)
+Contract.OldValue(this.elementCount) <= this.elementData.Count()
+this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID)
+this.elementCount == (Contract.OldValue(this.elementCount) / javautil.Vector13.serialVersionUID)
+this.elementCount == (this.elementData.Count() / javautil.Vector13.serialVersionUID)
+this.elementCount == (this.elementData.Count()-1 / javautil.Vector13.serialVersionUID)
+===========================================================================
+javautil.Vector13.removeElement(java.lang.Object):::ENTER
+obj != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: obj.getClass() is printable
+this.elementData.GetType() != obj.GetType()
+===========================================================================
+javautil.Vector13.removeElement(java.lang.Object):::EXIT480
+this.elementData[this.elementCount] == this.elementData[Contract.OldValue(this.elementCount)-1]
+Contract.ForAll(0, this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1).Count(), i => this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(this.elementCount+1, Contract.OldValue(this.elementData).Count()-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1).Count(), i => this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1)[i]))
+Contract.OldValue(this.elementData[this.elementCount]) == Contract.OldValue(this.elementData[this.elementCount-1])
+Contract.Result<boolean>() == true
+Contract.OldValue(this.elementCount) >= 1
+this.elementCount - Contract.OldValue(this.elementCount) + 1 == 0
+(!(this.elementData.Count()-1 == 0)) || (this.elementCount == 0)
+this.elementCount <= this.elementData.Count()-1
+Contract.Exists(Contract.OldValue(this.elementData), x => x.Equals(Contract.OldValue(obj)))
+Contract.Exists(Contract.OldValue(this.elementData), x => x.getClass().Equals(Contract.OldValue(obj.GetType())))
+Contract.Exists(Contract.OldValue(this.elementData).Slice(0, this.elementCount), x => x.Equals(Contract.OldValue(obj)))
+Contract.ForAll(this.elementData.Slice(this.elementCount, this.elementData.Count()-1), x => x == this.elementData[this.elementCount])
+Contract.ForAll(this.elementData.Slice(0, this.elementCount-1), i => Contract.OldValue(this.elementData).Slice(0, this.elementCount).Contains(i))
+===========================================================================
+javautil.Vector13.removeElement(java.lang.Object):::EXIT482
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+Contract.Result<boolean>() == false
+===========================================================================
+javautil.Vector13.removeElement(java.lang.Object):::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+this.elementData.Count() == Contract.OldValue(this.elementData).Count()
+Contract.ForAll(0, this.elementData.Slice(orig(this.elementCount), this.elementData.Count()-1).Count(), i => this.elementData.Slice(orig(this.elementCount), this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1)[i]))
+(Contract.Result<boolean>() == false).Implies(() => this.elementCount == Contract.OldValue(this.elementCount))
+(Contract.Result<boolean>() == false).Implies(() => Contract.ForAll(Contract.OldValue(this.elementData).Slice(this.elementCount, Contract.OldValue(this.elementData).Count()-1), x => x== null))
+(Contract.Result<boolean>() == false).Implies(() => Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i])))
+(Contract.Result<boolean>() == true).Implies(() => this.elementCount - Contract.OldValue(this.elementCount) + 1 == 0)
+(Contract.Result<boolean>() == true).Implies(() => (!(this.elementData.Count()-1 == 0)) || (this.elementCount == 0))
+(Contract.Result<boolean>() == true).Implies(() => Contract.Exists(Contract.OldValue(this.elementData).Slice(0, this.elementCount), x => x.Equals(Contract.OldValue(obj))))
+(Contract.Result<boolean>() == true).Implies(() => Contract.Exists(Contract.OldValue(this.elementData).Slice(0, orig(this.elementCount)-1), x => x.Equals(Contract.OldValue(obj))))
+(Contract.Result<boolean>() == true).Implies(() => Contract.Exists(Contract.OldValue(this.elementData), x => x.Equals(Contract.OldValue(obj))))
+(Contract.Result<boolean>() == true).Implies(() => Contract.Exists(Contract.OldValue(this.elementData), x => x.getClass().Equals(Contract.OldValue(obj.GetType()))))
+(Contract.Result<boolean>() == true).Implies(() => Contract.OldValue(this.elementCount) >= 1)
+(Contract.Result<boolean>() == true).Implies(() => Contract.OldValue(this.elementData[this.elementCount]) == Contract.OldValue(this.elementData[this.elementCount-1]))
+(Contract.Result<boolean>() == true).Implies(() => this.elementCount <= this.elementData.Count()-1)
+(Contract.Result<boolean>() == true).Implies(() => Contract.ForAll(this.elementData.Slice(0, this.elementCount-1), i => Contract.OldValue(this.elementData).Slice(0, this.elementCount).Contains(i)))
+(Contract.Result<boolean>() == true).Implies(() => Contract.ForAll(0, this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1).Count(), i => this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(this.elementCount+1, Contract.OldValue(this.elementData).Count()-1)[i])))
+(Contract.Result<boolean>() == true).Implies(() => Contract.ForAll(this.elementData.Slice(this.elementCount, this.elementData.Count()-1), x => x == this.elementData[Contract.OldValue(this.elementCount)-1]))
+(Contract.Result<boolean>() == true).Implies(() => Contract.ForAll(this.elementData.Slice(this.elementCount, this.elementData.Count()-1), x => x == this.elementData[this.elementCount]))
+(Contract.Result<boolean>() == true).Implies(() => this.elementData[this.elementCount] == this.elementData[Contract.OldValue(this.elementCount)-1])
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementData.GetType() != Contract.OldValue(obj.GetType())
+(!(Contract.OldValue(this.elementCount) == 0)) || (this.elementCount == 0)
+this.elementCount <= Contract.OldValue(this.elementCount)
+javautil.Vector13.serialVersionUID < Contract.OldValue(this.elementCount)
+(!(this.elementData.Count() == 0)) || (Contract.OldValue(this.elementCount) == 0)
+Contract.OldValue(this.elementCount) <= this.elementData.Count()
+Contract.ForAll(this.elementData.Slice(0, this.elementCount-1), i => Contract.OldValue(this.elementData).Slice(0, orig(this.elementCount)-1).Contains(i))
+===========================================================================
+javautil.Vector13.removeElementAt(int):::ENTER
+this.elementCount >= 1
+index >= 0
+this.elementCount > index
+javautil.Vector13.serialVersionUID < index
+(!(this.elementData.Count()-1 == 0)) || (index == 0)
+index <= this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.removeElementAt(int):::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+this.elementData.Count() == Contract.OldValue(this.elementData).Count()
+this.elementData[this.elementCount] == this.elementData[Contract.OldValue(this.elementCount)-1]
+Contract.ForAll(0, this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1).Count(), i => this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(this.elementCount+1, Contract.OldValue(this.elementData).Count()-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1).Count(), i => this.elementData.Slice(this.elementCount+1, this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(0, orig(index)-1).Count(), i => this.elementData.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, index-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(0, orig(index)-1).Count(), i => this.elementData.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, orig(index)-1)[i]))
+Contract.OldValue(this.elementData[this.elementCount]) == Contract.OldValue(this.elementData[this.elementCount-1])
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementCount - Contract.OldValue(this.elementCount) + 1 == 0
+(!(this.elementCount == 0)) || (Contract.OldValue(index) == 0)
+this.elementCount >= Contract.OldValue(index)
+(!(this.elementData.Count()-1 == 0)) || (this.elementCount == 0)
+this.elementCount <= this.elementData.Count()-1
+javautil.Vector13.serialVersionUID < Contract.OldValue(this.elementCount)
+Contract.OldValue(this.elementCount) <= this.elementData.Count()
+(!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(index) == 0)
+Contract.OldValue(index) <= this.elementData.Count()-1
+Contract.ForAll(this.elementData.Slice(this.elementCount, this.elementData.Count()-1), x => x == this.elementData[this.elementCount])
+Contract.ForAll(this.elementData.Slice(0, this.elementCount-1), i => Contract.OldValue(this.elementData).Slice(0, this.elementCount).Contains(i))
+Contract.OldValue(this.elementData).Slice(orig(index)+1, Contract.OldValue(this.elementData).Count()-1).IsSubsequence(this.elementData.Slice(orig(index), this.elementData.Count()-1))
+===========================================================================
+javautil.Vector13.setElementAt(java.lang.Object, int):::ENTER
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: obj.getClass() is printable
+index >= 0
+this.elementData.GetType() != obj.GetType()
+this.elementCount > index
+javautil.Vector13.serialVersionUID < index
+(!(this.elementData.Count()-1 == 0)) || (index == 0)
+index <= this.elementData.Count()-1
+===========================================================================
+javautil.Vector13.setElementAt(java.lang.Object, int):::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.OldValue(obj) == this.elementData[Contract.OldValue(index)]
+this.elementData.Count() == Contract.OldValue(this.elementData).Count()
+Contract.ForAll(0, this.elementData.Slice(this.elementCount, this.elementData.Count()-1).Count(), i => this.elementData.Slice(this.elementCount, this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(this.elementCount, Contract.OldValue(this.elementData).Count()-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(this.elementCount, this.elementData.Count()-1).Count(), i => this.elementData.Slice(this.elementCount, this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(orig(index)+1, this.elementData.Count()-1).Count(), i => this.elementData.Slice(orig(index)+1, this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(index+1, Contract.OldValue(this.elementData).Count()-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(orig(index)+1, this.elementData.Count()-1).Count(), i => this.elementData.Slice(orig(index)+1, this.elementData.Count()-1)[i].Equals(Contract.OldValue(this.elementData).Slice(orig(index)+1, Contract.OldValue(this.elementData).Count()-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(0, orig(index)-1).Count(), i => this.elementData.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, index-1)[i]))
+Contract.ForAll(0, this.elementData.Slice(0, orig(index)-1).Count(), i => this.elementData.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.elementData).Slice(0, orig(index)-1)[i]))
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+this.elementData.GetType() != Contract.OldValue(obj.GetType())
+Contract.Exists(this.elementData, x => x.Equals(Contract.OldValue(this.elementData[this.elementCount-1])))
+Contract.Exists(this.elementData, x => x.getClass().Equals(Contract.OldValue(obj.GetType())))
+this.elementCount > Contract.OldValue(index)
+(!(this.elementData.Count()-1 == 0)) || (Contract.OldValue(index) == 0)
+Contract.OldValue(index) <= this.elementData.Count()-1
+Contract.Exists(this.elementData.Slice(0, this.elementCount-1), x => x.Equals(Contract.OldValue(this.elementData[this.elementCount-1])))
+===========================================================================
+javautil.Vector13.setSize(int):::ENTER
+newSize >= 0
+javautil.Vector13.serialVersionUID < newSize
+===========================================================================
+javautil.Vector13.setSize(int):::EXIT
+this.elementCount == Contract.OldValue(newSize)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.ForAll(this.elementData.Slice(orig(this.elementCount), this.elementData.Count()-1), x => x== null)
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+(!(this.elementData.Count() == 0)) || (this.capacityIncrement == 0)
+javautil.Vector13.serialVersionUID < Contract.OldValue(this.elementCount)
+(!(this.elementData.Count() == 0)) || (Contract.OldValue(this.elementCount) == 0)
+Contract.OldValue(this.elementCount) <= this.elementData.Count()
+(!(this.elementData.Count() == 0)) || (Contract.OldValue(this.elementData).Count() == 0)
+this.elementData.Count() >= Contract.OldValue(this.elementData).Count()
+this.elementData.Count()-1 >= Contract.OldValue(this.elementData).Count()-1
+Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1).IsSubsequence(this.elementData.Slice(orig(this.elementCount), this.elementData.Count()-1))
+this.elementData.Count() == Math.Max(this.elementCount, Contract.OldValue(this.elementData).Count())
+===========================================================================
+javautil.Vector13.size():::ENTER
+===========================================================================
+javautil.Vector13.size():::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.Result<int>()
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.Result<int>() == Contract.OldValue(this.elementCount)
+Contract.Result<int>() >= 0
+Contract.ForAll(this.elementData.Slice(return, this.elementData.Count()-1), x => x== null)
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+javautil.Vector13.serialVersionUID < Contract.Result<int>()
+(!(this.elementData.Count() == 0)) || (Contract.Result<int>() == 0)
+Contract.Result<int>() <= this.elementData.Count()
+===========================================================================
+javautil.Vector13.toString():::ENTER
+===========================================================================
+javautil.Vector13.toString():::EXIT
+this.elementData == Contract.OldValue(this.elementData)
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+Contract.Result<java.lang.String>() != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.toString is printable
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+===========================================================================
+javautil.Vector13.trimToSize():::ENTER
+===========================================================================
+javautil.Vector13.trimToSize():::EXIT
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData).Slice(0, this.elementCount-1)[i]))
+Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Contract.OldValue(this.elementData).Slice(0, orig(this.elementCount)-1)[i]))
+this.elementCount == Contract.OldValue(this.elementCount)
+this.elementCount == this.elementData.Count()
+this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.elementData.GetType() == Contract.OldValue(this.elementData.GetType())
+(!(Contract.OldValue(this.elementData).Count() == 0)) || (this.elementCount == 0)
+this.elementCount <= Contract.OldValue(this.elementData).Count()
+this.elementData.Count()-1 <= Contract.OldValue(this.elementData).Count()-1
+Contract.ForAll(this.elementData.Slice(this.elementCount, this.elementData.Count()-1), i => Contract.OldValue(this.elementData).Slice(orig(this.elementCount), Contract.OldValue(this.elementData).Count()-1).Contains(i))

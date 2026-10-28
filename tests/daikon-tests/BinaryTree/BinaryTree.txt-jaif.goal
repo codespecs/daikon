@@ -4,29 +4,29 @@ annotation @NonNull:
 
 package DataStructures:
 class BinarySearchTree : // 14292/- obj/class samples
-  field root : @Nullable  // DataStructures.BinaryNode
+  field root : @Nullable // DataStructures.BinaryNode
   method <init>()V : // 16 samples
     return:
   method elementAt(LDataStructures/BinaryNode;)LDataStructures/Comparable; : // 1223 samples
     return: @Nullable
-    parameter #0 : @Nullable  // t
+    parameter #0 : @Nullable // t
   method find(LDataStructures/Comparable;)LDataStructures/Comparable; : // 153 samples
     return: @Nullable
     parameter #0 :  // x
   method find(LDataStructures/Comparable;LDataStructures/BinaryNode;)LDataStructures/BinaryNode; : // 567 samples
     return: @Nullable
     parameter #0 :  // x
-    parameter #1 : @Nullable  // t
+    parameter #1 : @Nullable // t
   method findMax()LDataStructures/Comparable; : // 493 samples
     return: @Nullable
   method findMax(LDataStructures/BinaryNode;)LDataStructures/BinaryNode; : // 493 samples
     return: @Nullable
-    parameter #0 : @Nullable  // t
+    parameter #0 : @Nullable // t
   method findMin()LDataStructures/Comparable; : // 577 samples
     return: @Nullable
   method findMin(LDataStructures/BinaryNode;)LDataStructures/BinaryNode; : // 1450 samples
     return: @Nullable
-    parameter #0 : @Nullable  // t
+    parameter #0 : @Nullable // t
   method insert(LDataStructures/Comparable;)V : // 221 samples
     return:
     parameter #0 :  // x
@@ -49,6 +49,6 @@ class BinarySearchTree : // 14292/- obj/class samples
   method remove(LDataStructures/Comparable;LDataStructures/BinaryNode;)LDataStructures/BinaryNode; : // 429 samples
     return: @Nullable
     parameter #0 :  // x
-    parameter #1 : @Nullable  // t
+    parameter #1 : @Nullable // t
 
 

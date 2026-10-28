@@ -1,0 +1,43 @@
+===========================================================================
+agora.AgoraTest:::OBJECT
+this has only one value
+===========================================================================
+agora.AgoraTest.AgoraTest():::EXIT
+===========================================================================
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+lst[] == []
+lst[].getClass().getName() == []
+lst.getClass().getName() is printable
+===========================================================================
+agora.AgoraTest.emptySequence(java.util.List):::EXIT
+lst[] == orig(lst[])
+lst[] == []
+lst[].getClass().getName() == []
+===========================================================================
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+s.toString == ""
+===========================================================================
+agora.AgoraTest.emptyString(java.lang.String):::EXIT
+s.toString == orig(s.toString)
+s.toString == ""
+===========================================================================
+agora.AgoraTest.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass().getName() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+agora.AgoraTest.main(java.lang.String[]):::EXIT
+args[] == orig(args[])
+args[] == []
+args[].toString == []
+===========================================================================
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+s != null
+s.toString is Numeric
+s.toString is printable
+===========================================================================
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT
+s.toString == orig(s.toString)
+s.toString is Numeric
+s.toString is printable

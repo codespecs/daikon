@@ -1600,6 +1600,7 @@ this.denom == orig(this.denom)
 this.numer one of { 1, 3 }
 this.numer == 1  (mod 2)
 return != null
+LENGTH(return.toString)==23
 return.toString is printable
 this.numer != this.denom
 ===========================================================================
@@ -1616,6 +1617,7 @@ this.denom == orig(this.denom)
 this.numer one of { 1, 3 }
 this.numer == 1  (mod 2)
 return != null
+LENGTH(return.toString)==23
 return.toString is printable
 this.numer != this.denom
 ===========================================================================
@@ -4241,6 +4243,7 @@ return.denom == 0
 orig(ratStr) has only one value
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT267
+ratStr.toString is Numeric
 return.denom == 1
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
@@ -4958,6 +4961,7 @@ this.denom == orig(this.denom)
 this.numer one of { 1, 3 }
 this.numer == 1  (mod 2)
 return != null
+LENGTH(return.toString)==23
 return.toString is printable
 ===========================================================================
 PolyCalc.RatNum.toString():::EXIT;condition="not(denom != 1)"
@@ -4973,6 +4977,7 @@ this.denom == orig(this.denom)
 this.numer one of { 1, 3 }
 this.numer == 1  (mod 2)
 return != null
+LENGTH(return.toString)==23
 return.toString is printable
 ===========================================================================
 PolyCalc.RatNum.toString():::EXIT;condition="not(orig(denom != 1))"
@@ -5187,56 +5192,73 @@ this.numer != this.denom
 PolyCalc.RatNum.unparse():::EXIT137
 (this.numer >= 1)  <==>  (this.numer >= this.denom)
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not(denom < 0)"
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not((denom == 0))"
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not(orig((denom == 0)))"
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="(this.denom != 0)&&(this.numer < 0)"
 this.denom == 1
+LENGTH(return.toString)==2
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not((this.denom != 0)&&(this.numer < 0))"
 this.numer >= 0
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="orig((this.denom != 0)&&(this.numer < 0))"
 this.denom == 1
+LENGTH(return.toString)==2
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not(orig((this.denom != 0)&&(this.numer < 0)))"
 this.numer >= 0
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="(this.denom == 0)||(this.numer > 0)"
 this.numer >= 1
 this.denom == 1
+return.toString is Numeric
 this.numer >= this.denom
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not((this.denom == 0)||(this.numer > 0))"
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="orig((this.denom == 0)||(this.numer > 0))"
 this.numer >= 1
 this.denom == 1
+return.toString is Numeric
 this.numer >= this.denom
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not(orig((this.denom == 0)||(this.numer > 0)))"
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not(orig(rn.isNaN()))"
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not(rn.isNaN())"
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not(isNaN())"
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not(orig(isNaN()))"
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137;condition="not(denom != 1)"
 ===========================================================================
@@ -5422,6 +5444,7 @@ this.numer == orig(this.numer)
 this.denom == orig(this.denom)
 this.denom == 1
 return != null
+return.toString is Numeric
 return.toString is printable
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT;condition="orig(denom != 1)"
@@ -5437,4 +5460,5 @@ this.numer == orig(this.numer)
 this.denom == orig(this.denom)
 this.denom == 1
 return != null
+return.toString is Numeric
 return.toString is printable
