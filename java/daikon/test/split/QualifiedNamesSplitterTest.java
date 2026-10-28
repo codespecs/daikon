@@ -52,8 +52,7 @@ public final class QualifiedNamesSplitterTest {
     values.put("orig(p.count)", 1L);
     values.put("java.lang.Integer.MAX_VALUE", (long) Integer.MAX_VALUE);
     values.put("orig(java.lang.Integer.MAX_VALUE)", (long) Integer.MAX_VALUE);
-    SplitterTestUtils.LoadedSplitters loaded =
-        SplitterTestUtils.load("QualifiedNames.spinfo", ppt, "misc.QualifiedNames.m");
+    SplitterTestUtils.LoadedSplitters loaded = SplitterTestUtils.load("QualifiedNames.spinfo", ppt);
     assertEquals(loaded.output, expectedValues, loaded.test(values));
   }
 }
