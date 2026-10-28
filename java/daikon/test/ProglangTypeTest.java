@@ -3,7 +3,6 @@ package daikon.test;
 import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 
-import daikon.FileIO;
 import daikon.ProglangType;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -29,7 +28,6 @@ public class ProglangTypeTest {
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
-    FileIO.new_decl_format = true;
   }
 
   /**

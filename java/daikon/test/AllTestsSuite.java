@@ -32,9 +32,11 @@ import org.junit.runners.Suite;
   daikon.test.PptTopLevelTypeTest.class,
   daikon.test.ProglangTypeTest.class,
   daikon.test.SampleTester.class,
+  daikon.test.SplitDtraceTest.class,
   daikon.test.split.FileCompilerTest.class,
   daikon.test.split.NullComparisonsSplitterTest.class,
   daikon.test.split.QualifiedNamesSplitterTest.class,
+  daikon.test.split.QuantCallsSplitterTest.class,
   daikon.test.split.SplitterDuplicatesTest.class,
   daikon.test.split.SplitterFactoryFileNameTest.class,
   daikon.test.split.SplitterListTest.class,
@@ -48,6 +50,7 @@ import org.junit.runners.Suite;
   daikon.test.VarDefinitionBoundTest.class,
   daikon.test.VarInfoAuxTest.class,
   daikon.test.VarInfoNameTest.class,
+  daikon.tools.ExtractConsequentTest.class,
   // daikon.test.split.SplitterFactoryTest is not in this suite, because it is generated after the
   // rest of Daikon (including this class) is compiled.  The Makefile's "junit" target runs it
   // separately.

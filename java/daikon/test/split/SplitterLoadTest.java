@@ -268,15 +268,8 @@ public class SplitterLoadTest {
       }
       modifier.accept(result);
 
-      // Reading the decls file sets FileIO.new_decl_format, which writing the splitters uses.
-      // Restore it afterward, so that it does not affect other tests.
-      Boolean oldNewDeclFormat = FileIO.new_decl_format;
-      try {
-        PptTopLevel ppt = readPpt(declsFile, fullPptName);
-        SplitterTestUtils.loadSplitters(ppt, spfile, true);
-      } finally {
-        FileIO.new_decl_format = oldNewDeclFormat;
-      }
+      PptTopLevel ppt = readPpt(declsFile, fullPptName);
+      SplitterTestUtils.loadSplitters(ppt, spfile, true);
       return result;
     } finally {
       Files.delete(spinfo);
@@ -300,7 +293,6 @@ public class SplitterLoadTest {
     Daikon.ppt_omit_regexp = null;
     Daikon.ppt_max_name = null;
     try {
-      FileIO.resetNewDeclFormat();
       FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
     } finally {
       Daikon.ppt_regexp = oldPptRegexp;
