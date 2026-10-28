@@ -58,20 +58,16 @@ public class SessionManager implements Closeable {
     worker = new Worker();
     worker.setDaemon(true);
     debugln("Manager: starting worker");
-    synchronized (this) {
-      worker.start();
-      // We won't wake up from this until the worker thread is ready
-      // and wait()ing to accept requests.
-      try {
-        this.wait();
-      } catch (InterruptedException e) {
-        // It's OK for a wait() to be interrupted.
-      }
-    }
+    worker.start();
     debugln("SessionManager created");
   }
 
-  /** Performs the given command, or times out if too much time elapses. */
+  /**
+   * Performs the given command.
+   *
+   * @param command the command to perform
+   * @throws TimeoutException if another thread closes this before the command completes
+   */
   public void request(Cmd command) throws TimeoutException {
     assert worker != null : "Cannot use closed SessionManager";
     assert pending == null : "Cannot queue requests";
@@ -88,15 +84,16 @@ public class SessionManager implements Closeable {
       pending = command;
       // tell the worker to wake up
       this.notifyAll();
-      // wait for worker to finish
-      try {
-        this.wait();
-      } catch (InterruptedException e) {
-        // It's OK for a wait() to be interrupted.
+      // Wait for the worker to finish, or for another thread to close this.
+      while (pending != null && worker != null) {
+        try {
+          this.wait();
+        } catch (InterruptedException e) {
+          // It's OK for a wait() to be interrupted.
+        }
       }
-      // command finished iff the command was nulled out
+      // The command finished iff the worker nulled it out; otherwise, another thread closed this.
       if (pending != null) {
-        close();
         throw new TimeoutException();
       }
       // check for error
@@ -106,13 +103,21 @@ public class SessionManager implements Closeable {
     }
   }
 
-  /** Shutdown this session. No further commands may be executed. */
+  /**
+   * Shutdown this session. No further commands may be executed. Has no effect if already closed.
+   */
   @SuppressWarnings("nullness") // nulling worker for fast failure (& for GC)
   @EnsuresCalledMethods(value = "worker", methods = "close")
   @Override
-  public void close(@GuardSatisfied SessionManager this) {
-    worker.close();
-    worker = null;
+  public synchronized void close(@GuardSatisfied SessionManager this) {
+    if (worker == null) {
+      return;
+    }
+    try {
+      worker.close();
+    } finally {
+      worker = null;
+    }
   }
 
   private static @MonotonicNonNull String prover_background = null;
@@ -189,31 +194,37 @@ public class SessionManager implements Closeable {
     /** The associated session, or null if the thread should shutdown. */
     private @Owning @Nullable @GuardedBy("<self>") Session session = new Session();
 
-    /** True if this has been closed. */
-    private boolean finished = false;
+    /**
+     * True if this has been closed. It is volatile because {@link #close} writes it on one thread
+     * and {@link #run} reads it on the worker thread.
+     */
+    private volatile boolean finished = false;
 
     @Override
     @SuppressWarnings("nullness") // tricky, but I think it's OK
     public void run() {
       debugln("Worker: run");
-      while (session != null) {
+      while (true) {
+        final @GuardedBy("<self>") Session s;
+        Cmd command;
         synchronized (mgr) {
-          mgr.pending = null;
-          mgr.notifyAll();
-          try {
-            mgr.wait(0);
-          } catch (InterruptedException e) {
-            // It's OK for a wait() to be interrupted.
+          // Wait for a command, or for close() to set `session` to null.
+          while (session != null && mgr.pending == null) {
+            try {
+              mgr.wait();
+            } catch (InterruptedException e) {
+              // It's OK for a wait() to be interrupted.
+            }
           }
-          assert mgr.pending != null
-              : "@AssumeAssertion(nullness): bug? might not be true if interrupted?";
-          // session != null && mgr.pending != null;
+          if (session == null) {
+            return;
+          }
+          s = session;
+          command = mgr.pending;
         }
         error = null;
         try {
-          // session could also be null at this point, I presume.
-          // That's probably what the catch block is for.
-          mgr.pending.apply(session);
+          command.apply(s);
         } catch (Throwable e) {
           if (finished) {
             return;
@@ -221,12 +232,17 @@ public class SessionManager implements Closeable {
           error = e.toString();
           e.printStackTrace();
         }
+        synchronized (mgr) {
+          mgr.pending = null;
+          mgr.notifyAll();
+        }
       }
     }
 
     @SuppressWarnings({
       "nullness:contracts.precondition.override",
-      "builder:required.method.not.called" // operation performed on alias
+      "builder:required.method.not.called", // operation performed on alias
+      "lock:lock.not.held" // must not wait for a command that is blocked on Simplify
     })
     @EnsuresCalledMethods(value = "session", methods = "close")
     @RequiresNonNull("session")
@@ -234,10 +250,18 @@ public class SessionManager implements Closeable {
     public void close(@GuardSatisfied Worker this) {
       finished = true;
       final @GuardedBy("<self>") Session tmp = session;
-      synchronized (tmp) {
+      try {
+        // Do not acquire the lock on `tmp`:  a command may hold it while blocked reading from a
+        // hung Simplify process, and only `tmp.close()` can unblock that command.
         tmp.close();
+      } finally {
+        // Wake the worker thread so that it sees that `session` is null and exits.  The worker
+        // cannot proceed until this releases the lock on `mgr`, after `session` is null.
+        synchronized (mgr) {
+          mgr.notifyAll();
+          session = null;
+        }
       }
-      session = null;
     }
   }
 
