@@ -1,11 +1,13 @@
 package daikon.split;
 
+import daikon.FileIO;
 import daikon.Global;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 import java.util.logging.Level;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -166,38 +168,38 @@ public abstract class SplitterList {
 
   /**
    * Returns the splitters associated with this program point name (or null). The resulting
-   * splitters are factories, not instantiated splitters.
+   * splitters are factories, not instantiated splitters. The result may contain several splitters
+   * with the same condition text.
    *
+   * <p>An OBJECT program point also uses every splitter, if any PPT_NAME contains "OBJECT".
+   *
+   * @param pptName the name of a program point
    * @return an array of splitters
    */
   public static Splitter @Nullable [] get(String pptName) {
-    List<Splitter[]> splitterArrays = new ArrayList<>();
-
-    for (String name : ppt_splitters.keySet()) {
-      // name is a ppt name, assumed to begin with "ClassName.functionName"
-      if (pptName.indexOf(name) != -1) {
-        Splitter[] result = get_raw(name);
-        if (result != null) {
-          splitterArrays.add(result);
-        }
-        // For the OBJECT program point, we want to use all the splitters.
-      } else if ((pptName.indexOf("OBJECT") != -1) && (name.indexOf("OBJECT") != -1)) {
-        for (Splitter[] sa : ppt_splitters.values()) {
-          splitterArrays.add(sa);
+    boolean useAll = false;
+    if (pptName.endsWith(FileIO.object_tag)) {
+      for (String name : ppt_splitters.keySet()) {
+        if (name.contains("OBJECT")) {
+          useAll = true;
+          break;
         }
       }
     }
 
-    if (splitterArrays.isEmpty()) {
+    List<Splitter> splitters = new ArrayList<>();
+    for (Map.Entry<String, Splitter[]> entry : ppt_splitters.entrySet()) {
+      String name = entry.getKey();
+      // name is a ppt name, assumed to begin with "ClassName.functionName"
+      if (pptName.contains(name) || useAll) {
+        splitters.addAll(Arrays.asList(entry.getValue()));
+      }
+    }
+
+    if (splitters.isEmpty()) {
       Global.debugSplit.fine("SplitterList.get found no splitters for " + pptName);
       return null;
     } else {
-      List<Splitter> splitters = new ArrayList<>();
-      for (Splitter[] tempsplitters : splitterArrays) {
-        for (int j = 0; j < tempsplitters.length; j++) {
-          splitters.add(tempsplitters[j]);
-        }
-      }
       Global.debugSplit.fine(
           "SplitterList.get found " + splitters.size() + " splitters for " + pptName);
       return splitters.toArray(new Splitter[0]);
@@ -205,31 +207,15 @@ public abstract class SplitterList {
   }
 
   /**
-   * Returns all the splitters in this program, The resulting splitters are factories, not
-   * instantiated splitters.
+   * Returns all the splitters in this program. The resulting splitters are factories, not
+   * instantiated splitters. The result may contain several splitters with the same condition text.
    *
    * @return an array of splitters
    */
   public static Splitter[] get_all() {
     List<Splitter> splitters = new ArrayList<>();
     for (Splitter[] splitter_array : ppt_splitters.values()) {
-      for (int i = 0; i < splitter_array.length; i++) {
-        Splitter tempsplitter = splitter_array[i];
-        boolean duplicate = false;
-        // Weed out splitters with the same condition.
-        if (!splitters.isEmpty()) {
-          for (Splitter splitter : splitters) {
-            if (tempsplitter.condition().trim().equals(splitter.condition().trim())) {
-              // System.err.println(" duplicate " + tempsplitter.condition()); System.err.println();
-              duplicate = true;
-              break;
-            }
-          }
-        }
-        if (!duplicate) {
-          splitters.add(tempsplitter);
-        }
-      }
+      splitters.addAll(Arrays.asList(splitter_array));
     }
     return splitters.toArray(new Splitter[0]);
   }
