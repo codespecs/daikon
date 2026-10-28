@@ -128,14 +128,25 @@ public class InvariantAddAndCheckTester {
     // Don't care about comparability info because we are only
     // creating variables for the purpose of being compared (thus they
     // should all be comparable)
+    boolean oldIgnoreComparability = Daikon.ignore_comparability;
     Daikon.ignore_comparability = true;
 
-    // run the actual test
+    // This test creates variables in the old decl format.
+    Boolean oldNewDeclFormat = FileIO.new_decl_format;
+    FileIO.new_decl_format = false;
 
-    if (!execute()) {
-      fail(
-          "At least one test failed."
-              + " Inspect java/daikon/test/InvariantAddAndCheckTest.diffs for error report.");
+    try {
+      // run the actual test
+      if (!execute()) {
+        fail("At least one test failed. Inspect " + diffFileName + " for error report.");
+      }
+    } finally {
+      Daikon.ignore_comparability = oldIgnoreComparability;
+      if (oldNewDeclFormat == null) {
+        FileIO.resetNewDeclFormat();
+      } else {
+        FileIO.new_decl_format = oldNewDeclFormat;
+      }
     }
   }
 

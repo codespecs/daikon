@@ -85,6 +85,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -2872,6 +2873,19 @@ public class PptTopLevel extends Ppt {
     }
   }
 
+  /**
+   * Creates a pair of conditional program points for each splitter that is valid at this program
+   * point.
+   *
+   * <p>If several valid splitters have the same condition text (ignoring leading and trailing
+   * whitespace), this uses only the first of them. That can lose information, because splitters
+   * with the same text may have been compiled for different program points, where a given variable
+   * name may refer to a different variable or have a different type. For example, in {@code i > 0},
+   * a splitter compiled for one program point may test parameter {@code i} and a splitter compiled
+   * for another program point may test field {@code this.i}.
+   *
+   * @param splits splitter factories
+   */
   public void addConditions(Splitter[] splits) {
 
     debugConditional.fine(
@@ -2887,16 +2901,28 @@ public class PptTopLevel extends Ppt {
 
     // Create a Conditional ppt for each side of each splitter
     splitters = new ArrayList<PptSplitter>(splits.length);
+    // The conditions of the splitters in `splitters`. A conditional program point's name contains
+    // its splitter's condition text, so splitters with the same condition text (ignoring leading
+    // and trailing whitespace) would yield indistinguishable conditional program points.
+    // Every program point uses the first valid splitter for a condition, rather than choosing in a
+    // way that depends on the program point, so that a program point and its children usually use
+    // the same Splitter object, as PptRelation.init_hierarchy requires.
+    Set<String> conditions = new HashSet<>();
     for (int ii = 0; ii < splits.length; ii++) {
-      PptSplitter ppt_split = new PptSplitter(this, splits[ii]);
-      if (!ppt_split.splitter_valid()) {
-        debugConditional.fine(
-            "Splitter ("
-                + ((ppt_split.splitter == null) ? "[no class]" : ppt_split.splitter.getClass())
-                + ") not valid: "
-                + ppt_split.ppts[0].name);
+      String condition = splits[ii].condition().trim();
+      if (conditions.contains(condition)) {
+        debugConditional.fine("Splitter has a duplicate condition: " + condition);
         continue;
       }
+      // Checking validity here is cheaper than constructing a PptSplitter, which copies this
+      // program point's variables. A conditional program point has the same variables as this one.
+      if (!splits[ii].instantiateSplitter(this).valid()) {
+        debugConditional.fine(
+            "Splitter (" + splits[ii].getClass() + ") not valid at " + name() + ": " + condition);
+        continue;
+      }
+      PptSplitter ppt_split = new PptSplitter(this, splits[ii]);
+      conditions.add(condition);
       splitters.add(ppt_split);
       if (debugConditional.isLoggable(Level.FINE)) {
         debugConditional.fine("Added PptSplitter: " + ppt_split);

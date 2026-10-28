@@ -67,20 +67,21 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    * Boolean. If true, the input to the Simplify theorem prover will also be directed to a file
    * named simplifyN.in (where N is a number starting from 0) in the current directory. Simplify's
    * operation can then be reproduced with a command like {@code Simplify -nosc <simplify0.in}. This
-   * is intended primarily for debugging when Simplify fails.
+   * is intended primarily for debugging when Simplify fails. This option is read when a Simplify
+   * session starts; changing it does not affect a session that is already running.
    */
   public static boolean dkconfig_trace_input = false;
 
-  /** non-null if dkconfig_trace_input==true */
+  /** Non-null if dkconfig_trace_input was true when this session was created. */
   private final @Owning @MonotonicNonNull PrintStream trace_file;
 
   /** A unique identifier for creating unique filenames for trace files. */
   private static int trace_count = 0;
 
   @SuppressWarnings({
-    "resourceleak:required.method.not.called",
-    "resourceleak:unneeded.suppression"
-  }) // `Process.close()` exists in Java 26+.
+    "resourceleak:required.method.not.called", // `Process.close()` exists only in Java 26+.
+    "resourceleak:unneeded.suppression" // `Process.close()` exists only in Java 26+.
+  })
   /* package */ @Owning
   final Process process;
 
@@ -98,7 +99,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
     "resourceleak:unneeded.suppression" // `Process.close()` exists only in Java 26+.
   })
   public Session() {
-    // Note that this local variable shadows `this.trace_file`.
+    // Note that these local variables shadow `this.process` and `this.trace_file`.
+    Process process = null;
     PrintStream trace_file = null;
     try {
       List<String> newEnv = new ArrayList<>();
@@ -119,6 +121,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
         simplifyPath = simplifyPathProp;
       }
       process = java.lang.Runtime.getRuntime().exec(new String[] {simplifyPath, "-nosc"}, envArray);
+      this.process = process;
       SessionManager.debugln("Session: exec ok");
 
       if (dkconfig_trace_input) {
@@ -151,6 +154,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
       assert expect.equals(actual) : "Prompt expected, got '" + actual + "'";
 
     } catch (Exception | AssertionError e) {
+      if (process != null) {
+        try {
+          process.destroyForcibly();
+        } catch (Exception destroyException) {
+          e.addSuppressed(destroyException);
+        }
+      }
       if (trace_file != null) {
         try {
           trace_file.close();
@@ -164,10 +174,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
   /* package access */ void sendLine(
       @UnknownInitialization(Session.class) @GuardSatisfied Session this, String s) {
-    if (dkconfig_trace_input) {
-      assert trace_file != null
-          : "@AssumeAssertion(nullness): dependent: trace_file is non-null (set in constructor) if"
-              + " dkconfig_trace_input is true";
+    if (trace_file != null) {
       trace_file.println(s);
     }
     input.println(s);
@@ -182,20 +189,20 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
   /** Releases the resources held by this. */
   @SuppressWarnings({
-    "resourceleak:required.method.not.called",
-    "resourceleak:unneeded.suppression"
-  }) // `Process.close()` exists in Java 26+.
+    "resourceleak:required.method.not.called", // `Process.close()` exists only in Java 26+.
+    "resourceleak:unneeded.suppression" // `Process.close()` exists only in Java 26+.
+  })
   @EnsuresCalledMethods(value = "trace_file", methods = "close")
   @Override
   public void close(@GuardSatisfied Session this) {
-    process.destroyForcibly();
-    // In Java 26, `Process` implements `AutoCloseable`, so uncomment `process.close()`.
-    // process.close();
-    assert dkconfig_trace_input == (trace_file != null)
-        : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
-            + " dkconfig_trace_input==true";
-    if (trace_file != null) {
-      trace_file.close();
+    try {
+      process.destroyForcibly();
+      // In Java 26, `Process` implements `AutoCloseable`, so uncomment `process.close()`.
+      // process.close();
+    } finally {
+      if (trace_file != null) {
+        trace_file.close();
+      }
     }
   }
 
