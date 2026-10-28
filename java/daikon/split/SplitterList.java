@@ -167,21 +167,88 @@ public abstract class SplitterList {
   // //////////////////////
 
   /**
+   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file designates the given
+   * program point.
+   *
+   * <p>A name that contains ":::", such as "pkg.Foo.bar(int):::EXIT1", is a complete program point
+   * name. It designates the program point of that name, and every program point whose name is that
+   * name preceded by a qualifier, such as a package: "Foo.bar(int):::EXIT1" designates
+   * "pkg.Foo.bar(int):::EXIT1" but not "pkg.BigFoo.bar(int):::EXIT1". A name ending with ":::EXIT"
+   * also designates the method's numbered exit points, such as "pkg.Foo.bar(int):::EXIT12".
+   *
+   * <p>Any other name, such as "Foo.bar", designates every program point whose name contains it.
+   *
+   * @param spinfoPptName a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param pptName the name of a program point
+   * @return true if {@code spinfoPptName} designates the program point named {@code pptName}
+   */
+  public static boolean matches(String spinfoPptName, String pptName) {
+    if (!isComplete(spinfoPptName)) {
+      return pptName.contains(spinfoPptName);
+    }
+    if (endsWithQualified(pptName, spinfoPptName)) {
+      return true;
+    }
+    if (spinfoPptName.endsWith(FileIO.exit_tag)) {
+      // Remove the exit number, if any.
+      int end = pptName.length();
+      while (end > 0 && pptName.charAt(end - 1) >= '0' && pptName.charAt(end - 1) <= '9') {
+        end--;
+      }
+      return end < pptName.length() && endsWithQualified(pptName.substring(0, end), spinfoPptName);
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the program point name is the given suffix, possibly preceded by a qualifier:
+   * that is, if the name ends with the suffix, and the character before the suffix, if any, is not
+   * a letter, digit, or underscore.
+   *
+   * @param pptName the name of a program point
+   * @param suffix a complete program point name, which may lack a qualifier such as a package
+   * @return true if {@code pptName} is {@code suffix}, possibly preceded by a qualifier
+   */
+  private static boolean endsWithQualified(String pptName, String suffix) {
+    if (!pptName.endsWith(suffix)) {
+      return false;
+    }
+    int start = pptName.length() - suffix.length();
+    if (start == 0) {
+      return true;
+    }
+    char before = pptName.charAt(start - 1);
+    return !(Character.isLetterOrDigit(before) || before == '_');
+  }
+
+  /**
+   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file is a complete program
+   * point name, which designates only specific program points; see {@link #matches}.
+   *
+   * @param spinfoPptName a name on a PPT_NAME line of a {@code .spinfo} file
+   * @return true if {@code spinfoPptName} is a complete program point name
+   */
+  static boolean isComplete(String spinfoPptName) {
+    return spinfoPptName.contains(FileIO.ppt_tag_separator);
+  }
+
+  /**
    * Returns the splitters associated with this program point name (or null). The resulting
    * splitters are factories, not instantiated splitters. The result may contain several splitters
    * with the same condition text.
    *
-   * <p>An OBJECT program point also uses every splitter, if any PPT_NAME contains "OBJECT".
+   * <p>An OBJECT program point also uses every splitter whose PPT_NAME is not a complete program
+   * point name, if any PPT_NAME (complete or not) contains "OBJECT".
    *
    * @param pptName the name of a program point
    * @return an array of splitters
    */
   public static Splitter @Nullable [] get(String pptName) {
-    boolean useAll = false;
+    boolean useAllIncomplete = false;
     if (pptName.endsWith(FileIO.object_tag)) {
       for (String name : ppt_splitters.keySet()) {
         if (name.contains("OBJECT")) {
-          useAll = true;
+          useAllIncomplete = true;
           break;
         }
       }
@@ -190,8 +257,7 @@ public abstract class SplitterList {
     List<Splitter> splitters = new ArrayList<>();
     for (Map.Entry<String, Splitter[]> entry : ppt_splitters.entrySet()) {
       String name = entry.getKey();
-      // name is a ppt name, assumed to begin with "ClassName.functionName"
-      if (pptName.contains(name) || useAll) {
+      if (matches(name, pptName) || (useAllIncomplete && !isComplete(name))) {
         splitters.addAll(Arrays.asList(entry.getValue()));
       }
     }
