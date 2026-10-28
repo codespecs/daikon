@@ -107,8 +107,8 @@ public class DtraceDiff {
    *
    * <p>Only {@code args} specify which program points and variables to compare. This method ignores
    * the values that {@link Daikon#ppt_regexp}, {@link Daikon#ppt_omit_regexp}, {@link
-   * Daikon#var_regexp}, {@link Daikon#var_omit_regexp}, {@link Daikon#ppt_max_name}, and {@link
-   * FileIO#new_decl_format} have on entry, and it restores those values before it returns.
+   * Daikon#var_regexp}, {@link Daikon#var_omit_regexp}, and {@link Daikon#ppt_max_name} have on
+   * entry, and it restores those values before it returns.
    *
    * @param args command-line arguments, like those of {@link #main}
    */
@@ -118,7 +118,6 @@ public class DtraceDiff {
     Pattern oldVarRegexp = Daikon.var_regexp;
     Pattern oldVarOmitRegexp = Daikon.var_omit_regexp;
     String oldPptMaxName = Daikon.ppt_max_name;
-    Boolean oldNewDeclFormat = FileIO.new_decl_format;
     Daikon.ppt_regexp = null;
     Daikon.ppt_omit_regexp = null;
     Daikon.var_regexp = null;
@@ -132,11 +131,6 @@ public class DtraceDiff {
       Daikon.var_regexp = oldVarRegexp;
       Daikon.var_omit_regexp = oldVarOmitRegexp;
       Daikon.ppt_max_name = oldPptMaxName;
-      if (oldNewDeclFormat == null) {
-        FileIO.resetNewDeclFormat();
-      } else {
-        FileIO.new_decl_format = oldNewDeclFormat;
-      }
     }
   }
 

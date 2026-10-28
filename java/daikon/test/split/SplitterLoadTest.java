@@ -268,11 +268,8 @@ public class SplitterLoadTest {
       }
       modifier.accept(result);
 
-      try {
-        PptTopLevel ppt = readPpt(declsFile, fullPptName);
-        SplitterTestUtils.loadSplitters(ppt, spfile, true);
-      } finally {
-      }
+      PptTopLevel ppt = readPpt(declsFile, fullPptName);
+      SplitterTestUtils.loadSplitters(ppt, spfile, true);
       return result;
     } finally {
       Files.delete(spinfo);

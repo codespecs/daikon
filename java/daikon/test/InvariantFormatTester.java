@@ -5,7 +5,6 @@ import static java.util.logging.Level.INFO;
 import static org.junit.Assert.fail;
 
 import daikon.Daikon;
-import daikon.FileIO;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -106,11 +105,6 @@ public class InvariantFormatTester {
     boolean oldIgnoreComparability = Daikon.ignore_comparability;
     Daikon.ignore_comparability = true;
 
-    // FormatTestCase creates variables in the decl format that FileIO.new_decl_format specifies.
-    // The csharpcontract format requires the new decl format.
-    Boolean oldNewDeclFormat = FileIO.new_decl_format;
-    FileIO.new_decl_format = true;
-
     try {
       // run the actual test
       if (!execute()) {
@@ -118,11 +112,6 @@ public class InvariantFormatTester {
       }
     } finally {
       Daikon.ignore_comparability = oldIgnoreComparability;
-      if (oldNewDeclFormat == null) {
-        FileIO.resetNewDeclFormat();
-      } else {
-        FileIO.new_decl_format = oldNewDeclFormat;
-      }
     }
   }
 
