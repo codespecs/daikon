@@ -2683,19 +2683,41 @@ public final class Daikon {
 
         // Open the file
         try (LineNumberReader fp = FilesPlume.newLineNumberFileReader(file)) {
+          // A file without a "decl-version" record is in the version 1 format.  The version
+          // determines what starts a declaration; for example, a version 1 variable may be named
+          // "ppt x".
+          boolean version2 = false;
 
           // Read each ppt name from the file
           for (String line = fp.readLine(); line != null; line = fp.readLine()) {
-            if (line.equals("") || FileIO.isComment(line)) {
+            String[] words = line.trim().split("\\s+");
+            if (words.length == 2 && words[0].equals("decl-version")) {
+              version2 = words[1].equals("2.0");
               continue;
             }
-            if (!line.equals("DECLARE")) {
+            String ppt_name;
+            if (version2) {
+              ppt_name = FileIO.declared_ppt_name(line);
+              if (ppt_name == null) {
+                continue;
+              }
+            } else if (line.equals("DECLARE")) {
+              // In the version 1 format, the line after "DECLARE" is the ppt name.
+              ppt_name = fp.readLine();
+              if (ppt_name == null) {
+                throw new Daikon.UserError("File " + file + " terminated prematurely");
+              }
+              // Skip the variables, one of which might be named "DECLARE".  A blank line ends
+              // the declaration.
+              for (String varLine = fp.readLine();
+                  varLine != null && !varLine.trim().isEmpty();
+                  varLine = fp.readLine()) {}
+            } else {
               continue;
             }
-            // Just read "DECLARE", so next line has ppt name.
-            String ppt_name = fp.readLine();
-            if (ppt_name == null) {
-              throw new Daikon.UserError("File " + file + " terminated prematurely");
+            // GLOBAL, OBJECT, and CLASS ppts are always included; see FileIO.ppt_included.
+            if (FileIO.is_parent_only_ppt_name(ppt_name)) {
+              continue;
             }
             ppts.add(ppt_name);
           }
