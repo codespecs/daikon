@@ -11,10 +11,14 @@ import daikon.Global;
 import daikon.Ppt;
 import daikon.PptMap;
 import daikon.PptTopLevel;
+import daikon.ProglangType;
 import daikon.VarInfo;
 import daikon.inv.Implication;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
+import daikon.inv.binary.twoScalar.IntEqual;
+import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.unary.scalar.OneOfScalar;
 import gnu.getopt.*;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -187,14 +191,12 @@ public class ExtractConsequent {
         int count = 0;
         for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
             conditions.entrySet()) {
-          count++;
           String condIndex = entry2.getKey();
           HashedConsequent cond = entry2.getValue();
           if (cond.fakeFor != null) {
-            count--;
             continue;
           }
-          String javaStr = cond.inv.format_using(OutputFormat.JAVA);
+          String javaStr = javaFormat(cond.inv);
           String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
           String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
           String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
@@ -206,9 +208,10 @@ public class ExtractConsequent {
             conjunctionESC.append(" && ");
             conjunctionSimplify.append(" ");
           }
-          conjunctionJava.append(javaStr);
-          conjunctionDaikon.append(daikonStr);
-          conjunctionESC.append(escStr);
+          count++;
+          conjunctionJava.append(parenthesizeIfNeeded(javaStr));
+          conjunctionDaikon.append(parenthesizeIfNeeded(daikonStr));
+          conjunctionESC.append(parenthesizeIfNeeded(escStr));
           conjunctionSimplify.append(simplifyStr);
         }
         conjunctionSimplify.append(")");
@@ -241,6 +244,90 @@ public class ExtractConsequent {
     }
 
     pw.flush();
+  }
+
+  /**
+   * Returns the invariant formatted as a splitting condition: in Java format, but with the return
+   * value written as "return", which is how a .spinfo file refers to it.
+   *
+   * @param inv an invariant
+   * @return the invariant formatted as a splitting condition
+   */
+  static String javaFormat(Invariant inv) {
+    return replaceResult(inv.format_using(OutputFormat.JAVA));
+  }
+
+  /**
+   * Returns the given Java expression, with each "\result" written as "return". A "\result" within
+   * a string or character literal is unchanged.
+   *
+   * @param expr a Java expression
+   * @return the expression, with the return value written as "return"
+   */
+  static String replaceResult(String expr) {
+    StringBuilder result = new StringBuilder();
+    Matcher m = literal_pattern.matcher(expr);
+    int start = 0;
+    while (m.find()) {
+      result.append(result_pattern.matcher(expr.substring(start, m.start())).replaceAll("return"));
+      result.append(m.group());
+      start = m.end();
+    }
+    result.append(result_pattern.matcher(expr.substring(start)).replaceAll("return"));
+    return result.toString();
+  }
+
+  /**
+   * Returns the given expression, parenthesized if it may contain an operator whose precedence is
+   * lower than that of conjunction, such as "||", " or ", "?:", or the ESC/JML "==&gt;", "&lt;==",
+   * "&lt;==&gt;", and "&lt;=!=&gt;". Such an expression must be parenthesized when it is a
+   * conjunct. Operators within string and character literals are ignored.
+   *
+   * @param expr a Java, ESC, or Daikon expression
+   * @return the expression, parenthesized if necessary to be used as a conjunct
+   */
+  static String parenthesizeIfNeeded(String expr) {
+    String withoutLiterals = literal_pattern.matcher(expr).replaceAll("\"\"");
+    return low_precedence_pattern.matcher(withoutLiterals).find() ? "(" + expr + ")" : expr;
+  }
+
+  /**
+   * Returns true if the invariant is legal Java when its variables are booleans. Daikon represents
+   * a boolean as an int, so it may infer numeric invariants, such as "b != 0" or "b1 < b2", that
+   * are not legal Java over booleans.
+   *
+   * @param inv an invariant
+   * @return true if the invariant uses no boolean variable, or is legal Java over booleans
+   */
+  static boolean isLegalForBooleans(Invariant inv) {
+    VarInfo[] vis = inv.ppt.var_infos;
+    // OneOfScalar is the only scalar invariant that formats a boolean specially, as "b == true".
+    // It decides whether its variable is a boolean from the file representation type, which may
+    // differ from the declared type that a splitter uses.
+    if (inv instanceof OneOfScalar) {
+      return ((OneOfScalar) inv).is_boolean() == isBoolean(vis[0]);
+    }
+    if (inv instanceof IntEqual || inv instanceof IntNonEqual) {
+      // "b == i" is not legal Java if exactly one of the operands is a boolean.
+      return isBoolean(vis[0]) == isBoolean(vis[1]);
+    }
+    for (VarInfo vi : vis) {
+      if (isBoolean(vi)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Returns true if the variable is a boolean. A splitter declares such a variable as a Java
+   * boolean; see {@code SplitterJavaSource.getVarType}.
+   *
+   * @param vi a variable
+   * @return true if the variable is a boolean
+   */
+  private static boolean isBoolean(VarInfo vi) {
+    return vi.type == ProglangType.BOOLEAN;
   }
 
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
@@ -348,28 +435,49 @@ public class ExtractConsequent {
           continue;
         }
 
-        String inv_string = inv.format_using(OutputFormat.JAVA);
+        // 2) Numeric invariants over booleans, such as "b != 0", which are not legal Java
+        if (!isLegalForBooleans(inv)) {
+          if (debug.isLoggable(FINE)) {
+            debug.fine("Not legal Java over booleans: " + inv.format_using(OutputFormat.JAVA));
+          }
+          continue;
+        }
+
+        String inv_string = javaFormat(inv);
         if (orig_pattern.matcher(inv_string).find()
             || dot_class_pattern.matcher(inv_string).find()) {
           continue;
         }
+        String cluster_key = clusterKey(cluster_inv);
         String fake_inv_string = simplify_inequalities(inv_string);
         HashedConsequent real = new HashedConsequent(inv, null);
         if (!fake_inv_string.equals(inv_string)) {
           // For instance, inv_string is "x != y", fake_inv_string is "x == y"
           HashedConsequent fake = new HashedConsequent(inv, inv_string);
-          boolean added =
-              store_invariant(
-                  cluster_inv.format_using(OutputFormat.JAVA), fake_inv_string, fake, pptname);
+          boolean added = store_invariant(cluster_key, fake_inv_string, fake, pptname);
           if (!added) {
             // We couldn't add "x == y", (when we're "x != y") because
             // it already exists; so don't add "x == y" either.
             continue;
           }
         }
-        store_invariant(cluster_inv.format_using(OutputFormat.JAVA), inv_string, real, pptname);
+        store_invariant(cluster_key, inv_string, real, pptname);
       }
     }
+  }
+
+  /**
+   * Returns a key that identifies the cluster that the given invariant describes. The pre-state
+   * value "orig(cluster)" and the post-state value "cluster" are equal, so the key for an invariant
+   * over one is the same as the key for the same invariant over the other.
+   *
+   * @param cluster_inv an invariant over the "cluster" variable, such as "cluster == 1"
+   * @return a key that identifies the cluster
+   */
+  static String clusterKey(Invariant cluster_inv) {
+    return orig_cluster_pattern
+        .matcher(cluster_inv.format_using(OutputFormat.DAIKON))
+        .replaceAll("cluster");
   }
 
   // Store the invariant for later printing. Ignore duplicate
@@ -404,8 +512,8 @@ public class ExtractConsequent {
   }
 
   private static boolean contains_constant_non_012(Invariant inv) {
-    if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
-      daikon.inv.unary.scalar.OneOfScalar oneof = (daikon.inv.unary.scalar.OneOfScalar) inv;
+    if (inv instanceof OneOfScalar) {
+      OneOfScalar oneof = (OneOfScalar) inv;
       // TODO: isInteresting has been removed.  Do we need to deal with it specially here?
       // OneOf invariants that indicate a small set ( > 1 element) of
       // possible values are not interesting, and have already been
@@ -471,7 +579,25 @@ public class ExtractConsequent {
     return m.find() && !m.find();
   }
 
+  /** Matches a pre-state or post-state value, which a splitter cannot use. */
   static Pattern orig_pattern;
+
+  /** Matches the return value in Java format. */
+  static Pattern result_pattern;
+
+  /** Matches the pre-state value of the "cluster" variable, in Daikon format. */
+  static Pattern orig_cluster_pattern;
+
+  /**
+   * Matches an operator whose precedence is lower than that of conjunction. "&lt;==" is needed for
+   * reverse implication, and "&lt;=!=&gt;" contains neither "==&gt;" nor "&lt;==". A "?" matches
+   * only if a ":" follows it, as in a conditional expression.
+   */
+  static Pattern low_precedence_pattern;
+
+  /** Matches a string or character literal. */
+  static Pattern literal_pattern;
+
   static Pattern dot_class_pattern;
   static Pattern non_word_pattern;
   static Pattern gteq_pattern;
@@ -485,7 +611,11 @@ public class ExtractConsequent {
   static {
     try {
       non_word_pattern = Pattern.compile("\\W+");
-      orig_pattern = Pattern.compile("orig\\s*\\(");
+      orig_pattern = Pattern.compile("\\borig\\s*\\(|\\\\(old|new)\\s*\\(");
+      result_pattern = Pattern.compile("\\\\result\\b");
+      orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
+      low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?.*:");
+      literal_pattern = Pattern.compile("\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'");
       dot_class_pattern = Pattern.compile("\\.class");
       inequality_pattern = Pattern.compile("[\\!<>]=");
       gteq_pattern = Pattern.compile(">=");
