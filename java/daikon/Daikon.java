@@ -2162,6 +2162,8 @@ public final class Daikon {
 
     SplitterFactory.load_splitters(ppt, spinfoFiles);
 
+    // pconds may contain several splitters with the same condition text, from different PPT_NAME
+    // lines or .spinfo files; addConditions uses only one of them.
     Splitter[] pconds;
     if (SplitterList.dkconfig_all_splitters) {
       pconds = SplitterList.get_all();
