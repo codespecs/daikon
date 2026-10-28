@@ -570,7 +570,8 @@ update-doc-dist-version:
 	# update the version number in the release archive file names
 	perl -wpi -e 's/(\-)[0-9]+(\.[0-9]+)+/$$1 . "${NEW_VER}"/eg;' doc/www/download/index.html
 	perl -wpi -e 's/(public static final String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "${NEW_VER}" . $$3/e;' java/daikon/Daikon.java
-	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "${NEW_VER}" . $$3/e' fjalar/valgrind/fjalar/mc_main.c
+	# Fail if the pattern matches nothing, rather than silently leaving Kvasir's version unchanged.
+	perl -wpi -e '$$n += s/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "${NEW_VER}" . $$3/e; END { if (!$$n) { warn "$$ARGV: no VG_(details_version) line to update\n"; $$? = 1; } }' fjalar/valgrind/fjalar/kvasir/kvasir_main.c
 	touch doc/CHANGELOG.md
 
 # Update the version number in file doc/VERSION
