@@ -1,0 +1,51 @@
+===========================================================================
+C:::OBJECT
+(this.x one of { -3, -2, -1 })  <==>  (this.q one of { 13, 14, 15 })
+(this.x one of { -3, -2, -1 })  <==>  (this.w one of { 5, 7, 9 })
+(this.x one of { -3, -2, -1 })  ==>  ((this.q >> this.w == 0))
+(this.x one of { -3, -2, -1 })  ==>  (this.q % this.x == 0)
+(this.x one of { 1, 2, 3 })  <==>  (this.q one of { 10, 11, 12 })
+(this.x one of { 1, 2, 3 })  <==>  (this.w one of { 1, 2, 3 })
+(this.x one of { 1, 2, 3 })  <==>  (this.x == this.w)
+this != null
+this.x <= this.w
+this.x < this.q
+this.w < this.q
+===========================================================================
+C:::OBJECT;condition="this.x > 0"
+this.x == this.w
+this.x one of { 1, 2, 3 }
+this.q one of { 10, 11, 12 }
+===========================================================================
+C:::OBJECT;condition="not(this.x > 0)"
+this.x one of { -3, -2, -1 }
+this.w one of { 5, 7, 9 }
+this.q one of { 13, 14, 15 }
+this.q % this.x == 0
+(this.q >> this.w == 0)
+===========================================================================
+C.m():::ENTER
+(this.x one of { -3, -2, -1 })  <==>  (this.q one of { 13, 14, 15 })
+(this.x one of { -3, -2, -1 })  <==>  (this.w one of { 5, 7, 9 })
+(this.x one of { 1, 2, 3 })  <==>  (this.q one of { 10, 11, 12 })
+(this.x one of { 1, 2, 3 })  <==>  (this.w one of { 1, 2, 3 })
+(this.x one of { 1, 2, 3 })  <==>  (this.x == this.w)
+===========================================================================
+C.m():::ENTER;condition="this.x > 0"
+===========================================================================
+C.m():::ENTER;condition="not(this.x > 0)"
+===========================================================================
+C.m():::EXIT
+this.x == orig(this.x)
+this.w == orig(this.w)
+this.q == orig(this.q)
+(this.x one of { -3, -2, -1 })  <==>  (this.q one of { 13, 14, 15 })
+(this.x one of { -3, -2, -1 })  <==>  (this.w one of { 5, 7, 9 })
+(this.x one of { 1, 2, 3 })  <==>  (this.q one of { 10, 11, 12 })
+(this.x one of { 1, 2, 3 })  <==>  (this.w one of { 1, 2, 3 })
+(this.x one of { 1, 2, 3 })  <==>  (this.x == this.w)
+===========================================================================
+C.m():::EXIT;condition="this.x > 0"
+this.x == orig(this.w)
+===========================================================================
+C.m():::EXIT;condition="not(this.x > 0)"

@@ -3,6 +3,7 @@ package daikon;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -184,6 +185,154 @@ public final class VarComparabilityImplicit extends VarComparability implements 
       assert type1.dimensions == 0 || type2.dimensions == 0;
       return false;
     }
+  }
+
+  /**
+   * If both comparabilities are implicit, records in {@code groups} the comparable sets that must
+   * be merged at a parent program point. Otherwise, does nothing. See {@link
+   * #mergeSets(VarComparabilityImplicit, VarComparabilityImplicit, Map, Map)}.
+   *
+   * @param parent the comparability of a variable at a parent program point
+   * @param child the comparability of the corresponding variable at a child program point
+   * @param childToParentSet maps each comparable set at the child to a comparable set at the parent
+   *     whose variables correspond to child variables in that set; updated by this method
+   * @param groups a union-find structure over the parent's comparable sets, as used by {@link
+   *     #findGroup}; updated by this method
+   */
+  static void mergeSets(
+      VarComparability parent,
+      VarComparability child,
+      Map<Integer, Integer> childToParentSet,
+      Map<Integer, Integer> groups) {
+    if (parent instanceof VarComparabilityImplicit && child instanceof VarComparabilityImplicit) {
+      mergeSets(
+          (VarComparabilityImplicit) parent,
+          (VarComparabilityImplicit) child,
+          childToParentSet,
+          groups);
+    }
+  }
+
+  /**
+   * Records in {@code groups} the comparable sets that must be merged at a parent program point so
+   * that the parent variable is comparable to every parent variable whose child variable is
+   * comparable to {@code child}. Wherever {@code child} is comparable to everything (its set is
+   * negative), the parent's comparable set is merged with the child's negative set, so that every
+   * variable in it becomes comparable to everything. A negative set means the same thing at every
+   * program point, so the parent variable can share an equality set with the parent variables whose
+   * child variables are in that negative set.
+   *
+   * <p>The caller applies the merges by calling {@link #remap} after every variable has been
+   * processed.
+   *
+   * @param parent the comparability of a variable at a parent program point
+   * @param child the comparability of the corresponding variable at a child program point
+   * @param childToParentSet maps each comparable set at the child to a comparable set at the parent
+   *     whose variables correspond to child variables in that set; updated by this method
+   * @param groups a union-find structure over the parent's comparable sets, as used by {@link
+   *     #findGroup}; updated by this method
+   */
+  static void mergeSets(
+      VarComparabilityImplicit parent,
+      VarComparabilityImplicit child,
+      Map<Integer, Integer> childToParentSet,
+      Map<Integer, Integer> groups) {
+    if (parent.dimensions != child.dimensions) {
+      // The variables have different types, so their comparabilities cannot be related.
+      return;
+    }
+    for (int i = 0; i < parent.dimensions; i++) {
+      mergeSets(
+          (VarComparabilityImplicit) parent.indexType(i),
+          (VarComparabilityImplicit) child.indexType(i),
+          childToParentSet,
+          groups);
+    }
+    if (parent.base < 0) {
+      return;
+    }
+    if (child.base < 0) {
+      union(parent.base, child.base, groups);
+    } else {
+      Integer parentSet = childToParentSet.putIfAbsent(child.base, parent.base);
+      if (parentSet != null) {
+        union(parentSet, parent.base, groups);
+      }
+    }
+  }
+
+  /**
+   * Merges two comparable sets in {@code groups}.
+   *
+   * @param set1 a comparable set
+   * @param set2 a comparable set
+   * @param groups a union-find structure over comparable sets, as used by {@link #findGroup}
+   */
+  private static void union(int set1, int set2, Map<Integer, Integer> groups) {
+    int group1 = findGroup(set1, groups);
+    int group2 = findGroup(set2, groups);
+    // Use the smaller value as the representative, for deterministic results and so that a group
+    // that contains a negative set, whose variables are comparable to everything, is negative.
+    if (group1 < group2) {
+      groups.put(group2, group1);
+    } else if (group2 < group1) {
+      groups.put(group1, group2);
+    }
+  }
+
+  /**
+   * Returns the representative of the comparable set that contains {@code base}. Compresses the
+   * path from {@code base} to its representative.
+   *
+   * @param base a comparable set
+   * @param groups a union-find structure over comparable sets: maps a comparable set to another
+   *     comparable set in the same group; a representative has no entry
+   * @return the representative of the comparable set that contains {@code base}
+   */
+  private static int findGroup(int base, Map<Integer, Integer> groups) {
+    int root = base;
+    Integer next;
+    while ((next = groups.get(root)) != null) {
+      root = next;
+    }
+    while (base != root) {
+      next = groups.put(base, root);
+      assert next != null : "@AssumeAssertion(nullness): base is not a representative";
+      base = next;
+    }
+    return root;
+  }
+
+  /**
+   * Returns a comparability like this one, but with each comparable set replaced by its
+   * representative in {@code groups}.
+   *
+   * @param groups a union-find structure over comparable sets, as built by {@link #mergeSets}
+   * @return a comparability like this one, with each comparable set replaced by its representative
+   */
+  @SuppressWarnings("interning:not.interned") // test whether remap() created a new object
+  VarComparabilityImplicit remap(Map<Integer, Integer> groups) {
+    // Also remap this program point's own negative sets:  groups may have merged a child's negative
+    // set, which has the same meaning at every program point, with another negative set.
+    int newBase = findGroup(base, groups);
+    VarComparabilityImplicit @Nullable [] oldIndexTypes = indexTypes;
+    VarComparabilityImplicit @Nullable [] newIndexTypes = oldIndexTypes;
+    if (oldIndexTypes != null) {
+      for (int i = 0; i < oldIndexTypes.length; i++) {
+        VarComparabilityImplicit newIndexType = oldIndexTypes[i].remap(groups);
+        if (newIndexType != oldIndexTypes[i]) {
+          if (newIndexTypes == oldIndexTypes) {
+            newIndexTypes = oldIndexTypes.clone();
+          }
+          assert newIndexTypes != null : "@AssumeAssertion(nullness): copy of oldIndexTypes";
+          newIndexTypes[i] = newIndexType;
+        }
+      }
+    }
+    if (newBase == base && newIndexTypes == indexTypes) {
+      return this;
+    }
+    return new VarComparabilityImplicit(newBase, newIndexTypes, dimensions);
   }
 
   /**

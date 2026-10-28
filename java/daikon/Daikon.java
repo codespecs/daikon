@@ -1805,9 +1805,50 @@ public final class Daikon {
 
   /**
    * Creates invariants for upper program points by merging together the invariants from all of the
-   * lower points.
+   * lower points. First, coarsens the comparability of each upper program point so that the merged
+   * invariants can be represented there.
    */
   public static void createUpperPpts(PptMap all_ppts) {
+
+    // Make each ppt's comparability at least as coarse as that of each of its children and of its
+    // conditional ppts.  Conditional ppts can have children too, so visit them as well.  Visit
+    // children before parents, so that usually each ppt is visited once.  But a ppt may need to be
+    // revisited:  a ppt and its conditional ppts depend on one another, and USER relations, if
+    // enabled (PptRelation.dkconfig_enable_object_user), can make the hierarchy cyclic (for
+    // example, if classes A and B each have a field of the other's type, then each OBJECT ppt is a
+    // parent of the other).  So, revisit the parents of each ppt whose comparability changes.
+    Set<PptTopLevel> worklist = new LinkedHashSet<>();
+    // In MergeInvariants, some children are in other PptMaps; do not visit them.
+    List<PptTopLevel> allPpts = new ArrayList<>();
+    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
+      allPpts.add(ppt);
+    }
+    Set<PptTopLevel> unvisited = new HashSet<>(allPpts);
+    for (PptTopLevel ppt : allPpts) {
+      addChildrenFirst(ppt, unvisited, worklist);
+    }
+    while (!worklist.isEmpty()) {
+      Iterator<PptTopLevel> itor = worklist.iterator();
+      PptTopLevel ppt = itor.next();
+      itor.remove();
+      if (ppt.coarsenComparability()) {
+        // coarsenComparability also changed the comparability of ppt's conditional ppts.
+        for (PptRelation rel : ppt.parents) {
+          worklist.add(rel.parent);
+        }
+        for (PptConditional pptCond : ppt.cond_iterable()) {
+          for (PptRelation rel : pptCond.parents) {
+            if (rel.parent != ppt) {
+              worklist.add(rel.parent);
+            }
+          }
+        }
+        // Only the conditional ppts of a ppt's first splitter have a PPT_PPTCOND relation to it.
+        if (ppt instanceof PptConditional) {
+          worklist.add(((PptConditional) ppt).parent);
+        }
+      }
+    }
 
     // Process each ppt that doesn't have a parent
     // (mergeInvs is called on a root, and recursively processes children)
@@ -1817,6 +1858,47 @@ public final class Daikon {
       if (ppt.parents.isEmpty()) {
         ppt.mergeInvs();
       }
+    }
+  }
+
+  /**
+   * Adds to {@code worklist} each ppt that has children, among {@code ppt}, its conditional ppts,
+   * and their descendants, each after its descendants. Does nothing for a ppt not in {@code
+   * unvisited}.
+   *
+   * @param ppt a program point
+   * @param unvisited the ppts that may still be visited; updated by this method
+   * @param worklist the ppts to coarsen the comparability of; updated by this method
+   */
+  private static void addChildrenFirst(
+      PptTopLevel ppt, Set<PptTopLevel> unvisited, Set<PptTopLevel> worklist) {
+    if (!unvisited.remove(ppt)) {
+      return;
+    }
+    for (PptRelation rel : ppt.children) {
+      addChildrenFirst(rel.child, unvisited, worklist);
+    }
+    for (PptConditional pptCond : ppt.cond_iterable()) {
+      addChildrenFirst(pptCond, unvisited, worklist);
+    }
+    if (!ppt.children.isEmpty()) {
+      worklist.add(ppt);
+    }
+  }
+
+  /**
+   * Initializes the partial order hierarchy among the given ppts, according to the format of the
+   * declarations that were read.
+   *
+   * @param all_ppts the ppts, whose declarations have been read
+   */
+  public static void init_hierarchy(PptMap all_ppts) {
+    assert FileIO.new_decl_format != null
+        : "@AssumeAssertion(nullness): read declarations, so new_decl_format is set";
+    if (FileIO.new_decl_format) {
+      PptRelation.init_hierarchy_new(all_ppts);
+    } else {
+      PptRelation.init_hierarchy(all_ppts);
     }
   }
 
@@ -2433,13 +2515,7 @@ public final class Daikon {
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
     startTime = System.nanoTime();
-    assert FileIO.new_decl_format != null
-        : "@AssumeAssertion(nullness): read data, so new_decl_format is set";
-    if (FileIO.new_decl_format) {
-      PptRelation.init_hierarchy_new(all_ppts);
-    } else {
-      PptRelation.init_hierarchy(all_ppts);
-    }
+    init_hierarchy(all_ppts);
     duration = System.nanoTime() - startTime;
     debugProgress.fine(
         "Init Hierarchy ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");

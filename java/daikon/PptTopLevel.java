@@ -4254,6 +4254,86 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Coarsens the comparability of the variables at this program point and at its conditional
+   * program points, so that two variables are comparable here if they are comparable in any child.
+   * Comparability is computed separately for each program point, so variables that are comparable
+   * (for example, always equal) in a child may be incomparable here; then the invariants merged
+   * from the children could not be represented here.
+   *
+   * <p>This must be called before this program point's invariants are created. Whenever it returns
+   * true, it must be called again on each parent of this program point and of its conditional
+   * program points, so that comparability propagates from each descendant to every ancestor.
+   *
+   * @return true if the comparability of any variable changed
+   */
+  @SuppressWarnings("interning:not.interned") // test whether remap() made a new object
+  boolean coarsenComparability() {
+    // A union-find structure over the comparable sets at this program point.
+    Map<Integer, Integer> groups = new HashMap<>();
+    for (PptRelation rel : children) {
+      if (rel.getRelationType() == PptRelationType.PPT_PPTCOND) {
+        // The conditional program points are handled below.
+        continue;
+      }
+      Map<Integer, Integer> childToParentSet = new HashMap<>();
+      for (VarInfo childVar : rel.child.var_infos) {
+        VarInfo parentVar = rel.parentVar(childVar);
+        if (parentVar != null) {
+          VarComparabilityImplicit.mergeSets(
+              parentVar.comparability, childVar.comparability, childToParentSet, groups);
+        }
+      }
+    }
+    // The conditional program points get this program point's comparability below.  Their own
+    // children may have coarsened their comparability, so merge it in first, lest it be lost.  A
+    // conditional program point with no children has a copy of this program point's comparability.
+    for (PptConditional pptCond : cond_iterable()) {
+      assert pptCond.var_infos.length == var_infos.length : pptCond.name();
+      if (pptCond.children.isEmpty()) {
+        continue;
+      }
+      Map<Integer, Integer> condToParentSet = new HashMap<>();
+      for (int i = 0; i < var_infos.length; i++) {
+        VarComparabilityImplicit.mergeSets(
+            var_infos[i].comparability,
+            pptCond.var_infos[i].comparability,
+            condToParentSet,
+            groups);
+      }
+    }
+    if (groups.isEmpty()) {
+      return false;
+    }
+
+    VarComparability[] newComparability = new VarComparability[var_infos.length];
+    boolean changed = false;
+    for (int i = 0; i < var_infos.length; i++) {
+      newComparability[i] = var_infos[i].comparability;
+      if (newComparability[i] instanceof VarComparabilityImplicit) {
+        newComparability[i] = ((VarComparabilityImplicit) newComparability[i]).remap(groups);
+      }
+      if (newComparability[i] != var_infos[i].comparability) {
+        changed = true;
+      }
+    }
+    if (!changed) {
+      return false;
+    }
+    assert equality_view == null
+        : "coarsening comparability after creating invariants at " + name();
+
+    for (int i = 0; i < var_infos.length; i++) {
+      var_infos[i].comparability = newComparability[i];
+    }
+    for (PptConditional pptCond : cond_iterable()) {
+      for (int i = 0; i < var_infos.length; i++) {
+        pptCond.var_infos[i].comparability = newComparability[i];
+      }
+    }
+    return true;
+  }
+
+  /**
    * Merges the conditionals from the children of this ppt to this ppt. Only conditionals that exist
    * at each child and whose splitting condition is valid here can be merged.
    */
