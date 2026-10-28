@@ -105,9 +105,42 @@ public class DtraceDiff {
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called programmatically.
    *
+   * <p>Only {@code args} specify which program points and variables to compare. This method ignores
+   * the values that {@link Daikon#ppt_regexp}, {@link Daikon#ppt_omit_regexp}, {@link
+   * Daikon#var_regexp}, {@link Daikon#var_omit_regexp}, and {@link Daikon#ppt_max_name} have on
+   * entry, and it restores those values before it returns.
+   *
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(final String[] args) {
+    Pattern oldPptRegexp = Daikon.ppt_regexp;
+    Pattern oldPptOmitRegexp = Daikon.ppt_omit_regexp;
+    Pattern oldVarRegexp = Daikon.var_regexp;
+    Pattern oldVarOmitRegexp = Daikon.var_omit_regexp;
+    String oldPptMaxName = Daikon.ppt_max_name;
+    Daikon.ppt_regexp = null;
+    Daikon.ppt_omit_regexp = null;
+    Daikon.var_regexp = null;
+    Daikon.var_omit_regexp = null;
+    Daikon.ppt_max_name = null;
+    try {
+      parseArgsAndDiff(args);
+    } finally {
+      Daikon.ppt_regexp = oldPptRegexp;
+      Daikon.ppt_omit_regexp = oldPptOmitRegexp;
+      Daikon.var_regexp = oldVarRegexp;
+      Daikon.var_omit_regexp = oldVarOmitRegexp;
+      Daikon.ppt_max_name = oldPptMaxName;
+    }
+  }
+
+  /**
+   * Processes the command-line arguments, which set Daikon's ppt and variable filters, and then
+   * compares the two dtrace files that they name.
+   *
+   * @param args command-line arguments, like those of {@link #main}
+   */
+  private static void parseArgsAndDiff(final String[] args) {
     Set<File> declsfile1 = new HashSet<>();
     String dtracefile1 = null;
     Set<File> declsfile2 = new HashSet<>();

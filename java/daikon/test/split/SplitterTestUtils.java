@@ -8,10 +8,12 @@ import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.ValueTuple;
 import daikon.VarInfo;
+import daikon.split.PptSplitter;
 import daikon.split.SpinfoFile;
 import daikon.split.Splitter;
 import daikon.split.SplitterFactory;
 import daikon.split.SplitterList;
+import daikon.split.SplitterObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -129,24 +131,23 @@ final class SplitterTestUtils {
 
   /**
    * Compiles and loads the splitters of a spinfo file for a program point. Checks that each
-   * splitter is valid and that no two splitters have the same condition. No other test may register
-   * splitters for splitterPptName.
+   * splitter is valid and that no two splitters have the same condition. Leaves {@link
+   * SplitterList} and {@link PptSplitter#dkconfig_suppressSplitterErrors} as they were.
    *
    * @param spinfoFile the name of the spinfo file, in {@link #targetDir}
    * @param ppt the program point to which the splitters apply
-   * @param splitterPptName the PPT_NAME of the splitters in the spinfo file
-   * @return the output of loading the splitters, and the splitters that were loaded
+   * @return the output of loading the splitters, including any errors, and the splitters that were
+   *     loaded
    * @throws IOException if the spinfo file cannot be read
    */
-  @SuppressWarnings("nullness:contracts.precondition") // parse_spinfofile sets the temp directory
-  static LoadedSplitters load(String spinfoFile, PptTopLevel ppt, String splitterPptName)
-      throws IOException {
+  static LoadedSplitters load(String spinfoFile, PptTopLevel ppt) throws IOException {
     SpinfoFile spinfo = SplitterFactory.parse_spinfofile(new File(targetDir + spinfoFile));
     PrintStream oldOut = System.out;
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     System.setOut(new PrintStream(out, true, StandardCharsets.UTF_8));
+    List<Splitter> factories;
     try {
-      SplitterFactory.load_splitters(ppt, Collections.singletonList(spinfo));
+      factories = loadSplitters(ppt, spinfo, false);
     } finally {
       System.setOut(oldOut);
     }
@@ -154,17 +155,63 @@ final class SplitterTestUtils {
 
     List<Splitter> splitters = new ArrayList<>();
     Set<String> conditions = new HashSet<>();
-    Splitter[] factories = SplitterList.get_raw(splitterPptName);
-    if (factories != null) {
-      for (Splitter factory : factories) {
-        String condition = factory.condition();
-        Splitter splitter = factory.instantiateSplitter(ppt);
-        assertTrue(condition, splitter.valid());
-        assertTrue("duplicate condition " + condition, conditions.add(condition));
-        splitters.add(splitter);
-      }
+    for (Splitter factory : factories) {
+      String condition = factory.condition();
+      Splitter splitter = factory.instantiateSplitter(ppt);
+      assertTrue(condition, splitter.valid());
+      assertTrue("duplicate condition " + condition, conditions.add(condition));
+      splitters.add(splitter);
     }
     return new LoadedSplitters(output, ppt, splitters);
+  }
+
+  /**
+   * Compiles and loads the splitters of a spinfo file for a program point, and returns them. Leaves
+   * {@link SplitterList} and {@link PptSplitter#dkconfig_suppressSplitterErrors} as they were.
+   *
+   * @param ppt the program point to which the splitters apply
+   * @param spinfo the parsed spinfo file; {@link SplitterFactory#load_splitters} removes from it
+   *     the splitters that it loads
+   * @param suppressErrors whether to suppress the messages about splitters that cannot be compiled
+   *     or loaded
+   * @return the splitters that were loaded, which are factories rather than instantiated splitters
+   */
+  @SuppressWarnings("nullness:contracts.precondition") // parsing spinfo set the temp directory
+  static List<Splitter> loadSplitters(PptTopLevel ppt, SpinfoFile spinfo, boolean suppressErrors) {
+    // SplitterList is global and put() appends, so set aside the splitters that other code
+    // registered for the PPT_NAMEs of spinfo; otherwise get_raw would return them too.
+    Map<String, Splitter @Nullable []> oldSplitters = new LinkedHashMap<>();
+    for (SplitterObject[] splitterObjects : spinfo.getSplitterObjects()) {
+      if (splitterObjects.length != 0) {
+        String pptName = splitterObjects[0].getPptName();
+        if (!oldSplitters.containsKey(pptName)) {
+          oldSplitters.put(pptName, SplitterList.get_raw(pptName));
+          SplitterList.remove(pptName);
+        }
+      }
+    }
+    boolean oldSuppress = PptSplitter.dkconfig_suppressSplitterErrors;
+    PptSplitter.dkconfig_suppressSplitterErrors = suppressErrors;
+    try {
+      SplitterFactory.load_splitters(ppt, Collections.singletonList(spinfo));
+      List<Splitter> result = new ArrayList<>();
+      for (String pptName : oldSplitters.keySet()) {
+        Splitter[] loaded = SplitterList.get_raw(pptName);
+        if (loaded != null) {
+          result.addAll(Arrays.asList(loaded));
+        }
+      }
+      return result;
+    } finally {
+      PptSplitter.dkconfig_suppressSplitterErrors = oldSuppress;
+      for (Map.Entry<String, Splitter @Nullable []> entry : oldSplitters.entrySet()) {
+        SplitterList.remove(entry.getKey());
+        Splitter[] old = entry.getValue();
+        if (old != null) {
+          SplitterList.put(entry.getKey(), old);
+        }
+      }
+    }
   }
 
   /**

@@ -102,12 +102,16 @@ public class InvariantFormatTester {
     // Don't care about comparability info because we are only
     // creating variables for the purpose of being compared (thus they
     // should all be comparable)
+    boolean oldIgnoreComparability = Daikon.ignore_comparability;
     Daikon.ignore_comparability = true;
 
-    // run the actual test
-
-    if (!execute()) {
-      fail("At least one test failed. Inspect " + diff_file + " for error report.");
+    try {
+      // run the actual test
+      if (!execute()) {
+        fail("At least one test failed. Inspect " + diff_file + " for error report.");
+      }
+    } finally {
+      Daikon.ignore_comparability = oldIgnoreComparability;
     }
   }
 

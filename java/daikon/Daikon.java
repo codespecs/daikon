@@ -976,6 +976,7 @@ public final class Daikon {
     ppt_omit_regexp = null;
     var_regexp = null;
     var_omit_regexp = null;
+    ppt_max_name = null;
     server_dir = null;
     use_mem_monitor = false;
     userDefinedInvariants.clear();
@@ -2157,6 +2158,8 @@ public final class Daikon {
 
     SplitterFactory.load_splitters(ppt, spinfoFiles);
 
+    // pconds may contain several splitters with the same condition text, from different PPT_NAME
+    // lines or .spinfo files; addConditions uses only one of them.
     Splitter[] pconds;
     if (SplitterList.dkconfig_all_splitters) {
       pconds = SplitterList.get_all();

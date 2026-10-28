@@ -197,6 +197,11 @@ public class SampleTester {
    */
   public void test_samples(String commandFile) throws IOException {
 
+    // Do not depend on global state that earlier tests leave behind.
+    Daikon.cleanup();
+    // Daikon.cleanup() discards the prototype invariants, so set them up again.
+    first_decl = true;
+
     try (InputStream commands = getClass().getResourceAsStream(commandFile)) {
       if (commands == null) {
         fail(
