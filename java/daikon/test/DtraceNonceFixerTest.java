@@ -466,41 +466,90 @@ public class DtraceNonceFixerTest {
   }
 
   /**
-   * Tests that ENTER and EXIT samples without nonces do not get nonces, because Daikon pairs them
-   * by their order in the file, and that other samples without nonces get nonces.
+   * Tests that an EXIT sample without a nonce gets the nonce of its ENTER sample, including for
+   * nested calls and for a sample that is preceded by a comment.
    *
    * @throws IOException if there is trouble reading or writing a file
    */
   @Test
-  public void testCallPointsWithoutNonces() throws IOException {
+  public void testMatchEnterExit() throws IOException {
     String samples =
         String.join(
             "\n",
             "C.f():::ENTER",
             "",
-            "C.f():::THROWS",
+            "C.g():::ENTER",
             "",
-            "C.f():::ENTER",
+            "# a comment",
+            "C.g():::EXIT7",
             "",
             "C.f():::EXIT3",
-            "",
-            "aprogram.point:::POINT",
             "",
             "");
     String expected =
         String.join(
             "\n",
             "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
             "",
-            "C.f():::THROWS",
+            "C.g():::ENTER",
+            "this_invocation_nonce",
+            "2",
+            "",
+            "# a comment",
+            "C.g():::EXIT7",
+            "this_invocation_nonce",
+            "2",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
+   * Tests that an EXIT sample without a nonce does not get the nonce of an ENTER sample that has a
+   * nonce, even one that has no EXIT sample, because Daikon does not pair those samples.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testExitWithoutNonceSkipsNoncedEnter() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
             "",
             "C.f():::ENTER",
+            "this_invocation_nonce",
+            "5",
             "",
             "C.f():::EXIT3",
             "",
-            "aprogram.point:::POINT",
+            "C.f():::EXIT3",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
             "this_invocation_nonce",
-            "1",
+            "6",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "6",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "7",
             "",
             "");
     assertEquals(expected, fix(samples));
