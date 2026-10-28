@@ -1621,13 +1621,16 @@ public final class FileIO {
 
   /**
    * Like read_data_trace_record, but sets global FileIO.data_trace_state for the duration of the
-   * call then clears it before returning. Intended for most external callers.
+   * call then clears it before returning or throwing. Intended for most external callers.
    */
   public static void read_data_trace_record_setstate(ParseState state) throws IOException {
 
     FileIO.data_trace_state = state;
-    read_data_trace_record(state);
-    clear_data_trace_state();
+    try {
+      read_data_trace_record(state);
+    } finally {
+      clear_data_trace_state();
+    }
   }
 
   /**
