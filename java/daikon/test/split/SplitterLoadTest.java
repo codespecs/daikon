@@ -10,7 +10,6 @@ import daikon.Daikon;
 import daikon.FileIO;
 import daikon.PptMap;
 import daikon.PptTopLevel;
-import daikon.split.PptSplitter;
 import daikon.split.SpinfoFile;
 import daikon.split.Splitter;
 import daikon.split.SplitterFactory;
@@ -25,7 +24,6 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
@@ -224,7 +222,7 @@ public class SplitterLoadTest {
 
   /**
    * Creates splitters with the given conditions for {@link #pptName}, then writes, compiles, and
-   * loads them. Leaves no splitters registered in {@link SplitterList}.
+   * loads them. Leaves {@link SplitterList} as it was.
    *
    * @param conditions the splitter conditions
    * @param modifier a function that modifies the splitters before they are loaded
@@ -237,7 +235,7 @@ public class SplitterLoadTest {
 
   /**
    * Creates splitters with the given conditions for a program point, then writes, compiles, and
-   * loads them. Leaves no splitters registered in {@link SplitterList}.
+   * loads them. Leaves {@link SplitterList} as it was.
    *
    * @param declsFile the decls file, in {@link #targetDir}, that declares the program point
    * @param pptName the name of the program point, as it appears in a spinfo file
@@ -270,14 +268,10 @@ public class SplitterLoadTest {
       }
       modifier.accept(result);
 
-      boolean oldSuppress = PptSplitter.dkconfig_suppressSplitterErrors;
-      PptSplitter.dkconfig_suppressSplitterErrors = true;
       try {
         PptTopLevel ppt = readPpt(declsFile, fullPptName);
-        SplitterFactory.load_splitters(ppt, Collections.singletonList(spfile));
+        SplitterTestUtils.loadSplitters(ppt, spfile, true);
       } finally {
-        PptSplitter.dkconfig_suppressSplitterErrors = oldSuppress;
-        SplitterList.remove(pptName);
       }
       return result;
     } finally {
