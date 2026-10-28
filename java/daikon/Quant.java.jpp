@@ -8,6 +8,7 @@ import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
@@ -109,6 +110,26 @@ public final class Quant {
       return Integer.MAX_VALUE; // return default value
     }
     return o.size();
+  }
+
+  /**
+   * Returns the ith element of the collection, in iteration order. Returns null if i is out of
+   * bounds.
+   */
+  @SuppressWarnings("signedness:return") // collection elements are assumed to be signed
+  @Pure
+  private static @Nullable Object collectionElement(Collection<?> c, long i) {
+    if (i < 0 || i >= c.size()) {
+      return null;
+    }
+    if (c instanceof List<?>) {
+      return ((List<?>)c).get((int)i);
+    }
+    Iterator<?> itor = c.iterator();
+    for (long j = 0; j < i; j++) {
+      itor.next();
+    }
+    return itor.next();
   }
 
   /** True iff the sequence contains no null elements. */
