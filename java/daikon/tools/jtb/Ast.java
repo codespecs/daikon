@@ -1245,9 +1245,6 @@ public class Ast {
    */
   public static List<Invariant> getInvariants(PptTopLevel ppt, PptMap ppt_map) {
 
-    // make names easier to read before printing
-    ppt.simplify_variable_names();
-
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.

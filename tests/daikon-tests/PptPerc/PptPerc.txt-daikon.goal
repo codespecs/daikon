@@ -1,0 +1,26 @@
+===========================================================================
+Point:::OBJECT
+this has only one value
+this.x >= 0
+this.y == 10
+(this.x >> this.y == 0)
+this.x != this.y
+===========================================================================
+Point.getX():::ENTER
+===========================================================================
+Point.getX():::EXIT
+this.x == return
+this.y == orig(this.y)
+return == orig(this.x)
+(return >> this.y == 0)
+this.y != return
+===========================================================================
+Point.getY():::ENTER
+===========================================================================
+Point.getY():::EXIT
+this.x == orig(this.x)
+this.y == return
+return == orig(this.y)
+return == 10
+(this.x >> return == 0)
+this.x != return

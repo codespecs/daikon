@@ -22,7 +22,6 @@ public class ConsequentCVFPairComparatorTester {
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
-    FileIO.new_decl_format = true;
   }
 
   @Test

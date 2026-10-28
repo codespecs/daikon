@@ -4,7 +4,6 @@ import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
 import daikon.Daikon;
 import daikon.Debug;
-import daikon.FileIO;
 import daikon.PptSlice;
 import daikon.PptSlice1;
 import daikon.PptSlice2;
@@ -1123,10 +1122,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       // System.out.println("ICFP: default rule yields "
       //                    + inv1.format().compareTo(inv2.format())
       //                    + " for " + inv1.format() + ", " + inv2.format());
-      // (Actually, FileIO.new_decl_format should always be non-null here.)
-      if (PrintInvariants.dkconfig_old_array_names
-          && FileIO.new_decl_format != null
-          && FileIO.new_decl_format) {
+      if (PrintInvariants.dkconfig_old_array_names) {
         return inv1.format().replace("[..]", "[]").compareTo(inv2.format().replace("[..]", "[]"));
       } else {
         return inv1.format().compareTo(inv2.format());

@@ -110,7 +110,6 @@ final class SplitterTestUtils {
    * @throws IOException if the decls file cannot be read
    */
   static void readDecls(String declsFile, PptMap ppts) throws IOException {
-    FileIO.resetNewDeclFormat();
     // Other tests may have set the patterns that filter the program points and variables.
     Pattern oldPptRegexp = Daikon.ppt_regexp;
     Pattern oldPptOmitRegexp = Daikon.ppt_omit_regexp;

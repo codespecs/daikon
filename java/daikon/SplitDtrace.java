@@ -69,27 +69,21 @@ public final class SplitDtrace {
       throw new Daikon.UserError(
           "Filename must end with .dtrace or .dtrace.gz: filename=" + filename);
     }
-    int declNum = 1;
+    int declNum = 0;
     int recNum = 0;
     try (BufferedReader reader = getStream(filename)) {
       ArrayList<String> rec = new ArrayList<>();
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
-          throw new Daikon.UserError("No DECLARE record in " + filename);
-        }
-        if (isDeclare(rec)) {
           break;
         }
-      }
-      while (true) {
-        readRec(reader, rec);
-        if (rec.isEmpty()) {
-          break;
+        if (isObsoleteFormat(rec)) {
+          throw new Daikon.UserError(filename + ": " + FileIO.obsoleteFormatMessage);
         }
         if (isDeclare(rec)) {
           declNum++;
-        } else {
+        } else if (!isHeader(rec)) {
           recNum++;
         }
       }
@@ -98,7 +92,7 @@ public final class SplitDtrace {
     }
 
     System.out.println(
-        "Number of DECLARE statements: " + declNum + " and number of records is: " + recNum);
+        "Number of declarations: " + declNum + " and number of records is: " + recNum);
 
     // DecimalFormat formatter = new DecimalFormat("000");
     // for (int i = 1; i<=100; i++) writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
@@ -119,18 +113,12 @@ public final class SplitDtrace {
       ArrayList<String> rec = new ArrayList<>();
       while (true) {
         readRec(reader, rec);
-        if (isDeclare(rec)) {
-          writer.newLine();
-        }
-        writeRec(writer, rec);
-        if (isDeclare(rec)) {
-          break;
-        }
-      }
-      while (true) {
-        readRec(reader, rec);
         if (rec.isEmpty()) {
           break;
+        }
+        if (isHeader(rec)) {
+          writeRec(writer, rec);
+          continue;
         }
         boolean isDecl = isDeclare(rec);
         if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
@@ -205,7 +193,34 @@ public final class SplitDtrace {
    */
   @Pure
   static boolean isDeclare(List<String> res) {
-    return res.get(0).equals("DECLARE");
+    return FileIO.is_declaration_header(res.get(0));
+  }
+
+  /**
+   * Returns true if the given record shows that the file is in the obsolete version 1 format: it is
+   * a "DECLARE" or "VarComparability" record, or a "decl-version 1.0" record.
+   *
+   * @param res the lines of a record from a .decls or .dtrace file
+   * @return true if the record shows that the file is in the version 1 format
+   */
+  @Pure
+  static boolean isObsoleteFormat(List<String> res) {
+    String[] words = res.get(0).trim().split("\\s+");
+    return words[0].equals("DECLARE")
+        || words[0].equals("VarComparability")
+        || (words[0].equals("decl-version") && words.length > 1 && words[1].equals("1.0"));
+  }
+
+  /**
+   * Returns true if the given record is a file header record, such as a comment or "decl-version",
+   * rather than a declaration or a sample.
+   *
+   * @param res the lines of a record from a .decls or .dtrace file
+   * @return true if the given record is a file header record
+   */
+  @Pure
+  static boolean isHeader(List<String> res) {
+    return FileIO.is_header_record(res.get(0));
   }
 
   /**
@@ -248,6 +263,17 @@ public final class SplitDtrace {
         break;
       }
     } // eat white space
+    if (line != null && FileIO.isComment(line)) {
+      // As in FileIO, a comment record ends at the first line that is not a comment, even if no
+      // blank line follows the comment.  Otherwise, a sample that immediately follows a comment
+      // would be part of a header record, which writeDtrace copies whether or not the sample is
+      // in the selected part of the file.
+      res.add(line.trim());
+      while (FileIO.nextLineIsComment(reader)) {
+        res.add(reader.readLine().trim());
+      }
+      return;
+    }
     while (line != null) {
       line = line.trim();
       if (isEmpty(line)) {
