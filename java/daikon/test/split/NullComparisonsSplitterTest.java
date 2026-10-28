@@ -26,7 +26,7 @@ public final class NullComparisonsSplitterTest {
     PptTopLevel ppt =
         SplitterTestUtils.readPpt("NullComparisons.decls", "misc.NullComparisons.m():::EXIT10");
     SplitterTestUtils.LoadedSplitters loaded =
-        SplitterTestUtils.load("NullComparisons.spinfo", ppt, "misc.NullComparisons.m");
+        SplitterTestUtils.load("NullComparisons.spinfo", ppt);
 
     // A hashcode of 0 represents null.  Daikon treats a null String as a missing value, so a
     // splitter is never evaluated on a null this.sign.
