@@ -1,6 +1,7 @@
 package daikon.test.split;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import daikon.split.Splitter;
@@ -42,6 +43,53 @@ public class SplitterListTest {
     SplitterList.put(pptname, splits);
   }
 
+  @Test
+  public void testMatchesPartialName() {
+    assertTrue(SplitterList.matches("Foo.bar", "pkg.Foo.bar(int):::ENTER"));
+    assertTrue(SplitterList.matches("Foo.bar", "pkg.Foo.barBaz(int):::EXIT1"));
+    assertTrue(SplitterList.matches("Math::BigFloat.bdiv_", "Math::BigFloat.bdiv_s():::EXIT36"));
+    assertFalse(SplitterList.matches("Foo.baz", "pkg.Foo.bar(int):::ENTER"));
+  }
+
+  @Test
+  public void testMatchesCompleteName() {
+    String enter = "pkg.Foo.bar(int):::ENTER";
+    assertTrue(SplitterList.matches(enter, enter));
+    assertFalse(SplitterList.matches(enter, "pkg.Foo.bar(int):::EXIT"));
+    assertFalse(SplitterList.matches(enter, "pkg.BigFoo.bar(int):::ENTER"));
+    assertFalse(SplitterList.matches(enter, "pkg.Foo.bar(int):::ENTER2"));
+    // A complete name may omit a qualifier, such as a package or an enclosing class.
+    assertTrue(SplitterList.matches(enter, "a.pkg.Foo.bar(int):::ENTER"));
+    assertTrue(SplitterList.matches(enter, "pkg.Outer$pkg.Foo.bar(int):::ENTER"));
+    assertTrue(SplitterList.matches("Foo.bar(int):::ENTER", enter));
+    assertFalse(SplitterList.matches("Foo.bar(int):::ENTER", "pkg.My_Foo.bar(int):::ENTER"));
+    assertFalse(SplitterList.matches("Foo.bar(int):::ENTER", "pkg.Foo.bar(int):::EXIT"));
+    assertTrue(SplitterList.matches("Hanoi:::OBJECT", "six170.Hanoi:::OBJECT"));
+    assertFalse(SplitterList.matches("Hanoi:::OBJECT", "six170.MyHanoi:::OBJECT"));
+    assertTrue(
+        SplitterList.matches("BigFloat.bdiv_s():::EXIT36", "Math::BigFloat.bdiv_s():::EXIT36"));
+
+    String exit1 = "pkg.Foo.bar(int):::EXIT1";
+    assertTrue(SplitterList.matches(exit1, exit1));
+    assertFalse(SplitterList.matches(exit1, "pkg.Foo.bar(int):::EXIT12"));
+    assertFalse(SplitterList.matches(exit1, "pkg.Foo.bar(int):::EXIT"));
+
+    String exit = "pkg.Foo.bar(int):::EXIT";
+    assertTrue(SplitterList.matches(exit, exit));
+    assertTrue(SplitterList.matches(exit, exit1));
+    assertTrue(SplitterList.matches(exit, "pkg.Foo.bar(int):::EXIT12"));
+    assertFalse(SplitterList.matches(exit, "pkg.Foo.bar(int):::EXITx"));
+    assertFalse(SplitterList.matches(exit, "pkg.Foo.bar(int):::ENTER"));
+    assertFalse(SplitterList.matches(exit, "pkg.BigFoo.bar(int):::EXIT1"));
+    assertTrue(SplitterList.matches("Foo.bar(int):::EXIT", "pkg.Foo.bar(int):::EXIT12"));
+    assertTrue(SplitterList.matches("Foo.bar(int):::EXIT", exit));
+    assertFalse(SplitterList.matches("Foo.bar(int):::EXIT", "pkg.BigFoo.bar(int):::EXIT12"));
+
+    assertTrue(SplitterList.matches("pkg.Foo:::OBJECT", "pkg.Foo:::OBJECT"));
+    assertFalse(SplitterList.matches("pkg.Foo:::OBJECT", "pkg.BigFoo:::OBJECT"));
+    assertFalse(SplitterList.matches("aprogram.point:::POINT", "aprogram.point:::POINT2"));
+  }
+
   /**
    * Returns the conditions of the splitters that {@link SplitterList#get} returns.
    *
@@ -67,9 +115,36 @@ public class SplitterListTest {
   }
 
   @Test
-  public void testGetObjectUsesAll() {
-    // A PPT_NAME that contains "OBJECT" makes OBJECT program points use every PPT_NAME's
-    // splitters, each once.
+  public void testGetObject() {
+    String objectA = "splitterlisttest.A:::OBJECT";
+    String objectB = "splitterlisttest.B:::OBJECT";
+    put(objectA, new Splitter[] {new ConditionSplitter("a > 0")});
+    put(objectB, new Splitter[] {new ConditionSplitter("b > 0")});
+    List<String> relevant = Arrays.asList("a > 0", "b > 0");
+    assertEquals(Arrays.asList("a > 0"), relevantConditions(SplitterList.get(objectA), relevant));
+    assertEquals(Arrays.asList("b > 0"), relevantConditions(SplitterList.get(objectB), relevant));
+  }
+
+  @Test
+  public void testGetCompleteObjectUsesAllIncomplete() {
+    // A complete PPT_NAME that contains "OBJECT", as CreateSpinfo writes, makes OBJECT program
+    // points use every incomplete PPT_NAME's splitters.
+    String object = "splitterlisttest.G:::OBJECT";
+    put(object, new Splitter[] {new ConditionSplitter("g > 0")});
+    put("splitterlisttest.G.m", new Splitter[] {new ConditionSplitter("m > 0")});
+    put("splitterlisttest.H.n():::EXIT", new Splitter[] {new ConditionSplitter("n > 0")});
+    List<String> relevant = Arrays.asList("g > 0", "m > 0", "n > 0");
+    assertEquals(
+        Arrays.asList("g > 0", "m > 0"), relevantConditions(SplitterList.get(object), relevant));
+    assertEquals(
+        Arrays.asList("m > 0"),
+        relevantConditions(SplitterList.get("splitterlisttest.H:::OBJECT"), relevant));
+  }
+
+  @Test
+  public void testGetObjectUsesAllIncomplete() {
+    // An incomplete PPT_NAME that contains "OBJECT" makes OBJECT program points use every
+    // incomplete PPT_NAME's splitters, each once.
     put("splitterlisttest.OBJECTsplit", new Splitter[] {new ConditionSplitter("o > 0")});
     put("splitterlisttest.OBJECTsplit2", new Splitter[] {new ConditionSplitter("p > 0")});
     put("splitterlisttest.Unrelated", new Splitter[] {new ConditionSplitter("u > 0")});
@@ -84,7 +159,7 @@ public class SplitterListTest {
   /**
    * Returns the conditions of the given splitters, among those whose condition is in {@code
    * relevant}. Other code may leave splitters in SplitterList; for example, loading {@link
-   * daikon.PptTopLevel} adds a splitter whose PPT_NAME is ".*".
+   * daikon.PptTopLevel} adds a splitter whose PPT_NAME is the incomplete name ".*".
    *
    * @param splitters splitters returned by {@link SplitterList}, or null
    * @param relevant the conditions of interest
