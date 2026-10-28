@@ -23,6 +23,32 @@ Further documentation can be found in:
 
 ## Version 5.9.1 (???, 2026)
 
+Daikon supports the following new invariants, over strings and sequences of
+strings; all of them are enabled by default:
+
+* IsUrl
+* FixedLengthString
+* IsNumeric
+* IsEmail
+* IsDateYYYYMMDD
+* IsDateDDMMYYYY
+* IsDateMMDDYYYY
+* IsTimeOfDay
+* IsTimeOfDayWithSeconds
+* IsTimeOfDayAMPM
+* IsTimestampYYYYMMHHThhmmssmm
+* SequenceFixedLengthString
+* SequenceStringElementsAreUrl
+* SequenceStringElementsAreNumeric
+* SequenceStringElementsAreEmail
+* SequenceStringElementsAreDateYYYYMMDD
+* SequenceStringElementsAreDateDDMMYYYY
+* SequenceStringElementsAreDateMMDDYYYY
+* SequenceStringElementsAreTimeOfDay
+* SequenceStringElementsAreTimeOfDayWithSeconds
+* SequenceStringElementsAreTimeOfDayAMPM
+* SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm
+
 * Daikon and its tools now reject a malformed command-line option.
 * All tools accept `-h` and `--help`, which print a usage message and exit
    with status 0.

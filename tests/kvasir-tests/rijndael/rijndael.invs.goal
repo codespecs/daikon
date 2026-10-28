@@ -477,6 +477,7 @@ key[].keyLen elements >= return
 ::iG[] == [14, 9, 13, 11, 11, 14, 9, 13, 13, 11, 14, 9, 9, 13, 11, 14]
 ::rcon has only one value
 ::rcon[] == [1, 2, 4, 8, 16, 32, 64, 128, 27, 54, 108, 216, 171, 77, 154, 47, 94, 188, 99, 198, 151, 53, 106, 212, 179, 125, 250, 239, 197, 145]
+LENGTH(IV)==32
 cipher != null
 cipher[] elements != null
 cipher[].IV contains no nulls and has only one value, of length 1

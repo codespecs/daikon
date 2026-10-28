@@ -80,6 +80,15 @@ class Vector13 implements Cloneable, java.io.Serializable {
     /*@ ensures \old(initialCapacity) == this.elementData.length; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null)); */
     /*@ ensures (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null))); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are Numeric; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: DD/MM/YYYY; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: MM/DD/YYYY; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: YYYY-MM-DD; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are emails; */
     /*@ ensures this.elementCount == 0; */
     /*@ ensures (\forall int i; (\old(initialCapacity) <= i && i <= this.elementData.length-1) ==> (this.elementData[i] != null)); */
     /*@ ensures this.elementCount <= this.capacityIncrement; */
@@ -104,6 +113,15 @@ class Vector13 implements Cloneable, java.io.Serializable {
     /*@ ensures \old(initialCapacity) == this.elementData.length; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null)); */
     /*@ ensures (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null))); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are Numeric; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: DD/MM/YYYY; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: MM/DD/YYYY; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: YYYY-MM-DD; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are emails; */
     /*@ ensures this.elementCount == 0; */
     /*@ ensures (\forall int i; (\old(initialCapacity) <= i && i <= this.elementData.length-1) ==> (this.elementData[i] != null)); */
     /*@ ensures this.elementCount <= \old(initialCapacity); */
@@ -122,6 +140,15 @@ class Vector13 implements Cloneable, java.io.Serializable {
     /*@ ensures (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null)); */
     /*@ ensures \elemtype(this.elementData) == \typeof(null); */
     /*@ ensures (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null))); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are Numeric; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: DD/MM/YYYY; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: MM/DD/YYYY; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: YYYY-MM-DD; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are emails; */
     /*@ ensures this.elementCount == 0; */
     /*@ ensures this.elementData.length == 10; */
     /*@ ensures (\forall int i; (this.elementCount+1 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null)); */
@@ -322,6 +349,15 @@ class Vector13 implements Cloneable, java.io.Serializable {
     /*@ requires this.elementCount <= this.elementData.length; */
     /*@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
     /*@ ensures (this.elementCount == 0)  ==  (\result == true); */
+    /*@ ensures (this.elementCount == 0)  ==>  (All the elements of this.elementData[..].getClass().getName() are Numeric); */
+    /*@ ensures (this.elementCount == 0)  ==>  (All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)); */
+    /*@ ensures (this.elementCount == 0)  ==>  (All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0); */
+    /*@ ensures (this.elementCount == 0)  ==>  (All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0); */
+    /*@ ensures (this.elementCount == 0)  ==>  (All the elements of this.elementData[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)); */
+    /*@ ensures (this.elementCount == 0)  ==>  (All the elements of this.elementData[..].getClass().getName() are dates. Format: DD/MM/YYYY); */
+    /*@ ensures (this.elementCount == 0)  ==>  (All the elements of this.elementData[..].getClass().getName() are dates. Format: MM/DD/YYYY); */
+    /*@ ensures (this.elementCount == 0)  ==>  (All the elements of this.elementData[..].getClass().getName() are dates. Format: YYYY-MM-DD); */
+    /*@ ensures (this.elementCount == 0)  ==>  (All the elements of this.elementData[..].getClass().getName() are emails); */
     /*@ ensures (this.elementCount == 0)  ==>  (this.elementCount <= this.capacityIncrement); */
     /*@ ensures (this.elementCount == 0)  ==>  (this.elementCount is a pointer); */
     /*@ ensures (this.elementCount == 0)  ==>  ((\forall int i; (0 <= i && i <= this.elementCount-1) ==> (this.elementData[i] != null))); */
@@ -364,6 +400,7 @@ class Vector13 implements Cloneable, java.io.Serializable {
     /*@ requires (this.elementData.length == 0) ==> (this.elementCount == 0); */
     /*@ requires this.elementCount <= this.elementData.length; */
     /*@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
+    /*@ ensures (\result == false)  ==>  (All the elements of this.elementData[..].getClass().getName() have LENGTH=16); */
     /*@ ensures (\result == true)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \old(\typeof(elem))))); */
     /*@ ensures (\result == true)  ==>  (this.elementCount >= 1); */
     /*@ ensures \typeof(this.elementData) != \old(\typeof(elem)); */
@@ -817,6 +854,15 @@ class Vector13 implements Cloneable, java.io.Serializable {
     /*@ modifies this.elementData[*], this.elementCount, this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[0..this.elementCount-1], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null)); */
     /*@ ensures (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null))); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are Numeric; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional); */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: DD/MM/YYYY; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: MM/DD/YYYY; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are dates. Format: YYYY-MM-DD; */
+    /*@ ensures All the elements of this.elementData[..].getClass().getName() are emails; */
     /*@ ensures this.elementCount == 0; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.elementCount-1) ==> (this.elementData[i] != null)); */
     /*@ ensures this.elementCount <= this.capacityIncrement; */
