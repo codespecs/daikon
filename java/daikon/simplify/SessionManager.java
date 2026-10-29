@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Logger;
 import org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -87,7 +88,13 @@ public class SessionManager implements Closeable {
       t.printStackTrace();
       System.err.flush();
     }
-    Future<?> result = executor.submit(() -> command.apply(session));
+    Future<?> result;
+    try {
+      result = executor.submit(() -> command.apply(session));
+    } catch (RejectedExecutionException e) {
+      // Another thread closed this before the command was submitted.
+      throw new TimeoutException();
+    }
     while (true) {
       try {
         result.get();
@@ -105,8 +112,9 @@ public class SessionManager implements Closeable {
         Throwable cause = e.getCause();
         assert cause != null
             : "@AssumeAssertion(nullness): a Future's ExecutionException has a cause";
+        // Print the stack trace because some clients discard SimplifyError without reporting it.
         cause.printStackTrace();
-        throw new SimplifyError(cause.toString());
+        throw new SimplifyError(cause);
       }
     }
   }
@@ -124,7 +132,12 @@ public class SessionManager implements Closeable {
       // hung Simplify process, and only `session.close()` can unblock that command.
       session.close();
     } finally {
-      executor.shutdownNow();
+      // Cancel commands that never started, so that `request()` does not wait for them forever.
+      for (Runnable unstarted : executor.shutdownNow()) {
+        if (unstarted instanceof Future) {
+          ((Future<?>) unstarted).cancel(false);
+        }
+      }
     }
   }
 
