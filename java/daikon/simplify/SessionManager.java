@@ -77,10 +77,10 @@ public class SessionManager implements Closeable {
    * Performs the given command.
    *
    * @param command the command to perform
-   * @throws TimeoutException if another thread closes this before the command completes
+   * @throws TimeoutException if this is closed (possibly by another thread) before the command
+   *     completes
    */
   public void request(Cmd command) throws TimeoutException {
-    assert !closed : "Cannot use closed SessionManager";
     if (debug.isLoggable(FINE)) {
       System.err.println("Running command " + command);
       System.err.println(" called from");
@@ -92,7 +92,7 @@ public class SessionManager implements Closeable {
     try {
       result = executor.submit(() -> command.apply(session));
     } catch (RejectedExecutionException e) {
-      // Another thread closed this before the command was submitted.
+      // This was closed before the command was submitted.
       throw new TimeoutException();
     }
     while (true) {
