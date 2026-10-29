@@ -1,0 +1,29 @@
+..H():::ENTER
+::handled sig
+
+..H():::EXIT0
+::handled sig
+
+..X():::ENTER
+::handled
+a
+
+..X():::EXIT0
+::handled
+a return
+
+..Y():::ENTER
+::handled
+a
+
+..Y():::EXIT0
+::handled
+a return
+
+..main():::ENTER
+::handled
+
+..main():::EXIT0
+::handled
+return
+

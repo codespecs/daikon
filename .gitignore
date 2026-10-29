@@ -430,6 +430,7 @@ tests/kvasir-tests/setjmp-test/setjmp-test
 tests/kvasir-tests/shared-lib/shared-lib
 tests/kvasir-tests/shared-lib/liba.so
 tests/kvasir-tests/shared-lib/libb.so
+tests/kvasir-tests/sigaltstack-test/sigaltstack-test
 tests/kvasir-tests/small-test/small-test
 tests/kvasir-tests/space/space
 tests/kvasir-tests/static-struct/static-struct
