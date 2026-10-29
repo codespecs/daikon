@@ -14680,19 +14680,24 @@ statb[..].__glibc_reserved[1]
 statb[..].__glibc_reserved[1][0]
 statb[..].__glibc_reserved[2]
 statb[..].__glibc_reserved[2][0]
-statb[..].__pad0 statb[..].st_gid statb[..].st_rdev
+statb[..].__pad0
 statb[..].st_atim
 statb[..].st_atim.tv_nsec
-statb[..].st_atim.tv_sec statb[..].st_blocks
+statb[..].st_atim.tv_sec
 statb[..].st_blksize
+statb[..].st_blocks
 statb[..].st_ctim
 statb[..].st_ctim.tv_nsec
-statb[..].st_ctim.tv_sec statb[..].st_mtim.tv_nsec
-statb[..].st_dev statb[..].st_ino
+statb[..].st_ctim.tv_sec
+statb[..].st_dev
+statb[..].st_gid
+statb[..].st_ino
 statb[..].st_mode
 statb[..].st_mtim
+statb[..].st_mtim.tv_nsec
 statb[..].st_mtim.tv_sec
 statb[..].st_nlink
+statb[..].st_rdev
 statb[..].st_size
 statb[..].st_uid
 
@@ -14807,19 +14812,24 @@ statb[..].__glibc_reserved[1]
 statb[..].__glibc_reserved[1][0]
 statb[..].__glibc_reserved[2]
 statb[..].__glibc_reserved[2][0]
-statb[..].__pad0 statb[..].st_gid statb[..].st_rdev
+statb[..].__pad0
 statb[..].st_atim
 statb[..].st_atim.tv_nsec
-statb[..].st_atim.tv_sec statb[..].st_blocks
+statb[..].st_atim.tv_sec
 statb[..].st_blksize
+statb[..].st_blocks
 statb[..].st_ctim
 statb[..].st_ctim.tv_nsec
-statb[..].st_ctim.tv_sec statb[..].st_mtim.tv_nsec
-statb[..].st_dev statb[..].st_ino
+statb[..].st_ctim.tv_sec
+statb[..].st_dev
+statb[..].st_gid
+statb[..].st_ino
 statb[..].st_mode
 statb[..].st_mtim
+statb[..].st_mtim.tv_nsec
 statb[..].st_mtim.tv_sec
 statb[..].st_nlink
+statb[..].st_rdev
 statb[..].st_size
 statb[..].st_uid
 
