@@ -98,6 +98,12 @@ public class SessionManager implements Closeable {
     while (true) {
       try {
         result.get();
+        if (closed) {
+          // Another thread closed this while the command was running.  The command may have
+          // completed normally even though Simplify did not receive its input, because writes to
+          // a closed session fail silently.
+          throw new TimeoutException();
+        }
         return;
       } catch (InterruptedException e) {
         // It's OK for a wait to be interrupted.
@@ -128,16 +134,18 @@ public class SessionManager implements Closeable {
   public void close(@GuardSatisfied SessionManager this) {
     closed = true;
     try {
-      // Do not acquire the lock on `session`:  a command may hold it while blocked reading from a
-      // hung Simplify process, and only `session.close()` can unblock that command.
-      session.close();
-    } finally {
-      // Cancel commands that never started, so that `request()` does not wait for them forever.
+      // Shut down the executor before closing `session`, so that no command starts on a closed
+      // session.  Cancel commands that never started, so that `request()` does not wait for them
+      // forever.
       for (Runnable unstarted : executor.shutdownNow()) {
         if (unstarted instanceof Future) {
           ((Future<?>) unstarted).cancel(false);
         }
       }
+    } finally {
+      // Do not acquire the lock on `session`:  a command may hold it while blocked reading from a
+      // hung Simplify process, and only `session.close()` can unblock that command.
+      session.close();
     }
   }
 
