@@ -80396,13 +80396,12 @@ unnamed_parameter0x4694a._M_current[..][0]
 ::kUnknownFile
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
-return
+return unnamed_parameter0x4694a unnamed_parameter0x4694a._M_current
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
 testing::internal::DeathTest::last_death_test_message_.length_
 testing::internal::OsStackTraceGetter::kElidedFramesMarker
 testing::internal::TypeIdHelper<testing::Test>::dummy_
-unnamed_parameter0x4694a unnamed_parameter0x4694a._M_current
 unnamed_parameter0x4694a._M_current[..]
 unnamed_parameter0x4694a._M_current[..]->elapsed_time_
 unnamed_parameter0x4694a._M_current[..]->name_
@@ -107788,9 +107787,8 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
 count
-plural_form
-return
-return.c_str_ return.length_
+plural_form return.c_str_
+return return.length_
 singular_form
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
@@ -108310,8 +108308,8 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::kUnknownFile
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
-return
-return.c_str_ return.length_
+return return.length_
+return.c_str_
 test_case_count
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
@@ -108546,8 +108544,8 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::kUnknownFile
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
-return
-return.c_str_ return.length_
+return return.length_
+return.c_str_
 test_count
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
@@ -164399,7 +164397,7 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::kStdErrFileno
 ::kStdOutFileno
 ::kStreamResultToFlag
-::kTestShardIndex ::kTestShardStatusFile ::kTestTotalShards
+::kTestShardIndex ::kTestShardStatusFile ::kTestTotalShards return.c_str_
 ::kTestTypeIdInGoogleTest
 ::kTestTypeIdInGoogleTest[..]
 ::kThrowOnFailureFlag
@@ -164407,9 +164405,7 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
 flag
-return
-return.c_str_
-return.length_
+return return.length_
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
 testing::internal::DeathTest::last_death_test_message_.length_
@@ -187932,7 +187928,7 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::g_captured_stdout[..].filename_._M_dataplus
 ::g_captured_stdout[..].filename_._M_dataplus._M_p
 ::g_captured_stdout[..].uncaptured_fd_
-::g_executable_path.c_str_
+::g_executable_path.c_str_ ::kTestShardIndex ::kTestShardStatusFile ::kTestTotalShards
 ::g_help_flag
 ::g_init_gtest_count
 ::g_linked_ptr_mutex ::g_linked_ptr_mutex.mutex_ ::g_linked_ptr_mutex.mutex_.__align ::g_linked_ptr_mutex.mutex_.__data ::g_linked_ptr_mutex.mutex_.__data.__count ::g_linked_ptr_mutex.mutex_.__data.__lock ::g_linked_ptr_mutex.mutex_.__size
@@ -187981,7 +187977,6 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::kStdErrFileno
 ::kStdOutFileno
 ::kStreamResultToFlag
-::kTestShardIndex ::kTestShardStatusFile ::kTestTotalShards
 ::kTestTypeIdInGoogleTest
 ::kTestTypeIdInGoogleTest[..]
 ::kThrowOnFailureFlag
@@ -188034,7 +188029,7 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_end_of_storage[..][0]
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_finish[..]
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_finish[..][0]
-::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_start[..] ::g_executable_path ::g_executable_path.length_ return.c_str_
+::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_start[..] ::g_executable_path ::g_executable_path.length_ return return.length_
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_start[..][0]
 ::g_captured_stderr
 ::g_captured_stderr[..]
@@ -188050,7 +188045,7 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::g_captured_stdout[..].filename_._M_dataplus
 ::g_captured_stdout[..].filename_._M_dataplus._M_p
 ::g_captured_stdout[..].uncaptured_fd_
-::g_executable_path.c_str_
+::g_executable_path.c_str_ ::kTestShardIndex ::kTestShardStatusFile ::kTestTotalShards return.c_str_
 ::g_help_flag
 ::g_init_gtest_count
 ::g_linked_ptr_mutex ::g_linked_ptr_mutex.mutex_ ::g_linked_ptr_mutex.mutex_.__align ::g_linked_ptr_mutex.mutex_.__data ::g_linked_ptr_mutex.mutex_.__data.__count ::g_linked_ptr_mutex.mutex_.__data.__lock ::g_linked_ptr_mutex.mutex_.__size
@@ -188099,15 +188094,12 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::kStdErrFileno
 ::kStdOutFileno
 ::kStreamResultToFlag
-::kTestShardIndex ::kTestShardStatusFile ::kTestTotalShards
 ::kTestTypeIdInGoogleTest
 ::kTestTypeIdInGoogleTest[..]
 ::kThrowOnFailureFlag
 ::kUnknownFile
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
-return
-return.length_
 ss
 ss[..]
 testing::internal::DeathTest::last_death_test_message_
@@ -188573,8 +188565,8 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::g_captured_stdout[..].filename_._M_dataplus
 ::g_captured_stdout[..].filename_._M_dataplus._M_p
 ::g_captured_stdout[..].uncaptured_fd_
-::g_executable_path ::g_executable_path.length_ return.c_str_
-::g_executable_path.c_str_
+::g_executable_path ::g_executable_path.length_ return return.length_
+::g_executable_path.c_str_ return.c_str_
 ::g_help_flag
 ::g_init_gtest_count
 ::g_linked_ptr_mutex ::g_linked_ptr_mutex.mutex_ ::g_linked_ptr_mutex.mutex_.__align ::g_linked_ptr_mutex.mutex_.__data ::g_linked_ptr_mutex.mutex_.__data.__count ::g_linked_ptr_mutex.mutex_.__data.__lock ::g_linked_ptr_mutex.mutex_.__size
@@ -188630,8 +188622,6 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::kUnknownFile
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
-return
-return.length_
 streamable
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
@@ -188794,7 +188784,7 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_end_of_storage[..][0]
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_finish[..]
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_finish[..][0]
-::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_start[..] ::g_executable_path ::g_executable_path.length_ return.c_str_
+::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_start[..] ::g_executable_path ::g_executable_path.length_ return return.length_
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_start[..][0]
 ::g_captured_stderr
 ::g_captured_stderr[..]
@@ -188866,8 +188856,7 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::kUnknownFile
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
-return
-return.length_
+return.c_str_
 streamable
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
@@ -197073,7 +197062,7 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::FLAGS_gtest_internal_run_death_test ::FLAGS_gtest_internal_run_death_test.length_
 ::FLAGS_gtest_internal_run_death_test.c_str_
 ::FLAGS_gtest_list_tests
-::FLAGS_gtest_output ::FLAGS_gtest_output.length_ return.c_str_ return.length_
+::FLAGS_gtest_output ::FLAGS_gtest_output.length_ return return.length_
 ::FLAGS_gtest_output.c_str_
 ::FLAGS_gtest_print_time
 ::FLAGS_gtest_random_seed
@@ -197169,7 +197158,7 @@ testing::internal::TypeIdHelper<testing::Test>::dummy_
 ::kUnknownFile
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
-return
+return.c_str_
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
 testing::internal::DeathTest::last_death_test_message_.length_
@@ -283065,9 +283054,8 @@ FilePath.GetCurrentDir():::EXIT0
 ::kUnknownFile
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
-return return.pathname_
+return return.pathname_ return.pathname_.length_
 return.pathname_.c_str_
-return.pathname_.length_
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
 testing::internal::DeathTest::last_death_test_message_.length_
@@ -301084,7 +301072,7 @@ Message.GetString()\_const:::ENTER
 ::g_captured_stdout[..].filename_._M_dataplus
 ::g_captured_stdout[..].filename_._M_dataplus._M_p
 ::g_captured_stdout[..].uncaptured_fd_
-::g_executable_path.c_str_
+::g_executable_path.c_str_ ::kTestShardIndex ::kTestShardStatusFile ::kTestTotalShards
 ::g_help_flag
 ::g_init_gtest_count
 ::g_linked_ptr_mutex ::g_linked_ptr_mutex.mutex_ ::g_linked_ptr_mutex.mutex_.__align ::g_linked_ptr_mutex.mutex_.__data ::g_linked_ptr_mutex.mutex_.__data.__count ::g_linked_ptr_mutex.mutex_.__data.__lock ::g_linked_ptr_mutex.mutex_.__size
@@ -301133,7 +301121,6 @@ Message.GetString()\_const:::ENTER
 ::kStdErrFileno
 ::kStdOutFileno
 ::kStreamResultToFlag
-::kTestShardIndex ::kTestShardStatusFile ::kTestTotalShards
 ::kTestTypeIdInGoogleTest
 ::kTestTypeIdInGoogleTest[..]
 ::kThrowOnFailureFlag
@@ -301187,7 +301174,7 @@ Message.GetString()\_const:::EXIT0
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_end_of_storage[..][0]
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_finish[..]
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_finish[..][0]
-::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_start[..] ::g_executable_path ::g_executable_path.length_ return.c_str_
+::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_start[..] ::g_executable_path ::g_executable_path.length_ return return.length_
 ::g_argvs._Vector_base<testing::internal::String,\_std::allocator<testing::internal::String>\_>._M_impl._M_start[..][0]
 ::g_captured_stderr
 ::g_captured_stderr[..]
@@ -301203,7 +301190,7 @@ Message.GetString()\_const:::EXIT0
 ::g_captured_stdout[..].filename_._M_dataplus
 ::g_captured_stdout[..].filename_._M_dataplus._M_p
 ::g_captured_stdout[..].uncaptured_fd_
-::g_executable_path.c_str_
+::g_executable_path.c_str_ ::kTestShardIndex ::kTestShardStatusFile ::kTestTotalShards return.c_str_
 ::g_help_flag
 ::g_init_gtest_count
 ::g_linked_ptr_mutex ::g_linked_ptr_mutex.mutex_ ::g_linked_ptr_mutex.mutex_.__align ::g_linked_ptr_mutex.mutex_.__data ::g_linked_ptr_mutex.mutex_.__data.__count ::g_linked_ptr_mutex.mutex_.__data.__lock ::g_linked_ptr_mutex.mutex_.__size
@@ -301252,15 +301239,12 @@ Message.GetString()\_const:::EXIT0
 ::kStdErrFileno
 ::kStdOutFileno
 ::kStreamResultToFlag
-::kTestShardIndex ::kTestShardStatusFile ::kTestTotalShards
 ::kTestTypeIdInGoogleTest
 ::kTestTypeIdInGoogleTest[..]
 ::kThrowOnFailureFlag
 ::kUnknownFile
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
-return
-return.length_
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
 testing::internal::DeathTest::last_death_test_message_.length_
@@ -326999,7 +326983,7 @@ String.Format(char\_const*,\_...):::EXIT0
 ::kColorEncodedHelpMessage
 ::kColorFlag
 ::kCurrentDirectoryString
-::kDeathTestCaseFilter ::kDisableTestFilter
+::kDeathTestCaseFilter ::kDisableTestFilter return.c_str_
 ::kDeathTestInternalError
 ::kDeathTestLived
 ::kDeathTestReturned
@@ -327038,8 +327022,7 @@ String.Format(char\_const*,\_...):::EXIT0
 ::std::tr1::tuple_size<std::tr1::tuple<>\_>::value
 ::testing::internal::ImplicitlyConvertible<void\_const*,\_void\_const*>::value
 format
-return
-return.c_str_ return.length_
+return return.length_
 testing::internal::DeathTest::last_death_test_message_
 testing::internal::DeathTest::last_death_test_message_.c_str_
 testing::internal::DeathTest::last_death_test_message_.length_
