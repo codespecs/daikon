@@ -3,7 +3,6 @@ package daikon.simplify;
 import daikon.inv.Invariant;
 import java.io.Closeable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NavigableSet;
@@ -17,6 +16,7 @@ import org.checkerframework.checker.mustcall.qual.CreatesMustCallFor;
 import org.checkerframework.checker.mustcall.qual.MustCall;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A stack of Lemmas that shadows the stack of assumptions that Simplify keeps. Keeping this stack
@@ -410,19 +410,52 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /**
-   * Pop the lemmas in {@link #lemmas} off Simplify's stack, leaving it empty. If Simplify times
-   * out, this restarts it with an empty stack.
+   * A computation on Simplify that might time out.
+   *
+   * @param <T> the type of the result of the computation
    */
-  private void unAssumeLemmas() throws SimplifyError {
-    runOrRestart(() -> unAssume(lemmas.size()), Collections.emptyList());
+  @FunctionalInterface
+  private interface SimplifyComputation<T> {
+    /**
+     * Performs the computation.
+     *
+     * @return the result of the computation
+     * @throws TimeoutException if Simplify times out
+     */
+    T run() throws TimeoutException;
   }
 
   /**
-   * Push the lemmas in {@link #lemmas} onto Simplify's empty stack. If Simplify times out, this
-   * restarts it.
+   * Performs a computation while Simplify's stack is empty. Pops the lemmas in {@link #lemmas} off
+   * Simplify's stack beforehand and pushes them back afterward; the computation must leave
+   * Simplify's stack empty. If Simplify times out or reports an error, this restarts Simplify with
+   * the lemmas in {@link #lemmas} on its stack.
+   *
+   * @param <T> the type of the result of the computation
+   * @param computation the computation to perform
+   * @return the result of the computation, or null if Simplify times out before the computation
+   *     completes
+   * @throws SimplifyError if Simplify reports an error or cannot be restarted
    */
-  private void reassumeLemmas() throws SimplifyError {
-    runOrRestart(() -> assumeAll(lemmas), lemmas);
+  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
+  private <T> @Nullable T computeWithEmptyStack(SimplifyComputation<T> computation)
+      throws SimplifyError {
+    @Nullable T result = null;
+    try {
+      unAssume(lemmas.size());
+      result = computation.run();
+      assumeAll(lemmas);
+    } catch (TimeoutException e) {
+      restartProver(lemmas);
+    } catch (SimplifyError e) {
+      try {
+        restartProver(lemmas);
+      } catch (SimplifyError restartError) {
+        e.addSuppressed(restartError);
+      }
+      throw e;
+    }
+    return result;
   }
 
   /**
@@ -437,25 +470,27 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * @param result the string to imply
    * @return sets of invariant classes whose lemmas imply {@code result}; empty if {@code result} is
    *     valid without any assumptions or if no such set is found
-   * @throws SimplifyError if Simplify cannot be restarted after a timeout
+   * @throws SimplifyError if Simplify reports an error or cannot be restarted
    */
-  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public List<Set<Class<? extends Invariant>>> minimizeClasses(String result) throws SimplifyError {
     List<Lemma> assumptions = new ArrayList<>(lemmas);
     Set<Set<Class<? extends Invariant>>> found = new HashSet<Set<Class<? extends Invariant>>>();
-    unAssumeLemmas();
-    try {
-      if (checkStringAssuming(Collections.emptyList(), result) == 'F') {
-        Set<Class<? extends Invariant>> exclude = new HashSet<Class<? extends Invariant>>();
-        Set<Set<Class<? extends Invariant>>> black = new HashSet<Set<Class<? extends Invariant>>>();
-        Set<Set<Class<? extends Invariant>>> gray = new HashSet<Set<Class<? extends Invariant>>>();
-        minimizeClasses_rec(result, assumptions, exclude, black, gray, found);
-      }
-    } catch (TimeoutException e) {
+    Set<Set<Class<? extends Invariant>>> completed =
+        computeWithEmptyStack(
+            () -> {
+              if (checkStringOrTimeout(result) == 'F') {
+                Set<Class<? extends Invariant>> exclude = new HashSet<Class<? extends Invariant>>();
+                Set<Set<Class<? extends Invariant>>> black =
+                    new HashSet<Set<Class<? extends Invariant>>>();
+                Set<Set<Class<? extends Invariant>>> gray =
+                    new HashSet<Set<Class<? extends Invariant>>>();
+                minimizeClasses_rec(result, assumptions, exclude, black, gray, found);
+              }
+              return found;
+            });
+    if (completed == null) {
       System.err.println("Minimization timed out");
-      restartProver(Collections.emptyList());
     }
-    reassumeLemmas();
     return new ArrayList<>(found);
   }
 
@@ -468,23 +503,17 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * @return a minimal set of assumptions from the stack that imply the given string, or all the
    *     assumptions on the stack if Simplify times out
    */
-  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   private List<Lemma> minimizeReasons(String str) throws SimplifyError {
     // TODO: This assertion has a side effect: if Simplify times out, checkString() restarts it.
     // Also, a timeout makes the assertion fail.
     assert checkString(str) == 'T';
-    unAssumeLemmas();
     Lemma[] lemmaAry = lemmas.toArray(new Lemma[0]);
     // shuffle(lemmaAry, new Random());
-    List<Lemma> result;
-    try {
-      result = minimizeAssumptions(lemmaAry, str);
-    } catch (TimeoutException e) {
+    List<Lemma> result = computeWithEmptyStack(() -> minimizeAssumptions(lemmaAry, str));
+    if (result == null) {
       System.err.println("Minimization timed out");
-      restartProver(Collections.emptyList());
-      result = new ArrayList<>(lemmas);
+      return new ArrayList<>(lemmas);
     }
-    reassumeLemmas();
     return result;
   }
 
