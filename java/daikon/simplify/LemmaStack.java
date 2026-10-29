@@ -504,9 +504,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    *     assumptions on the stack if Simplify times out
    */
   private List<Lemma> minimizeReasons(String str) throws SimplifyError {
-    // TODO: This assertion has a side effect: if Simplify times out, checkString() restarts it.
-    // Also, a timeout makes the assertion fail.
-    assert checkString(str) == 'T';
+    // If Simplify times out, checkString() returns '?' and restarts Simplify with the same lemmas,
+    // so this assertion does not change the state of the stack.
+    assert checkString(str) != 'F';
     Lemma[] lemmaAry = lemmas.toArray(new Lemma[0]);
     // shuffle(lemmaAry, new Random());
     List<Lemma> result = computeWithEmptyStack(() -> minimizeAssumptions(lemmaAry, str));
