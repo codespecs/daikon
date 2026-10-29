@@ -303219,13 +303219,8 @@ testing::internal::DeathTest::last_death_test_message_.c_str_
 testing::internal::DeathTest::last_death_test_message_.length_
 testing::internal::OsStackTraceGetter::kElidedFramesMarker
 testing::internal::TypeIdHelper<testing::Test>::dummy_
-this this[0] this[0].MutexBase.mutex_ this[0].MutexBase.mutex_.__align this[0].MutexBase.mutex_.__data this[0].MutexBase.mutex_.__data.__count this[0].MutexBase.mutex_.__data.__lock this[0].MutexBase.mutex_.__size
-this[0].MutexBase.mutex_.__data.__elision
+this this[0] this[0].MutexBase.mutex_ this[0].MutexBase.mutex_.__align this[0].MutexBase.mutex_.__data this[0].MutexBase.mutex_.__data.__count this[0].MutexBase.mutex_.__data.__elision this[0].MutexBase.mutex_.__data.__list this[0].MutexBase.mutex_.__data.__lock this[0].MutexBase.mutex_.__data.__nusers this[0].MutexBase.mutex_.__data.__owner this[0].MutexBase.mutex_.__data.__spins this[0].MutexBase.mutex_.__size
 this[0].MutexBase.mutex_.__data.__kind
-this[0].MutexBase.mutex_.__data.__list
-this[0].MutexBase.mutex_.__data.__nusers
-this[0].MutexBase.mutex_.__data.__owner
-this[0].MutexBase.mutex_.__data.__spins
 this[0].MutexBase.owner_
 
 Mutex.Mutex():::EXIT0
@@ -303343,13 +303338,8 @@ testing::internal::DeathTest::last_death_test_message_.c_str_
 testing::internal::DeathTest::last_death_test_message_.length_
 testing::internal::OsStackTraceGetter::kElidedFramesMarker
 testing::internal::TypeIdHelper<testing::Test>::dummy_
-this this[0] this[0].MutexBase.mutex_ this[0].MutexBase.mutex_.__align this[0].MutexBase.mutex_.__data this[0].MutexBase.mutex_.__data.__count this[0].MutexBase.mutex_.__data.__lock this[0].MutexBase.mutex_.__size
-this[0].MutexBase.mutex_.__data.__elision
+this this[0] this[0].MutexBase.mutex_ this[0].MutexBase.mutex_.__align this[0].MutexBase.mutex_.__data this[0].MutexBase.mutex_.__data.__count this[0].MutexBase.mutex_.__data.__elision this[0].MutexBase.mutex_.__data.__list this[0].MutexBase.mutex_.__data.__lock this[0].MutexBase.mutex_.__data.__nusers this[0].MutexBase.mutex_.__data.__owner this[0].MutexBase.mutex_.__data.__spins this[0].MutexBase.mutex_.__size
 this[0].MutexBase.mutex_.__data.__kind
-this[0].MutexBase.mutex_.__data.__list
-this[0].MutexBase.mutex_.__data.__nusers
-this[0].MutexBase.mutex_.__data.__owner
-this[0].MutexBase.mutex_.__data.__spins
 this[0].MutexBase.owner_
 
 Mutex.~Mutex():::ENTER
@@ -303470,13 +303460,8 @@ testing::internal::DeathTest::last_death_test_message_.c_str_
 testing::internal::DeathTest::last_death_test_message_.length_
 testing::internal::OsStackTraceGetter::kElidedFramesMarker
 testing::internal::TypeIdHelper<testing::Test>::dummy_
-this this[0] this[0].MutexBase.mutex_ this[0].MutexBase.mutex_.__align this[0].MutexBase.mutex_.__data this[0].MutexBase.mutex_.__data.__count this[0].MutexBase.mutex_.__data.__lock this[0].MutexBase.mutex_.__size
-this[0].MutexBase.mutex_.__data.__elision
+this this[0] this[0].MutexBase.mutex_ this[0].MutexBase.mutex_.__align this[0].MutexBase.mutex_.__data this[0].MutexBase.mutex_.__data.__count this[0].MutexBase.mutex_.__data.__elision this[0].MutexBase.mutex_.__data.__list this[0].MutexBase.mutex_.__data.__lock this[0].MutexBase.mutex_.__data.__nusers this[0].MutexBase.mutex_.__data.__owner this[0].MutexBase.mutex_.__data.__spins this[0].MutexBase.mutex_.__size
 this[0].MutexBase.mutex_.__data.__kind
-this[0].MutexBase.mutex_.__data.__list
-this[0].MutexBase.mutex_.__data.__nusers
-this[0].MutexBase.mutex_.__data.__owner
-this[0].MutexBase.mutex_.__data.__spins
 this[0].MutexBase.owner_
 
 Mutex.~Mutex():::EXIT0
@@ -303597,13 +303582,8 @@ testing::internal::DeathTest::last_death_test_message_.c_str_
 testing::internal::DeathTest::last_death_test_message_.length_
 testing::internal::OsStackTraceGetter::kElidedFramesMarker
 testing::internal::TypeIdHelper<testing::Test>::dummy_
-this this[0] this[0].MutexBase.mutex_ this[0].MutexBase.mutex_.__align this[0].MutexBase.mutex_.__data this[0].MutexBase.mutex_.__data.__count this[0].MutexBase.mutex_.__data.__lock this[0].MutexBase.mutex_.__size
-this[0].MutexBase.mutex_.__data.__elision
+this this[0] this[0].MutexBase.mutex_ this[0].MutexBase.mutex_.__align this[0].MutexBase.mutex_.__data this[0].MutexBase.mutex_.__data.__count this[0].MutexBase.mutex_.__data.__elision this[0].MutexBase.mutex_.__data.__list this[0].MutexBase.mutex_.__data.__lock this[0].MutexBase.mutex_.__data.__nusers this[0].MutexBase.mutex_.__data.__owner this[0].MutexBase.mutex_.__data.__spins this[0].MutexBase.mutex_.__size
 this[0].MutexBase.mutex_.__data.__kind
-this[0].MutexBase.mutex_.__data.__list
-this[0].MutexBase.mutex_.__data.__nusers
-this[0].MutexBase.mutex_.__data.__owner
-this[0].MutexBase.mutex_.__data.__spins
 this[0].MutexBase.owner_
 
 MutexBase.Lock():::ENTER
