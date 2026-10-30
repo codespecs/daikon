@@ -215,12 +215,8 @@ turnip
 ::globalInt
 ::globalLong
 ::globalStr
-a
-a.char_val
+a a.char_val a.short_val a.uchar_val a.ushort_val
 a.int_val
-a.short_val
-a.uchar_val
-a.ushort_val
 
 ..readStruct():::EXIT0
 ::cpg
@@ -240,18 +236,8 @@ a.ushort_val
 ::globalInt
 ::globalLong
 ::globalStr
-a
-a.char_val
-a.int_val
-a.short_val
-a.uchar_val
-a.ushort_val
-return
-return.char_val
-return.int_val
-return.short_val
-return.uchar_val
-return.ushort_val
+a a.char_val a.short_val a.uchar_val a.ushort_val return return.char_val return.short_val return.uchar_val return.ushort_val
+a.int_val return.int_val
 
 ..returnDoublePtr():::ENTER
 ::cpg
