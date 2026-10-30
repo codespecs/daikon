@@ -334,7 +334,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * "varName.publicField", is converted to the name of the longest such variable, with "_"
    * separating the parts. Other dotted names, such as "java.lang.Math.abs", are not changed.
    * Instances of "orig(variableName)" are replaced by instances of "orig_variableName". For example
-   * "orig(varName.publicField)" would yield "orig_varName_publicField". Instances of "null" that
+   * "orig(varName.publicField)" would yield "orig_varName_publicField". Calls to daikon.Quant
+   * methods that access arrays are replaced (see {@link QuantFixer}), and instances of "null" that
    * are compared with a hashcode are replaced by "0" (see {@link NullReplacer}).
    *
    * @param condition a string representation of a conditional statement
@@ -353,6 +354,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = PrefixFixer.fixPrefix(condition, baseNames);
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
+    // QuantFixer must run before ArrayFixer, which would add "_identity" to the array arguments.
+    condition = QuantFixer.fixQuant(condition, baseNames, varInfos);
     condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
     // NullReplacer must run last, because it recognizes the compilable names of variables.
     condition = NullReplacer.replaceNull(condition, varInfos);
