@@ -9,26 +9,33 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Logger;
 import org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.lock.qual.GuardedBy;
-import org.checkerframework.checker.mustcall.qual.MustCall;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /** A SessionManager is a component which handles the threading interaction with the Session. */
 public class SessionManager implements Closeable {
-  /** The command to be performed (point of communication with worker thread). */
-  private @Nullable Cmd pending;
+  /** The session, which commands are applied to. */
+  private final @Owning @GuardedBy("<self>") Session session;
 
-  /** Our worker thread; hold onto it so that we can stop it. */
-  private @Owning Worker worker;
+  /** Applies commands to {@link #session}, one at a time, on a separate thread. */
+  private final ExecutorService executor;
 
-  // The error message returned by the worked thread, or null
-  private @Nullable String error = null;
+  /**
+   * True if this has been closed. It is volatile because {@link #close} may write it on a thread
+   * other than the one in {@link #request}.
+   */
+  private volatile boolean closed = false;
 
   /** Debug tracer common to all Simplify classes. */
   public static final Logger debug = Logger.getLogger("daikon.simplify");
@@ -55,26 +62,25 @@ public class SessionManager implements Closeable {
 
   public SessionManager() {
     debugln("Creating SessionManager");
-    worker = new Worker();
-    worker.setDaemon(true);
-    debugln("Manager: starting worker");
-    synchronized (this) {
-      worker.start();
-      // We won't wake up from this until the worker thread is ready
-      // and wait()ing to accept requests.
-      try {
-        this.wait();
-      } catch (InterruptedException e) {
-        // It's OK for a wait() to be interrupted.
-      }
-    }
+    session = new Session();
+    executor =
+        Executors.newSingleThreadExecutor(
+            r -> {
+              Thread t = new Thread(r);
+              t.setDaemon(true);
+              return t;
+            });
     debugln("SessionManager created");
   }
 
-  /** Performs the given command, or times out if too much time elapses. */
+  /**
+   * Performs the given command.
+   *
+   * @param command the command to perform
+   * @throws TimeoutException if this is closed (possibly by another thread) before the command
+   *     completes
+   */
   public void request(Cmd command) throws TimeoutException {
-    assert worker != null : "Cannot use closed SessionManager";
-    assert pending == null : "Cannot queue requests";
     if (debug.isLoggable(FINE)) {
       System.err.println("Running command " + command);
       System.err.println(" called from");
@@ -82,37 +88,65 @@ public class SessionManager implements Closeable {
       t.printStackTrace();
       System.err.flush();
     }
-    synchronized (this) {
-      // place the command in the slot
-      assert pending == null;
-      pending = command;
-      // tell the worker to wake up
-      this.notifyAll();
-      // wait for worker to finish
+    Future<?> result;
+    try {
+      result = executor.submit(() -> command.apply(session));
+    } catch (RejectedExecutionException e) {
+      // This was closed before the command was submitted.
+      throw new TimeoutException();
+    }
+    while (true) {
       try {
-        this.wait();
+        result.get();
+        if (closed) {
+          // Another thread closed this while the command was running.  The command may have
+          // completed normally even though Simplify did not receive its input, because writes to
+          // a closed session fail silently.
+          throw new TimeoutException();
+        }
+        return;
       } catch (InterruptedException e) {
-        // It's OK for a wait() to be interrupted.
-      }
-      // command finished iff the command was nulled out
-      if (pending != null) {
-        close();
+        // It's OK for a wait to be interrupted.
+      } catch (CancellationException e) {
+        // Another thread closed this before the command started.
         throw new TimeoutException();
-      }
-      // check for error
-      if (error != null) {
-        throw new SimplifyError(error);
+      } catch (ExecutionException e) {
+        if (closed) {
+          // Another thread closed this while the command was running.
+          throw new TimeoutException();
+        }
+        Throwable cause = e.getCause();
+        assert cause != null
+            : "@AssumeAssertion(nullness): a Future's ExecutionException has a cause";
+        // Print the stack trace because some clients discard SimplifyError without reporting it.
+        cause.printStackTrace();
+        throw new SimplifyError(cause);
       }
     }
   }
 
-  /** Shutdown this session. No further commands may be executed. */
-  @SuppressWarnings("nullness") // nulling worker for fast failure (& for GC)
-  @EnsuresCalledMethods(value = "worker", methods = "close")
+  /**
+   * Shutdown this session. No further commands may be executed. Has no effect if already closed.
+   */
+  @SuppressWarnings("lock:lock.not.held") // must not wait for a command that is blocked on Simplify
+  @EnsuresCalledMethods(value = "session", methods = "close")
   @Override
   public void close(@GuardSatisfied SessionManager this) {
-    worker.close();
-    worker = null;
+    closed = true;
+    try {
+      // Shut down the executor before closing `session`, so that no command starts on a closed
+      // session.  Cancel commands that never started, so that `request()` does not wait for them
+      // forever.
+      for (Runnable unstarted : executor.shutdownNow()) {
+        if (unstarted instanceof Future) {
+          ((Future<?>) unstarted).cancel(false);
+        }
+      }
+    } finally {
+      // Do not acquire the lock on `session`:  a command may hold it while blocked reading from a
+      // hung Simplify process, and only `session.close()` can unblock that command.
+      session.close();
+    }
   }
 
   private static @MonotonicNonNull String prover_background = null;
@@ -179,66 +213,6 @@ public class SessionManager implements Closeable {
       throw new RuntimeException("Timeout on universal background", e);
     }
     return prover;
-  }
-
-  /** Helper thread which interacts with a Session, according to the enclosing manager. */
-  @MustCall("close") private class Worker extends Thread implements Closeable {
-    /** The session manager. */
-    private final SessionManager mgr = SessionManager.this; // just sugar
-
-    /** The associated session, or null if the thread should shutdown. */
-    private @Owning @Nullable @GuardedBy("<self>") Session session = new Session();
-
-    /** True if this has been closed. */
-    private boolean finished = false;
-
-    @Override
-    @SuppressWarnings("nullness") // tricky, but I think it's OK
-    public void run() {
-      debugln("Worker: run");
-      while (session != null) {
-        synchronized (mgr) {
-          mgr.pending = null;
-          mgr.notifyAll();
-          try {
-            mgr.wait(0);
-          } catch (InterruptedException e) {
-            // It's OK for a wait() to be interrupted.
-          }
-          assert mgr.pending != null
-              : "@AssumeAssertion(nullness): bug? might not be true if interrupted?";
-          // session != null && mgr.pending != null;
-        }
-        error = null;
-        try {
-          // session could also be null at this point, I presume.
-          // That's probably what the catch block is for.
-          mgr.pending.apply(session);
-        } catch (Throwable e) {
-          if (finished) {
-            return;
-          }
-          error = e.toString();
-          e.printStackTrace();
-        }
-      }
-    }
-
-    @SuppressWarnings({
-      "nullness:contracts.precondition.override",
-      "builder:required.method.not.called" // operation performed on alias
-    })
-    @EnsuresCalledMethods(value = "session", methods = "close")
-    @RequiresNonNull("session")
-    @Override
-    public void close(@GuardSatisfied Worker this) {
-      finished = true;
-      final @GuardedBy("<self>") Session tmp = session;
-      synchronized (tmp) {
-        tmp.close();
-      }
-      session = null;
-    }
   }
 
   /**

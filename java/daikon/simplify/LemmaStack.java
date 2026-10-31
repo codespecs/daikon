@@ -16,6 +16,7 @@ import org.checkerframework.checker.mustcall.qual.CreatesMustCallFor;
 import org.checkerframework.checker.mustcall.qual.MustCall;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A stack of Lemmas that shadows the stack of assumptions that Simplify keeps. Keeping this stack
@@ -106,15 +107,46 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     }
   }
 
-  /** Try to restart Simplify back where we left off, after killing it. */
+  /**
+   * Try to restart Simplify, after killing it.
+   *
+   * @param stack the lemmas that Simplify's stack should hold after the restart
+   */
   @CreatesMustCallFor("this")
-  private void restartProver(@UnknownInitialization(LemmaStack.class) LemmaStack this)
+  private void restartProver(
+      @UnknownInitialization(LemmaStack.class) LemmaStack this, List<Lemma> stack)
       throws SimplifyError {
     startProver();
     try {
-      assumeAll(lemmas);
+      assumeAll(stack);
     } catch (TimeoutException e) {
       throw new SimplifyError("Simplify restart timed out");
+    }
+  }
+
+  /** An operation on Simplify that might time out. */
+  @FunctionalInterface
+  private interface SimplifyOperation {
+    /**
+     * Performs the operation.
+     *
+     * @throws TimeoutException if Simplify times out
+     */
+    void run() throws TimeoutException;
+  }
+
+  /**
+   * Performs an operation on Simplify. If Simplify times out, this restarts it.
+   *
+   * @param operation the operation to perform
+   * @param stack the lemmas that Simplify's stack should hold after the operation
+   */
+  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
+  private void runOrRestart(SimplifyOperation operation, List<Lemma> stack) throws SimplifyError {
+    try {
+      operation.run();
+    } catch (TimeoutException e) {
+      restartProver(stack);
     }
   }
 
@@ -128,14 +160,9 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /** Pop a lemma from our and Simplify's stacks. If Simplify times out, this restarts it. */
-  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public void popLemma() throws SimplifyError {
     lemmas.pop();
-    try {
-      unAssume();
-    } catch (TimeoutException e) {
-      restartProver();
-    }
+    runOrRestart(this::unAssume, lemmas);
   }
 
   /**
@@ -165,7 +192,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
       return true;
     } catch (TimeoutException e) {
-      restartProver();
+      restartProver(lemmas);
       return false;
     }
   }
@@ -185,8 +212,9 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * answer.
    *
    * <p>If Simplify times out, this restarts it with the assumptions in {@link #lemmas}. Therefore,
-   * call this only when Simplify's stack holds exactly the assumptions in {@link #lemmas};
-   * otherwise, call {@link #checkStringOrTimeout}.
+   * call this only when Simplify's stack holds exactly the assumptions in {@link #lemmas}. To check
+   * a string under other assumptions, call {@link #checkStringAssuming}, which leaves recovery from
+   * a timeout to its caller.
    *
    * @param str the string to check
    * @return 'T' if Simplify says yes, 'F' if Simplify says no, or '?' if Simplify does not answer
@@ -197,7 +225,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     try {
       return checkStringOrTimeout(str);
     } catch (TimeoutException e) {
-      restartProver();
+      restartProver(lemmas);
       return '?';
     }
   }
@@ -240,32 +268,27 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
   /**
    * Ask Simplify whether the given assumptions imply a string. Simplify's stack must be empty, and
-   * it is empty afterward. If Simplify times out, this restarts it.
+   * it is empty afterward unless Simplify times out.
    *
    * @param assumptions the assumptions
    * @param str the string to check
-   * @return 'T' if Simplify says yes, 'F' if Simplify says no, or '?' if Simplify does not answer
+   * @return 'T' if Simplify says yes, 'F' if Simplify says no, or '?' if Simplify does not know
+   * @throws TimeoutException if Simplify times out
    */
-  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
-  private char checkStringAssuming(List<Lemma> assumptions, String str) throws SimplifyError {
-    try {
-      assumeAll(assumptions);
-      char result = checkStringOrTimeout(str);
-      unAssume(assumptions.size());
-      return result;
-    } catch (TimeoutException e) {
-      startProver();
-      return '?';
-    }
+  private char checkStringAssuming(List<Lemma> assumptions, String str) throws TimeoutException {
+    assumeAll(assumptions);
+    char result = checkStringOrTimeout(str);
+    unAssume(assumptions.size());
+    return result;
   }
 
   /**
    * Returns true if all the invariants in invs[i] in invs[] not between min and max (inclusive) for
-   * which excluded[i] is false, together imply the formula conseq, or if Simplify does not answer.
+   * which excluded[i] is false, together imply the formula conseq, or if Simplify does not know.
    * Simplify's stack must be empty.
    */
   private boolean allExceptImply(Lemma[] invs, boolean[] excluded, int min, int max, String conseq)
-      throws SimplifyError {
+      throws TimeoutException {
     List<Lemma> assumptions = new ArrayList<>();
     for (int i = 0; i < invs.length; i++) {
       if (!excluded[i] && (i < min || i > max)) {
@@ -290,7 +313,8 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * we may not return the smallest such set. The set is currently returned in the same order as the
    * invariants appeared in invs[]. Simplify's stack must be empty.
    */
-  private List<Lemma> minimizeAssumptions(Lemma[] invs, String consequence) throws SimplifyError {
+  private List<Lemma> minimizeAssumptions(Lemma[] invs, String consequence)
+      throws TimeoutException {
     boolean[] excluded = new boolean[invs.length];
 
     for (int size = invs.length / 2; size > 1; size /= 2) {
@@ -345,7 +369,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
       Set<Set<Class<? extends Invariant>>> black,
       Set<Set<Class<? extends Invariant>>> gray,
       Set<Set<Class<? extends Invariant>>> found)
-      throws SimplifyError {
+      throws TimeoutException {
     for (Set<Class<? extends Invariant>> known : found) {
       // If known and exclude are disjoint, return
       Set<Class<? extends Invariant>> exclude2 = new HashSet<Class<? extends Invariant>>(exclude);
@@ -386,61 +410,110 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /**
-   * Pop the lemmas in {@link #lemmas} off Simplify's stack, leaving it empty. If Simplify times
-   * out, this restarts it with an empty stack.
+   * A computation on Simplify that might time out.
+   *
+   * @param <T> the type of the result of the computation
+   */
+  @FunctionalInterface
+  private interface SimplifyComputation<T> {
+    /**
+     * Performs the computation.
+     *
+     * @return the result of the computation
+     * @throws TimeoutException if Simplify times out
+     */
+    T run() throws TimeoutException;
+  }
+
+  /**
+   * Performs a computation while Simplify's stack is empty. Pops the lemmas in {@link #lemmas} off
+   * Simplify's stack beforehand and pushes them back afterward; the computation must leave
+   * Simplify's stack empty. If Simplify times out or reports an error, this restarts Simplify with
+   * the lemmas in {@link #lemmas} on its stack.
+   *
+   * @param <T> the type of the result of the computation
+   * @param computation the computation to perform
+   * @return the result of the computation, or null if Simplify times out before the computation
+   *     completes
+   * @throws SimplifyError if Simplify reports an error or cannot be restarted
    */
   @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
-  private void unAssumeLemmas() throws SimplifyError {
+  private <T> @Nullable T computeWithEmptyStack(SimplifyComputation<T> computation)
+      throws SimplifyError {
+    @Nullable T result = null;
     try {
       unAssume(lemmas.size());
-    } catch (TimeoutException e) {
-      startProver();
-    }
-  }
-
-  /**
-   * Push the lemmas in {@link #lemmas} onto Simplify's empty stack. If Simplify times out, this
-   * restarts it.
-   */
-  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
-  private void reassumeLemmas() throws SimplifyError {
-    try {
+      result = computation.run();
       assumeAll(lemmas);
     } catch (TimeoutException e) {
-      restartProver();
+      restartProver(lemmas);
+    } catch (SimplifyError e) {
+      try {
+        restartProver(lemmas);
+      } catch (SimplifyError restartError) {
+        e.addSuppressed(restartError);
+      }
+      throw e;
     }
-  }
-
-  public List<Set<Class<? extends Invariant>>> minimizeClasses(String result) throws SimplifyError {
-    List<Lemma> assumptions = new ArrayList<>(lemmas);
-    List<Set<Class<? extends Invariant>>> found = new ArrayList<>();
-    unAssumeLemmas();
-    if (checkStringAssuming(new ArrayList<>(), result) == 'F') {
-      Set<Class<? extends Invariant>> exclude = new HashSet<Class<? extends Invariant>>();
-      Set<Set<Class<? extends Invariant>>> black = new HashSet<Set<Class<? extends Invariant>>>();
-      Set<Set<Class<? extends Invariant>>> gray = new HashSet<Set<Class<? extends Invariant>>>();
-      Set<Set<Class<? extends Invariant>>> found_set =
-          new HashSet<Set<Class<? extends Invariant>>>();
-      minimizeClasses_rec(result, assumptions, exclude, black, gray, found_set);
-      found.addAll(found_set);
-    }
-    reassumeLemmas();
-    return found;
+    return result;
   }
 
   /**
-   * Returns a minimal set of assumptions from the stack that imply a given string.
+   * Returns sets of invariant classes whose lemmas on the stack imply a given string. Each set is
+   * the classes of the lemmas in a minimal subset of the stack that implies the string. Lemmas that
+   * do not come from an invariant class are never used. Also prints each minimal subset of lemmas
+   * to System.err.
+   *
+   * <p>If Simplify times out, this prints a message, restarts Simplify, and returns the sets found
+   * so far.
+   *
+   * @param result the string to imply
+   * @return sets of invariant classes whose lemmas imply {@code result}; empty if {@code result} is
+   *     valid without any assumptions or if no such set is found
+   * @throws SimplifyError if Simplify reports an error or cannot be restarted
+   */
+  public List<Set<Class<? extends Invariant>>> minimizeClasses(String result) throws SimplifyError {
+    List<Lemma> assumptions = new ArrayList<>(lemmas);
+    Set<Set<Class<? extends Invariant>>> found = new HashSet<Set<Class<? extends Invariant>>>();
+    Set<Set<Class<? extends Invariant>>> completed =
+        computeWithEmptyStack(
+            () -> {
+              if (checkStringOrTimeout(result) == 'F') {
+                Set<Class<? extends Invariant>> exclude = new HashSet<Class<? extends Invariant>>();
+                Set<Set<Class<? extends Invariant>>> black =
+                    new HashSet<Set<Class<? extends Invariant>>>();
+                Set<Set<Class<? extends Invariant>>> gray =
+                    new HashSet<Set<Class<? extends Invariant>>>();
+                minimizeClasses_rec(result, assumptions, exclude, black, gray, found);
+              }
+              return found;
+            });
+    if (completed == null) {
+      System.err.println("Minimization timed out");
+    }
+    return new ArrayList<>(found);
+  }
+
+  /**
+   * Returns a minimal set of assumptions from the stack that imply a given string. If Simplify
+   * times out, this prints a message, restarts Simplify, and returns all the assumptions on the
+   * stack.
    *
    * @param str the expression to make true
-   * @return a minimal set of assumptions from the stack that imply the given string
+   * @return a minimal set of assumptions from the stack that imply the given string, or all the
+   *     assumptions on the stack if Simplify times out
    */
   private List<Lemma> minimizeReasons(String str) throws SimplifyError {
-    assert checkString(str) == 'T';
-    unAssumeLemmas();
+    // If Simplify times out, checkString() returns '?' and restarts Simplify with the same lemmas,
+    // so this assertion does not change the state of the stack.
+    assert checkString(str) != 'F';
     Lemma[] lemmaAry = lemmas.toArray(new Lemma[0]);
     // shuffle(lemmaAry, new Random());
-    List<Lemma> result = minimizeAssumptions(lemmaAry, str);
-    reassumeLemmas();
+    List<Lemma> result = computeWithEmptyStack(() -> minimizeAssumptions(lemmaAry, str));
+    if (result == null) {
+      System.err.println("Minimization timed out");
+      return new ArrayList<>(lemmas);
+    }
     return result;
   }
 
@@ -483,7 +556,6 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * Search for the given lemma in the stack, and then remove it from both our stack and Simplify's.
    * The lemmas above it are popped off Simplify's stack and re-assumed.
    */
-  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public void removeLemma(Lemma bad) throws SimplifyError {
     int spliceOut = -1;
     for (int i = lemmas.size() - 1; i >= 0; i--) {
@@ -495,26 +567,21 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
       }
     }
     assert spliceOut != -1;
+    // Pop the bad lemma and the lemmas above it, then push back the lemmas that were above it.
     int popCount = lemmas.size() - spliceOut;
     lemmas.removeElementAt(spliceOut);
-    try {
-      unAssume(popCount);
-      assumeAll(lemmas.subList(spliceOut, lemmas.size()));
-    } catch (TimeoutException e) {
-      restartProver();
-    }
+    List<Lemma> above = lemmas.subList(spliceOut, lemmas.size());
+    runOrRestart(
+        () -> {
+          unAssume(popCount);
+          assumeAll(above);
+        },
+        lemmas);
   }
 
   /** Blow away everything on our stack and Simplify's. If Simplify times out, this restarts it. */
-  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public void clear() throws SimplifyError {
-    int oldSize = lemmas.size();
-    lemmas.removeAllElements();
-    try {
-      unAssume(oldSize);
-    } catch (TimeoutException e) {
-      restartProver();
-    }
+    popToMark(0);
   }
 
   /**
@@ -533,7 +600,12 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * restarts it.
    */
   public void popToMark(int mark) throws SimplifyError {
-    while (lemmas.size() > mark) popLemma();
+    int popCount = lemmas.size() - mark;
+    if (popCount <= 0) {
+      return;
+    }
+    lemmas.setSize(mark);
+    runOrRestart(() -> unAssume(popCount), lemmas);
   }
 
   /**
@@ -595,22 +667,9 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /** Releases resources held by this. */
-  @SuppressWarnings(
-      "calledmethods:contracts.postcondition") // performed on a local alias, not the field
   @EnsuresCalledMethods(value = "session", methods = "close")
   @Override
   public void close(@GuardSatisfied LemmaStack this) {
-    // this.session should be effectively final in that it refers
-    // to the same value throughout the execution of this method.
-    // Unfortunately, the Lock Checker cannot verify this,
-    // so a final local variable is used to satisfy the Lock Checker's
-    // requirement that all variables used as locks be final or
-    // effectively final.  If a bug exists whereby this.session
-    // is not effectively final, this would unfortunately mask that error.
-    final SessionManager session = this.session;
     session.close();
-    synchronized (session) {
-      session.notifyAll();
-    }
   }
 }
