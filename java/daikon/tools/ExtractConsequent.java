@@ -80,7 +80,7 @@ public class ExtractConsequent {
     // The invariant in each output format.  They are computed once, because each condition may be
     // written for several program points.
 
-    /** The invariant in Java format, as returned by {@link #javaFormat}. */
+    /** The invariant in Java format, as returned by {@link #formatCondition}. */
     final String javaStr;
 
     /** The invariant in Daikon format. */
@@ -96,16 +96,16 @@ public class ExtractConsequent {
      * Creates a HashedConsequent.
      *
      * @param inv the invariant
-     * @param javaStr the invariant in Java format, as returned by {@link #javaFormat}
+     * @param javaStr the invariant in Java format, as returned by {@link #formatCondition}
      * @param fakeFor the dispreferred form of the invariant, or null
      */
     HashedConsequent(Invariant inv, String javaStr, @Nullable String fakeFor) {
       this.inv = inv;
       this.fakeFor = fakeFor;
       this.javaStr = javaStr;
-      this.daikonStr = inv.format_using(OutputFormat.DAIKON);
-      this.escStr = inv.format_using(OutputFormat.ESCJAVA);
-      this.simplifyStr = inv.format_using(OutputFormat.SIMPLIFY);
+      this.daikonStr = formatCondition(inv, OutputFormat.DAIKON);
+      this.escStr = formatCondition(inv, OutputFormat.ESCJAVA);
+      this.simplifyStr = formatCondition(inv, OutputFormat.SIMPLIFY);
     }
   }
 
