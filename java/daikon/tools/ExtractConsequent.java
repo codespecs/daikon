@@ -528,7 +528,7 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns a key that identifies the cluster that the given invariant describes. The pre-state
+   * Returns the key that identifies the cluster that the given invariant describes. The pre-state
    * value "orig(cluster)" and the post-state value "cluster" are equal, so the key for an invariant
    * over one is the same as the key for the same invariant over the other.
    *
