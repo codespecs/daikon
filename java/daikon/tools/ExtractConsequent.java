@@ -184,11 +184,10 @@ public class ExtractConsequent {
       for (Map.Entry<@KeyFor("cluster_to_conditions") String, Map<String, HashedConsequent>> entry :
           cluster_to_conditions.entrySet()) {
         Map<String, HashedConsequent> conditions = entry.getValue();
-        StringBuilder conjunctionJava = new StringBuilder();
-        StringBuilder conjunctionDaikon = new StringBuilder();
-        StringBuilder conjunctionESC = new StringBuilder();
-        StringBuilder conjunctionSimplify = new StringBuilder("(AND ");
-        int count = 0;
+        List<String> condsJava = new ArrayList<>();
+        List<String> condsDaikon = new ArrayList<>();
+        List<String> condsESC = new ArrayList<>();
+        List<String> condsSimplify = new ArrayList<>();
         for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
             conditions.entrySet()) {
           String condIndex = entry2.getKey();
@@ -203,23 +202,15 @@ public class ExtractConsequent {
           String simplifyStr = formatCondition(cond.inv, OutputFormat.SIMPLIFY);
           allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
           //           allConds.add(condIndex);
-          if (count > 0) {
-            conjunctionJava.append(" && ");
-            conjunctionDaikon.append(" and ");
-            conjunctionESC.append(" && ");
-            conjunctionSimplify.append(" ");
-          }
-          count++;
-          conjunctionJava.append(parenthesizeIfNeeded(javaStr));
-          conjunctionDaikon.append(parenthesizeIfNeeded(daikonStr));
-          conjunctionESC.append(parenthesizeIfNeeded(escStr));
-          conjunctionSimplify.append(simplifyStr);
+          condsJava.add(javaStr);
+          condsDaikon.add(daikonStr);
+          condsESC.add(escStr);
+          condsSimplify.add(simplifyStr);
         }
-        conjunctionSimplify.append(")");
-        String conj = conjunctionJava.toString();
+        String conj = conjunction(condsJava, " && ");
         // Avoid inserting self-contradictory conditions such as "x == 1 &&
         // x == 2", or conjunctions of only a single condition.
-        if (count < 2
+        if (condsJava.size() < 2
             || contradict_inv_pattern.matcher(conj).find()
             || useless_inv_pattern_1.matcher(conj).find()
             || useless_inv_pattern_2.matcher(conj).find()) {
@@ -227,10 +218,10 @@ public class ExtractConsequent {
         } else {
           allConds.add(
               combineDummy(
-                  conjunctionJava.toString(),
-                  conjunctionDaikon.toString(),
-                  conjunctionESC.toString(),
-                  conjunctionSimplify.toString()));
+                  conj,
+                  conjunction(condsDaikon, " and "),
+                  conjunction(condsESC, " && "),
+                  "(AND " + String.join(" ", condsSimplify) + ")"));
         }
       }
 
@@ -321,8 +312,48 @@ public class ExtractConsequent {
    * @return the expression, parenthesized if necessary to be used as a conjunct
    */
   static String parenthesizeIfNeeded(String expr) {
-    String withoutLiterals = literal_pattern.matcher(expr).replaceAll("\"\"");
-    return low_precedence_pattern.matcher(withoutLiterals).find() ? "(" + expr + ")" : expr;
+    return low_precedence_pattern.matcher(removeLiterals(expr)).find() ? "(" + expr + ")" : expr;
+  }
+
+  /**
+   * Returns the conjunction of the given conditions, each parenthesized if necessary, such as
+   * {@code (x > 0 || y > 0) && z > 0}.
+   *
+   * @param conditions conditions, in Java, ESC, or Daikon format
+   * @param and the conjunction operator, such as {@code " && "} or {@code " and "}
+   * @return the conjunction of the conditions
+   */
+  static String conjunction(List<String> conditions, String and) {
+    List<String> conjuncts = new ArrayList<>(conditions.size());
+    for (String condition : conditions) {
+      conjuncts.add(parenthesizeIfNeeded(condition));
+    }
+    return String.join(and, conjuncts);
+  }
+
+  /**
+   * Returns the given expression, with each string or character literal replaced by the empty
+   * string literal {@code ""}. The result contains no operator or name that appears only within a
+   * literal of the expression.
+   *
+   * @param expr a Java, ESC, or Daikon expression
+   * @return the expression, with each literal replaced by the empty string literal
+   */
+  static String removeLiterals(String expr) {
+    return literal_pattern.matcher(expr).replaceAll("\"\"");
+  }
+
+  /**
+   * Returns true if the given condition refers to a post-state value, such as "\post(x)", or
+   * contains ".class". Text within a string or character literal is ignored.
+   *
+   * @param condition a condition in Java format
+   * @return true if the condition refers to a post-state value or contains ".class"
+   */
+  static boolean usesPostStateOrClass(String condition) {
+    String withoutLiterals = removeLiterals(condition);
+    return post_pattern.matcher(withoutLiterals).find()
+        || dot_class_pattern.matcher(withoutLiterals).find();
   }
 
   /**
@@ -503,8 +534,7 @@ public class ExtractConsequent {
         }
 
         String inv_string = formatCondition(inv, OutputFormat.JAVA);
-        if (post_pattern.matcher(inv_string).find()
-            || dot_class_pattern.matcher(inv_string).find()) {
+        if (usesPostStateOrClass(inv_string)) {
           continue;
         }
         String cluster_key = clusterKey(cluster_inv);
