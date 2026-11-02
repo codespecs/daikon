@@ -12,11 +12,10 @@ import daikon.PptSlice1;
 import daikon.PptSlice2;
 import daikon.PptTopLevel;
 import daikon.ProglangType;
-import daikon.VarComparabilityNone;
 import daikon.VarInfo;
 import daikon.VarInfo.VarKind;
-import daikon.VarInfoAux;
 import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntGreaterThan;
 import daikon.inv.binary.twoScalar.IntNonEqual;
@@ -64,12 +63,9 @@ public class ExtractConsequentTest {
    */
   @SuppressWarnings("interning") // newly-created VarInfo
   private static VarInfo newBooleanVarInfo(String name, ProglangType file_rep_type) {
-    return new VarInfo(
-        name,
-        ProglangType.BOOLEAN,
-        file_rep_type,
-        VarComparabilityNone.it,
-        VarInfoAux.getDefault());
+    VarDefinition vardef = new VarDefinition(name, VarKind.VARIABLE, ProglangType.BOOLEAN);
+    vardef.rep_type = file_rep_type;
+    return new VarInfo(vardef);
   }
 
   @Test
@@ -99,27 +95,33 @@ public class ExtractConsequentTest {
   }
 
   @Test
-  public void testReplaceResult() {
-    assertEquals("return > 0", ExtractConsequent.replaceResult("\\result > 0"));
+  public void testReplaceJmlNames() {
+    assertEquals("return > 0", ExtractConsequent.replaceJmlNames("\\result > 0"));
     assertEquals(
-        "return.x == return.y", ExtractConsequent.replaceResult("\\result.x == \\result.y"));
-    assertEquals("\\resultx > 0", ExtractConsequent.replaceResult("\\resultx > 0"));
+        "return.x == return.y", ExtractConsequent.replaceJmlNames("\\result.x == \\result.y"));
+    assertEquals("\\resultx > 0", ExtractConsequent.replaceJmlNames("\\resultx > 0"));
     assertEquals(
-        "s.equals(\"\\\\result\")", ExtractConsequent.replaceResult("s.equals(\"\\\\result\")"));
+        "s.equals(\"\\\\result\")", ExtractConsequent.replaceJmlNames("s.equals(\"\\\\result\")"));
     assertEquals(
         "return.equals(\"\\\\result\") && return != null",
-        ExtractConsequent.replaceResult("\\result.equals(\"\\\\result\") && \\result != null"));
+        ExtractConsequent.replaceJmlNames("\\result.equals(\"\\\\result\") && \\result != null"));
+
+    assertEquals("orig(x) > 0", ExtractConsequent.replaceJmlNames("\\old(x) > 0"));
+    assertEquals(
+        "return == orig(this.size)",
+        ExtractConsequent.replaceJmlNames("\\result == \\old(this.size)"));
+    assertEquals(
+        "s.equals(\"\\\\old(x)\")", ExtractConsequent.replaceJmlNames("s.equals(\"\\\\old(x)\")"));
   }
 
   @Test
-  public void testOrigPattern() {
-    assertTrue(ExtractConsequent.orig_pattern.matcher("orig(x) > 0").find());
-    assertTrue(ExtractConsequent.orig_pattern.matcher("x == orig (y)").find());
-    assertTrue(ExtractConsequent.orig_pattern.matcher("\\old(x) > 0").find());
-    assertTrue(ExtractConsequent.orig_pattern.matcher("\\new(x) > 0").find());
-    assertFalse(ExtractConsequent.orig_pattern.matcher("x > 0").find());
-    assertFalse(ExtractConsequent.orig_pattern.matcher("borig(x) > 0").find());
-    assertFalse(ExtractConsequent.orig_pattern.matcher("this.isOrig(x)").find());
+  public void testPostPattern() {
+    assertTrue(ExtractConsequent.post_pattern.matcher("\\post(x) > 0").find());
+    assertTrue(ExtractConsequent.post_pattern.matcher("x == \\post (y)").find());
+    assertFalse(ExtractConsequent.post_pattern.matcher("x > 0").find());
+    assertFalse(ExtractConsequent.post_pattern.matcher("orig(x) > 0").find());
+    assertFalse(ExtractConsequent.post_pattern.matcher("\\old(x) > 0").find());
+    assertFalse(ExtractConsequent.post_pattern.matcher("this.post(x)").find());
   }
 
   /**
@@ -179,19 +181,46 @@ public class ExtractConsequentTest {
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b3)));
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(i1)));
 
-    // OneOfScalar formats a boolean whose file representation type is int as "b1 == 1".
+    // OneOfScalar formats a boolean whose file representation type is int as "b1 == 1", and
+    // formatCondition writes that as "b1 == true".  "b1 one of { 0, 1 }" is not legal Java.
     assertFalse(ExtractConsequent.isLegalForBooleans(oneOf(b1)));
+    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b1, 1)));
+    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b1, 0)));
+    assertFalse(ExtractConsequent.isLegalForBooleans(oneOf(b1, 0, 1)));
+  }
+
+  @Test
+  public void testFormatCondition() {
+    VarInfo b = newBooleanVarInfo("b", ProglangType.INT);
+    Invariant bTrue = oneOf(b, 1);
+    assertEquals("b == true", ExtractConsequent.formatCondition(bTrue, OutputFormat.JAVA));
+    assertEquals("b == true", ExtractConsequent.formatCondition(bTrue, OutputFormat.DAIKON));
+    assertEquals("b == true", ExtractConsequent.formatCondition(bTrue, OutputFormat.ESCJAVA));
+    assertEquals(
+        "(EQ |b| |@true|)", ExtractConsequent.formatCondition(bTrue, OutputFormat.SIMPLIFY));
+    assertEquals("b == false", ExtractConsequent.formatCondition(oneOf(b, 0), OutputFormat.JAVA));
+
+    // Other invariants are formatted as usual.
+    @SuppressWarnings("interning") // newly-created VarInfo
+    VarInfo i = new VarInfo(new VarDefinition("i", VarKind.VARIABLE, ProglangType.INT));
+    assertEquals("i == 1", ExtractConsequent.formatCondition(oneOf(i, 1), OutputFormat.JAVA));
   }
 
   /**
-   * Returns a OneOfScalar invariant over the given variable.
+   * Returns a OneOfScalar invariant over the given variable, which has the given values.
    *
    * @param var a variable
+   * @param values the values of the variable
    * @return a OneOfScalar invariant over {@code var}
    */
-  private static Invariant oneOf(VarInfo var) {
+  private static Invariant oneOf(VarInfo var, long... values) {
     PptTopLevel ppt = Common.makePptTopLevel("Foo.bar(int):::ENTER", new VarInfo[] {var});
-    return instantiate(OneOfScalar.get_proto(), new PptSlice1(ppt, new VarInfo[] {var}));
+    OneOfScalar result =
+        (OneOfScalar) instantiate(OneOfScalar.get_proto(), new PptSlice1(ppt, new VarInfo[] {var}));
+    for (long value : values) {
+      result.add_modified(value, 1);
+    }
+    return result;
   }
 
   /**
