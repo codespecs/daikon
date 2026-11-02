@@ -1,0 +1,102 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..H():::ENTER
+  ppt-type enter
+  variable ::handled
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable sig
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..H():::EXIT0
+  ppt-type subexit
+  variable ::handled
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable sig
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..X():::ENTER
+  ppt-type enter
+  variable ::handled
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..X():::EXIT0
+  ppt-type subexit
+  variable ::handled
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..Y():::ENTER
+  ppt-type enter
+  variable ::handled
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..Y():::EXIT0
+  ppt-type subexit
+  variable ::handled
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::handled
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::handled
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
