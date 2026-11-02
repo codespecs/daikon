@@ -77,14 +77,14 @@ public class DtraceNonceFixerTest {
             "\n",
             "aprogram.point:::POINT",
             "this_invocation_nonce",
-            "1",
+            "0",
             "x",
             "5",
             "1",
             "",
             "aprogram.point:::POINT",
             "this_invocation_nonce",
-            "2",
+            "1",
             "x",
             "6",
             "1",
@@ -263,7 +263,7 @@ public class DtraceNonceFixerTest {
     String samples = String.join("\n", "aprogram.point:::POINT ", "x", "   ", "1", "", "");
     String expected =
         String.join(
-            "\n", "aprogram.point:::POINT ", "this_invocation_nonce", "1", "x", "   ", "1", "", "");
+            "\n", "aprogram.point:::POINT ", "this_invocation_nonce", "0", "x", "   ", "1", "", "");
     assertEquals(expected, fix(samples));
   }
 
@@ -346,7 +346,7 @@ public class DtraceNonceFixerTest {
             "\n",
             "aprogram.point:::POINT",
             "this_invocation_nonce",
-            "1",
+            "0",
             " this_invocation_nonce",
             "0",
             "1",
@@ -439,7 +439,7 @@ public class DtraceNonceFixerTest {
     Files.writeString(in, samples, UTF_8);
     String expected =
         String.join(
-            "\n", "aprogram.point:::POINT", "this_invocation_nonce", "1", "x", "5", "1", "", "");
+            "\n", "aprogram.point:::POINT", "this_invocation_nonce", "0", "x", "5", "1", "", "");
 
     // A new output file gets the same permissions as another new file.
     Path out = dir.resolve("out.dtrace");
@@ -491,20 +491,20 @@ public class DtraceNonceFixerTest {
             "\n",
             "C.f():::ENTER",
             "this_invocation_nonce",
-            "1",
+            "0",
             "",
             "C.g():::ENTER",
             "this_invocation_nonce",
-            "2",
+            "1",
             "",
             "# a comment",
             "C.g():::EXIT7",
             "this_invocation_nonce",
-            "2",
+            "1",
             "",
             "C.f():::EXIT3",
             "this_invocation_nonce",
-            "1",
+            "0",
             "",
             "");
     assertEquals(expected, fix(samples));
@@ -542,30 +542,111 @@ public class DtraceNonceFixerTest {
             "\n",
             "C.f():::ENTER",
             "this_invocation_nonce",
-            "1",
+            "0",
             "",
             "C.f():::ENTER",
             "this_invocation_nonce",
-            "2",
+            "1",
             "",
             "C.g():::ENTER",
             "this_invocation_nonce",
-            "3",
+            "2",
             "",
             "C.f():::THROWS",
             "this_invocation_nonce",
-            "2",
+            "1",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.g():::EXIT7",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
+   * Tests that ENTER and EXIT samples without nonces, in a file that is concatenated after a file
+   * with nonces, get nonces that do not collide with the earlier nonces.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testConcatenatedFileWithoutNonces() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            // A second, concatenated file, which has no nonces.
+            "C.f():::ENTER",
+            "",
+            "C.f():::EXIT3",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
             "",
             "C.f():::EXIT3",
             "this_invocation_nonce",
             "1",
             "",
-            "C.g():::EXIT7",
-            "this_invocation_nonce",
-            "4",
-            "",
             "");
     assertEquals(expected, fix(samples));
+  }
+
+  /**
+   * Tests that when outputs of DtraceNonceFixer for files without nonces are concatenated, fixing
+   * the result renumbers the nonces of the second output so that they do not collide.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testRefixConcatenatedOutputs() throws IOException {
+    String samples = String.join("\n", "C.f():::ENTER", "", "C.f():::EXIT3", "", "");
+    String fixedOnce = fix(samples);
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "");
+    assertEquals(expected, fix(fixedOnce + fixedOnce));
   }
 
   /**

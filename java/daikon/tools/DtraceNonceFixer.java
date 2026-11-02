@@ -31,7 +31,8 @@ import org.plumelib.util.StringsPlume;
  * cat} command combining multiple dtrace files. It renumbers the nonces of each concatenated file
  * after the first so that they do not collide with nonces of earlier files, and it gives a nonce to
  * each sample that lacks one. An EXIT or THROWS sample gets the same nonce as its ENTER sample,
- * which is found the same way that Daikon pairs samples without nonces.
+ * which is the most recent unmatched ENTER sample for the same method (as Daikon pairs samples
+ * without nonces).
  */
 public class DtraceNonceFixer {
 
@@ -103,8 +104,8 @@ public class DtraceNonceFixer {
         try {
           // First pass: renumber the nonces of each concatenated file after the first.
           int maxNonce = renumberNonces(infileName, tmpFile.toString());
-          // Second pass: give a new nonce to each sample that lacks one, such as an OBJECT or
-          // CLASS sample.
+          // Second pass: give a nonce to each sample that lacks one.  An EXIT or THROWS sample
+          // gets the nonce of its ENTER sample; any other sample gets a new nonce.
           addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
           // Delete before replacing the output file, so that no failure occurs after the output
           // file changes.
@@ -171,12 +172,14 @@ public class DtraceNonceFixer {
    *
    * @param inFilename the dtrace file to read
    * @param outFilename the dtrace file to write
-   * @return the largest nonce in the output
+   * @return the largest nonce in the output, or -1 if the output has no nonce
    * @throws IOException if there is trouble reading or writing a file
    */
   private static int renumberNonces(String inFilename, String outFilename) throws IOException {
-    // maxNonce - the biggest nonce ever found in the file
-    int maxNonce = 0;
+    // maxNonce - the biggest nonce ever found in the file, or -1 if none has been found.  When the
+    // file has no nonces, the new nonces start at 0, so that if outputs of this program are
+    // concatenated, renumberNonces finds the boundaries between them.
+    int maxNonce = -1;
     try (BufferedReader br = FilesPlume.newBufferedFileReader(inFilename);
         BufferedWriter bw = FilesPlume.newBufferedFileWriter(outFilename)) {
       PrintWriter out = new PrintWriter(bw);
@@ -212,11 +215,12 @@ public class DtraceNonceFixer {
    * such as an OBJECT or CLASS sample. Each new nonce is larger than {@code maxNonce}. An EXIT or
    * THROWS sample gets the nonce of the most recent unmatched ENTER sample for the same method,
    * like the call stack that Daikon uses for samples without nonces. As in Daikon, an ENTER sample
-   * that has a nonce in the input is not paired with an EXIT or THROWS sample that lacks one.
+   * that has a nonce in the input is not paired with an EXIT or THROWS sample that lacks one. An
+   * EXIT or THROWS sample that has no unmatched ENTER sample gets a new nonce.
    *
    * @param inFilename the dtrace file to read
    * @param outFilename the dtrace file to write
-   * @param maxNonce the largest nonce in {@code inFilename}
+   * @param maxNonce the largest nonce in {@code inFilename}, or -1 if it has no nonce
    * @throws IOException if there is trouble reading or writing a file
    */
   private static void addMissingNonces(String inFilename, String outFilename, int maxNonce)
@@ -365,14 +369,12 @@ public class DtraceNonceFixer {
       }
       while (true) {
         Call call = stack.pop();
-        counts.computeIfPresent(
-            call.method,
-            (m, count) -> {
-              if (count == 1) {
-                return null;
-              }
-              return count - 1;
-            });
+        int count = castNonNull(counts.get(call.method)); // every call in the stack is counted
+        if (count == 1) {
+          counts.remove(call.method);
+        } else {
+          counts.put(call.method, count - 1);
+        }
         if (call.method.equals(method)) {
           return call.nonce;
         }
