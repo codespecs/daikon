@@ -183,9 +183,22 @@ public abstract class SplitterList {
    * @return true if {@code spinfoPptName} designates the program point named {@code pptName}
    */
   public static boolean matches(String spinfoPptName, String pptName) {
-    if (!isComplete(spinfoPptName)) {
+    if (isComplete(spinfoPptName)) {
+      return matchesComplete(spinfoPptName, pptName);
+    } else {
       return pptName.contains(spinfoPptName);
     }
+  }
+
+  /**
+   * Returns true if the complete program point name on a PPT_NAME line of a {@code .spinfo} file
+   * designates the given program point; see {@link #matches}.
+   *
+   * @param spinfoPptName a complete program point name on a PPT_NAME line of a {@code .spinfo} file
+   * @param pptName the name of a program point
+   * @return true if {@code spinfoPptName} designates the program point named {@code pptName}
+   */
+  static boolean matchesComplete(String spinfoPptName, String pptName) {
     if (endsWithQualified(pptName, spinfoPptName)) {
       return true;
     }
@@ -201,12 +214,19 @@ public abstract class SplitterList {
   }
 
   /**
+   * The characters that can separate a qualifier from the rest of a program point name: "." (as in
+   * "pkg.Foo"), "$" (as in the Java nested class "Outer$Inner"), ":" (as in the Perl package
+   * "Math::BigFloat"), and "/" (as in a directory path).
+   */
+  private static final String QUALIFIER_SEPARATORS = ".$:/";
+
+  /**
    * Returns true if the program point name is the given suffix, possibly preceded by a qualifier:
-   * that is, if the name ends with the suffix, and the character before the suffix, if any, is not
-   * a letter, digit, or underscore.
+   * that is, if the name ends with the suffix, and the character before the suffix, if any, is a
+   * qualifier separator in {@link #QUALIFIER_SEPARATORS}.
    *
    * @param pptName the name of a program point
-   * @param suffix a complete program point name, which may lack a qualifier such as a package
+   * @param suffix a complete program point name, which can lack a qualifier such as a package
    * @return true if {@code pptName} is {@code suffix}, possibly preceded by a qualifier
    */
   private static boolean endsWithQualified(String pptName, String suffix) {
@@ -218,7 +238,7 @@ public abstract class SplitterList {
       return true;
     }
     char before = pptName.charAt(start - 1);
-    return !(Character.isLetterOrDigit(before) || before == '_');
+    return QUALIFIER_SEPARATORS.indexOf(before) != -1;
   }
 
   /**
@@ -257,7 +277,11 @@ public abstract class SplitterList {
     List<Splitter> splitters = new ArrayList<>();
     for (Map.Entry<String, Splitter[]> entry : ppt_splitters.entrySet()) {
       String name = entry.getKey();
-      if (matches(name, pptName) || (useAllIncomplete && !isComplete(name))) {
+      boolean use =
+          isComplete(name)
+              ? matchesComplete(name, pptName)
+              : (useAllIncomplete || pptName.contains(name));
+      if (use) {
         splitters.addAll(Arrays.asList(entry.getValue()));
       }
     }
