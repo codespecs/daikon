@@ -512,8 +512,8 @@ public class DtraceNonceFixerTest {
 
   /**
    * Tests that, for samples without nonces, an EXIT or THROWS sample of a recursive method gets the
-   * nonce of the most recent unmatched ENTER sample, and that a THROWS sample also discards the more
-   * recent calls that have no EXIT sample.
+   * nonce of the most recent unmatched ENTER sample, and that a THROWS sample also discards the
+   * more recent calls that have no EXIT sample.
    *
    * @throws IOException if there is trouble reading or writing a file
    */
