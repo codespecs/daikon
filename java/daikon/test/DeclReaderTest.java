@@ -2,6 +2,7 @@ package daikon.test;
 
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -253,6 +254,8 @@ public class DeclReaderTest {
             file(namedPpt("C.m(int,\\_int):::ENTER", "1"), namedPpt("C.n(int, int):::ENTER", "2")));
     assertEquals(1, castNonNull(reader.find_ppt("C.m(int, int):::ENTER")).vars.size());
     assertEquals(1, castNonNull(reader.find_ppt("C.n(int, int):::ENTER")).vars.size());
+    assertNull(reader.find_ppt("C.m(int,\\_int):::ENTER"));
+    assertEquals(2, reader.ppts.size());
   }
 
   /** A "ppt" record within a variable declaration is rejected. */

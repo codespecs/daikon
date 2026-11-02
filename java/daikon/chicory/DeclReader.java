@@ -1,7 +1,6 @@
 package daikon.chicory;
 
 import daikon.Daikon;
-import daikon.FileIO;
 import daikon.plumelib.util.EntryReader;
 import daikon.plumelib.util.EntryReader.CommentFormat;
 import daikon.plumelib.util.EntryReader.EntryFormat;
@@ -407,7 +406,7 @@ public class DeclReader {
     if (tokens.length != 2 || !tokens[0].equals("ppt")) {
       reportFileError(decl_file, "Expected \"ppt <PPTNAME>\", found \"" + firstLine + "\"");
     }
-    String pptname = FileIO.unescape_decl(tokens[1]);
+    String pptname = DaikonWriter.unescape(tokens[1]);
     DeclPpt ppt = new DeclPpt(pptname);
     ppts.put(pptname, ppt);
 
