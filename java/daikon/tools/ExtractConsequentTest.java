@@ -189,6 +189,7 @@ public class ExtractConsequentTest {
     assertFalse(ExtractConsequent.isLegalForBooleans(oneOf(b1, 0, 1)));
   }
 
+  @SuppressWarnings("interning") // newly-created VarInfo
   @Test
   public void testFormatCondition() {
     VarInfo b = newBooleanVarInfo("b", ProglangType.INT);
@@ -201,7 +202,6 @@ public class ExtractConsequentTest {
     assertEquals("b == false", ExtractConsequent.formatCondition(oneOf(b, 0), OutputFormat.JAVA));
 
     // Other invariants are formatted as usual.
-    @SuppressWarnings("interning") // newly-created VarInfo
     VarInfo i = new VarInfo(new VarDefinition("i", VarKind.VARIABLE, ProglangType.INT));
     assertEquals("i == 1", ExtractConsequent.formatCondition(oneOf(i, 1), OutputFormat.JAVA));
   }
