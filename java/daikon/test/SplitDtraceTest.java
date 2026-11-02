@@ -54,6 +54,38 @@ public class SplitDtraceTest {
   }
 
   /**
+   * Runs SplitDtrace on a data trace file and returns the second half that it writes.
+   *
+   * @param dtrace the contents of a data trace file
+   * @return the contents of the file that SplitDtrace writes
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  private static String secondHalf(String dtrace) throws IOException {
+    Path dir = Files.createTempDirectory("SplitDtraceTest");
+    Path input = dir.resolve("test.dtrace");
+    Path output = dir.resolve("test.second-half.dtrace");
+    try {
+      Files.write(input, dtrace.getBytes(UTF_8));
+      SplitDtrace.mainHelper(new String[] {input.toString()});
+      return new String(Files.readAllBytes(output), UTF_8);
+    } finally {
+      Files.deleteIfExists(input);
+      Files.deleteIfExists(output);
+      Files.delete(dir);
+    }
+  }
+
+  /** The header records of a version 2 file, followed by a blank line. */
+  private static final String HEADER =
+      String.join(
+          System.lineSeparator(),
+          "// A comment",
+          "",
+          "decl-version 2.0",
+          "var-comparability implicit",
+          "");
+
+  /**
    * Tests that SplitDtrace writes the header records and declarations of a version 2 file, and the
    * second half of its samples.
    *
@@ -61,7 +93,25 @@ public class SplitDtraceTest {
    */
   @Test
   public void testVersion2() throws IOException {
-    checkSecondHalf("C.m(int):::ENTER", "C.m(int):::EXIT1");
+    checkSecondHalf(HEADER, "C.m(int):::ENTER", "C.m(int):::EXIT1");
+  }
+
+  /**
+   * Tests that SplitDtrace recognizes a version 2 file whose "decl-version" record is not the first
+   * of the header records on consecutive lines, as in the output of Kvasir.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testConsecutiveHeaderRecords() throws IOException {
+    String header =
+        String.join(
+            System.lineSeparator(),
+            "input-language C/C++",
+            "decl-version 2.0",
+            "var-comparability none",
+            "");
+    checkSecondHalf(header, "..m():::ENTER", "..m():::EXIT0");
   }
 
   /**
@@ -72,25 +122,22 @@ public class SplitDtraceTest {
    */
   @Test
   public void testPptNameStartingWithKeyword() throws IOException {
-    checkSecondHalf("decl-version.C.m(int):::ENTER", "var-comparability.C.m(int):::EXIT1");
-    checkSecondHalf("input-language.C.m(int):::ENTER", "input-language.C.m(int):::EXIT1");
+    checkSecondHalf(HEADER, "decl-version.C.m(int):::ENTER", "var-comparability.C.m(int):::EXIT1");
+    checkSecondHalf(HEADER, "input-language.C.m(int):::ENTER", "input-language.C.m(int):::EXIT1");
   }
 
   /**
    * Checks that SplitDtrace writes the header records and declarations of a version 2 file with an
    * entry and an exit program point, and the second half of its samples.
    *
+   * @param header the header records of the file, followed by a blank line
    * @param enter the name of the entry program point
    * @param exit the name of the exit program point
    * @throws IOException if there is trouble reading or writing a file
    */
-  private static void checkSecondHalf(String enter, String exit) throws IOException {
+  private static void checkSecondHalf(String header, String enter, String exit) throws IOException {
     StringJoiner dtrace = new StringJoiner(System.lineSeparator());
-    dtrace.add("// A comment");
-    dtrace.add("");
-    dtrace.add("decl-version 2.0");
-    dtrace.add("var-comparability implicit");
-    dtrace.add("");
+    dtrace.add(header);
     dtrace.add(declaration(enter, "enter"));
     dtrace.add(declaration(exit, "subexit"));
     for (int nonce = 1; nonce <= 4; nonce++) {
@@ -98,26 +145,14 @@ public class SplitDtraceTest {
       dtrace.add(sample(exit, nonce));
     }
 
-    Path dir = Files.createTempDirectory("SplitDtraceTest");
-    try {
-      Path input = dir.resolve("test.dtrace");
-      Path output = dir.resolve("test.second-half.dtrace");
-      Files.write(input, dtrace.toString().getBytes(UTF_8));
-      SplitDtrace.mainHelper(new String[] {input.toString()});
-
-      String result = new String(Files.readAllBytes(output), UTF_8);
-      String nl = System.lineSeparator();
-      assertTrue(result, result.contains("decl-version 2.0" + nl));
-      assertTrue(result, result.contains("ppt " + enter + nl));
-      assertTrue(result, result.contains("ppt " + exit + nl));
-      assertFalse(result, result.contains("this_invocation_nonce" + nl + "2" + nl));
-      assertTrue(result, result.contains("this_invocation_nonce" + nl + "3" + nl));
-      assertTrue(result, result.contains("this_invocation_nonce" + nl + "4" + nl));
-      Files.delete(input);
-      Files.delete(output);
-    } finally {
-      Files.delete(dir);
-    }
+    String result = secondHalf(dtrace.toString());
+    String nl = System.lineSeparator();
+    assertTrue(result, result.contains("decl-version 2.0" + nl));
+    assertTrue(result, result.contains("ppt " + enter + nl));
+    assertTrue(result, result.contains("ppt " + exit + nl));
+    assertFalse(result, result.contains("this_invocation_nonce" + nl + "2" + nl));
+    assertTrue(result, result.contains("this_invocation_nonce" + nl + "3" + nl));
+    assertTrue(result, result.contains("this_invocation_nonce" + nl + "4" + nl));
   }
 
   /**
@@ -150,25 +185,13 @@ public class SplitDtraceTest {
       dtrace.add(sample(exit, nonce));
     }
 
-    Path dir = Files.createTempDirectory("SplitDtraceTest");
-    try {
-      Path input = dir.resolve("test.dtrace");
-      Path output = dir.resolve("test.second-half.dtrace");
-      Files.write(input, dtrace.toString().getBytes(UTF_8));
-      SplitDtrace.mainHelper(new String[] {input.toString()});
-
-      String result = new String(Files.readAllBytes(output), UTF_8);
-      String nl = System.lineSeparator();
-      assertTrue(result, result.contains("DECLARE" + nl + enter + nl));
-      assertTrue(result, result.contains("DECLARE" + nl + exit + nl));
-      assertFalse(result, result.contains("this_invocation_nonce" + nl + "2" + nl));
-      assertTrue(result, result.contains("this_invocation_nonce" + nl + "3" + nl));
-      assertTrue(result, result.contains("this_invocation_nonce" + nl + "4" + nl));
-      Files.delete(input);
-      Files.delete(output);
-    } finally {
-      Files.delete(dir);
-    }
+    String result = secondHalf(dtrace.toString());
+    String nl = System.lineSeparator();
+    assertTrue(result, result.contains("DECLARE" + nl + enter + nl));
+    assertTrue(result, result.contains("DECLARE" + nl + exit + nl));
+    assertFalse(result, result.contains("this_invocation_nonce" + nl + "2" + nl));
+    assertTrue(result, result.contains("this_invocation_nonce" + nl + "3" + nl));
+    assertTrue(result, result.contains("this_invocation_nonce" + nl + "4" + nl));
   }
 
   /**
@@ -197,23 +220,11 @@ public class SplitDtraceTest {
       dtrace.add(sample(exit, nonce));
     }
 
-    Path dir = Files.createTempDirectory("SplitDtraceTest");
-    try {
-      Path input = dir.resolve("test.dtrace");
-      Path output = dir.resolve("test.second-half.dtrace");
-      Files.write(input, dtrace.toString().getBytes(UTF_8));
-      SplitDtrace.mainHelper(new String[] {input.toString()});
-
-      String result = new String(Files.readAllBytes(output), UTF_8);
-      String nl = System.lineSeparator();
-      assertTrue(result, result.contains("// A comment" + nl));
-      assertFalse(result, result.contains("this_invocation_nonce" + nl + "2" + nl));
-      assertTrue(result, result.contains("this_invocation_nonce" + nl + "3" + nl));
-      assertTrue(result, result.contains("this_invocation_nonce" + nl + "4" + nl));
-      Files.delete(input);
-      Files.delete(output);
-    } finally {
-      Files.delete(dir);
-    }
+    String result = secondHalf(dtrace.toString());
+    String nl = System.lineSeparator();
+    assertTrue(result, result.contains("// A comment" + nl));
+    assertFalse(result, result.contains("this_invocation_nonce" + nl + "2" + nl));
+    assertTrue(result, result.contains("this_invocation_nonce" + nl + "3" + nl));
+    assertTrue(result, result.contains("this_invocation_nonce" + nl + "4" + nl));
   }
 }

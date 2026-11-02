@@ -80,7 +80,7 @@ public final class SplitDtrace {
           break;
         }
         if (isHeader(rec)) {
-          version2 = isVersion2(rec, version2);
+          version2 = FileIO.is_version2_after(rec.get(0), version2);
         } else if (isDeclare(rec, version2)) {
           declNum++;
         } else {
@@ -118,7 +118,7 @@ public final class SplitDtrace {
           break;
         }
         if (isHeader(rec)) {
-          version2 = isVersion2(rec, version2);
+          version2 = FileIO.is_version2_after(rec.get(0), version2);
           writeRec(writer, rec);
           continue;
         }
@@ -204,23 +204,6 @@ public final class SplitDtrace {
   }
 
   /**
-   * Returns whether the file is in the version 2 format, after the given header record.
-   *
-   * @param res the lines of a header record
-   * @param version2 true if the file is in the version 2 format, according to the records before
-   *     this one
-   * @return true if the file is in the version 2 format, according to the records up to this one
-   */
-  @Pure
-  static boolean isVersion2(List<String> res, boolean version2) {
-    String[] words = res.get(0).trim().split("\\s+");
-    if (words.length == 2 && words[0].equals("decl-version")) {
-      return words[1].equals("2.0");
-    }
-    return version2;
-  }
-
-  /**
    * Returns true if the given record is a file header record, such as a comment or "decl-version",
    * rather than a declaration or a sample.
    *
@@ -281,6 +264,13 @@ public final class SplitDtrace {
       while (FileIO.nextLineIsComment(reader)) {
         res.add(reader.readLine().trim());
       }
+      return;
+    }
+    if (line != null && FileIO.is_one_line_header_record(line)) {
+      // As in FileIO, a record such as "decl-version 2.0" ends at the end of its line.  Otherwise,
+      // a "decl-version" record that follows another header record on the next line, as in the
+      // output of Kvasir, would not be the first line of a record, and so would be ignored.
+      res.add(line.trim());
       return;
     }
     while (line != null) {
