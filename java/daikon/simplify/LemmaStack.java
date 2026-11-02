@@ -554,18 +554,14 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
   /**
    * Search for the given lemma in the stack, and then remove it from both our stack and Simplify's.
-   * This is rather inefficient.
+   * If the lemma appears on the stack more than once, this removes its topmost occurrence. The cost
+   * is proportional to the number of lemmas above the removed one.
+   *
+   * @param bad the lemma to remove; it must be on the stack
    */
   public void removeLemma(Lemma bad) throws SimplifyError {
-    int spliceOut = -1;
-    for (int i = 0; i < lemmas.size(); i++) {
-      Lemma lem = lemmas.elementAt(i);
-      @SuppressWarnings("interning") // value in list
-      boolean isBad = (lem == bad);
-      if (isBad) {
-        spliceOut = i;
-      }
-    }
+    // Lemma does not override equals(), so lastIndexOf() compares by identity.
+    int spliceOut = lemmas.lastIndexOf(bad);
     assert spliceOut != -1;
     // Pop the bad lemma and the lemmas above it, then push back the lemmas that were above it.
     int popCount = lemmas.size() - spliceOut;
