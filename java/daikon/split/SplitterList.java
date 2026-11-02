@@ -2,6 +2,7 @@ package daikon.split;
 
 import daikon.FileIO;
 import daikon.Global;
+import daikon.PptName;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -203,12 +204,9 @@ public abstract class SplitterList {
       return true;
     }
     if (spinfoPptName.endsWith(FileIO.exit_tag)) {
-      // Remove the exit number, if any.
-      int end = pptName.length();
-      while (end > 0 && pptName.charAt(end - 1) >= '0' && pptName.charAt(end - 1) <= '9') {
-        end--;
-      }
-      return end < pptName.length() && endsWithQualified(pptName.substring(0, end), spinfoPptName);
+      PptName ppt = new PptName(pptName);
+      // A non-empty exit line means that the program point is a numbered exit point such as EXIT12.
+      return !ppt.exitLine().isEmpty() && endsWithQualified(ppt.makeExit().name(), spinfoPptName);
     }
     return false;
   }
