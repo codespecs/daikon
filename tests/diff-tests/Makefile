@@ -18,16 +18,19 @@
 
 # 6. Check the directory and remaining files into the repository.
 
-# XXX HACK:  must remove "grep -v StackAr"
-SUBDIRS = $(shell find * -maxdepth 0 -type d | grep -v StackAr)
+# A test directory is one that contains a .decls file.  A test directory without a
+# Makefile makes the run fail rather than being skipped.
+SUBDIRS = $(patsubst %/,%,$(sort $(dir $(wildcard */*.decls))))
 
 default:
 
+# A goal mismatch does not make this target fail; it leaves a non-empty .diff file,
+# which `make -C .. results` reports and treats as a failure.
 # The regression tests seem to break if the "@" is omitted from this line.
 %:
 	@for dir in ${SUBDIRS}; \
 	  do echo "Entering diff-tests subdirectory: $$dir"; \
-	     ${MAKE} -C $$dir $*; \
+	     ${MAKE} -C $$dir $* || exit 1; \
 	done
 
 showvars:
