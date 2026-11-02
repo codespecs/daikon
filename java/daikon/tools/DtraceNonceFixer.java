@@ -369,7 +369,7 @@ public class DtraceNonceFixer {
       }
       while (true) {
         Call call = stack.pop();
-        int count = castNonNull(counts.get(call.method)); // every call in the stack is counted
+        Integer count = castNonNull(counts.get(call.method)); // every call in the stack is counted
         if (count == 1) {
           counts.remove(call.method);
         } else {
