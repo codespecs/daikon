@@ -37,7 +37,7 @@ public class PptDeclarationTest {
   }
 
   /**
-   * Tests that a ppt name with unescaped blanks, as DynComp writes it, is read in full.
+   * Tests that a ppt name with unescaped blanks is read in full.
    *
    * @throws IOException if there is trouble writing or reading the decls file
    */

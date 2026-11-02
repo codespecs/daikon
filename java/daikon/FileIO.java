@@ -370,9 +370,9 @@ public final class FileIO {
     if (record_name != "ppt") { // interned
       decl_error(state, "found '%s' where 'ppt' expected", record_name);
     }
-    // The ppt name is the rest of the line.  A ppt name can contain blanks, which some front ends,
-    // such as DynComp, do not escape.  Chicory's DeclReader and the reading of a sample's ppt name
-    // also take the whole remainder of the line.
+    // The ppt name is the rest of the line.  A ppt name can contain blanks, which a front end might
+    // not escape.  Chicory's DeclReader and the reading of a sample's ppt name also take the whole
+    // remainder of the line.
     if (!scanner.hasNext()) {
       decl_error(state, "end-of-line found where ppt name expected");
     }
