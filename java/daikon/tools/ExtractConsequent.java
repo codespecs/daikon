@@ -385,34 +385,67 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the invariant formatted as a splitting condition: in Java format, but with the return
-   * value written as "return", which is how a .spinfo file refers to it.
+   * Returns the invariant formatted as a splitting condition in the given format. In Java format,
+   * the return value and pre-state values are written as a .spinfo file refers to them; see {@link
+   * #replaceJmlNames}. A OneOfScalar invariant over a boolean variable whose file representation
+   * type is int, such as "b == 1", is written as "b == true" (see {@link #intBooleanValue}).
    *
    * @param inv an invariant
+   * @param format the format in which to write the invariant
    * @return the invariant formatted as a splitting condition
    */
-  static String javaFormat(Invariant inv) {
-    return replaceResult(inv.format_using(OutputFormat.JAVA));
+  static String formatCondition(Invariant inv, OutputFormat format) {
+    Boolean value = (inv instanceof OneOfScalar) ? intBooleanValue((OneOfScalar) inv) : null;
+    String result;
+    if (value == null) {
+      result = inv.format_using(format);
+    } else {
+      VarInfo var = ((OneOfScalar) inv).var();
+      if (format == OutputFormat.SIMPLIFY) {
+        result = "(EQ " + var.simplifyFixedupName() + " " + (value ? "|@true|" : "|@false|") + ")";
+      } else {
+        result = var.name_using(format) + " == " + value;
+      }
+    }
+    if (format == OutputFormat.JAVA) {
+      result = replaceJmlNames(result);
+    }
+    return result;
   }
 
   /**
-   * Returns the given Java expression, with each "\result" written as "return". A "\result" within
-   * a string or character literal is unchanged.
+   * Returns the given Java expression, with each "\result" written as "return" and each "\old(x)"
+   * written as "orig(x)", which is how a .spinfo file refers to the return value and to pre-state
+   * values. Text within a string or character literal is unchanged.
    *
    * @param expr a Java expression
-   * @return the expression, with the return value written as "return"
+   * @return the expression, with the return value and pre-state values written as a .spinfo file
+   *     refers to them
    */
-  static String replaceResult(String expr) {
+  static String replaceJmlNames(String expr) {
     StringBuilder result = new StringBuilder();
     Matcher m = literal_pattern.matcher(expr);
     int start = 0;
     while (m.find()) {
-      result.append(result_pattern.matcher(expr.substring(start, m.start())).replaceAll("return"));
+      result.append(replaceJmlNamesOutsideLiterals(expr.substring(start, m.start())));
       result.append(m.group());
       start = m.end();
     }
-    result.append(result_pattern.matcher(expr.substring(start)).replaceAll("return"));
+    result.append(replaceJmlNamesOutsideLiterals(expr.substring(start)));
     return result.toString();
+  }
+
+  /**
+   * Returns the given text, which contains no string or character literal, with each "\result"
+   * written as "return" and each "\old(x)" written as "orig(x)".
+   *
+   * @param text a part of a Java expression that contains no literal
+   * @return the text, with the return value and pre-state values written as a .spinfo file refers
+   *     to them
+   */
+  private static String replaceJmlNamesOutsideLiterals(String text) {
+    text = result_pattern.matcher(text).replaceAll("return");
+    return old_pattern.matcher(text).replaceAll("orig(");
   }
 
   /**
@@ -440,10 +473,12 @@ public class ExtractConsequent {
   static boolean isLegalForBooleans(Invariant inv) {
     VarInfo[] vis = inv.ppt.var_infos;
     // OneOfScalar is the only scalar invariant that formats a boolean specially, as "b == true".
-    // It decides whether its variable is a boolean from the file representation type, which may
-    // differ from the declared type that a splitter uses.
+    // It decides whether its variable is a boolean from the file representation type, which can
+    // differ from the declared type that a splitter uses.  formatCondition writes "b == 1" as
+    // "b == true" when the declared type is boolean and the file representation type is int.
     if (inv instanceof OneOfScalar) {
-      return ((OneOfScalar) inv).is_boolean() == isBoolean(vis[0]);
+      OneOfScalar oneof = (OneOfScalar) inv;
+      return oneof.is_boolean() == isBoolean(vis[0]) || intBooleanValue(oneof) != null;
     }
     if (inv instanceof IntEqual || inv instanceof IntNonEqual) {
       // "b == i" is not legal Java if exactly one of the operands is a boolean.
@@ -466,6 +501,29 @@ public class ExtractConsequent {
    */
   private static boolean isBoolean(VarInfo vi) {
     return vi.type == ProglangType.BOOLEAN;
+  }
+
+  /**
+   * Returns the value of the variable of the given OneOfScalar invariant, if the variable is a
+   * boolean whose file representation type is int and the invariant is "b == 0" or "b == 1".
+   * OneOfScalar formats such an invariant as "b == 0" or "b == 1", which is not legal Java.
+   *
+   * @param oneof a OneOfScalar invariant
+   * @return false if the invariant is "b == 0", true if it is "b == 1", or null if the variable is
+   *     not a boolean whose file representation type is int or the invariant is neither
+   */
+  static @Nullable Boolean intBooleanValue(OneOfScalar oneof) {
+    if (oneof.is_boolean() || !isBoolean(oneof.var()) || oneof.num_elts() != 1) {
+      return null;
+    }
+    long value = ((Long) oneof.elt()).longValue();
+    if (value == 0) {
+      return false;
+    } else if (value == 1) {
+      return true;
+    } else {
+      return null;
+    }
   }
 
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
@@ -582,8 +640,8 @@ public class ExtractConsequent {
           continue;
         }
 
-        String inv_string = javaFormat(inv);
-        if (orig_pattern.matcher(inv_string).find()
+        String inv_string = formatCondition(inv, OutputFormat.JAVA);
+        if (post_pattern.matcher(inv_string).find()
             || dot_class_pattern.matcher(inv_string).find()) {
           continue;
         }
@@ -697,11 +755,17 @@ public class ExtractConsequent {
     return m.find() && !m.find();
   }
 
-  /** Matches a pre-state or post-state value, which a splitter cannot use. */
-  static Pattern orig_pattern;
+  /**
+   * Matches a post-state value in Java format, such as "\post(x)", which a splitter cannot use. The
+   * Java format uses "\post" only for a variable declared in the old declaration format.
+   */
+  static Pattern post_pattern;
 
   /** Matches the return value in Java format. */
   static Pattern result_pattern;
+
+  /** Matches the start of a pre-state value in Java format, such as "\old(" in "\old(x)". */
+  static Pattern old_pattern;
 
   /** Matches the pre-state value of the "cluster" variable, in Daikon format. */
   static Pattern orig_cluster_pattern;
@@ -727,8 +791,9 @@ public class ExtractConsequent {
 
   static {
     try {
-      orig_pattern = Pattern.compile("\\borig\\s*\\(|\\\\(old|new)\\s*\\(");
+      post_pattern = Pattern.compile("\\\\post\\s*\\(");
       result_pattern = Pattern.compile("\\\\result\\b");
+      old_pattern = Pattern.compile("\\\\old\\s*\\(");
       orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
       low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?.*:");
       literal_pattern = Pattern.compile("\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'");
