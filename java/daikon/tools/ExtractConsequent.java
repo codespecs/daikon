@@ -312,7 +312,7 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the given expression, parenthesized if it may contain an operator whose precedence is
+   * Returns the given expression, parenthesized if it might contain an operator whose precedence is
    * lower than that of conjunction, such as "||", " or ", "?:", or the ESC/JML "==&gt;", "&lt;==",
    * "&lt;==&gt;", and "&lt;=!=&gt;". Such an expression must be parenthesized when it is a
    * conjunct. Operators within string and character literals are ignored.
@@ -327,7 +327,7 @@ public class ExtractConsequent {
 
   /**
    * Returns true if the invariant is legal Java when its variables are booleans. Daikon represents
-   * a boolean as an int, so it may infer numeric invariants, such as "b != 0" or "b1 < b2", that
+   * a boolean as an int, so it might infer numeric invariants, such as "b != 0" or "b1 < b2", that
    * are not legal Java over booleans.
    *
    * @param inv an invariant
