@@ -511,6 +511,64 @@ public class DtraceNonceFixerTest {
   }
 
   /**
+   * Tests that, for samples without nonces, an EXIT or THROWS sample of a recursive method gets the
+   * nonce of the most recent unmatched ENTER sample, and that a THROWS sample also discards the more
+   * recent calls that have no EXIT sample.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testMatchRecursionAndThrows() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "",
+            "C.f():::ENTER",
+            "",
+            // A call that has no EXIT sample, because it exits exceptionally.
+            "C.g():::ENTER",
+            "",
+            "C.f():::THROWS",
+            "",
+            "C.f():::EXIT3",
+            "",
+            // The call to C.g() was discarded, so this sample gets a new nonce.
+            "C.g():::EXIT7",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "2",
+            "",
+            "C.g():::ENTER",
+            "this_invocation_nonce",
+            "3",
+            "",
+            "C.f():::THROWS",
+            "this_invocation_nonce",
+            "2",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.g():::EXIT7",
+            "this_invocation_nonce",
+            "4",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
    * Tests that an EXIT sample without a nonce does not get the nonce of an ENTER sample that has a
    * nonce, even one that has no EXIT sample, because Daikon does not pair those samples.
    *
