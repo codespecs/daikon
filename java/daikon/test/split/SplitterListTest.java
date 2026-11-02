@@ -58,7 +58,7 @@ public class SplitterListTest {
     assertFalse(SplitterList.matches(enter, "pkg.Foo.bar(int):::EXIT"));
     assertFalse(SplitterList.matches(enter, "pkg.BigFoo.bar(int):::ENTER"));
     assertFalse(SplitterList.matches(enter, "pkg.Foo.bar(int):::ENTER2"));
-    // A complete name may omit a qualifier, such as a package or an enclosing class.
+    // A complete name can omit a qualifier, such as a package or an enclosing class.
     assertTrue(SplitterList.matches(enter, "a.pkg.Foo.bar(int):::ENTER"));
     assertTrue(SplitterList.matches(enter, "pkg.Outer$pkg.Foo.bar(int):::ENTER"));
     assertTrue(SplitterList.matches("Foo.bar(int):::ENTER", enter));

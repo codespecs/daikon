@@ -2416,10 +2416,10 @@ which was encountered first.  Instead writing @samp{PPT_NAME
 List.add(} will match only the @code{add} method.
 
 If @var{pptname} contains @samp{:::}, then it is a complete program
-point name, such as @samp{pkg.List.add(java.lang.Object):::EXIT12}, and
-it matches only the program point of that name.  The name may omit a
-qualifier such as the package, so
-@samp{List.add(java.lang.Object):::EXIT12} matches
+point name, such as @samp{pkg.List.add(java.lang.Object):::EXIT12}.  It
+matches the program point of that name, and every program point whose
+name is that name preceded by a qualifier such as a package.  For
+example, @samp{List.add(java.lang.Object):::EXIT12} matches
 @samp{pkg.List.add(java.lang.Object):::EXIT12} but not
 @samp{pkg.MyList.add(java.lang.Object):::EXIT12}.  As a special case, a
 name that ends with @samp{:::EXIT} also matches the method's numbered

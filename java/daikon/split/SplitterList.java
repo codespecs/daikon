@@ -226,7 +226,7 @@ public abstract class SplitterList {
    * qualifier separator in {@link #QUALIFIER_SEPARATORS}.
    *
    * @param pptName the name of a program point
-   * @param suffix a complete program point name, which may lack a qualifier such as a package
+   * @param suffix a complete program point name, which can lack a qualifier such as a package
    * @return true if {@code pptName} is {@code suffix}, possibly preceded by a qualifier
    */
   private static boolean endsWithQualified(String pptName, String suffix) {
