@@ -2406,9 +2406,11 @@ PPT_NAME @var{pptname}
 
 @noindent
 @var{pptname} can be any string that matches a part of the desired
-program point name as printed in the @file{.decls} file.  In finding matching
-program points, Daikon uses the first program point that matches
-@var{pptname}.  Caution is necessary when dealing with method names
+program point name as printed in the @file{.decls} file.  Daikon
+compiles the conditions against the first program point that matches
+@var{pptname}, except that it skips procedure entry points:  for a
+procedure, it uses the first exit point, which has more variables in
+scope, such as the return value.  Caution is necessary when dealing with method names
 that are prefixes of other method names.  For instance, if the class
 @code{List} has methods @code{add} and @code{addAll}, specifying
 @samp{PPT_NAME List.add} might select either method, depending on
