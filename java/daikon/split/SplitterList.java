@@ -201,9 +201,16 @@ public abstract class SplitterList {
   }
 
   /**
+   * The characters that can separate a qualifier from the rest of a program point name: "." (as in
+   * "pkg.Foo"), "$" (as in the Java nested class "Outer$Inner"), ":" (as in the Perl package
+   * "Math::BigFloat"), and "/" (as in a directory path).
+   */
+  private static final String QUALIFIER_SEPARATORS = ".$:/";
+
+  /**
    * Returns true if the program point name is the given suffix, possibly preceded by a qualifier:
-   * that is, if the name ends with the suffix, and the character before the suffix, if any, is not
-   * a letter, digit, or underscore.
+   * that is, if the name ends with the suffix, and the character before the suffix, if any, is a
+   * qualifier separator in {@link #QUALIFIER_SEPARATORS}.
    *
    * @param pptName the name of a program point
    * @param suffix a complete program point name, which may lack a qualifier such as a package
@@ -218,7 +225,7 @@ public abstract class SplitterList {
       return true;
     }
     char before = pptName.charAt(start - 1);
-    return !(Character.isLetterOrDigit(before) || before == '_');
+    return QUALIFIER_SEPARATORS.indexOf(before) != -1;
   }
 
   /**

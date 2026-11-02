@@ -63,9 +63,12 @@ public class SplitterListTest {
     assertTrue(SplitterList.matches(enter, "pkg.Outer$pkg.Foo.bar(int):::ENTER"));
     assertTrue(SplitterList.matches("Foo.bar(int):::ENTER", enter));
     assertFalse(SplitterList.matches("Foo.bar(int):::ENTER", "pkg.My_Foo.bar(int):::ENTER"));
+    assertFalse(SplitterList.matches("Foo.bar(int):::ENTER", "pkg.My-Foo.bar(int):::ENTER"));
     assertFalse(SplitterList.matches("Foo.bar(int):::ENTER", "pkg.Foo.bar(int):::EXIT"));
     assertTrue(SplitterList.matches("Hanoi:::OBJECT", "six170.Hanoi:::OBJECT"));
     assertFalse(SplitterList.matches("Hanoi:::OBJECT", "six170.MyHanoi:::OBJECT"));
+    assertFalse(SplitterList.matches("Foo:::OBJECT", "my-Foo:::OBJECT"));
+    assertTrue(SplitterList.matches("file_c.f():::ENTER", "dir/file_c.f():::ENTER"));
     assertTrue(
         SplitterList.matches("BigFloat.bdiv_s():::EXIT36", "Math::BigFloat.bdiv_s():::EXIT36"));
 
