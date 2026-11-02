@@ -71,6 +71,15 @@ public class SplitterListTest {
     assertTrue(SplitterList.matches("file_c.f():::ENTER", "dir/file_c.f():::ENTER"));
     assertTrue(
         SplitterList.matches("BigFloat.bdiv_s():::EXIT36", "Math::BigFloat.bdiv_s():::EXIT36"));
+    // A complete name cannot omit the class name or part of the method signature.
+    assertFalse(SplitterList.matches("bar(int):::ENTER", enter));
+    assertFalse(SplitterList.matches("int):::ENTER", enter));
+    assertFalse(SplitterList.matches("Object):::ENTER", "pkg.Foo.bar(java.lang.Object):::ENTER"));
+    assertFalse(
+        SplitterList.matches("lang.Object):::ENTER", "pkg.Foo.bar(java.lang.Object):::ENTER"));
+    assertTrue(SplitterList.matches("bar(int):::ENTER", "bar(int):::ENTER"));
+    assertTrue(SplitterList.matches("..main():::ENTER", "..main():::ENTER"));
+    assertFalse(SplitterList.matches("main():::ENTER", "..main():::ENTER"));
 
     String exit1 = "pkg.Foo.bar(int):::EXIT1";
     assertTrue(SplitterList.matches(exit1, exit1));
