@@ -9,6 +9,7 @@ import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.PptMap;
+import daikon.PptName;
 import daikon.PptTopLevel;
 import daikon.ProglangType;
 import daikon.VarInfo;
@@ -18,7 +19,6 @@ import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntNonEqual;
 import daikon.inv.unary.scalar.OneOfScalar;
-import daikon.split.SplitterList;
 import gnu.getopt.*;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +40,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.StringsPlume;
 
@@ -48,9 +53,11 @@ import org.plumelib.util.StringsPlume;
  * generally true for all executions of the program point to which the Implication belongs. These
  * resulting implications are written to standard output in the format of a splitter info file.
  *
- * <p>Each PPT_NAME in the output is a complete program point name. To make Daikon use each
- * condition only at the program points that its PPT_NAME designates, disable indiscriminate
- * splitting via {@code --config_option daikon.split.SplitterList.all_splitters=false}.
+ * <p>Each PPT_NAME in the output is a complete program point name. It designates the program point
+ * of that name, and also every program point whose name is that name preceded by a qualifier (see
+ * {@link daikon.split.SplitterList#matches}). To make Daikon use each condition only at the program
+ * points that its PPT_NAME designates, disable indiscriminate splitting via {@code --config_option
+ * daikon.split.SplitterList.all_splitters=false}.
  */
 public class ExtractConsequent {
 
@@ -77,47 +84,51 @@ public class ExtractConsequent {
     // placeholder and remove the dispreferred form.
     final @Nullable String fakeFor;
 
-    // The invariant in each output format.  They are computed once, because each condition may be
-    // written for several program points.
+    // The invariant in Java format is the key under which a condition that is not fake is stored.
 
-    /** The invariant in Java format, as returned by {@link #formatCondition}. */
-    final String javaStr;
+    /** The invariant in Daikon format, or null if {@link #format} has not been called. */
+    @MonotonicNonNull String daikonStr;
 
-    /** The invariant in Daikon format. */
-    final String daikonStr;
+    /** The invariant in ESC format, or null if {@link #format} has not been called. */
+    @MonotonicNonNull String escStr;
 
-    /** The invariant in ESC format. */
-    final String escStr;
-
-    /** The invariant in Simplify format. */
-    final String simplifyStr;
+    /** The invariant in Simplify format, or null if {@link #format} has not been called. */
+    @MonotonicNonNull String simplifyStr;
 
     /**
      * Creates a HashedConsequent.
      *
      * @param inv the invariant
-     * @param javaStr the invariant in Java format, as returned by {@link #formatCondition}
      * @param fakeFor the dispreferred form of the invariant, or null
      */
-    HashedConsequent(Invariant inv, String javaStr, @Nullable String fakeFor) {
+    HashedConsequent(Invariant inv, @Nullable String fakeFor) {
       this.inv = inv;
       this.fakeFor = fakeFor;
-      this.javaStr = javaStr;
-      this.daikonStr = formatCondition(inv, OutputFormat.DAIKON);
-      this.escStr = formatCondition(inv, OutputFormat.ESCJAVA);
-      this.simplifyStr = formatCondition(inv, OutputFormat.SIMPLIFY);
+    }
+
+    /**
+     * Sets {@link #daikonStr}, {@link #escStr}, and {@link #simplifyStr}, if they are not set. Only
+     * a condition that is written is formatted, and only once, though it can be written for several
+     * program points.
+     */
+    @EnsuresNonNull({"daikonStr", "escStr", "simplifyStr"})
+    void format() {
+      if (daikonStr == null || escStr == null || simplifyStr == null) {
+        daikonStr = formatCondition(inv, OutputFormat.DAIKON);
+        escStr = formatCondition(inv, OutputFormat.ESCJAVA);
+        simplifyStr = formatCondition(inv, OutputFormat.SIMPLIFY);
+      }
     }
   }
 
   /**
-   * Maps a program point name to a map whose keys are cluster keys (see {@link #clusterKey}) and
-   * whose values are maps whose keys are Strings (normalized Java-format invariants) and whose
-   * values are HashedConsequent objects. Each program point has its own clustering, so conditions
-   * from different program points are never combined. The maps are sorted, for deterministic
-   * output.
+   * Maps a program point to a map whose keys are cluster keys (see {@link #clusterKey}) and whose
+   * values are maps whose keys are Strings (normalized Java-format invariants) and whose values are
+   * HashedConsequent objects. Each program point has its own clustering, so conditions from
+   * different program points are never combined. The maps are sorted, for deterministic output.
    */
-  private static Map<String, Map<String, Map<String, HashedConsequent>>> pptname_to_conditions =
-      new TreeMap<>();
+  private static Map<PptTopLevel, Map<String, Map<String, HashedConsequent>>> ppt_to_conditions =
+      new TreeMap<>(Comparator.comparing(PptTopLevel::name));
 
   /** The usage message for this program. */
   private static String usage =
@@ -196,40 +207,42 @@ public class ExtractConsequent {
   }
 
   public static void extract_consequent(PptMap ppts) {
-    pptname_to_conditions.clear();
+    ppt_to_conditions.clear();
     for (PptTopLevel ppt : ppts.asCollection()) {
       extract_consequent_maybe(ppt, ppts);
     }
+    Map<PptName, List<PptTopLevel>> numberedExits = numberedExitPoints(ppts);
 
     // Maps a program point name to the conditions to write for it.  Sorted, for deterministic
     // output.
     Map<String, TreeSet<String>> pptname_to_output = new TreeMap<>();
-    for (Map.Entry<String, Map<String, Map<String, HashedConsequent>>> entry :
-        pptname_to_conditions.entrySet()) {
-      String pptname = entry.getKey();
+    for (Map.Entry<PptTopLevel, Map<String, Map<String, HashedConsequent>>> entry :
+        ppt_to_conditions.entrySet()) {
+      PptTopLevel ppt = entry.getKey();
       Set<String> allConds = conditions(entry.getValue(), inv -> true);
       if (allConds.isEmpty()) {
         continue;
       }
-      pptname_to_output.computeIfAbsent(pptname, k -> new TreeSet<>()).addAll(allConds);
+      pptname_to_output.computeIfAbsent(ppt.name(), k -> new TreeSet<>()).addAll(allConds);
       // A condition at an entry point also splits the method's exit points, if the method does not
       // modify the condition's variables.  At an exit point, a variable's name denotes its
       // post-state value, and a splitter cannot use a pre-state value such as "orig(x)".
-      if (pptname.endsWith(FileIO.enter_tag)) {
-        String exitName =
-            pptname.substring(0, pptname.length() - FileIO.enter_tag.length()) + FileIO.exit_tag;
+      if (ppt.ppt_name.isEnterPoint()) {
+        PptName exitName = ppt.ppt_name.makeExit();
         // A condition at the combined exit point also splits the numbered exit points (see
         // SplitterList#matches), so it is not repeated for them.  A condition that is rejected at
-        // the combined exit point may still be acceptable at some numbered exit points.
+        // the combined exit point can still be acceptable at some numbered exit points.
         Set<String> combinedConds = new TreeSet<>();
         PptTopLevel combinedExit = ppts.get(exitName);
         if (combinedExit != null) {
           combinedConds = conditions(entry.getValue(), inv -> isUnmodified(inv, combinedExit));
           if (!combinedConds.isEmpty()) {
-            pptname_to_output.computeIfAbsent(exitName, k -> new TreeSet<>()).addAll(combinedConds);
+            pptname_to_output
+                .computeIfAbsent(combinedExit.name(), k -> new TreeSet<>())
+                .addAll(combinedConds);
           }
         }
-        for (PptTopLevel exitPpt : numberedExitPoints(exitName, ppts)) {
+        for (PptTopLevel exitPpt : numberedExits.getOrDefault(exitName, Collections.emptyList())) {
           Set<String> exitConds = conditions(entry.getValue(), inv -> isUnmodified(inv, exitPpt));
           exitConds.removeAll(combinedConds);
           if (!exitConds.isEmpty()) {
@@ -254,17 +267,18 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the numbered exit points of a method, such as "pkg.Foo.bar(int):::EXIT12".
+   * Returns the numbered exit points in the given program points, grouped by method.
    *
-   * @param exitName the name of the method's combined exit point
-   * @param ppts all the program points
-   * @return the numbered exit points of the method whose combined exit point is {@code exitName}
+   * @param ppts a set of program points
+   * @return a map from the name of each method's combined exit point, such as
+   *     "pkg.Foo.bar(int):::EXIT", to the method's numbered exit points in {@code ppts}, such as
+   *     "pkg.Foo.bar(int):::EXIT12"
    */
-  private static List<PptTopLevel> numberedExitPoints(String exitName, PptMap ppts) {
-    List<PptTopLevel> result = new ArrayList<>();
+  private static Map<PptName, List<PptTopLevel>> numberedExitPoints(PptMap ppts) {
+    Map<PptName, List<PptTopLevel>> result = new HashMap<>();
     for (PptTopLevel ppt : ppts.asCollection()) {
-      if (!ppt.name().equals(exitName) && SplitterList.matches(exitName, ppt.name())) {
-        result.add(ppt);
+      if (ppt.ppt_name.isNumberedExitPoint()) {
+        result.computeIfAbsent(ppt.ppt_name.makeExit(), k -> new ArrayList<>()).add(ppt);
       }
     }
     return result;
@@ -329,7 +343,7 @@ public class ExtractConsequent {
    * the conditions for each cluster.
    *
    * @param cluster_to_conditions maps a cluster key to the conditions for that cluster, as in a
-   *     value of {@link #pptname_to_conditions}
+   *     value of {@link #ppt_to_conditions}
    * @param filter which invariants to use as conditions
    * @return the splitting conditions, each formatted by {@link #combineDummy}
    */
@@ -351,6 +365,7 @@ public class ExtractConsequent {
         if (cond.fakeFor != null || !filter.test(cond.inv)) {
           continue;
         }
+        cond.format();
         allConds.add(
             combineDummy(condIndex, "<dummy> " + cond.daikonStr, cond.escStr, cond.simplifyStr));
         if (count > 0) {
@@ -360,7 +375,7 @@ public class ExtractConsequent {
           conjunctionSimplify.append(" ");
         }
         count++;
-        conjunctionJava.append(parenthesizeIfNeeded(cond.javaStr));
+        conjunctionJava.append(parenthesizeIfNeeded(condIndex));
         conjunctionDaikon.append(parenthesizeIfNeeded(cond.daikonStr));
         conjunctionESC.append(parenthesizeIfNeeded(cond.escStr));
         conjunctionSimplify.append(cond.simplifyStr);
@@ -552,8 +567,6 @@ public class ExtractConsequent {
       }
     }
     if (!invs.isEmpty()) {
-      // The full name, which SplitterList.matches matches only to this program point.
-      String pptname = ppt.name();
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
 
@@ -647,18 +660,18 @@ public class ExtractConsequent {
         }
         String cluster_key = clusterKey(cluster_inv);
         String fake_inv_string = simplify_inequalities(inv_string);
-        HashedConsequent real = new HashedConsequent(inv, inv_string, null);
+        HashedConsequent real = new HashedConsequent(inv, null);
         if (!fake_inv_string.equals(inv_string)) {
           // For instance, inv_string is "x != y", fake_inv_string is "x == y"
-          HashedConsequent fake = new HashedConsequent(inv, inv_string, inv_string);
-          boolean added = store_invariant(cluster_key, fake_inv_string, fake, pptname);
+          HashedConsequent fake = new HashedConsequent(inv, inv_string);
+          boolean added = store_invariant(cluster_key, fake_inv_string, fake, ppt);
           if (!added) {
             // We couldn't add "x == y", (when we're "x != y") because
             // it already exists; so don't add "x == y" either.
             continue;
           }
         }
-        store_invariant(cluster_key, inv_string, real, pptname);
+        store_invariant(cluster_key, inv_string, real, ppt);
       }
     }
   }
@@ -680,13 +693,12 @@ public class ExtractConsequent {
   // Store the invariant for later printing. Ignore duplicate
   // invariants at the same program point.
   private static boolean store_invariant(
-      String predicate, String index, HashedConsequent consequent, String pptname) {
-    if (!pptname_to_conditions.containsKey(pptname)) {
-      pptname_to_conditions.put(pptname, new TreeMap<>());
+      String predicate, String index, HashedConsequent consequent, PptTopLevel ppt) {
+    if (!ppt_to_conditions.containsKey(ppt)) {
+      ppt_to_conditions.put(ppt, new TreeMap<>());
     }
 
-    Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
-        pptname_to_conditions.get(pptname);
+    Map<String, Map<String, HashedConsequent>> cluster_to_conditions = ppt_to_conditions.get(ppt);
     if (!cluster_to_conditions.containsKey(predicate)) {
       cluster_to_conditions.put(predicate, new TreeMap<>());
     }
