@@ -2427,7 +2427,10 @@ exit points, such as @samp{:::EXIT12}.  By default, Daikon uses every
 loaded condition at
 every program point, regardless of @var{pptname}; to use each condition
 only at the program points that its @var{pptname} matches, disable
-indiscriminate splitting (@pxref{Indiscriminate splitting}).
+indiscriminate splitting (@pxref{Indiscriminate splitting}).  There is
+one exception:  if any @var{pptname} contains @samp{OBJECT}, then
+Daikon also uses, at every @samp{:::OBJECT} program point, each
+condition whose @var{pptname} is not a complete program point name.
 
 Each condition is a Java expression of boolean type.  All variables
 that appear in the condition must also appear in the declaration of
