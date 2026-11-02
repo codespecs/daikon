@@ -9,7 +9,6 @@ import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.PptMap;
-import daikon.PptName;
 import daikon.PptTopLevel;
 import daikon.ProglangType;
 import daikon.VarInfo;
@@ -27,22 +26,15 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.KeyFor;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.StringsPlume;
 
@@ -84,51 +76,21 @@ public class ExtractConsequent {
     // placeholder and remove the dispreferred form.
     final @Nullable String fakeFor;
 
-    // The invariant in Java format is the key under which a condition that is not fake is stored.
-
-    /** The invariant in Daikon format, or null if {@link #format} has not been called. */
-    @MonotonicNonNull String daikonStr;
-
-    /** The invariant in ESC format, or null if {@link #format} has not been called. */
-    @MonotonicNonNull String escStr;
-
-    /** The invariant in Simplify format, or null if {@link #format} has not been called. */
-    @MonotonicNonNull String simplifyStr;
-
-    /**
-     * Creates a HashedConsequent.
-     *
-     * @param inv the invariant
-     * @param fakeFor the dispreferred form of the invariant, or null
-     */
     HashedConsequent(Invariant inv, @Nullable String fakeFor) {
       this.inv = inv;
       this.fakeFor = fakeFor;
     }
-
-    /**
-     * Sets {@link #daikonStr}, {@link #escStr}, and {@link #simplifyStr}, if they are not set. Only
-     * a condition that is written is formatted, and only once, though it can be written for several
-     * program points.
-     */
-    @EnsuresNonNull({"daikonStr", "escStr", "simplifyStr"})
-    void format() {
-      if (daikonStr == null || escStr == null || simplifyStr == null) {
-        daikonStr = formatCondition(inv, OutputFormat.DAIKON);
-        escStr = formatCondition(inv, OutputFormat.ESCJAVA);
-        simplifyStr = formatCondition(inv, OutputFormat.SIMPLIFY);
-      }
-    }
   }
 
   /**
-   * Maps a program point to a map whose keys are cluster keys (see {@link #clusterKey}) and whose
-   * values are maps whose keys are Strings (normalized Java-format invariants) and whose values are
-   * HashedConsequent objects. Each program point has its own clustering, so conditions from
-   * different program points are never combined. The maps are sorted, for deterministic output.
+   * Maps a complete program point name to a map whose keys are cluster keys (see {@link
+   * #clusterKey}) and whose values are maps whose keys are Strings (normalized Java-format
+   * invariants) and whose values are HashedConsequent objects. Each program point has its own
+   * clustering, so conditions from different program points are never combined. The maps are
+   * sorted, for deterministic output.
    */
-  private static Map<PptTopLevel, Map<String, Map<String, HashedConsequent>>> ppt_to_conditions =
-      new TreeMap<>(Comparator.comparing(PptTopLevel::name));
+  private static Map<String, Map<String, Map<String, HashedConsequent>>> pptname_to_conditions =
+      new TreeMap<>();
 
   /** The usage message for this program. */
   private static String usage =
@@ -207,196 +169,84 @@ public class ExtractConsequent {
   }
 
   public static void extract_consequent(PptMap ppts) {
-    ppt_to_conditions.clear();
+    pptname_to_conditions.clear();
     for (PptTopLevel ppt : ppts.asCollection()) {
       extract_consequent_maybe(ppt, ppts);
-    }
-    Map<PptName, List<PptTopLevel>> numberedExits = numberedExitPoints(ppts);
-
-    // Maps a program point name to the conditions to write for it.  Sorted, for deterministic
-    // output.
-    Map<String, TreeSet<String>> pptname_to_output = new TreeMap<>();
-    for (Map.Entry<PptTopLevel, Map<String, Map<String, HashedConsequent>>> entry :
-        ppt_to_conditions.entrySet()) {
-      PptTopLevel ppt = entry.getKey();
-      Set<String> allConds = conditions(entry.getValue(), inv -> true);
-      if (allConds.isEmpty()) {
-        continue;
-      }
-      pptname_to_output.computeIfAbsent(ppt.name(), k -> new TreeSet<>()).addAll(allConds);
-      // A condition at an entry point also splits the method's exit points, if the method does not
-      // modify the condition's variables.  At an exit point, a variable's name denotes its
-      // post-state value, and a splitter cannot use a pre-state value such as "orig(x)".
-      if (ppt.ppt_name.isEnterPoint()) {
-        PptName exitName = ppt.ppt_name.makeExit();
-        // A condition at the combined exit point also splits the numbered exit points (see
-        // SplitterList#matches), so it is not repeated for them.  A condition that is rejected at
-        // the combined exit point can still be acceptable at some numbered exit points.
-        Set<String> combinedConds = new TreeSet<>();
-        PptTopLevel combinedExit = ppts.get(exitName);
-        if (combinedExit != null) {
-          combinedConds = conditions(entry.getValue(), inv -> isUnmodified(inv, combinedExit));
-          if (!combinedConds.isEmpty()) {
-            pptname_to_output
-                .computeIfAbsent(combinedExit.name(), k -> new TreeSet<>())
-                .addAll(combinedConds);
-          }
-        }
-        for (PptTopLevel exitPpt : numberedExits.getOrDefault(exitName, Collections.emptyList())) {
-          Set<String> exitConds = conditions(entry.getValue(), inv -> isUnmodified(inv, exitPpt));
-          exitConds.removeAll(combinedConds);
-          if (!exitConds.isEmpty()) {
-            pptname_to_output
-                .computeIfAbsent(exitPpt.name(), k -> new TreeSet<>())
-                .addAll(exitConds);
-          }
-        }
-      }
     }
 
     PrintWriter pw =
         new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out, UTF_8)), true);
-    for (Map.Entry<String, TreeSet<String>> entry : pptname_to_output.entrySet()) {
-      pw.println();
-      pw.println("PPT_NAME " + entry.getKey());
-      for (String s : entry.getValue()) {
-        pw.println(s);
-      }
-    }
-    pw.flush();
-  }
 
-  /**
-   * Returns the numbered exit points in the given program points, grouped by method.
-   *
-   * @param ppts a set of program points
-   * @return a map from the name of each method's combined exit point, such as
-   *     "pkg.Foo.bar(int):::EXIT", to the method's numbered exit points in {@code ppts}, such as
-   *     "pkg.Foo.bar(int):::EXIT12"
-   */
-  private static Map<PptName, List<PptTopLevel>> numberedExitPoints(PptMap ppts) {
-    Map<PptName, List<PptTopLevel>> result = new HashMap<>();
-    for (PptTopLevel ppt : ppts.asCollection()) {
-      if (ppt.ppt_name.isNumberedExitPoint()) {
-        result.computeIfAbsent(ppt.ppt_name.makeExit(), k -> new ArrayList<>()).add(ppt);
-      }
-    }
-    return result;
-  }
-
-  /**
-   * Returns true if the invariant, which is at an entry point, means the same thing at the given
-   * exit point: that is, if every variable of the invariant is unmodified at the exit point.
-   *
-   * @param inv an invariant at an entry point
-   * @param exitPpt an exit point of the same method
-   * @return true if no variable of the invariant is modified at {@code exitPpt}
-   */
-  static boolean isUnmodified(Invariant inv, PptTopLevel exitPpt) {
-    for (VarInfo vi : inv.ppt.var_infos) {
-      if (!isUnmodified(vi, exitPpt)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  /**
-   * Returns true if the variable, which is at an entry point, exists at the given exit point and
-   * has the same value there as on entry.
-   *
-   * @param vi a variable at an entry point
-   * @param exitPpt an exit point of the same method
-   * @return true if {@code vi} exists and is unmodified at {@code exitPpt}
-   */
-  private static boolean isUnmodified(VarInfo vi, PptTopLevel exitPpt) {
-    VarInfo post = exitPpt.find_var_by_name(vi.name());
-    if (post == null) {
-      return false;
-    }
-    if (vi.isDerived()) {
-      // A derived variable's value is a function of its bases.  Its pre-state version is named
-      // for its bases' pre-state versions, such as "size(orig(this.a[]))", so there is no
-      // variable named "orig(size(this.a[]))" to compare it to.
-      for (VarInfo base : vi.derived.getBases()) {
-        if (!isUnmodified(base, exitPpt)) {
-          return false;
-        }
-      }
-      return true;
-    }
-    VarInfo orig = exitPpt.find_var_by_name(vi.prestate_name());
-    if (orig == null) {
-      return false;
-    }
-    // A variable's equalitySet is null if Daikon did not compute equality sets at the ppt.
-    if (post.equalitySet == null || orig.equalitySet == null) {
-      return false;
-    }
-    // Equal variables are usually in the same equality set, but undoOpts replaces equality sets
-    // by equality invariants.
-    return post.isEqualTo(orig) || exitPpt.is_equal(post, orig);
-  }
-
-  /**
-   * Returns the splitting conditions for one program point: each condition, and the conjunction of
-   * the conditions for each cluster.
-   *
-   * @param cluster_to_conditions maps a cluster key to the conditions for that cluster, as in a
-   *     value of {@link #ppt_to_conditions}
-   * @param filter which invariants to use as conditions
-   * @return the splitting conditions, each formatted by {@link #combineDummy}
-   */
-  private static Set<String> conditions(
-      Map<String, Map<String, HashedConsequent>> cluster_to_conditions,
-      Predicate<Invariant> filter) {
-    // A TreeSet, for deterministic output.
+    // All conditions at a program point.  A TreeSet to enable
+    // deterministic output.
     TreeSet<String> allConds = new TreeSet<>();
-    for (Map<String, HashedConsequent> conditions : cluster_to_conditions.values()) {
-      StringBuilder conjunctionJava = new StringBuilder();
-      StringBuilder conjunctionDaikon = new StringBuilder();
-      StringBuilder conjunctionESC = new StringBuilder();
-      StringBuilder conjunctionSimplify = new StringBuilder("(AND ");
-      int count = 0;
-      for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
-          conditions.entrySet()) {
-        String condIndex = entry2.getKey();
-        HashedConsequent cond = entry2.getValue();
-        if (cond.fakeFor != null || !filter.test(cond.inv)) {
-          continue;
+    for (String pptname : pptname_to_conditions.keySet()) {
+      Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
+          pptname_to_conditions.get(pptname);
+      for (Map.Entry<@KeyFor("cluster_to_conditions") String, Map<String, HashedConsequent>> entry :
+          cluster_to_conditions.entrySet()) {
+        Map<String, HashedConsequent> conditions = entry.getValue();
+        StringBuilder conjunctionJava = new StringBuilder();
+        StringBuilder conjunctionDaikon = new StringBuilder();
+        StringBuilder conjunctionESC = new StringBuilder();
+        StringBuilder conjunctionSimplify = new StringBuilder("(AND ");
+        int count = 0;
+        for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
+            conditions.entrySet()) {
+          String condIndex = entry2.getKey();
+          HashedConsequent cond = entry2.getValue();
+          if (cond.fakeFor != null) {
+            continue;
+          }
+          // The key of a condition that is not fake is the condition in Java format.
+          String javaStr = condIndex;
+          String daikonStr = formatCondition(cond.inv, OutputFormat.DAIKON);
+          String escStr = formatCondition(cond.inv, OutputFormat.ESCJAVA);
+          String simplifyStr = formatCondition(cond.inv, OutputFormat.SIMPLIFY);
+          allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
+          //           allConds.add(condIndex);
+          if (count > 0) {
+            conjunctionJava.append(" && ");
+            conjunctionDaikon.append(" and ");
+            conjunctionESC.append(" && ");
+            conjunctionSimplify.append(" ");
+          }
+          count++;
+          conjunctionJava.append(parenthesizeIfNeeded(javaStr));
+          conjunctionDaikon.append(parenthesizeIfNeeded(daikonStr));
+          conjunctionESC.append(parenthesizeIfNeeded(escStr));
+          conjunctionSimplify.append(simplifyStr);
         }
-        cond.format();
-        allConds.add(
-            combineDummy(condIndex, "<dummy> " + cond.daikonStr, cond.escStr, cond.simplifyStr));
-        if (count > 0) {
-          conjunctionJava.append(" && ");
-          conjunctionDaikon.append(" and ");
-          conjunctionESC.append(" && ");
-          conjunctionSimplify.append(" ");
+        conjunctionSimplify.append(")");
+        String conj = conjunctionJava.toString();
+        // Avoid inserting self-contradictory conditions such as "x == 1 &&
+        // x == 2", or conjunctions of only a single condition.
+        if (count < 2
+            || contradict_inv_pattern.matcher(conj).find()
+            || useless_inv_pattern_1.matcher(conj).find()
+            || useless_inv_pattern_2.matcher(conj).find()) {
+          // System.out.println("Suppressing: " + conj);
+        } else {
+          allConds.add(
+              combineDummy(
+                  conjunctionJava.toString(),
+                  conjunctionDaikon.toString(),
+                  conjunctionESC.toString(),
+                  conjunctionSimplify.toString()));
         }
-        count++;
-        conjunctionJava.append(parenthesizeIfNeeded(condIndex));
-        conjunctionDaikon.append(parenthesizeIfNeeded(cond.daikonStr));
-        conjunctionESC.append(parenthesizeIfNeeded(cond.escStr));
-        conjunctionSimplify.append(cond.simplifyStr);
       }
-      conjunctionSimplify.append(")");
-      String conj = conjunctionJava.toString();
-      // Avoid inserting self-contradictory conditions such as "x == 1 &&
-      // x == 2", or conjunctions of only a single condition.
-      if (count >= 2
-          && !contradict_inv_pattern.matcher(conj).find()
-          && !useless_inv_pattern_1.matcher(conj).find()
-          && !useless_inv_pattern_2.matcher(conj).find()) {
-        allConds.add(
-            combineDummy(
-                conj,
-                conjunctionDaikon.toString(),
-                conjunctionESC.toString(),
-                conjunctionSimplify.toString()));
+
+      if (!allConds.isEmpty()) {
+        pw.println();
+        pw.println("PPT_NAME " + pptname);
+        for (String s : allConds) {
+          pw.println(s);
+        }
       }
+      allConds.clear();
     }
-    return allConds;
+
+    pw.flush();
   }
 
   /**
@@ -567,6 +417,7 @@ public class ExtractConsequent {
       }
     }
     if (!invs.isEmpty()) {
+      String pptname = ppt.name();
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
 
@@ -664,14 +515,14 @@ public class ExtractConsequent {
         if (!fake_inv_string.equals(inv_string)) {
           // For instance, inv_string is "x != y", fake_inv_string is "x == y"
           HashedConsequent fake = new HashedConsequent(inv, inv_string);
-          boolean added = store_invariant(cluster_key, fake_inv_string, fake, ppt);
+          boolean added = store_invariant(cluster_key, fake_inv_string, fake, pptname);
           if (!added) {
             // We couldn't add "x == y", (when we're "x != y") because
             // it already exists; so don't add "x == y" either.
             continue;
           }
         }
-        store_invariant(cluster_key, inv_string, real, ppt);
+        store_invariant(cluster_key, inv_string, real, pptname);
       }
     }
   }
@@ -693,12 +544,13 @@ public class ExtractConsequent {
   // Store the invariant for later printing. Ignore duplicate
   // invariants at the same program point.
   private static boolean store_invariant(
-      String predicate, String index, HashedConsequent consequent, PptTopLevel ppt) {
-    if (!ppt_to_conditions.containsKey(ppt)) {
-      ppt_to_conditions.put(ppt, new TreeMap<>());
+      String predicate, String index, HashedConsequent consequent, String pptname) {
+    if (!pptname_to_conditions.containsKey(pptname)) {
+      pptname_to_conditions.put(pptname, new TreeMap<>());
     }
 
-    Map<String, Map<String, HashedConsequent>> cluster_to_conditions = ppt_to_conditions.get(ppt);
+    Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
+        pptname_to_conditions.get(pptname);
     if (!cluster_to_conditions.containsKey(predicate)) {
       cluster_to_conditions.put(predicate, new TreeMap<>());
     }
