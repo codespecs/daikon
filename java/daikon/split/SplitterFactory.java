@@ -296,7 +296,8 @@ public class SplitterFactory {
   }
 
   /**
-   * Returns true if a Ppt's name matches the given name from a {@code .spinfo} file.
+   * Returns true if the given program point's name matches the given name from a {@code .spinfo}
+   * file.
    *
    * @param ppt_name a name on a PPT_NAME line of a {@code .spinfo} file
    * @param ppt a program point
@@ -304,28 +305,15 @@ public class SplitterFactory {
    */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
     if (SplitterList.isComplete(ppt_name)) {
-      return SplitterList.matches(ppt_name, ppt.name);
+      return SplitterList.matchesComplete(ppt_name, ppt.name);
     }
-    if (ppt.name.equals(ppt_name)) {
-      return true;
+    if (ppt_name.contains("OBJECT")) {
+      return SplitterList.matches(ppt_name, ppt.name);
     }
 
     // Look for corresponding EXIT ppt. This is because the exit ppt usually has
     // more relevant variables in scope (eg. return, hashcodes) than the enter.
-    String regex;
-    int index = ppt_name.indexOf("OBJECT");
-    if (index == -1) {
-      // Didn't find "OBJECT" suffix; add ".*EXIT".
-      regex = Pattern.quote(ppt_name) + ".*EXIT";
-    } else {
-      // Found "OBJECT" suffix.
-      if (ppt_name.length() > 6) {
-        regex = Pattern.quote(ppt_name.substring(0, index - 1)) + ":::OBJECT";
-      } else {
-        regex = Pattern.quote(ppt_name);
-      }
-    }
-    return matchPptRegex(regex, ppt);
+    return matchPptRegex(Pattern.quote(ppt_name) + ".*EXIT", ppt);
   }
 
   private static boolean matchPptRegex(@Regex String ppt_regex, PptTopLevel ppt) {

@@ -183,9 +183,22 @@ public abstract class SplitterList {
    * @return true if {@code spinfoPptName} designates the program point named {@code pptName}
    */
   public static boolean matches(String spinfoPptName, String pptName) {
-    if (!isComplete(spinfoPptName)) {
+    if (isComplete(spinfoPptName)) {
+      return matchesComplete(spinfoPptName, pptName);
+    } else {
       return pptName.contains(spinfoPptName);
     }
+  }
+
+  /**
+   * Returns true if the complete program point name on a PPT_NAME line of a {@code .spinfo} file
+   * designates the given program point; see {@link #matches}.
+   *
+   * @param spinfoPptName a complete program point name on a PPT_NAME line of a {@code .spinfo} file
+   * @param pptName the name of a program point
+   * @return true if {@code spinfoPptName} designates the program point named {@code pptName}
+   */
+  static boolean matchesComplete(String spinfoPptName, String pptName) {
     if (endsWithQualified(pptName, spinfoPptName)) {
       return true;
     }
@@ -264,7 +277,11 @@ public abstract class SplitterList {
     List<Splitter> splitters = new ArrayList<>();
     for (Map.Entry<String, Splitter[]> entry : ppt_splitters.entrySet()) {
       String name = entry.getKey();
-      if (matches(name, pptName) || (useAllIncomplete && !isComplete(name))) {
+      boolean use =
+          isComplete(name)
+              ? matchesComplete(name, pptName)
+              : (useAllIncomplete || pptName.contains(name));
+      if (use) {
         splitters.addAll(Arrays.asList(entry.getValue()));
       }
     }
