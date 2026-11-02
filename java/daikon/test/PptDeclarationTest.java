@@ -1,7 +1,7 @@
 package daikon.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import daikon.PptMap;
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class PptDeclarationTest {
   public void testUnescapedBlanks() throws IOException {
     PptMap ppts = readDecl("ppt Year.compute(int, int, int):::ENTER");
     assertEquals(1, ppts.size());
-    assertNotNull(ppts.get("Year.compute(int, int, int):::ENTER"));
+    assertTrue(ppts.containsName("Year.compute(int, int, int):::ENTER"));
   }
 
   /**
@@ -57,6 +57,6 @@ public class PptDeclarationTest {
   public void testEscapedBlanks() throws IOException {
     PptMap ppts = readDecl("ppt Year.compute(int,\\_int,\\_int):::ENTER  ");
     assertEquals(1, ppts.size());
-    assertNotNull(ppts.get("Year.compute(int, int, int):::ENTER"));
+    assertTrue(ppts.containsName("Year.compute(int, int, int):::ENTER"));
   }
 }
