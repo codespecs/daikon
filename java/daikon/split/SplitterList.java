@@ -277,11 +277,7 @@ public abstract class SplitterList {
     List<Splitter> splitters = new ArrayList<>();
     for (Map.Entry<String, Splitter[]> entry : ppt_splitters.entrySet()) {
       String name = entry.getKey();
-      boolean use =
-          isComplete(name)
-              ? matchesComplete(name, pptName)
-              : (useAllIncomplete || pptName.contains(name));
-      if (use) {
+      if (matches(name, pptName) || (useAllIncomplete && !isComplete(name))) {
         splitters.addAll(Arrays.asList(entry.getValue()));
       }
     }
