@@ -15,6 +15,9 @@ import daikon.VarInfo;
 import daikon.inv.Implication;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
+import daikon.inv.filter.InvariantFilter;
+import daikon.inv.filter.InvariantFilters;
+import daikon.inv.filter.UnjustifiedFilter;
 import gnu.getopt.*;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,6 +28,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -324,7 +328,7 @@ public class ExtractConsequent {
           cluster_inv = consequent;
         }
 
-        if (!inv.isWorthPrinting()) {
+        if (!isWorthWriting(inv, maybe)) {
           continue;
         }
 
@@ -401,6 +405,40 @@ public class ExtractConsequent {
       conditions.put(index, consequent);
       return true;
     }
+  }
+
+  /**
+   * Returns true if the given condition, which is the predicate or the consequent of the given
+   * implication, should be written as a splitting condition: that is, if the implication is
+   * justified and the condition passes the other filters that {@link Invariant#isWorthPrinting}
+   * applies.
+   *
+   * <p>The condition's own justification is not used. The condition is a copy that Daikon moved
+   * from a conditional program point to its parent, so its justification is computed from the
+   * parent's samples rather than from the samples that satisfy the condition. For example, if
+   * "cluster == 1 &lt;==&gt; x &gt;= 1", then "x &gt;= 1" can seem unjustified, because the parent
+   * also has the samples in which x is negative. The implication's justification is computed from
+   * the original invariants at the conditional program points.
+   *
+   * @param condition the predicate or the consequent of {@code implication}
+   * @param implication an implication
+   * @return true if {@code condition} should be written as a splitting condition
+   */
+  static boolean isWorthWriting(Invariant condition, Implication implication) {
+    if (!implication.justified()) {
+      return false;
+    }
+    InvariantFilters filters = InvariantFilters.defaultFilters();
+    if (filters.shouldKeepVarFilters(condition) != null) {
+      return false;
+    }
+    for (Iterator<InvariantFilter> itor = filters.getPropertyFiltersIterator(); itor.hasNext(); ) {
+      InvariantFilter filter = itor.next();
+      if (!(filter instanceof UnjustifiedFilter) && filter.shouldDiscard(condition)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static boolean contains_constant_non_012(Invariant inv) {
