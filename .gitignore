@@ -439,8 +439,8 @@ tests/kvasir-tests/tot_info/tot_info
 tests/kvasir-tests/two-statics/two-statics
 tests/kvasir-tests/virtual-method/virtual-method
 tests/kvasir-tests/wordplay/wordplay
-tests/merge-invariants-tests/drawlet/drawlet.txt
-tests/merge-invariants-tests/drawlet/merge.txt
+tests/merge-invariants-tests/*/*.txt
+tests/merge-invariants-tests/*/*.txt-all
 tests/sources/sources
 
 # Tools

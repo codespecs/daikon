@@ -1824,7 +1824,7 @@ public final class Daikon {
    * Initializes the partial order hierarchy among the given ppts, according to the format of the
    * declarations that were read.
    *
-   * @param all_ppts the ppts, whose declarations have been read
+   * @param all_ppts a map of ppts whose declarations have been read
    */
   public static void init_hierarchy(PptMap all_ppts) {
     assert FileIO.new_decl_format != null
