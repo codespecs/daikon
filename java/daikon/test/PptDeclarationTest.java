@@ -1,58 +1,62 @@
 package daikon.test;
 
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import daikon.Daikon;
-import daikon.FileIO;
-import java.io.File;
+import daikon.PptMap;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Collections;
-import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-/** Tests the checking of the ppt record of a version 2 declaration. */
+/** Tests the reading of the ppt record of a version 2 declaration. */
 public class PptDeclarationTest {
 
   /** A temporary directory for decls files. */
   @Rule public TemporaryFolder tmpFolder = new TemporaryFolder();
 
   /**
-   * Tests that a ppt record with anything after the ppt name is a declaration error.
+   * Returns the program points read from a decls file that contains one declaration.
    *
-   * @throws IOException if there is trouble writing the decls file
+   * @param pptRecord the ppt record of the declaration, such as {@code "ppt foo():::ENTER"}
+   * @return the program points read from the decls file
+   * @throws IOException if there is trouble writing or reading the decls file
+   */
+  private PptMap readDecl(String pptRecord) throws IOException {
+    return Common.readDecls(
+        tmpFolder.newFile(),
+        "decl-version 2.0",
+        "var-comparability none",
+        "",
+        pptRecord,
+        "ppt-type enter",
+        "variable x",
+        "  var-kind variable",
+        "  dec-type int",
+        "  rep-type int");
+  }
+
+  /**
+   * Tests that a ppt name with unescaped blanks, as DynComp writes it, is read in full.
+   *
+   * @throws IOException if there is trouble writing or reading the decls file
    */
   @Test
-  public void testSurplusToken() throws IOException {
-    File declsFile = tmpFolder.newFile("test.decls");
-    String decls =
-        String.join(
-            "\n",
-            "decl-version 2.0",
-            "var-comparability none",
-            "",
-            "ppt foo():::ENTER unexpected",
-            "ppt-type enter",
-            "variable x",
-            "  var-kind variable",
-            "  dec-type int",
-            "  rep-type int",
-            "");
-    Files.write(declsFile.toPath(), decls.getBytes(StandardCharsets.UTF_8));
-    FileIO.resetNewDeclFormat();
-    try {
-      List<File> files = Collections.singletonList(declsFile);
-      Daikon.UserError e =
-          assertThrows(Daikon.UserError.class, () -> FileIO.read_declaration_files(files));
-      String message = String.valueOf(e.getMessage());
-      assertTrue(message, message.startsWith("'unexpected' found where end-of-line expected"));
-    } finally {
-      // Reading the file set the declaration format; do not let it affect later tests.
-      FileIO.resetNewDeclFormat();
-    }
+  public void testUnescapedBlanks() throws IOException {
+    PptMap ppts = readDecl("ppt Year.compute(int, int, int):::ENTER");
+    assertEquals(1, ppts.size());
+    assertNotNull(ppts.get("Year.compute(int, int, int):::ENTER"));
+  }
+
+  /**
+   * Tests that a ppt name with escaped blanks, as Chicory writes it, is unescaped.
+   *
+   * @throws IOException if there is trouble writing or reading the decls file
+   */
+  @Test
+  public void testEscapedBlanks() throws IOException {
+    PptMap ppts = readDecl("ppt Year.compute(int,\\_int,\\_int):::ENTER  ");
+    assertEquals(1, ppts.size());
+    assertNotNull(ppts.get("Year.compute(int, int, int):::ENTER"));
   }
 }

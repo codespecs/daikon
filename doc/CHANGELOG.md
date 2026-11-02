@@ -24,6 +24,9 @@ Further documentation can be found in:
 ## Version 5.9.1 (???, 2026)
 
 * Daikon and its tools now reject a malformed command-line option.
+* In a version 2.0 declaration file, Daikon reads the whole rest of a `ppt`
+   record as the program point name, which can contain unescaped blanks.
+   Daikon no longer truncates such a name at its first blank.
 * All tools accept `-h` and `--help`, which print a usage message and exit
    with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had

@@ -1,11 +1,18 @@
 package daikon.test;
 
+import daikon.FileIO;
+import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.ProglangType;
 import daikon.VarComparabilityNone;
 import daikon.VarInfo;
 import daikon.VarInfoAux;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /** A collection of useful helper methods that are common to many different individual tests. */
@@ -74,5 +81,29 @@ public class Common {
 
     PptTopLevel ppt = new PptTopLevel(pptname, vars);
     return ppt;
+  }
+
+  /**
+   * Writes the given lines to a decls file, and returns the program points that Daikon reads from
+   * it. Afterward, FileIO again accepts a decls file of either format version, so this does not
+   * affect later tests.
+   *
+   * @param declsFile a file, which this method overwrites
+   * @param lines the lines of the decls file, without line terminators
+   * @return the program points read from the decls file
+   * @throws IOException if there is trouble writing or reading the decls file
+   */
+  public static PptMap readDecls(File declsFile, String... lines) throws IOException {
+    StringBuilder decls = new StringBuilder();
+    for (String line : lines) {
+      decls.append(line).append('\n');
+    }
+    Files.write(declsFile.toPath(), decls.toString().getBytes(StandardCharsets.UTF_8));
+    FileIO.resetNewDeclFormat();
+    try {
+      return FileIO.read_declaration_files(Collections.singletonList(declsFile));
+    } finally {
+      FileIO.resetNewDeclFormat();
+    }
   }
 }
