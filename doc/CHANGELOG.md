@@ -36,6 +36,8 @@ Further documentation can be found in:
    `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
    or `PERL5LIB`.
 * Removed the Perl front end, dfepl.
+* DynComp escapes blanks in program point names in its `.decls-DynComp`
+   output, as the declaration file format requires.
 
 Scripts:
 

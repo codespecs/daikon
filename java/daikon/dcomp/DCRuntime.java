@@ -1,6 +1,7 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
+import daikon.FileIO;
 import daikon.chicory.ArrayInfo;
 import daikon.chicory.ClassInfo;
 import daikon.chicory.ComparabilityProvider;
@@ -1933,7 +1934,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Write the class ppt
     String classPptName = ci.class_name + ":::CLASS";
-    pw.println("ppt " + classPptName);
+    pw.println("ppt " + FileIO.escape_decl(classPptName));
     pw.println("ppt-type class");
     printDeclVars(get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
     pw.println();
@@ -1941,7 +1942,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Write the object ppt
     String objectPptName = ci.class_name + ":::OBJECT";
-    pw.println("ppt " + objectPptName);
+    pw.println("ppt " + FileIO.escape_decl(objectPptName));
     pw.println("ppt-type object");
     printDeclVars(get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
     pw.println();
@@ -1991,7 +1992,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Print the enter point
     String enterPptName = clean_decl_name(DaikonWriter.methodEntryName(mi.member));
-    pw.println("ppt " + enterPptName);
+    pw.println("ppt " + FileIO.escape_decl(enterPptName));
     pw.println("ppt-type enter");
     // ppt_name_ms += watch.snapshot();  watch.reset();
     printDeclVars(l, mi.traversalEnter, enterPptName);
@@ -2006,7 +2007,7 @@ public final class DCRuntime implements ComparabilityProvider {
     time_decl.log("got exit comparable sets");
     for (Integer ii : mi.exit_locations) {
       String exitPptName = clean_decl_name(DaikonWriter.methodExitName(mi.member, ii));
-      pw.println("ppt " + exitPptName);
+      pw.println("ppt " + FileIO.escape_decl(exitPptName));
       pw.println("ppt-type subexit");
       // ppt_name_ms += watch.snapshot();  watch.reset();
 

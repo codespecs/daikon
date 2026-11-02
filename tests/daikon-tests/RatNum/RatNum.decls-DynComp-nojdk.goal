@@ -60,7 +60,7 @@ variable n
   flags is_param
   comparability 2
 
-ppt PolyCalc.RatNum.RatNum(int, int):::ENTER
+ppt PolyCalc.RatNum.RatNum(int,\_int):::ENTER
 ppt-type enter
 variable n
   var-kind variable
@@ -75,7 +75,7 @@ variable d
   flags is_param
   comparability 2
 
-ppt PolyCalc.RatNum.RatNum(int, int):::EXIT55
+ppt PolyCalc.RatNum.RatNum(int,\_int):::EXIT55
 ppt-type subexit
 variable this
   var-kind variable
@@ -106,7 +106,7 @@ variable d
   flags is_param
   comparability 2
 
-ppt PolyCalc.RatNum.RatNum(int, int):::EXIT67
+ppt PolyCalc.RatNum.RatNum(int,\_int):::EXIT67
 ppt-type subexit
 variable this
   var-kind variable
@@ -1083,7 +1083,7 @@ variable return.denom
   rep-type int
   comparability 3
 
-ppt PolyCalc.RatNum.gcd(int, int):::ENTER
+ppt PolyCalc.RatNum.gcd(int,\_int):::ENTER
 ppt-type enter
 variable _a
   var-kind variable
@@ -1098,7 +1098,7 @@ variable _b
   flags is_param
   comparability 2
 
-ppt PolyCalc.RatNum.gcd(int, int):::EXIT203
+ppt PolyCalc.RatNum.gcd(int,\_int):::EXIT203
 ppt-type subexit
 variable _a
   var-kind variable
@@ -1118,7 +1118,7 @@ variable return
   rep-type int
   comparability 2
 
-ppt PolyCalc.RatNum.gcd(int, int):::EXIT209
+ppt PolyCalc.RatNum.gcd(int,\_int):::EXIT209
 ppt-type subexit
 variable _a
   var-kind variable

@@ -242,6 +242,21 @@ public class DeclReaderTest {
     assertThrows(Daikon.UserError.class, () -> parse(lines));
   }
 
+  /**
+   * A program point name with escaped blanks is unescaped, and one with unescaped blanks is read in
+   * full.
+   */
+  @Test
+  public void testBlanksInPptName() {
+    DeclReader reader =
+        parse(
+            file(
+                namedPpt("C.m(int,\\_int):::ENTER", "1"),
+                namedPpt("C.n(int, int):::ENTER", "2")));
+    assertEquals(1, castNonNull(reader.find_ppt("C.m(int, int):::ENTER")).vars.size());
+    assertEquals(1, castNonNull(reader.find_ppt("C.n(int, int):::ENTER")).vars.size());
+  }
+
   /** A "ppt" record within a variable declaration is rejected. */
   @Test
   public void testPptRecordInVariable() {
