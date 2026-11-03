@@ -274,7 +274,8 @@ public abstract class SplitterList {
    * with the same condition text.
    *
    * <p>An OBJECT program point also uses every splitter whose PPT_NAME is not a complete program
-   * point name, if any PPT_NAME (complete or not) contains "OBJECT".
+   * point name, if any PPT_NAME (complete or not) whose splitters were registered via {@link #put}
+   * contains "OBJECT".
    *
    * @param pptName the name of a program point
    * @return an array of splitters
