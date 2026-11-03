@@ -82,7 +82,7 @@ variable height
   flags is_param
   comparability 2
 
-ppt six170.Hanoi.Hanoi(int, boolean):::ENTER
+ppt six170.Hanoi.Hanoi(int,\_boolean):::ENTER
 ppt-type enter
 variable height
   var-kind variable
@@ -97,7 +97,7 @@ variable noOutput
   flags is_param
   comparability 3
 
-ppt six170.Hanoi.Hanoi(int, boolean):::EXIT43
+ppt six170.Hanoi.Hanoi(int,\_boolean):::EXIT43
 ppt-type subexit
 variable this
   var-kind variable
@@ -139,7 +139,7 @@ variable noOutput
   flags is_param
   comparability 4
 
-ppt six170.Hanoi.moveDisk(int, int):::ENTER
+ppt six170.Hanoi.moveDisk(int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -181,7 +181,7 @@ variable toPeg
   flags is_param
   comparability 2
 
-ppt six170.Hanoi.moveDisk(int, int):::EXIT57
+ppt six170.Hanoi.moveDisk(int,\_int):::EXIT57
 ppt-type subexit
 variable this
   var-kind variable
@@ -223,7 +223,7 @@ variable toPeg
   flags is_param
   comparability 2
 
-ppt six170.Hanoi.otherPeg(int, int):::ENTER
+ppt six170.Hanoi.otherPeg(int,\_int):::ENTER
 ppt-type enter
 variable pegA
   var-kind variable
@@ -238,7 +238,7 @@ variable pegB
   flags is_param
   comparability 3
 
-ppt six170.Hanoi.otherPeg(int, int):::EXIT65
+ppt six170.Hanoi.otherPeg(int,\_int):::EXIT65
 ppt-type subexit
 variable pegA
   var-kind variable
@@ -258,7 +258,7 @@ variable return
   rep-type int
   comparability 4
 
-ppt six170.Hanoi.otherPeg(int, int):::EXIT66
+ppt six170.Hanoi.otherPeg(int,\_int):::EXIT66
 ppt-type subexit
 variable pegA
   var-kind variable
@@ -278,7 +278,7 @@ variable return
   rep-type int
   comparability 4
 
-ppt six170.Hanoi.otherPeg(int, int):::EXIT67
+ppt six170.Hanoi.otherPeg(int,\_int):::EXIT67
 ppt-type subexit
 variable pegA
   var-kind variable
@@ -298,7 +298,7 @@ variable return
   rep-type int
   comparability 4
 
-ppt six170.Hanoi.otherPeg(int, int):::EXIT68
+ppt six170.Hanoi.otherPeg(int,\_int):::EXIT68
 ppt-type subexit
 variable pegA
   var-kind variable
@@ -318,7 +318,7 @@ variable return
   rep-type int
   comparability 4
 
-ppt six170.Hanoi.otherPeg(int, int):::EXIT69
+ppt six170.Hanoi.otherPeg(int,\_int):::EXIT69
 ppt-type subexit
 variable pegA
   var-kind variable
@@ -338,7 +338,7 @@ variable return
   rep-type int
   comparability 4
 
-ppt six170.Hanoi.otherPeg(int, int):::EXIT70
+ppt six170.Hanoi.otherPeg(int,\_int):::EXIT70
 ppt-type subexit
 variable pegA
   var-kind variable
@@ -358,7 +358,7 @@ variable return
   rep-type int
   comparability 4
 
-ppt six170.Hanoi.otherPeg(int, int):::EXIT71
+ppt six170.Hanoi.otherPeg(int,\_int):::EXIT71
 ppt-type subexit
 variable pegA
   var-kind variable
@@ -378,7 +378,7 @@ variable return
   rep-type int
   comparability 4
 
-ppt six170.Hanoi.moveTower(int, int, int):::ENTER
+ppt six170.Hanoi.moveTower(int,\_int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -426,7 +426,7 @@ variable towerHeight
   flags is_param
   comparability 4
 
-ppt six170.Hanoi.moveTower(int, int, int):::EXIT98
+ppt six170.Hanoi.moveTower(int,\_int,\_int):::EXIT98
 ppt-type subexit
 variable this
   var-kind variable

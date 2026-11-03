@@ -64,7 +64,7 @@ variable javautil.Vector13.serialVersionUID
   flags nomod
   comparability 2
 
-ppt javautil.Vector13.Vector13(int, int):::ENTER
+ppt javautil.Vector13.Vector13(int,\_int):::ENTER
 ppt-type enter
 variable initialCapacity
   var-kind variable
@@ -79,7 +79,7 @@ variable capacityIncrement
   flags is_param
   comparability 2
 
-ppt javautil.Vector13.Vector13(int, int):::EXIT85
+ppt javautil.Vector13.Vector13(int,\_int):::EXIT85
 ppt-type subexit
 variable this
   var-kind variable
@@ -1547,7 +1547,7 @@ variable return
   rep-type int
   comparability 2
 
-ppt javautil.Vector13.indexOf(java.lang.Object, int):::ENTER
+ppt javautil.Vector13.indexOf(java.lang.Object,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -1617,7 +1617,7 @@ variable index
   flags is_param
   comparability 2
 
-ppt javautil.Vector13.indexOf(java.lang.Object, int):::EXIT274
+ppt javautil.Vector13.indexOf(java.lang.Object,\_int):::EXIT274
 ppt-type subexit
 variable this
   var-kind variable
@@ -1692,7 +1692,7 @@ variable return
   rep-type int
   comparability 2
 
-ppt javautil.Vector13.indexOf(java.lang.Object, int):::EXIT277
+ppt javautil.Vector13.indexOf(java.lang.Object,\_int):::EXIT277
 ppt-type subexit
 variable this
   var-kind variable
@@ -1900,7 +1900,7 @@ variable return
   rep-type int
   comparability 2
 
-ppt javautil.Vector13.lastIndexOf(java.lang.Object, int):::ENTER
+ppt javautil.Vector13.lastIndexOf(java.lang.Object,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -1970,7 +1970,7 @@ variable index
   flags is_param
   comparability 2
 
-ppt javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT307
+ppt javautil.Vector13.lastIndexOf(java.lang.Object,\_int):::EXIT307
 ppt-type subexit
 variable this
   var-kind variable
@@ -2045,7 +2045,7 @@ variable return
   rep-type int
   comparability 2
 
-ppt javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT310
+ppt javautil.Vector13.lastIndexOf(java.lang.Object,\_int):::EXIT310
 ppt-type subexit
 variable this
   var-kind variable
@@ -2474,7 +2474,7 @@ variable return.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.Vector13.setElementAt(java.lang.Object, int):::ENTER
+ppt javautil.Vector13.setElementAt(java.lang.Object,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -2544,7 +2544,7 @@ variable index
   flags is_param
   comparability 2
 
-ppt javautil.Vector13.setElementAt(java.lang.Object, int):::EXIT387
+ppt javautil.Vector13.setElementAt(java.lang.Object,\_int):::EXIT387
 ppt-type subexit
 variable this
   var-kind variable
@@ -2728,7 +2728,7 @@ variable index
   flags is_param
   comparability 2
 
-ppt javautil.Vector13.insertElementAt(java.lang.Object, int):::ENTER
+ppt javautil.Vector13.insertElementAt(java.lang.Object,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -2798,7 +2798,7 @@ variable index
   flags is_param
   comparability 2
 
-ppt javautil.Vector13.insertElementAt(java.lang.Object, int):::EXIT447
+ppt javautil.Vector13.insertElementAt(java.lang.Object,\_int):::EXIT447
 ppt-type subexit
 variable this
   var-kind variable
