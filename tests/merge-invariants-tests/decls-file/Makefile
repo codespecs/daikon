@@ -4,56 +4,32 @@
 # declares only numbered exits, so MergeInvariants must create the combined
 # exit, and it must build the program point hierarchy from the declarations'
 # parent records.
+#
+# Test "decls" uses no splitters.  Test "spinfo" also uses the splitters in
+# DeclsFile.spinfo, so it checks the conditional program points too.
 
-# The directory containing this file.  The test infrastructure, Makefile.jdk,
-# is found relative to it.  DAIKONDIR names the Daikon that is tested, which
-# may be a different Daikon tree (as in ../../Makefile.common) that lacks
-# Makefile.jdk.
-THIS_MAKEFILE_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-# DAIKONDIR is the clone of the 'daikon' project.
-ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath ${THIS_MAKEFILE_DIR}../../..)
-endif
-include ${THIS_MAKEFILE_DIR}../../Makefile.jdk
+TESTS = decls spinfo
+include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.common
 
-DAIKON_ARGS = --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
-# A prerequisite that changes whenever Daikon is rebuilt: Daikon.class if the
-# java/ tree is compiled, otherwise daikon.jar.
-DAIKON := $(firstword $(wildcard ${DAIKONDIR}/java/daikon/Daikon.class ${DAIKONDIR}/daikon.jar))
-ifeq (${DAIKON},)
-  ifneq ($(filter-out clean update-goals,$(or ${MAKECMDGOALS},diffs)),)
-    $(error Daikon is not built.  Run "make -C ${DAIKONDIR} compile")
-  endif
-endif
+RUNS = Run1 Run2
 
-DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
+decls-merge.inv.gz: ${DAIKON} DeclsFile.decls ${RUNS:=.inv.gz}
+	${DAIKON_JAVA} daikon.MergeInvariants -o $@ DeclsFile.decls ${RUNS:=.inv.gz}
 
-.DELETE_ON_ERROR:
+decls-daikon.inv.gz: ${DAIKON} DeclsFile.decls ${RUNS:=.dtrace.gz}
+	${DAIKON_JAVA} daikon.Daikon -o $@ ${DAIKON_ARGS} DeclsFile.decls ${RUNS:=.dtrace.gz}
 
-# A failing diff is left in daikon.txt-failed.diff for inspection.
-diffs: daikon.txt.diff
-daikon.txt.diff: combined.inv.gz merge.inv.gz
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants combined.inv.gz > combined.txt
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.PrintInvariants merge.inv.gz > merge.txt
-	diff -u combined.txt merge.txt > daikon.txt-failed.diff || (cat daikon.txt-failed.diff && false)
-	mv daikon.txt-failed.diff daikon.txt.diff
+${RUNS:=.inv.gz}: %.inv.gz: ${DAIKON} DeclsFile.decls %.dtrace.gz
+	${DAIKON_JAVA} daikon.Daikon -o $@ ${DAIKON_ARGS} DeclsFile.decls $*.dtrace.gz
 
-# Build the merged version of the invariant file from the individual inv files
-merge.inv.gz: ${DAIKON} DeclsFile.decls Run1.inv.gz Run2.inv.gz
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.MergeInvariants -o merge.inv.gz \
-	  DeclsFile.decls Run1.inv.gz Run2.inv.gz
+spinfo-merge.inv.gz: ${DAIKON} DeclsFile.decls DeclsFile.spinfo ${RUNS:=-spinfo.inv.gz}
+	${DAIKON_JAVA} daikon.MergeInvariants -o $@ DeclsFile.decls DeclsFile.spinfo \
+	  ${RUNS:=-spinfo.inv.gz}
 
-# Build the combined inv file directly from the trace files
-combined.inv.gz: ${DAIKON} DeclsFile.decls Run1.dtrace.gz Run2.dtrace.gz
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon -o combined.inv.gz ${DAIKON_ARGS} \
-	  DeclsFile.decls Run1.dtrace.gz Run2.dtrace.gz
+spinfo-daikon.inv.gz: ${DAIKON} DeclsFile.decls DeclsFile.spinfo ${RUNS:=.dtrace.gz}
+	${DAIKON_JAVA} daikon.Daikon -o $@ ${DAIKON_ARGS} DeclsFile.decls DeclsFile.spinfo \
+	  ${RUNS:=.dtrace.gz}
 
-Run%.inv.gz: ${DAIKON} DeclsFile.decls Run%.dtrace.gz
-	${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g daikon.Daikon -o $@ ${DAIKON_ARGS} \
-	  DeclsFile.decls Run$*.dtrace.gz
-
-update-goals:
-
-.PHONY: diffs update-goals clean
-clean:
-	/bin/rm -rf *.inv.gz *.diff *.txt
+${RUNS:=-spinfo.inv.gz}: %-spinfo.inv.gz: ${DAIKON} DeclsFile.decls DeclsFile.spinfo %.dtrace.gz
+	${DAIKON_JAVA} daikon.Daikon -o $@ ${DAIKON_ARGS} DeclsFile.decls DeclsFile.spinfo \
+	  $*.dtrace.gz
