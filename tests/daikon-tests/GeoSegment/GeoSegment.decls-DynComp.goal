@@ -38,7 +38,7 @@ variable this.longitude
   rep-type int
   comparability 4
 
-ppt MapQuick1.GeoPoint.GeoPoint(int, int):::ENTER
+ppt MapQuick1.GeoPoint.GeoPoint(int,\_int):::ENTER
 ppt-type enter
 variable latitude
   var-kind variable
@@ -53,7 +53,7 @@ variable longitude
   flags is_param
   comparability 2
 
-ppt MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT47
+ppt MapQuick1.GeoPoint.GeoPoint(int,\_int):::EXIT47
 ppt-type subexit
 variable this
   var-kind variable
@@ -584,7 +584,7 @@ variable this.p2.longitude
   rep-type int
   comparability 7
 
-ppt MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::ENTER
+ppt MapQuick1.GeoSegment.GeoSegment(java.lang.String,\_MapQuick1.GeoPoint,\_MapQuick1.GeoPoint):::ENTER
 ppt-type enter
 variable name
   var-kind variable
@@ -638,7 +638,7 @@ variable p2.longitude
   rep-type int
   comparability 6
 
-ppt MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::EXIT67
+ppt MapQuick1.GeoSegment.GeoSegment(java.lang.String,\_MapQuick1.GeoPoint,\_MapQuick1.GeoPoint):::EXIT67
 ppt-type subexit
 variable this
   var-kind variable

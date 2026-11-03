@@ -88,7 +88,7 @@ variable args[..].toString
   flags synthetic to_string
   comparability 4[6]
 
-ppt misc.Compar1.bar(int, int, int, int):::ENTER
+ppt misc.Compar1.bar(int,\_int,\_int,\_int):::ENTER
 ppt-type enter
 variable i
   var-kind variable
@@ -115,7 +115,7 @@ variable l
   flags is_param
   comparability 3
 
-ppt misc.Compar1.bar(int, int, int, int):::EXIT29
+ppt misc.Compar1.bar(int,\_int,\_int,\_int):::EXIT29
 ppt-type subexit
 variable i
   var-kind variable
