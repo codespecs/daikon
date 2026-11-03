@@ -268,7 +268,7 @@ variable t
   flags is_param
   comparability 2
 
-ppt PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::ENTER
+ppt PolyCalc.RatTermVec.insert(PolyCalc.RatTerm,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -308,7 +308,7 @@ variable index
   flags is_param
   comparability 2
 
-ppt PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::EXIT64
+ppt PolyCalc.RatTermVec.insert(PolyCalc.RatTerm,\_int):::EXIT64
 ppt-type subexit
 variable this
   var-kind variable
@@ -416,7 +416,7 @@ variable index
   flags is_param
   comparability 2
 
-ppt PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::ENTER
+ppt PolyCalc.RatTermVec.set(PolyCalc.RatTerm,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -456,7 +456,7 @@ variable index
   flags is_param
   comparability 2
 
-ppt PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::EXIT89
+ppt PolyCalc.RatTermVec.set(PolyCalc.RatTerm,\_int):::EXIT89
 ppt-type subexit
 variable this
   var-kind variable

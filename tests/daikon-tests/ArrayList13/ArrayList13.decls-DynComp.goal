@@ -1701,7 +1701,7 @@ variable return.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.ArrayList13.set(int, java.lang.Object):::ENTER
+ppt javautil.ArrayList13.set(int,\_java.lang.Object):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -1765,7 +1765,7 @@ variable element.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.ArrayList13.set(int, java.lang.Object):::EXIT327
+ppt javautil.ArrayList13.set(int,\_java.lang.Object):::EXIT327
 ppt-type subexit
 variable this
   var-kind variable
@@ -1962,7 +1962,7 @@ variable return
   rep-type boolean
   comparability 3
 
-ppt javautil.ArrayList13.add(int, java.lang.Object):::ENTER
+ppt javautil.ArrayList13.add(int,\_java.lang.Object):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -2026,7 +2026,7 @@ variable element.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.ArrayList13.add(int, java.lang.Object):::EXIT362
+ppt javautil.ArrayList13.add(int,\_java.lang.Object):::EXIT362
 ppt-type subexit
 variable this
   var-kind variable
@@ -2415,7 +2415,7 @@ variable return
   rep-type boolean
   comparability 3
 
-ppt javautil.ArrayList13.addAll(int, javautil.Collection13):::ENTER
+ppt javautil.ArrayList13.addAll(int,\_javautil.Collection13):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -2479,7 +2479,7 @@ variable c.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.ArrayList13.addAll(int, javautil.Collection13):::EXIT460
+ppt javautil.ArrayList13.addAll(int,\_javautil.Collection13):::EXIT460
 ppt-type subexit
 variable this
   var-kind variable
@@ -2548,7 +2548,7 @@ variable return
   rep-type boolean
   comparability 4
 
-ppt javautil.ArrayList13.removeRange(int, int):::ENTER
+ppt javautil.ArrayList13.removeRange(int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -2605,7 +2605,7 @@ variable toIndex
   flags is_param
   comparability 8
 
-ppt javautil.ArrayList13.removeRange(int, int):::EXIT483
+ppt javautil.ArrayList13.removeRange(int,\_int):::EXIT483
 ppt-type subexit
 variable this
   var-kind variable
@@ -3089,7 +3089,7 @@ variable return
   rep-type boolean
   comparability 3
 
-ppt javautil.AbstractList13.set(int, java.lang.Object):::ENTER
+ppt javautil.AbstractList13.set(int,\_java.lang.Object):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -3129,7 +3129,7 @@ variable element.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.AbstractList13.add(int, java.lang.Object):::ENTER
+ppt javautil.AbstractList13.add(int,\_java.lang.Object):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -3540,7 +3540,7 @@ variable this.modCount
   rep-type int
   comparability 3
 
-ppt javautil.AbstractList13.addAll(int, javautil.Collection13):::ENTER
+ppt javautil.AbstractList13.addAll(int,\_javautil.Collection13):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -3580,7 +3580,7 @@ variable c.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.AbstractList13.addAll(int, javautil.Collection13):::EXIT308
+ppt javautil.AbstractList13.addAll(int,\_javautil.Collection13):::EXIT308
 ppt-type subexit
 variable this
   var-kind variable
@@ -3799,7 +3799,7 @@ variable return.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.AbstractList13.subList(int, int):::ENTER
+ppt javautil.AbstractList13.subList(int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -3832,7 +3832,7 @@ variable toIndex
   flags is_param
   comparability 5
 
-ppt javautil.AbstractList13.subList(int, int):::EXIT565
+ppt javautil.AbstractList13.subList(int,\_int):::EXIT565
 ppt-type subexit
 variable this
   var-kind variable
@@ -4114,7 +4114,7 @@ variable return
   rep-type int
   comparability 2
 
-ppt javautil.AbstractList13.removeRange(int, int):::ENTER
+ppt javautil.AbstractList13.removeRange(int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -4147,7 +4147,7 @@ variable toIndex
   flags is_param
   comparability 5
 
-ppt javautil.AbstractList13.removeRange(int, int):::EXIT657
+ppt javautil.AbstractList13.removeRange(int,\_int):::EXIT657
 ppt-type subexit
 variable this
   var-kind variable

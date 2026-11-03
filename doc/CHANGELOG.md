@@ -58,10 +58,19 @@ strings; all of them are enabled by default:
    2.0 declaration file, such as one written by Chicory, rather than only one
    written by DynComp.  A variable with no `comparability` record is
    comparable to every other variable.
+* In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
+  complete program point name.  It matches the program point of that name, and
+  every program point whose name is that name preceded by a qualifier such as a
+  package.  A name ending with `:::EXIT` also matches the numbered exit points.
+  This affects where Daikon uses a condition only if indiscriminate splitting
+  (which uses every loaded condition at every program point) is disabled via
+  `--config_option daikon.split.SplitterList.all_splitters=false`.
 * `daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
    `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
    or `PERL5LIB`.
 * Removed the Perl front end, dfepl.
+* DynComp escapes blanks in program point names in its `.decls-DynComp`
+   output, as the declaration file format requires.
 
 Scripts:
 
