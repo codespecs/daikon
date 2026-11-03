@@ -76,7 +76,7 @@ variable this.list2.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt misc.Purity.Purity(int, int):::ENTER
+ppt misc.Purity.Purity(int,\_int):::ENTER
 ppt-type enter
 variable value
   var-kind variable
@@ -91,7 +91,7 @@ variable shift
   flags is_param
   comparability 2
 
-ppt misc.Purity.Purity(int, int):::EXIT25
+ppt misc.Purity.Purity(int,\_int):::EXIT25
 ppt-type subexit
 variable this
   var-kind variable

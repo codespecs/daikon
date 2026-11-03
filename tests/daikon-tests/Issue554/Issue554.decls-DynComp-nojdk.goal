@@ -309,7 +309,7 @@ variable return
   rep-type int
   comparability 6
 
-ppt misc.Issue554.calcBitLength(int, int[]):::ENTER
+ppt misc.Issue554.calcBitLength(int,\_int[]):::ENTER
 ppt-type enter
 variable misc.Issue554.ZERO_MAG
   var-kind variable
@@ -364,7 +364,7 @@ variable mag[..]
   rep-type int[]
   comparability 4[2]
 
-ppt misc.Issue554.calcBitLength(int, int[]):::EXIT39
+ppt misc.Issue554.calcBitLength(int,\_int[]):::EXIT39
 ppt-type subexit
 variable misc.Issue554.ZERO_MAG
   var-kind variable

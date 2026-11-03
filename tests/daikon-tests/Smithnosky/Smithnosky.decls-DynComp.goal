@@ -65,7 +65,7 @@ variable this.s[..].getClass().getName()
   flags synthetic classname non_null
   comparability 1[8]
 
-ppt misc.Smithnosky.Smithnosky(int, int, int):::ENTER
+ppt misc.Smithnosky.Smithnosky(int,\_int,\_int):::ENTER
 ppt-type enter
 variable a
   var-kind variable
@@ -86,7 +86,7 @@ variable c
   flags is_param
   comparability 2
 
-ppt misc.Smithnosky.Smithnosky(int, int, int):::EXIT24
+ppt misc.Smithnosky.Smithnosky(int,\_int,\_int):::EXIT24
 ppt-type subexit
 variable this
   var-kind variable
