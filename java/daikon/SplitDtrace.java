@@ -73,9 +73,7 @@ public final class SplitDtrace {
     int recNum = 0;
     try (BufferedReader reader = getStream(filename)) {
       ArrayList<String> rec = new ArrayList<>();
-      // A version 1 file is rejected, so a file without a "decl-version" record is in the version 2
-      // format.
-      boolean version2 = true;
+      boolean version2 = false;
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
@@ -116,8 +114,7 @@ public final class SplitDtrace {
       int currRecCount = 0;
       HashSet<Integer> nonceSet = new HashSet<>();
       ArrayList<String> rec = new ArrayList<>();
-      // mainHelper rejected a version 1 file.
-      boolean version2 = true;
+      boolean version2 = false;
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
@@ -204,9 +201,10 @@ public final class SplitDtrace {
    */
   @Pure
   static boolean isDeclare(List<String> res, boolean version2) {
-    // A version 1 file is rejected (see isObsoleteFormat), so only a version 2 declaration, which
-    // starts with "ppt", is a declaration.
-    return version2 && FileIO.is_declaration_header(res.get(0));
+    // mainHelper rejects a file in the obsolete version 1 format, so every declaration is in the
+    // version 2 format, even in a file that has no "decl-version" record (for which version2 is
+    // false).
+    return FileIO.is_declaration_header(res.get(0));
   }
 
   /**
