@@ -1,34 +1,34 @@
 // Declarations for javautil.ArrayList13
-// Declarations written Sun Nov 27 16:57:07 PST 2016
+// Declarations written by Chicory 2023-09-29T09:26:08.535271465
 
 decl-version 2.0
-var-comparability none
+var-comparability implicit
 
 ppt javautil.ArrayList13.ArrayList13(int):::ENTER
 ppt-type enter
 variable initialCapacity
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.ArrayList13(int):::EXIT101
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -37,15 +37,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[2]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -55,28 +55,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[2]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable initialCapacity
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.ArrayList13():::ENTER
 ppt-type enter
@@ -85,18 +85,18 @@ ppt javautil.ArrayList13.ArrayList13():::EXIT108
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -105,15 +105,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 4[7]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -123,31 +123,31 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 
 ppt javautil.ArrayList13.ArrayList13(javautil.Collection13):::ENTER
 ppt-type enter
 variable c
-  var-kind variable 
+  var-kind variable
   dec-type javautil.Collection13
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable c.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var c
@@ -155,24 +155,24 @@ variable c.getClass().getName()
   rep-type java.lang.String
   function-args c
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.ArrayList13(javautil.Collection13):::EXIT122
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -181,15 +181,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -199,28 +199,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable c
-  var-kind variable 
+  var-kind variable
   dec-type javautil.Collection13
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable c.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var c
@@ -228,24 +228,24 @@ variable c.getClass().getName()
   rep-type java.lang.String
   function-args c
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.trimToSize():::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -254,15 +254,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 4[7]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -272,39 +272,39 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 
 ppt javautil.ArrayList13.trimToSize():::EXIT137
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -313,15 +313,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 4[7]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -331,39 +331,39 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 
 ppt javautil.ArrayList13.ensureCapacity(int):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -372,15 +372,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -390,45 +390,45 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable minCapacity
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.ensureCapacity(int):::EXIT157
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -437,15 +437,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -455,45 +455,45 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable minCapacity
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.size():::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -502,15 +502,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 4[7]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -520,39 +520,39 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 
 ppt javautil.ArrayList13.size():::EXIT165
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -561,15 +561,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -579,44 +579,44 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.isEmpty():::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -625,15 +625,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 4[7]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -643,39 +643,39 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 
 ppt javautil.ArrayList13.isEmpty():::EXIT175
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -684,15 +684,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -702,44 +702,44 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.contains(java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -748,15 +748,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -766,28 +766,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable elem
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable elem.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var elem
@@ -795,24 +795,24 @@ variable elem.getClass().getName()
   rep-type java.lang.String
   function-args elem
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.contains(java.lang.Object):::EXIT184
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -821,15 +821,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -839,28 +839,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable elem
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable elem.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var elem
@@ -868,29 +868,29 @@ variable elem.getClass().getName()
   rep-type java.lang.String
   function-args elem
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 3
 
 ppt javautil.ArrayList13.indexOf(java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -899,15 +899,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -917,28 +917,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable elem
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable elem.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var elem
@@ -946,24 +946,24 @@ variable elem.getClass().getName()
   rep-type java.lang.String
   function-args elem
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.indexOf(java.lang.Object):::EXIT200
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -972,15 +972,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -990,28 +990,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable elem
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable elem.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var elem
@@ -1019,29 +1019,29 @@ variable elem.getClass().getName()
   rep-type java.lang.String
   function-args elem
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.ArrayList13.indexOf(java.lang.Object):::EXIT204
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1050,15 +1050,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1068,28 +1068,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable elem
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable elem.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var elem
@@ -1097,29 +1097,29 @@ variable elem.getClass().getName()
   rep-type java.lang.String
   function-args elem
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.ArrayList13.indexOf(java.lang.Object):::EXIT206
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1128,15 +1128,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1146,28 +1146,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable elem
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable elem.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var elem
@@ -1175,29 +1175,29 @@ variable elem.getClass().getName()
   rep-type java.lang.String
   function-args elem
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.ArrayList13.lastIndexOf(java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1206,15 +1206,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1224,28 +1224,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable elem
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable elem.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var elem
@@ -1253,24 +1253,24 @@ variable elem.getClass().getName()
   rep-type java.lang.String
   function-args elem
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT225
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1279,15 +1279,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1297,28 +1297,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable elem
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable elem.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var elem
@@ -1326,29 +1326,29 @@ variable elem.getClass().getName()
   rep-type java.lang.String
   function-args elem
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT227
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1357,15 +1357,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1375,28 +1375,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable elem
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable elem.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var elem
@@ -1404,29 +1404,29 @@ variable elem.getClass().getName()
   rep-type java.lang.String
   function-args elem
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT221
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1435,15 +1435,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1453,28 +1453,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable elem
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable elem.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var elem
@@ -1482,29 +1482,29 @@ variable elem.getClass().getName()
   rep-type java.lang.String
   function-args elem
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.ArrayList13.clone():::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1513,15 +1513,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 4[7]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1531,39 +1531,39 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 
 ppt javautil.ArrayList13.clone():::EXIT242
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1572,15 +1572,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1590,27 +1590,27 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type java.lang.Object
   rep-type hashcode
-  comparability 22
+  comparability 2
 variable return.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var return
@@ -1618,24 +1618,24 @@ variable return.getClass().getName()
   rep-type java.lang.String
   function-args return
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.toArray():::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1644,15 +1644,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 4[7]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1662,39 +1662,39 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 
 ppt javautil.ArrayList13.toArray():::EXIT259
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1703,15 +1703,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1721,27 +1721,27 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 2
 variable return.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var return
@@ -1749,31 +1749,31 @@ variable return.getClass().getName()
   rep-type java.lang.String
   function-args return
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return[..]
-  var-kind array 
+  var-kind array
   enclosing-var return
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 3[11]
 
 ppt javautil.ArrayList13.toArray(java.lang.Object[]):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1782,15 +1782,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1800,28 +1800,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable a
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object[]
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable a.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var a
@@ -1829,31 +1829,31 @@ variable a.getClass().getName()
   rep-type java.lang.String
   function-args a
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable a[..]
-  var-kind array 
+  var-kind array
   enclosing-var a
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 3[11]
 
 ppt javautil.ArrayList13.toArray(java.lang.Object[]):::EXIT293
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1862,15 +1862,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 8[11]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1880,28 +1880,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[12]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 10
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 9
   parent javautil.ArrayList13:::OBJECT 1
 variable a
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object[]
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable a.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var a
@@ -1909,19 +1909,19 @@ variable a.getClass().getName()
   rep-type java.lang.String
   function-args a
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable a[..]
-  var-kind array 
+  var-kind array
   enclosing-var a
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 3[13]
 variable return
-  var-kind return 
+  var-kind return
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
 variable return.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var return
@@ -1929,31 +1929,31 @@ variable return.getClass().getName()
   rep-type java.lang.String
   function-args return
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return[..]
-  var-kind array 
+  var-kind array
   enclosing-var return
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[14]
 
 ppt javautil.ArrayList13.get(int):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -1962,15 +1962,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -1980,45 +1980,45 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.get(int):::EXIT309
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2027,15 +2027,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2045,33 +2045,33 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable return
-  var-kind return 
+  var-kind return
   dec-type java.lang.Object
   rep-type hashcode
-  comparability 22
+  comparability 3
 variable return.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var return
@@ -2079,24 +2079,24 @@ variable return.getClass().getName()
   rep-type java.lang.String
   function-args return
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.set(int,\_java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2105,15 +2105,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2123,34 +2123,34 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 3
 variable element
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable element.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var element
@@ -2158,24 +2158,24 @@ variable element.getClass().getName()
   rep-type java.lang.String
   function-args element
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.set(int,\_java.lang.Object):::EXIT327
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2184,15 +2184,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 7[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2202,34 +2202,34 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[11]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 9
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 3
 variable element
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable element.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var element
@@ -2237,12 +2237,12 @@ variable element.getClass().getName()
   rep-type java.lang.String
   function-args element
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type java.lang.Object
   rep-type hashcode
-  comparability 22
+  comparability 4
 variable return.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var return
@@ -2250,24 +2250,24 @@ variable return.getClass().getName()
   rep-type java.lang.String
   function-args return
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.add(java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2276,15 +2276,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2294,28 +2294,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -2323,24 +2323,24 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.add(java.lang.Object):::EXIT339
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2349,15 +2349,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2367,28 +2367,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -2396,29 +2396,29 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 3
 
 ppt javautil.ArrayList13.add(int,\_java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2427,15 +2427,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2445,34 +2445,34 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 3
 variable element
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable element.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var element
@@ -2480,24 +2480,24 @@ variable element.getClass().getName()
   rep-type java.lang.String
   function-args element
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.add(int,\_java.lang.Object):::EXIT362
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2506,15 +2506,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2524,34 +2524,34 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 3
 variable element
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable element.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var element
@@ -2559,24 +2559,24 @@ variable element.getClass().getName()
   rep-type java.lang.String
   function-args element
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.remove(int):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2585,15 +2585,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2603,45 +2603,45 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.remove(int):::EXIT386
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2650,15 +2650,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2668,33 +2668,33 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable return
-  var-kind return 
+  var-kind return
   dec-type java.lang.Object
   rep-type hashcode
-  comparability 22
+  comparability 3
 variable return.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var return
@@ -2702,24 +2702,24 @@ variable return.getClass().getName()
   rep-type java.lang.String
   function-args return
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.clear():::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2728,15 +2728,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 4[7]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2746,39 +2746,39 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 
 ppt javautil.ArrayList13.clear():::EXIT401
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2787,15 +2787,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 4[7]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2805,39 +2805,39 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 
 ppt javautil.ArrayList13.addAll(javautil.Collection13):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2846,15 +2846,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2864,28 +2864,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable c
-  var-kind variable 
+  var-kind variable
   dec-type javautil.Collection13
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable c.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var c
@@ -2893,24 +2893,24 @@ variable c.getClass().getName()
   rep-type java.lang.String
   function-args c
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.addAll(javautil.Collection13):::EXIT425
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2919,15 +2919,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -2937,28 +2937,28 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable c
-  var-kind variable 
+  var-kind variable
   dec-type javautil.Collection13
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable c.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var c
@@ -2966,29 +2966,29 @@ variable c.getClass().getName()
   rep-type java.lang.String
   function-args c
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 3
 
 ppt javautil.ArrayList13.addAll(int,\_javautil.Collection13):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -2997,15 +2997,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 6[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -3015,34 +3015,34 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 3
 variable c
-  var-kind variable 
+  var-kind variable
   dec-type javautil.Collection13
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable c.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var c
@@ -3050,24 +3050,24 @@ variable c.getClass().getName()
   rep-type java.lang.String
   function-args c
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.ArrayList13.addAll(int,\_javautil.Collection13):::EXIT460
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 5
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -3076,15 +3076,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 7[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -3094,34 +3094,34 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[11]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 9
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 8
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 3
 variable c
-  var-kind variable 
+  var-kind variable
   dec-type javautil.Collection13
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable c.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var c
@@ -3129,29 +3129,29 @@ variable c.getClass().getName()
   rep-type java.lang.String
   function-args c
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 4
 
 ppt javautil.ArrayList13.removeRange(int,\_int):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -3160,15 +3160,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -3178,51 +3178,51 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable fromIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable toIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 8
 
 ppt javautil.ArrayList13.removeRange(int,\_int):::EXIT483
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -3231,15 +3231,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -3249,51 +3249,51 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[10]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable fromIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable toIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 8
 
 ppt javautil.ArrayList13.RangeCheck(int):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -3302,15 +3302,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -3320,45 +3320,45 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.RangeCheck(int):::EXIT493
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -3367,15 +3367,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -3385,45 +3385,45 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.writeObject(java.io.ObjectOutputStream):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -3432,15 +3432,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -3450,45 +3450,45 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable s
-  var-kind variable 
+  var-kind variable
   dec-type java.io.ObjectOutputStream
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.writeObject(java.io.ObjectOutputStream):::EXIT514
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -3497,15 +3497,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -3515,45 +3515,45 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable s
-  var-kind variable 
+  var-kind variable
   dec-type java.io.ObjectOutputStream
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.readObject(java.io.ObjectInputStream):::ENTER
 ppt-type enter
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -3562,15 +3562,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -3580,45 +3580,45 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable s
-  var-kind variable 
+  var-kind variable
   dec-type java.io.ObjectInputStream
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13.readObject(java.io.ObjectInputStream):::EXIT532
 ppt-type subexit
 parent parent javautil.ArrayList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
@@ -3627,15 +3627,15 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 5[8]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
@@ -3645,43 +3645,43 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[9]
   parent javautil.ArrayList13:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 7
   parent javautil.ArrayList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.ArrayList13:::OBJECT 1
 variable s
-  var-kind variable 
+  var-kind variable
   dec-type java.io.ObjectInputStream
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.ArrayList13:::OBJECT
 ppt-type object
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.ArrayList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
 variable this.elementData
   var-kind field elementData
   enclosing-var this
   dec-type java.lang.Object[]
   rep-type hashcode
-  comparability 22
+  comparability 3
 variable this.elementData.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var this.elementData
@@ -3689,14 +3689,14 @@ variable this.elementData.getClass().getName()
   rep-type java.lang.String
   function-args this.elementData
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable this.elementData[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.elementData
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 22
+  comparability 4[7]
 variable this.elementData[..].getClass().getName()
   var-kind function getClass().getName()
   enclosing-var this.elementData[..]
@@ -3705,19 +3705,19 @@ variable this.elementData[..].getClass().getName()
   rep-type java.lang.String[]
   function-args this.elementData[]
   flags synthetic classname non_null
-  comparability 22
+  comparability 1[8]
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
 
 ppt javautil.AbstractList13.AbstractList13():::ENTER
 ppt-type enter
@@ -3726,11 +3726,11 @@ ppt javautil.AbstractList13.AbstractList13():::EXIT63
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -3739,25 +3739,25 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 
 ppt javautil.AbstractList13.add(java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -3766,21 +3766,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -3788,17 +3788,17 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.add(java.lang.Object):::EXIT91
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -3807,21 +3807,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -3829,22 +3829,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.set(int,\_java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -3853,27 +3853,27 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 3
 variable element
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable element.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var element
@@ -3881,17 +3881,17 @@ variable element.getClass().getName()
   rep-type java.lang.String
   function-args element
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.add(int,\_java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -3900,27 +3900,27 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 3
 variable element
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable element.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var element
@@ -3928,17 +3928,17 @@ variable element.getClass().getName()
   rep-type java.lang.String
   function-args element
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.remove(int):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -3947,31 +3947,31 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.AbstractList13.indexOf(java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -3980,21 +3980,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4002,17 +4002,17 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.indexOf(java.lang.Object):::EXIT200
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4021,21 +4021,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4043,22 +4043,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.indexOf(java.lang.Object):::EXIT204
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4067,21 +4067,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4089,22 +4089,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.indexOf(java.lang.Object):::EXIT206
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4113,21 +4113,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4135,22 +4135,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4159,21 +4159,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4181,17 +4181,17 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT231
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4200,21 +4200,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4222,22 +4222,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT235
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4246,21 +4246,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4268,22 +4268,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT237
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4292,21 +4292,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4314,22 +4314,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.clear():::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4338,25 +4338,25 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 
 ppt javautil.AbstractList13.clear():::EXIT260
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4365,25 +4365,25 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 
 ppt javautil.AbstractList13.addAll(int,\_javautil.Collection13):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4392,27 +4392,27 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 3
 variable c
-  var-kind variable 
+  var-kind variable
   dec-type javautil.Collection13
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable c.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var c
@@ -4420,17 +4420,17 @@ variable c.getClass().getName()
   rep-type java.lang.String
   function-args c
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.addAll(int,\_javautil.Collection13):::EXIT308
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4439,27 +4439,27 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent javautil.AbstractList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 3
 variable c
-  var-kind variable 
+  var-kind variable
   dec-type javautil.Collection13
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable c.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var c
@@ -4467,22 +4467,22 @@ variable c.getClass().getName()
   rep-type java.lang.String
   function-args c
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 4
 
 ppt javautil.AbstractList13.iterator():::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4491,25 +4491,25 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 
 ppt javautil.AbstractList13.iterator():::EXIT336
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4518,20 +4518,20 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type javautil.Iterator13
   rep-type hashcode
-  comparability 22
+  comparability 2
 variable return.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var return
@@ -4539,17 +4539,17 @@ variable return.getClass().getName()
   rep-type java.lang.String
   function-args return
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.listIterator():::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4558,25 +4558,25 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 
 ppt javautil.AbstractList13.listIterator():::EXIT348
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4585,20 +4585,20 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type javautil.ListIterator13
   rep-type hashcode
-  comparability 22
+  comparability 2
 variable return.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var return
@@ -4606,17 +4606,17 @@ variable return.getClass().getName()
   rep-type java.lang.String
   function-args return
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.listIterator(int):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4625,31 +4625,31 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt javautil.AbstractList13.listIterator(int):::EXIT391
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4658,26 +4658,26 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable index
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable return
-  var-kind return 
+  var-kind return
   dec-type javautil.ListIterator13
   rep-type hashcode
-  comparability 22
+  comparability 3
 variable return.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var return
@@ -4685,17 +4685,17 @@ variable return.getClass().getName()
   rep-type java.lang.String
   function-args return
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.subList(int,\_int):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4704,37 +4704,37 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable fromIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable toIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 5
 
 ppt javautil.AbstractList13.subList(int,\_int):::EXIT565
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4743,32 +4743,32 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable fromIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable toIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 6
 variable return
-  var-kind return 
+  var-kind return
   dec-type javautil.List13
   rep-type hashcode
-  comparability 22
+  comparability 3
 variable return.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var return
@@ -4776,17 +4776,17 @@ variable return.getClass().getName()
   rep-type java.lang.String
   function-args return
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.equals(java.lang.Object):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4795,21 +4795,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4817,17 +4817,17 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 
 ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT594
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4836,21 +4836,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4858,22 +4858,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT596
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4882,21 +4882,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4904,22 +4904,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT604
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4928,21 +4928,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4950,22 +4950,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT606
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -4974,21 +4974,21 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 5
   parent javautil.AbstractList13:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
@@ -4996,22 +4996,22 @@ variable o.getClass().getName()
   rep-type java.lang.String
   function-args o
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 3
 
 ppt javautil.AbstractList13.hashCode():::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -5020,25 +5020,25 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 
 ppt javautil.AbstractList13.hashCode():::EXIT625
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -5047,30 +5047,30 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable return
-  var-kind return 
+  var-kind return
   dec-type int
   rep-type int
-  comparability 22
+  comparability 2
 
 ppt javautil.AbstractList13.removeRange(int,\_int):::ENTER
 ppt-type enter
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -5079,37 +5079,37 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable fromIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable toIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 5
 
 ppt javautil.AbstractList13.removeRange(int,\_int):::EXIT657
 ppt-type subexit
 parent parent javautil.AbstractList13:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent javautil.AbstractList13:::OBJECT 1
 variable this.getClass().getName()
   var-kind function getClass().getName()
@@ -5118,36 +5118,36 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
   parent javautil.AbstractList13:::OBJECT 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent javautil.AbstractList13:::OBJECT 1
 variable fromIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable toIndex
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 5
 
 ppt javautil.AbstractList13:::OBJECT
 ppt-type object
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type javautil.AbstractList13
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
 variable this.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var this
@@ -5155,13 +5155,13 @@ variable this.getClass().getName()
   rep-type java.lang.String
   function-args this
   flags synthetic classname non_null
-  comparability 22
+  comparability 1
 variable this.modCount
   var-kind field modCount
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 
 javautil.ArrayList13.ArrayList13():::ENTER
 this_invocation_nonce
@@ -5182,7 +5182,7 @@ javautil.AbstractList13.AbstractList13():::EXIT63
 this_invocation_nonce
 2
 this
-1580893732
+1268959798
 1
 this.getClass().getName()
 "javautil.ArrayList13"
@@ -5195,10 +5195,10 @@ javautil.ArrayList13.ArrayList13(int):::EXIT101
 this_invocation_nonce
 1
 this
-1580893732
+1268959798
 1
 this.elementData
-1547425104
+1786364562
 1
 this.elementData.getClass().getName()
 "java.lang.Object[]"
@@ -5223,10 +5223,10 @@ javautil.ArrayList13.ArrayList13():::EXIT108
 this_invocation_nonce
 0
 this
-1580893732
+1268959798
 1
 this.elementData
-1547425104
+1786364562
 1
 this.elementData.getClass().getName()
 "java.lang.Object[]"

@@ -21,6 +21,15 @@ this.theArray[this.currentSize] == this.theArray[this.back]
 this.theArray[this.currentSize] == this.theArray[orig(capacity)-1]
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 this.theArray[0..this.currentSize] == [null]
 this.theArray[orig(capacity)..] == []
@@ -78,6 +87,15 @@ this.theArray[this.currentSize] == this.theArray[orig(this.currentSize)-1]
 this.theArray[this.currentSize] == this.theArray[orig(this.back)]
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 this.theArray[0..this.currentSize] == [null]
 this.theArray[0..this.currentSize-1] == []
@@ -129,6 +147,15 @@ return == orig(this.theArray[this.currentSize])
 return == orig(this.theArray[this.back])
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 return == null
 this.theArray[0..this.currentSize] == [null]
@@ -160,6 +187,15 @@ return == orig(this.theArray[this.front])
 (this.currentSize == 0)  <==>  (this.theArray[this.back] == null)
 (this.currentSize == 0)  ==>  ((this.back == 0) ==> (size(this.theArray[])-1 == 0))
 (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.front == 0))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (this.currentSize == 0)  ==>  (orig(this.theArray[0..post(this.currentSize)]) == [null])
 (this.currentSize == 0)  ==>  (orig(this.theArray[0..this.currentSize]) == [null])
 (this.currentSize == 0)  ==>  (orig(this.theArray[post(this.currentSize)]) == null)
@@ -209,6 +245,15 @@ this.back == orig(this.back)
 (this.currentSize == 0)  <==>  (return == true)
 (this.currentSize == 0)  ==>  ((this.back == 0) ==> (size(this.theArray[])-1 == 0))
 (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.front == 0))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (this.currentSize == 0)  ==>  (orig(this.theArray[0..post(this.currentSize)]) == [null])
 (this.currentSize == 0)  ==>  (orig(this.theArray[0..this.currentSize]) == [null])
 (this.currentSize == 0)  ==>  (this.currentSize <= size(this.theArray[])-1)
@@ -247,6 +292,15 @@ this.theArray[this.currentSize] == orig(this.theArray[this.front])
 this.theArray[this.currentSize] == orig(this.theArray[this.back])
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 return == true
 this.theArray[0..this.currentSize] == [null]
@@ -312,6 +366,15 @@ this.theArray[this.currentSize] == this.theArray[orig(this.front)]
 this.theArray[this.currentSize] == this.theArray[orig(this.back)]
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 this.theArray[0..this.currentSize] == [null]
 this.theArray[0..this.currentSize-1] == []
