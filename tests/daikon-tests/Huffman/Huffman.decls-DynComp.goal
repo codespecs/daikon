@@ -33,7 +33,7 @@ variable this.frequency
   rep-type int
   comparability 3
 
-ppt six170.HuffmanSymbol.HuffmanSymbol(java.lang.Object, int):::ENTER
+ppt six170.HuffmanSymbol.HuffmanSymbol(java.lang.Object,\_int):::ENTER
 ppt-type enter
 variable symbol
   var-kind variable
@@ -55,7 +55,7 @@ variable frequency
   flags is_param
   comparability 2
 
-ppt six170.HuffmanSymbol.HuffmanSymbol(java.lang.Object, int):::EXIT26
+ppt six170.HuffmanSymbol.HuffmanSymbol(java.lang.Object,\_int):::EXIT26
 ppt-type subexit
 variable this
   var-kind variable
@@ -1083,7 +1083,7 @@ variable return.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt six170.HuffmanCodec.addToMap(java.util.Map, six170.HuffmanTree, java.util.List):::ENTER
+ppt six170.HuffmanCodec.addToMap(java.util.Map,\_six170.HuffmanTree,\_java.util.List):::ENTER
 ppt-type enter
 variable encodingMap
   var-kind variable
@@ -1194,7 +1194,7 @@ variable bitStack.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt six170.HuffmanCodec.addToMap(java.util.Map, six170.HuffmanTree, java.util.List):::EXIT123
+ppt six170.HuffmanCodec.addToMap(java.util.Map,\_six170.HuffmanTree,\_java.util.List):::EXIT123
 ppt-type subexit
 variable encodingMap
   var-kind variable
@@ -2613,7 +2613,7 @@ variable symbol.frequency
   rep-type int
   comparability 3
 
-ppt six170.HuffmanTree.HuffmanTree(six170.HuffmanTree, six170.HuffmanTree):::ENTER
+ppt six170.HuffmanTree.HuffmanTree(six170.HuffmanTree,\_six170.HuffmanTree):::ENTER
 ppt-type enter
 variable left
   var-kind variable
@@ -2752,7 +2752,7 @@ variable right.right.right
   rep-type hashcode
   comparability 2
 
-ppt six170.HuffmanTree.HuffmanTree(six170.HuffmanTree, six170.HuffmanTree):::EXIT43
+ppt six170.HuffmanTree.HuffmanTree(six170.HuffmanTree,\_six170.HuffmanTree):::EXIT43
 ppt-type subexit
 variable this
   var-kind variable

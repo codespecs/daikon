@@ -247,12 +247,6 @@ public final class MergeInvariants {
       assert merge_ppts != null
           : "@AssumeAssertion(nullness): inv_files is non-empty, so for-loop body executed";
 
-      // Remove all of the slices and equality sets, to start
-      debugProgress.fine("Cleaning ppt map in preparation for merge");
-      for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
-        ppt.clean_for_merge();
-      }
-
     } else {
 
       // Build the result pptmap from the specific decls file
@@ -261,12 +255,15 @@ public final class MergeInvariants {
       List<File> decl_files = new ArrayList<>();
       decl_files.add(decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
-      merge_ppts.trimToSize();
       Daikon.create_combined_exits(merge_ppts);
+      merge_ppts.trimToSize();
       PptRelation.init_hierarchy(merge_ppts);
-      for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
-        ppt.clean_for_merge();
-      }
+    }
+
+    // Remove all of the slices and equality sets, to start
+    debugProgress.fine("Cleaning ppt map in preparation for merge");
+    for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
+      ppt.clean_for_merge();
     }
 
     // Create a hierarchy between the merge leaves (such as exitNN points)

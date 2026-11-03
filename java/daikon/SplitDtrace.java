@@ -73,6 +73,9 @@ public final class SplitDtrace {
     int recNum = 0;
     try (BufferedReader reader = getStream(filename)) {
       ArrayList<String> rec = new ArrayList<>();
+      // A version 1 file is rejected, so a file without a "decl-version" record is in the version 2
+      // format.
+      boolean version2 = true;
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
@@ -81,7 +84,9 @@ public final class SplitDtrace {
         if (isObsoleteFormat(rec)) {
           throw new Daikon.UserError(filename + ": " + FileIO.obsoleteFormatMessage);
         }
-        if (isDeclare(rec)) {
+        if (isHeader(rec)) {
+          version2 = FileIO.is_version2_after(rec.get(0), version2);
+        } else if (isDeclare(rec, version2)) {
           declNum++;
         } else if (!isHeader(rec)) {
           recNum++;
@@ -111,16 +116,19 @@ public final class SplitDtrace {
       int currRecCount = 0;
       HashSet<Integer> nonceSet = new HashSet<>();
       ArrayList<String> rec = new ArrayList<>();
+      // mainHelper rejected a version 1 file.
+      boolean version2 = true;
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
           break;
         }
         if (isHeader(rec)) {
+          version2 = FileIO.is_version2_after(rec.get(0), version2);
           writeRec(writer, rec);
           continue;
         }
-        boolean isDecl = isDeclare(rec);
+        boolean isDecl = isDeclare(rec, version2);
         if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
           boolean shouldWrite = true;
           if (!isDecl) {
@@ -186,14 +194,19 @@ public final class SplitDtrace {
   }
 
   /**
-   * Returns true if the given line starts a program point declaration.
+   * Returns true if the given record is a program point declaration. As in {@link FileIO}, the
+   * file's declaration version determines the form of a declaration, because the name of a program
+   * point in a version 1 sample may start with "ppt ".
    *
-   * @param res a line from a .decls or .dtrace file
-   * @return true if the given line starts a program point declaration
+   * @param res the lines of a record from a .decls or .dtrace file
+   * @param version2 true if the file is in the version 2 format
+   * @return true if the given record is a program point declaration
    */
   @Pure
-  static boolean isDeclare(List<String> res) {
-    return FileIO.is_declaration_header(res.get(0));
+  static boolean isDeclare(List<String> res, boolean version2) {
+    // A version 1 file is rejected (see isObsoleteFormat), so only a version 2 declaration, which
+    // starts with "ppt", is a declaration.
+    return version2 && FileIO.is_declaration_header(res.get(0));
   }
 
   /**
@@ -272,6 +285,13 @@ public final class SplitDtrace {
       while (FileIO.nextLineIsComment(reader)) {
         res.add(reader.readLine().trim());
       }
+      return;
+    }
+    if (line != null && FileIO.is_one_line_header_record(line)) {
+      // As in FileIO, a record such as "decl-version 2.0" ends at the end of its line.  Otherwise,
+      // a "decl-version" record that follows another header record on the next line, as in the
+      // output of Kvasir, would not be the first line of a record, and so would be ignored.
+      res.add(line.trim());
       return;
     }
     while (line != null) {
