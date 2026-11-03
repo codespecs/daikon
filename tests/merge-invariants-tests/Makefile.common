@@ -1,0 +1,59 @@
+# Definitions and rules that are common to the MergeInvariants tests.
+#
+# A test's Makefile sets TESTS to a list of test names, then includes this
+# file.  For each test name T in TESTS, the Makefile gives rules to build these
+# files:
+#  * T-daikon.inv.gz: the output of Daikon run on all the trace files at once.
+#  * T-merge.inv.gz: the output of MergeInvariants run on several .inv files,
+#    each of which is the output of Daikon run on some of the trace files.
+# Test T passes if the two files contain the same invariants.
+#
+# The Makefile can also set DAIKON_ARGS; this file appends to it.
+
+# The directory containing this file.  Makefile.jdk is found relative to it,
+# not via DAIKONDIR, which may name a different Daikon tree.
+MERGE_TESTS_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+# DAIKONDIR is the clone of the 'daikon' project.
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath ${MERGE_TESTS_DIR}../..)
+endif
+include ${MERGE_TESTS_DIR}../Makefile.jdk
+
+DAIKON_ARGS += --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
+# A prerequisite that changes whenever Daikon is rebuilt: Daikon.class if the
+# java/ tree is compiled, otherwise daikon.jar.
+DAIKON := $(firstword $(wildcard ${DAIKONDIR}/java/daikon/Daikon.class ${DAIKONDIR}/daikon.jar))
+ifeq (${DAIKON},)
+  ifneq ($(filter-out clean update-goals,$(or ${MAKECMDGOALS},diffs)),)
+    $(error Daikon is not built.  Run "make -C ${DAIKONDIR} compile")
+  endif
+endif
+
+DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
+# The command that runs a Daikon tool; its first argument is the tool's class.
+DAIKON_JAVA = ${JAVA} -cp ${DAIKON_CLASSPATH} -ea -Xmx7g
+
+# If a recipe fails, delete its target, so that a partially written output
+# file does not make the next run appear up to date.
+.DELETE_ON_ERROR:
+
+# For each test T, a failing diff is left in T.txt-failed.diff for inspection.
+diffs: $(addsuffix .txt.diff,${TESTS})
+%.txt.diff: %-daikon.txt %-merge.txt
+	diff -u $^ > $*.txt-failed.diff || (cat $*.txt-failed.diff && false)
+	mv $*.txt-failed.diff $@
+
+# Keep the printed invariants for inspection after a test runs.
+.SECONDARY: $(foreach t,${TESTS},$t-daikon.txt $t-merge.txt)
+
+%.txt: %.inv.gz ${DAIKON}
+	${DAIKON_JAVA} daikon.PrintInvariants $< > $@
+
+%.txt-all: %.inv.gz ${DAIKON}
+	${DAIKON_JAVA} daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
+
+update-goals:
+
+.PHONY: diffs update-goals clean
+clean:
+	/bin/rm -rf *.inv.gz *.diff *.txt *.txt-all
