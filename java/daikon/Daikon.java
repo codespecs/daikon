@@ -1455,7 +1455,7 @@ public final class Daikon {
 
     // Setup ppt_max_name based on the specified percentage of ppts to process
     if (dkconfig_ppt_perc != 100) {
-      ppt_max_name = setup_ppt_perc(decl_files, dkconfig_ppt_perc);
+      ppt_max_name = setup_ppt_perc(decl_files, dtrace_files, dkconfig_ppt_perc);
       System.out.println("Max ppt name = " + ppt_max_name);
     }
 
@@ -2662,8 +2662,18 @@ public final class Daikon {
   /**
    * Returns the ppt name, max_ppt, that corresponds to the specified percentage of ppts (presuming
    * that only those ppts &le; max_ppt will be processed).
+   *
+   * <p>The ppts are those declared in the declaration files and in the data trace files. A data
+   * trace file that is standard input ("-"), a Chicory socket ("+"), or a URL is not read, because
+   * it might not be possible to read it twice.
+   *
+   * @param decl_files the declaration files
+   * @param dtrace_files the data trace files, as given on the command line
+   * @param ppt_perc a percentage of ppts to process, from 1 to 100
+   * @return the name of the last ppt to process, or null if ppt_perc is 100
    */
-  private static @Nullable String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
+  public static @Nullable String setup_ppt_perc(
+      Collection<File> decl_files, Collection<String> dtrace_files, int ppt_perc) {
 
     // Make sure the percentage is valid
     if ((ppt_perc < 1) || (ppt_perc > 100)) {
@@ -2677,29 +2687,21 @@ public final class Daikon {
     // Keep track of all of the ppts in a set ordered by the ppt name
     Set<String> ppts = new TreeSet<>();
 
-    // Read all of the ppt names out of the decl files
+    // Read all of the ppt names out of the files, in the order that Daikon reads the files.  As in
+    // FileIO, a file without a "decl-version" record is in the format of the files before it.
+    boolean version2 = false;
     try {
       for (File file : decl_files) {
-
-        // Open the file
-        try (LineNumberReader fp = FilesPlume.newLineNumberFileReader(file)) {
-
-          // Read each ppt name from the file
-          for (String line = fp.readLine(); line != null; line = fp.readLine()) {
-            if (line.equals("") || FileIO.isComment(line)) {
-              continue;
-            }
-            if (!line.equals("DECLARE")) {
-              continue;
-            }
-            // Just read "DECLARE", so next line has ppt name.
-            String ppt_name = fp.readLine();
-            if (ppt_name == null) {
-              throw new Daikon.UserError("File " + file + " terminated prematurely");
-            }
-            ppts.add(ppt_name);
-          }
+        version2 = add_declared_ppt_names(file.toString(), version2, ppts);
+      }
+      for (String filename : dtrace_files) {
+        if (filename.equals("-")
+            || filename.equals("+")
+            || filename.startsWith("file:")
+            || filename.startsWith("jar:")) {
+          continue;
         }
+        version2 = add_declared_ppt_names(filename, version2, ppts);
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -2730,6 +2732,57 @@ public final class Daikon {
     }
     // Execution should not reach this line
     throw new Error("ppt_cnt " + ppt_cnt + " ppts.size " + ppts.size());
+  }
+
+  /**
+   * Adds to a set the names of the ppts declared in the given file, except GLOBAL, OBJECT, and
+   * CLASS ppts, which are always processed (see {@link FileIO#ppt_included}).
+   *
+   * @param filename a .decls or .dtrace file name
+   * @param version2 true if the files read before this one are in the version 2 format
+   * @param ppts the set to which to add the ppt names
+   * @return true if the files read after this one are in the version 2 format
+   * @throws IOException if there is trouble reading the file
+   */
+  private static boolean add_declared_ppt_names(String filename, boolean version2, Set<String> ppts)
+      throws IOException {
+    try (LineNumberReader fp = FilesPlume.newLineNumberFileReader(filename)) {
+      // As in FileIO, only the first line of a record determines what the record is.  For
+      // example, a variable in a version 1 declaration might be named "DECLARE" or "ppt x".  A
+      // blank line ends a record, and so does the end of a comment or of a one-line header record.
+      boolean recordStart = true;
+      for (String line = fp.readLine(); line != null; line = fp.readLine()) {
+        if (line.trim().isEmpty()) {
+          recordStart = true;
+          continue;
+        }
+        if (!recordStart || FileIO.isComment(line)) {
+          continue;
+        }
+        if (FileIO.is_one_line_header_record(line)) {
+          version2 = FileIO.is_version2_after(line, version2);
+          continue;
+        }
+        recordStart = false;
+        String ppt_name;
+        if (version2) {
+          ppt_name = FileIO.declared_ppt_name(line);
+        } else if (line.equals("DECLARE")) {
+          // In the version 1 format, the line after "DECLARE" is the ppt name.
+          ppt_name = fp.readLine();
+          if (ppt_name == null) {
+            throw new Daikon.UserError("File " + filename + " terminated prematurely");
+          }
+        } else {
+          // The record is a sample or another kind of header record.
+          ppt_name = null;
+        }
+        if (ppt_name != null && !FileIO.is_parent_only_ppt_name(ppt_name)) {
+          ppts.add(ppt_name);
+        }
+      }
+    }
+    return version2;
   }
 
   /**
