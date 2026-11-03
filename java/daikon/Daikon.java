@@ -723,10 +723,7 @@ public final class Daikon {
    *
    * @param args the command-line arguments
    */
-  @SuppressWarnings({
-    "nullness:contracts.precondition", // private field
-    "SystemConsoleNull" // https://errorprone.info/bugpattern/SystemConsoleNull
-  })
+  @SuppressWarnings("SystemConsoleNull") // https://errorprone.info/bugpattern/SystemConsoleNull
   public static void mainHelper(final String[] args) {
     long startTime = System.nanoTime();
     long duration;
@@ -1905,7 +1902,6 @@ public final class Daikon {
         // vars instead of taking the first n.
         int len = ppt.num_tracevars + ppt.num_static_constant_vars;
         VarInfo[] exit_vars = new VarInfo[len];
-        // System.out.printf("new decl fmt = %b%n", FileIO.new_decl_format);
         for (int j = 0; j < len; j++) {
           @SuppressWarnings("interning") // about to be used in new program point
           @Interned VarInfo exit_var = new VarInfo(ppt.var_infos[j]);
@@ -2449,7 +2445,7 @@ public final class Daikon {
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
     startTime = System.nanoTime();
-    init_hierarchy(all_ppts);
+    PptRelation.init_hierarchy(all_ppts);
     duration = System.nanoTime() - startTime;
     debugProgress.fine(
         "Init Hierarchy ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
@@ -2599,17 +2595,7 @@ public final class Daikon {
         p = ((PptConditional) ppt).parent;
       }
 
-      // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
-      // exit), we define them as everything except
-      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT
-      //  and :::CLASS program points.  This scheme ensures that arbitrarily
-      //  named program points such as :::POINT (used by convertcsv.pl)
-      //  will be treated as leaves.
-      if (p.ppt_name.isCombinedExitPoint()
-          || p.ppt_name.isEnterPoint()
-          || p.ppt_name.isThrowsPoint()
-          || p.ppt_name.isObjectInstanceSynthetic()
-          || p.ppt_name.isClassStaticSynthetic()) {
+      if (!p.is_dataflow_leaf()) {
         return;
       }
 
@@ -2618,9 +2604,7 @@ public final class Daikon {
       }
     }
 
-    // Create the initial equality sets
-    ppt.equality_view = new PptSliceEquality(ppt);
-    ppt.equality_view.instantiate_invariants();
+    ppt.create_equality_view();
   }
 
   private static List<SpinfoFile> spinfoFiles = new ArrayList<>();
