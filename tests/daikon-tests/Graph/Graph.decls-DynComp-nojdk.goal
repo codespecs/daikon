@@ -285,7 +285,7 @@ variable return.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::ENTER
+ppt MapQuick1.Graph.addEdge(java.lang.Object,\_java.lang.Object):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -325,7 +325,7 @@ variable to.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::EXIT128
+ppt MapQuick1.Graph.addEdge(java.lang.Object,\_java.lang.Object):::EXIT128
 ppt-type subexit
 variable this
   var-kind variable
