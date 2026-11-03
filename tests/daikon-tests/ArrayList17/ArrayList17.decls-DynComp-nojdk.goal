@@ -4116,7 +4116,7 @@ variable return.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.ArrayList17.set(int, java.lang.Object):::ENTER
+ppt javautil.ArrayList17.set(int,\_java.lang.Object):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -4225,7 +4225,7 @@ variable element.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.ArrayList17.set(int, java.lang.Object):::EXIT432
+ppt javautil.ArrayList17.set(int,\_java.lang.Object):::EXIT432
 ppt-type subexit
 variable this
   var-kind variable
@@ -4557,7 +4557,7 @@ variable return
   rep-type boolean
   comparability 9
 
-ppt javautil.ArrayList17.add(int, java.lang.Object):::ENTER
+ppt javautil.ArrayList17.add(int,\_java.lang.Object):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -4666,7 +4666,7 @@ variable element.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.ArrayList17.add(int, java.lang.Object):::EXIT464
+ppt javautil.ArrayList17.add(int,\_java.lang.Object):::EXIT464
 ppt-type subexit
 variable this
   var-kind variable
@@ -5989,7 +5989,7 @@ variable return
   rep-type boolean
   comparability 9
 
-ppt javautil.ArrayList17.addAll(int, java.util.Collection):::ENTER
+ppt javautil.ArrayList17.addAll(int,\_java.util.Collection):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -6098,7 +6098,7 @@ variable c.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.ArrayList17.addAll(int, java.util.Collection):::EXIT598
+ppt javautil.ArrayList17.addAll(int,\_java.util.Collection):::EXIT598
 ppt-type subexit
 variable this
   var-kind variable
@@ -6212,7 +6212,7 @@ variable return
   rep-type boolean
   comparability 10
 
-ppt javautil.ArrayList17.removeRange(int, int):::ENTER
+ppt javautil.ArrayList17.removeRange(int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -6314,7 +6314,7 @@ variable toIndex
   flags is_param
   comparability 12
 
-ppt javautil.ArrayList17.removeRange(int, int):::EXIT627
+ppt javautil.ArrayList17.removeRange(int,\_int):::EXIT627
 ppt-type subexit
 variable this
   var-kind variable
@@ -7426,7 +7426,7 @@ variable return
   rep-type boolean
   comparability 9
 
-ppt javautil.ArrayList17.batchRemove(java.util.Collection, boolean):::ENTER
+ppt javautil.ArrayList17.batchRemove(java.util.Collection,\_boolean):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -7535,7 +7535,7 @@ variable complement
   flags is_param
   comparability 3
 
-ppt javautil.ArrayList17.batchRemove(java.util.Collection, boolean):::EXIT722
+ppt javautil.ArrayList17.batchRemove(java.util.Collection,\_boolean):::EXIT722
 ppt-type subexit
 variable this
   var-kind variable
@@ -8621,7 +8621,7 @@ variable return.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.ArrayList17.subList(int, int):::ENTER
+ppt javautil.ArrayList17.subList(int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -8723,7 +8723,7 @@ variable toIndex
   flags is_param
   comparability 12
 
-ppt javautil.ArrayList17.subList(int, int):::EXIT957
+ppt javautil.ArrayList17.subList(int,\_int):::EXIT957
 ppt-type subexit
 variable this
   var-kind variable
@@ -8851,7 +8851,7 @@ variable return.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.ArrayList17.subListRangeCheck(int, int, int):::ENTER
+ppt javautil.ArrayList17.subListRangeCheck(int,\_int,\_int):::ENTER
 ppt-type enter
 variable javautil.ArrayList17.serialVersionUID
   var-kind variable
@@ -8917,7 +8917,7 @@ variable size
   flags is_param
   comparability 8
 
-ppt javautil.ArrayList17.subListRangeCheck(int, int, int):::EXIT968
+ppt javautil.ArrayList17.subListRangeCheck(int,\_int,\_int):::EXIT968
 ppt-type subexit
 variable javautil.ArrayList17.serialVersionUID
   var-kind variable
@@ -9543,7 +9543,7 @@ variable return
   rep-type boolean
   comparability 3
 
-ppt javautil.AbstractList17.set(int, java.lang.Object):::ENTER
+ppt javautil.AbstractList17.set(int,\_java.lang.Object):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -9583,7 +9583,7 @@ variable element.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.AbstractList17.add(int, java.lang.Object):::ENTER
+ppt javautil.AbstractList17.add(int,\_java.lang.Object):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -9994,7 +9994,7 @@ variable this.modCount
   rep-type int
   comparability 3
 
-ppt javautil.AbstractList17.addAll(int, java.util.Collection):::ENTER
+ppt javautil.AbstractList17.addAll(int,\_java.util.Collection):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -10034,7 +10034,7 @@ variable c.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.AbstractList17.addAll(int, java.util.Collection):::EXIT265
+ppt javautil.AbstractList17.addAll(int,\_java.util.Collection):::EXIT265
 ppt-type subexit
 variable this
   var-kind variable
@@ -10253,7 +10253,7 @@ variable return.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt javautil.AbstractList17.subList(int, int):::ENTER
+ppt javautil.AbstractList17.subList(int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -10286,7 +10286,7 @@ variable toIndex
   flags is_param
   comparability 5
 
-ppt javautil.AbstractList17.subList(int, int):::EXIT486
+ppt javautil.AbstractList17.subList(int,\_int):::EXIT486
 ppt-type subexit
 variable this
   var-kind variable
@@ -10582,7 +10582,7 @@ variable return
   rep-type int
   comparability 2
 
-ppt javautil.AbstractList17.removeRange(int, int):::ENTER
+ppt javautil.AbstractList17.removeRange(int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -10615,7 +10615,7 @@ variable toIndex
   flags is_param
   comparability 5
 
-ppt javautil.AbstractList17.removeRange(int, int):::EXIT575
+ppt javautil.AbstractList17.removeRange(int,\_int):::EXIT575
 ppt-type subexit
 variable this
   var-kind variable
