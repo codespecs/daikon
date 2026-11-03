@@ -105,7 +105,8 @@ pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
 
 missing-tests__%: do-ConstantTest__% do-ConstMergeTest__% do-ExceptionTest__% \
 		   do-pthread-test__% do-rdtsc__% do-setjmp-test__% \
-		   do-shared-lib__%  do-UnionComp__% do-virtual-method__%
+		   do-shared-lib__% do-sigaltstack-test__% do-UnionComp__% \
+		   do-virtual-method__%
 	@
 
 tws-tests__%: do-SelectGlobalsTest__%

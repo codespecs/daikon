@@ -1,6 +1,7 @@
 package daikon.chicory;
 
 import daikon.Daikon;
+import daikon.FileIO;
 import daikon.plumelib.util.EntryReader;
 import daikon.plumelib.util.EntryReader.CommentFormat;
 import daikon.plumelib.util.EntryReader.EntryFormat;
@@ -66,9 +67,7 @@ public class DeclReader {
   public List<String> header = new ArrayList<>();
 
   /** The keywords of the header records. */
-  private static final Set<String> HEADER_KEYWORDS =
-      new HashSet<>(
-          Arrays.asList("decl-version", "var-comparability", "input-language", "ListImplementors"));
+  private static final Set<String> HEADER_KEYWORDS = new HashSet<>(FileIO.header_keywords);
 
   /**
    * The keywords of the records that are permitted only within a variable. The keywords "parent"
@@ -415,7 +414,7 @@ public class DeclReader {
    * @return true if a record with the given keyword starts a declaration or a header record
    */
   private static boolean startsBlock(String keyword) {
-    return keyword.equals("ppt") || HEADER_KEYWORDS.contains(keyword);
+    return keyword.equals("ppt") || FileIO.header_keywords.contains(keyword);
   }
 
   /**
@@ -554,7 +553,7 @@ public class DeclReader {
     if (tokens.length != 2 || !tokens[0].equals("ppt")) {
       reportFileError(decl_file, "Expected \"ppt <PPTNAME>\", found \"" + firstLine + "\"");
     }
-    String pptname = tokens[1];
+    String pptname = DaikonWriter.unescape(tokens[1]);
     if (forRewriting && !pptname.contains(":::")) {
       reportFileError(decl_file, "Program point name \"" + pptname + "\" does not contain \":::\"");
     }

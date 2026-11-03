@@ -549,7 +549,7 @@ variable return.current.next
   rep-type hashcode
   comparability 3
 
-ppt DataStructures.LinkedList.insert(java.lang.Object, DataStructures.LinkedListItr):::ENTER
+ppt DataStructures.LinkedList.insert(java.lang.Object,\_DataStructures.LinkedListItr):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -638,7 +638,7 @@ variable p.current.next
   rep-type hashcode
   comparability 3
 
-ppt DataStructures.LinkedList.insert(java.lang.Object, DataStructures.LinkedListItr):::EXIT83
+ppt DataStructures.LinkedList.insert(java.lang.Object,\_DataStructures.LinkedListItr):::EXIT83
 ppt-type subexit
 variable this
   var-kind variable
@@ -1615,7 +1615,7 @@ variable theElement.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt DataStructures.ListNode.ListNode(java.lang.Object, DataStructures.ListNode):::ENTER
+ppt DataStructures.ListNode.ListNode(java.lang.Object,\_DataStructures.ListNode):::ENTER
 ppt-type enter
 variable theElement
   var-kind variable
@@ -1671,7 +1671,7 @@ variable n.next.next
   rep-type hashcode
   comparability 5
 
-ppt DataStructures.ListNode.ListNode(java.lang.Object, DataStructures.ListNode):::EXIT19
+ppt DataStructures.ListNode.ListNode(java.lang.Object,\_DataStructures.ListNode):::EXIT19
 ppt-type subexit
 variable this
   var-kind variable
