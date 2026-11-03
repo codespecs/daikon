@@ -39,8 +39,7 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.StringsPlume;
 
-// This class is deprecated.  It should be removed as soon as Daikon no
-// longer supports the old decl format.
+// This class is deprecated.  It should be removed.
 
 // If you change this file, also change class daikon.test.VarInfoNameTest.
 
@@ -76,7 +75,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    */
   public static VarInfoName parse(String name) {
 
-    // Remove the array indication from the new decl format
+    // Remove the array indication from the declaration format
     name = name.replace("[..]", "[]");
 
     // orig(x)
@@ -169,12 +168,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       return parse(first).applyField(field);
     }
 
-    // New decl format permits arbitrary uninterpreted strings as names
-    if (FileIO.new_decl_format) {
-      return new Simple(name).intern();
-    } else {
-      throw new UnsupportedOperationException("parse error: '" + name + "'");
-    }
+    // The declaration format permits arbitrary uninterpreted strings as names
+    return new Simple(name).intern();
   }
 
   /**

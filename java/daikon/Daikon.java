@@ -723,10 +723,7 @@ public final class Daikon {
    *
    * @param args the command-line arguments
    */
-  @SuppressWarnings({
-    "nullness:contracts.precondition", // private field
-    "SystemConsoleNull" // https://errorprone.info/bugpattern/SystemConsoleNull
-  })
+  @SuppressWarnings("SystemConsoleNull") // https://errorprone.info/bugpattern/SystemConsoleNull
   public static void mainHelper(final String[] args) {
     long startTime = System.nanoTime();
     long duration;
@@ -1905,7 +1902,6 @@ public final class Daikon {
         // vars instead of taking the first n.
         int len = ppt.num_tracevars + ppt.num_static_constant_vars;
         VarInfo[] exit_vars = new VarInfo[len];
-        // System.out.printf("new decl fmt = %b%n", FileIO.new_decl_format);
         for (int j = 0; j < len; j++) {
           @SuppressWarnings("interning") // about to be used in new program point
           @Interned VarInfo exit_var = new VarInfo(ppt.var_infos[j]);
@@ -2449,7 +2445,7 @@ public final class Daikon {
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
     startTime = System.nanoTime();
-    init_hierarchy(all_ppts);
+    PptRelation.init_hierarchy(all_ppts);
     duration = System.nanoTime() - startTime;
     debugProgress.fine(
         "Init Hierarchy ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");

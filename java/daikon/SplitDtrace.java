@@ -79,11 +79,14 @@ public final class SplitDtrace {
         if (rec.isEmpty()) {
           break;
         }
+        if (isObsoleteFormat(rec)) {
+          throw new Daikon.UserError(filename + ": " + FileIO.obsoleteFormatMessage);
+        }
         if (isHeader(rec)) {
           version2 = FileIO.is_version2_after(rec.get(0), version2);
         } else if (isDeclare(rec, version2)) {
           declNum++;
-        } else {
+        } else if (!isHeader(rec)) {
           recNum++;
         }
       }
@@ -198,9 +201,25 @@ public final class SplitDtrace {
    */
   @Pure
   static boolean isDeclare(List<String> res, boolean version2) {
-    String line = res.get(0);
-    // A version 1 declaration starts with "DECLARE", and a version 2 declaration with "ppt".
-    return version2 ? line.startsWith("ppt ") : line.equals("DECLARE");
+    // mainHelper rejects a file in the obsolete version 1 format, so every declaration is in the
+    // version 2 format, even in a file that has no "decl-version" record (for which version2 is
+    // false).
+    return FileIO.is_declaration_header(res.get(0));
+  }
+
+  /**
+   * Returns true if the given record shows that the file is in the obsolete version 1 format: it is
+   * a "DECLARE" or "VarComparability" record, or a "decl-version 1.0" record.
+   *
+   * @param res the lines of a record from a .decls or .dtrace file
+   * @return true if the record shows that the file is in the version 1 format
+   */
+  @Pure
+  static boolean isObsoleteFormat(List<String> res) {
+    String[] words = res.get(0).trim().split("\\s+");
+    return words[0].equals("DECLARE")
+        || words[0].equals("VarComparability")
+        || (words[0].equals("decl-version") && words.length > 1 && words[1].equals("1.0"));
   }
 
   /**
