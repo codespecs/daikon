@@ -370,6 +370,10 @@ public final class FileIO {
       decl_error(state, "ppt name expected in '%s'", line);
       throw new Error(); // this can't happen
     }
+    // The ppt name is the rest of the line.  A ppt name can contain blanks, which a front end might
+    // not escape.  Chicory's DeclReader and the reading of a sample's ppt name also take the whole
+    // remainder of the line.
+    ppt_name = user_mod_ppt_name(unescape_decl(line.substring("ppt".length()).trim()));
 
     // Information that will populate the new program point.
     Map<String, VarDefinition> varmap = new LinkedHashMap<>();
