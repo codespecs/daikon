@@ -130,7 +130,7 @@ variable node
   flags is_param
   comparability 2
 
-ppt MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::ENTER
+ppt MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode,\_MapQuick.WeightedNodePath):::ENTER
 ppt-type enter
 variable node
   var-kind variable
@@ -175,7 +175,7 @@ variable path.cost
   rep-type int
   comparability 4
 
-ppt MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT51
+ppt MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode,\_MapQuick.WeightedNodePath):::EXIT51
 ppt-type subexit
 variable this
   var-kind variable

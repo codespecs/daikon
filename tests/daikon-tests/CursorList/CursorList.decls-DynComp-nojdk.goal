@@ -984,7 +984,7 @@ variable return.current
   rep-type int
   comparability 3
 
-ppt DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::ENTER
+ppt DataStructures.CursorList.insert(java.lang.Object,\_DataStructures.CursorListItr):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -1074,7 +1074,7 @@ variable p.current
   rep-type int
   comparability 3
 
-ppt DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::EXIT108
+ppt DataStructures.CursorList.insert(java.lang.Object,\_DataStructures.CursorListItr):::EXIT108
 ppt-type subexit
 variable this
   var-kind variable
@@ -2200,7 +2200,7 @@ variable theElement.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt DataStructures.CursorNode.CursorNode(java.lang.Object, int):::ENTER
+ppt DataStructures.CursorNode.CursorNode(java.lang.Object,\_int):::ENTER
 ppt-type enter
 variable theElement
   var-kind variable
@@ -2222,7 +2222,7 @@ variable n
   flags is_param
   comparability 2
 
-ppt DataStructures.CursorNode.CursorNode(java.lang.Object, int):::EXIT19
+ppt DataStructures.CursorNode.CursorNode(java.lang.Object,\_int):::EXIT19
 ppt-type subexit
 variable this
   var-kind variable

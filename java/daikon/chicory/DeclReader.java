@@ -402,7 +402,7 @@ public class DeclReader {
     if (tokens.length != 2 || !tokens[0].equals("ppt")) {
       reportFileError(decl_file, "Expected \"ppt <PPTNAME>\", found \"" + firstLine + "\"");
     }
-    String pptname = tokens[1];
+    String pptname = DaikonWriter.unescape(tokens[1]);
     DeclPpt ppt = new DeclPpt(pptname);
     ppts.put(pptname, ppt);
 
