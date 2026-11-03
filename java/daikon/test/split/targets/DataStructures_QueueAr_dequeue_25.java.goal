@@ -8,7 +8,7 @@ public final class DataStructures_QueueAr_dequeue_25 extends Splitter {
     return "++front == theArray.length";
   }
 
-  VarInfo this_theArray_array_varinfo; // this.theArray[]
+  VarInfo this_theArray_array_varinfo; // this.theArray[..]
   VarInfo this_front_varinfo; // this.front
 
   static DummyInvariant dummyInvFactory;
@@ -16,7 +16,7 @@ public final class DataStructures_QueueAr_dequeue_25 extends Splitter {
 
   public DataStructures_QueueAr_dequeue_25() { }
   public DataStructures_QueueAr_dequeue_25(Ppt ppt) {
-    this_theArray_array_varinfo = ppt.find_var_by_name("this.theArray[]");
+    this_theArray_array_varinfo = ppt.find_var_by_name("this.theArray[..]");
     this_front_varinfo = ppt.find_var_by_name("this.front");
   }
 
@@ -48,7 +48,7 @@ public final class DataStructures_QueueAr_dequeue_25 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
-    VarInfo this_theArray_array_vi = ppt.find_var_by_name("this.theArray[]");
+    VarInfo this_theArray_array_vi = ppt.find_var_by_name("this.theArray[..]");
     VarInfo this_front_vi = ppt.find_var_by_name("this.front");
     if (this_theArray_array_vi != null && this_front_vi != null) {
       dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_theArray_array_vi, this_front_vi});
