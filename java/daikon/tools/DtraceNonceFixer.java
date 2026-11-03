@@ -16,8 +16,12 @@ import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
@@ -25,10 +29,10 @@ import org.plumelib.util.StringsPlume;
 /**
  * This tool fixes a Dtrace file whose invocation nonces became inaccurate as a result of a {@code
  * cat} command combining multiple dtrace files. It renumbers the nonces of each concatenated file
- * after the first so that they do not collide with nonces of earlier files, and it gives a new
- * nonce to each sample that lacks one, other than an ENTER, EXIT, or THROWS sample. (Daikon pairs
- * nonce-less ENTER and EXIT samples by their order in the file; giving each one a different nonce
- * would prevent Daikon from pairing them.)
+ * after the first so that they do not collide with nonces of earlier files, and it gives a nonce to
+ * each sample that lacks one. An EXIT or THROWS sample gets the same nonce as its ENTER sample,
+ * which is the most recent unmatched ENTER sample for the same method (as Daikon pairs samples
+ * without nonces).
  */
 public class DtraceNonceFixer {
 
@@ -43,9 +47,9 @@ public class DtraceNonceFixer {
           "Usage: DtraceNonceFixer FILENAME [OUTFILE]",
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
           "It renumbers the nonces of concatenated dtrace files so that they do not collide,",
-          "and it gives a nonce to each sample that lacks one, other than an ENTER, EXIT, or",
-          "THROWS sample.  The result is written to OUTFILE, which defaults to",
-          "FILENAME_all_fixed (plus \".gz\" if FILENAME ends with \".gz\").",
+          "and it gives a nonce to each sample that lacks one; an EXIT or THROWS sample gets",
+          "the nonce of its ENTER sample.  The result is written to OUTFILE, which defaults",
+          "to FILENAME_all_fixed (plus \".gz\" if FILENAME ends with \".gz\").",
           "OUTFILE may be the same as FILENAME.");
 
   public static void main(String[] args) {
@@ -100,8 +104,8 @@ public class DtraceNonceFixer {
         try {
           // First pass: renumber the nonces of each concatenated file after the first.
           int maxNonce = renumberNonces(infileName, tmpFile.toString());
-          // Second pass: give a new nonce to each sample that lacks one, such as an OBJECT or
-          // CLASS sample.
+          // Second pass: give a nonce to each sample that lacks one.  An EXIT or THROWS sample
+          // gets the nonce of its ENTER sample; any other sample gets a new nonce.
           addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
           // Delete before replacing the output file, so that no failure occurs after the output
           // file changes.
@@ -168,12 +172,14 @@ public class DtraceNonceFixer {
    *
    * @param inFilename the dtrace file to read
    * @param outFilename the dtrace file to write
-   * @return the largest nonce in the output
+   * @return the largest nonce in the output, or -1 if the output has no nonce
    * @throws IOException if there is trouble reading or writing a file
    */
   private static int renumberNonces(String inFilename, String outFilename) throws IOException {
-    // maxNonce - the biggest nonce ever found in the file
-    int maxNonce = 0;
+    // maxNonce - the biggest nonce ever found in the file, or -1 if none has been found.  When the
+    // file has no nonces, the new nonces start at 0, so that if outputs of this program are
+    // concatenated, renumberNonces finds the boundaries between them.
+    int maxNonce = -1;
     try (BufferedReader br = FilesPlume.newBufferedFileReader(inFilename);
         BufferedWriter bw = FilesPlume.newBufferedFileWriter(outFilename)) {
       PrintWriter out = new PrintWriter(bw);
@@ -205,28 +211,48 @@ public class DtraceNonceFixer {
   }
 
   /**
-   * Copies {@code inFilename} to {@code outFilename}, giving a new nonce to each sample that lacks
-   * one, such as an OBJECT or CLASS sample, other than an ENTER, EXIT, or THROWS sample. Each new
-   * nonce is larger than {@code maxNonce}.
+   * Copies {@code inFilename} to {@code outFilename}, giving a nonce to each sample that lacks one,
+   * such as an OBJECT or CLASS sample. Each new nonce is larger than {@code maxNonce}. An EXIT or
+   * THROWS sample gets the nonce of the most recent unmatched ENTER sample for the same method,
+   * like the call stack that Daikon uses for samples without nonces. As in Daikon, an ENTER sample
+   * that has a nonce in the input is not paired with an EXIT or THROWS sample that lacks one. An
+   * EXIT or THROWS sample that has no unmatched ENTER sample gets a new nonce.
    *
    * @param inFilename the dtrace file to read
    * @param outFilename the dtrace file to write
-   * @param maxNonce the largest nonce in {@code inFilename}
+   * @param maxNonce the largest nonce in {@code inFilename}, or -1 if it has no nonce
    * @throws IOException if there is trouble reading or writing a file
    */
   private static void addMissingNonces(String inFilename, String outFilename, int maxNonce)
       throws IOException {
+    CallStack callStack = new CallStack();
+    // The parsed program point names, so that each distinct name is parsed only once.
+    Map<String, PptName> pptNames = new HashMap<>();
     try (BufferedReader br = FilesPlume.newBufferedFileReader(inFilename);
         BufferedWriter bw = FilesPlume.newBufferedFileWriter(outFilename)) {
       PrintWriter out = new PrintWriter(bw);
       Paragraph para;
       while ((para = Paragraph.read(br)) != null) {
-        if (para.isSample() && para.nonce == -1 && !isCallPoint(new PptName(para.pptNameLine()))) {
-          maxNonce = addNonces(maxNonce, 1);
-          para.printWithNonce(out, maxNonce);
-        } else {
+        if (!para.isSample() || para.nonce != -1) {
           para.print(out);
+          continue;
         }
+        PptName pptName = pptNames.computeIfAbsent(para.pptNameLine(), PptName::new);
+        // This is the same test that Daikon uses in FileIO.compute_orig_variables.
+        boolean isEnter = pptName.name().endsWith(FileIO.enter_tag);
+        boolean isExit = isExitOrThrows(pptName);
+        Integer enterNonce = isExit ? callStack.matchMethod(methodName(pptName)) : null;
+        int nonce;
+        if (enterNonce != null) {
+          nonce = enterNonce;
+        } else {
+          maxNonce = addNonces(maxNonce, 1);
+          nonce = maxNonce;
+          if (isEnter) {
+            callStack.push(methodName(pptName), nonce);
+          }
+        }
+        para.printWithNonce(out, nonce);
       }
       throwIfError(out, outFilename);
     }
@@ -266,17 +292,6 @@ public class DtraceNonceFixer {
   }
 
   /**
-   * Returns true if the given program point is an ENTER, EXIT, or THROWS point. Daikon pairs each
-   * EXIT or THROWS sample with an ENTER sample.
-   *
-   * @param pptName a program point name
-   * @return true if {@code pptName} is an ENTER, EXIT, or THROWS point
-   */
-  private static boolean isCallPoint(PptName pptName) {
-    return pptName.isEnterPoint() || isExitOrThrows(pptName);
-  }
-
-  /**
    * Returns true if the given program point is an EXIT or THROWS point, which Daikon pairs with an
    * ENTER point.
    *
@@ -285,6 +300,86 @@ public class DtraceNonceFixer {
    */
   private static boolean isExitOrThrows(PptName pptName) {
     return pptName.isExitPoint() || pptName.isThrowsPoint();
+  }
+
+  /**
+   * Returns the given program point name, without the part starting at ":::".
+   *
+   * @param pptName a program point name
+   * @return the method part of {@code pptName}
+   */
+  private static String methodName(PptName pptName) {
+    // The PptName(String) constructor always sets the name without the point.
+    return castNonNull(pptName.getNameWithoutPoint());
+  }
+
+  /** A method call whose ENTER sample has been seen, but whose EXIT sample has not. */
+  private static final class Call {
+    /** The program point name, without the part starting at ":::". */
+    final String method;
+
+    /** The nonce of the ENTER sample. */
+    final int nonce;
+
+    /**
+     * Creates a new Call.
+     *
+     * @param method the program point name, without the part starting at ":::"
+     * @param nonce the nonce of the ENTER sample
+     */
+    Call(String method, int nonce) {
+      this.method = method;
+      this.nonce = nonce;
+    }
+  }
+
+  /**
+   * The ENTER samples that have not yet been matched by an EXIT sample, and that will not be
+   * matched by nonce. Each operation takes amortized constant time.
+   */
+  private static final class CallStack {
+    /** The calls, most recent first. */
+    private final Deque<Call> stack = new ArrayDeque<>();
+
+    /** The number of calls in {@link #stack}, for each method. */
+    private final Map<String, Integer> counts = new HashMap<>();
+
+    /**
+     * Adds a call.
+     *
+     * @param method the program point name of the ENTER sample, without the part starting at ":::"
+     * @param nonce the nonce of the ENTER sample
+     */
+    void push(String method, int nonce) {
+      stack.push(new Call(method, nonce));
+      counts.merge(method, 1, Integer::sum);
+    }
+
+    /**
+     * Removes the most recent call to {@code method}, along with all more recent calls (which
+     * exited exceptionally), and returns its nonce. If there is no call to {@code method}, returns
+     * null and leaves this unchanged.
+     *
+     * @param method the method of an EXIT sample
+     * @return the nonce of the matching ENTER sample, or null if there is none
+     */
+    @Nullable Integer matchMethod(String method) {
+      if (!counts.containsKey(method)) {
+        return null;
+      }
+      while (true) {
+        Call call = stack.pop();
+        Integer count = castNonNull(counts.get(call.method)); // every call in the stack is counted
+        if (count == 1) {
+          counts.remove(call.method);
+        } else {
+          counts.put(call.method, count - 1);
+        }
+        if (call.method.equals(method)) {
+          return call.nonce;
+        }
+      }
+    }
   }
 
   /** A paragraph of a dtrace file: its lines, up to but not including a blank line. */

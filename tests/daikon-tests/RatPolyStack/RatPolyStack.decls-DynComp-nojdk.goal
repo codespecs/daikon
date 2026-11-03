@@ -1360,7 +1360,7 @@ variable this.tail.tail.tail
   rep-type hashcode
   comparability 6
 
-ppt PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::ENTER
+ppt PolyCalc.Cons.Cons(PolyCalc.RatPoly,\_PolyCalc.Cons):::ENTER
 ppt-type enter
 variable h
   var-kind variable
@@ -1395,7 +1395,7 @@ variable t.tail.tail
   rep-type hashcode
   comparability 5
 
-ppt PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::EXIT11
+ppt PolyCalc.Cons.Cons(PolyCalc.RatPoly,\_PolyCalc.Cons):::EXIT11
 ppt-type subexit
 variable this
   var-kind variable

@@ -36326,10 +36326,12 @@ return[..].op_targ
 return[..].op_type
 
 ..Perl_keyword():::ENTER
-d len
+d
+len
 
 ..Perl_keyword():::EXIT0
-d len
+d
+len
 return
 
 ..Perl_leave_scope():::ENTER

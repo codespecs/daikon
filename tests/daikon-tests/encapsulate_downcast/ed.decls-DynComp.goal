@@ -508,7 +508,7 @@ variable this._weight
   rep-type int
   comparability 6
 
-ppt misc.Person.Person(java.lang.String, int, int):::ENTER
+ppt misc.Person.Person(java.lang.String,\_int,\_int):::ENTER
 ppt-type enter
 variable name
   var-kind variable
@@ -536,7 +536,7 @@ variable weight
   flags is_param
   comparability 5
 
-ppt misc.Person.Person(java.lang.String, int, int):::EXIT15
+ppt misc.Person.Person(java.lang.String,\_int,\_int):::EXIT15
 ppt-type subexit
 variable this
   var-kind variable

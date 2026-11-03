@@ -433,7 +433,7 @@ variable return.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+ppt DataStructures.BinarySearchTree.insert(DataStructures.Comparable,\_DataStructures.BinaryNode):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -466,7 +466,7 @@ variable t
   flags is_param
   comparability 2
 
-ppt DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT132
+ppt DataStructures.BinarySearchTree.insert(DataStructures.Comparable,\_DataStructures.BinaryNode):::EXIT132
 ppt-type subexit
 variable this
   var-kind variable
@@ -504,7 +504,7 @@ variable return
   rep-type hashcode
   comparability 2
 
-ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable,\_DataStructures.BinaryNode):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -537,7 +537,7 @@ variable t
   flags is_param
   comparability 2
 
-ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144
+ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable,\_DataStructures.BinaryNode):::EXIT144
 ppt-type subexit
 variable this
   var-kind variable
@@ -575,7 +575,7 @@ variable return
   rep-type hashcode
   comparability 2
 
-ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156
+ppt DataStructures.BinarySearchTree.remove(DataStructures.Comparable,\_DataStructures.BinaryNode):::EXIT156
 ppt-type subexit
 variable this
   var-kind variable
@@ -753,7 +753,7 @@ variable return
   rep-type hashcode
   comparability 2
 
-ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable,\_DataStructures.BinaryNode):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -786,7 +786,7 @@ variable t
   flags is_param
   comparability 2
 
-ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable,\_DataStructures.BinaryNode):::EXIT196
 ppt-type subexit
 variable this
   var-kind variable
@@ -824,7 +824,7 @@ variable return
   rep-type hashcode
   comparability 2
 
-ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable,\_DataStructures.BinaryNode):::EXIT198
 ppt-type subexit
 variable this
   var-kind variable
@@ -862,7 +862,7 @@ variable return
   rep-type hashcode
   comparability 2
 
-ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable,\_DataStructures.BinaryNode):::EXIT200
 ppt-type subexit
 variable this
   var-kind variable
@@ -900,7 +900,7 @@ variable return
   rep-type hashcode
   comparability 2
 
-ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202
+ppt DataStructures.BinarySearchTree.find(DataStructures.Comparable,\_DataStructures.BinaryNode):::EXIT202
 ppt-type subexit
 variable this
   var-kind variable
