@@ -14821,7 +14821,7 @@ variable item.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt DataStructures.RedBlackTree.rotate(DataStructures.Comparable, DataStructures.RedBlackNode):::ENTER
+ppt DataStructures.RedBlackTree.rotate(DataStructures.Comparable,\_DataStructures.RedBlackNode):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -15458,7 +15458,7 @@ variable parent.color
   rep-type int
   comparability 22
 
-ppt DataStructures.RedBlackTree.rotate(DataStructures.Comparable, DataStructures.RedBlackNode):::EXIT211
+ppt DataStructures.RedBlackTree.rotate(DataStructures.Comparable,\_DataStructures.RedBlackNode):::EXIT211
 ppt-type subexit
 variable this
   var-kind variable
@@ -16181,7 +16181,7 @@ variable return.color
   rep-type int
   comparability 22
 
-ppt DataStructures.RedBlackTree.rotate(DataStructures.Comparable, DataStructures.RedBlackNode):::EXIT215
+ppt DataStructures.RedBlackTree.rotate(DataStructures.Comparable,\_DataStructures.RedBlackNode):::EXIT215
 ppt-type subexit
 variable this
   var-kind variable
@@ -22786,7 +22786,7 @@ variable theElement.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable, DataStructures.RedBlackNode, DataStructures.RedBlackNode):::ENTER
+ppt DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable,\_DataStructures.RedBlackNode,\_DataStructures.RedBlackNode):::ENTER
 ppt-type enter
 variable theElement
   var-kind variable
@@ -22976,7 +22976,7 @@ variable rt.color
   rep-type int
   comparability 3
 
-ppt DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable, DataStructures.RedBlackNode, DataStructures.RedBlackNode):::EXIT21
+ppt DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable,\_DataStructures.RedBlackNode,\_DataStructures.RedBlackNode):::EXIT21
 ppt-type subexit
 variable this
   var-kind variable

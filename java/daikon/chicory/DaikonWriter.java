@@ -191,8 +191,15 @@ public abstract class DaikonWriter {
     return Signatures.classGetNameToBinaryName(type.getName());
   }
 
-  /** Escapes blanks and backslashes in names written to the decl/dtrace files. */
-  public String escape(String str) {
+  /**
+   * Returns the given name, with blanks and backslashes escaped as the decl/dtrace files require.
+   * Each blank becomes {@code \_} and each backslash becomes {@code \\}. This is the inverse of
+   * {@link #unescape}.
+   *
+   * @param str a name
+   * @return the representation of the name in a decl/dtrace file
+   */
+  public static String escape(String str) {
 
     // If there is nothing to escape, return the original string
     if ((str.indexOf('\\') == -1) && (str.indexOf(' ') == -1)) {
@@ -202,5 +209,35 @@ public abstract class DaikonWriter {
     str = str.replace("\\", "\\\\");
     str = str.replace(" ", "\\_");
     return str;
+  }
+
+  /**
+   * Returns the name that a decl/dtrace file represents as the given string. Each {@code \_}
+   * becomes a blank and each {@code \\} becomes a backslash; any other character, including a
+   * backslash that begins no such pair, is retained. This is the inverse of {@link #escape}.
+   *
+   * @param str the representation of a name in a decl/dtrace file
+   * @return the name
+   */
+  public static String unescape(String str) {
+    if (str.indexOf('\\') == -1) {
+      return str;
+    }
+    StringBuilder sb = new StringBuilder(str.length());
+    int i = 0;
+    while (i < str.length()) {
+      char c = str.charAt(i);
+      if (c == '\\' && i + 1 < str.length()) {
+        char next = str.charAt(i + 1);
+        if (next == '_' || next == '\\') {
+          sb.append(next == '_' ? ' ' : '\\');
+          i += 2;
+          continue;
+        }
+      }
+      sb.append(c);
+      i++;
+    }
+    return sb.toString();
   }
 }
