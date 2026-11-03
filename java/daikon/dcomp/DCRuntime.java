@@ -1933,16 +1933,14 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Write the class ppt
     String classPptName = ci.class_name + ":::CLASS";
-    pw.println("ppt " + classPptName);
-    pw.println("ppt-type class");
+    printPptHeader(pw, classPptName, "class");
     printDeclVars(get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
     pw.println();
     time_decl.log("printed class ppt");
 
     // Write the object ppt
     String objectPptName = ci.class_name + ":::OBJECT";
-    pw.println("ppt " + objectPptName);
-    pw.println("ppt-type object");
+    printPptHeader(pw, objectPptName, "object");
     printDeclVars(get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
     pw.println();
     time_decl.log("printed object ppt");
@@ -1958,6 +1956,18 @@ public final class DCRuntime implements ComparabilityProvider {
 
     time_decl.log("finished class %s%n", ci.class_name);
     time_decl.exdent();
+  }
+
+  /**
+   * Prints the "ppt" and "ppt-type" records that begin the declaration of the given program point.
+   *
+   * @param pw where to produce output
+   * @param pptName a program point name, such as "Year.compute(int, int, int):::ENTER"
+   * @param pptType the program point's type, such as "enter" or "subexit"
+   */
+  private static void printPptHeader(PrintWriter pw, String pptName, String pptType) {
+    pw.println("ppt " + DaikonWriter.escape(pptName));
+    pw.println("ppt-type " + pptType);
   }
 
   static long comp_list_ms = 0;
@@ -1991,8 +2001,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Print the enter point
     String enterPptName = clean_decl_name(DaikonWriter.methodEntryName(mi.member));
-    pw.println("ppt " + enterPptName);
-    pw.println("ppt-type enter");
+    printPptHeader(pw, enterPptName, "enter");
     // ppt_name_ms += watch.snapshot();  watch.reset();
     printDeclVars(l, mi.traversalEnter, enterPptName);
     // decl_vars_ms += watch.snapshot();  watch.reset();
@@ -2006,8 +2015,7 @@ public final class DCRuntime implements ComparabilityProvider {
     time_decl.log("got exit comparable sets");
     for (Integer ii : mi.exit_locations) {
       String exitPptName = clean_decl_name(DaikonWriter.methodExitName(mi.member, ii));
-      pw.println("ppt " + exitPptName);
-      pw.println("ppt-type subexit");
+      printPptHeader(pw, exitPptName, "subexit");
       // ppt_name_ms += watch.snapshot();  watch.reset();
 
       time_decl.log("after exit clean_decl_name");
