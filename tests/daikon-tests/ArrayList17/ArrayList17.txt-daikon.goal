@@ -15,6 +15,7 @@ javautil.ArrayList17.EMPTY_ELEMENTDATA[].getClass().getName() == []
 javautil.ArrayList17:::OBJECT
 javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == this.elementData.getClass().getName()
 this.elementData != null
+All the elements of this.elementData[].getClass().getName() have LENGTH=17
 this.size >= 0
 this.modCount >= 0
 size(this.elementData[])-1 != 0
