@@ -62,7 +62,7 @@ variable numElements
   flags is_param
   comparability 2
 
-ppt DataStructures.DisjSets.unionDisjoint(int, int):::ENTER
+ppt DataStructures.DisjSets.unionDisjoint(int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -94,7 +94,7 @@ variable root2
   flags is_param
   comparability 2
 
-ppt DataStructures.DisjSets.unionDisjoint(int, int):::EXIT44
+ppt DataStructures.DisjSets.unionDisjoint(int,\_int):::EXIT44
 ppt-type subexit
 variable this
   var-kind variable
@@ -126,7 +126,7 @@ variable root2
   flags is_param
   comparability 2
 
-ppt DataStructures.DisjSets.unionCareful(int, int):::ENTER
+ppt DataStructures.DisjSets.unionCareful(int,\_int):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -158,7 +158,7 @@ variable set2
   flags is_param
   comparability 2
 
-ppt DataStructures.DisjSets.unionCareful(int, int):::EXIT57
+ppt DataStructures.DisjSets.unionCareful(int,\_int):::EXIT57
 ppt-type subexit
 variable this
   var-kind variable

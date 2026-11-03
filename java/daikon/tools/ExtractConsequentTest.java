@@ -21,6 +21,7 @@ import daikon.inv.binary.twoScalar.IntGreaterThan;
 import daikon.inv.binary.twoScalar.IntNonEqual;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.test.Common;
+import java.util.Arrays;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -95,6 +96,19 @@ public class ExtractConsequentTest {
   }
 
   @Test
+  public void testConjunction() {
+    assertEquals(
+        "(x > 0 || y > 0) && z > 0",
+        ExtractConsequent.conjunction(Arrays.asList("x > 0 || y > 0", "z > 0"), " && "));
+    assertEquals(
+        "x > 0 and (y > 0 or z > 0)",
+        ExtractConsequent.conjunction(Arrays.asList("x > 0", "y > 0 or z > 0"), " and "));
+    assertEquals(
+        "x > 0 && s == \"||\"",
+        ExtractConsequent.conjunction(Arrays.asList("x > 0", "s == \"||\""), " && "));
+  }
+
+  @Test
   public void testReplaceJmlNames() {
     assertEquals("return > 0", ExtractConsequent.replaceJmlNames("\\result > 0"));
     assertEquals(
@@ -122,6 +136,17 @@ public class ExtractConsequentTest {
     assertFalse(ExtractConsequent.post_pattern.matcher("orig(x) > 0").find());
     assertFalse(ExtractConsequent.post_pattern.matcher("\\old(x) > 0").find());
     assertFalse(ExtractConsequent.post_pattern.matcher("this.post(x)").find());
+  }
+
+  @Test
+  public void testUsesPostStateOrClass() {
+    assertTrue(ExtractConsequent.usesPostStateOrClass("\\post(x) > 0"));
+    assertTrue(ExtractConsequent.usesPostStateOrClass("x.getClass() == Foo.class"));
+    assertFalse(ExtractConsequent.usesPostStateOrClass("x > 0"));
+    assertFalse(ExtractConsequent.usesPostStateOrClass("s.equals(\"\\\\post(x)\")"));
+    assertFalse(ExtractConsequent.usesPostStateOrClass("s.equals(\"Foo.class\")"));
+    assertTrue(
+        ExtractConsequent.usesPostStateOrClass("s.equals(\"\\\\post(x)\") && \\post(y) > 0"));
   }
 
   /**
