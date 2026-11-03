@@ -7133,10 +7133,12 @@ comparable in the output.
 Like DynComp, @command{MergeComparability} makes a variable's
 comparability consistent across related program points.  For example, if
 two variables are comparable at any exit point of a method, then they are
-comparable at every exit point and at the entry point of the method; and
-if two fields are comparable at any entry or exit point of a class's
-methods, then they are comparable at the class's @code{OBJECT} program
-point and at every exit point of the class's methods.
+comparable at every exit point and at the entry point of the method.
+Furthermore, if the class has an @code{OBJECT} program point, and two
+variables are comparable at any entry or exit point of the class's
+methods, then the same-named variables are comparable at the
+@code{OBJECT} program point, at every entry and exit point of the
+class's methods, and at the class's @code{CLASS} program point (if any).
 
 A variable that is comparable to everything in any input file (because
 its comparability is a negative number such as @code{-1}, or because it
