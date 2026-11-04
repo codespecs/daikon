@@ -320,4 +320,21 @@ public class DeclReaderTest {
         reader.header.get(reader.header.size() - 1));
     assertThrows(Daikon.UserError.class, () -> parse(lines, true));
   }
+
+  /** A line that is exactly "ppt" in a "ListImplementors" list is a class name, in both modes. */
+  @Test
+  public void testBarePptInListImplementors() {
+    List<String> lines = new ArrayList<>(HEADER);
+    lines.addAll(Arrays.asList("ListImplementors", "java.util.List", "ppt", "java.util.Map", ""));
+    lines.addAll(ppt("1"));
+    String expected =
+        String.join(
+            System.lineSeparator(), "ListImplementors", "java.util.List", "ppt", "java.util.Map");
+    DeclReader ordinary = parse(lines);
+    assertEquals("1", nnComparability(ordinary, "a"));
+    assertEquals(expected, ordinary.header.get(ordinary.header.size() - 1));
+    DeclReader rewriting = parse(lines, true);
+    assertEquals("1", nnComparability(rewriting, "a"));
+    assertEquals(expected, rewriting.header.get(rewriting.header.size() - 1));
+  }
 }

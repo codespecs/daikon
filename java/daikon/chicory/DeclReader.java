@@ -504,7 +504,9 @@ public class DeclReader {
             for (String className = decl_file.readLine();
                 className != null && !className.trim().isEmpty();
                 className = decl_file.readLine()) {
-              if (startsBlock(firstToken(className))) {
+              // A line that is exactly "ppt" is a class name in the unnamed package, not the start
+              // of a declaration, which requires a program point name.
+              if (startsBlock(firstToken(className)) && !className.trim().equals("ppt")) {
                 // The blank line that ends the list is missing.
                 if (forRewriting) {
                   reportFileError(
