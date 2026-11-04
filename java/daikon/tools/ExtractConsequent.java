@@ -346,8 +346,8 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns true if the given condition refers to a post-state value, such as "\post(x)", or
-   * contains ".class". Text within a string or character literal is ignored.
+   * Returns true if the given condition refers to a post-state value, such as "\post(x)" or
+   * "\new(x)", or contains ".class". Text within a string or character literal is ignored.
    *
    * @param condition a condition in Java format
    * @return true if the condition refers to a post-state value or contains ".class"
@@ -650,8 +650,10 @@ public class ExtractConsequent {
   }
 
   /**
-   * Matches a post-state value in Java format, such as "\post(x)", which a splitter cannot use. The
-   * Java format uses "\post" only for a variable declared in the old declaration format.
+   * Matches a post-state value in Java format, such as "\post(x)" or "\new(x)", which a splitter
+   * cannot use. The Java format uses "\post" for a variable declared in the old declaration format,
+   * and "\new" for a post-state index into a pre-state sequence, such as "\new(i)" in
+   * "\old(daikon.Quant.getElement_int(a, \new(i)))", in the new declaration format.
    */
   static Pattern post_pattern;
 
@@ -685,7 +687,7 @@ public class ExtractConsequent {
 
   static {
     try {
-      post_pattern = Pattern.compile("\\\\post\\s*\\(");
+      post_pattern = Pattern.compile("\\\\(?:post|new)\\s*\\(");
       result_pattern = Pattern.compile("\\\\result\\b");
       old_pattern = Pattern.compile("\\\\old\\s*\\(");
       orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
