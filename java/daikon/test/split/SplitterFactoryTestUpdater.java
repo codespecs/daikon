@@ -106,6 +106,7 @@ public class SplitterFactoryTestUpdater {
     generateSplitters("QueueAr.spinfo", "QueueAr.decls");
     generateSplitters("BigFloat.spinfo", "BigFloat.decls");
     generateSplitters("CharBuf.spinfo", "CharBuf.decls");
+    generateSplitters("QuantCalls.spinfo", "QuantCalls.decls");
     processFiles(updateGoals);
     writeTestClass();
   }
@@ -139,16 +140,12 @@ public class SplitterFactoryTestUpdater {
     }
     spinfoFileLists.add(new ArrayList<File>(spinfoFiles));
     for (String declsFile : decls) {
-      declsFile = targetDir + declsFile;
-      declsFileSet.add(new File(declsFile));
+      declsFileSet.add(new File(targetDir + declsFile));
     }
     declsFileLists.add(new ArrayList<File>(declsFileSet));
     try {
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
-      // Calling readDecls in a loop instead of calling
-      // read_data_trace_files allows us to mix version 1 and
-      // version 2 decls file formats.
       for (String declsFile : decls) {
         SplitterTestUtils.readDecls(targetDir + declsFile, allPpts);
       }

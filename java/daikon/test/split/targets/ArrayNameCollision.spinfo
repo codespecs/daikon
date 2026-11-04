@@ -1,0 +1,6 @@
+PPT_NAME misc.ArrayNameCollision.m
+daikon.Quant.getElement_int(this.a, 0) > 0
+daikon.Quant.size(this.a) == 1
+daikon.Quant.getElement_int(this.a_array, 0) > 0
+daikon.Quant.size(this.a_array) == 1
+daikon.Quant.getElement_int(this.a, 0) > daikon.Quant.getElement_int(this.a_array, 0)
