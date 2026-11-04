@@ -132,6 +132,12 @@ public class ExtractConsequentTest {
   public void testPostPattern() {
     assertTrue(ExtractConsequent.post_pattern.matcher("\\post(x) > 0").find());
     assertTrue(ExtractConsequent.post_pattern.matcher("x == \\post (y)").find());
+    assertTrue(
+        ExtractConsequent.post_pattern
+            .matcher("orig(daikon.Quant.getElement_int(a, \\new(i))) > 0")
+            .find());
+    assertTrue(ExtractConsequent.post_pattern.matcher("x == \\new (y)").find());
+    assertFalse(ExtractConsequent.post_pattern.matcher("new Foo() == x").find());
     assertFalse(ExtractConsequent.post_pattern.matcher("x > 0").find());
     assertFalse(ExtractConsequent.post_pattern.matcher("orig(x) > 0").find());
     assertFalse(ExtractConsequent.post_pattern.matcher("\\old(x) > 0").find());
@@ -143,7 +149,9 @@ public class ExtractConsequentTest {
     assertTrue(ExtractConsequent.usesPostStateOrClass("\\post(x) > 0"));
     assertTrue(ExtractConsequent.usesPostStateOrClass("x.getClass() == Foo.class"));
     assertFalse(ExtractConsequent.usesPostStateOrClass("x > 0"));
+    assertTrue(ExtractConsequent.usesPostStateOrClass("\\old(a[\\new(i)]) > 0"));
     assertFalse(ExtractConsequent.usesPostStateOrClass("s.equals(\"\\\\post(x)\")"));
+    assertFalse(ExtractConsequent.usesPostStateOrClass("s.equals(\"\\\\new(x)\")"));
     assertFalse(ExtractConsequent.usesPostStateOrClass("s.equals(\"Foo.class\")"));
     assertTrue(
         ExtractConsequent.usesPostStateOrClass("s.equals(\"\\\\post(x)\") && \\post(y) > 0"));
