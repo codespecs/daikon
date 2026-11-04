@@ -355,8 +355,11 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
     // QuantFixer must run before ArrayFixer, which would add "_identity" to the array arguments.
-    condition = QuantFixer.fixQuant(condition, baseNames, varInfos);
-    condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
+    // QuantFixer leaves placeholders for the array arguments, so that ArrayFixer does not mistake
+    // the compilable name of one array for the base name of another.
+    QuantFixer.Result quantFixed = QuantFixer.fixQuant(condition, baseNames, varInfos);
+    condition = ArrayFixer.fixArrays(quantFixed.expression, baseNames, varInfos);
+    condition = quantFixed.restoreArrayNames(condition);
     // NullReplacer must run last, because it recognizes the compilable names of variables.
     condition = NullReplacer.replaceNull(condition, varInfos);
     return condition;
