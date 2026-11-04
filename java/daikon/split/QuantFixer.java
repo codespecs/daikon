@@ -47,8 +47,8 @@ class QuantFixer extends DepthFirstVisitor {
   private final List<String> errors = new ArrayList<>();
 
   /**
-   * The prefix of the placeholders that stand for the array arguments of the replaced calls. Neither
-   * the expression nor any base name contains it.
+   * The prefix of the placeholders that stand for the array arguments of the replaced calls.
+   * Neither the expression nor any base name contains it.
    */
   private final String placeholderPrefix;
 
@@ -113,8 +113,9 @@ class QuantFixer extends DepthFirstVisitor {
   }
 
   /**
-   * The result of {@link QuantFixer#fixQuant}: an expression in which the array arguments of the replaced
-   * calls are placeholders, and a way to replace the placeholders by the arrays' compilable names.
+   * The result of {@link QuantFixer#fixQuant}: an expression in which the array arguments of the
+   * replaced calls are placeholders, and a way to replace the placeholders by the arrays'
+   * compilable names.
    *
    * <p>The placeholders keep {@link ArrayFixer} from treating a compilable name as a base name. For
    * example, if a program point has int arrays a and a_array, then the compilable name of a is
