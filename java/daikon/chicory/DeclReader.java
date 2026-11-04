@@ -504,6 +504,18 @@ public class DeclReader {
             for (String className = decl_file.readLine();
                 className != null && !className.trim().isEmpty();
                 className = decl_file.readLine()) {
+              if (startsBlock(firstToken(className))) {
+                // The blank line that ends the list is missing.
+                if (forRewriting) {
+                  reportFileError(
+                      decl_file,
+                      "Expected a class name or a blank line after \"ListImplementors\", found \""
+                          + className.trim()
+                          + "\"");
+                }
+                decl_file.putback(className);
+                break;
+              }
               lines.add(className.trim());
             }
             record = String.join(System.lineSeparator(), lines);
