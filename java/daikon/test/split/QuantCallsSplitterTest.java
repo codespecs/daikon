@@ -97,4 +97,32 @@ public final class QuantCallsSplitterTest {
                 + " this.d[..] is not the one that the method expects"));
     assertEquals(output, expectedValues, loaded.test(values));
   }
+
+  /**
+   * Checks that a daikon.Quant call reads the array that it names when the compilable name of one
+   * array (this_a_array, for the elements of this.a) is the base name of another (this.a_array).
+   *
+   * @throws IOException if a test input cannot be read
+   */
+  @Test
+  public void testArrayNameCollision() throws IOException {
+    PptTopLevel ppt =
+        SplitterTestUtils.readPpt(
+            "ArrayNameCollision.decls", "misc.ArrayNameCollision.m():::EXIT10");
+    Map<String, Object> values = new HashMap<>();
+    values.put("this.a[..]", new long[] {5});
+    values.put("this.a_array[..]", new long[] {-3, 4});
+    SplitterTestUtils.LoadedSplitters loaded =
+        SplitterTestUtils.load("ArrayNameCollision.spinfo", ppt);
+
+    Map<String, Boolean> expected = new HashMap<>();
+    expected.put("daikon.Quant.getElement_int(this.a, 0) > 0", true);
+    expected.put("daikon.Quant.size(this.a) == 1", true);
+    expected.put("daikon.Quant.getElement_int(this.a_array, 0) > 0", false);
+    expected.put("daikon.Quant.size(this.a_array) == 1", false);
+    expected.put(
+        "daikon.Quant.getElement_int(this.a, 0) > daikon.Quant.getElement_int(this.a_array, 0)",
+        true);
+    assertEquals(loaded.output, expected, loaded.test(values));
+  }
 }

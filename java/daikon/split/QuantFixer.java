@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import jtb.ParseException;
 import jtb.syntaxtree.ArgumentList;
 import jtb.syntaxtree.Arguments;
@@ -45,23 +47,134 @@ class QuantFixer extends DepthFirstVisitor {
   private final List<String> errors = new ArrayList<>();
 
   /**
+   * The prefix of the placeholders that stand for the array arguments of the replaced calls.
+   * Neither the expression nor any base name contains it.
+   */
+  private final String placeholderPrefix;
+
+  /**
+   * The compilable names of the array arguments of the replaced calls. The array argument of a
+   * replaced call is the placeholder {@link #placeholderPrefix} followed by its index in this list.
+   */
+  private final List<String> arrayNames = new ArrayList<>();
+
+  /**
    * Creates a new QuantFixer.
    *
+   * @param expression the expression that this will visit
    * @param baseNames the base names of the variables that may appear in the expression
    * @param varInfos the VarInfos of the variables; the ith element is the VarInfo for the ith
    *     element of baseNames
    */
-  private QuantFixer(String[] baseNames, VarInfo[] varInfos) {
+  private QuantFixer(String expression, String[] baseNames, VarInfo[] varInfos) {
     super();
     for (int i = 0; i < varInfos.length; i++) {
       if (varInfos[i].type.isArray() && varInfos[i].file_rep_type != ProglangType.HASHCODE) {
         arrays.put(baseNames[i], varInfos[i]);
       }
     }
+    placeholderPrefix = choosePlaceholderPrefix(expression, baseNames);
   }
 
   /**
-   * Replaces calls to daikon.Quant methods that access arrays (see class description).
+   * Returns a prefix for placeholders that neither expression nor any base name contains. Because
+   * no base name contains the prefix, ArrayFixer does not change a placeholder.
+   *
+   * @param expression an expression
+   * @param baseNames the base names of the variables that may appear in the expression
+   * @return a prefix for placeholders
+   */
+  private static String choosePlaceholderPrefix(String expression, String[] baseNames) {
+    String prefix = "daikon_quant_array_";
+    while (containsPrefix(expression, baseNames, prefix)) {
+      prefix = prefix + "x_";
+    }
+    return prefix;
+  }
+
+  /**
+   * Returns true if expression or any base name contains prefix.
+   *
+   * @param expression an expression
+   * @param baseNames base names of variables
+   * @param prefix a candidate placeholder prefix
+   * @return true if expression or any base name contains prefix
+   */
+  private static boolean containsPrefix(String expression, String[] baseNames, String prefix) {
+    if (expression.contains(prefix)) {
+      return true;
+    }
+    for (String baseName : baseNames) {
+      if (baseName.contains(prefix)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * The result of {@link QuantFixer#fixQuant}: an expression in which the array arguments of the
+   * replaced calls are placeholders, and a way to replace the placeholders by the arrays'
+   * compilable names.
+   *
+   * <p>The placeholders keep {@link ArrayFixer} from treating a compilable name as a base name. For
+   * example, if a program point has int arrays a and a_array, then the compilable name of a is
+   * a_array, which is also the base name of a_array; ArrayFixer would change it to a_array_array.
+   */
+  static final class Result {
+
+    /** The expression, with placeholders for the array arguments of the replaced calls. */
+    final String expression;
+
+    /** The prefix of the placeholders. */
+    private final String placeholderPrefix;
+
+    /** The compilable names for the placeholders, in order. */
+    private final List<String> arrayNames;
+
+    /**
+     * Creates a new Result.
+     *
+     * @param expression the expression, with placeholders
+     * @param placeholderPrefix the prefix of the placeholders
+     * @param arrayNames the compilable names for the placeholders, in order
+     */
+    private Result(String expression, String placeholderPrefix, List<String> arrayNames) {
+      this.expression = expression;
+      this.placeholderPrefix = placeholderPrefix;
+      this.arrayNames = arrayNames;
+    }
+
+    /**
+     * Replaces the placeholders in fixedExpression by the compilable names of the arrays that they
+     * stand for.
+     *
+     * @param fixedExpression {@link #expression}, possibly modified in ways that do not change the
+     *     placeholders
+     * @return fixedExpression, with the placeholders replaced
+     */
+    String restoreArrayNames(String fixedExpression) {
+      if (arrayNames.isEmpty()) {
+        return fixedExpression;
+      }
+      Pattern placeholder =
+          Pattern.compile("(?<![\\w$])" + Pattern.quote(placeholderPrefix) + "(\\d+)(?![\\w$])");
+      Matcher m = placeholder.matcher(fixedExpression);
+      StringBuilder sb = new StringBuilder();
+      while (m.find()) {
+        String index = m.group(1);
+        assert index != null : "@AssumeAssertion(nullness): the group is not optional";
+        m.appendReplacement(sb, Matcher.quoteReplacement(arrayNames.get(Integer.parseInt(index))));
+      }
+      m.appendTail(sb);
+      return sb.toString();
+    }
+  }
+
+  /**
+   * Replaces calls to daikon.Quant methods that access arrays (see class description). In the
+   * result, the array arguments of the replaced calls are placeholders; after {@link ArrayFixer}
+   * runs, call {@link Result#restoreArrayNames} to replace them by the arrays' compilable names.
    *
    * @param expression a valid segment of Java code
    * @param baseNames the base names of the variables that may appear in the expression
@@ -71,18 +184,18 @@ class QuantFixer extends DepthFirstVisitor {
    * @throws ParseException if expression is not valid Java code, or if it contains a call to a
    *     daikon.Quant method that accesses an array but cannot be replaced
    */
-  public static String fixQuant(String expression, String[] baseNames, VarInfo[] varInfos)
+  public static Result fixQuant(String expression, String[] baseNames, VarInfo[] varInfos)
       throws ParseException {
     if (!expression.contains("daikon.Quant")) {
-      return expression;
+      return new Result(expression, "", new ArrayList<>());
     }
     Node root = Visitors.getJtbTree(expression);
-    QuantFixer fixer = new QuantFixer(baseNames, varInfos);
+    QuantFixer fixer = new QuantFixer(expression, baseNames, varInfos);
     root.accept(fixer);
     if (!fixer.errors.isEmpty()) {
       throw new ParseException(String.join(System.lineSeparator(), fixer.errors));
     }
-    return Ast.format(root);
+    return new Result(Ast.format(root), fixer.placeholderPrefix, fixer.arrayNames);
   }
 
   /**
@@ -143,7 +256,9 @@ class QuantFixer extends DepthFirstVisitor {
     for (int i = 0; i < methodTokens.length - 1; i++) {
       methodTokens[i].tokenImage = "";
     }
-    arrayTokens[0].tokenImage = SplitterJavaSource.compilableName(array);
+    // A placeholder, which fixQuant's caller replaces by the compilable name after ArrayFixer runs.
+    arrayTokens[0].tokenImage = placeholderPrefix + arrayNames.size();
+    arrayNames.add(SplitterJavaSource.compilableName(array));
     return null;
   }
 
