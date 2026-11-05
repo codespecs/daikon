@@ -93,6 +93,14 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     return (dimensions == 0) && (base < 0);
   }
 
+  /**
+   * Returns the implicit comparability that the given textual representation denotes.
+   *
+   * @param rep a textual representation of an implicit comparability, such as "3" or "3[4][5]"
+   * @param vartype the type of the variable whose comparability {@code rep} is; unused
+   * @return the implicit comparability that {@code rep} denotes
+   * @throws IllegalArgumentException if {@code rep} is malformed
+   */
   static VarComparabilityImplicit parse(String rep, @Nullable ProglangType vartype) {
     int[] components = parseComponents(rep);
     int dims = components.length - 1;

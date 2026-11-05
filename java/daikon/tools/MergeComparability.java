@@ -301,9 +301,9 @@ public final class MergeComparability {
         String record = "comparability " + formatComparability(comparabilities[v]);
         for (int j = 0; j < var.lines.size(); j++) {
           String line = var.lines.get(j);
-          pw.println(j == var.comparabilityLine ? leadingWhitespace(line) + record : line);
+          pw.println(j == var.comparabilityLineIndex ? leadingWhitespace(line) + record : line);
         }
-        if (var.comparabilityLine == -1) {
+        if (var.comparabilityLineIndex == -1) {
           // Daikon treats a variable without a comparability record as having comparability -3,
           // which might be the merged comparability of an unrelated variable.
           String indent = (var.lines.size() > 1) ? leadingWhitespace(var.lines.get(1)) : "  ";
@@ -350,13 +350,13 @@ public final class MergeComparability {
    * record are also sorted, because their order is not significant.
    *
    * @param lines the lines of a declaration
-   * @param comparabilityLine the index in {@code lines} of the comparability record, or -1
+   * @param comparabilityLineIndex the index in {@code lines} of the comparability record, or -1
    * @return the records other than the first line and the comparability record
    */
-  private static List<String> otherRecords(List<String> lines, int comparabilityLine) {
+  private static List<String> otherRecords(List<String> lines, int comparabilityLineIndex) {
     List<String> result = new ArrayList<>(lines.size());
     for (int j = 1; j < lines.size(); j++) {
-      if (j != comparabilityLine) {
+      if (j != comparabilityLineIndex) {
         List<String> tokens = tokenizeRespectingQuotes(lines.get(j));
         if (!tokens.isEmpty() && tokens.get(0).equals("flags")) {
           Collections.sort(tokens.subList(1, tokens.size()));
@@ -620,7 +620,7 @@ public final class MergeComparability {
       List<String> templateHeaderRecords = otherRecords(template.declHeaderLines, -1);
       List<List<String>> templateVarRecords = new ArrayList<>(numVars);
       for (DeclVarInfo var : templateVars) {
-        templateVarRecords.add(otherRecords(var.lines, var.comparabilityLine));
+        templateVarRecords.add(otherRecords(var.lines, var.comparabilityLineIndex));
       }
       for (DeclPpt ppt : decls) {
         boolean isTemplate = (ppt == template);
@@ -653,7 +653,7 @@ public final class MergeComparability {
             checkSameRecords(
                 "Program point " + ppt.name + ": variable " + var.name,
                 templateVarRecords.get(v),
-                otherRecords(var.lines, var.comparabilityLine),
+                otherRecords(var.lines, var.comparabilityLineIndex),
                 template,
                 ppt);
           }

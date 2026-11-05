@@ -39,20 +39,23 @@ import org.checkerframework.dataflow.qual.TerminatesExecution;
 public class DeclReader {
 
   /**
-   * If true, this reader retains the text of every declaration, and it rejects input that cannot be
-   * faithfully rewritten: a file that is not a version 2.0 declaration file, records (such as
-   * sample records in a .dtrace file) that are neither header records nor declarations, a header
-   * record that appears more than once, a program point that is declared more than once, a variable
-   * that is declared more than once in a program point, a variable with more than one comparability
-   * record, and extra tokens at the end of a "variable" or "comparability" record.
-   *
-   * <p>If false, this reader skips everything other than program point declarations; within a
+   * If false, this reader skips everything other than program point declarations; within a
    * declaration, it ignores extra tokens at the end of a "variable" or "comparability" record; and
    * a later declaration of a program point, of a variable, or of a comparability replaces an
    * earlier one.
    *
+   * <p>If true, this reader retains the text of every declaration, and it rejects input that cannot
+   * be faithfully rewritten.
+   *
    * <p>In either case, this reader does not check the records of a declaration other than the
    * "ppt", "variable", "dec-type", "rep-type", and "comparability" records.
+   *
+   * <p>Input cannot be faithfully rewritten if it is not a version 2.0 declaration file, or if it
+   * contains samples/records (as appear in a .dtrace file) that are neither header records nor
+   * declarations, a header record that appears more than once, a program point that is declared
+   * more than once, a variable that is declared more than once in a program point, a variable with
+   * more than one comparability record, or extra tokens at the end of a "variable" or
+   * "comparability" record.
    */
   private final boolean forRewriting;
 
@@ -116,13 +119,13 @@ public class DeclReader {
     public int index;
 
     /**
-     * The lines of the declaration, starting with the "variable" line; empty if the DeclReader does
-     * not retain the text of declarations.
+     * The lines of the declaration, starting with the "variable" line; empty unless the
+     * declaration was read for rewriting (see {@link DeclReader#forRewriting}).
      */
     public List<String> lines;
 
     /** The index in {@link #lines} of the comparability record, or -1 if there is none. */
-    public int comparabilityLine;
+    public int comparabilityLineIndex;
 
     /**
      * Creates a new DeclVarInfo.
@@ -133,7 +136,7 @@ public class DeclReader {
      * @param comparability the comparability, or null
      * @param index the index of the variable within its program point
      * @param lines the lines of the declaration
-     * @param comparabilityLine the index in {@code lines} of the comparability record, or -1
+     * @param comparabilityLineIndex the index in {@code lines} of the comparability record, or -1
      */
     public DeclVarInfo(
         String name,
@@ -142,14 +145,14 @@ public class DeclReader {
         @Nullable String comparability,
         int index,
         List<String> lines,
-        int comparabilityLine) {
+        int comparabilityLineIndex) {
       this.name = name;
       this.type = type;
       this.rep_type = rep_type;
       this.comparability = comparability;
       this.index = index;
       this.lines = lines;
-      this.comparabilityLine = comparabilityLine;
+      this.comparabilityLineIndex = comparabilityLineIndex;
     }
 
     /**
@@ -191,7 +194,7 @@ public class DeclReader {
 
     /**
      * The lines of the declaration that precede the first variable, starting with the "ppt" line;
-     * empty if the DeclReader does not retain the text of declarations.
+     * empty unless the declaration was read for rewriting (see {@link DeclReader#forRewriting}).
      */
     public List<String> declHeaderLines;
 
@@ -250,7 +253,7 @@ public class DeclReader {
       String type = null;
       String rep_type = null;
       String comparability = null;
-      int comparabilityLine = -1;
+      int comparabilityLineIndex = -1;
 
       // read variable data records until next variable or blank line
       String record = decl_file.readLine();
@@ -286,7 +289,7 @@ public class DeclReader {
           }
           comparability = tokens[1];
           if (forRewriting) {
-            comparabilityLine = lines.size() - 1;
+            comparabilityLineIndex = lines.size() - 1;
           }
         }
         // All other record types (such as flags and enclosing-var) are not parsed, because no
@@ -316,7 +319,7 @@ public class DeclReader {
               // A later declaration of a variable replaces an earlier one, in the same position.
               (previous == null) ? vars.size() : previous.index,
               lines,
-              comparabilityLine);
+              comparabilityLineIndex);
       vars.put(varName, var);
       return var;
     }
