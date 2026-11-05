@@ -119,8 +119,8 @@ public class DeclReader {
     public int index;
 
     /**
-     * The lines of the declaration, starting with the "variable" line; empty unless the
-     * declaration was read for rewriting (see {@link DeclReader#forRewriting}).
+     * The lines of the declaration, starting with the "variable" line; empty unless the declaration
+     * was read for rewriting (see {@link DeclReader#forRewriting}).
      */
     public List<String> lines;
 
