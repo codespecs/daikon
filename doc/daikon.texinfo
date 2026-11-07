@@ -2428,7 +2428,8 @@ loaded condition at
 every program point, regardless of @var{pptname}; to use each condition
 only at the program points that its @var{pptname} matches, disable
 indiscriminate splitting (@pxref{Indiscriminate splitting}).  There is
-one exception:  if any @var{pptname} contains @samp{OBJECT}, then
+one exception:  if the @var{pptname} of any loaded condition contains
+@samp{OBJECT}, then
 Daikon also uses, at every @samp{:::OBJECT} program point, each
 condition whose @var{pptname} is not a complete program point name.
 

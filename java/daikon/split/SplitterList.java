@@ -2,12 +2,14 @@ package daikon.split;
 
 import daikon.FileIO;
 import daikon.Global;
+import daikon.PptName;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.logging.Level;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -172,9 +174,12 @@ public abstract class SplitterList {
    *
    * <p>A name that contains ":::", such as "pkg.Foo.bar(int):::EXIT1", is a complete program point
    * name. It designates the program point of that name, and every program point whose name is that
-   * name preceded by a qualifier, such as a package: "Foo.bar(int):::EXIT1" designates
-   * "pkg.Foo.bar(int):::EXIT1" but not "pkg.BigFoo.bar(int):::EXIT1". A name ending with ":::EXIT"
-   * also designates the method's numbered exit points, such as "pkg.Foo.bar(int):::EXIT12".
+   * name with a qualifier, such as a package, before the class name: "Foo.bar(int):::EXIT1"
+   * designates "pkg.Foo.bar(int):::EXIT1" but not "pkg.BigFoo.bar(int):::EXIT1". The name can omit
+   * only a qualifier of the class name, not the class name itself or part of the method signature:
+   * neither "bar(int):::EXIT1" nor "int):::EXIT1" designates "pkg.Foo.bar(int):::EXIT1". A name
+   * ending with ":::EXIT" also designates the method's numbered exit points, such as
+   * "pkg.Foo.bar(int):::EXIT12".
    *
    * <p>Any other name, such as "Foo.bar", designates every program point whose name contains it.
    *
@@ -199,45 +204,56 @@ public abstract class SplitterList {
    * @return true if {@code spinfoPptName} designates the program point named {@code pptName}
    */
   private static boolean matchesComplete(String spinfoPptName, String pptName) {
-    if (endsWithQualified(pptName, spinfoPptName)) {
+    PptName spinfo = new PptName(spinfoPptName);
+    PptName ppt = new PptName(pptName);
+
+    String spinfoClass = spinfo.getFullClassName();
+    String pptClass = ppt.getFullClassName();
+    boolean classMatches =
+        Objects.equals(spinfoClass, pptClass)
+            || (spinfoClass != null
+                && pptClass != null
+                && endsWithQualified(pptClass, spinfoClass));
+    if (!classMatches) {
+      return false;
+    }
+
+    if (!Objects.equals(spinfo.getSignature(), ppt.getSignature())) {
+      return false;
+    }
+
+    if (Objects.equals(spinfo.getPoint(), ppt.getPoint())) {
       return true;
     }
-    if (spinfoPptName.endsWith(FileIO.exit_tag)) {
-      // Remove the exit number, if any.
-      int end = pptName.length();
-      while (end > 0 && pptName.charAt(end - 1) >= '0' && pptName.charAt(end - 1) <= '9') {
-        end--;
-      }
-      return end < pptName.length() && endsWithQualified(pptName.substring(0, end), spinfoPptName);
-    }
-    return false;
+    // A non-empty exit line means that the program point is a numbered exit point such as EXIT12.
+    return spinfo.isCombinedExitPoint() && !ppt.exitLine().isEmpty();
   }
 
   /**
-   * The characters that can separate a qualifier from the rest of a program point name: "." (as in
+   * The characters that can separate a qualifier from the rest of a class name: "." (as in
    * "pkg.Foo"), "$" (as in the Java nested class "Outer$Inner"), ":" (as in the Perl package
    * "Math::BigFloat"), and "/" (as in a directory path).
    */
   private static final String QUALIFIER_SEPARATORS = ".$:/";
 
   /**
-   * Returns true if the program point name is the given suffix, possibly preceded by a qualifier:
-   * that is, if the name ends with the suffix, and the character before the suffix, if any, is a
+   * Returns true if the class name is the given suffix, possibly preceded by a qualifier: that is,
+   * if the class name ends with the suffix, and the character before the suffix, if any, is a
    * qualifier separator in {@link #QUALIFIER_SEPARATORS}.
    *
-   * @param pptName the name of a program point
-   * @param suffix a complete program point name, which can lack a qualifier such as a package
-   * @return true if {@code pptName} is {@code suffix}, possibly preceded by a qualifier
+   * @param className a class name, such as "pkg.Outer$Inner"
+   * @param suffix a class name that might lack a qualifier, such as "Inner" or "pkg.Outer$Inner"
+   * @return true if {@code className} is {@code suffix}, possibly preceded by a qualifier
    */
-  private static boolean endsWithQualified(String pptName, String suffix) {
-    if (!pptName.endsWith(suffix)) {
+  private static boolean endsWithQualified(String className, String suffix) {
+    if (!className.endsWith(suffix)) {
       return false;
     }
-    int start = pptName.length() - suffix.length();
+    int start = className.length() - suffix.length();
     if (start == 0) {
       return true;
     }
-    char before = pptName.charAt(start - 1);
+    char before = className.charAt(start - 1);
     return QUALIFIER_SEPARATORS.indexOf(before) != -1;
   }
 
@@ -258,7 +274,8 @@ public abstract class SplitterList {
    * with the same condition text.
    *
    * <p>An OBJECT program point also uses every splitter whose PPT_NAME is not a complete program
-   * point name, if any PPT_NAME (complete or not) contains "OBJECT".
+   * point name, if any PPT_NAME (complete or not) whose splitters were registered via {@link #put}
+   * contains "OBJECT".
    *
    * @param pptName the name of a program point
    * @return an array of splitters
