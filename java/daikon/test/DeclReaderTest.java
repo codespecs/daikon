@@ -94,7 +94,19 @@ public class DeclReaderTest {
    * @return the contents of the file
    */
   private static DeclReader parse(List<String> lines) {
-    DeclReader result = new DeclReader();
+    return parse(lines, false);
+  }
+
+  /**
+   * Parses the contents of a declaration file.
+   *
+   * @param lines the lines of the file
+   * @param forRewriting if true, retain the text of every declaration and reject input that cannot
+   *     be faithfully rewritten
+   * @return the contents of the file
+   */
+  private static DeclReader parse(List<String> lines, boolean forRewriting) {
+    DeclReader result = new DeclReader(forRewriting);
     try {
       result.read(new StringReader(String.join("\n", lines)), "a");
     } catch (IOException e) {
@@ -242,6 +254,21 @@ public class DeclReaderTest {
     assertThrows(Daikon.UserError.class, () -> parse(lines));
   }
 
+  /**
+   * A program point name with escaped blanks is unescaped, and one with unescaped blanks is read in
+   * full.
+   */
+  @Test
+  public void testBlanksInPptName() {
+    DeclReader reader =
+        parse(
+            file(namedPpt("C.m(int,\\_int):::ENTER", "1"), namedPpt("C.n(int, int):::ENTER", "2")));
+    assertEquals(1, castNonNull(reader.find_ppt("C.m(int, int):::ENTER")).vars.size());
+    assertEquals(1, castNonNull(reader.find_ppt("C.n(int, int):::ENTER")).vars.size());
+    assertTrue(reader.find_ppt("C.m(int,\\_int):::ENTER") == null);
+    assertEquals(2, reader.ppts.size());
+  }
+
   /** A "ppt" record within a variable declaration is rejected. */
   @Test
   public void testPptRecordInVariable() {
@@ -275,5 +302,39 @@ public class DeclReaderTest {
     List<String> lines = new ArrayList<>(file(ppt("1", "2")));
     lines.remove("variable a");
     assertThrows(Daikon.UserError.class, () -> parse(lines));
+  }
+
+  /**
+   * A "ListImplementors" record whose list of class names is not ended by a blank line ends at the
+   * next declaration; a rewriting reader rejects it.
+   */
+  @Test
+  public void testMissingBlankLineAfterListImplementors() {
+    List<String> lines = new ArrayList<>(HEADER);
+    lines.addAll(Arrays.asList("ListImplementors", "java.util.List"));
+    lines.addAll(ppt("1"));
+    DeclReader reader = parse(lines);
+    assertEquals("1", nnComparability(reader, "a"));
+    assertEquals(
+        String.join(System.lineSeparator(), "ListImplementors", "java.util.List"),
+        reader.header.get(reader.header.size() - 1));
+    assertThrows(Daikon.UserError.class, () -> parse(lines, true));
+  }
+
+  /** A line that is exactly "ppt" in a "ListImplementors" list is a class name, in both modes. */
+  @Test
+  public void testBarePptInListImplementors() {
+    List<String> lines = new ArrayList<>(HEADER);
+    lines.addAll(Arrays.asList("ListImplementors", "java.util.List", "ppt", "java.util.Map", ""));
+    lines.addAll(ppt("1"));
+    String expected =
+        String.join(
+            System.lineSeparator(), "ListImplementors", "java.util.List", "ppt", "java.util.Map");
+    DeclReader ordinary = parse(lines);
+    assertEquals("1", nnComparability(ordinary, "a"));
+    assertEquals(expected, ordinary.header.get(ordinary.header.size() - 1));
+    DeclReader rewriting = parse(lines, true);
+    assertEquals("1", nnComparability(rewriting, "a"));
+    assertEquals(expected, rewriting.header.get(rewriting.header.size() - 1));
   }
 }

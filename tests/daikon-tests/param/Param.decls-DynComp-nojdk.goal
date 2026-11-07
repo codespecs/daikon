@@ -214,7 +214,7 @@ variable this.gs2.b
   rep-type int
   comparability 10
 
-ppt misc.Param.work(int, int, misc.ParamType, misc.ParamType):::ENTER
+ppt misc.Param.work(int,\_int,\_misc.ParamType,\_misc.ParamType):::ENTER
 ppt-type enter
 variable this
   var-kind variable
@@ -307,7 +307,7 @@ variable ps2.b
   rep-type int
   comparability 9
 
-ppt misc.Param.work(int, int, misc.ParamType, misc.ParamType):::EXIT41
+ppt misc.Param.work(int,\_int,\_misc.ParamType,\_misc.ParamType):::EXIT41
 ppt-type subexit
 variable this
   var-kind variable

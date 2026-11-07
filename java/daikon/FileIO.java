@@ -365,13 +365,11 @@ public final class FileIO {
 
     // process the ppt record
     String line = top_line;
-    Scanner scanner = new Scanner(line);
-    @Interned String record_name = need(state, scanner, "'ppt'");
-    if (record_name != "ppt") { // interned
-      decl_error(state, "found '%s' where 'ppt' expected", record_name);
+    String ppt_name = declared_ppt_name(line);
+    if (ppt_name == null) {
+      decl_error(state, "ppt name expected in '%s'", line);
+      throw new Error(); // this can't happen
     }
-    String ppt_name = need(state, scanner, "ppt name");
-    ppt_name = user_mod_ppt_name(ppt_name);
 
     // Information that will populate the new program point.
     Map<String, VarDefinition> varmap = new LinkedHashMap<>();
@@ -391,7 +389,7 @@ public final class FileIO {
           break;
         }
 
-        scanner = new Scanner(line);
+        Scanner scanner = new Scanner(line);
         @Interned String record = scanner.next().intern();
         if (vardef == null) {
           if (record == "parent") { // interned
@@ -1679,7 +1677,7 @@ public final class FileIO {
       // interning bugfix:  no need to intern "line" (after code change to is_declaration_header)
 
       // Check for the file format
-      if (line.startsWith("decl-version")) {
+      if (is_keyword_record(line, "decl-version")) {
         read_decl_version(state, line);
         state.payload = (new_decl_format ? "2.0" : "1.0");
         state.payload = (FileIO.new_decl_format ? "2.0" : "1.0");
@@ -1688,7 +1686,7 @@ public final class FileIO {
       }
 
       // Check for the input language
-      if (line.startsWith("input-language")) {
+      if (is_keyword_record(line, "input-language")) {
         String input_language = read_input_language(state, line);
         state.payload = input_language;
         state.rtype = RecordType.INPUT_LANGUAGE;
@@ -1725,7 +1723,7 @@ public final class FileIO {
         state.rtype = RecordType.DECL;
         return;
       }
-      if (line.equals("VarComparability") || line.startsWith("var-comparability")) {
+      if (line.equals("VarComparability") || is_keyword_record(line, "var-comparability")) {
         state.varcomp_format = read_var_comparability(state, line);
         state.rtype = RecordType.COMPARABILITY;
         return;
@@ -2586,6 +2584,8 @@ public final class FileIO {
   /**
    * Returns true if the specified ppt name should be included in processing. Ppts can be excluded
    * because they match the omit_regexp, don't match ppt_regexp, or are greater than ppt_max_name.
+   * The ppt_max_name cutoff never excludes GLOBAL, OBJECT, or CLASS ppts, because they may be
+   * parents of included ppts.
    */
   public static boolean ppt_included(String ppt_name) {
 
@@ -2595,11 +2595,44 @@ public final class FileIO {
         || ((Daikon.ppt_regexp != null) && !Daikon.ppt_regexp.matcher(ppt_name).find())
         || ((Daikon.ppt_max_name != null)
             && ((Daikon.ppt_max_name.compareTo(ppt_name) < 0)
-                && (ppt_name.indexOf(global_suffix) == -1)))) {
+                && !is_parent_only_ppt_name(ppt_name)))) {
       return false;
     } else {
       return true;
     }
+  }
+
+  /**
+   * Returns true if the ppt name is for a GLOBAL, OBJECT, or CLASS ppt. Such ppts have no samples
+   * of their own; they get their values from their children.
+   *
+   * @param ppt_name a ppt name
+   * @return true if the ppt name is for a GLOBAL, OBJECT, or CLASS ppt
+   */
+  public static boolean is_parent_only_ppt_name(String ppt_name) {
+    // This is called for every sample, so it avoids constructing a PptName or a substring.
+    int separatorPosition = ppt_name.indexOf(ppt_tag_separator);
+    if (separatorPosition == -1) {
+      return false;
+    }
+    int pointStart = separatorPosition + ppt_tag_separator.length();
+    return is_point(ppt_name, pointStart, global_suffix)
+        || is_point(ppt_name, pointStart, object_suffix)
+        || is_point(ppt_name, pointStart, class_static_suffix);
+  }
+
+  /**
+   * Returns true if the part of the ppt name that starts at the given index is the given point.
+   *
+   * @param ppt_name a ppt name, such as "Point:::OBJECT"
+   * @param pointStart the index in the ppt name where the point starts
+   * @param point a point, such as "OBJECT"
+   * @return true if the ppt name ends with the point, starting at the index
+   */
+  @Pure
+  private static boolean is_point(String ppt_name, int pointStart, String point) {
+    return ppt_name.length() - pointStart == point.length()
+        && ppt_name.startsWith(point, pointStart);
   }
 
   /**
@@ -3230,6 +3263,106 @@ public final class FileIO {
     } else {
       return line.equals(declaration_header);
     }
+  }
+
+  /**
+   * Returns true if the line starts a header record: a record that is neither a ppt declaration nor
+   * a sample, such as a comment or a "decl-version" record. Such records are handled by {@link
+   * #read_data_trace_record}.
+   *
+   * @param line the first line of a record in a .decls or .dtrace file
+   * @return true if the line starts a header record
+   */
+  @Pure
+  public static boolean is_header_record(String line) {
+    if (isComment(line) || line.equals("VarComparability")) {
+      return true;
+    }
+    for (String keyword : header_keywords) {
+      if (is_keyword_record(line, keyword)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * The keywords that start a header record of a .decls or .dtrace file. The version 1
+   * "VarComparability" record and comments are header records that do not start with one of these
+   * keywords.
+   */
+  public static final List<String> header_keywords =
+      List.of("decl-version", "var-comparability", "input-language", "ListImplementors");
+
+  /**
+   * Returns true if the line is a header record that ends at the end of the line: a "decl-version",
+   * "var-comparability", or "input-language" record. No blank line needs to follow such a record.
+   * For example, Kvasir writes "input-language", "decl-version", and "var-comparability" records on
+   * consecutive lines.
+   *
+   * @param line the first line of a record in a .decls or .dtrace file
+   * @return true if the line is a header record that ends at the end of the line
+   */
+  @Pure
+  public static boolean is_one_line_header_record(String line) {
+    return is_keyword_record(line, "decl-version")
+        || is_keyword_record(line, "var-comparability")
+        || is_keyword_record(line, "input-language");
+  }
+
+  /**
+   * Returns true if the line is a "decl-version" record that declares the version 2 format, or if
+   * the line is not a "decl-version" record and {@code version2} is true. Callers use this to track
+   * the format of a .decls or .dtrace file as they read it. As in {@link #read_data_trace_record},
+   * the format of a file without a "decl-version" record is that of the files read before it, or
+   * the version 1 format if there are none.
+   *
+   * @param line the first line of a record in a .decls or .dtrace file
+   * @param version2 true if the records before this one are in the version 2 format
+   * @return true if the records after this one are in the version 2 format
+   */
+  @SideEffectFree
+  public static boolean is_version2_after(String line, boolean version2) {
+    if (!is_keyword_record(line, "decl-version")) {
+      return version2;
+    }
+    // Unlike read_decl_version, this does not check that the version is valid.
+    return line.substring("decl-version".length()).trim().equals("2.0");
+  }
+
+  /**
+   * Returns true if the line is the given keyword, or the keyword followed by whitespace and its
+   * arguments. A program point name in a sample cannot be such a line, because its blanks are
+   * escaped (see {@link #unescape_decl}), even if the name starts with the keyword.
+   *
+   * @param line the first line of a record in a .decls or .dtrace file
+   * @param keyword a keyword that starts a header record, such as "decl-version"
+   * @return true if the line starts with the keyword as a whole word
+   */
+  @Pure
+  private static boolean is_keyword_record(String line, String keyword) {
+    return line.startsWith(keyword)
+        && (line.length() == keyword.length()
+            || Character.isWhitespace(line.charAt(keyword.length())));
+  }
+
+  /**
+   * If the line is the start of a version 2 ppt declaration, returns the declared ppt name, after
+   * applying {@link #user_mod_ppt_name}. Otherwise returns null.
+   *
+   * @param line a line of a declaration file
+   * @return the ppt name declared by the line, or null if the line is not a ppt record
+   */
+  public static @Nullable String declared_ppt_name(String line) {
+    if (!line.startsWith("ppt ")) {
+      return null;
+    }
+    Scanner scanner = new Scanner(line);
+    scanner.next(); // "ppt"
+    if (!scanner.hasNext()) {
+      return null;
+    }
+    return user_mod_ppt_name(unescape_decl(scanner.next()));
   }
 
   /**
