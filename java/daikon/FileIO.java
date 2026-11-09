@@ -2999,26 +2999,6 @@ public final class FileIO {
   }
 
   /**
-   * Returns true if the line is a "decl-version" record that declares the version 2 format, or if
-   * the line is not a "decl-version" record and {@code version2} is true. Callers use this to track
-   * the format of a .decls or .dtrace file as they read it. As in {@link #read_data_trace_record},
-   * the format of a file without a "decl-version" record is that of the files read before it, or
-   * the version 1 format if there are none.
-   *
-   * @param line the first line of a record in a .decls or .dtrace file
-   * @param version2 true if the records before this one are in the version 2 format
-   * @return true if the records after this one are in the version 2 format
-   */
-  @SideEffectFree
-  public static boolean is_version2_after(String line, boolean version2) {
-    if (!is_keyword_record(line, "decl-version")) {
-      return version2;
-    }
-    // Unlike read_decl_version, this does not check that the version is valid.
-    return line.substring("decl-version".length()).trim().equals("2.0");
-  }
-
-  /**
    * Returns true if the line is the given keyword, or the keyword followed by whitespace and its
    * arguments. A program point name in a sample cannot be such a line, because its blanks are
    * escaped (see {@link #unescape_decl}), even if the name starts with the keyword.
