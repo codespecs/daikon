@@ -15,7 +15,6 @@ import daikon.ProglangType;
 import daikon.VarInfo;
 import daikon.VarInfo.VarKind;
 import daikon.inv.Invariant;
-import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntGreaterThan;
 import daikon.inv.binary.twoScalar.IntNonEqual;
@@ -214,29 +213,10 @@ public class ExtractConsequentTest {
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b3)));
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(i1)));
 
-    // OneOfScalar formats a boolean whose file representation type is int as "b1 == 1", and
-    // formatCondition writes that as "b1 == true".  "b1 one of { 0, 1 }" is not legal Java.
-    assertFalse(ExtractConsequent.isLegalForBooleans(oneOf(b1)));
+    // OneOfScalar also formats a boolean whose file representation type is int as "b1 == true" or
+    // "b1 == false".
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b1, 1)));
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b1, 0)));
-    assertFalse(ExtractConsequent.isLegalForBooleans(oneOf(b1, 0, 1)));
-  }
-
-  @SuppressWarnings("interning") // newly-created VarInfo
-  @Test
-  public void testFormatCondition() {
-    VarInfo b = newBooleanVarInfo("b", ProglangType.INT);
-    Invariant bTrue = oneOf(b, 1);
-    assertEquals("b == true", ExtractConsequent.formatCondition(bTrue, OutputFormat.JAVA));
-    assertEquals("b == true", ExtractConsequent.formatCondition(bTrue, OutputFormat.DAIKON));
-    assertEquals("b == true", ExtractConsequent.formatCondition(bTrue, OutputFormat.ESCJAVA));
-    assertEquals(
-        "(EQ |b| |@true|)", ExtractConsequent.formatCondition(bTrue, OutputFormat.SIMPLIFY));
-    assertEquals("b == false", ExtractConsequent.formatCondition(oneOf(b, 0), OutputFormat.JAVA));
-
-    // Other invariants are formatted as usual.
-    VarInfo i = new VarInfo(new VarDefinition("i", VarKind.VARIABLE, ProglangType.INT));
-    assertEquals("i == 1", ExtractConsequent.formatCondition(oneOf(i, 1), OutputFormat.JAVA));
   }
 
   /**

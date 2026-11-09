@@ -1,17 +1,22 @@
 package daikon.test.inv.unary.scalar;
 
 import static java.util.logging.Level.INFO;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import daikon.FileIO;
+import daikon.FileIO.VarDefinition;
 import daikon.PptSlice;
 import daikon.PptSlice1;
 import daikon.PptTopLevel;
 import daikon.ProglangType;
 import daikon.VarComparabilityNone;
 import daikon.VarInfo;
+import daikon.VarInfo.VarKind;
 import daikon.VarInfoAux;
+import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.test.Common;
 import junit.framework.*;
@@ -91,6 +96,47 @@ public class OneOfScalarTester {
     inv2.add_modified(22, DOESNT_MATTER);
 
     assertTrue(inv1.isSameFormula(inv2));
+  }
+
+  /**
+   * Returns a OneOfScalar invariant over the given variable, which has the given value.
+   *
+   * @param var a variable
+   * @param value the value of the variable
+   * @return a OneOfScalar invariant over {@code var}
+   */
+  private static OneOfScalar oneOf(VarInfo var, long value) {
+    PptTopLevel ppt = Common.makePptTopLevel("Foo.bar(int):::ENTER", new VarInfo[] {var});
+    OneOfScalar result =
+        (OneOfScalar) OneOfScalar.get_proto().instantiate(new PptSlice1(ppt, new VarInfo[] {var}));
+    result.add_modified(value, DOESNT_MATTER);
+    return result;
+  }
+
+  @SuppressWarnings("interning") // newly-created VarInfo
+  @Test
+  public void testIntRepresentedBoolean() {
+    // A boolean variable whose file representation type is int.
+    VarDefinition bDef = new VarDefinition("b", VarKind.VARIABLE, ProglangType.BOOLEAN);
+    bDef.rep_type = ProglangType.INT;
+    VarInfo b = new VarInfo(bDef);
+    OneOfScalar bTrue = oneOf(b, 1);
+    assertTrue(bTrue.is_boolean());
+    assertEquals("b == true", bTrue.format_using(OutputFormat.JAVA));
+    assertEquals("b == true", bTrue.format_using(OutputFormat.DAIKON));
+    assertEquals("b == true", bTrue.format_using(OutputFormat.ESCJAVA));
+    assertEquals("(EQ |b| |@true|)", bTrue.format_using(OutputFormat.SIMPLIFY));
+    assertEquals("b == false", oneOf(b, 0).format_using(OutputFormat.JAVA));
+
+    // As for a boolean whose file representation type is boolean, a second value falsifies the
+    // invariant, so Daikon never infers "b one of { 0, 1 }".
+    assertEquals(InvariantStatus.FALSIFIED, oneOf(b, 0).add_modified(1, DOESNT_MATTER));
+
+    // An int variable is not a boolean.
+    VarInfo i = new VarInfo(new VarDefinition("i", VarKind.VARIABLE, ProglangType.INT));
+    OneOfScalar iOne = oneOf(i, 1);
+    assertFalse(iOne.is_boolean());
+    assertEquals("i == 1", iOne.format_using(OutputFormat.JAVA));
   }
 
   /* NEED TO DEFINE SEMANTICS WITH MIKE E
