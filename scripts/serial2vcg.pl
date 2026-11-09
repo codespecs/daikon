@@ -6,7 +6,7 @@ no warnings 'recursion';
 
 # Usage: zcat foo.inv.gz | perl serial2vcg.pl >foo.vcg
 #        ~smcc/bin/xvcg foo.vcg
-# VCG is also at https://rw4.cs.uni-sb.de/users/sander/html/gsvcg1.html
+# VCG is also at http://rw4.cs.uni-sb.de/users/sander/html/gsvcg1.html
 
 my $buf;
 read(STDIN, $buf, 2);

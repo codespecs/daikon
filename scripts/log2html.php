@@ -203,9 +203,7 @@ function process_line ($line, $tb) {
     // echo "tb_open = " . implode (" ", $tb_open) . "\n";
     fclose ($fp);
     if ($open || $close) {
-      header("Location: https://".$_SERVER['HTTP_HOST']
-                     .dirname($_SERVER['PHP_SELF'])
-                     ."/log2html.php?file=$file");
+      header("Location: log2html.php?file=$file");
       exit;
     }
   }
