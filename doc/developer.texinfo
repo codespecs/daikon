@@ -114,20 +114,20 @@ It describes Daikon version 5.9.1, released September 1, 2026.
 
 This is the developer manual for the
 @ifhtml
-@uref{http://plse.cs.washington.edu/daikon/, ,Daikon invariant detector}.
+@uref{https://plse.cs.washington.edu/daikon/, ,Daikon invariant detector}.
 @end ifhtml
 @ifnothtml
 Daikon invariant detector.  See: @*
-@ @ @ @ @ @ @uref{http://plse.cs.washington.edu/daikon/}.
+@ @ @ @ @ @ @uref{https://plse.cs.washington.edu/daikon/}.
 @end ifnothtml
 
 For information about using Daikon, see the
-@uref{http://plse.cs.washington.edu/daikon/download/doc/daikon.html#Introduction,Daikon User Manual}.
+@uref{https://plse.cs.washington.edu/daikon/download/doc/daikon.html#Introduction,Daikon User Manual}.
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
 
 Additional information can be found in the technical papers available from
-@w{@uref{http://plse.cs.washington.edu/daikon/pubs/}.}
+@w{@uref{https://plse.cs.washington.edu/daikon/pubs/}.}
 
 @node    Extending Daikon
 @chapter Extending Daikon
@@ -276,10 +276,10 @@ Daikon.
 
 
 A Java class defining an invariant is a concrete subclass of one of the direct subclasses of
-@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/UnaryInvariant.html,@code{UnaryInvariant}},
-@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/BinaryInvariant.html,@code{BinaryInvariant}},
+@uref{https://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/UnaryInvariant.html,@code{UnaryInvariant}},
+@uref{https://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/BinaryInvariant.html,@code{BinaryInvariant}},
 or
-@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/ternary/TernaryInvariant.html,@code{TernaryInvariant}}.
+@uref{https://plse.cs.washington.edu/daikon/download/api/daikon/inv/ternary/TernaryInvariant.html,@code{TernaryInvariant}}.
 A complete list of invariants appears in the body of
 @code{Daikon.setup_proto_invs()}.
 
@@ -291,7 +291,7 @@ remaining invariants at the end of the program run can be queried for
 their statistical confidence, then reported as
 likely to be true.
 
-You need to implement the abstract methods of @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/Invariant.html,@code{Invariant}} that are not defined in one of the subclasses listed above.  You also need to define a constructor and a static method:
+You need to implement the abstract methods of @uref{https://plse.cs.washington.edu/daikon/download/api/daikon/inv/Invariant.html,@code{Invariant}} that are not defined in one of the subclasses listed above.  You also need to define a constructor and a static method:
 
 @table @code
 @item protected @var{InvName}(PptSlice ppt)
@@ -673,7 +673,7 @@ memory errors.
 
 @c An example of compiler (not runtime) infrastructure for Microsoft
 @c Windows is Phoenix:
-@c http://research.microsoft.com/phoenix/
+@c https://research.microsoft.com/phoenix/
 
 
 
@@ -914,13 +914,13 @@ This is covered in the next section.
 
 More detailed information can be found in the Javadoc for
 @ifhtml
-@code{@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/Debug.html,,daikon.Debug}}
+@code{@uref{https://plse.cs.washington.edu/daikon/download/api/daikon/Debug.html,,daikon.Debug}}
 @end ifhtml
 @ifnothtml
-@code{@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/Debug.html, daikon.Debug}}
+@code{@uref{https://plse.cs.washington.edu/daikon/download/api/daikon/Debug.html, daikon.Debug}}
 @end ifnothtml
 and
-@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
+@uref{https://plse.cs.washington.edu/daikon/download/api/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
 
 @menu
 * Adding track logging::
@@ -1093,7 +1093,7 @@ More detail can be found in the paper ``Efficient incremental algorithms
 for dynamic detection of likely invariants'' by Jeff H. Perkins and
 Michael D. Ernst, published in Foundations of Software Engineering in 2004;
 the paper is available from
-@uref{http://plse.cs.washington.edu/daikon/pubs/invariants-incremental-fse2004-abstract.html}.
+@uref{https://plse.cs.washington.edu/daikon/pubs/invariants-incremental-fse2004-abstract.html}.
 
 @need 2000
 @node    Dataflow hierarchy
@@ -1655,7 +1655,7 @@ For more information, see the comments in file
 The Daikon source code follows
 the @uref{https://google.github.io/styleguide/javaguide.html, Google Java Style}
 and also
-@uref{http://homes.cs.washington.edu/~mernst/advice/coding-style.html, Michael Ernst's coding conventions}.
+@uref{https://homes.cs.washington.edu/~mernst/advice/coding-style.html, Michael Ernst's coding conventions}.
 
 
 @menu
@@ -1856,7 +1856,7 @@ HTML, info, or printed (PDF) output.
 You can edit the manual using an ordinary text editor.  Emacs has a
 useful Texinfo mode.  You can mimic the formatting commands that
 already appear in the manual, but it's also a good idea to read the
-@uref{http://www.gnu.org/software/texinfo/,Texinfo documentation}.
+@uref{https://www.gnu.org/software/texinfo/,Texinfo documentation}.
 
 If you wish to create a new section of the manual, insert two lines like
 the following:
@@ -1933,7 +1933,7 @@ version control repository, that they are not using the released version,
 because the version numbers differ.
 
 The Daikon distribution site is located at
-@uref{http://plse.cs.washington.edu/daikon/} and is served from the UW CSE
+@uref{https://plse.cs.washington.edu/daikon/} and is served from the UW CSE
 file system at
 @file{/cse/web/research/plse/daikon}.
 In order to be able to write to the distribution site, your CSE user id must be
@@ -2059,7 +2059,7 @@ The home page for the Valgrind instrumentation framework is
 @uref{https://valgrind.org}.
 The home page for the GNU Binutils
 (a collection of binary tools, of which Kvasir uses only readelf) is
-@uref{http://www.gnu.org/software/binutils/}.
+@uref{https://www.gnu.org/software/binutils/}.
 
 File
 @uref{https://raw.githubusercontent.com/codespecs/fjalar/master/valgrind/REVISION,
@@ -2068,7 +2068,7 @@ these tools that Kvasir uses.
 You can determine whether a newer version of these tools is available
 by comparing the @file{REVISION} file to
 @url{https://valgrind.org/downloads/current.html} and
-@url{http://ftp.gnu.org/gnu/binutils/?C=M;O=D}.
+@url{https://ftp.gnu.org/gnu/binutils/?C=M;O=D}.
 If so, you should update the Fjalar source tree as soon as practical.
 For details, see the separate document ``Merging
 newer versions of Valgrind into Fjalar'', which appears
@@ -2103,7 +2103,7 @@ last release:
 
 @smallexample
 if [ -z "$@{DAIKONDIR@}" ] && [ -d "java/daikon/" ] ; then DAIKONDIR=$(pwd) ; fi
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
+DAIKONVERSION=`wget -q https://plse.cs.washington.edu/daikon/download/doc/VERSION \
     -O - | xargs echo -n` && \
 cd $@{DAIKONDIR@} && \
 git log v$@{DAIKONVERSION@}..HEAD
@@ -2122,7 +2122,7 @@ In addition, you should run the same command in your Fjalar clone:
 
 @smallexample
 if [ -z "$@{DAIKONDIR@}" ] && [ -d "java/daikon/" ] ; then DAIKONDIR=$(pwd) ; fi
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
+DAIKONVERSION=`wget -q https://plse.cs.washington.edu/daikon/download/doc/VERSION \
     -O - | xargs echo -n` && \
 @{ cd $@{DAIKONDIR@}/fjalar || cd $@{DAIKONDIR@}/../fjalar ; @} && \
 git log v$@{DAIKONVERSION@}..HEAD
@@ -2163,7 +2163,7 @@ If the word is technical information, such as part
 of a computer command or filename, then mark it with a Texinfo command;
 see ``Chapter 9: Marking Text,
 Words and Phrases'' of the
-GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, PDF},
+GNU Texinfo Manual (@uref{https://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, PDF},
 @uref{https://www.gnu.org/software/texinfo/manual/texinfo/texinfo.html#Marking-Text,, HTML}).
 
 @end itemize
@@ -2317,7 +2317,7 @@ The following commands get a fresh clone of Daikon, set some
 environment variables and then
 build everything to be distributed and copy it to the temporary staging area
 @c not @uref{...} because we don't want robots to notice and crawl the link
-(http://plse.cs.washington.edu/staging-daikon/).
+(https://plse.cs.washington.edu/staging-daikon/).
 
 @c can't use 'daikon' as will conflict with jar build if no '/scratch' on system.
 
@@ -2377,7 +2377,7 @@ the incorrect link.
 Here is a workflow that may be used to deal with broken links:
 @itemize
 @item
-Use the @samp{Wayback Machine}, @url{http://archive.org/web/}, and enter the URL.
+Use the @samp{Wayback Machine}, @url{https://archive.org/web/}, and enter the URL.
 @item
 You will get a timeline.  Select a year and day, then you have to click on the time of day,
 and then you get a version of the page at that time.
@@ -2407,7 +2407,7 @@ Repeat this step to verify your corrections.
 If @file{checklink.log} contains an error message of the form:
 @smallexample
 List of broken links and other issues:
-http://plse.cs.washington.edu/daikon/download/doc/developer/Requirements-for-compiling-Kvasir.html
+https://plse.cs.washington.edu/daikon/download/doc/developer/Requirements-for-compiling-Kvasir.html
   Line: 185
   Code: 200 OK
  To do: Some of the links to this resource point to broken URI fragments
@@ -2422,9 +2422,9 @@ indirect references through stub files.  Two @command{suppress-fragment} entries
 are required.  For the example above, these
 would be:
 @smallexample
---suppress-fragment http://plse.cs.washington.edu/daikon/download/doc/developer/\
+--suppress-fragment https://plse.cs.washington.edu/daikon/download/doc/developer/\
 Requirements-for-compiling-Kvasir.html#Requirements-for-compiling-Kvasir
---suppress-fragment http://plse.cs.washington.edu/staging-daikon/download/doc/developer/\
+--suppress-fragment https://plse.cs.washington.edu/staging-daikon/download/doc/developer/\
 Requirements-for-compiling-Kvasir.html#Requirements-for-compiling-Kvasir
 @end smallexample
 but on two long lines without any @code{\} line continuation characters.
@@ -2564,7 +2564,7 @@ the actual number of the release.
 <subject:>  Daikon version <version number> has been released
 
 Daikon version <version number> is available at:
-http://plse.cs.washington.edu/daikon/download/
+https://plse.cs.washington.edu/daikon/download/
 
 Please see the entry from the doc/CHANGELOG.md file that appears below for more details.
 
@@ -2603,7 +2603,7 @@ before that time.  The reason for this is that converting the full CVS
 repository would create a repository that would be too
 large for convenient use, and that would also be too large to upload to
 Google Code or GitHub.  The original CVS repository is available for download from
-@uref{http://plse.cs.washington.edu/daikon/download/inv-cvs/}, as files
+@uref{https://plse.cs.washington.edu/daikon/download/inv-cvs/}, as files
 @file{inv-cvsaa} through @file{inv-cvsai}.  Download
 all 9 files, and then run the following commands to re-create the CVS
 repository, which will be named @file{invariants/}:
@@ -2623,7 +2623,7 @@ a set of tests that is more extensive than those in the Daikon
 distribution.  If you are a researcher who uses the Daikon version
 control history, please let us know of any publications so that we can
 publicize them at
-@uref{http://plse.cs.washington.edu/daikon/pubs/#daikon-testsubject}.
+@uref{https://plse.cs.washington.edu/daikon/pubs/#daikon-testsubject}.
 
 The layout of the Daikon CVS repository differs slightly from that of
 the distribution.  For example, the top-level directory is named
@@ -2672,8 +2672,8 @@ branch (named @samp{ENGINE_V2_PATCHES}) for version 2 of Daikon.
 The CVS manual
 (see section
 @c This is the official source for the manual since it is linked from the
-@c GNU CVS webpage (http://www.nongnu.org/cvs/).
-@uref{https://web.archive.org/web/20140619100950/http://ximbiot.com/cvs/manual/cvs-1.11.23/cvs_5.html,
+@c GNU CVS webpage (https://www.nongnu.org/cvs/).
+@uref{https://web.archive.org/web/20140619100950/https://ximbiot.com/cvs/manual/cvs-1.11.23/cvs_5.html,
 ``Branching and merging''} of the manual @emph{CVS --- Concurrent Versions System})
 describes CVS branches:
 
