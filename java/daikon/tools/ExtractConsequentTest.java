@@ -110,6 +110,7 @@ public class ExtractConsequentTest {
         ExtractConsequent.conjunction(Arrays.asList("x > 0", "s == \"||\""), " && "));
   }
 
+  @SuppressWarnings("nullness:argument") // JUnit annotations forbid null actual values
   @Test
   public void testToSpinfoCondition() {
     assertEquals("return > 0", ExtractConsequent.toSpinfoCondition("\\result > 0"));
@@ -148,6 +149,7 @@ public class ExtractConsequentTest {
     assertFalse(ExtractConsequent.post_pattern.matcher("this.post(x)").find());
   }
 
+  @SuppressWarnings("nullness:argument") // JUnit annotations forbid null actual values
   @Test
   public void testToSpinfoConditionUnusable() {
     assertNull(ExtractConsequent.toSpinfoCondition("\\post(x) > 0"));
