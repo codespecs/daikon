@@ -2925,39 +2925,6 @@ public final class FileIO {
   }
 
   /**
-   * Returns true if the line starts a header record: a record that is neither a ppt declaration nor
-   * a sample, such as a comment or a "decl-version" record. Such records are handled by {@link
-   * #read_data_trace_record}.
-   *
-   * @param line the first line of a record in a .decls or .dtrace file
-   * @return true if the line starts a header record
-   */
-  @Pure
-  public static boolean is_header_record(String line) {
-    return isComment(line)
-        || is_keyword_record(line, "decl-version")
-        || is_keyword_record(line, "var-comparability")
-        || is_keyword_record(line, "input-language")
-        || line.equals("ListImplementors");
-  }
-
-  /**
-   * Returns true if the line is the given keyword, or the keyword followed by whitespace and its
-   * arguments. A program point name in a sample cannot be such a line, because its blanks are
-   * escaped (see {@link #unescape_decl}), even if the name starts with the keyword.
-   *
-   * @param line the first line of a record in a .decls or .dtrace file
-   * @param keyword a keyword that starts a header record, such as "decl-version"
-   * @return true if the line starts with the keyword as a whole word
-   */
-  @Pure
-  private static boolean is_keyword_record(String line, String keyword) {
-    return line.startsWith(keyword)
-        && (line.length() == keyword.length()
-            || Character.isWhitespace(line.charAt(keyword.length())));
-  }
-
-  /**
    * Returns true if the line is the start of a ppt declaration.
    *
    * @param line the first line of a record in a .decls or .dtrace file
@@ -2997,7 +2964,7 @@ public final class FileIO {
    */
   @Pure
   public static boolean is_header_record(String line) {
-    if (isComment(line) || line.equals("VarComparability")) {
+    if (isComment(line)) {
       return true;
     }
     for (String keyword : header_keywords) {
@@ -3009,9 +2976,8 @@ public final class FileIO {
   }
 
   /**
-   * The keywords that start a header record of a .decls or .dtrace file. The version 1
-   * "VarComparability" record and comments are header records that do not start with one of these
-   * keywords.
+   * The keywords that start a header record of a .decls or .dtrace file. Comments are header
+   * records that do not start with one of these keywords.
    */
   public static final List<String> header_keywords =
       List.of("decl-version", "var-comparability", "input-language", "ListImplementors");
@@ -3066,25 +3032,6 @@ public final class FileIO {
     return line.startsWith(keyword)
         && (line.length() == keyword.length()
             || Character.isWhitespace(line.charAt(keyword.length())));
-  }
-
-  /**
-   * If the line is the start of a version 2 ppt declaration, returns the declared ppt name, after
-   * applying {@link #user_mod_ppt_name}. Otherwise returns null.
-   *
-   * @param line a line of a declaration file
-   * @return the ppt name declared by the line, or null if the line is not a ppt record
-   */
-  public static @Nullable String declared_ppt_name(String line) {
-    if (!line.startsWith("ppt ")) {
-      return null;
-    }
-    Scanner scanner = new Scanner(line);
-    scanner.next(); // "ppt"
-    if (!scanner.hasNext()) {
-      return null;
-    }
-    return user_mod_ppt_name(unescape_decl(scanner.next()));
   }
 
   /**
