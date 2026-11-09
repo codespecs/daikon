@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import daikon.FileIO;
 import daikon.PptSlice;
 import daikon.PptSlice1;
 import daikon.PptTopLevel;
@@ -38,7 +37,6 @@ public class OneOfSequenceTester {
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
-    FileIO.new_decl_format = true;
   }
 
   @SuppressWarnings("interning")
