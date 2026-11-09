@@ -164,11 +164,15 @@ public class OneOfScalarTester {
     VarInfo c = new VarInfo(cDef); // checkRep succeeds
     assertEquals(ProglangType.BOOLEAN, c.file_rep_type);
 
-    // A boolean whose rep type is not integral keeps its rep type.
+    // A boolean whose rep type is not an integer type written as numbers keeps its rep type.
     VarDefinition hDef = new VarDefinition("h", VarKind.VARIABLE, ProglangType.BOOLEAN);
     hDef.rep_type = ProglangType.HASHCODE;
     hDef.useBooleanRepType();
     assertEquals(ProglangType.HASHCODE, hDef.rep_type);
+    VarDefinition chDef = new VarDefinition("ch", VarKind.VARIABLE, ProglangType.BOOLEAN);
+    chDef.rep_type = ProglangType.CHAR;
+    chDef.useBooleanRepType();
+    assertEquals(ProglangType.CHAR, chDef.rep_type);
 
     // A variable that is not declared as a boolean keeps its rep type.
     VarDefinition iDef = new VarDefinition("i", VarKind.VARIABLE, ProglangType.INT);

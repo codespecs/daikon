@@ -133,9 +133,10 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * hashcodes, but is applicable to integers (of various sizes) and floats. (In the variable name,
    * "rep" stands for "representation".)
    *
-   * <p>A variable that is declared as a boolean has file_rep_type boolean, even if its declaration
-   * in the data trace file gives an integral rep type such as int; see {@link
-   * FileIO.VarDefinition#useBooleanRepType}.
+   * <p>A variable that Daikon reads from a declaration and that is declared as a boolean has
+   * file_rep_type boolean, even if its declaration gives an integer rep type such as int; see
+   * {@link FileIO.VarDefinition#useBooleanRepType}. A VarInfo that is created in another way has
+   * the file_rep_type that its creator supplies.
    */
   public ProglangType file_rep_type; // interned (as are all ProglangType objects)
 
@@ -658,7 +659,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * @param name the variable name
    * @param type type as declared in the program point
-   * @param file_rep_type type as written in the data trace file; see {@link #file_rep_type}
+   * @param file_rep_type the file representation type; see {@link #file_rep_type}
    * @param comparability comparability info
    * @param is_static_constant true if the variable always has the same, known value
    * @param static_constant_value the static constant value, or null if not statically constant

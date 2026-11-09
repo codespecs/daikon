@@ -2343,7 +2343,7 @@ public final class FileIO {
     if (value instanceof Long) {
       long l = (Long) value;
       if (l != 0 && l != 1) {
-        result = Intern.internedLong(1);
+        result = ProglangType.LongOne;
       }
     } else if (value instanceof long[]) {
       long[] a = (long[]) value;
@@ -2799,19 +2799,27 @@ public final class FileIO {
     }
 
     /**
-     * If this variable is declared as a boolean (or boolean[]) and its rep type is integral, such
-     * as int (or int[]), sets its rep type to boolean (or boolean[]), so that Daikon treats the
+     * If this variable is declared as a boolean (or boolean[]) and its rep type is an integer type
+     * whose values are written as numbers -- int, long, long long int, or short (or an array of
+     * one of them) -- sets its rep type to boolean (or boolean[]), so that Daikon treats the
      * variable as a boolean. For example, a declaration might give the rep type int to a variable
-     * whose declared type is boolean.
+     * whose declared type is boolean. Other integral rep types, such as char, are left unchanged.
      *
      * <p>Such a variable loses its min-value and max-value bounds, which are not permitted for a
      * boolean (see {@link #checkBound}), and its constant value, if any, gets the same treatment
      * as a value in the data trace file: each boolean that is neither 0 nor 1 becomes 1.
      */
     public void useBooleanRepType() {
-      if (declared_type == ProglangType.BOOLEAN && rep_type.isIntegral()) {
+      @Interned String base = rep_type.base();
+      if (!(base == ProglangType.BASE_INT
+          || base == ProglangType.BASE_LONG
+          || base == ProglangType.BASE_LONG_LONG
+          || base == ProglangType.BASE_SHORT)) {
+        return;
+      }
+      if (declared_type == ProglangType.BOOLEAN && rep_type.dimensions() == 0) {
         rep_type = ProglangType.BOOLEAN;
-      } else if (declared_type == ProglangType.BOOLEAN_ARRAY && rep_type.elementIsIntegral()) {
+      } else if (declared_type == ProglangType.BOOLEAN_ARRAY && rep_type.dimensions() == 1) {
         rep_type = ProglangType.BOOLEAN_ARRAY;
       } else {
         return;
