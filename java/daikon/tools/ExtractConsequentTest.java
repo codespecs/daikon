@@ -3,6 +3,7 @@ package daikon.tools;
 import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import daikon.FileIO;
@@ -109,23 +110,25 @@ public class ExtractConsequentTest {
   }
 
   @Test
-  public void testReplaceJmlNames() {
-    assertEquals("return > 0", ExtractConsequent.replaceJmlNames("\\result > 0"));
+  public void testToSpinfoCondition() {
+    assertEquals("return > 0", ExtractConsequent.toSpinfoCondition("\\result > 0"));
     assertEquals(
-        "return.x == return.y", ExtractConsequent.replaceJmlNames("\\result.x == \\result.y"));
-    assertEquals("\\resultx > 0", ExtractConsequent.replaceJmlNames("\\resultx > 0"));
+        "return.x == return.y", ExtractConsequent.toSpinfoCondition("\\result.x == \\result.y"));
+    assertEquals("\\resultx > 0", ExtractConsequent.toSpinfoCondition("\\resultx > 0"));
     assertEquals(
-        "s.equals(\"\\\\result\")", ExtractConsequent.replaceJmlNames("s.equals(\"\\\\result\")"));
+        "s.equals(\"\\\\result\")",
+        ExtractConsequent.toSpinfoCondition("s.equals(\"\\\\result\")"));
     assertEquals(
         "return.equals(\"\\\\result\") && return != null",
-        ExtractConsequent.replaceJmlNames("\\result.equals(\"\\\\result\") && \\result != null"));
+        ExtractConsequent.toSpinfoCondition("\\result.equals(\"\\\\result\") && \\result != null"));
 
-    assertEquals("orig(x) > 0", ExtractConsequent.replaceJmlNames("\\old(x) > 0"));
+    assertEquals("orig(x) > 0", ExtractConsequent.toSpinfoCondition("\\old(x) > 0"));
     assertEquals(
         "return == orig(this.size)",
-        ExtractConsequent.replaceJmlNames("\\result == \\old(this.size)"));
+        ExtractConsequent.toSpinfoCondition("\\result == \\old(this.size)"));
     assertEquals(
-        "s.equals(\"\\\\old(x)\")", ExtractConsequent.replaceJmlNames("s.equals(\"\\\\old(x)\")"));
+        "s.equals(\"\\\\old(x)\")",
+        ExtractConsequent.toSpinfoCondition("s.equals(\"\\\\old(x)\")"));
   }
 
   @Test
@@ -145,16 +148,34 @@ public class ExtractConsequentTest {
   }
 
   @Test
-  public void testUsesPostStateOrClass() {
-    assertTrue(ExtractConsequent.usesPostStateOrClass("\\post(x) > 0"));
-    assertTrue(ExtractConsequent.usesPostStateOrClass("x.getClass() == Foo.class"));
-    assertFalse(ExtractConsequent.usesPostStateOrClass("x > 0"));
-    assertTrue(ExtractConsequent.usesPostStateOrClass("\\old(a[\\new(i)]) > 0"));
-    assertFalse(ExtractConsequent.usesPostStateOrClass("s.equals(\"\\\\post(x)\")"));
-    assertFalse(ExtractConsequent.usesPostStateOrClass("s.equals(\"\\\\new(x)\")"));
-    assertFalse(ExtractConsequent.usesPostStateOrClass("s.equals(\"Foo.class\")"));
+  public void testToSpinfoConditionUnusable() {
+    assertNull(ExtractConsequent.toSpinfoCondition("\\post(x) > 0"));
+    assertNull(ExtractConsequent.toSpinfoCondition("x.getClass() == Foo.class"));
+    assertNull(ExtractConsequent.toSpinfoCondition("\\old(a[\\new(i)]) > 0"));
+    assertNull(ExtractConsequent.toSpinfoCondition("s.equals(\"\\\\post(x)\") && \\post(y) > 0"));
+    assertEquals("x > 0", ExtractConsequent.toSpinfoCondition("x > 0"));
+    assertEquals("this.classCount > 0", ExtractConsequent.toSpinfoCondition("this.classCount > 0"));
+    assertEquals(
+        "this.classifier == null", ExtractConsequent.toSpinfoCondition("this.classifier == null"));
+    assertEquals(
+        "s.equals(\"\\\\post(x)\")",
+        ExtractConsequent.toSpinfoCondition("s.equals(\"\\\\post(x)\")"));
+    assertEquals(
+        "s.equals(\"\\\\new(x)\")",
+        ExtractConsequent.toSpinfoCondition("s.equals(\"\\\\new(x)\")"));
+    assertEquals(
+        "s.equals(\"Foo.class\")", ExtractConsequent.toSpinfoCondition("s.equals(\"Foo.class\")"));
+  }
+
+  @Test
+  public void testContradictPattern() {
+    assertTrue(ExtractConsequent.contradict_inv_pattern.matcher("x == 1 && x == 2").find());
     assertTrue(
-        ExtractConsequent.usesPostStateOrClass("s.equals(\"\\\\post(x)\") && \\post(y) > 0"));
+        ExtractConsequent.contradict_inv_pattern
+            .matcher("this.flag == true && y > 0 && this.flag == false")
+            .find());
+    assertFalse(ExtractConsequent.contradict_inv_pattern.matcher("x == 1 && y == 2").find());
+    assertFalse(ExtractConsequent.contradict_inv_pattern.matcher("b == true && c == false").find());
   }
 
   /**

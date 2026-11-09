@@ -239,10 +239,11 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the invariant formatted as a splitting condition in the given format. In Java format,
-   * the return value and pre-state values are written as a .spinfo file refers to them; see {@link
-   * #replaceJmlNames}. A OneOfScalar invariant over a boolean variable whose file representation
-   * type is int, such as "b == 1", is written as "b == true" (see {@link #intBooleanValue}).
+   * Returns the invariant formatted as a splitting condition in the given format. A OneOfScalar
+   * invariant over a boolean variable whose file representation type is int, such as "b == 1", is
+   * written as "b == true" (see {@link #intBooleanValue}). In Java format, the result can refer to
+   * the return value and to pre-state values as "\result" and "\old(x)"; see {@link
+   * #toSpinfoCondition}.
    *
    * @param inv an invariant
    * @param format the format in which to write the invariant
@@ -261,45 +262,39 @@ public class ExtractConsequent {
         result = var.name_using(format) + " == " + value;
       }
     }
-    if (format == OutputFormat.JAVA) {
-      result = replaceJmlNames(result);
-    }
     return result;
   }
 
   /**
-   * Returns the given Java expression, with each "\result" written as "return" and each "\old(x)"
-   * written as "orig(x)", which is how a .spinfo file refers to the return value and to pre-state
-   * values. Text within a string or character literal is unchanged.
+   * Returns the given condition as a .spinfo file writes it, or null if a splitter cannot use the
+   * condition. The result writes each "\result" as "return" and each "\old(x)" as "orig(x)", which
+   * is how a .spinfo file refers to the return value and to pre-state values. A splitter cannot use
+   * a condition that refers to a post-state value, such as "\post(x)" or "\new(x)", or that
+   * contains ".class". Text within a string or character literal is neither changed nor examined.
    *
-   * @param expr a Java expression
-   * @return the expression, with the return value and pre-state values written as a .spinfo file
-   *     refers to them
+   * @param condition a condition in Java format, such as "\result &gt; \old(this.size)"
+   * @return the condition as a .spinfo file writes it, such as "return &gt; orig(this.size)", or
+   *     null if a splitter cannot use the condition
    */
-  static String replaceJmlNames(String expr) {
+  static @Nullable String toSpinfoCondition(String condition) {
     StringBuilder result = new StringBuilder();
-    Matcher m = literal_pattern.matcher(expr);
+    Matcher m = literal_pattern.matcher(condition);
     int start = 0;
-    while (m.find()) {
-      result.append(replaceJmlNamesOutsideLiterals(expr.substring(start, m.start())));
+    while (true) {
+      boolean found = m.find();
+      // The text between the previous literal and the next one (or the end of the condition).
+      String text = condition.substring(start, found ? m.start() : condition.length());
+      if (post_pattern.matcher(text).find() || dot_class_pattern.matcher(text).find()) {
+        return null;
+      }
+      text = result_pattern.matcher(text).replaceAll("return");
+      result.append(old_pattern.matcher(text).replaceAll("orig("));
+      if (!found) {
+        return result.toString();
+      }
       result.append(m.group());
       start = m.end();
     }
-    result.append(replaceJmlNamesOutsideLiterals(expr.substring(start)));
-    return result.toString();
-  }
-
-  /**
-   * Returns the given text, which contains no string or character literal, with each "\result"
-   * written as "return" and each "\old(x)" written as "orig(x)".
-   *
-   * @param text a part of a Java expression that contains no literal
-   * @return the text, with the return value and pre-state values written as a .spinfo file refers
-   *     to them
-   */
-  private static String replaceJmlNamesOutsideLiterals(String text) {
-    text = result_pattern.matcher(text).replaceAll("return");
-    return old_pattern.matcher(text).replaceAll("orig(");
   }
 
   /**
@@ -312,7 +307,8 @@ public class ExtractConsequent {
    * @return the expression, parenthesized if necessary to be used as a conjunct
    */
   static String parenthesizeIfNeeded(String expr) {
-    return low_precedence_pattern.matcher(removeLiterals(expr)).find() ? "(" + expr + ")" : expr;
+    String withoutLiterals = literal_pattern.matcher(expr).replaceAll("\"\"");
+    return low_precedence_pattern.matcher(withoutLiterals).find() ? "(" + expr + ")" : expr;
   }
 
   /**
@@ -329,31 +325,6 @@ public class ExtractConsequent {
       conjuncts.add(parenthesizeIfNeeded(condition));
     }
     return String.join(and, conjuncts);
-  }
-
-  /**
-   * Returns the given expression, with each string or character literal replaced by the empty
-   * string literal {@code ""}. The result contains no operator or name that appears only within a
-   * literal of the expression.
-   *
-   * @param expr a Java, ESC, or Daikon expression
-   * @return the expression, with each literal replaced by the empty string literal
-   */
-  static String removeLiterals(String expr) {
-    return literal_pattern.matcher(expr).replaceAll("\"\"");
-  }
-
-  /**
-   * Returns true if the given condition refers to a post-state value, such as "\post(x)" or
-   * "\new(x)", or contains ".class". Text within a string or character literal is ignored.
-   *
-   * @param condition a condition in Java format
-   * @return true if the condition refers to a post-state value or contains ".class"
-   */
-  static boolean usesPostStateOrClass(String condition) {
-    String withoutLiterals = removeLiterals(condition);
-    return post_pattern.matcher(withoutLiterals).find()
-        || dot_class_pattern.matcher(withoutLiterals).find();
   }
 
   /**
@@ -533,8 +504,8 @@ public class ExtractConsequent {
           continue;
         }
 
-        String inv_string = formatCondition(inv, OutputFormat.JAVA);
-        if (usesPostStateOrClass(inv_string)) {
+        String inv_string = toSpinfoCondition(formatCondition(inv, OutputFormat.JAVA));
+        if (inv_string == null) {
           continue;
         }
         String cluster_key = clusterKey(cluster_inv);
@@ -695,13 +666,21 @@ public class ExtractConsequent {
   /** Matches a string or character literal. */
   static Pattern literal_pattern;
 
+  /** Matches ".class", as in "Foo.class", but not ".classCount". */
   static Pattern dot_class_pattern;
+
   static Pattern non_word_pattern;
   static Pattern gteq_pattern;
   static Pattern lteq_pattern;
   static Pattern neq_pattern;
   static Pattern inequality_pattern;
+
+  /**
+   * Matches a conjunction in which one expression equals two different values, such as "x == 1
+   * &amp;&amp; x == 2" or "b == true &amp;&amp; b == false".
+   */
   static Pattern contradict_inv_pattern;
+
   static Pattern useless_inv_pattern_1;
   static Pattern useless_inv_pattern_2;
 
@@ -714,13 +693,14 @@ public class ExtractConsequent {
       orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
       low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?.*:");
       literal_pattern = Pattern.compile("\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'");
-      dot_class_pattern = Pattern.compile("\\.class");
+      dot_class_pattern = Pattern.compile("\\.class\\b");
       inequality_pattern = Pattern.compile("[\\!<>]=");
       gteq_pattern = Pattern.compile(">=");
       lteq_pattern = Pattern.compile("<=");
       neq_pattern = Pattern.compile("\\!=");
+      String value = "(?:-?[0-9]+|true|false)";
       contradict_inv_pattern =
-          Pattern.compile("(^| && )(.*) == -?[0-9]+ &.*& \\2 == -?[0-9]+($| && )");
+          Pattern.compile("(^| && )(.*) == " + value + " &.*& \\2 == " + value + "($| && )");
       useless_inv_pattern_1 =
           Pattern.compile("(^| && )(.*) > -?[0-9]+ &.*& \\2 > -?[0-9]+($| && )");
       useless_inv_pattern_2 =
