@@ -120,6 +120,7 @@ public class OneOfScalarTester {
     VarDefinition bDef = new VarDefinition("b", VarKind.VARIABLE, ProglangType.BOOLEAN);
     bDef.rep_type = ProglangType.INT;
     VarInfo b = new VarInfo(bDef);
+    assertEquals(ProglangType.BOOLEAN, b.file_rep_type);
     OneOfScalar bTrue = oneOf(b, 1);
     assertTrue(bTrue.is_boolean());
     assertEquals("b == true", bTrue.format_using(OutputFormat.JAVA));

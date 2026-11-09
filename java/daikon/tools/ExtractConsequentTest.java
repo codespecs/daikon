@@ -184,6 +184,24 @@ public class ExtractConsequentTest {
     return instantiate(proto, new PptSlice2(ppt, new VarInfo[] {v1, v2}));
   }
 
+  /**
+   * Returns an IntNonEqual invariant over two variables, even if a variable is a boolean.
+   *
+   * @param v1 a variable
+   * @param v2 another variable
+   * @return an IntNonEqual invariant over the two variables
+   */
+  private static Invariant intNonEqual(VarInfo v1, VarInfo v2) {
+    // By default, Daikon does not instantiate IntNonEqual over a boolean.
+    boolean saved = IntNonEqual.dkconfig_integral_only;
+    IntNonEqual.dkconfig_integral_only = false;
+    try {
+      return binaryInvariant(IntNonEqual.get_proto(), v1, v2);
+    } finally {
+      IntNonEqual.dkconfig_integral_only = saved;
+    }
+  }
+
   @Test
   public void testIsLegalForBooleans() {
     VarInfo b1 = newBooleanVarInfo("b1", ProglangType.INT);
@@ -193,30 +211,24 @@ public class ExtractConsequentTest {
 
     // "b1 == b2", "b1 != b2", "i1 == i2", and "i1 > i2" are legal Java.
     assertTrue(ExtractConsequent.isLegalForBooleans(binaryInvariant(IntEqual.get_proto(), b1, b2)));
-    assertTrue(
-        ExtractConsequent.isLegalForBooleans(binaryInvariant(IntNonEqual.get_proto(), b1, b2)));
+    assertTrue(ExtractConsequent.isLegalForBooleans(intNonEqual(b1, b2)));
     assertTrue(ExtractConsequent.isLegalForBooleans(binaryInvariant(IntEqual.get_proto(), i1, i2)));
     assertTrue(
         ExtractConsequent.isLegalForBooleans(binaryInvariant(IntGreaterThan.get_proto(), i1, i2)));
 
-    // "b1 == i1", "b1 != i1", and "b1 > b2" are not legal Java.
+    // "b1 == i1" and "b1 != i1" are not legal Java.  (Daikon does not instantiate an ordering
+    // invariant such as IntGreaterThan over a boolean, so "b1 > b2" cannot arise.)
     assertFalse(
         ExtractConsequent.isLegalForBooleans(binaryInvariant(IntEqual.get_proto(), b1, i1)));
-    assertFalse(
-        ExtractConsequent.isLegalForBooleans(binaryInvariant(IntNonEqual.get_proto(), b1, i1)));
-    assertFalse(
-        ExtractConsequent.isLegalForBooleans(binaryInvariant(IntGreaterThan.get_proto(), b1, b2)));
+    assertFalse(ExtractConsequent.isLegalForBooleans(intNonEqual(b1, i1)));
 
-    // OneOfScalar formats a boolean whose file representation type is boolean as "b3 == true" or
-    // "b3 == false".
+    // OneOfScalar formats a boolean as "b3 == true" or "b3 == false", whether the file
+    // representation type of the boolean is boolean or int.
     VarInfo b3 = newBooleanVarInfo("b3", ProglangType.BOOLEAN);
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b3)));
-    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(i1)));
-
-    // OneOfScalar also formats a boolean whose file representation type is int as "b1 == true" or
-    // "b1 == false".
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b1, 1)));
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b1, 0)));
+    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(i1)));
   }
 
   /**

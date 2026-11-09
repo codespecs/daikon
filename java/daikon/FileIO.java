@@ -2278,6 +2278,15 @@ public final class FileIO {
 
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
+          if (vi.file_rep_type.baseIsBoolean() && !isLegalBooleanValue(vals[val_index])) {
+            throw new Daikon.UserError(
+                "Value \""
+                    + value_rep
+                    + "\" of boolean variable "
+                    + vi.name()
+                    + " is not a boolean; each boolean value must be true, false, 1, or 0",
+                data_trace_state);
+          }
           if (vals[val_index] == null) {
             if (debug_missing && !vi.canBeMissing) {
               System.out.printf(
@@ -2633,6 +2642,27 @@ public final class FileIO {
   private static boolean is_point(String ppt_name, int pointStart, String point) {
     return ppt_name.length() - pointStart == point.length()
         && ppt_name.startsWith(point, pointStart);
+  }
+
+  /**
+   * Returns true if the given value of a boolean or boolean[] variable is 0 or 1, or is an array
+   * whose elements are 0 or 1, or is null (a missing value).
+   *
+   * @param value a value of a boolean or boolean[] variable, such as a Long or a long[]
+   * @return true if the value is null or each boolean in it is 0 or 1
+   */
+  private static boolean isLegalBooleanValue(@Nullable Object value) {
+    if (value instanceof Long) {
+      long l = (Long) value;
+      return l == 0 || l == 1;
+    } else if (value instanceof long[]) {
+      for (long l : (long[]) value) {
+        if (l != 0 && l != 1) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   /**

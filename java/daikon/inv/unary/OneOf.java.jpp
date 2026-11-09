@@ -359,35 +359,18 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 
 #if defined(SCALAR)
-  /**
-   * Returns true if the variable is a boolean. Such a variable has file representation type boolean,
-   * or it is declared as a boolean and has an integral file representation type, such as int.
-   *
-   * @return true if the variable is a boolean
-   */
   @Pure
   public boolean is_boolean(@GuardSatisfied ONEOFSCALAR this) {
-    VarInfo v = var();
-    return v.file_rep_type == ProglangType.BOOLEAN
-        || (v.file_rep_type.isIntegral() && v.type == ProglangType.BOOLEAN);
+     return var().file_rep_type == ProglangType.BOOLEAN;
   }
   @Pure
   public boolean is_hashcode(@GuardSatisfied ONEOFSCALAR this) {
     return var().file_rep_type == ProglangType.HASHCODE;
   }
 #else
-  /**
-   * Returns true if the elements of the variable are booleans. Such elements have file
-   * representation type boolean, or they are declared as booleans and have an integral file
-   * representation type, such as int.
-   *
-   * @return true if the elements of the variable are booleans
-   */
   @Pure
   public boolean is_boolean(@GuardSatisfied ONEOFSCALAR this) {
-    VarInfo v = var();
-    return v.file_rep_type.elementType() == ProglangType.BOOLEAN
-        || (v.file_rep_type.elementIsIntegral() && v.type.elementType() == ProglangType.BOOLEAN);
+    return var().file_rep_type.elementType() == ProglangType.BOOLEAN;
   }
   @Pure
   public boolean is_hashcode(@GuardSatisfied ONEOFSCALAR this) {
@@ -1542,11 +1525,12 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       return InvariantStatus.FALSIFIED;
     }
 #elif defined(SCALAR) || defined(ELT)
-    if ((is_boolean() && (num_elts == 1)) || (is_hashcode() && (num_elts == 2))) {
+    boolean hashcode = is_hashcode();
+    if ((is_boolean() && (num_elts == 1)) || (hashcode && (num_elts == 2))) {
       return InvariantStatus.FALSIFIED;
     }
 
-    if (is_hashcode() && (num_elts == 1)) {
+    if (hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
         return InvariantStatus.FALSIFIED;
