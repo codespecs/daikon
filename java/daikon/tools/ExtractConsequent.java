@@ -556,15 +556,25 @@ public class ExtractConsequent {
   /**
    * Returns the key that identifies the cluster that the given invariant describes. The pre-state
    * value "orig(cluster)" and the post-state value "cluster" are equal, so the key for an invariant
-   * over one is the same as the key for the same invariant over the other.
+   * over "orig(cluster)" is the same as the key for the same invariant over "cluster". An invariant
+   * over both, such as "cluster == orig(cluster)", is its own key, because replacing
+   * "orig(cluster)" in it would yield a different invariant, "cluster == cluster".
    *
-   * @param cluster_inv an invariant over the "cluster" variable, such as "cluster == 1"
+   * @param cluster_inv an invariant over the "cluster" variable or its pre-state value, such as
+   *     "cluster == 1" or "orig(cluster) == 1"
    * @return a key that identifies the cluster
    */
   static String clusterKey(Invariant cluster_inv) {
-    return orig_cluster_pattern
-        .matcher(cluster_inv.format_using(OutputFormat.DAIKON))
-        .replaceAll("cluster");
+    String result = cluster_inv.format_using(OutputFormat.DAIKON);
+    if (cluster_inv.usesVar("cluster")) {
+      return result;
+    }
+    for (VarInfo vi : cluster_inv.ppt.var_infos) {
+      if (vi.isPrestate() && vi.postState.name().equals("cluster")) {
+        result = result.replace(vi.name(), "cluster");
+      }
+    }
+    return result;
   }
 
   // Store the invariant for later printing. Ignore duplicate
@@ -680,9 +690,6 @@ public class ExtractConsequent {
   /** Matches the start of a pre-state value in Java format, such as "\old(" in "\old(x)". */
   static Pattern old_pattern;
 
-  /** Matches the pre-state value of the "cluster" variable, in Daikon format. */
-  static Pattern orig_cluster_pattern;
-
   /**
    * Matches an operator whose precedence is lower than that of conjunction. "&lt;==" is needed for
    * reverse implication, and "&lt;=!=&gt;" contains neither "==&gt;" nor "&lt;==". A "?" matches
@@ -709,7 +716,6 @@ public class ExtractConsequent {
       post_pattern = Pattern.compile("\\\\(?:post|new)\\s*\\(");
       result_pattern = Pattern.compile("\\\\result\\b");
       old_pattern = Pattern.compile("\\\\old\\s*\\(");
-      orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
       low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?.*:");
       literal_pattern = Pattern.compile("\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'");
       dot_class_pattern = Pattern.compile("\\.class");
