@@ -234,7 +234,7 @@ public final class Daikon {
           + release_version
           + ", released "
           + release_date
-          + "; http://plse.cs.washington.edu/daikon.";
+          + "; https://plse.cs.washington.edu/daikon.";
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -528,7 +528,7 @@ public final class Daikon {
           "  Each file is a declaration file or a data trace file; the file type",
           "  is determined by the file name (containing \".decls\" or \".dtrace\").",
           "  For a list of flags, see the Daikon manual, which appears in the ",
-          "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.");
+          "  Daikon distribution and also at https://plse.cs.washington.edu/daikon/.");
 
   /** Indicates the need for Daikon to terminate. */
   public abstract static class DaikonTerminationException extends RuntimeException {
@@ -1184,8 +1184,8 @@ public final class Daikon {
             Invariant.invariantEnabledDefault = false;
 
             // Get all loaded classes.  This solution is from
-            // http://stackoverflow.com/a/10261850/173852 .  Alternate approach:
-            // http://stackoverflow.com/questions/2548384/java-get-a-list-of-all-classes-loaded-in-the-jvm
+            // https://stackoverflow.com/a/10261850/173852 .  Alternate approach:
+            // https://stackoverflow.com/questions/2548384/java-get-a-list-of-all-classes-loaded-in-the-jvm
             Field f;
             try {
               f = ClassLoader.class.getDeclaredField("classes");
