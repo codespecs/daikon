@@ -559,22 +559,21 @@ public class ExtractConsequent {
    * Returns the key that identifies the cluster that the given invariant describes. The pre-state
    * value "orig(cluster)" and the post-state value "cluster" are equal, so the key for an invariant
    * over "orig(cluster)" is the same as the key for the same invariant over "cluster". An invariant
-   * over both, such as "cluster == orig(cluster)", is its own key.
+   * over both, such as "cluster == orig(cluster)", is its own key, because replacing
+   * "orig(cluster)" in it would yield a different invariant, "cluster == cluster".
    *
-   * @param cluster_inv an invariant over the "cluster" variable, such as "cluster == 1"
+   * @param cluster_inv an invariant over the "cluster" variable or its pre-state value, such as
+   *     "cluster == 1" or "orig(cluster) == 1"
    * @return a key that identifies the cluster
    */
   static String clusterKey(Invariant cluster_inv) {
     String result = cluster_inv.format_using(OutputFormat.DAIKON);
-    VarInfo[] vis = cluster_inv.ppt.var_infos;
-    for (VarInfo vi : vis) {
-      if (vi.name().equals("cluster")) {
-        return result;
-      }
+    if (cluster_inv.usesVar("cluster")) {
+      return result;
     }
-    for (VarInfo vi : vis) {
-      if (vi.postState != null && vi.postState.name().equals("cluster")) {
-        result = result.replace(vi.name(), vi.postState.name());
+    for (VarInfo vi : cluster_inv.ppt.var_infos) {
+      if (vi.isPrestate() && vi.postState.name().equals("cluster")) {
+        result = result.replace(vi.name(), "cluster");
       }
     }
     return result;
