@@ -1180,6 +1180,7 @@ ppt MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
     enclosing-var o
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability 22
   variable this
     var-kind variable
@@ -1233,6 +1234,7 @@ ppt MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT266
     enclosing-var o
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability 22
   variable return
     var-kind return

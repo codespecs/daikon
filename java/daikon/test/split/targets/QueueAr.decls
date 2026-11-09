@@ -36,6 +36,7 @@ ppt DataStructures.QueueAr.QueueAr():::EXIT30
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -52,6 +53,7 @@ ppt DataStructures.QueueAr.QueueAr():::EXIT30
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -113,6 +115,7 @@ ppt DataStructures.QueueAr.QueueAr(int):::EXIT39
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -129,6 +132,7 @@ ppt DataStructures.QueueAr.QueueAr(int):::EXIT39
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -175,6 +179,7 @@ ppt DataStructures.QueueAr.isEmpty():::ENTER
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -191,6 +196,7 @@ ppt DataStructures.QueueAr.isEmpty():::ENTER
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -242,6 +248,7 @@ ppt DataStructures.QueueAr.isEmpty():::EXIT47
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -258,6 +265,7 @@ ppt DataStructures.QueueAr.isEmpty():::EXIT47
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -304,6 +312,7 @@ ppt DataStructures.QueueAr.isFull():::ENTER
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -320,6 +329,7 @@ ppt DataStructures.QueueAr.isFull():::ENTER
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -371,6 +381,7 @@ ppt DataStructures.QueueAr.isFull():::EXIT56
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -387,6 +398,7 @@ ppt DataStructures.QueueAr.isFull():::EXIT56
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -433,6 +445,7 @@ ppt DataStructures.QueueAr.makeEmpty():::ENTER
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -449,6 +462,7 @@ ppt DataStructures.QueueAr.makeEmpty():::ENTER
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -495,6 +509,7 @@ ppt DataStructures.QueueAr.makeEmpty():::EXIT67
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -511,6 +526,7 @@ ppt DataStructures.QueueAr.makeEmpty():::EXIT67
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -557,6 +573,7 @@ ppt DataStructures.QueueAr.getFront():::ENTER
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -573,6 +590,7 @@ ppt DataStructures.QueueAr.getFront():::ENTER
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -610,6 +628,7 @@ ppt DataStructures.QueueAr.getFront():::EXIT77
     enclosing-var return
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable this
     var-kind variable
@@ -630,6 +649,7 @@ ppt DataStructures.QueueAr.getFront():::EXIT77
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -646,6 +666,7 @@ ppt DataStructures.QueueAr.getFront():::EXIT77
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -683,6 +704,7 @@ ppt DataStructures.QueueAr.getFront():::EXIT78
     enclosing-var return
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable this
     var-kind variable
@@ -703,6 +725,7 @@ ppt DataStructures.QueueAr.getFront():::EXIT78
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -719,6 +742,7 @@ ppt DataStructures.QueueAr.getFront():::EXIT78
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -765,6 +789,7 @@ ppt DataStructures.QueueAr.dequeue():::ENTER
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -781,6 +806,7 @@ ppt DataStructures.QueueAr.dequeue():::ENTER
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -818,6 +844,7 @@ ppt DataStructures.QueueAr.dequeue():::EXIT88
     enclosing-var return
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable this
     var-kind variable
@@ -838,6 +865,7 @@ ppt DataStructures.QueueAr.dequeue():::EXIT88
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -854,6 +882,7 @@ ppt DataStructures.QueueAr.dequeue():::EXIT88
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -891,6 +920,7 @@ ppt DataStructures.QueueAr.dequeue():::EXIT94
     enclosing-var return
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable this
     var-kind variable
@@ -911,6 +941,7 @@ ppt DataStructures.QueueAr.dequeue():::EXIT94
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -927,6 +958,7 @@ ppt DataStructures.QueueAr.dequeue():::EXIT94
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -965,6 +997,7 @@ ppt DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
     enclosing-var x
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable this
     var-kind variable
@@ -985,6 +1018,7 @@ ppt DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -1001,6 +1035,7 @@ ppt DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -1039,6 +1074,7 @@ ppt DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT109
     enclosing-var x
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable this
     var-kind variable
@@ -1059,6 +1095,7 @@ ppt DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT109
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -1075,6 +1112,7 @@ ppt DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT109
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -1127,6 +1165,7 @@ ppt DataStructures.QueueAr.increment(int):::ENTER
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -1143,6 +1182,7 @@ ppt DataStructures.QueueAr.increment(int):::ENTER
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -1200,6 +1240,7 @@ ppt DataStructures.QueueAr.increment(int):::EXIT120
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.theArray[..]
@@ -1216,6 +1257,7 @@ ppt DataStructures.QueueAr.increment(int):::EXIT120
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     parent DataStructures.QueueAr:::OBJECT 1
     comparability -1
   variable this.currentSize
@@ -1253,6 +1295,7 @@ ppt DataStructures.QueueAr.main(java.lang.String[]):::ENTER
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable args[..]
     var-kind array
@@ -1283,6 +1326,7 @@ ppt DataStructures.QueueAr.main(java.lang.String[]):::EXIT201
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable args[..]
     var-kind array
@@ -1319,6 +1363,7 @@ ppt DataStructures.QueueAr:::OBJECT
     enclosing-var this.theArray
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable this.theArray[..]
     var-kind array
@@ -1333,6 +1378,7 @@ ppt DataStructures.QueueAr:::OBJECT
     array 1
     dec-type java.lang.Class[]
     rep-type java.lang.String[]
+    flags synthetic classname
     comparability -1
   variable this.currentSize
     var-kind field currentSize

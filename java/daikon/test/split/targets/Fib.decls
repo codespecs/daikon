@@ -57,6 +57,7 @@ ppt misc.Fib.main(java.lang.String[]):::ENTER
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable args[..]
     var-kind array
@@ -113,6 +114,7 @@ ppt misc.Fib.main(java.lang.String[]):::EXIT18
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable args[..]
     var-kind array
