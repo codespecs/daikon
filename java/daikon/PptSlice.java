@@ -99,9 +99,13 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Returns true if any of our variables is named NAME, or is derived from a variable named NAME.
+   * Returns true if any of our variables is named NAME, is derived from a variable named NAME, or
+   * is the pre-state value of a variable named NAME, such as "orig(NAME)". See {@link
+   * VarInfo#includes_simple_name}.
    *
-   * @return true if any of our variables is named NAME, or is derived from a variable named NAME
+   * @param name the name of a simple variable
+   * @return true if any of our variables is named NAME, is derived from a variable named NAME, or
+   *     is the pre-state value of a variable named NAME
    */
   // Only called right now from tools/ExtractConsequent
   public boolean usesVarDerived(String name) {

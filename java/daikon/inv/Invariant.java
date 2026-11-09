@@ -731,7 +731,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return ppt.usesVar(name);
   }
 
-  /** Returns true if this invariant uses the given variable or any variable derived from it. */
+  /**
+   * Returns true if this invariant uses the given variable, any variable derived from it, or its
+   * pre-state value, such as "orig(x)" for "x".
+   *
+   * @param name the name of a simple variable
+   * @return true if this invariant uses the variable, any variable derived from it, or its
+   *     pre-state value
+   */
   public boolean usesVarDerived(@NonPrototype Invariant this, String name) {
     return ppt.usesVarDerived(name);
   }

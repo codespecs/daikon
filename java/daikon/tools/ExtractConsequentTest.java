@@ -283,5 +283,8 @@ public class ExtractConsequentTest {
     assertEquals(clusterKey(cluster, 1), clusterKey(origCluster, 1));
     // Normalization does not conflate different clusters.
     assertFalse(clusterKey(origCluster, 1).equals(clusterKey(origCluster, 2)));
+    // An invariant over both the pre-state and the post-state value is its own key.
+    Invariant unchanged = binaryInvariant(IntEqual.get_proto(), cluster, origCluster);
+    assertEquals("cluster == orig(cluster)", ExtractConsequent.clusterKey(unchanged));
   }
 }
