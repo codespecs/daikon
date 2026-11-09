@@ -1969,19 +1969,20 @@ public final class FileIO {
         // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
 
         try {
-          vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
+          @Interned Object value = vi.rep_type.parse_value(value_rep, reader, filename);
           if (vi.file_rep_type.baseIsBoolean()) {
-            @Interned Object value = booleanValue(vals[val_index]);
-            if (value != vals[val_index]) {
+            @Interned Object boolValue = booleanValue(value);
+            if (boolValue != value) {
               if (FileIO.data_trace_state.varsWithNonBooleanValues.add(vi)) {
                 warnNonBooleanValue(
                     vi.name() + " in " + ppt.name(),
                     value_rep,
                     "at line " + reader.getLineNumber() + " of " + filename);
               }
-              vals[val_index] = value;
+              value = boolValue;
             }
           }
+          vals[val_index] = value;
           if (vals[val_index] == null) {
             if (debug_missing && !vi.canBeMissing) {
               System.out.printf(
@@ -2800,14 +2801,14 @@ public final class FileIO {
 
     /**
      * If this variable is declared as a boolean (or boolean[]) and its rep type is an integer type
-     * whose values are written as numbers -- int, long, long long int, or short (or an array of
-     * one of them) -- sets its rep type to boolean (or boolean[]), so that Daikon treats the
-     * variable as a boolean. For example, a declaration might give the rep type int to a variable
-     * whose declared type is boolean. Other integral rep types, such as char, are left unchanged.
+     * whose values are written as numbers -- int, long, long long int, or short (or an array of one
+     * of them) -- sets its rep type to boolean (or boolean[]), so that Daikon treats the variable
+     * as a boolean. For example, a declaration might give the rep type int to a variable whose
+     * declared type is boolean. Other integral rep types, such as char, are left unchanged.
      *
      * <p>Such a variable loses its min-value and max-value bounds, which are not permitted for a
-     * boolean (see {@link #checkBound}), and its constant value, if any, gets the same treatment
-     * as a value in the data trace file: each boolean that is neither 0 nor 1 becomes 1.
+     * boolean (see {@link #checkBound}), and its constant value, if any, gets the same treatment as
+     * a value in the data trace file: each boolean that is neither 0 nor 1 becomes 1.
      */
     public void useBooleanRepType() {
       @Interned String base = rep_type.base();
@@ -2831,7 +2832,7 @@ public final class FileIO {
             (static_constant_value instanceof long[])
                 ? Arrays.toString((long[]) static_constant_value)
                 : static_constant_value.toString();
-        @Interned Object value = booleanValue(static_constant_value);
+        @Nullable @Interned Object value = booleanValue(static_constant_value);
         if (value != static_constant_value) {
           warnNonBooleanValue(name, value_rep, "in its declaration");
           static_constant_value = value;
