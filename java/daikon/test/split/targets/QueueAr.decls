@@ -1262,11 +1262,12 @@ ppt DataStructures.QueueAr.main(java.lang.String[]):::ENTER
     rep-type java.lang.String[]
     comparability 0[1]
   variable args[..].toString
-    var-kind field toString
+    var-kind function toString()
     enclosing-var args[..]
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
+    flags synthetic to_string
     comparability -1
 
 ppt DataStructures.QueueAr.main(java.lang.String[]):::EXIT201
@@ -1291,11 +1292,12 @@ ppt DataStructures.QueueAr.main(java.lang.String[]):::EXIT201
     rep-type java.lang.String[]
     comparability 0[1]
   variable args[..].toString
-    var-kind field toString
+    var-kind function toString()
     enclosing-var args[..]
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
+    flags synthetic to_string
     comparability -1
 
 ppt DataStructures.QueueAr:::OBJECT

@@ -31,7 +31,8 @@ ppt Math::BigFloat.TIESCALAR_s():::EXIT11
     flags is_param
     comparability 22
   variable return.deref.is_defined
-    var-kind variable
+    var-kind field deref.is_defined
+    enclosing-var return
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -68,7 +69,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -79,7 +81,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -90,7 +93,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -108,7 +112,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -119,7 +124,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -130,7 +136,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -196,7 +203,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -207,7 +215,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -218,7 +227,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -236,7 +246,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -247,7 +258,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -258,7 +270,8 @@ ppt Math::BigFloat.bdiv_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -379,7 +392,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -390,7 +404,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -401,7 +416,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -419,7 +435,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -430,7 +447,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -441,7 +459,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -507,7 +526,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -518,7 +538,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -529,7 +550,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -547,7 +569,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -558,7 +581,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -569,7 +593,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -681,7 +706,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -692,7 +718,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -703,7 +730,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -721,7 +749,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -732,7 +761,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -743,7 +773,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT100
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -817,7 +848,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -828,7 +860,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -839,7 +872,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -857,7 +891,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -868,7 +903,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -879,7 +915,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -945,7 +982,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -956,7 +994,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -967,7 +1006,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -985,7 +1025,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -996,7 +1037,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1007,7 +1049,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1119,7 +1162,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1130,7 +1174,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1141,7 +1186,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1159,7 +1205,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1170,7 +1217,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1181,7 +1229,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT117
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1255,7 +1304,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1266,7 +1316,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1277,7 +1328,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1295,7 +1347,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1306,7 +1359,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1317,7 +1371,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1383,7 +1438,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1394,7 +1450,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1405,7 +1462,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1423,7 +1481,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1434,7 +1493,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1445,7 +1505,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1557,7 +1618,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1568,7 +1630,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1579,7 +1642,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1597,7 +1661,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1608,7 +1673,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1619,7 +1685,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT36
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1693,7 +1760,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1704,7 +1772,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1715,7 +1784,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1733,7 +1803,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1744,7 +1815,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1755,7 +1827,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1821,7 +1894,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1832,7 +1906,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1843,7 +1918,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1861,7 +1937,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1872,7 +1949,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -1883,7 +1961,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -1995,7 +2074,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2006,7 +2086,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2017,7 +2098,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2035,7 +2117,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2046,7 +2129,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2057,7 +2141,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT411
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2131,7 +2216,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2142,7 +2228,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2153,7 +2240,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2171,7 +2259,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2182,7 +2271,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2193,7 +2283,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2259,7 +2350,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2270,7 +2362,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2281,7 +2374,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2299,7 +2393,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2310,7 +2405,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2321,7 +2417,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2433,7 +2530,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2444,7 +2542,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2455,7 +2554,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2473,7 +2573,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2484,7 +2585,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2495,7 +2597,8 @@ ppt Math::BigFloat.bdiv_s():::EXIT70
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2563,7 +2666,8 @@ ppt Math::BigFloat.bfround_s():::ENTER
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2574,7 +2678,8 @@ ppt Math::BigFloat.bfround_s():::ENTER
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2585,7 +2690,8 @@ ppt Math::BigFloat.bfround_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2603,7 +2709,8 @@ ppt Math::BigFloat.bfround_s():::ENTER
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2614,7 +2721,8 @@ ppt Math::BigFloat.bfround_s():::ENTER
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2625,7 +2733,8 @@ ppt Math::BigFloat.bfround_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2694,7 +2803,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2705,7 +2815,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2716,7 +2827,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2734,7 +2846,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2745,7 +2858,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2756,7 +2870,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2804,12 +2919,14 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     flags is_param
     comparability 22
   variable return._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2820,7 +2937,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2831,7 +2949,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2849,7 +2968,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2860,7 +2980,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2871,7 +2992,8 @@ ppt Math::BigFloat.bfround_s():::EXIT104
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2927,7 +3049,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2938,7 +3061,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2949,7 +3073,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -2967,7 +3092,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2978,7 +3104,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -2989,7 +3116,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3037,12 +3165,14 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     flags is_param
     comparability 22
   variable return._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3053,7 +3183,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3064,7 +3195,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3082,7 +3214,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3093,7 +3226,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3104,7 +3238,8 @@ ppt Math::BigFloat.bfround_s():::EXIT135
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3160,7 +3295,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3171,7 +3307,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3182,7 +3319,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3200,7 +3338,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3211,7 +3350,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3222,7 +3362,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3270,12 +3411,14 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     flags is_param
     comparability 22
   variable return._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3286,7 +3429,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3297,7 +3441,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3315,7 +3460,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3326,7 +3472,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3337,7 +3484,8 @@ ppt Math::BigFloat.bfround_s():::EXIT186
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3393,7 +3541,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3404,7 +3553,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3415,7 +3565,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3433,7 +3584,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3444,7 +3596,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3455,7 +3608,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3503,12 +3657,14 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     flags is_param
     comparability 22
   variable return._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3519,7 +3675,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3530,7 +3687,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3548,7 +3706,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3559,7 +3718,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3570,7 +3730,8 @@ ppt Math::BigFloat.bfround_s():::EXIT197
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3626,7 +3787,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3637,7 +3799,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3648,7 +3811,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3666,7 +3830,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3677,7 +3842,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3688,7 +3854,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3736,12 +3903,14 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     flags is_param
     comparability 22
   variable return._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3752,7 +3921,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3763,7 +3933,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3781,7 +3952,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3792,7 +3964,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3803,7 +3976,8 @@ ppt Math::BigFloat.bfround_s():::EXIT245
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3859,7 +4033,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3870,7 +4045,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3881,7 +4057,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3899,7 +4076,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3910,7 +4088,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3921,7 +4100,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -3969,12 +4149,14 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     flags is_param
     comparability 22
   variable return._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3985,7 +4167,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -3996,7 +4179,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4014,7 +4198,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4025,7 +4210,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4036,7 +4222,8 @@ ppt Math::BigFloat.bfround_s():::EXIT319
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4092,7 +4279,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4103,7 +4291,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4114,7 +4303,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4132,7 +4322,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4143,7 +4334,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4154,7 +4346,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4202,12 +4395,14 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     flags is_param
     comparability 22
   variable return._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4218,7 +4413,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4229,7 +4425,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4247,7 +4444,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4258,7 +4456,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4269,7 +4468,8 @@ ppt Math::BigFloat.bfround_s():::EXIT80
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4325,7 +4525,8 @@ ppt Math::BigFloat.binf_s():::ENTER
     rep-type boolean
     comparability 22
   variable $self._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4336,7 +4537,8 @@ ppt Math::BigFloat.binf_s():::ENTER
     rep-type int
     comparability 1
   variable $self._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4347,7 +4549,8 @@ ppt Math::BigFloat.binf_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $self._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4365,7 +4568,8 @@ ppt Math::BigFloat.binf_s():::ENTER
     rep-type hashcode
     comparability 22
   variable $self._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4376,7 +4580,8 @@ ppt Math::BigFloat.binf_s():::ENTER
     rep-type int
     comparability 1
   variable $self._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4387,7 +4592,8 @@ ppt Math::BigFloat.binf_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $self._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4469,7 +4675,8 @@ ppt Math::BigFloat.binf_s():::EXIT104
     rep-type boolean
     comparability 22
   variable $self._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4480,7 +4687,8 @@ ppt Math::BigFloat.binf_s():::EXIT104
     rep-type int
     comparability 1
   variable $self._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4491,7 +4699,8 @@ ppt Math::BigFloat.binf_s():::EXIT104
     rep-type java.lang.String
     comparability 22
   variable $self._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4509,7 +4718,8 @@ ppt Math::BigFloat.binf_s():::EXIT104
     rep-type hashcode
     comparability 22
   variable $self._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4520,7 +4730,8 @@ ppt Math::BigFloat.binf_s():::EXIT104
     rep-type int
     comparability 1
   variable $self._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4531,7 +4742,8 @@ ppt Math::BigFloat.binf_s():::EXIT104
     rep-type java.lang.String
     comparability 22
   variable $self._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4610,12 +4822,14 @@ ppt Math::BigFloat.binf_s():::EXIT104
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4626,7 +4840,8 @@ ppt Math::BigFloat.binf_s():::EXIT104
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4644,12 +4859,14 @@ ppt Math::BigFloat.binf_s():::EXIT104
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4660,7 +4877,8 @@ ppt Math::BigFloat.binf_s():::EXIT104
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4734,7 +4952,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4745,7 +4964,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4756,7 +4976,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4774,7 +4995,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4785,7 +5007,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4796,7 +5019,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4862,7 +5086,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4873,7 +5098,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4884,7 +5110,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -4902,7 +5129,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4913,7 +5141,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -4924,7 +5153,8 @@ ppt Math::BigFloat.bmul_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5045,7 +5275,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5056,7 +5287,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5067,7 +5299,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5085,7 +5318,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5096,7 +5330,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5107,7 +5342,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5173,7 +5409,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5184,7 +5421,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5195,7 +5433,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5213,7 +5452,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5224,7 +5464,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5235,7 +5476,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5347,7 +5589,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5358,7 +5601,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5369,7 +5613,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5387,7 +5632,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5398,7 +5644,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5409,7 +5656,8 @@ ppt Math::BigFloat.bmul_s():::EXIT105
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5483,7 +5731,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5494,7 +5743,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5505,7 +5755,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5523,7 +5774,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5534,7 +5786,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5545,7 +5798,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5611,7 +5865,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5622,7 +5877,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5633,7 +5889,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5651,7 +5908,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5662,7 +5920,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5673,7 +5932,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5785,7 +6045,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5796,7 +6057,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5807,7 +6069,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5825,7 +6088,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5836,7 +6100,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5847,7 +6112,8 @@ ppt Math::BigFloat.bmul_s():::EXIT113
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5921,7 +6187,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5932,7 +6199,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5943,7 +6211,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -5961,7 +6230,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5972,7 +6242,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -5983,7 +6254,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6049,7 +6321,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6060,7 +6333,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6071,7 +6345,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6089,7 +6364,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6100,7 +6376,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6111,7 +6388,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6223,7 +6501,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6234,7 +6513,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6245,7 +6525,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6263,7 +6544,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6274,7 +6556,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6285,7 +6568,8 @@ ppt Math::BigFloat.bmul_s():::EXIT169
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6359,7 +6643,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6370,7 +6655,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6381,7 +6667,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6399,7 +6686,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6410,7 +6698,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6421,7 +6710,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6487,7 +6777,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6498,7 +6789,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6509,7 +6801,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6527,7 +6820,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6538,7 +6832,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6549,7 +6844,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6661,7 +6957,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6672,7 +6969,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6683,7 +6981,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6701,7 +7000,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6712,7 +7012,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6723,7 +7024,8 @@ ppt Math::BigFloat.bmul_s():::EXIT53
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6797,7 +7099,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6808,7 +7111,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6819,7 +7123,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6837,7 +7142,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6848,7 +7154,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6859,7 +7166,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6925,7 +7233,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type boolean
     comparability 22
   variable $y._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6936,7 +7245,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type int
     comparability 1
   variable $y._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6947,7 +7257,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type java.lang.String
     comparability 22
   variable $y._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -6965,7 +7276,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type hashcode
     comparability 22
   variable $y._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6976,7 +7288,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type int
     comparability 1
   variable $y._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $y._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -6987,7 +7300,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type java.lang.String
     comparability 22
   variable $y._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $y._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7099,7 +7413,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7110,7 +7425,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7121,7 +7437,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7139,7 +7456,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7150,7 +7468,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7161,7 +7480,8 @@ ppt Math::BigFloat.bmul_s():::EXIT86
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7229,7 +7549,8 @@ ppt Math::BigFloat.bnan_s():::ENTER
     rep-type boolean
     comparability 22
   variable $self._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7240,7 +7561,8 @@ ppt Math::BigFloat.bnan_s():::ENTER
     rep-type int
     comparability 1
   variable $self._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7251,7 +7573,8 @@ ppt Math::BigFloat.bnan_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $self._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7269,7 +7592,8 @@ ppt Math::BigFloat.bnan_s():::ENTER
     rep-type hashcode
     comparability 22
   variable $self._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7280,7 +7604,8 @@ ppt Math::BigFloat.bnan_s():::ENTER
     rep-type int
     comparability 1
   variable $self._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7291,7 +7616,8 @@ ppt Math::BigFloat.bnan_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $self._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7360,7 +7686,8 @@ ppt Math::BigFloat.bnan_s():::EXIT84
     rep-type boolean
     comparability 22
   variable $self._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7371,7 +7698,8 @@ ppt Math::BigFloat.bnan_s():::EXIT84
     rep-type int
     comparability 1
   variable $self._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7382,7 +7710,8 @@ ppt Math::BigFloat.bnan_s():::EXIT84
     rep-type java.lang.String
     comparability 22
   variable $self._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7400,7 +7729,8 @@ ppt Math::BigFloat.bnan_s():::EXIT84
     rep-type hashcode
     comparability 22
   variable $self._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7411,7 +7741,8 @@ ppt Math::BigFloat.bnan_s():::EXIT84
     rep-type int
     comparability 1
   variable $self._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7422,7 +7753,8 @@ ppt Math::BigFloat.bnan_s():::EXIT84
     rep-type java.lang.String
     comparability 22
   variable $self._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7488,12 +7820,14 @@ ppt Math::BigFloat.bnan_s():::EXIT84
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7504,7 +7838,8 @@ ppt Math::BigFloat.bnan_s():::EXIT84
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7522,12 +7857,14 @@ ppt Math::BigFloat.bnan_s():::EXIT84
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7538,7 +7875,8 @@ ppt Math::BigFloat.bnan_s():::EXIT84
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7609,7 +7947,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT146
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7620,7 +7959,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT146
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7631,7 +7971,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT146
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7649,7 +7990,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT146
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7660,7 +8002,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT146
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7671,7 +8014,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT146
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7739,7 +8083,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT24
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7750,7 +8095,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT24
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7761,7 +8107,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT24
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7779,7 +8126,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT24
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7790,7 +8138,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT24
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7801,7 +8150,8 @@ ppt Math::BigFloat.bnorm_s():::EXIT24
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7869,7 +8219,8 @@ ppt Math::BigFloat.bround_s():::ENTER
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7880,7 +8231,8 @@ ppt Math::BigFloat.bround_s():::ENTER
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7891,7 +8243,8 @@ ppt Math::BigFloat.bround_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -7909,7 +8262,8 @@ ppt Math::BigFloat.bround_s():::ENTER
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7920,7 +8274,8 @@ ppt Math::BigFloat.bround_s():::ENTER
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -7931,7 +8286,8 @@ ppt Math::BigFloat.bround_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8000,7 +8356,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8011,7 +8368,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8022,7 +8380,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8040,7 +8399,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8051,7 +8411,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8062,7 +8423,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8128,7 +8490,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8139,7 +8502,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8150,7 +8514,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8168,7 +8533,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8179,7 +8545,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8190,7 +8557,8 @@ ppt Math::BigFloat.bround_s():::EXIT118
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8258,7 +8626,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8269,7 +8638,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8280,7 +8650,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8298,7 +8669,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8309,7 +8681,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8320,7 +8693,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8386,7 +8760,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8397,7 +8772,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8408,7 +8784,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8426,7 +8803,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8437,7 +8815,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8448,7 +8827,8 @@ ppt Math::BigFloat.bround_s():::EXIT149
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8516,7 +8896,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8527,7 +8908,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8538,7 +8920,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8556,7 +8939,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8567,7 +8951,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8578,7 +8963,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8644,7 +9030,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8655,7 +9042,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8666,7 +9054,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8684,7 +9073,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8695,7 +9085,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8706,7 +9097,8 @@ ppt Math::BigFloat.bround_s():::EXIT201
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8774,7 +9166,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type boolean
     comparability 22
   variable $x._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8785,7 +9178,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type int
     comparability 1
   variable $x._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8796,7 +9190,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type java.lang.String
     comparability 22
   variable $x._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8814,7 +9209,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type hashcode
     comparability 22
   variable $x._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8825,7 +9221,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type int
     comparability 1
   variable $x._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $x._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8836,7 +9233,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type java.lang.String
     comparability 22
   variable $x._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $x._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8902,7 +9300,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8913,7 +9312,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8924,7 +9324,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -8942,7 +9343,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8953,7 +9355,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -8964,7 +9367,8 @@ ppt Math::BigFloat.bround_s():::EXIT94
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -9059,7 +9463,8 @@ ppt Math::BigFloat.bzero_s():::ENTER
     rep-type boolean
     comparability 22
   variable $self._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9070,7 +9475,8 @@ ppt Math::BigFloat.bzero_s():::ENTER
     rep-type int
     comparability 1
   variable $self._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9081,7 +9487,8 @@ ppt Math::BigFloat.bzero_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $self._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -9099,7 +9506,8 @@ ppt Math::BigFloat.bzero_s():::ENTER
     rep-type hashcode
     comparability 22
   variable $self._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9110,7 +9518,8 @@ ppt Math::BigFloat.bzero_s():::ENTER
     rep-type int
     comparability 1
   variable $self._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9121,7 +9530,8 @@ ppt Math::BigFloat.bzero_s():::ENTER
     rep-type java.lang.String
     comparability 22
   variable $self._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -9190,7 +9600,8 @@ ppt Math::BigFloat.bzero_s():::EXIT84
     rep-type boolean
     comparability 22
   variable $self._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9201,7 +9612,8 @@ ppt Math::BigFloat.bzero_s():::EXIT84
     rep-type int
     comparability 1
   variable $self._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9212,7 +9624,8 @@ ppt Math::BigFloat.bzero_s():::EXIT84
     rep-type java.lang.String
     comparability 22
   variable $self._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -9230,7 +9643,8 @@ ppt Math::BigFloat.bzero_s():::EXIT84
     rep-type hashcode
     comparability 22
   variable $self._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9241,7 +9655,8 @@ ppt Math::BigFloat.bzero_s():::EXIT84
     rep-type int
     comparability 1
   variable $self._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var $self._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9252,7 +9667,8 @@ ppt Math::BigFloat.bzero_s():::EXIT84
     rep-type java.lang.String
     comparability 22
   variable $self._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var $self._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -9318,12 +9734,14 @@ ppt Math::BigFloat.bzero_s():::EXIT84
     rep-type boolean
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9334,7 +9752,8 @@ ppt Math::BigFloat.bzero_s():::EXIT84
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -9352,12 +9771,14 @@ ppt Math::BigFloat.bzero_s():::EXIT84
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9368,7 +9789,8 @@ ppt Math::BigFloat.bzero_s():::EXIT84
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -9506,7 +9928,8 @@ ppt Math::BigFloat.new_s():::EXIT167
     flags is_param
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9517,7 +9940,8 @@ ppt Math::BigFloat.new_s():::EXIT167
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9528,7 +9952,8 @@ ppt Math::BigFloat.new_s():::EXIT167
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -9546,7 +9971,8 @@ ppt Math::BigFloat.new_s():::EXIT167
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9557,7 +9983,8 @@ ppt Math::BigFloat.new_s():::EXIT167
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9568,7 +9995,8 @@ ppt Math::BigFloat.new_s():::EXIT167
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -9612,7 +10040,8 @@ ppt Math::BigFloat.new_s():::EXIT253
     flags is_param
     comparability 22
   variable return._e._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9623,7 +10052,8 @@ ppt Math::BigFloat.new_s():::EXIT253
     rep-type int
     comparability 1
   variable return._e._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._e
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9634,7 +10064,8 @@ ppt Math::BigFloat.new_s():::EXIT253
     rep-type java.lang.String
     comparability 22
   variable return._e.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._e.value
     array 1
     dec-type int[]
     rep-type int[]
@@ -9652,7 +10083,8 @@ ppt Math::BigFloat.new_s():::EXIT253
     rep-type hashcode
     comparability 22
   variable return._m._a.is_defined
-    var-kind variable
+    var-kind field _a.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9663,7 +10095,8 @@ ppt Math::BigFloat.new_s():::EXIT253
     rep-type int
     comparability 1
   variable return._m._p.is_defined
-    var-kind variable
+    var-kind field _p.is_defined
+    enclosing-var return._m
     dec-type boolean
     rep-type boolean
     comparability 22
@@ -9674,7 +10107,8 @@ ppt Math::BigFloat.new_s():::EXIT253
     rep-type java.lang.String
     comparability 22
   variable return._m.value.deref[..]
-    var-kind variable
+    var-kind array
+    enclosing-var return._m.value
     array 1
     dec-type int[]
     rep-type int[]
