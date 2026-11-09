@@ -11,15 +11,15 @@ Further documentation can be found in:
 * The Daikon Manual.  Its source is file `daikon.texinfo`; formatted, it
    appears as `daikon.html` or `daikon.pdf`.
    It is available online at:
-   <http://plse.cs.washington.edu/daikon/download/doc/daikon.html> .
+   <https://plse.cs.washington.edu/daikon/download/doc/daikon.html> .
 * The Daikon Developer Manual.  Its source is file `developer.texinfo`;
    formatted, it appears as `developer.html` or `developer.pdf`.
    It is available online at:
-   <http://plse.cs.washington.edu/daikon/download/doc/developer.html> .
+   <https://plse.cs.washington.edu/daikon/download/doc/developer.html> .
 * The Javadoc API documentation for the source code.  This is not
    distributed with Daikon, but you can build it by executing the command
      `make -C $DAIKONDIR/java javadoc`
-   It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
+   It is also available at <https://plse.cs.washington.edu/daikon/download/api/> .
 
 ## Version 5.9.1 (???, 2026)
 
@@ -947,13 +947,13 @@ Highlights
 
 * Celeriac is a new front end for .NET languages (C#, F#, and Visual Basic).
 * The Kvasir front end for C works with current Linux distributions.
-* Daikon releases can be found at <http://plse.cs.washington.edu/daikon/>.
+* Daikon releases can be found at <https://plse.cs.washington.edu/daikon/>.
 * The bug tracker has moved to Google Code, and mailing lists to Google Groups.
 
 General
 
 * The Daikon distribution is now hosted at the University of Washington:
-    <http://plse.cs.washington.edu/daikon/>
+    <https://plse.cs.washington.edu/daikon/>
 
 * Bug reporting is done using GitHub issue trackers:
     <https://github.com/codespecs/daikon/issues/>
@@ -2410,7 +2410,7 @@ User-visible changes
   includes a command-line option, `--daikon-purity-file`, that causes it to
   write a file that is appropriate for passing to Chicory via its
   `--purity-file` option.  The Purity Analysis Kit was written by Alexandru
-  Salcianu and is available from <http://www.mit.edu/~salcianu/purity/>.
+  Salcianu and is available from <https://www.mit.edu/~salcianu/purity/>.
 
 ## Version 4.1.7 (November 1 2005)
 
@@ -2611,7 +2611,7 @@ a Bugzilla database.
 ### General
 
   Daikon problems are now tracked in the Bugzilla database at:
-  <http://pag.csail.mit.edu/bugzilla/>.  There are separate products for
+  <https://pag.csail.mit.edu/bugzilla/>.  There are separate products for
   Daikon and Kvasir.  Problems with Chicory and other front ends
   should be submitted against the Daikon product.
 
@@ -3052,7 +3052,7 @@ These improvements include:
   information, analyzing those traces, and creating appropriately annotated
   Java source code. The plug-in works with Eclipse version 3.0.1 and later.
   You can find documentation for the plug-in at
-  <http://pag.csail.mit.edu/daikon/doc/daikonHelp.html> .
+  <https://pag.csail.mit.edu/daikon/doc/daikonHelp.html> .
   The 3.1.7 version of the plug-in supports versions of Daikon up to Daikon
   3.1.7 and (like Eclipse 3.0.1) only versions of Java up to Java 1.4.2.
   A version of the plug-in for Eclipse 3.1 and Daikon 4.0.0 is forthcoming.
@@ -3102,7 +3102,7 @@ Developer changes
     that you will need a Java 5 compiler to compile Daikon, and you will
     need a Java 5 JVM to run Daikon.  (You may be able to run Daikon on an
     older JVM by using a utility like retroweaver:
-    <http://retroweaver.sourceforge.net/> .)
+    <https://retroweaver.sourceforge.net/> .)
 
 dfej
 
@@ -3155,7 +3155,7 @@ dfej
   used, for example, by the Eclat tool (which is not a part of Daikon
   itself).  Eclat automatically creates test cases that are much more
   likely than random to reveal errors in programs.  You can download Eclat
-  from <http://pag.csail.mit.edu/eclat/> .
+  from <https://pag.csail.mit.edu/eclat/> .
 
 ### Kvasir
 
@@ -3201,7 +3201,7 @@ enhancements and several bug fixes.
 * The Daikon publications webpage has been reorganized to bring all of
     the publications relating to Daikon together on a single webpage.
     Links have been added to other tools that perform dynamic invariant
-    detection.  See <http://plse.cs.washington.edu/daikon/pubs/>.
+    detection.  See <https://plse.cs.washington.edu/daikon/pubs/>.
 
 * The list of configuration options in the user manual was reorganized
     to group the options by category.
@@ -3845,7 +3845,7 @@ Three new mailing lists have been set up:
   <daikon-announce@lists.csail.mit.edu>
   <daikon-discuss@lists.csail.mit.edu>
   <daikon-developers@lists.csail.mit.edu>
-To subscribe, visit <http://lists.csail.mit.edu/mailman/listinfo>.
+To subscribe, visit <https://lists.csail.mit.edu/mailman/listinfo>.
 
 The Context GUI now shares the same look and feel as the Tree GUI.
 Furthermore, .dci files are no longer necessary for the Context GUI, and
@@ -3954,7 +3954,7 @@ array element processing.
 ## Version 2.3.8 (10 May 2002)
 
 This release coordinates with a new release of the dfec binaries (at
-<http://pag.csail.mit.edu/daikon/download/>).
+<https://pag.csail.mit.edu/daikon/download/>).
 
 Remove some innocuous syntax anachronisms from example C programs.
 Add the example C programs to the distribution.
