@@ -3,6 +3,7 @@ package daikon.test.inv.unary.scalar;
 import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import daikon.FileIO.VarDefinition;
@@ -22,6 +23,7 @@ import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.plumelib.util.Intern;
 
 @SuppressWarnings("nullness") // testing code
 public class OneOfScalarTester {
@@ -146,6 +148,21 @@ public class OneOfScalarTester {
     bDef.rep_type = ProglangType.LONG_PRIMITIVE;
     bDef.useBooleanRepType();
     assertEquals(ProglangType.BOOLEAN, bDef.rep_type);
+
+    // Such a variable loses its bounds, and a constant value other than 0 or 1 becomes 1.
+    VarDefinition cDef = new VarDefinition("c", VarKind.VARIABLE, ProglangType.BOOLEAN);
+    cDef.rep_type = ProglangType.INT;
+    cDef.min_value = "0";
+    cDef.max_value = "1";
+    cDef.static_constant_value = Intern.internedLong(2);
+    cDef.useBooleanRepType();
+    assertEquals(ProglangType.BOOLEAN, cDef.rep_type);
+    assertNull(cDef.min_value);
+    assertNull(cDef.max_value);
+    assertEquals(Long.valueOf(1), cDef.static_constant_value);
+    @SuppressWarnings("interning") // newly-created VarInfo
+    VarInfo c = new VarInfo(cDef); // checkRep succeeds
+    assertEquals(ProglangType.BOOLEAN, c.file_rep_type);
 
     // A boolean whose rep type is not integral keeps its rep type.
     VarDefinition hDef = new VarDefinition("h", VarKind.VARIABLE, ProglangType.BOOLEAN);

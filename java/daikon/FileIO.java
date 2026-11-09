@@ -43,10 +43,11 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -1056,6 +1057,14 @@ public final class FileIO {
     public @Nullable Object payload; // used when status=COMMENT
 
     /**
+     * The variables that have had a boolean value other than 0 or 1 in this file. Daikon warns
+     * about each such variable only once per file. A variable is in a single program point, so
+     * "return" in two program points is two variables.
+     */
+    public Set<VarInfo> varsWithNonBooleanValues =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+
+    /**
      * Start parsing the given file.
      *
      * @param raw_filename the file name supplied by the user; may be "-" or "+"
@@ -1962,7 +1971,16 @@ public final class FileIO {
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
           if (vi.file_rep_type.baseIsBoolean()) {
-            vals[val_index] = booleanValue(vals[val_index], vi, value_rep);
+            @Interned Object value = booleanValue(vals[val_index]);
+            if (value != vals[val_index]) {
+              if (FileIO.data_trace_state.varsWithNonBooleanValues.add(vi)) {
+                warnNonBooleanValue(
+                    vi.name() + " in " + ppt.name(),
+                    value_rep,
+                    "at line " + reader.getLineNumber() + " of " + filename);
+              }
+              vals[val_index] = value;
+            }
           }
           if (vals[val_index] == null) {
             if (debug_missing && !vi.canBeMissing) {
@@ -2313,25 +2331,14 @@ public final class FileIO {
   }
 
   /**
-   * The names of the boolean variables that have had a value other than 0 or 1, such as "flag" in a
-   * C program that assigns 2 to a variable of a boolean type. Daikon warns about each such variable
-   * only once.
-   */
-  private static Set<String> varsWithNonBooleanValues = new HashSet<>();
-
-  /**
    * Returns the given value of a boolean or boolean[] variable, with each boolean in it that is
-   * neither 0 nor 1 replaced by 1 (true), as C does. The first time that a variable has such a
-   * value, prints a warning.
+   * neither 0 nor 1 replaced by 1 (true), as C does.
    *
    * @param value a value of a boolean or boolean[] variable, such as a Long or a long[], or null
    *     for a missing value
-   * @param vi the variable
-   * @param value_rep the value as written in the data trace file; used for diagnostics
    * @return the value, with each boolean in it that is neither 0 nor 1 replaced by 1
    */
-  private static @Nullable @Interned Object booleanValue(
-      @Nullable @Interned Object value, VarInfo vi, String value_rep) {
+  private static @Nullable @Interned Object booleanValue(@Nullable @Interned Object value) {
     @Interned Object result = value;
     if (value instanceof Long) {
       long l = (Long) value;
@@ -2353,13 +2360,21 @@ public final class FileIO {
         }
       }
     }
-    if (result != value && varsWithNonBooleanValues.add(vi.name())) {
-      System.out.printf(
-          "Warning: boolean variable %s has value %s at line %d; Daikon treats each boolean other"
-              + " than 0 and 1 as true (1)%n",
-          vi.name(), value_rep, FileIO.get_linenum());
-    }
     return result;
+  }
+
+  /**
+   * Prints a warning that the given boolean variable has a value other than 0 or 1.
+   *
+   * @param varname the name of a boolean variable
+   * @param value_rep the variable's value, as written in a file
+   * @param location where the value appears, such as "at line 31 of file foo.dtrace"
+   */
+  private static void warnNonBooleanValue(String varname, String value_rep, String location) {
+    System.out.printf(
+        "Warning: boolean variable %s has value %s %s; Daikon treats each boolean other than 0 and"
+            + " 1 as true (1)%n",
+        varname, value_rep, location);
   }
 
   /**
@@ -2786,14 +2801,33 @@ public final class FileIO {
     /**
      * If this variable is declared as a boolean (or boolean[]) and its rep type is integral, such
      * as int (or int[]), sets its rep type to boolean (or boolean[]), so that Daikon treats the
-     * variable as a boolean. For example, Kvasir writes a C variable of a boolean type with rep
-     * type int.
+     * variable as a boolean. For example, a declaration might give the rep type int to a variable
+     * whose declared type is boolean.
+     *
+     * <p>Such a variable loses its min-value and max-value bounds, which are not permitted for a
+     * boolean (see {@link #checkBound}), and its constant value, if any, gets the same treatment
+     * as a value in the data trace file: each boolean that is neither 0 nor 1 becomes 1.
      */
     public void useBooleanRepType() {
       if (declared_type == ProglangType.BOOLEAN && rep_type.isIntegral()) {
         rep_type = ProglangType.BOOLEAN;
       } else if (declared_type == ProglangType.BOOLEAN_ARRAY && rep_type.elementIsIntegral()) {
         rep_type = ProglangType.BOOLEAN_ARRAY;
+      } else {
+        return;
+      }
+      min_value = null;
+      max_value = null;
+      if (static_constant_value != null) {
+        String value_rep =
+            (static_constant_value instanceof long[])
+                ? Arrays.toString((long[]) static_constant_value)
+                : static_constant_value.toString();
+        @Interned Object value = booleanValue(static_constant_value);
+        if (value != static_constant_value) {
+          warnNonBooleanValue(name, value_rep, "in its declaration");
+          static_constant_value = value;
+        }
       }
     }
 
