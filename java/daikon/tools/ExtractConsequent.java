@@ -18,6 +18,7 @@ import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.unary.OneOf;
 import daikon.inv.unary.scalar.OneOfScalar;
 import gnu.getopt.*;
 import java.io.BufferedWriter;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -188,6 +190,7 @@ public class ExtractConsequent {
         List<String> condsDaikon = new ArrayList<>();
         List<String> condsESC = new ArrayList<>();
         List<String> condsSimplify = new ArrayList<>();
+        List<Invariant> condsInv = new ArrayList<>();
         for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
             conditions.entrySet()) {
           String condIndex = entry2.getKey();
@@ -206,12 +209,13 @@ public class ExtractConsequent {
           condsDaikon.add(daikonStr);
           condsESC.add(escStr);
           condsSimplify.add(simplifyStr);
+          condsInv.add(cond.inv);
         }
         String conj = conjunction(condsJava, " && ");
         // Avoid inserting self-contradictory conditions such as "x == 1 &&
         // x == 2", or conjunctions of only a single condition.
         if (condsJava.size() < 2
-            || contradict_inv_pattern.matcher(conj).find()
+            || isContradictory(condsInv)
             || useless_inv_pattern_1.matcher(conj).find()
             || useless_inv_pattern_2.matcher(conj).find()) {
           // System.out.println("Suppressing: " + conj);
@@ -266,15 +270,60 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the given condition as a .spinfo file writes it, or null if a splitter cannot use the
-   * condition. The result writes each "\result" as "return" and each "\old(x)" as "orig(x)", which
-   * is how a .spinfo file refers to the return value and to pre-state values. A splitter cannot use
-   * a condition that refers to a post-state value, such as "\post(x)" or "\new(x)", or that
-   * contains ".class". Text within a string or character literal is neither changed nor examined.
+   * Returns true if two of the given invariants give the same variable different values, as "x ==
+   * 1" and "x == 2" do, or "b == true" and "b == false". The conjunction of such invariants is
+   * always false.
+   *
+   * @param invs invariants
+   * @return true if two of the invariants give the same variable different values
+   */
+  static boolean isContradictory(Collection<Invariant> invs) {
+    // Maps a variable's name to the value that some invariant in invs gives it.
+    Map<String, Object> values = new HashMap<>();
+    for (Invariant inv : invs) {
+      if (!(inv instanceof OneOf)) {
+        continue;
+      }
+      OneOf oneOf = (OneOf) inv;
+      if (oneOf.num_elts() != 1) {
+        continue;
+      }
+      Object value = oneOf.elt();
+      Object otherValue = values.put(oneOf.var().name(), value);
+      if (otherValue != null && !sameValue(value, otherValue)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the given values, which are values of the same variable, are equal. Two
+   * floating-point values are equal if they are approximately equal according to {@link
+   * Global#fuzzy}.
+   *
+   * @param v1 a value, such as a Long, Double, or String
+   * @param v2 another value of the same variable as v1
+   * @return true if the values are equal
+   */
+  private static boolean sameValue(Object v1, Object v2) {
+    if (v1 instanceof Double && v2 instanceof Double) {
+      return Global.fuzzy.eq((Double) v1, (Double) v2);
+    }
+    return v1.equals(v2);
+  }
+
+  /**
+   * Returns the given condition as a .spinfo file writes it, or null if the condition refers to a
+   * post-state value or uses a class literal such as "Foo.class". The result writes each "\result"
+   * as "return" and each "\old(x)" as "orig(x)", which is how a .spinfo file refers to the return
+   * value and to pre-state values. A splitter cannot use a condition that refers to a post-state
+   * value, such as "\post(x)" or "\new(x)", or that uses a class literal. Text within a string or
+   * character literal is neither changed nor examined.
    *
    * @param condition a condition in Java format, such as "\result &gt; \old(this.size)"
    * @return the condition as a .spinfo file writes it, such as "return &gt; orig(this.size)", or
-   *     null if a splitter cannot use the condition
+   *     null if the condition refers to a post-state value or uses a class literal
    */
   static @Nullable String toSpinfoCondition(String condition) {
     StringBuilder result = new StringBuilder();
@@ -666,7 +715,7 @@ public class ExtractConsequent {
   /** Matches a string or character literal. */
   static Pattern literal_pattern;
 
-  /** Matches ".class", as in "Foo.class", but not ".classCount". */
+  /** Matches ".class", as in "Foo.class", but not ".classCount" or ".class$0". */
   static Pattern dot_class_pattern;
 
   static Pattern non_word_pattern;
@@ -674,12 +723,6 @@ public class ExtractConsequent {
   static Pattern lteq_pattern;
   static Pattern neq_pattern;
   static Pattern inequality_pattern;
-
-  /**
-   * Matches a conjunction in which one expression equals two different values, such as "x == 1
-   * &amp;&amp; x == 2" or "b == true &amp;&amp; b == false".
-   */
-  static Pattern contradict_inv_pattern;
 
   static Pattern useless_inv_pattern_1;
   static Pattern useless_inv_pattern_2;
@@ -693,14 +736,11 @@ public class ExtractConsequent {
       orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
       low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?.*:");
       literal_pattern = Pattern.compile("\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'");
-      dot_class_pattern = Pattern.compile("\\.class\\b");
+      dot_class_pattern = Pattern.compile("\\.class(?!\\p{javaJavaIdentifierPart})");
       inequality_pattern = Pattern.compile("[\\!<>]=");
       gteq_pattern = Pattern.compile(">=");
       lteq_pattern = Pattern.compile("<=");
       neq_pattern = Pattern.compile("\\!=");
-      String value = "(?:-?[0-9]+|true|false)";
-      contradict_inv_pattern =
-          Pattern.compile("(^| && )(.*) == " + value + " &.*& \\2 == " + value + "($| && )");
       useless_inv_pattern_1 =
           Pattern.compile("(^| && )(.*) > -?[0-9]+ &.*& \\2 > -?[0-9]+($| && )");
       useless_inv_pattern_2 =

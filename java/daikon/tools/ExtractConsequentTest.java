@@ -20,6 +20,7 @@ import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntGreaterThan;
 import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.unary.scalar.OneOfFloat;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.test.Common;
 import java.util.Arrays;
@@ -157,6 +158,9 @@ public class ExtractConsequentTest {
     assertEquals("this.classCount > 0", ExtractConsequent.toSpinfoCondition("this.classCount > 0"));
     assertEquals(
         "this.classifier == null", ExtractConsequent.toSpinfoCondition("this.classifier == null"));
+    assertEquals("Foo.class$0 == null", ExtractConsequent.toSpinfoCondition("Foo.class$0 == null"));
+    assertEquals(
+        "this.class\u00e9 > 0", ExtractConsequent.toSpinfoCondition("this.class\u00e9 > 0"));
     assertEquals(
         "s.equals(\"\\\\post(x)\")",
         ExtractConsequent.toSpinfoCondition("s.equals(\"\\\\post(x)\")"));
@@ -167,15 +171,29 @@ public class ExtractConsequentTest {
         "s.equals(\"Foo.class\")", ExtractConsequent.toSpinfoCondition("s.equals(\"Foo.class\")"));
   }
 
+  @SuppressWarnings("interning") // newly-created VarInfo
   @Test
-  public void testContradictPattern() {
-    assertTrue(ExtractConsequent.contradict_inv_pattern.matcher("x == 1 && x == 2").find());
+  public void testIsContradictory() {
+    VarInfo x = Common.newIntVarInfo("x");
+    VarInfo y = Common.newIntVarInfo("y");
+    VarInfo b = newBooleanVarInfo("b", ProglangType.INT);
+    VarInfo d = new VarInfo(new VarDefinition("d", VarKind.VARIABLE, ProglangType.DOUBLE));
+
+    // "x == 1 && x == 2", "b == true && b == false", and "d == 0.5 && d == 1.5" are always false.
+    assertTrue(ExtractConsequent.isContradictory(Arrays.asList(oneOf(x, 1), oneOf(x, 2))));
     assertTrue(
-        ExtractConsequent.contradict_inv_pattern
-            .matcher("this.flag == true && y > 0 && this.flag == false")
-            .find());
-    assertFalse(ExtractConsequent.contradict_inv_pattern.matcher("x == 1 && y == 2").find());
-    assertFalse(ExtractConsequent.contradict_inv_pattern.matcher("b == true && c == false").find());
+        ExtractConsequent.isContradictory(Arrays.asList(oneOf(b, 1), oneOf(y, 3), oneOf(b, 0))));
+    assertTrue(
+        ExtractConsequent.isContradictory(Arrays.asList(oneOfFloat(d, 0.5), oneOfFloat(d, 1.5))));
+
+    // "x == 1 && y == 2", "x == 1 && x == 1", and "x == 1 && x one of { 1, 2 }" can be true.
+    assertFalse(ExtractConsequent.isContradictory(Arrays.asList(oneOf(x, 1), oneOf(y, 2))));
+    assertFalse(ExtractConsequent.isContradictory(Arrays.asList(oneOf(x, 1), oneOf(x, 1))));
+    assertFalse(ExtractConsequent.isContradictory(Arrays.asList(oneOf(x, 1), oneOf(x, 1, 2))));
+    // Floating-point values that are approximately equal are equal.
+    assertFalse(
+        ExtractConsequent.isContradictory(
+            Arrays.asList(oneOfFloat(d, 0.5), oneOfFloat(d, 0.5 + 1e-12))));
   }
 
   /**
@@ -272,6 +290,23 @@ public class ExtractConsequentTest {
     OneOfScalar result =
         (OneOfScalar) instantiate(OneOfScalar.get_proto(), new PptSlice1(ppt, new VarInfo[] {var}));
     for (long value : values) {
+      result.add_modified(value, 1);
+    }
+    return result;
+  }
+
+  /**
+   * Returns a OneOfFloat invariant over the given variable, which has the given values.
+   *
+   * @param var a floating-point variable
+   * @param values the values of the variable
+   * @return a OneOfFloat invariant over {@code var}
+   */
+  private static Invariant oneOfFloat(VarInfo var, double... values) {
+    PptTopLevel ppt = Common.makePptTopLevel("Foo.bar(double):::ENTER", new VarInfo[] {var});
+    OneOfFloat result =
+        (OneOfFloat) instantiate(OneOfFloat.get_proto(), new PptSlice1(ppt, new VarInfo[] {var}));
+    for (double value : values) {
       result.add_modified(value, 1);
     }
     return result;
