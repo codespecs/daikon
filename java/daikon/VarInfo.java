@@ -132,6 +132,10 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * applicable to a variable. For example, the less-than invariant is not applicable to booleans or
    * hashcodes, but is applicable to integers (of various sizes) and floats. (In the variable name,
    * "rep" stands for "representation".)
+   *
+   * <p>A variable that is declared as a boolean has file_rep_type boolean, even if its declaration
+   * in the data trace file gives an integral rep type such as int; see {@link
+   * FileIO.VarDefinition#useBooleanRepType}.
    */
   public ProglangType file_rep_type; // interned (as are all ProglangType objects)
 
@@ -384,28 +388,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the file representation type that Daikon uses for a variable with the given declared
-   * type and file representation type. That is the given file representation type, except that a
-   * variable that is declared as boolean (or boolean[]) and whose file representation type is int
-   * (or int[]) gets file representation type boolean (or boolean[]), so that Daikon treats it as a
-   * boolean. For example, a C front end writes a variable of a boolean type with file
-   * representation type int.
-   *
-   * @param type a variable's declared type
-   * @param file_rep_type the variable's file representation type, as written in the declaration
-   * @return the file representation type that Daikon uses for the variable
-   */
-  static ProglangType booleanFileRepType(ProglangType type, ProglangType file_rep_type) {
-    if (type == ProglangType.BOOLEAN && file_rep_type == ProglangType.INT) {
-      return ProglangType.BOOLEAN;
-    } else if (type == ProglangType.BOOLEAN_ARRAY && file_rep_type == ProglangType.INT_ARRAY) {
-      return ProglangType.BOOLEAN_ARRAY;
-    } else {
-      return file_rep_type;
-    }
-  }
-
-  /**
    * Create VarInfo from VarDefinition.
    *
    * <p>This does not create a fully initialized VarInfo. For example, its ppt and enclosing_var
@@ -435,7 +417,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     ref_type = vardef.ref_type;
     arr_dims = vardef.arr_dims;
     comparability = vardef.comparability;
-    file_rep_type = booleanFileRepType(vardef.declared_type, vardef.rep_type);
+    file_rep_type = vardef.rep_type;
     type = vardef.declared_type;
     var_flags = vardef.flags;
     lang_flags = vardef.lang_flags;
@@ -676,7 +658,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * @param name the variable name
    * @param type type as declared in the program point
-   * @param file_rep_type type as written in the data trace file
+   * @param file_rep_type type as written in the data trace file; see {@link #file_rep_type}
    * @param comparability comparability info
    * @param is_static_constant true if the variable always has the same, known value
    * @param static_constant_value the static constant value, or null if not statically constant
@@ -721,8 +703,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // didn't.
     this.var_info_name = name.intern(); // vin ok
     this.type = type;
-    this.file_rep_type = booleanFileRepType(type, file_rep_type);
-    this.rep_type = this.file_rep_type.fileTypeToRepType();
+    this.file_rep_type = file_rep_type;
+    this.rep_type = file_rep_type.fileTypeToRepType();
     arr_dims = rep_type.isArray() ? 1 : 0;
     this.comparability = comparability;
     this.is_static_constant = is_static_constant;

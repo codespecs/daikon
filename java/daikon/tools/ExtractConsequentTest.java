@@ -17,6 +17,7 @@ import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntGreaterThan;
 import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.test.Common;
 import java.util.Arrays;
@@ -36,8 +37,9 @@ public class ExtractConsequentTest {
   }
 
   /**
-   * Returns a new boolean variable. If its file representation type is int, Daikon infers numeric
-   * invariants, such as "b1 &gt; b2", over the variable.
+   * Returns a new boolean variable, declared with the given file representation type. As when
+   * Daikon reads a declaration, a boolean declared with an integral file representation type gets
+   * file representation type boolean (see {@link VarDefinition#useBooleanRepType}).
    *
    * @param name the name of the variable
    * @param file_rep_type the file representation type of the variable: int or boolean
@@ -47,6 +49,7 @@ public class ExtractConsequentTest {
   private static VarInfo newBooleanVarInfo(String name, ProglangType file_rep_type) {
     VarDefinition vardef = new VarDefinition(name, VarKind.VARIABLE, ProglangType.BOOLEAN);
     vardef.rep_type = file_rep_type;
+    vardef.useBooleanRepType();
     return new VarInfo(vardef);
   }
 
@@ -203,6 +206,12 @@ public class ExtractConsequentTest {
     assertFalse(
         ExtractConsequent.isLegalForBooleans(binaryInvariant(IntEqual.get_proto(), b1, i1)));
     assertFalse(ExtractConsequent.isLegalForBooleans(intNonEqual(b1, i1)));
+
+    // "b1 != 0" is not legal Java.
+    PptTopLevel ppt = Common.makePptTopLevel("Foo.bar(int):::ENTER", new VarInfo[] {b1});
+    assertFalse(
+        ExtractConsequent.isLegalForBooleans(
+            instantiate(NonZero.get_proto(), new PptSlice1(ppt, new VarInfo[] {b1}))));
 
     // OneOfScalar formats a boolean as "b3 == true" or "b3 == false", whether the file
     // representation type of the boolean is boolean or int.

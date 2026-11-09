@@ -5,12 +5,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import daikon.FileIO.VarDefinition;
 import daikon.PptSlice;
 import daikon.PptSlice1;
 import daikon.PptTopLevel;
 import daikon.ProglangType;
 import daikon.VarComparabilityNone;
 import daikon.VarInfo;
+import daikon.VarInfo.VarKind;
 import daikon.VarInfoAux;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
@@ -82,14 +84,12 @@ public class OneOfSequenceTester {
   @Test
   public void testIntRepresentedBooleanArray() {
     // A boolean[] variable whose file representation type is int[].
-    VarInfo a =
-        new VarInfo(
-            "a[]",
-            ProglangType.BOOLEAN_ARRAY,
-            ProglangType.INT_ARRAY,
-            VarComparabilityNone.it,
-            VarInfoAux.getDefault());
-    assertEquals(ProglangType.BOOLEAN_ARRAY, a.file_rep_type);
+    VarDefinition aDef = new VarDefinition("a[]", VarKind.VARIABLE, ProglangType.BOOLEAN_ARRAY);
+    aDef.rep_type = ProglangType.INT_ARRAY;
+    aDef.arr_dims = 1;
+    aDef.useBooleanRepType();
+    assertEquals(ProglangType.BOOLEAN_ARRAY, aDef.rep_type);
+    VarInfo a = new VarInfo(aDef);
     EltOneOf aTrue = eltOneOf(a, 1, 1);
     assertTrue(aTrue.is_boolean());
     assertEquals("a[] elements == true", aTrue.format_using(OutputFormat.DAIKON));

@@ -328,8 +328,8 @@ public class ExtractConsequent {
 
   /**
    * Returns true if the invariant is legal Java when its variables are booleans. Daikon represents
-   * a boolean as an int, so it might infer numeric invariants, such as "b != 0" or "b1 < b2", that
-   * are not legal Java over booleans.
+   * a boolean as an int, so it might infer numeric invariants, such as "b != 0" or "b == i" (where
+   * i is an int), that are not legal Java over booleans.
    *
    * @param inv an invariant
    * @return true if the invariant uses no boolean variable, or is legal Java over booleans

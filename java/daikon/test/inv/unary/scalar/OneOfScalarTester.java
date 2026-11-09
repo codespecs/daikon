@@ -117,6 +117,7 @@ public class OneOfScalarTester {
     // A boolean variable whose file representation type is int.
     VarDefinition bDef = new VarDefinition("b", VarKind.VARIABLE, ProglangType.BOOLEAN);
     bDef.rep_type = ProglangType.INT;
+    bDef.useBooleanRepType();
     VarInfo b = new VarInfo(bDef);
     assertEquals(ProglangType.BOOLEAN, b.file_rep_type);
     OneOfScalar bTrue = oneOf(b, 1);
@@ -136,6 +137,26 @@ public class OneOfScalarTester {
     OneOfScalar iOne = oneOf(i, 1);
     assertFalse(iOne.is_boolean());
     assertEquals("i == 1", iOne.format_using(OutputFormat.JAVA));
+  }
+
+  @Test
+  public void testUseBooleanRepType() {
+    // A boolean whose rep type is integral gets rep type boolean.
+    VarDefinition bDef = new VarDefinition("b", VarKind.VARIABLE, ProglangType.BOOLEAN);
+    bDef.rep_type = ProglangType.LONG_PRIMITIVE;
+    bDef.useBooleanRepType();
+    assertEquals(ProglangType.BOOLEAN, bDef.rep_type);
+
+    // A boolean whose rep type is not integral keeps its rep type.
+    VarDefinition hDef = new VarDefinition("h", VarKind.VARIABLE, ProglangType.BOOLEAN);
+    hDef.rep_type = ProglangType.HASHCODE;
+    hDef.useBooleanRepType();
+    assertEquals(ProglangType.HASHCODE, hDef.rep_type);
+
+    // A variable that is not declared as a boolean keeps its rep type.
+    VarDefinition iDef = new VarDefinition("i", VarKind.VARIABLE, ProglangType.INT);
+    iDef.useBooleanRepType();
+    assertEquals(ProglangType.INT, iDef.rep_type);
   }
 
   /* NEED TO DEFINE SEMANTICS WITH MIKE E

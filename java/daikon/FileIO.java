@@ -46,11 +46,13 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,6 +72,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.FilesPlume;
+import org.plumelib.util.Intern;
 import org.plumelib.util.MapsP;
 import org.plumelib.util.StringsPlume;
 
@@ -461,6 +464,7 @@ public final class FileIO {
     // Build the var infos from the var definitions.
     List<VarInfo> vi_list = new ArrayList<>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
+      vd.useBooleanRepType();
       @SuppressWarnings("interning") // about to be used in a new program point
       @Interned VarInfo vi = new VarInfo(vd);
       vi_list.add(vi);
@@ -1957,14 +1961,8 @@ public final class FileIO {
 
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
-          if (vi.file_rep_type.baseIsBoolean() && !isLegalBooleanValue(vals[val_index])) {
-            throw new Daikon.UserError(
-                "Value \""
-                    + value_rep
-                    + "\" of boolean variable "
-                    + vi.name()
-                    + " is not a boolean; each boolean value must be true, false, 1, or 0",
-                data_trace_state);
+          if (vi.file_rep_type.baseIsBoolean()) {
+            vals[val_index] = booleanValue(vals[val_index], vi, value_rep);
           }
           if (vals[val_index] == null) {
             if (debug_missing && !vi.canBeMissing) {
@@ -2315,24 +2313,53 @@ public final class FileIO {
   }
 
   /**
-   * Returns true if the given value of a boolean or boolean[] variable is 0 or 1, or is an array
-   * whose elements are 0 or 1, or is null (a missing value).
-   *
-   * @param value a value of a boolean or boolean[] variable, such as a Long or a long[]
-   * @return true if the value is null or each boolean in it is 0 or 1
+   * The names of the boolean variables that have had a value other than 0 or 1, such as "flag" in a
+   * C program that assigns 2 to a variable of a boolean type. Daikon warns about each such variable
+   * only once.
    */
-  private static boolean isLegalBooleanValue(@Nullable Object value) {
+  private static Set<String> varsWithNonBooleanValues = new HashSet<>();
+
+  /**
+   * Returns the given value of a boolean or boolean[] variable, with each boolean in it that is
+   * neither 0 nor 1 replaced by 1 (true), as C does. The first time that a variable has such a
+   * value, prints a warning.
+   *
+   * @param value a value of a boolean or boolean[] variable, such as a Long or a long[], or null
+   *     for a missing value
+   * @param vi the variable
+   * @param value_rep the value as written in the data trace file; used for diagnostics
+   * @return the value, with each boolean in it that is neither 0 nor 1 replaced by 1
+   */
+  private static @Nullable @Interned Object booleanValue(
+      @Nullable @Interned Object value, VarInfo vi, String value_rep) {
+    @Interned Object result = value;
     if (value instanceof Long) {
       long l = (Long) value;
-      return l == 0 || l == 1;
+      if (l != 0 && l != 1) {
+        result = Intern.internedLong(1);
+      }
     } else if (value instanceof long[]) {
-      for (long l : (long[]) value) {
-        if (l != 0 && l != 1) {
-          return false;
+      long[] a = (long[]) value;
+      for (int i = 0; i < a.length; i++) {
+        if (a[i] != 0 && a[i] != 1) {
+          long[] copy = a.clone();
+          for (int j = i; j < copy.length; j++) {
+            if (copy[j] != 0) {
+              copy[j] = 1;
+            }
+          }
+          result = Intern.intern(copy);
+          break;
         }
       }
     }
-    return true;
+    if (result != value && varsWithNonBooleanValues.add(vi.name())) {
+      System.out.printf(
+          "Warning: boolean variable %s has value %s at line %d; Daikon treats each boolean other"
+              + " than 0 and 1 as true (1)%n",
+          vi.name(), value_rep, FileIO.get_linenum());
+    }
+    return result;
   }
 
   /**
@@ -2502,7 +2529,11 @@ public final class FileIO {
     @SuppressWarnings("serial")
     public @Nullable List<String> function_args = null;
 
-    /** The type of the variable as stored in the dtrace file (required) */
+    /**
+     * The type of the variable as stored in the dtrace file (required). After {@link
+     * #useBooleanRepType}, a variable that is declared as a boolean has rep type boolean, even if
+     * the declaration gives an integral rep type such as int.
+     */
     public ProglangType rep_type = null;
 
     /** Declared type of the variable as an arbitrary string (required) */
@@ -2749,6 +2780,20 @@ public final class FileIO {
       function_args = new ArrayList<String>();
       while (scanner.hasNext()) {
         function_args.add(unescape_decl(scanner.next()).intern());
+      }
+    }
+
+    /**
+     * If this variable is declared as a boolean (or boolean[]) and its rep type is integral, such
+     * as int (or int[]), sets its rep type to boolean (or boolean[]), so that Daikon treats the
+     * variable as a boolean. For example, Kvasir writes a C variable of a boolean type with rep
+     * type int.
+     */
+    public void useBooleanRepType() {
+      if (declared_type == ProglangType.BOOLEAN && rep_type.isIntegral()) {
+        rep_type = ProglangType.BOOLEAN;
+      } else if (declared_type == ProglangType.BOOLEAN_ARRAY && rep_type.elementIsIntegral()) {
+        rep_type = ProglangType.BOOLEAN_ARRAY;
       }
     }
 
