@@ -132,6 +132,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * applicable to a variable. For example, the less-than invariant is not applicable to booleans or
    * hashcodes, but is applicable to integers (of various sizes) and floats. (In the variable name,
    * "rep" stands for "representation".)
+   *
+   * <p>A variable that Daikon reads from a declaration and that is declared as a boolean has
+   * file_rep_type boolean, even if its declaration gives an integer rep type such as int; see
+   * {@link FileIO.VarDefinition#useBooleanRepType}. A VarInfo that is created in another way has
+   * the file_rep_type that its creator supplies.
    */
   public ProglangType file_rep_type; // interned (as are all ProglangType objects)
 
@@ -654,7 +659,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * @param name the variable name
    * @param type type as declared in the program point
-   * @param file_rep_type type as written in the data trace file
+   * @param file_rep_type the file representation type; see {@link #file_rep_type}
    * @param comparability comparability info
    * @param is_static_constant true if the variable always has the same, known value
    * @param static_constant_value the static constant value, or null if not statically constant
@@ -2849,9 +2854,17 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return get_length().simplify_name().intern();
   }
 
-  /** Returns true if this variable contains a simple variable whose name is varname. */
+  /**
+   * Returns true if this variable contains a simple variable whose name is varname. A pre-state
+   * variable such as "orig(x)" contains "x", as does a variable derived from "x".
+   *
+   * @param varname the name of a simple variable
+   * @return true if this variable contains a simple variable whose name is varname
+   */
   public boolean includes_simple_name(String varname) {
-    if (isDerived()) {
+    if (postState != null) {
+      return postState.includes_simple_name(varname);
+    } else if (isDerived()) {
       for (VarInfo base : derived.getBases()) {
         if (base.includes_simple_name(varname)) {
           return true;

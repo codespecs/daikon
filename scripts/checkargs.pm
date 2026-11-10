@@ -1,7 +1,7 @@
 #!/uns/bin/perl
 # checkargs -- check number of args in function calls
 # Michael D. Ernst <mernst@csail.mit.edu>
-# http://homes.cs.washington.edu/~mernst/software/checkargs.pm
+# https://homes.cs.washington.edu/~mernst/software/checkargs.pm
 # Time-stamp: <2024-06-26 18:27:32 mernst>
 
 package checkargs;

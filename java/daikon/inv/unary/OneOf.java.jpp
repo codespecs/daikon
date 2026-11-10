@@ -1525,11 +1525,12 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       return InvariantStatus.FALSIFIED;
     }
 #elif defined(SCALAR) || defined(ELT)
-    if ((is_boolean() && (num_elts == 1)) || (is_hashcode() && (num_elts == 2))) {
+    boolean hashcode = is_hashcode();
+    if ((is_boolean() && (num_elts == 1)) || (hashcode && (num_elts == 2))) {
       return InvariantStatus.FALSIFIED;
     }
 
-    if (is_hashcode() && (num_elts == 1)) {
+    if (hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
         return InvariantStatus.FALSIFIED;

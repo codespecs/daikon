@@ -73,7 +73,6 @@ public final class SplitDtrace {
     int recNum = 0;
     try (BufferedReader reader = getStream(filename)) {
       ArrayList<String> rec = new ArrayList<>();
-      boolean version2 = false;
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
@@ -82,9 +81,7 @@ public final class SplitDtrace {
         if (isObsoleteFormat(rec)) {
           throw new Daikon.UserError(filename + ": " + FileIO.obsoleteFormatMessage);
         }
-        if (isHeader(rec)) {
-          version2 = FileIO.is_version2_after(rec.get(0), version2);
-        } else if (isDeclare(rec, version2)) {
+        if (isDeclare(rec)) {
           declNum++;
         } else if (!isHeader(rec)) {
           recNum++;
@@ -114,18 +111,16 @@ public final class SplitDtrace {
       int currRecCount = 0;
       HashSet<Integer> nonceSet = new HashSet<>();
       ArrayList<String> rec = new ArrayList<>();
-      boolean version2 = false;
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
           break;
         }
         if (isHeader(rec)) {
-          version2 = FileIO.is_version2_after(rec.get(0), version2);
           writeRec(writer, rec);
           continue;
         }
-        boolean isDecl = isDeclare(rec, version2);
+        boolean isDecl = isDeclare(rec);
         if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
           boolean shouldWrite = true;
           if (!isDecl) {
@@ -191,19 +186,13 @@ public final class SplitDtrace {
   }
 
   /**
-   * Returns true if the given record is a program point declaration. As in {@link FileIO}, the
-   * file's declaration version determines the form of a declaration, because the name of a program
-   * point in a version 1 sample may start with "ppt ".
+   * Returns true if the given record is a program point declaration.
    *
    * @param res the lines of a record from a .decls or .dtrace file
-   * @param version2 true if the file is in the version 2 format
    * @return true if the given record is a program point declaration
    */
   @Pure
-  static boolean isDeclare(List<String> res, boolean version2) {
-    // mainHelper rejects a file in the obsolete version 1 format, so every declaration is in the
-    // version 2 format, even in a file that has no "decl-version" record (for which version2 is
-    // false).
+  static boolean isDeclare(List<String> res) {
     return FileIO.is_declaration_header(res.get(0));
   }
 

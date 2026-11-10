@@ -17,10 +17,11 @@ ppt MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::ENTER
     flags is_param
     comparability 22
   variable numbers.toString
-    var-kind field toString
+    var-kind function toString()
     enclosing-var numbers
     dec-type java.lang.String
     rep-type java.lang.String
+    flags synthetic to_string
     comparability 22
 
 ppt MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::EXIT68
@@ -33,10 +34,11 @@ ppt MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::EXIT68
     flags is_param
     comparability 22
   variable numbers.toString
-    var-kind field toString
+    var-kind function toString()
     enclosing-var numbers
     dec-type java.lang.String
     rep-type java.lang.String
+    flags synthetic to_string
     comparability 22
   variable this
     var-kind variable
@@ -1178,6 +1180,7 @@ ppt MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
     enclosing-var o
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability 22
   variable this
     var-kind variable
@@ -1231,6 +1234,7 @@ ppt MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT266
     enclosing-var o
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability 22
   variable return
     var-kind return

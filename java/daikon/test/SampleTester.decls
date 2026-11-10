@@ -84,8 +84,14 @@ ppt foo.strings():::ENTER
     dec-type java.lang.String
     rep-type java.lang.String
     comparability 22
-  variable a[..]
+  variable a
     var-kind variable
+    dec-type java.lang.String[]
+    rep-type hashcode
+    comparability 22
+  variable a[..]
+    var-kind array
+    enclosing-var a
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
@@ -98,8 +104,14 @@ ppt foo.strings():::EXIT1
     dec-type java.lang.String
     rep-type java.lang.String
     comparability 22
-  variable a[..]
+  variable a
     var-kind variable
+    dec-type java.lang.String[]
+    rep-type hashcode
+    comparability 22
+  variable a[..]
+    var-kind array
+    enclosing-var a
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]

@@ -43,14 +43,17 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,6 +73,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.FilesPlume;
+import org.plumelib.util.Intern;
 import org.plumelib.util.MapsP;
 import org.plumelib.util.StringsPlume;
 
@@ -461,6 +465,7 @@ public final class FileIO {
     // Build the var infos from the var definitions.
     List<VarInfo> vi_list = new ArrayList<>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
+      vd.useBooleanRepType();
       @SuppressWarnings("interning") // about to be used in a new program point
       @Interned VarInfo vi = new VarInfo(vd);
       vi_list.add(vi);
@@ -1044,6 +1049,14 @@ public final class FileIO {
 
     /** Miscellaneous text in the parsed item. */
     public @Nullable Object payload; // used when status=COMMENT
+
+    /**
+     * The variables that have had a boolean value other than 0 or 1 in this file. Daikon warns
+     * about each such variable only once per file. A variable is in a single program point, so
+     * "return" in two program points is two variables.
+     */
+    public Set<VarInfo> varsWithNonBooleanValues =
+        Collections.newSetFromMap(new IdentityHashMap<>());
 
     /**
      * Start parsing the given file.
@@ -1935,7 +1948,20 @@ public final class FileIO {
         // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
 
         try {
-          vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
+          @Interned Object value = vi.rep_type.parse_value(value_rep, reader, filename);
+          if (vi.file_rep_type.baseIsBoolean()) {
+            @Interned Object boolValue = booleanValue(value);
+            if (boolValue != value) {
+              if (FileIO.data_trace_state.varsWithNonBooleanValues.add(vi)) {
+                warnNonBooleanValue(
+                    vi.name() + " in " + ppt.name(),
+                    value_rep,
+                    "at line " + reader.getLineNumber() + " of " + filename);
+              }
+              value = boolValue;
+            }
+          }
+          vals[val_index] = value;
           if (vals[val_index] == null) {
             if (debug_missing && !vi.canBeMissing) {
               System.out.printf(
@@ -2285,6 +2311,53 @@ public final class FileIO {
   }
 
   /**
+   * Returns the given value of a boolean or boolean[] variable, with each boolean in it that is
+   * neither 0 nor 1 replaced by 1 (true), as C does.
+   *
+   * @param value a value of a boolean or boolean[] variable, such as a Long or a long[], or null
+   *     for a missing value
+   * @return the value, with each boolean in it that is neither 0 nor 1 replaced by 1
+   */
+  private static @Nullable @Interned Object booleanValue(@Nullable @Interned Object value) {
+    @Interned Object result = value;
+    if (value instanceof Long) {
+      long l = (Long) value;
+      if (l != 0 && l != 1) {
+        result = ProglangType.LongOne;
+      }
+    } else if (value instanceof long[]) {
+      long[] a = (long[]) value;
+      for (int i = 0; i < a.length; i++) {
+        if (a[i] != 0 && a[i] != 1) {
+          long[] copy = a.clone();
+          for (int j = i; j < copy.length; j++) {
+            if (copy[j] != 0) {
+              copy[j] = 1;
+            }
+          }
+          result = Intern.intern(copy);
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Prints a warning that the given boolean variable has a value other than 0 or 1.
+   *
+   * @param varname the name of a boolean variable
+   * @param value_rep the variable's value, as written in a file
+   * @param location where the value appears, such as "at line 31 of file foo.dtrace"
+   */
+  private static void warnNonBooleanValue(String varname, String value_rep, String location) {
+    System.out.printf(
+        "Warning: boolean variable %s has value %s %s; Daikon treats each boolean other than 0 and"
+            + " 1 as true (1)%n",
+        varname, value_rep, location);
+  }
+
+  /**
    * Returns true if the given variable is included, according to Daikon's {@code
    * --var-select-pattern} and {@code --var-omit-pattern} flags.
    */
@@ -2451,7 +2524,11 @@ public final class FileIO {
     @SuppressWarnings("serial")
     public @Nullable List<String> function_args = null;
 
-    /** The type of the variable as stored in the dtrace file (required) */
+    /**
+     * The type of the variable as stored in the dtrace file (required). After {@link
+     * #useBooleanRepType}, a variable that is declared as a boolean has rep type boolean, even if
+     * the declaration gives an integral rep type such as int.
+     */
     public ProglangType rep_type = null;
 
     /** Declared type of the variable as an arbitrary string (required) */
@@ -2701,6 +2778,47 @@ public final class FileIO {
       }
     }
 
+    /**
+     * If this variable is declared as a boolean (or boolean[]) and its rep type is an integer type
+     * whose values are written as numbers -- int, long, long long int, or short (or an array of one
+     * of them) -- sets its rep type to boolean (or boolean[]), so that Daikon treats the variable
+     * as a boolean. For example, a declaration might give the rep type int to a variable whose
+     * declared type is boolean. Other integral rep types, such as char, are left unchanged.
+     *
+     * <p>Such a variable loses its min-value and max-value bounds, which are not permitted for a
+     * boolean (see {@link #checkBound}), and its constant value, if any, gets the same treatment as
+     * a value in the data trace file: each boolean that is neither 0 nor 1 becomes 1.
+     */
+    public void useBooleanRepType() {
+      @Interned String base = rep_type.base();
+      if (!(base == ProglangType.BASE_INT
+          || base == ProglangType.BASE_LONG
+          || base == ProglangType.BASE_LONG_LONG
+          || base == ProglangType.BASE_SHORT)) {
+        return;
+      }
+      if (declared_type == ProglangType.BOOLEAN && rep_type.dimensions() == 0) {
+        rep_type = ProglangType.BOOLEAN;
+      } else if (declared_type == ProglangType.BOOLEAN_ARRAY && rep_type.dimensions() == 1) {
+        rep_type = ProglangType.BOOLEAN_ARRAY;
+      } else {
+        return;
+      }
+      min_value = null;
+      max_value = null;
+      if (static_constant_value != null) {
+        String value_rep =
+            (static_constant_value instanceof long[])
+                ? Arrays.toString((long[]) static_constant_value)
+                : static_constant_value.toString();
+        @Nullable @Interned Object value = booleanValue(static_constant_value);
+        if (value != static_constant_value) {
+          warnNonBooleanValue(name, value_rep, "in its declaration");
+          static_constant_value = value;
+        }
+      }
+    }
+
     public void parse_rep_type(Scanner scanner) {
       @Interned String rep_type_str = need(scanner, "rep type");
       need_eol(scanner);
@@ -2904,39 +3022,6 @@ public final class FileIO {
   }
 
   /**
-   * Returns true if the line starts a header record: a record that is neither a ppt declaration nor
-   * a sample, such as a comment or a "decl-version" record. Such records are handled by {@link
-   * #read_data_trace_record}.
-   *
-   * @param line the first line of a record in a .decls or .dtrace file
-   * @return true if the line starts a header record
-   */
-  @Pure
-  public static boolean is_header_record(String line) {
-    return isComment(line)
-        || is_keyword_record(line, "decl-version")
-        || is_keyword_record(line, "var-comparability")
-        || is_keyword_record(line, "input-language")
-        || line.equals("ListImplementors");
-  }
-
-  /**
-   * Returns true if the line is the given keyword, or the keyword followed by whitespace and its
-   * arguments. A program point name in a sample cannot be such a line, because its blanks are
-   * escaped (see {@link #unescape_decl}), even if the name starts with the keyword.
-   *
-   * @param line the first line of a record in a .decls or .dtrace file
-   * @param keyword a keyword that starts a header record, such as "decl-version"
-   * @return true if the line starts with the keyword as a whole word
-   */
-  @Pure
-  private static boolean is_keyword_record(String line, String keyword) {
-    return line.startsWith(keyword)
-        && (line.length() == keyword.length()
-            || Character.isWhitespace(line.charAt(keyword.length())));
-  }
-
-  /**
    * Returns true if the line is the start of a ppt declaration.
    *
    * @param line the first line of a record in a .decls or .dtrace file
@@ -2976,7 +3061,7 @@ public final class FileIO {
    */
   @Pure
   public static boolean is_header_record(String line) {
-    if (isComment(line) || line.equals("VarComparability")) {
+    if (isComment(line)) {
       return true;
     }
     for (String keyword : header_keywords) {
@@ -2988,9 +3073,8 @@ public final class FileIO {
   }
 
   /**
-   * The keywords that start a header record of a .decls or .dtrace file. The version 1
-   * "VarComparability" record and comments are header records that do not start with one of these
-   * keywords.
+   * The keywords that start a header record of a .decls or .dtrace file. Comments are header
+   * records that do not start with one of these keywords.
    */
   public static final List<String> header_keywords =
       List.of("decl-version", "var-comparability", "input-language", "ListImplementors");
@@ -3012,26 +3096,6 @@ public final class FileIO {
   }
 
   /**
-   * Returns true if the line is a "decl-version" record that declares the version 2 format, or if
-   * the line is not a "decl-version" record and {@code version2} is true. Callers use this to track
-   * the format of a .decls or .dtrace file as they read it. As in {@link #read_data_trace_record},
-   * the format of a file without a "decl-version" record is that of the files read before it, or
-   * the version 1 format if there are none.
-   *
-   * @param line the first line of a record in a .decls or .dtrace file
-   * @param version2 true if the records before this one are in the version 2 format
-   * @return true if the records after this one are in the version 2 format
-   */
-  @SideEffectFree
-  public static boolean is_version2_after(String line, boolean version2) {
-    if (!is_keyword_record(line, "decl-version")) {
-      return version2;
-    }
-    // Unlike read_decl_version, this does not check that the version is valid.
-    return line.substring("decl-version".length()).trim().equals("2.0");
-  }
-
-  /**
    * Returns true if the line is the given keyword, or the keyword followed by whitespace and its
    * arguments. A program point name in a sample cannot be such a line, because its blanks are
    * escaped (see {@link #unescape_decl}), even if the name starts with the keyword.
@@ -3045,25 +3109,6 @@ public final class FileIO {
     return line.startsWith(keyword)
         && (line.length() == keyword.length()
             || Character.isWhitespace(line.charAt(keyword.length())));
-  }
-
-  /**
-   * If the line is the start of a version 2 ppt declaration, returns the declared ppt name, after
-   * applying {@link #user_mod_ppt_name}. Otherwise returns null.
-   *
-   * @param line a line of a declaration file
-   * @return the ppt name declared by the line, or null if the line is not a ppt record
-   */
-  public static @Nullable String declared_ppt_name(String line) {
-    if (!line.startsWith("ppt ")) {
-      return null;
-    }
-    Scanner scanner = new Scanner(line);
-    scanner.next(); // "ppt"
-    if (!scanner.hasNext()) {
-      return null;
-    }
-    return user_mod_ppt_name(unescape_decl(scanner.next()));
   }
 
   /**
