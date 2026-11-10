@@ -15,10 +15,10 @@ import daikon.ProglangType;
 import daikon.VarInfo;
 import daikon.VarInfo.VarKind;
 import daikon.inv.Invariant;
-import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntGreaterThan;
 import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.unary.scalar.OneOfFloat;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.test.Common;
@@ -39,18 +39,14 @@ public class ExtractConsequentTest {
   }
 
   /**
-   * Returns a new boolean variable. If its file representation type is int, Daikon infers numeric
-   * invariants, such as "b1 &gt; b2", over the variable.
+   * Returns a new boolean variable, whose file representation type is boolean.
    *
    * @param name the name of the variable
-   * @param file_rep_type the file representation type of the variable: int or boolean
    * @return a new boolean variable
    */
   @SuppressWarnings("interning") // newly-created VarInfo
-  private static VarInfo newBooleanVarInfo(String name, ProglangType file_rep_type) {
-    VarDefinition vardef = new VarDefinition(name, VarKind.VARIABLE, ProglangType.BOOLEAN);
-    vardef.rep_type = file_rep_type;
-    return new VarInfo(vardef);
+  private static VarInfo newBooleanVarInfo(String name) {
+    return new VarInfo(new VarDefinition(name, VarKind.VARIABLE, ProglangType.BOOLEAN));
   }
 
   @Test
@@ -160,7 +156,7 @@ public class ExtractConsequentTest {
   public void testIsContradictory() {
     VarInfo x = Common.newIntVarInfo("x");
     VarInfo y = Common.newIntVarInfo("y");
-    VarInfo b = newBooleanVarInfo("b", ProglangType.INT);
+    VarInfo b = newBooleanVarInfo("b");
     VarInfo d = new VarInfo(new VarDefinition("d", VarKind.VARIABLE, ProglangType.DOUBLE));
 
     // "x == 1 && x == 2", "b == true && b == false", and "d == 0.5 && d == 1.5" are always false.
@@ -208,58 +204,55 @@ public class ExtractConsequentTest {
     return instantiate(proto, new PptSlice2(ppt, new VarInfo[] {v1, v2}));
   }
 
+  /**
+   * Returns an IntNonEqual invariant over two variables, even if a variable is a boolean.
+   *
+   * @param v1 a variable
+   * @param v2 another variable
+   * @return an IntNonEqual invariant over the two variables
+   */
+  private static Invariant intNonEqual(VarInfo v1, VarInfo v2) {
+    // By default, Daikon does not instantiate IntNonEqual over a boolean.
+    boolean saved = IntNonEqual.dkconfig_integral_only;
+    IntNonEqual.dkconfig_integral_only = false;
+    try {
+      return binaryInvariant(IntNonEqual.get_proto(), v1, v2);
+    } finally {
+      IntNonEqual.dkconfig_integral_only = saved;
+    }
+  }
+
   @Test
   public void testIsLegalForBooleans() {
-    VarInfo b1 = newBooleanVarInfo("b1", ProglangType.INT);
-    VarInfo b2 = newBooleanVarInfo("b2", ProglangType.INT);
+    VarInfo b1 = newBooleanVarInfo("b1");
+    VarInfo b2 = newBooleanVarInfo("b2");
     VarInfo i1 = Common.newIntVarInfo("i1");
     VarInfo i2 = Common.newIntVarInfo("i2");
 
     // "b1 == b2", "b1 != b2", "i1 == i2", and "i1 > i2" are legal Java.
     assertTrue(ExtractConsequent.isLegalForBooleans(binaryInvariant(IntEqual.get_proto(), b1, b2)));
-    assertTrue(
-        ExtractConsequent.isLegalForBooleans(binaryInvariant(IntNonEqual.get_proto(), b1, b2)));
+    assertTrue(ExtractConsequent.isLegalForBooleans(intNonEqual(b1, b2)));
     assertTrue(ExtractConsequent.isLegalForBooleans(binaryInvariant(IntEqual.get_proto(), i1, i2)));
     assertTrue(
         ExtractConsequent.isLegalForBooleans(binaryInvariant(IntGreaterThan.get_proto(), i1, i2)));
 
-    // "b1 == i1", "b1 != i1", and "b1 > b2" are not legal Java.
+    // "b1 == i1" and "b1 != i1" are not legal Java.  (Daikon does not instantiate an ordering
+    // invariant such as IntGreaterThan over a boolean, so "b1 > b2" cannot arise.)
     assertFalse(
         ExtractConsequent.isLegalForBooleans(binaryInvariant(IntEqual.get_proto(), b1, i1)));
-    assertFalse(
-        ExtractConsequent.isLegalForBooleans(binaryInvariant(IntNonEqual.get_proto(), b1, i1)));
-    assertFalse(
-        ExtractConsequent.isLegalForBooleans(binaryInvariant(IntGreaterThan.get_proto(), b1, b2)));
+    assertFalse(ExtractConsequent.isLegalForBooleans(intNonEqual(b1, i1)));
 
-    // OneOfScalar formats a boolean whose file representation type is boolean as "b3 == true" or
-    // "b3 == false".
-    VarInfo b3 = newBooleanVarInfo("b3", ProglangType.BOOLEAN);
-    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b3)));
-    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(i1)));
+    // "b1 != 0" is not legal Java.
+    PptTopLevel ppt = Common.makePptTopLevel("Foo.bar(int):::ENTER", new VarInfo[] {b1});
+    assertFalse(
+        ExtractConsequent.isLegalForBooleans(
+            instantiate(NonZero.get_proto(), new PptSlice1(ppt, new VarInfo[] {b1}))));
 
-    // OneOfScalar formats a boolean whose file representation type is int as "b1 == 1", and
-    // formatCondition writes that as "b1 == true".  "b1 one of { 0, 1 }" is not legal Java.
-    assertFalse(ExtractConsequent.isLegalForBooleans(oneOf(b1)));
+    // OneOfScalar formats a boolean as "b1 == true" or "b1 == false".
+    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b1)));
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b1, 1)));
     assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(b1, 0)));
-    assertFalse(ExtractConsequent.isLegalForBooleans(oneOf(b1, 0, 1)));
-  }
-
-  @SuppressWarnings("interning") // newly-created VarInfo
-  @Test
-  public void testFormatCondition() {
-    VarInfo b = newBooleanVarInfo("b", ProglangType.INT);
-    Invariant bTrue = oneOf(b, 1);
-    assertEquals("b == true", ExtractConsequent.formatCondition(bTrue, OutputFormat.JAVA));
-    assertEquals("b == true", ExtractConsequent.formatCondition(bTrue, OutputFormat.DAIKON));
-    assertEquals("b == true", ExtractConsequent.formatCondition(bTrue, OutputFormat.ESCJAVA));
-    assertEquals(
-        "(EQ |b| |@true|)", ExtractConsequent.formatCondition(bTrue, OutputFormat.SIMPLIFY));
-    assertEquals("b == false", ExtractConsequent.formatCondition(oneOf(b, 0), OutputFormat.JAVA));
-
-    // Other invariants are formatted as usual.
-    VarInfo i = new VarInfo(new VarDefinition("i", VarKind.VARIABLE, ProglangType.INT));
-    assertEquals("i == 1", ExtractConsequent.formatCondition(oneOf(i, 1), OutputFormat.JAVA));
+    assertTrue(ExtractConsequent.isLegalForBooleans(oneOf(i1)));
   }
 
   /**

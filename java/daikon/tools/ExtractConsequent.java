@@ -198,14 +198,13 @@ public class ExtractConsequent {
           if (cond.fakeFor != null) {
             continue;
           }
-          // The key of a condition that is not fake is the condition in Java format.
-          String javaStr = condIndex;
-          String daikonStr = formatCondition(cond.inv, OutputFormat.DAIKON);
-          String escStr = formatCondition(cond.inv, OutputFormat.ESCJAVA);
-          String simplifyStr = formatCondition(cond.inv, OutputFormat.SIMPLIFY);
+          String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
+          String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
+          String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
           allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
           //           allConds.add(condIndex);
-          condsJava.add(javaStr);
+          // The key of a condition that is not fake is the condition in Java format.
+          condsJava.add(condIndex);
           condsDaikon.add(daikonStr);
           condsESC.add(escStr);
           condsSimplify.add(simplifyStr);
@@ -240,33 +239,6 @@ public class ExtractConsequent {
     }
 
     pw.flush();
-  }
-
-  /**
-   * Returns the invariant formatted as a splitting condition in the given format. A OneOfScalar
-   * invariant over a boolean variable whose file representation type is int, such as "b == 1", is
-   * written as "b == true" (see {@link #intBooleanValue}). In Java format, the result can refer to
-   * the return value and to pre-state values as "\result" and "\old(x)"; see {@link
-   * #toSpinfoCondition}.
-   *
-   * @param inv an invariant
-   * @param format the format in which to write the invariant
-   * @return the invariant formatted as a splitting condition
-   */
-  static String formatCondition(Invariant inv, OutputFormat format) {
-    Boolean value = (inv instanceof OneOfScalar) ? intBooleanValue((OneOfScalar) inv) : null;
-    String result;
-    if (value == null) {
-      result = inv.format_using(format);
-    } else {
-      VarInfo var = ((OneOfScalar) inv).var();
-      if (format == OutputFormat.SIMPLIFY) {
-        result = "(EQ " + var.simplifyFixedupName() + " " + (value ? "|@true|" : "|@false|") + ")";
-      } else {
-        result = var.name_using(format) + " == " + value;
-      }
-    }
-    return result;
   }
 
   /**
@@ -378,8 +350,8 @@ public class ExtractConsequent {
 
   /**
    * Returns true if the invariant is legal Java when its variables are booleans. Daikon represents
-   * a boolean as an int, so it might infer numeric invariants, such as "b != 0" or "b1 < b2", that
-   * are not legal Java over booleans.
+   * a boolean as an int, so it might infer numeric invariants, such as "b != 0" or "b == i" (where
+   * i is an int), that are not legal Java over booleans.
    *
    * @param inv an invariant
    * @return true if the invariant uses no boolean variable, or is legal Java over booleans
@@ -387,12 +359,8 @@ public class ExtractConsequent {
   static boolean isLegalForBooleans(Invariant inv) {
     VarInfo[] vis = inv.ppt.var_infos;
     // OneOfScalar is the only scalar invariant that formats a boolean specially, as "b == true".
-    // It decides whether its variable is a boolean from the file representation type, which can
-    // differ from the declared type that a splitter uses.  formatCondition writes "b == 1" as
-    // "b == true" when the declared type is boolean and the file representation type is int.
     if (inv instanceof OneOfScalar) {
-      OneOfScalar oneof = (OneOfScalar) inv;
-      return oneof.is_boolean() == isBoolean(vis[0]) || intBooleanValue(oneof) != null;
+      return ((OneOfScalar) inv).is_boolean() == isBoolean(vis[0]);
     }
     if (inv instanceof IntEqual || inv instanceof IntNonEqual) {
       // "b == i" is not legal Java if exactly one of the operands is a boolean.
@@ -415,29 +383,6 @@ public class ExtractConsequent {
    */
   private static boolean isBoolean(VarInfo vi) {
     return vi.type == ProglangType.BOOLEAN;
-  }
-
-  /**
-   * Returns the value of the variable of the given OneOfScalar invariant, if the variable is a
-   * boolean whose file representation type is int and the invariant is "b == 0" or "b == 1".
-   * OneOfScalar formats such an invariant as "b == 0" or "b == 1", which is not legal Java.
-   *
-   * @param oneof a OneOfScalar invariant
-   * @return false if the invariant is "b == 0", true if it is "b == 1", or null if the variable is
-   *     not a boolean whose file representation type is int or the invariant is neither
-   */
-  static @Nullable Boolean intBooleanValue(OneOfScalar oneof) {
-    if (oneof.is_boolean() || !isBoolean(oneof.var()) || oneof.num_elts() != 1) {
-      return null;
-    }
-    long value = ((Long) oneof.elt()).longValue();
-    if (value == 0) {
-      return false;
-    } else if (value == 1) {
-      return true;
-    } else {
-      return null;
-    }
   }
 
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
@@ -551,7 +496,7 @@ public class ExtractConsequent {
           continue;
         }
 
-        String inv_string = toSpinfoCondition(formatCondition(inv, OutputFormat.JAVA));
+        String inv_string = toSpinfoCondition(inv.format_using(OutputFormat.JAVA));
         if (inv_string == null) {
           continue;
         }
