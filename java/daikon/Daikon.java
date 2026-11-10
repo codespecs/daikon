@@ -256,7 +256,7 @@ public final class Daikon {
           + release_version
           + ", released "
           + release_date
-          + "; http://plse.cs.washington.edu/daikon.";
+          + "; https://plse.cs.washington.edu/daikon.";
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -550,7 +550,7 @@ public final class Daikon {
           "  Each file is a declaration file or a data trace file; the file type",
           "  is determined by the file name (containing \".decls\" or \".dtrace\").",
           "  For a list of flags, see the Daikon manual, which appears in the ",
-          "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.");
+          "  Daikon distribution and also at https://plse.cs.washington.edu/daikon/.");
 
   /** Indicates the need for Daikon to terminate. */
   public abstract static class DaikonTerminationException extends RuntimeException {
@@ -745,10 +745,7 @@ public final class Daikon {
    *
    * @param args the command-line arguments
    */
-  @SuppressWarnings({
-    "nullness:contracts.precondition", // private field
-    "SystemConsoleNull" // https://errorprone.info/bugpattern/SystemConsoleNull
-  })
+  @SuppressWarnings("SystemConsoleNull") // https://errorprone.info/bugpattern/SystemConsoleNull
   public static void mainHelper(final String[] args) {
     long startTime = System.nanoTime();
     long duration;
@@ -1209,8 +1206,8 @@ public final class Daikon {
             Invariant.invariantEnabledDefault = false;
 
             // Get all loaded classes.  This solution is from
-            // http://stackoverflow.com/a/10261850/173852 .  Alternate approach:
-            // http://stackoverflow.com/questions/2548384/java-get-a-list-of-all-classes-loaded-in-the-jvm
+            // https://stackoverflow.com/a/10261850/173852 .  Alternate approach:
+            // https://stackoverflow.com/questions/2548384/java-get-a-list-of-all-classes-loaded-in-the-jvm
             Field f;
             try {
               f = ClassLoader.class.getDeclaredField("classes");
@@ -1875,22 +1872,6 @@ public final class Daikon {
     }
   }
 
-  /**
-   * Initializes the partial order hierarchy among the given ppts, according to the format of the
-   * declarations that were read.
-   *
-   * @param all_ppts a map of ppts whose declarations have been read
-   */
-  public static void init_hierarchy(PptMap all_ppts) {
-    assert FileIO.new_decl_format != null
-        : "@AssumeAssertion(nullness): read declarations, so new_decl_format is set";
-    if (FileIO.new_decl_format) {
-      PptRelation.init_hierarchy_new(all_ppts);
-    } else {
-      PptRelation.init_hierarchy(all_ppts);
-    }
-  }
-
   /** Setup splitters. Add orig and derived variables. Recursively call init_ppt on splits. */
   public static void init_ppt(PptTopLevel ppt, PptMap all_ppts) {
 
@@ -1960,7 +1941,6 @@ public final class Daikon {
         // vars instead of taking the first n.
         int len = ppt.num_tracevars + ppt.num_static_constant_vars;
         VarInfo[] exit_vars = new VarInfo[len];
-        // System.out.printf("new decl fmt = %b%n", FileIO.new_decl_format);
         for (int j = 0; j < len; j++) {
           @SuppressWarnings("interning") // about to be used in new program point
           @Interned VarInfo exit_var = new VarInfo(ppt.var_infos[j]);
@@ -2504,7 +2484,7 @@ public final class Daikon {
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
     startTime = System.nanoTime();
-    init_hierarchy(all_ppts);
+    PptRelation.init_hierarchy(all_ppts);
     duration = System.nanoTime() - startTime;
     debugProgress.fine(
         "Init Hierarchy ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
@@ -2752,12 +2732,10 @@ public final class Daikon {
     // Keep track of all of the ppts in a set ordered by the ppt name
     Set<String> ppts = new TreeSet<>();
 
-    // Read all of the ppt names out of the files, in the order that Daikon reads the files.  As in
-    // FileIO, a file without a "decl-version" record is in the format of the files before it.
-    boolean version2 = false;
+    // Read all of the ppt names out of the files.
     try {
       for (File file : decl_files) {
-        version2 = add_declared_ppt_names(file.toString(), version2, ppts);
+        add_declared_ppt_names(file.toString(), ppts);
       }
       for (String filename : dtrace_files) {
         if (filename.equals("-")
@@ -2766,7 +2744,7 @@ public final class Daikon {
             || filename.startsWith("jar:")) {
           continue;
         }
-        version2 = add_declared_ppt_names(filename, version2, ppts);
+        add_declared_ppt_names(filename, ppts);
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -2804,17 +2782,13 @@ public final class Daikon {
    * CLASS ppts, which are always processed (see {@link FileIO#ppt_included}).
    *
    * @param filename a .decls or .dtrace file name
-   * @param version2 true if the files read before this one are in the version 2 format
    * @param ppts the set to which to add the ppt names
-   * @return true if the files read after this one are in the version 2 format
    * @throws IOException if there is trouble reading the file
    */
-  private static boolean add_declared_ppt_names(String filename, boolean version2, Set<String> ppts)
-      throws IOException {
+  private static void add_declared_ppt_names(String filename, Set<String> ppts) throws IOException {
     try (LineNumberReader fp = FilesPlume.newLineNumberFileReader(filename)) {
-      // As in FileIO, only the first line of a record determines what the record is.  For
-      // example, a variable in a version 1 declaration might be named "DECLARE" or "ppt x".  A
-      // blank line ends a record, and so does the end of a comment or of a one-line header record.
+      // As in FileIO, only the first line of a record determines what the record is.  A blank
+      // line ends a record, and so does the end of a comment or of a one-line header record.
       boolean recordStart = true;
       for (String line = fp.readLine(); line != null; line = fp.readLine()) {
         if (line.trim().isEmpty()) {
@@ -2825,29 +2799,16 @@ public final class Daikon {
           continue;
         }
         if (FileIO.is_one_line_header_record(line)) {
-          version2 = FileIO.is_version2_after(line, version2);
           continue;
         }
         recordStart = false;
-        String ppt_name;
-        if (version2) {
-          ppt_name = FileIO.declared_ppt_name(line);
-        } else if (line.equals("DECLARE")) {
-          // In the version 1 format, the line after "DECLARE" is the ppt name.
-          ppt_name = fp.readLine();
-          if (ppt_name == null) {
-            throw new Daikon.UserError("File " + filename + " terminated prematurely");
-          }
-        } else {
-          // The record is a sample or another kind of header record.
-          ppt_name = null;
-        }
+        // ppt_name is null if the record is a sample or another kind of header record.
+        String ppt_name = FileIO.declared_ppt_name(line);
         if (ppt_name != null && !FileIO.is_parent_only_ppt_name(ppt_name)) {
           ppts.add(ppt_name);
         }
       }
     }
-    return version2;
   }
 
   /**

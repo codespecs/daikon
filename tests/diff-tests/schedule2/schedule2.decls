@@ -1,685 +1,823 @@
-VarComparability
-implicit
+decl-version 2.0
 
-DECLARE
-std.enqueue(int;process *;)int:::ENTER
-prio
-int
-int
-1
-::next_pid
-int
-int
-2
+var-comparability implicit
 
-DECLARE
-std.enqueue(int;process *;)int:::EXIT1
-prio
-int
-int
-1
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.enqueue(int;process\_*;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.enqueue(int;process *;)int:::EXIT2
-prio
-int
-int
-1
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.enqueue(int;process\_*;)int:::EXIT1
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.main(int;char **;)int:::ENTER
-argc
-int
-int
-4
-argv
-char *[]
-hashcode
-5
-::next_pid
-int
-int
-2
+ppt std.enqueue(int;process\_*;)int:::EXIT2
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.main(int;char **;)int:::EXIT3
-argc
-int
-int
-4
-argv
-char *[]
-hashcode
-5
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.main(int;char\_**;)int:::ENTER
+  ppt-type enter
+  variable argc
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable argv
+    var-kind variable
+    dec-type char\_*[]
+    rep-type hashcode
+    comparability 5
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.get_command(int *;int *;float *;)int:::ENTER
-command
-int[]
-hashcode
-6
-*command
-int
-int
-7
-prio
-int[]
-hashcode
-1
-*prio
-int
-int
-7
-ratio
-float[]
-hashcode
-8
-*ratio
-float
-double
-9
-::next_pid
-int
-int
-2
+ppt std.main(int;char\_**;)int:::EXIT3
+  ppt-type subexit
+  variable argc
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable argv
+    var-kind variable
+    dec-type char\_*[]
+    rep-type hashcode
+    comparability 5
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.get_command(int *;int *;float *;)int:::EXIT4
-command
-int[]
-hashcode
-6
-*command
-int
-int
-7
-prio
-int[]
-hashcode
-1
-*prio
-int
-int
-7
-ratio
-float[]
-hashcode
-8
-*ratio
-float
-double
-9
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.get_command(int\_*;int\_*;float\_*;)int:::ENTER
+  ppt-type enter
+  variable command
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 6
+  variable *command
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 7
+  variable prio
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 1
+  variable *prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 7
+  variable ratio
+    var-kind variable
+    dec-type float[]
+    rep-type hashcode
+    comparability 8
+  variable *ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 9
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.get_command(int *;int *;float *;)int:::EXIT5
-command
-int[]
-hashcode
-6
-*command
-int
-int
-7
-prio
-int[]
-hashcode
-1
-*prio
-int
-int
-7
-ratio
-float[]
-hashcode
-8
-*ratio
-float
-double
-9
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.get_command(int\_*;int\_*;float\_*;)int:::EXIT4
+  ppt-type subexit
+  variable command
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 6
+  variable *command
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 7
+  variable prio
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 1
+  variable *prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 7
+  variable ratio
+    var-kind variable
+    dec-type float[]
+    rep-type hashcode
+    comparability 8
+  variable *ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 9
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.exit_here(int;)int:::ENTER
-status
-int
-int
-10
-::next_pid
-int
-int
-2
+ppt std.get_command(int\_*;int\_*;float\_*;)int:::EXIT5
+  ppt-type subexit
+  variable command
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 6
+  variable *command
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 7
+  variable prio
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 1
+  variable *prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 7
+  variable ratio
+    var-kind variable
+    dec-type float[]
+    rep-type hashcode
+    comparability 8
+  variable *ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 9
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.exit_here(int;)int:::EXIT6
-status
-int
-int
-10
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.exit_here(int;)int:::ENTER
+  ppt-type enter
+  variable status
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.new_job(int;)int:::ENTER
-prio
-int
-int
-1
-::next_pid
-int
-int
-2
+ppt std.exit_here(int;)int:::EXIT6
+  ppt-type subexit
+  variable status
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.new_job(int;)int:::EXIT7
-prio
-int
-int
-1
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.new_job(int;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.upgrade_prio(int;float;)int:::ENTER
-prio
-int
-int
-1
-ratio
-float
-double
-8
-::next_pid
-int
-int
-2
+ppt std.new_job(int;)int:::EXIT7
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.upgrade_prio(int;float;)int:::EXIT8
-prio
-int
-int
-1
-ratio
-float
-double
-8
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.upgrade_prio(int;float;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.upgrade_prio(int;float;)int:::EXIT9
-prio
-int
-int
-1
-ratio
-float
-double
-8
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.upgrade_prio(int;float;)int:::EXIT8
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.upgrade_prio(int;float;)int:::EXIT10
-prio
-int
-int
-1
-ratio
-float
-double
-8
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.upgrade_prio(int;float;)int:::EXIT9
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.block()int:::ENTER
-::next_pid
-int
-int
-2
+ppt std.upgrade_prio(int;float;)int:::EXIT10
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.block()int:::EXIT11
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.block()int:::ENTER
+  ppt-type enter
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.block()int:::EXIT12
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.block()int:::EXIT11
+  ppt-type subexit
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.unblock(float;)int:::ENTER
-ratio
-float
-double
-8
-::next_pid
-int
-int
-2
+ppt std.block()int:::EXIT12
+  ppt-type subexit
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.unblock(float;)int:::EXIT13
-ratio
-float
-double
-8
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.unblock(float;)int:::ENTER
+  ppt-type enter
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.unblock(float;)int:::EXIT14
-ratio
-float
-double
-8
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.unblock(float;)int:::EXIT13
+  ppt-type subexit
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.quantum_expire()int:::ENTER
-::next_pid
-int
-int
-2
+ppt std.unblock(float;)int:::EXIT14
+  ppt-type subexit
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.quantum_expire()int:::EXIT15
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.quantum_expire()int:::ENTER
+  ppt-type enter
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.quantum_expire()int:::EXIT16
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.quantum_expire()int:::EXIT15
+  ppt-type subexit
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.finish()int:::ENTER
-::next_pid
-int
-int
-2
+ppt std.quantum_expire()int:::EXIT16
+  ppt-type subexit
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.finish()int:::EXIT17
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.finish()int:::ENTER
+  ppt-type enter
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.finish()int:::EXIT18
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.finish()int:::EXIT17
+  ppt-type subexit
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.flush()int:::ENTER
-::next_pid
-int
-int
-2
+ppt std.finish()int:::EXIT18
+  ppt-type subexit
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.flush()int:::EXIT19
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.flush()int:::ENTER
+  ppt-type enter
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.get_current()process *:::ENTER
-::next_pid
-int
-int
-2
+ppt std.flush()int:::EXIT19
+  ppt-type subexit
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.get_current()process *:::EXIT20
-::next_pid
-int
-int
-2
+ppt std.get_current()process\_*:::ENTER
+  ppt-type enter
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.reschedule(int;)int:::ENTER
-prio
-int
-int
-1
-::next_pid
-int
-int
-2
+ppt std.get_current()process\_*:::EXIT20
+  ppt-type subexit
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.reschedule(int;)int:::EXIT21
-prio
-int
-int
-1
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.reschedule(int;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.schedule(int;int;float;)int:::ENTER
-command
-int
-int
-11
-prio
-int
-int
-11
-ratio
-float
-double
-8
-::next_pid
-int
-int
-2
+ppt std.reschedule(int;)int:::EXIT21
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.schedule(int;int;float;)int:::EXIT22
-command
-int
-int
-11
-prio
-int
-int
-11
-ratio
-float
-double
-8
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.schedule(int;int;float;)int:::ENTER
+  ppt-type enter
+  variable command
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.put_end(int;process *;)int:::ENTER
-prio
-int
-int
-1
-::next_pid
-int
-int
-2
+ppt std.schedule(int;int;float;)int:::EXIT22
+  ppt-type subexit
+  variable command
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.put_end(int;process *;)int:::EXIT23
-prio
-int
-int
-1
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.put_end(int;process\_*;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.put_end(int;process *;)int:::EXIT24
-prio
-int
-int
-1
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.put_end(int;process\_*;)int:::EXIT23
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.get_process(int;float;process **;)int:::ENTER
-prio
-int
-int
-1
-ratio
-float
-double
-8
-job
-process *[]
-hashcode
-12
-::next_pid
-int
-int
-2
+ppt std.put_end(int;process\_*;)int:::EXIT24
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.get_process(int;float;process **;)int:::EXIT25
-prio
-int
-int
-1
-ratio
-float
-double
-8
-job
-process *[]
-hashcode
-12
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.get_process(int;float;process\_**;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable job
+    var-kind variable
+    dec-type process\_*[]
+    rep-type hashcode
+    comparability 12
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
 
-DECLARE
-std.get_process(int;float;process **;)int:::EXIT26
-prio
-int
-int
-1
-ratio
-float
-double
-8
-job
-process *[]
-hashcode
-12
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.get_process(int;float;process\_**;)int:::EXIT25
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable job
+    var-kind variable
+    dec-type process\_*[]
+    rep-type hashcode
+    comparability 12
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.get_process(int;float;process **;)int:::EXIT27
-prio
-int
-int
-1
-ratio
-float
-double
-8
-job
-process *[]
-hashcode
-12
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.get_process(int;float;process\_**;)int:::EXIT26
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable job
+    var-kind variable
+    dec-type process\_*[]
+    rep-type hashcode
+    comparability 12
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
-DECLARE
-std.get_process(int;float;process **;)int:::EXIT28
-prio
-int
-int
-1
-ratio
-float
-double
-8
-job
-process *[]
-hashcode
-12
-::next_pid
-int
-int
-2
-return
-int
-int
-3
+ppt std.get_process(int;float;process\_**;)int:::EXIT27
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable job
+    var-kind variable
+    dec-type process\_*[]
+    rep-type hashcode
+    comparability 12
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
+
+ppt std.get_process(int;float;process\_**;)int:::EXIT28
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 8
+  variable job
+    var-kind variable
+    dec-type process\_*[]
+    rep-type hashcode
+    comparability 12
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 2
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 3
 
 # Implicit Type to Explicit Type
 #   1 : prio
