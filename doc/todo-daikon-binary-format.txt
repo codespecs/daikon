@@ -1,6 +1,6 @@
 For details about Daikon's file formats, see Appendix A of the Daikon
 Developer manual:
-http://plse.cs.washington.edu/daikon/download/doc/developer.html#File-formats
+https://plse.cs.washington.edu/daikon/download/doc/developer.html#File-formats
 
 For example, here is a record in Daikon's current ASCII format:
 

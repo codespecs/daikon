@@ -19,7 +19,6 @@ public class VarComparabilityTest {
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
-    FileIO.new_decl_format = true;
   }
 
   boolean comp(VarComparability v1, VarComparability v2) {

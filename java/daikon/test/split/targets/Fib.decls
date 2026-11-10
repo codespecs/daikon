@@ -16,36 +16,36 @@ ppt misc.Fib.Fib():::ENTER
 
 ppt misc.Fib.Fib():::EXIT5
   ppt-type subexit
-  parent parent misc.Fib:::OBJECT 1
+  parent parent misc.Fib:::CLASS 1
   variable misc.Fib.a
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability -2
   variable misc.Fib.b
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability -2
   variable misc.Fib.c
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability -2
   variable misc.Fib.STEPS
     var-kind variable
     dec-type int
     rep-type int
     constant 20
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability -2
 
 ppt misc.Fib.main(java.lang.String[]):::ENTER
   ppt-type enter
-  parent parent misc.Fib:::OBJECT 1
+  parent parent misc.Fib:::CLASS 1
   variable args
     var-kind variable
     dec-type java.lang.String[]
@@ -57,6 +57,7 @@ ppt misc.Fib.main(java.lang.String[]):::ENTER
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable args[..]
     var-kind array
@@ -66,41 +67,42 @@ ppt misc.Fib.main(java.lang.String[]):::ENTER
     rep-type java.lang.String[]
     comparability 2[3]
   variable args[..].toString
-    var-kind field toString
+    var-kind function toString()
     enclosing-var args[..]
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
+    flags synthetic to_string
     comparability -1
   variable misc.Fib.a
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.b
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.c
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.STEPS
     var-kind variable
     dec-type int
     rep-type int
     constant 20
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 1
 
 ppt misc.Fib.main(java.lang.String[]):::EXIT18
   ppt-type subexit
-  parent parent misc.Fib:::OBJECT 1
+  parent parent misc.Fib:::CLASS 1
   variable args
     var-kind variable
     dec-type java.lang.String[]
@@ -112,6 +114,7 @@ ppt misc.Fib.main(java.lang.String[]):::EXIT18
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    flags synthetic classname
     comparability -1
   variable args[..]
     var-kind array
@@ -121,94 +124,95 @@ ppt misc.Fib.main(java.lang.String[]):::EXIT18
     rep-type java.lang.String[]
     comparability 2[3]
   variable args[..].toString
-    var-kind field toString
+    var-kind function toString()
     enclosing-var args[..]
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
+    flags synthetic to_string
     comparability -1
   variable misc.Fib.a
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.b
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.c
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.STEPS
     var-kind variable
     dec-type int
     rep-type int
     constant 20
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 1
 
 ppt misc.Fib.increment():::ENTER
   ppt-type enter
-  parent parent misc.Fib:::OBJECT 1
+  parent parent misc.Fib:::CLASS 1
   variable misc.Fib.a
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.b
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.c
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.STEPS
     var-kind variable
     dec-type int
     rep-type int
     constant 20
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 1
 
 ppt misc.Fib.increment():::EXIT25
   ppt-type subexit
-  parent parent misc.Fib:::OBJECT 1
+  parent parent misc.Fib:::CLASS 1
   variable misc.Fib.a
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.b
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.c
     var-kind variable
     dec-type int
     rep-type int
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 0
   variable misc.Fib.STEPS
     var-kind variable
     dec-type int
     rep-type int
     constant 20
-    parent misc.Fib:::OBJECT 1
+    parent misc.Fib:::CLASS 1
     comparability 1
 
 ppt DataStructures.QueueAr.QueueAr():::ENTER
@@ -240,6 +244,7 @@ ppt misc.Fib:::CLASS
 
 ppt misc.Fib:::OBJECT
   ppt-type object
+  parent parent misc.Fib:::CLASS 1
   variable this
     var-kind variable
     dec-type misc.Fib
@@ -250,20 +255,24 @@ ppt misc.Fib:::OBJECT
     var-kind variable
     dec-type int
     rep-type int
+    parent misc.Fib:::CLASS 1
     comparability -2
   variable misc.Fib.b
     var-kind variable
     dec-type int
     rep-type int
+    parent misc.Fib:::CLASS 1
     comparability -2
   variable misc.Fib.c
     var-kind variable
     dec-type int
     rep-type int
+    parent misc.Fib:::CLASS 1
     comparability -2
   variable misc.Fib.STEPS
     var-kind variable
     dec-type int
     rep-type int
     constant 20
+    parent misc.Fib:::CLASS 1
     comparability -2
