@@ -17,6 +17,7 @@ import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.unary.OneOf;
 import daikon.inv.unary.scalar.OneOfScalar;
 import gnu.getopt.*;
 import java.io.BufferedWriter;
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -190,6 +193,7 @@ public class ExtractConsequent {
         List<String> condsDaikon = new ArrayList<>();
         List<String> condsESC = new ArrayList<>();
         List<String> condsSimplify = new ArrayList<>();
+        List<Invariant> condsInv = new ArrayList<>();
         for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
             conditions.entrySet()) {
           String condIndex = entry2.getKey();
@@ -197,23 +201,23 @@ public class ExtractConsequent {
           if (cond.fakeFor != null) {
             continue;
           }
-          // The key of a condition that is not fake is the condition in Java format.
-          String javaStr = condIndex;
-          String daikonStr = formatCondition(cond.inv, OutputFormat.DAIKON);
-          String escStr = formatCondition(cond.inv, OutputFormat.ESCJAVA);
-          String simplifyStr = formatCondition(cond.inv, OutputFormat.SIMPLIFY);
+          String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
+          String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
+          String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
           allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
           //           allConds.add(condIndex);
-          condsJava.add(javaStr);
+          // The key of a condition that is not fake is the condition in Java format.
+          condsJava.add(condIndex);
           condsDaikon.add(daikonStr);
           condsESC.add(escStr);
           condsSimplify.add(simplifyStr);
+          condsInv.add(cond.inv);
         }
         String conj = conjunction(condsJava, " && ");
         // Avoid inserting self-contradictory conditions such as "x == 1 &&
         // x == 2", or conjunctions of only a single condition.
         if (condsJava.size() < 2
-            || contradict_inv_pattern.matcher(conj).find()
+            || isContradictory(condsInv)
             || useless_inv_pattern_1.matcher(conj).find()
             || useless_inv_pattern_2.matcher(conj).find()) {
           // System.out.println("Suppressing: " + conj);
@@ -241,67 +245,80 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the invariant formatted as a splitting condition in the given format. In Java format,
-   * the return value and pre-state values are written as a .spinfo file refers to them; see {@link
-   * #replaceJmlNames}. A OneOfScalar invariant over a boolean variable whose file representation
-   * type is int, such as "b == 1", is written as "b == true" (see {@link #intBooleanValue}).
+   * Returns true if two of the given invariants give the same variable different values, as "x ==
+   * 1" and "x == 2" do, or "b == true" and "b == false". The conjunction of such invariants is
+   * always false.
    *
-   * @param inv an invariant
-   * @param format the format in which to write the invariant
-   * @return the invariant formatted as a splitting condition
+   * @param invs invariants
+   * @return true if two of the invariants give the same variable different values
    */
-  static String formatCondition(Invariant inv, OutputFormat format) {
-    Boolean value = (inv instanceof OneOfScalar) ? intBooleanValue((OneOfScalar) inv) : null;
-    String result;
-    if (value == null) {
-      result = inv.format_using(format);
-    } else {
-      VarInfo var = ((OneOfScalar) inv).var();
-      if (format == OutputFormat.SIMPLIFY) {
-        result = "(EQ " + var.simplifyFixedupName() + " " + (value ? "|@true|" : "|@false|") + ")";
-      } else {
-        result = var.name_using(format) + " == " + value;
+  static boolean isContradictory(Collection<Invariant> invs) {
+    // Maps a variable's name to the value that some invariant in invs gives it.
+    Map<String, Object> values = new HashMap<>();
+    for (Invariant inv : invs) {
+      if (!(inv instanceof OneOf)) {
+        continue;
+      }
+      OneOf oneOf = (OneOf) inv;
+      if (oneOf.num_elts() != 1) {
+        continue;
+      }
+      Object value = oneOf.elt();
+      Object otherValue = values.put(oneOf.var().name(), value);
+      if (otherValue != null && !sameValue(value, otherValue)) {
+        return true;
       }
     }
-    if (format == OutputFormat.JAVA) {
-      result = replaceJmlNames(result);
-    }
-    return result;
+    return false;
   }
 
   /**
-   * Returns the given Java expression, with each "\result" written as "return" and each "\old(x)"
-   * written as "orig(x)", which is how a .spinfo file refers to the return value and to pre-state
-   * values. Text within a string or character literal is unchanged.
+   * Returns true if the given values, which are values of the same variable, are equal. Two
+   * floating-point values are equal if they are approximately equal according to {@link
+   * Global#fuzzy}.
    *
-   * @param expr a Java expression
-   * @return the expression, with the return value and pre-state values written as a .spinfo file
-   *     refers to them
+   * @param v1 a value, such as a Long, Double, or String
+   * @param v2 another value of the same variable as v1
+   * @return true if the values are equal
    */
-  static String replaceJmlNames(String expr) {
+  private static boolean sameValue(Object v1, Object v2) {
+    if (v1 instanceof Double && v2 instanceof Double) {
+      return Global.fuzzy.eq((Double) v1, (Double) v2);
+    }
+    return v1.equals(v2);
+  }
+
+  /**
+   * Returns the given condition as a .spinfo file writes it, or null if the condition refers to a
+   * post-state value or uses a class literal such as "Foo.class". The result writes each "\result"
+   * as "return" and each "\old(x)" as "orig(x)", which is how a .spinfo file refers to the return
+   * value and to pre-state values. A splitter cannot use a condition that refers to a post-state
+   * value, such as "\post(x)" or "\new(x)", or that uses a class literal. Text within a string or
+   * character literal is neither changed nor examined.
+   *
+   * @param condition a condition in Java format, such as "\result &gt; \old(this.size)"
+   * @return the condition as a .spinfo file writes it, such as "return &gt; orig(this.size)", or
+   *     null if the condition refers to a post-state value or uses a class literal
+   */
+  static @Nullable String toSpinfoCondition(String condition) {
     StringBuilder result = new StringBuilder();
-    Matcher m = literal_pattern.matcher(expr);
+    Matcher m = literal_pattern.matcher(condition);
     int start = 0;
-    while (m.find()) {
-      result.append(replaceJmlNamesOutsideLiterals(expr.substring(start, m.start())));
+    while (true) {
+      boolean found = m.find();
+      // The text between the previous literal and the next one (or the end of the condition).
+      String text = condition.substring(start, found ? m.start() : condition.length());
+      if (post_pattern.matcher(text).find() || dot_class_pattern.matcher(text).find()) {
+        return null;
+      }
+      text = result_pattern.matcher(text).replaceAll("return");
+      result.append(old_pattern.matcher(text).replaceAll("orig("));
+      if (!found) {
+        return result.toString();
+      }
       result.append(m.group());
       start = m.end();
     }
-    result.append(replaceJmlNamesOutsideLiterals(expr.substring(start)));
-    return result.toString();
-  }
-
-  /**
-   * Returns the given text, which contains no string or character literal, with each "\result"
-   * written as "return" and each "\old(x)" written as "orig(x)".
-   *
-   * @param text a part of a Java expression that contains no literal
-   * @return the text, with the return value and pre-state values written as a .spinfo file refers
-   *     to them
-   */
-  private static String replaceJmlNamesOutsideLiterals(String text) {
-    text = result_pattern.matcher(text).replaceAll("return");
-    return old_pattern.matcher(text).replaceAll("orig(");
   }
 
   /**
@@ -314,7 +331,8 @@ public class ExtractConsequent {
    * @return the expression, parenthesized if necessary to be used as a conjunct
    */
   static String parenthesizeIfNeeded(String expr) {
-    return low_precedence_pattern.matcher(removeLiterals(expr)).find() ? "(" + expr + ")" : expr;
+    String withoutLiterals = literal_pattern.matcher(expr).replaceAll("\"\"");
+    return low_precedence_pattern.matcher(withoutLiterals).find() ? "(" + expr + ")" : expr;
   }
 
   /**
@@ -334,34 +352,9 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the given expression, with each string or character literal replaced by the empty
-   * string literal {@code ""}. The result contains no operator or name that appears only within a
-   * literal of the expression.
-   *
-   * @param expr a Java, ESC, or Daikon expression
-   * @return the expression, with each literal replaced by the empty string literal
-   */
-  static String removeLiterals(String expr) {
-    return literal_pattern.matcher(expr).replaceAll("\"\"");
-  }
-
-  /**
-   * Returns true if the given condition refers to a post-state value, such as "\post(x)" or
-   * "\new(x)", or contains ".class". Text within a string or character literal is ignored.
-   *
-   * @param condition a condition in Java format
-   * @return true if the condition refers to a post-state value or contains ".class"
-   */
-  static boolean usesPostStateOrClass(String condition) {
-    String withoutLiterals = removeLiterals(condition);
-    return post_pattern.matcher(withoutLiterals).find()
-        || dot_class_pattern.matcher(withoutLiterals).find();
-  }
-
-  /**
    * Returns true if the invariant is legal Java when its variables are booleans. Daikon represents
-   * a boolean as an int, so it might infer numeric invariants, such as "b != 0" or "b1 < b2", that
-   * are not legal Java over booleans.
+   * a boolean as an int, so it might infer numeric invariants, such as "b != 0" or "b == i" (where
+   * i is an int), that are not legal Java over booleans.
    *
    * @param inv an invariant
    * @return true if the invariant uses no boolean variable, or is legal Java over booleans
@@ -369,12 +362,8 @@ public class ExtractConsequent {
   static boolean isLegalForBooleans(Invariant inv) {
     VarInfo[] vis = inv.ppt.var_infos;
     // OneOfScalar is the only scalar invariant that formats a boolean specially, as "b == true".
-    // It decides whether its variable is a boolean from the file representation type, which can
-    // differ from the declared type that a splitter uses.  formatCondition writes "b == 1" as
-    // "b == true" when the declared type is boolean and the file representation type is int.
     if (inv instanceof OneOfScalar) {
-      OneOfScalar oneof = (OneOfScalar) inv;
-      return oneof.is_boolean() == isBoolean(vis[0]) || intBooleanValue(oneof) != null;
+      return ((OneOfScalar) inv).is_boolean() == isBoolean(vis[0]);
     }
     if (inv instanceof IntEqual || inv instanceof IntNonEqual) {
       // "b == i" is not legal Java if exactly one of the operands is a boolean.
@@ -397,29 +386,6 @@ public class ExtractConsequent {
    */
   private static boolean isBoolean(VarInfo vi) {
     return vi.type == ProglangType.BOOLEAN;
-  }
-
-  /**
-   * Returns the value of the variable of the given OneOfScalar invariant, if the variable is a
-   * boolean whose file representation type is int and the invariant is "b == 0" or "b == 1".
-   * OneOfScalar formats such an invariant as "b == 0" or "b == 1", which is not legal Java.
-   *
-   * @param oneof a OneOfScalar invariant
-   * @return false if the invariant is "b == 0", true if it is "b == 1", or null if the variable is
-   *     not a boolean whose file representation type is int or the invariant is neither
-   */
-  static @Nullable Boolean intBooleanValue(OneOfScalar oneof) {
-    if (oneof.is_boolean() || !isBoolean(oneof.var()) || oneof.num_elts() != 1) {
-      return null;
-    }
-    long value = ((Long) oneof.elt()).longValue();
-    if (value == 0) {
-      return false;
-    } else if (value == 1) {
-      return true;
-    } else {
-      return null;
-    }
   }
 
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
@@ -533,8 +499,8 @@ public class ExtractConsequent {
           continue;
         }
 
-        String inv_string = formatCondition(inv, OutputFormat.JAVA);
-        if (usesPostStateOrClass(inv_string)) {
+        String inv_string = toSpinfoCondition(inv.format_using(OutputFormat.JAVA));
+        if (inv_string == null) {
           continue;
         }
         String cluster_key = clusterKey(cluster_inv);
@@ -558,15 +524,25 @@ public class ExtractConsequent {
   /**
    * Returns the key that identifies the cluster that the given invariant describes. The pre-state
    * value "orig(cluster)" and the post-state value "cluster" are equal, so the key for an invariant
-   * over one is the same as the key for the same invariant over the other.
+   * over "orig(cluster)" is the same as the key for the same invariant over "cluster". An invariant
+   * over both, such as "cluster == orig(cluster)", is its own key, because replacing
+   * "orig(cluster)" in it would yield a different invariant, "cluster == cluster".
    *
-   * @param cluster_inv an invariant over the "cluster" variable, such as "cluster == 1"
+   * @param cluster_inv an invariant over the "cluster" variable or its pre-state value, such as
+   *     "cluster == 1" or "orig(cluster) == 1"
    * @return a key that identifies the cluster
    */
   static String clusterKey(Invariant cluster_inv) {
-    return orig_cluster_pattern
-        .matcher(cluster_inv.format_using(OutputFormat.DAIKON))
-        .replaceAll("cluster");
+    String result = cluster_inv.format_using(OutputFormat.DAIKON);
+    if (cluster_inv.usesVar("cluster")) {
+      return result;
+    }
+    for (VarInfo vi : cluster_inv.ppt.var_infos) {
+      if (vi.isPrestate() && vi.postState.name().equals("cluster")) {
+        result = result.replace(vi.name(), "cluster");
+      }
+    }
+    return result;
   }
 
   // Store the invariant for later printing. Ignore duplicate
@@ -661,9 +637,6 @@ public class ExtractConsequent {
   /** Matches the start of a pre-state value in Java format, such as "\old(" in "\old(x)". */
   static Pattern old_pattern;
 
-  /** Matches the pre-state value of the "cluster" variable, in Daikon format. */
-  static Pattern orig_cluster_pattern;
-
   /**
    * Matches an operator whose precedence is lower than that of conjunction. "&lt;==" is needed for
    * reverse implication, and "&lt;=!=&gt;" contains neither "==&gt;" nor "&lt;==". A "?" matches
@@ -674,12 +647,14 @@ public class ExtractConsequent {
   /** Matches a string or character literal. */
   static Pattern literal_pattern;
 
+  /** Matches ".class", as in "Foo.class", but not ".classCount" or ".class$0". */
   static Pattern dot_class_pattern;
+
   static Pattern gteq_pattern;
   static Pattern lteq_pattern;
   static Pattern neq_pattern;
   static Pattern inequality_pattern;
-  static Pattern contradict_inv_pattern;
+
   static Pattern useless_inv_pattern_1;
   static Pattern useless_inv_pattern_2;
 
@@ -688,16 +663,13 @@ public class ExtractConsequent {
       post_pattern = Pattern.compile("\\\\(?:post|new)\\s*\\(");
       result_pattern = Pattern.compile("\\\\result\\b");
       old_pattern = Pattern.compile("\\\\old\\s*\\(");
-      orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
       low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?.*:");
       literal_pattern = Pattern.compile("\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'");
-      dot_class_pattern = Pattern.compile("\\.class");
+      dot_class_pattern = Pattern.compile("\\.class(?!\\p{javaJavaIdentifierPart})");
       inequality_pattern = Pattern.compile("[\\!<>]=");
       gteq_pattern = Pattern.compile(">=");
       lteq_pattern = Pattern.compile("<=");
       neq_pattern = Pattern.compile("\\!=");
-      contradict_inv_pattern =
-          Pattern.compile("(^| && )(.*) == -?[0-9]+ &.*& \\2 == -?[0-9]+($| && )");
       useless_inv_pattern_1 =
           Pattern.compile("(^| && )(.*) > -?[0-9]+ &.*& \\2 > -?[0-9]+($| && )");
       useless_inv_pattern_2 =

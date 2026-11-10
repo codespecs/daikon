@@ -295,8 +295,19 @@ public class SplitterFactory {
     return fileCompiler.compileFiles(fileNames);
   }
 
-  /** Returns true if a Ppt's name matches the given pattern. */
+  /**
+   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file designates the given
+   * program point. A complete program point name designates the program points described by {@link
+   * SplitterList#matches}.
+   *
+   * @param ppt_name a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param ppt a program point
+   * @return true if {@code ppt_name} designates {@code ppt}
+   */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
+    if (SplitterList.isComplete(ppt_name)) {
+      return SplitterList.matches(ppt_name, ppt.name);
+    }
     if (ppt.name.equals(ppt_name)) {
       return true;
     }

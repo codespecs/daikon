@@ -102,8 +102,7 @@ final class SplitterTestUtils {
   }
 
   /**
-   * Reads a decls file into a PptMap. The decls file may use a different format than previously
-   * read decls files, and its program points and variables are not filtered.
+   * Reads a decls file into a PptMap. Its program points and variables are not filtered.
    *
    * @param declsFile the name of the decls file
    * @param ppts the PptMap to which to add the program points of declsFile
