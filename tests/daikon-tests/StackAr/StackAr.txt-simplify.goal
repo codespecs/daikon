@@ -18,6 +18,15 @@ DataStructures.StackAr.StackAr(int):::EXIT
 (EQ |__orig__capacity| (arrayLength (select |theArray| |this|)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (typeof (select (select elems (select |theArray| |this|)) |i|)) |T_null|)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 (EQ (select |topOfStack| |this|) -1)
 (AND (EQ (+ 1 (- (select |topOfStack| |this|) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
 (EQ (|java->>| |__orig__capacity| (stringLength (typeof (select |theArray| |this|)))) 0)
@@ -32,6 +41,15 @@ DataStructures.StackAr.isEmpty():::EXIT
 (EQ (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
 (EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
 (IFF (EQ (select |topOfStack| |this|) -1) (EQ |return| |@true|))
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are Numeric)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are emails)
 (IMPLIES (EQ (select |topOfStack| |this|) -1) (AND (EQ (+ 1 (- (select |topOfStack| |this|) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null)))))
 (IMPLIES (EQ (select |topOfStack| |this|) -1) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) null))))
 (IMPLIES (EQ (select |topOfStack| |this|) -1) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (typeof (select (select elems (select |theArray| |this|)) |i|)) |T_null|))))
@@ -74,6 +92,15 @@ DataStructures.StackAr.makeEmpty():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= (+ (select |topOfStack| |__orig__this|) 1) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)) (<= (+ (select |topOfStack| |__orig__this|) 1) |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (typeof (select (select elems (select |theArray| |this|)) |i|)) |T_null|)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 (EQ (select |topOfStack| |this|) -1)
 (AND (EQ (+ 1 (- (select |topOfStack| |this|) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
 (<= (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
@@ -157,6 +184,15 @@ DataStructures.StackAr.top():::ENTER
 DataStructures.StackAr.top():::EXIT74
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (typeof (select (select elems (select |theArray| |this|)) |i|)) |T_null|)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 (EQ (select |topOfStack| |this|) -1)
 (EQ (hash |return|) null)
 (AND (EQ (+ 1 (- (select |topOfStack| |this|) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
@@ -179,6 +215,15 @@ DataStructures.StackAr.top():::EXIT
 (EQ (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
 (EQ (stringLength (typeof (select |theArray| |this|))) (stringLength (typeof (select |theArray| |__orig__this|))))
 (IFF (EQ (select |topOfStack| |this|) -1) (EQ (hash |return|) null))
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are Numeric)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(IMPLIES (EQ (select |topOfStack| |this|) -1) All the elements of this.theArray[].getClass().getName() are emails)
 (IMPLIES (EQ (select |topOfStack| |this|) -1) (AND (EQ (+ 1 (- (select |topOfStack| |this|) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null)))))
 (IMPLIES (EQ (select |topOfStack| |this|) -1) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) null))))
 (IMPLIES (EQ (select |topOfStack| |this|) -1) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) |return|))))
@@ -227,6 +272,15 @@ DataStructures.StackAr.topAndPop():::EXIT108
 (EQ (select |topOfStack| |this|) (select |topOfStack| |__orig__this|))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (typeof (select (select elems (select |theArray| |this|)) |i|)) |T_null|)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 (EQ (select |topOfStack| |this|) -1)
 (EQ (hash |return|) null)
 (AND (EQ (+ 1 (- (select |topOfStack| |this|) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
@@ -278,6 +332,24 @@ DataStructures.StackAr.topAndPop():::EXIT
 (IFF (EQ (hash |return|) null) (EQ (select |topOfStack| |__orig__this|) -1))
 (IFF (EQ (hash |return|) null) (FORALL (|i|) (IMPLIES (AND (<= (+ (select |topOfStack| |this|) 1) |i|) (<= |i| (select |topOfStack| |__orig__this|))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
 (IFF (EQ (hash |return|) null) (EQ (select |topOfStack| |this|) (select |topOfStack| |__orig__this|)))
+(IMPLIES (EQ (hash |return|) null) All the elements of orig(this.theArray[].getClass().getName()) are Numeric)
+(IMPLIES (EQ (hash |return|) null) All the elements of orig(this.theArray[].getClass().getName()) are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(IMPLIES (EQ (hash |return|) null) All the elements of orig(this.theArray[].getClass().getName()) are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(IMPLIES (EQ (hash |return|) null) All the elements of orig(this.theArray[].getClass().getName()) are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(IMPLIES (EQ (hash |return|) null) All the elements of orig(this.theArray[].getClass().getName()) are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(IMPLIES (EQ (hash |return|) null) All the elements of orig(this.theArray[].getClass().getName()) are dates. Format: DD/MM/YYYY)
+(IMPLIES (EQ (hash |return|) null) All the elements of orig(this.theArray[].getClass().getName()) are dates. Format: MM/DD/YYYY)
+(IMPLIES (EQ (hash |return|) null) All the elements of orig(this.theArray[].getClass().getName()) are dates. Format: YYYY-MM-DD)
+(IMPLIES (EQ (hash |return|) null) All the elements of orig(this.theArray[].getClass().getName()) are emails)
+(IMPLIES (EQ (hash |return|) null) All the elements of this.theArray[].getClass().getName() are Numeric)
+(IMPLIES (EQ (hash |return|) null) All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(IMPLIES (EQ (hash |return|) null) All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(IMPLIES (EQ (hash |return|) null) All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(IMPLIES (EQ (hash |return|) null) All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(IMPLIES (EQ (hash |return|) null) All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(IMPLIES (EQ (hash |return|) null) All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(IMPLIES (EQ (hash |return|) null) All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(IMPLIES (EQ (hash |return|) null) All the elements of this.theArray[].getClass().getName() are emails)
 (IMPLIES (EQ (hash |return|) null) (AND (EQ (+ 1 (- (select |topOfStack| |__orig__this|) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |topOfStack| |__orig__this|))) (NEQ (select (select elems (select |theArray| |__orig__this|)) |i|)  null)))))
 (IMPLIES (EQ (hash |return|) null) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |__orig__this|)) 1))) (EQ (select (select elems (select |theArray| |__orig__this|)) |i|) null))))
 (IMPLIES (EQ (hash |return|) null) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |__orig__this|)) 1))) (EQ (typeof (select (select elems (select |theArray| |__orig__this|)) |i|)) |T_null|))))
