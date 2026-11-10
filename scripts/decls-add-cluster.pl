@@ -26,7 +26,7 @@ foreach my $decls_file (@ARGV) {
     $decls_cluster .= "_runcluster_temp.decls";
     print " $decls_cluster ";
     if ($decls_file =~ /\.gz$/) {
-	open (IN, "zcat $decls_file |") || die "couldn't open $decls_file for input with zcat\n";
+	open (IN, "-|", "zcat", $decls_file) || die "couldn't open $decls_file for input with zcat\n";
     } else {
 	open (IN, $decls_file) || die "couldn't open $decls_file for input\n";
     }

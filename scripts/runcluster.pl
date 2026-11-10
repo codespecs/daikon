@@ -99,7 +99,7 @@ foreach my $trace_file (@trace_files) {
   my $fixed = basename($trace_file);
   $fixed =~ s/\.dtrace(\.gz)?$//;
   $fixed .= "_runcluster_temp_nonces.dtrace$gz";
-  system_or_die("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer $trace_file $fixed", $verbose);
+  system_or_die("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer " . shell_quote($trace_file) . " " . shell_quote($fixed), $verbose);
   push @fixed_trace_files, $fixed;
 }
 my $dtrace_files = join(' ', @fixed_trace_files);
@@ -108,7 +108,10 @@ my $decls_files = (scalar(@decls_files) == 0) ? $dtrace_files : join(' ', @decls
 
 #extract the variables from the dtrace file
 if ($verbose) { print "\n# Extracting variables from dtrace file ...\n"; }
-my $command = "$SCRIPTDIR/extract_vars.pl --algorithm $algorithm $decls_files $dtrace_files";
+# Pass only the user-supplied decls files:  if there are none, extract_vars.pl
+# reads the declarations from the dtrace files, and passing the dtrace files
+# twice would read their samples twice.
+my $command = "$SCRIPTDIR/extract_vars.pl --algorithm $algorithm " . join(' ', @decls_files) . " $dtrace_files";
 if ($verbose) { print "$command\n"; }
 if (system($command) != 0) {
   # extract_vars.pl's error message names a temporary file, not an input file.
@@ -276,6 +279,14 @@ if (! $keep_tempfiles ) {
 exit();
 
 ################# Subroutines ####################################
+
+# Quote a string for use as a single word in a shell command.
+# (No prototype, because it is called before its definition.)
+sub shell_quote {
+  my ($s) = @_;
+  $s =~ s/'/'\\''/g;
+  return "'$s'";
+} #shell_quote
 
 sub unlink_glob ( $ ) {
   my ($glob) = @_;
