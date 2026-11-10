@@ -4,7 +4,6 @@ import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 
 import daikon.Daikon;
 import daikon.Debug;
-import daikon.FileIO;
 import daikon.PptSlice;
 import daikon.PptSlice1;
 import daikon.PptSlice2;
@@ -731,7 +730,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return ppt.usesVar(name);
   }
 
-  /** Returns true if this invariant uses the given variable or any variable derived from it. */
+  /**
+   * Returns true if this invariant uses the given variable, a field of it (such as "x.f" for "x"),
+   * any variable derived from it, or its pre-state value (such as "orig(x)" for "x").
+   *
+   * @param name the name of a simple variable
+   * @return true if this invariant uses the variable, a field of it, any variable derived from it,
+   *     or its pre-state value
+   */
   public boolean usesVarDerived(@NonPrototype Invariant this, String name) {
     return ppt.usesVarDerived(name);
   }
@@ -1123,10 +1129,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       // System.out.println("ICFP: default rule yields "
       //                    + inv1.format().compareTo(inv2.format())
       //                    + " for " + inv1.format() + ", " + inv2.format());
-      // (Actually, FileIO.new_decl_format should always be non-null here.)
-      if (PrintInvariants.dkconfig_old_array_names
-          && FileIO.new_decl_format != null
-          && FileIO.new_decl_format) {
+      if (PrintInvariants.dkconfig_old_array_names) {
         return inv1.format().replace("[..]", "[]").compareTo(inv2.format().replace("[..]", "[]"));
       } else {
         return inv1.format().compareTo(inv2.format());

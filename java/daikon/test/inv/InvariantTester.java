@@ -23,7 +23,6 @@ public class InvariantTester {
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
-    FileIO.new_decl_format = true;
   }
 
   @SuppressWarnings("interning")
