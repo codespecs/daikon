@@ -1,7 +1,6 @@
 ===========================================================================
 std.ALIM()int:::ENTER
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -41,8 +40,7 @@ return == ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
 return == orig(::Positive_RA_Alt_Thresh[post(::Alt_Layer_Value)])
 return == ::Positive_RA_Alt_Thresh[orig(::Alt_Layer_Value)]
 return == orig(::Positive_RA_Alt_Thresh[::Alt_Layer_Value])
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -64,8 +62,7 @@ size(::Positive_RA_Alt_Thresh[]) == 4
 ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements < return
 ===========================================================================
 std.Inhibit_Biased_Climb()int:::ENTER
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -101,8 +98,7 @@ std.Inhibit_Biased_Climb()int:::EXIT
 ::Other_RAC == orig(::Other_RAC)
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -125,8 +121,7 @@ size(::Positive_RA_Alt_Thresh[]) == 4
 ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
 ===========================================================================
 std.Non_Crossing_Biased_Climb()boolean:::ENTER
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -162,9 +157,7 @@ std.Non_Crossing_Biased_Climb()boolean:::EXIT
 ::Other_RAC == orig(::Other_RAC)
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
-(return == 0)  ==>  (return is a pointer)
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -172,7 +165,6 @@ std.Non_Crossing_Biased_Climb()boolean:::EXIT
 ::Other_RAC one of { 0, 1 }
 ::Other_Capability one of { 0, 1 }
 ::Climb_Inhibit one of { 0, 1 }
-return one of { 0, 1 }
 size(::Positive_RA_Alt_Thresh[]) == 4
 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] == 0  (mod 20)
 {740} subset of ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..]
@@ -187,14 +179,13 @@ size(::Positive_RA_Alt_Thresh[]) == 4
 ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
 ===========================================================================
 std.Non_Crossing_Biased_Climb()boolean:::EXIT;condition="return == true"
-return == 1
+return == true
 ===========================================================================
 std.Non_Crossing_Biased_Climb()boolean:::EXIT;condition="not(return == true)"
-return == 0
+return == false
 ===========================================================================
 std.Non_Crossing_Biased_Descend()boolean:::ENTER
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -228,9 +219,7 @@ std.Non_Crossing_Biased_Descend()boolean:::EXIT
 ::Other_RAC == orig(::Other_RAC)
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
-(return == 0)  ==>  (return is a pointer)
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -238,7 +227,6 @@ std.Non_Crossing_Biased_Descend()boolean:::EXIT
 ::Other_RAC one of { 0, 1 }
 ::Other_Capability one of { 0, 1 }
 ::Climb_Inhibit one of { 0, 1 }
-return one of { 0, 1 }
 size(::Positive_RA_Alt_Thresh[]) == 4
 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] == 0  (mod 20)
 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
@@ -251,14 +239,13 @@ size(::Positive_RA_Alt_Thresh[]) == 4
 ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
 ===========================================================================
 std.Non_Crossing_Biased_Descend()boolean:::EXIT;condition="return == true"
-return == 1
+return == true
 ===========================================================================
 std.Non_Crossing_Biased_Descend()boolean:::EXIT;condition="not(return == true)"
-return == 0
+return == false
 ===========================================================================
 std.Own_Above_Threat()boolean:::ENTER
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -294,12 +281,10 @@ std.Own_Above_Threat()boolean:::EXIT
 ::Other_RAC == orig(::Other_RAC)
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
-(return == 0)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
-(return == 0)  ==>  (return is a pointer)
-(return == 1)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
-(return == 1)  ==>  (::Up_Separation <= ::Down_Separation)
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+(return == false)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
+(return == true)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
+(return == true)  ==>  (::Up_Separation <= ::Down_Separation)
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -307,7 +292,6 @@ std.Own_Above_Threat()boolean:::EXIT
 ::Other_RAC one of { 0, 1 }
 ::Other_Capability one of { 0, 1 }
 ::Climb_Inhibit one of { 0, 1 }
-return one of { 0, 1 }
 size(::Positive_RA_Alt_Thresh[]) == 4
 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] == 0  (mod 20)
 {740} subset of ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..]
@@ -322,17 +306,16 @@ size(::Positive_RA_Alt_Thresh[]) == 4
 ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
 ===========================================================================
 std.Own_Above_Threat()boolean:::EXIT;condition="return == true"
-return == 1
+return == true
 ::Own_Tracked_Alt > ::Other_Tracked_Alt
 ::Up_Separation <= ::Down_Separation
 ===========================================================================
 std.Own_Above_Threat()boolean:::EXIT;condition="not(return == true)"
-return == 0
+return == false
 ::Own_Tracked_Alt < ::Other_Tracked_Alt
 ===========================================================================
 std.Own_Below_Threat()boolean:::ENTER
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+::High_Confidence == true
 ::Own_Tracked_Alt_Rate >= 2
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
@@ -369,12 +352,10 @@ std.Own_Below_Threat()boolean:::EXIT
 ::Other_RAC == orig(::Other_RAC)
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
-(return == 0)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
-(return == 0)  ==>  (return is a pointer)
-(return == 1)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
-(return == 1)  ==>  (::Own_Tracked_Alt_Rate >= 2)
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid one of { 0, 1 }
+(return == false)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
+(return == true)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
+(return == true)  ==>  (::Own_Tracked_Alt_Rate >= 2)
+::High_Confidence == true
 ::Own_Tracked_Alt_Rate >= 2
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
@@ -383,7 +364,6 @@ std.Own_Below_Threat()boolean:::EXIT
 ::Other_RAC one of { 0, 1 }
 ::Other_Capability one of { 0, 1 }
 ::Climb_Inhibit one of { 0, 1 }
-return one of { 0, 1 }
 size(::Positive_RA_Alt_Thresh[]) == 4
 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] == 0  (mod 20)
 {740} subset of ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..]
@@ -398,16 +378,14 @@ size(::Positive_RA_Alt_Thresh[]) == 4
 ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
 ===========================================================================
 std.Own_Below_Threat()boolean:::EXIT;condition="return == true"
-return == 1
+return == true
 ::Own_Tracked_Alt < ::Other_Tracked_Alt
 ===========================================================================
 std.Own_Below_Threat()boolean:::EXIT;condition="not(return == true)"
-return == 0
+return == false
 ::Own_Tracked_Alt > ::Other_Tracked_Alt
 ===========================================================================
 std.alt_sep_test()int:::ENTER
-::High_Confidence one of { 0, 1 }
-::Two_of_Three_Reports_Valid one of { 0, 1 }
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -443,8 +421,6 @@ std.alt_sep_test()int:::EXIT
 ::Other_RAC == orig(::Other_RAC)
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
-::High_Confidence one of { 0, 1 }
-::Two_of_Three_Reports_Valid one of { 0, 1 }
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
@@ -470,8 +446,8 @@ std.initialize()void:::ENTER
 ::Own_Tracked_Alt == ::Other_Tracked_Alt
 ::Up_Separation == ::Down_Separation
 ::Cur_Vertical_Sep == 0
-::High_Confidence == 0
-::Two_of_Three_Reports_Valid == 0
+::High_Confidence == false
+::Two_of_Three_Reports_Valid == false
 ::Own_Tracked_Alt == 0
 ::Own_Tracked_Alt_Rate == 0
 ::Alt_Layer_Value == 0
@@ -498,8 +474,8 @@ std.initialize()void:::EXIT
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
 ::Cur_Vertical_Sep == 0
-::High_Confidence == 0
-::Two_of_Three_Reports_Valid == 0
+::High_Confidence == false
+::Two_of_Three_Reports_Valid == false
 ::Own_Tracked_Alt == 0
 ::Own_Tracked_Alt_Rate == 0
 ::Alt_Layer_Value == 0

@@ -85,8 +85,7 @@ public class Common {
 
   /**
    * Writes the given lines to a decls file, and returns the program points that Daikon reads from
-   * it. Afterward, FileIO again accepts a decls file of either format version, so this does not
-   * affect later tests.
+   * it.
    *
    * @param declsFile a file, which this method overwrites
    * @param lines the lines of the decls file, without line terminators
@@ -99,11 +98,6 @@ public class Common {
       decls.append(line).append('\n');
     }
     Files.write(declsFile.toPath(), decls.toString().getBytes(StandardCharsets.UTF_8));
-    FileIO.resetNewDeclFormat();
-    try {
-      return FileIO.read_declaration_files(Collections.singletonList(declsFile));
-    } finally {
-      FileIO.resetNewDeclFormat();
-    }
+    return FileIO.read_declaration_files(Collections.singletonList(declsFile));
   }
 }
