@@ -3,16 +3,12 @@ package daikon.test;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
-import daikon.FileIO;
 import daikon.tools.TraceSelect;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.plumelib.util.FilesPlume;
 
@@ -21,26 +17,6 @@ public class TraceSelectTest {
 
   /** The number of invocations in the trace file created by {@link #writeTrace}. */
   private static final int NUM_INVOCATIONS = 20;
-
-  /** The value of {@link FileIO#new_decl_format} before the current test. */
-  private @Nullable Boolean savedNewDeclFormat;
-
-  /** Ensures that the decl format of an earlier test's input files does not affect this test. */
-  @Before
-  public void resetNewDeclFormat() {
-    savedNewDeclFormat = FileIO.new_decl_format;
-    FileIO.resetNewDeclFormat();
-  }
-
-  /** Ensures that the decl format of this test's input files does not affect later tests. */
-  @After
-  public void restoreNewDeclFormat() {
-    if (savedNewDeclFormat == null) {
-      FileIO.resetNewDeclFormat();
-    } else {
-      FileIO.new_decl_format = savedNewDeclFormat;
-    }
-  }
 
   /** The declarations for the trace file created by {@link #writeTrace}. */
   private static final String DECLS =

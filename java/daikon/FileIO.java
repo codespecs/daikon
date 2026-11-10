@@ -43,14 +43,17 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,7 +64,6 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.mustcall.qual.MustCall;
 import org.checkerframework.checker.mustcall.qual.Owning;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -71,6 +73,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.FilesPlume;
+import org.plumelib.util.Intern;
 import org.plumelib.util.MapsP;
 import org.plumelib.util.StringsPlume;
 
@@ -83,9 +86,6 @@ public final class FileIO {
   }
 
   // Constants
-
-  /** Introduces a declaration in a declaration file. */
-  static final String declaration_header = "DECLARE";
 
   // Program point name tags
   /** String used to append a ppt type to a ppt name. */
@@ -182,22 +182,6 @@ public final class FileIO {
    * be suppressed.
    */
   public static long dkconfig_dtrace_line_count = 0;
-
-  /** True if declaration records are in the new format -- that is, decl-version 2.0. */
-  // Set by read_decl_version; by read_data_trace_record if the file is non-empty;
-  // by read_serialized_pptmap; and by InvMap.readObject.
-  public static @MonotonicNonNull Boolean new_decl_format = null;
-
-  /**
-   * Do not use this routine unless you know what you are doing. This routine breaks the
-   * representation invariant that new_decl_format, once set, is never reset to null. This routine
-   * should be used only if you can guarantee that new_decl_format will be once again set to a
-   * non-null value before any code runs that depends on the fact that new_decl_format is non-null.
-   */
-  @SuppressWarnings("nullness") // reinitialization
-  public static void resetNewDeclFormat() {
-    FileIO.new_decl_format = null;
-  }
 
   /**
    * If true, modified all ppt names to remove duplicate routine names within the ppt name. This is
@@ -352,8 +336,6 @@ public final class FileIO {
     }
   }
 
-  // Read a declaration in the Version 2 format.  For Version 1, see
-  // read_declaration.
   /**
    * Reads one ppt declaration. The next line should be the ppt record. After completion, the file
    * pointer will be pointing at the next record (ie, the blank line at the end of the ppt
@@ -483,6 +465,7 @@ public final class FileIO {
     // Build the var infos from the var definitions.
     List<VarInfo> vi_list = new ArrayList<>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
+      vd.useBooleanRepType();
       @SuppressWarnings("interning") // about to be used in a new program point
       @Interned VarInfo vi = new VarInfo(vd);
       vi_list.add(vi);
@@ -543,287 +526,12 @@ public final class FileIO {
     return ppt_type;
   }
 
-  // Read a declaration in the Version 1 format.  For version 2, see
-  // read_ppt_decl.
-  // The "DECLARE" line has already been read.
-  private static @Nullable PptTopLevel read_declaration(ParseState state) throws IOException {
-
-    // We have just read the "DECLARE" line.
-    String ppt_name = state.reader.readLine();
-    if (ppt_name == null) {
-      throw new Daikon.UserError(
-          "File ends with \"DECLARE\" with no following program point name", state);
-    }
-    ppt_name = user_mod_ppt_name(ppt_name);
-    ppt_name = ppt_name.intern();
-    VarInfo[] vi_array = read_VarInfos(state, ppt_name);
-
-    // System.out.printf("Ppt %s with %d variables%n", ppt_name,
-    //                   vi_array.length);
-
-    // This program point name has already been encountered.
-    if (state.all_ppts.containsName(ppt_name)) {
-      @NonNull PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
-      assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
-      if (state.ppts_may_be_new) {
-        check_decl_match(state, existing_ppt, vi_array);
-      } else { // ppts are already in the map
-        return existing_ppt;
-      }
-    }
-
-    // If we are excluding this ppt, just throw it away
-    if (!ppt_included(ppt_name)) {
-      omitted_declarations++;
-      return null;
-    }
-
-    // taking care of visibility information
-    // the information is needed in the variable hierarchy because private methods
-    // should not be linked under the object program point
-    // the ppt name is truncated before putting it in the pptMap because the visibility
-    // information is only present in the decls file and not the dtrace file
-
-    //    if (ppt_name.startsWith("public")) {
-    //      int position = ppt_name.indexOf("public");
-    //      ppt_name = ppt_name.substring(7);
-    //      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
-    //      newppt.ppt_name.setVisibility("public");
-    //      return newppt;
-    //    }
-    //    if (ppt_name.startsWith("private")) {
-    //      int position = ppt_name.indexOf("private");
-    //      ppt_name = ppt_name.substring(8);
-    //      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
-    //      newppt.ppt_name.setVisibility("private");
-    //      return newppt;
-    //    }
-    //    if (ppt_name.startsWith("protected")) {
-    //      int position = ppt_name.indexOf("protected");
-    //      ppt_name = ppt_name.substring(10);
-    //      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
-    //      newppt.ppt_name.setVisibility("protected");
-    //      return newppt;
-    //    }
-
-    // TODO: add a new config variable to turn this accessibility flag processing on?
-    PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
-    // newppt.ppt_name.setVisibility("package-protected");
-    return newppt;
-    // return new PptTopLevel(ppt_name, vi_array);
-  }
-
-  private static VarInfo[] read_VarInfos(ParseState state, String ppt_name) throws IOException {
-
-    // The var_infos that will populate the new program point
-    List<VarInfo> var_infos = new ArrayList<>();
-
-    // Each iteration reads a variable name, type, and comparability.
-    // Possibly abstract this out into a separate function??
-    VarInfo vi;
-    while ((vi = read_VarInfo(state, ppt_name)) != null) {
-      for (VarInfo vi2 : var_infos) {
-        if (vi.name() == vi2.name()) {
-          throw new Daikon.UserError("Duplicate variable name " + vi.name(), state);
-        }
-      }
-      // Can't do this test in read_VarInfo, it seems, because of the test
-      // against null above.
-      if (!var_included(vi.name())) {
-        continue;
-      }
-      var_infos.add(vi);
-    }
-
-    VarInfo[] result = var_infos.toArray(new VarInfo[0]);
-    return result;
-  }
-
-  // So that warning message below is only printed once
-  private static boolean seen_string_rep_type = false;
-
-  /**
-   * Read a variable name, type, and comparability; construct a VarInfo. Return null after reading
-   * the last variable in this program point declaration.
-   *
-   * <p>The resulting VarInfo does not have its ppt field set; the client should arrange to do so.
-   *
-   * @param state the parse state
-   * @param ppt_name the name of the variable's program point; used only for diagnostic messages
-   * @return a new VarInfo read from {@code state.reader}
-   * @throws IOException if there is trouble reading the file
-   */
-  private static @Nullable VarInfo read_VarInfo(ParseState state, String ppt_name)
-      throws IOException {
-    LineNumberReader file = state.reader;
-    int varcomp_format = state.varcomp_format;
-    String filename = state.filename;
-
-    String line = file.readLine();
-    if ((line == null) || line.equals("")) {
-      return null;
-    }
-    String varname = line;
-    String proglang_type_string_and_aux = file.readLine();
-    String file_rep_type_string = file.readLine();
-    String comparability_string = file.readLine();
-    if ( // (varname == null) || // already returned null if varname==null
-    (proglang_type_string_and_aux == null)
-        || (file_rep_type_string == null)
-        || (comparability_string == null))
-      throw new Daikon.UserError(
-          "End of file "
-              + filename
-              + " while reading variable "
-              + varname
-              + " in declaration of program point "
-              + ppt_name);
-    int equals_index = file_rep_type_string.indexOf(" = ");
-    String static_constant_value_string = null;
-    @Interned Object static_constant_value = null;
-    boolean is_static_constant = false;
-    if (equals_index != -1) {
-      is_static_constant = true;
-      static_constant_value_string = file_rep_type_string.substring(equals_index + 3);
-      file_rep_type_string = file_rep_type_string.substring(0, equals_index);
-    }
-    // XXX temporary, for compatibility with older .dtrace files.  12/20/2001
-    if ("String".equals(file_rep_type_string)) {
-      file_rep_type_string = "java.lang.String";
-      if (!seen_string_rep_type) {
-        seen_string_rep_type = true;
-        System.err.println(
-            "Warning: Malformed trace file.  Representation type 'String' should be "
-                + "'java.lang.String' instead on line "
-                + (file.getLineNumber() - 1)
-                + " of "
-                + filename);
-      }
-    }
-    // This is for people who were confused by the above temporary
-    // workaround when it didn't have a warning. But this has never
-    // worked, so it's fatal.
-    else if ("String[]".equals(file_rep_type_string)) {
-      throw new Daikon.UserError(
-          "Representation type 'String[]' should be "
-              + "'java.lang.String[]' instead for variable "
-              + varname,
-          file,
-          filename);
-    }
-    // XXX
-
-    int hash_position = proglang_type_string_and_aux.indexOf('#');
-    String aux_string = "";
-    if (hash_position == -1) {
-      hash_position = proglang_type_string_and_aux.length();
-    } else {
-      aux_string =
-          proglang_type_string_and_aux.substring(
-              hash_position + 1, proglang_type_string_and_aux.length());
-    }
-
-    String proglang_type_string = proglang_type_string_and_aux.substring(0, hash_position).trim();
-
-    ProglangType prog_type;
-    ProglangType file_rep_type;
-    ProglangType rep_type;
-    VarInfoAux aux;
-    try {
-      prog_type = ProglangType.parse(proglang_type_string);
-      file_rep_type = ProglangType.rep_parse(file_rep_type_string);
-      rep_type = file_rep_type.fileTypeToRepType();
-      aux = VarInfoAux.parse(aux_string);
-    } catch (IOException e) {
-      throw new Daikon.UserError(e, file, filename);
-    }
-
-    if (static_constant_value_string != null) {
-      static_constant_value = rep_type.parse_value(static_constant_value_string, file, filename);
-      // Why can't the value be null?
-      assert static_constant_value != null;
-    }
-    VarComparability comparability = null;
-    try {
-      comparability = VarComparability.parse(varcomp_format, comparability_string, prog_type);
-    } catch (Exception e) {
-      throw new Daikon.UserError(
-          String.format(
-              "Error parsing comparability (%s) at line %d in file %s",
-              e, file.getLineNumber(), filename));
-    }
-    if (!VarInfo.legalFileRepType(file_rep_type)) {
-      throw new Daikon.UserError(
-          "Unsupported representation type "
-              + file_rep_type.format()
-              + " (parsed as "
-              + rep_type
-              + ")"
-              + " for variable "
-              + varname,
-          file,
-          filename);
-    }
-    if (!VarInfo.legalRepType(rep_type)) {
-      throw new Daikon.UserError(
-          "Unsupported (converted) representation type "
-              + file_rep_type.format()
-              + " for variable "
-              + varname,
-          file,
-          filename);
-    }
-    // COMPARABILITY TEST
-    if (!(comparability.alwaysComparable()
-        || ((VarComparabilityImplicit) comparability).dimensions == file_rep_type.dimensions())) {
-      System.err.println();
-      throw new Daikon.UserError(
-          "Rep type "
-              + file_rep_type.format()
-              + " has "
-              + file_rep_type.dimensions()
-              + " dimensions,"
-              + " but comparability "
-              + comparability
-              + " has "
-              + ((VarComparabilityImplicit) comparability).dimensions
-              + " dimensions,"
-              + " for variable "
-              + varname,
-          file,
-          filename);
-    }
-
-    @SuppressWarnings("interning")
-    @Interned VarInfo result =
-        new VarInfo(
-            varname,
-            prog_type,
-            file_rep_type,
-            comparability,
-            is_static_constant,
-            static_constant_value,
-            aux);
-    return result;
-  }
-
-  @RequiresNonNull("FileIO.new_decl_format")
   private static int read_var_comparability(ParseState state, String line) throws IOException {
 
-    // System.out.printf("read_var_comparability, line = '%s' %b%n", line,
-    //                   new_decl_format);
-    String comp_str;
-    if (new_decl_format) {
-      Scanner scanner = new Scanner(line);
-      scanner.next();
-      comp_str = need(state, scanner, "comparability");
-      need_eol(state, scanner);
-    } else { // old format
-      comp_str = state.reader.readLine();
-      if (comp_str == null) {
-        throw new Daikon.UserError("Found end of file, expected comparability", state);
-      }
-    }
+    Scanner scanner = new Scanner(line);
+    scanner.next();
+    String comp_str = need(state, scanner, "comparability");
+    need_eol(state, scanner);
 
     if (comp_str.equals("none")) {
       return VarComparability.NONE;
@@ -844,30 +552,28 @@ public final class FileIO {
     return input_lang;
   }
 
-  @EnsuresNonNull("FileIO.new_decl_format")
-  private static void read_decl_version(ParseState state, String line) throws IOException {
+  /**
+   * Reads a "decl-version" record and checks that it specifies the only supported version, 2.0.
+   *
+   * @param state the parse state
+   * @param line the "decl-version" record
+   */
+  private static void read_decl_version(ParseState state, String line) {
     Scanner scanner = new Scanner(line);
     scanner.next();
     @Interned String version = need(state, scanner, "declaration version number");
     need_eol(state, scanner);
-    boolean new_df;
-    if (version == "2.0") { // interned
-      new_df = true;
-    } else if (version == "1.0") { // interned
-      new_df = false;
-    } else {
-      decl_error(state, "'%s' found where 1.0 or 2.0 expected", version);
-      throw new Error("Can't get here"); // help out definite assignment analysis
+    if (version == "1.0") { // interned
+      throw new Daikon.UserError(obsoleteFormatMessage, state);
+    } else if (version != "2.0") { // interned
+      decl_error(state, "'%s' found where 2.0 expected", version);
     }
-
-    // Make sure that if a format was specified previously, it is the same
-    if ((new_decl_format != null) && (new_df != new_decl_format.booleanValue())) {
-      decl_error(state, "decl format '%s' does not match previous setting", version);
-    }
-
-    // System.out.println("setting new_decl_format = " + new_df);
-    new_decl_format = Boolean.valueOf(new_df);
   }
+
+  /** The error message for a file in the obsolete version 1 format. */
+  static final String obsoleteFormatMessage =
+      "File is in the version 1 format, which is no longer supported."
+          + " Re-generate it with a current front end, which produces version 2 files.";
 
   // Each line following is the name (in JVM form) of a class that
   // implements java.util.List.  All those lines (including interspersed
@@ -1351,6 +1057,14 @@ public final class FileIO {
     public @Nullable Object payload; // used when status=COMMENT
 
     /**
+     * The variables that have had a boolean value other than 0 or 1 in this file. Daikon warns
+     * about each such variable only once per file. A variable is in a single program point, so
+     * "return" in two program points is two variables.
+     */
+    public Set<VarInfo> varsWithNonBooleanValues =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+
+    /**
      * Start parsing the given file.
      *
      * @param raw_filename the file name supplied by the user; may be "-" or "+"
@@ -1640,7 +1354,6 @@ public final class FileIO {
    */
   // TODO:  For clarity, this should perhaps return its side-effected argument.
   @RequiresNonNull("FileIO.data_trace_state")
-  // not guaranteed: File might be empty  EnsuresNonNull("FileIO.new_decl_format")
   public static void read_data_trace_record(ParseState state) throws IOException {
 
     // Abstract out the test result into a variable because Java doesn't
@@ -1674,13 +1387,9 @@ public final class FileIO {
         return;
       }
 
-      // interning bugfix:  no need to intern "line" (after code change to is_declaration_header)
-
       // Check for the file format
       if (is_keyword_record(line, "decl-version")) {
         read_decl_version(state, line);
-        state.payload = (new_decl_format ? "2.0" : "1.0");
-        state.payload = (FileIO.new_decl_format ? "2.0" : "1.0");
         state.rtype = RecordType.DECL_VERSION;
         return;
       }
@@ -1693,20 +1402,14 @@ public final class FileIO {
         return;
       }
 
-      // If we have gotten to here and new_decl_format is not set, presume
-      // it is the old format
-      if (new_decl_format == null) {
-        // System.out.printf("setting new_decl_format to false%n");
-        new_decl_format = Boolean.FALSE;
+      // These records appear only in the obsolete version 1 format.
+      if (line.equals("DECLARE") || line.equals("VarComparability")) {
+        throw new Daikon.UserError(obsoleteFormatMessage, state);
       }
 
       // First look for declarations in the dtrace stream
       if (is_declaration_header(line)) {
-        if (new_decl_format) {
-          state.ppt = read_ppt_decl(state, line);
-        } else {
-          state.ppt = read_declaration(state);
-        }
+        state.ppt = read_ppt_decl(state, line);
         // ppt can be null if this declaration was skipped because of
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (state.ppt != null) {
@@ -1723,7 +1426,7 @@ public final class FileIO {
         state.rtype = RecordType.DECL;
         return;
       }
-      if (line.equals("VarComparability") || is_keyword_record(line, "var-comparability")) {
+      if (is_keyword_record(line, "var-comparability")) {
         state.varcomp_format = read_var_comparability(state, line);
         state.rtype = RecordType.COMPARABILITY;
         return;
@@ -1733,11 +1436,8 @@ public final class FileIO {
         state.rtype = RecordType.LIST_IMPLEMENTORS;
         return;
       }
-      String ppt_name = line;
-      if (new_decl_format) {
-        // interning bugfix: no need to intern
-        ppt_name = unescape_decl(line);
-      }
+      // interning bugfix: no need to intern
+      String ppt_name = unescape_decl(line);
       ppt_name = user_mod_ppt_name(ppt_name);
       if (!ppt_included(ppt_name)) {
         // System.out.printf("skipping ppt %s%n", line);
@@ -1747,14 +1447,6 @@ public final class FileIO {
       // System.out.printf("Not skipping ppt  %s%n", line);
 
       if (state.is_decl_file) {
-        if (!new_decl_format && line.startsWith("ppt ")) {
-          throw new Daikon.UserError(
-              String.format(
-                  "Declaration file %s is not version 2.0, but line %d looks like a version 2.0"
-                      + " declaration: %s%nPerhaps the file is missing a \"decl-version 2.0\""
-                      + " record at the beginning",
-                  state.filename, state.reader.getLineNumber(), line));
-        }
         throw new Daikon.UserError(
             String.format(
                 "Declaration files should not contain samples, but file %s does at line %d: %s",
@@ -2277,7 +1969,20 @@ public final class FileIO {
         // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
 
         try {
-          vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
+          @Interned Object value = vi.rep_type.parse_value(value_rep, reader, filename);
+          if (vi.file_rep_type.baseIsBoolean()) {
+            @Interned Object boolValue = booleanValue(value);
+            if (boolValue != value) {
+              if (FileIO.data_trace_state.varsWithNonBooleanValues.add(vi)) {
+                warnNonBooleanValue(
+                    vi.name() + " in " + ppt.name(),
+                    value_rep,
+                    "at line " + reader.getLineNumber() + " of " + filename);
+              }
+              value = boolValue;
+            }
+          }
+          vals[val_index] = value;
           if (vals[val_index] == null) {
             if (debug_missing && !vi.canBeMissing) {
               System.out.printf(
@@ -2496,18 +2201,15 @@ public final class FileIO {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
-    static final long serialVersionUID = 20060905L;
+    static final long serialVersionUID = 20261006L;
 
-    @RequiresNonNull("FileIO.new_decl_format")
     public SerialFormat(PptMap map, Configuration config) {
       this.map = map;
       this.config = config;
-      this.new_decl_format = FileIO.new_decl_format;
     }
 
     public PptMap map;
     public Configuration config;
-    public boolean new_decl_format = false;
   }
 
   /**
@@ -2531,7 +2233,6 @@ public final class FileIO {
    * @return a serialized PptMap
    * @throws IOException if there is trouble reading the file
    */
-  @EnsuresNonNull("FileIO.new_decl_format")
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
       throws IOException {
 
@@ -2542,9 +2243,6 @@ public final class FileIO {
         if (use_saved_config) {
           Configuration.getInstance().overlap(record.config);
         }
-        FileIO.new_decl_format = record.new_decl_format;
-        // System.err.printf("Setting FileIO.new_decl_format to %b%n",
-        //                   FileIO.new_decl_format);
         return record.map;
       } else if (obj instanceof InvMap) {
         // System.err.printf("Restoring an InvMap%n");
@@ -2561,8 +2259,6 @@ public final class FileIO {
             slice.addInvariant(inv);
           }
         }
-        assert FileIO.new_decl_format != null
-            : "@AssumeAssertion(nullness): InvMap.readObject() sets FileIO.new_decl_format";
         return ppts;
       } else {
         throw new IOException("Unexpected serialized file type: " + obj.getClass());
@@ -2633,6 +2329,53 @@ public final class FileIO {
   private static boolean is_point(String ppt_name, int pointStart, String point) {
     return ppt_name.length() - pointStart == point.length()
         && ppt_name.startsWith(point, pointStart);
+  }
+
+  /**
+   * Returns the given value of a boolean or boolean[] variable, with each boolean in it that is
+   * neither 0 nor 1 replaced by 1 (true), as C does.
+   *
+   * @param value a value of a boolean or boolean[] variable, such as a Long or a long[], or null
+   *     for a missing value
+   * @return the value, with each boolean in it that is neither 0 nor 1 replaced by 1
+   */
+  private static @Nullable @Interned Object booleanValue(@Nullable @Interned Object value) {
+    @Interned Object result = value;
+    if (value instanceof Long) {
+      long l = (Long) value;
+      if (l != 0 && l != 1) {
+        result = ProglangType.LongOne;
+      }
+    } else if (value instanceof long[]) {
+      long[] a = (long[]) value;
+      for (int i = 0; i < a.length; i++) {
+        if (a[i] != 0 && a[i] != 1) {
+          long[] copy = a.clone();
+          for (int j = i; j < copy.length; j++) {
+            if (copy[j] != 0) {
+              copy[j] = 1;
+            }
+          }
+          result = Intern.intern(copy);
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Prints a warning that the given boolean variable has a value other than 0 or 1.
+   *
+   * @param varname the name of a boolean variable
+   * @param value_rep the variable's value, as written in a file
+   * @param location where the value appears, such as "at line 31 of file foo.dtrace"
+   */
+  private static void warnNonBooleanValue(String varname, String value_rep, String location) {
+    System.out.printf(
+        "Warning: boolean variable %s has value %s %s; Daikon treats each boolean other than 0 and"
+            + " 1 as true (1)%n",
+        varname, value_rep, location);
   }
 
   /**
@@ -2802,7 +2545,11 @@ public final class FileIO {
     @SuppressWarnings("serial")
     public @Nullable List<String> function_args = null;
 
-    /** The type of the variable as stored in the dtrace file (required) */
+    /**
+     * The type of the variable as stored in the dtrace file (required). After {@link
+     * #useBooleanRepType}, a variable that is declared as a boolean has rep type boolean, even if
+     * the declaration gives an integral rep type such as int.
+     */
     public ProglangType rep_type = null;
 
     /** Declared type of the variable as an arbitrary string (required) */
@@ -3052,6 +2799,47 @@ public final class FileIO {
       }
     }
 
+    /**
+     * If this variable is declared as a boolean (or boolean[]) and its rep type is an integer type
+     * whose values are written as numbers -- int, long, long long int, or short (or an array of one
+     * of them) -- sets its rep type to boolean (or boolean[]), so that Daikon treats the variable
+     * as a boolean. For example, a declaration might give the rep type int to a variable whose
+     * declared type is boolean. Other integral rep types, such as char, are left unchanged.
+     *
+     * <p>Such a variable loses its min-value and max-value bounds, which are not permitted for a
+     * boolean (see {@link #checkBound}), and its constant value, if any, gets the same treatment as
+     * a value in the data trace file: each boolean that is neither 0 nor 1 becomes 1.
+     */
+    public void useBooleanRepType() {
+      @Interned String base = rep_type.base();
+      if (!(base == ProglangType.BASE_INT
+          || base == ProglangType.BASE_LONG
+          || base == ProglangType.BASE_LONG_LONG
+          || base == ProglangType.BASE_SHORT)) {
+        return;
+      }
+      if (declared_type == ProglangType.BOOLEAN && rep_type.dimensions() == 0) {
+        rep_type = ProglangType.BOOLEAN;
+      } else if (declared_type == ProglangType.BOOLEAN_ARRAY && rep_type.dimensions() == 1) {
+        rep_type = ProglangType.BOOLEAN_ARRAY;
+      } else {
+        return;
+      }
+      min_value = null;
+      max_value = null;
+      if (static_constant_value != null) {
+        String value_rep =
+            (static_constant_value instanceof long[])
+                ? Arrays.toString((long[]) static_constant_value)
+                : static_constant_value.toString();
+        @Nullable @Interned Object value = booleanValue(static_constant_value);
+        if (value != static_constant_value) {
+          warnNonBooleanValue(name, value_rep, "in its declaration");
+          static_constant_value = value;
+        }
+      }
+    }
+
     public void parse_rep_type(Scanner scanner) {
       @Interned String rep_type_str = need(scanner, "rep type");
       need_eol(scanner);
@@ -3254,15 +3042,34 @@ public final class FileIO {
     throw new Daikon.UserError(cause, msg);
   }
 
-  /** Returns true if the line is the start of a ppt declaration. */
-  @RequiresNonNull("FileIO.new_decl_format")
+  /**
+   * Returns true if the line is the start of a ppt declaration.
+   *
+   * @param line the first line of a record in a .decls or .dtrace file
+   * @return true if the line starts a ppt declaration
+   */
   @Pure
-  private static boolean is_declaration_header(String line) {
-    if (new_decl_format) {
-      return line.startsWith("ppt ");
-    } else {
-      return line.equals(declaration_header);
+  public static boolean is_declaration_header(String line) {
+    return line.startsWith("ppt ");
+  }
+
+  /**
+   * If the line is the start of a ppt declaration, returns the declared ppt name, after applying
+   * {@link #user_mod_ppt_name}. Otherwise returns null.
+   *
+   * @param line a line of a declaration file
+   * @return the ppt name declared by the line, or null if the line is not a ppt record
+   */
+  public static @Nullable String declared_ppt_name(String line) {
+    if (!is_declaration_header(line)) {
+      return null;
     }
+    Scanner scanner = new Scanner(line);
+    scanner.next(); // "ppt"
+    if (!scanner.hasNext()) {
+      return null;
+    }
+    return user_mod_ppt_name(unescape_decl(scanner.next()));
   }
 
   /**
@@ -3275,7 +3082,7 @@ public final class FileIO {
    */
   @Pure
   public static boolean is_header_record(String line) {
-    if (isComment(line) || line.equals("VarComparability")) {
+    if (isComment(line)) {
       return true;
     }
     for (String keyword : header_keywords) {
@@ -3287,9 +3094,8 @@ public final class FileIO {
   }
 
   /**
-   * The keywords that start a header record of a .decls or .dtrace file. The version 1
-   * "VarComparability" record and comments are header records that do not start with one of these
-   * keywords.
+   * The keywords that start a header record of a .decls or .dtrace file. Comments are header
+   * records that do not start with one of these keywords.
    */
   public static final List<String> header_keywords =
       List.of("decl-version", "var-comparability", "input-language", "ListImplementors");
@@ -3311,26 +3117,6 @@ public final class FileIO {
   }
 
   /**
-   * Returns true if the line is a "decl-version" record that declares the version 2 format, or if
-   * the line is not a "decl-version" record and {@code version2} is true. Callers use this to track
-   * the format of a .decls or .dtrace file as they read it. As in {@link #read_data_trace_record},
-   * the format of a file without a "decl-version" record is that of the files read before it, or
-   * the version 1 format if there are none.
-   *
-   * @param line the first line of a record in a .decls or .dtrace file
-   * @param version2 true if the records before this one are in the version 2 format
-   * @return true if the records after this one are in the version 2 format
-   */
-  @SideEffectFree
-  public static boolean is_version2_after(String line, boolean version2) {
-    if (!is_keyword_record(line, "decl-version")) {
-      return version2;
-    }
-    // Unlike read_decl_version, this does not check that the version is valid.
-    return line.substring("decl-version".length()).trim().equals("2.0");
-  }
-
-  /**
    * Returns true if the line is the given keyword, or the keyword followed by whitespace and its
    * arguments. A program point name in a sample cannot be such a line, because its blanks are
    * escaped (see {@link #unescape_decl}), even if the name starts with the keyword.
@@ -3344,25 +3130,6 @@ public final class FileIO {
     return line.startsWith(keyword)
         && (line.length() == keyword.length()
             || Character.isWhitespace(line.charAt(keyword.length())));
-  }
-
-  /**
-   * If the line is the start of a version 2 ppt declaration, returns the declared ppt name, after
-   * applying {@link #user_mod_ppt_name}. Otherwise returns null.
-   *
-   * @param line a line of a declaration file
-   * @return the ppt name declared by the line, or null if the line is not a ppt record
-   */
-  public static @Nullable String declared_ppt_name(String line) {
-    if (!line.startsWith("ppt ")) {
-      return null;
-    }
-    Scanner scanner = new Scanner(line);
-    scanner.next(); // "ppt"
-    if (!scanner.hasNext()) {
-      return null;
-    }
-    return user_mod_ppt_name(unescape_decl(scanner.next()));
   }
 
   /**
