@@ -1,6 +1,7 @@
 package daikon.split;
 
 import daikon.Global;
+import daikon.PptName;
 import daikon.PptTopLevel;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,14 +13,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import jtb.ParseException;
 import jtb.TokenMgrError;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
@@ -115,8 +113,8 @@ public class SplitterFactory {
                   + ", "
                   + ppt
                   + "; match="
-                  + matchPpt(ppt_name, ppt));
-          if (matchPpt(ppt_name, ppt)) {
+                  + matchPpt(ppt_name, ppt.ppt_name));
+          if (matchPpt(ppt_name, ppt.ppt_name)) {
             int numGood = 0;
             // Writes, compiles, and loads the splitter .java files.
             loadSplitters(splitterObjects[i], ppt, statementReplacer);
@@ -311,53 +309,23 @@ public class SplitterFactory {
   }
 
   /**
-   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file designates the given
-   * program point. A complete program point name designates the program points described by {@link
-   * SplitterList#matches}.
+   * Returns true if Daikon should compile the conditions of the given name from a {@code .spinfo}
+   * file against the given program point. That is the case if the name matches the program point
+   * (see {@link SplitterList#matches}), unless the name is not a complete program point name and
+   * the program point is a procedure entry. Such a name waits for the procedure's exit point, which
+   * usually has more relevant variables in scope (such as the return value) than the entry point.
+   * Accessible for the purpose of testing.
    *
-   * @param ppt_name a name on a PPT_NAME line of a {@code .spinfo} file
-   * @param ppt a program point
-   * @return true if {@code ppt_name} designates {@code ppt}
+   * @param spinfoPptName a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param pptName a program point's name
+   * @return true if Daikon should compile the conditions of {@code spinfoPptName} against the
+   *     program point named {@code pptName}
    */
-  private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
-    if (SplitterList.isComplete(ppt_name)) {
-      return SplitterList.matches(ppt_name, ppt.name);
+  public static boolean matchPpt(String spinfoPptName, PptName pptName) {
+    if (!SplitterList.matches(spinfoPptName, pptName.name())) {
+      return false;
     }
-    if (ppt.name.equals(ppt_name)) {
-      return true;
-    }
-    if (ppt_name.endsWith(":::EXIT")) {
-      String regex = Pattern.quote(ppt_name) + "[0-9]+";
-      if (matchPptRegex(regex, ppt)) {
-        return true;
-      }
-    }
-
-    // Look for corresponding EXIT ppt. This is because the exit ppt usually has
-    // more relevant variables in scope (eg. return, hashcodes) than the enter.
-    String regex;
-    int index = ppt_name.indexOf("OBJECT");
-    if (index == -1) {
-      // Didn't find "OBJECT" suffix; add ".*EXIT".
-      regex = Pattern.quote(ppt_name) + ".*EXIT";
-    } else {
-      // Found "OBJECT" suffix.
-      if (ppt_name.length() > 6) {
-        regex = Pattern.quote(ppt_name.substring(0, index - 1)) + ":::OBJECT";
-      } else {
-        regex = Pattern.quote(ppt_name);
-      }
-    }
-    return matchPptRegex(regex, ppt);
-  }
-
-  private static boolean matchPptRegex(@Regex String ppt_regex, PptTopLevel ppt) {
-    // System.out.println("matchPptRegex: " + ppt_regex);
-    Pattern pattern = Pattern.compile(ppt_regex);
-    String name = ppt.name;
-    Matcher matcher = pattern.matcher(name);
-    // System.out.println("  considering " + name);
-    return matcher.find();
+    return SplitterList.isComplete(spinfoPptName) || !pptName.isEnterPoint();
   }
 
   /**

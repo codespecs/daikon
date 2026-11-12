@@ -2406,9 +2406,11 @@ PPT_NAME @var{pptname}
 
 @noindent
 @var{pptname} can be any string that matches a part of the desired
-program point name as printed in the @file{.decls} file.  In finding matching
-program points, Daikon uses the first program point that matches
-@var{pptname}.  Caution is necessary when dealing with method names
+program point name as printed in the @file{.decls} file.  Daikon
+compiles the conditions against the first program point that matches
+@var{pptname}, except that it skips procedure entry points:  for a
+procedure, it uses the first exit point, which has more variables in
+scope, such as the return value.  Caution is necessary when dealing with method names
 that are prefixes of other method names.  For instance, if the class
 @code{List} has methods @code{add} and @code{addAll}, specifying
 @samp{PPT_NAME List.add} might select either method, depending on
@@ -2423,8 +2425,10 @@ example, @samp{List.add(java.lang.Object):::EXIT12} matches
 @samp{pkg.List.add(java.lang.Object):::EXIT12} but not
 @samp{pkg.MyList.add(java.lang.Object):::EXIT12}.  As a special case, a
 name that ends with @samp{:::EXIT} also matches the method's numbered
-exit points, such as @samp{:::EXIT12}.  By default, Daikon uses every
-loaded condition at
+exit points, such as @samp{:::EXIT12}.  Daikon loads the conditions
+for a @var{pptname} only if @var{pptname} matches at least one program
+point, so the conditions for a complete name that matches no program
+point are never used.  By default, Daikon uses every loaded condition at
 every program point, regardless of @var{pptname}; to use each condition
 only at the program points that its @var{pptname} matches, disable
 indiscriminate splitting (@pxref{Indiscriminate splitting}).  There is
@@ -2499,7 +2503,8 @@ daikon.split.SplitterList.all_splitters = false
 The default, called @dfn{indiscriminate splitting}, is to use every
 loaded condition at every
 program point, regardless of where in the @file{.spinfo} file the
-condition appeared.
+condition appeared.  A condition is loaded only if its @var{pptname}
+matches at least one program point (@pxref{Splitter info file format}).
 
 The advantage of indiscriminate splitting is that a condition that is
 useful at one program point may also be useful at another --- if the
