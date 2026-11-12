@@ -571,21 +571,24 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Creates an equality view and invariants for each non-leaf ppt that has no children and does not
-   * already have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL
-   * that do not end up with any children (due to the program source or because of ppt filtering).
-   * It also happens for a combined exit point that a decls file declares when no corresponding
-   * numbered exit point is declared or included. Leaves get their equality views from {@link
-   * Daikon#setupEquality}.
+   * Creates an equality view and invariants for each ppt (including each conditional ppt) that has
+   * no children and does not already have an equality view. This happens for non-leaf ppts such as
+   * OBJECT, CLASS, or GLOBAL that do not end up with any children (due to the program source or
+   * because of ppt filtering). It also happens for a combined exit point that a decls file declares
+   * when no corresponding numbered exit point is declared or included. A leaf usually gets its
+   * equality view from {@link Daikon#setupEquality}, before it receives any samples.
    *
-   * <p>The equality view is created even if {@link Daikon#use_equality_optimization} is false,
-   * because {@link PptTopLevel#mergeInvs} requires every childless ppt to have one.
+   * <p>The new equality view puts all variables in a single equality set, so each ppt that gets one
+   * must have no samples. The equality view is created even if {@link
+   * Daikon#use_equality_optimization} is false, because {@link PptTopLevel#mergeInvs} requires
+   * every childless ppt to have one.
    *
-   * @param all_ppts the program points
+   * @param all_ppts a map of program points
    */
-  private static void setup_childless_nonleaves(PptMap all_ppts) {
-    for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.children.isEmpty() && (ppt.equality_view == null) && !ppt.is_dataflow_leaf()) {
+  static void create_childless_equality_views(PptMap all_ppts) {
+    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
+      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
+        assert ppt.num_samples() == 0 : ppt;
         ppt.create_equality_view();
       }
     }
@@ -632,34 +635,35 @@ public class PptRelation implements Serializable {
           throw new RuntimeException(
               "parent ppt " + pr.parent_ppt_name + " not found for ppt " + ppt.name());
         }
+        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+          continue;
+        }
         // A leaf obtains its invariants from its samples (and its conditional ppts), never from
         // its children.
-        if (parent.is_dataflow_leaf()) {
+        if (Daikon.use_dataflow_hierarchy && parent.is_dataflow_leaf()) {
           throw new Daikon.UserError(
               String.format(
                   "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
                       + " the dataflow hierarchy",
                   parent.name(), ppt.name(), parent.type.name().toLowerCase(Locale.ENGLISH)));
         }
-        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
-          continue;
-        }
         // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));
       }
 
-      // if an exitNN point, parent is combined exit point
+      // If an exitNN point, parent is combined exit point.  A ppt that is declared with type
+      // POINT is a leaf whatever its name, so it is never a parent.
       if (ppt.is_subexit()) {
         PptTopLevel parent = all_ppts.get(pname.makeExit());
-        if (parent != null) {
+        if ((parent != null) && parent.is_combined_exit()) {
           rels.add(newCombinedExitExitNNRel(parent, ppt));
         }
 
         // Connect combined exit points to enter points over orig variables
       } else if (ppt.is_combined_exit()) {
         PptTopLevel enter = all_ppts.get(pname.makeEnter());
-        if (enter != null) {
+        if ((enter != null) && enter.is_enter()) {
           rels.add(PptRelation.newEnterExitRel(enter, ppt));
         }
       }
@@ -753,7 +757,7 @@ public class PptRelation implements Serializable {
       }
     }
 
-    setup_childless_nonleaves(all_ppts);
+    create_childless_equality_views(all_ppts);
 
     // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {

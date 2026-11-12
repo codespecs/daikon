@@ -189,9 +189,9 @@ public class PptTopLevel extends Ppt {
     ENTER,
     EXIT,
     SUBEXIT,
-    /** A :::THROWS program point. Daikon assigns this type based on the program point's name. */
+    /** A program point whose name contains :::THROWS, such as foo:::THROWS or foo:::THROWS12. */
     THROWS,
-    /** A :::GLOBAL program point. Daikon assigns this type based on the program point's name. */
+    /** A program point whose name ends with :::GLOBAL. */
     GLOBAL
   }
 
@@ -525,7 +525,9 @@ public class PptTopLevel extends Ppt {
    * to the type, except for {@link PptType#POINT}, which permits any name.
    *
    * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, is_dataflow_leaf, etc.
-   * agree with one another and with the program point's name.
+   * agree with one another. They also agree with the program point's name, except for a program
+   * point that is declared as a {@link PptType#POINT}: it is a leaf of the dataflow hierarchy
+   * whatever its name, even if its name is foo:::ENTER.
    *
    * @param ppt_name the name of the program point
    * @param type the declared type of the program point, or null if none was declared
