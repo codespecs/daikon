@@ -26,6 +26,7 @@
         /*@ invariant this.array != null; */
         /*@ invariant this.array != null; */
         /*@ invariant this.array.getClass().getName() == DataStructures.Comparable[].class.getName(); */
+        /*@ invariant All the elements of this.array[..].getClass().getName() have LENGTH=24; */
         /*@ invariant daikon.Quant.size(this.array) == 101; */
         /*@ invariant daikon.Quant.noDups(daikon.Quant.slice(this.array, 0, this.currentSize)); */
         /*@ invariant this.currentSize <= daikon.Quant.size(this.array)-1; */

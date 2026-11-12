@@ -98,6 +98,7 @@ this.elementData.getClass().getName() == orig(this.elementData.getClass().getNam
 this.elementData[] == orig(this.elementData[])
 this.elementCount == orig(this.elementCount)
 this.capacityIncrement == orig(this.capacityIncrement)
+(return == false)  ==>  (All the elements of this.elementData[].getClass().getName() have LENGTH=16)
 (return == true)  ==>  (orig(elem.getClass().getName()) in this.elementData[].getClass().getName())
 (return == true)  ==>  (this.elementCount >= 1)
 this.elementData.getClass().getName() != orig(elem.getClass().getName())
@@ -110,6 +111,7 @@ return == true
 orig(elem.getClass().getName()) in this.elementData[].getClass().getName()
 ===========================================================================
 javautil.Vector13.contains(java.lang.Object):::EXIT;condition="not(return == true)"
+All the elements of this.elementData[].getClass().getName() have LENGTH=16
 return == false
 ===========================================================================
 javautil.Vector13.copyInto(java.lang.Object[]):::ENTER

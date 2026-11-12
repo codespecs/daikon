@@ -98,6 +98,7 @@ javautil.Vector13.contains(java.lang.Object):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
+(IMPLIES (EQ |return| |@false|) All the elements of this.elementData[].getClass().getName() have LENGTH=16)
 (IMPLIES (EQ |return| |@true|) warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass().getName()) in this.elementData[].getClass().getName())
 (IMPLIES (EQ |return| |@true|) (>= (select |elementCount| |this|) 1))
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__elem|))
