@@ -130,7 +130,7 @@ It describes Daikon version 5.9.1, released September 1, 2026.
 @c If you edit the introduction, then re-generate daikon.html and insert
 @c its ``Introduction'' section into $DAIKONDIR/doc/www/index.html .
 
-@uref{http://plse.cs.washington.edu/daikon/, ,Daikon} is an implementation of
+@uref{https://plse.cs.washington.edu/daikon/, ,Daikon} is an implementation of
 dynamic detection of likely invariants; that is, the Daikon invariant
 detector reports likely program invariants.  An invariant is a property
 that holds at a certain point or points in a program; these are often
@@ -155,15 +155,15 @@ detection is a machine learning technique that can be applied to
 arbitrary data.)  It is easy to extend Daikon to other applications.
 
 Daikon is freely available for download from
-@uref{http://plse.cs.washington.edu/daikon/download/, ,download-site}.
+@uref{https://plse.cs.washington.edu/daikon/download/, ,download-site}.
 Daikon's license permits unrestricted use (@pxref{License}).
 The distribution includes both source code
 (also available on @uref{https://github.com/codespecs/daikon, , GitHub})
 and
-@uref{http://plse.cs.washington.edu/daikon/download/doc/, ,documentation},
+@uref{https://plse.cs.washington.edu/daikon/download/doc/, ,documentation},
 Many researchers and practitioners have used Daikon; those uses, and Daikon
 itself, are described in various
-@uref{http://plse.cs.washington.edu/daikon/pubs/, ,publications}.
+@uref{https://plse.cs.washington.edu/daikon/pubs/, ,publications}.
 
 For more information on Daikon,
 @pxref{Top, , Introduction, developer, Daikon Developer Manual}.
@@ -249,7 +249,7 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.9.1.tar.gz
+wget https://plse.cs.washington.edu/daikon/download/daikon-5.9.1.tar.gz
 tar zxf daikon-5.9.1.tar.gz
 @end example
 
@@ -332,7 +332,7 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @c
 @c apt -qqy install wget
 @c
-@c wget http://plse.cs.washington.edu/daikon/download/daikon-5.9.1.tar.gz
+@c wget https://plse.cs.washington.edu/daikon/download/daikon-5.9.1.tar.gz
 @c tar zxf daikon-5.9.1.tar.gz
 @c
 @c export DAIKONDIR=$(cd daikon-5.9.1 && pwd)
@@ -430,7 +430,7 @@ and the Daikon output is written to the terminal.
 @c @cindex GUI, Eclipse
 @c
 @c Daikon is integrated with the
-@c @uref{http://eclipse.org/, ,
+@c @uref{https://eclipse.org/, ,
 @c Eclipse} IDE (Integrated Development Environment) for Java.
 @c The Daikon plug-in provides a convenient way to instrument files,
 @c obtain trace information, analyze those traces,
@@ -1411,7 +1411,7 @@ If you wish to write your own tools for processing invariants, you have
 two general options.  You can parse Daikon's textual output, or you can
 write Java code that processes the @file{.inv} file.  The @file{.inv}
 file is simply a serialized
-@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/PptMap.html,@code{PptMap}}
+@uref{https://plse.cs.washington.edu/daikon/download/api/daikon/PptMap.html,@code{PptMap}}
 object.  In addition to reading the Javadoc, you can examine how the
 other tools use this data structure.
 
@@ -1508,7 +1508,7 @@ These expressions are obviously not valid Java code.
 @item JML format
 Produces output in JML (Java Modeling Language,
 @uref{https://www.cs.ucf.edu/~leavens/JML/}); for details, see the
-@uref{http://www.eecs.ucf.edu/~leavens/JML/documentation.shtml, ,JML Manual}.  @option{JML}
+@uref{https://www.eecs.ucf.edu/~leavens/JML/documentation.shtml, ,JML Manual}.  @option{JML}
 format lets you use the various JVM tools on Daikon invariants,
 including run-time assertion checking and the
 @uref{https://www.kindsoftware.com/products/opensource/escjava2/, ,ESC/Java2}
@@ -1523,7 +1523,7 @@ tool.
 @item Simplify format
 Produces output in the format expected by the Simplify automated theorem
 prover; for details, see the
-@c was: @uref{http://research.compaq.com/SRC/esc/simplify/InputSyntax.html}
+@c was: @uref{https://research.compaq.com/SRC/esc/simplify/InputSyntax.html}
 @uref{https://www.hpl.hp.com/downloads/crl/jtk/,,Simplify distribution}.
 
 @cindex CSharpContract output format
@@ -2280,7 +2280,7 @@ context-sensitive invariants:  set a variable that depends on the call
 site, then compute an implication whose predicate tests that variable.
 For an example, see the paper @cite{Selecting, refining, and evaluating
 predicates for program analysis}
-(@uref{http://plse.cs.washington.edu/daikon/pubs/predicates-tr914-abstract.html}).
+(@uref{https://plse.cs.washington.edu/daikon/pubs/predicates-tr914-abstract.html}).
 
 Daikon must be supplied with the predicate for an implication.  Daikon has
 certain built-in predicates that it uses for finding conditional invariants;
@@ -2785,7 +2785,7 @@ hierarchical clustering, and the xmeans algorithm (kmeans algorithm
 with efficient discovery of the number of clusters).  The kmeans and
 hierarchical clustering tools are provided in the Daikon
 distribution.  The xmeans code and executable are publicly available at
-@uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
+@uref{https://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
 form and mail it in).
 
 @node       Random selection for splitters
@@ -6047,7 +6047,7 @@ It can be used on any programming language that can be compiled to LLVM.
 
 A front end for @nospellcheck{WS-BPEL} process definitions, named Takuan,
 is distributed
-separately; see @uref{http://web.archive.org/web/20160528161316/https://neptuno.uca.es/redmine/projects/takuan-website}.
+separately; see @uref{https://web.archive.org/web/20160528161316/https://neptuno.uca.es/redmine/projects/takuan-website}.
 
 @cindex CITADEL front end for Eiffel
 @cindex front end for Eiffel
@@ -6372,7 +6372,7 @@ source code as annotations in @option{DBC}, @option{ESC}, @option{Java} or @opti
 These annotations are comments that can be automatically verified or
 otherwise manipulated by other tools.
 The Daikon website has an example of code after invariant
-insertion:  @url{http://plse.cs.washington.edu/daikon/StackAr.html}.
+insertion:  @url{https://plse.cs.washington.edu/daikon/StackAr.html}.
 
 Invoke Annotate like this:
 @exampleindent 1
@@ -7262,25 +7262,18 @@ should indicate where the problem is occurring.
 
 If Daikon terminates with an error such as
 @smallexample
-decl format '2.0' does not match previous setting at line 4 in file test.dtrace
+Error at line 1 in file test.decls: File is in the version 1 format, which is no longer supported. ...
 @end smallexample
 
 @noindent
-it means you are using multiple @file{.dtrace} and/or @file{.decls} files
-and they are not all in the same format.
+it means that the file was produced by an old front end (or an old version
+of Chicory or DynComp) that wrote the obsolete version 1 file format.
 (See @ref{Declaration version,,,developer,Daikon Developer Manual}
 for information about how to determine a data file's format.)
-
-The most probable cause is you are using at least one
-version 1 @file{.decls} file or @file{.dtrace} file generated by an older version of
-Chicory/DynComp and at least one current @file{.decls} file or @file{.dtrace} file (which
-defaults to version 2) as input to Daikon.
-(Note that the C/C++ front end Kvasir generates a version 2 file @file{.decls}.)
-The way to
-avoid this problem is to use your Java-DynComp-generated @file{.decls} files
-as input to Chicory. The resulting @file{.dtrace} file will contain the
-comparability values from the @file{.decls} file(s) and can then be used
-as input to Daikon.
+Daikon reads only version 2 files.  Re-generate the file with a current front
+end.  For example, if the file is a @file{.decls} file produced by an old
+version of DynComp, re-run DynComp, and then pass the resulting
+@file{.decls} file to Chicory.
 Passing a @file{.decls} file to Chicory is
 described in @ref{Detecting invariants in Java programs}, for example:
 
@@ -8228,7 +8221,7 @@ and is also printed when you run Daikon.
 @c ; also, whether you are running
 @c from the @file{.class} files or from the @file{.jar} file.
 If you are not using the most recent version, download a newer version
-from @uref{http://plse.cs.washington.edu/daikon/} to see whether your problem
+from @uref{https://plse.cs.washington.edu/daikon/} to see whether your problem
 has already been corrected.
 If you are using a modified version of Daikon, you should verify that
 the problem exists in Daikon as distributed.
@@ -8295,7 +8288,7 @@ we strive to incorporate that information in this manual so that you
 don't have to search the archives as well.
 
 For further reading, see the list of publications at the
-Daikon homepage, @uref{http://plse.cs.washington.edu/daikon/pubs/}.
+Daikon homepage, @uref{https://plse.cs.washington.edu/daikon/pubs/}.
 
 
 @node    Details
@@ -8731,9 +8724,9 @@ Toshiba.
 
 If you wish to cite Daikon in a publication, we recommend that you
 reference one of the scholarly papers listed at
-@uref{http://plse.cs.washington.edu/daikon/pubs/#invariant-detection} in lieu
+@uref{https://plse.cs.washington.edu/daikon/pubs/#invariant-detection} in lieu
 of, or in addition to, referencing this manual and the Daikon website
-(@uref{http://plse.cs.washington.edu/daikon/}).
+(@uref{https://plse.cs.washington.edu/daikon/}).
 
 
 
@@ -8800,7 +8793,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  bBoOmjpi de iconv undefine DHAVE Xie Ast rt MyPackage jre
 @c  LocalWords:  superdirectory SOURCEPATH InvalidClassDataError strace lstat
 @c  LocalWords:  RuntimeException IFLNK interconvert interconvertible strdup ld
-@c  LocalWords:  lwpp ine runtime's malloced MaxPermSize JVM's MyVector perc vv
+@c  LocalWords:  ine runtime's malloced MaxPermSize JVM's MyVector perc vv
 @c  LocalWords:  falsetime trueinvs testsuite MergeInvariants fns untruncate mx
 @c  LocalWords:  subsubheading bzip fontspecific sublicense NONINFRINGEMENT Cok
 @c  LocalWords:  getopt Renn Nethercote MemCheck readelf Binutils Yuriy Brun ps

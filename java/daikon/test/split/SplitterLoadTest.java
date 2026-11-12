@@ -221,6 +221,67 @@ public class SplitterLoadTest {
   }
 
   /**
+   * A splitter whose PPT_NAME is a complete program point name without a package is loaded at a
+   * program point whose name is qualified by a package, and is usable there.
+   */
+  @Test
+  public void testCompletePptName() throws IOException {
+    SplitterObject[] splitters =
+        loadSplitters(
+            "CompletePptName.decls",
+            "Foo.bar(int):::ENTER",
+            "p2.Foo.bar(int):::ENTER",
+            List.of("x > 0"),
+            s -> {});
+    SplitterObject splitter = splitters[0];
+    assertTrue(splitter.getError(), splitter.splitterExists());
+    PptTopLevel ppt = readPpt("CompletePptName.decls", "p2.Foo.bar(int):::ENTER");
+    assertTrue(splitter.getSplitter().instantiateSplitter(ppt).valid());
+  }
+
+  /**
+   * A splitter for a complete program point name that cannot be compiled at one matching program
+   * point, because that program point lacks a variable that the condition uses, is retried at a
+   * later matching program point.
+   */
+  @Test
+  public void testCompletePptNameRetry() throws IOException {
+    String declsFile = "CompletePptName.decls";
+    Path spinfo = Files.createTempFile("SplitterLoadTest", ".spinfo");
+    try {
+      Files.writeString(
+          spinfo,
+          String.join(
+              System.lineSeparator(), "PPT_NAME Foo.bar(int):::ENTER", "x > 0", "y > 0", ""));
+      SpinfoFile spfile = SplitterFactory.parse_spinfofile(spinfo.toFile());
+      SplitterObject[] splitters = spfile.getSplitterObjects()[0];
+      SplitterObject xSplitter = splitters[0];
+      SplitterObject ySplitter = splitters[1];
+
+      // p1 has y but not x.
+      PptTopLevel p1 = readPpt(declsFile, "p1.Foo.bar(int):::ENTER");
+      List<Splitter> loaded1 = SplitterTestUtils.loadSplitters(p1, spfile, true);
+      assertFalse(xSplitter.splitterExists());
+      assertTrue(ySplitter.getError(), ySplitter.splitterExists());
+      assertEquals(1, loaded1.size());
+      assertEquals("y > 0", loaded1.get(0).condition());
+      // Only the unsuccessful splitter remains available.
+      assertEquals(List.of(xSplitter), List.of(spfile.getSplitterObjects()[0]));
+
+      // p2 has x but not y.
+      PptTopLevel p2 = readPpt(declsFile, "p2.Foo.bar(int):::ENTER");
+      List<Splitter> loaded2 = SplitterTestUtils.loadSplitters(p2, spfile, true);
+      assertTrue(xSplitter.getError(), xSplitter.splitterExists());
+      assertEquals(1, loaded2.size());
+      assertEquals("x > 0", loaded2.get(0).condition());
+      assertTrue(loaded2.get(0).instantiateSplitter(p2).valid());
+      assertEquals(0, spfile.getSplitterObjects()[0].length);
+    } finally {
+      Files.delete(spinfo);
+    }
+  }
+
+  /**
    * Creates splitters with the given conditions for {@link #pptName}, then writes, compiles, and
    * loads them. Leaves {@link SplitterList} as it was.
    *
@@ -268,15 +329,8 @@ public class SplitterLoadTest {
       }
       modifier.accept(result);
 
-      // Reading the decls file sets FileIO.new_decl_format, which writing the splitters uses.
-      // Restore it afterward, so that it does not affect other tests.
-      Boolean oldNewDeclFormat = FileIO.new_decl_format;
-      try {
-        PptTopLevel ppt = readPpt(declsFile, fullPptName);
-        SplitterTestUtils.loadSplitters(ppt, spfile, true);
-      } finally {
-        FileIO.new_decl_format = oldNewDeclFormat;
-      }
+      PptTopLevel ppt = readPpt(declsFile, fullPptName);
+      SplitterTestUtils.loadSplitters(ppt, spfile, true);
       return result;
     } finally {
       Files.delete(spinfo);
@@ -300,7 +354,6 @@ public class SplitterLoadTest {
     Daikon.ppt_omit_regexp = null;
     Daikon.ppt_max_name = null;
     try {
-      FileIO.resetNewDeclFormat();
       FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
     } finally {
       Daikon.ppt_regexp = oldPptRegexp;
