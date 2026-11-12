@@ -1,7 +1,6 @@
 package daikon.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -104,7 +103,9 @@ public class InitHierarchyTest {
    */
   private static PptTopLevel get(PptMap ppts, String name) {
     PptTopLevel result = ppts.get(name);
-    assertNotNull(name, result);
+    if (result == null) {
+      throw new AssertionError("no program point named " + name);
+    }
     return result;
   }
 
