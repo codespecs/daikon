@@ -1,6 +1,7 @@
 package daikon.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -103,7 +104,7 @@ public class InitHierarchyTest {
    */
   private static PptTopLevel get(PptMap ppts, String name) {
     PptTopLevel result = ppts.get(name);
-    assertTrue(name, result != null);
+    assertNotNull(name, result);
     return result;
   }
 
@@ -129,7 +130,7 @@ public class InitHierarchyTest {
     assertEquals(
         "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it a"
             + " leaf of the dataflow hierarchy",
-        e.getMessage());
+        String.valueOf(e.getMessage()));
   }
 
   /** A point can be declared as a parent when the hierarchy is not used. */
