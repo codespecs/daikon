@@ -38,7 +38,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * An array that is passed to a method is given the "_array" suffix, so the method receives the
  * elements of the array. For example, {@code Arrays.equals(this_a, (this_b))} would be changed to
  * {@code Arrays.equals(this_a_array, (this_b_array))}. (QuantFixer has already replaced the calls
- * to daikon.Quant methods that access arrays.)
+ * to daikon.Quant.size and the daikon.Quant.getElement_ methods.)
  */
 class ArrayFixer extends DepthFirstVisitor {
 
@@ -97,13 +97,13 @@ class ArrayFixer extends DepthFirstVisitor {
    * Fixes the arrays found in statement (see class description). names and varInfos must be in same
    * order s.t. the ith element of varInfos is the VarInfo for the ith element of names.
    *
-   * @param expression a valid segment of java code
+   * @param expression a Java expression
    * @param names is a List of Strings that are the names of all the variables in statement
    * @param varInfos is a List of VarInfos for all the variables named in names
    * @return condition with all variable referring to arrays suffixed with "_identity" or "_array"
    *     as needed
-   * @throws ParseException when condition is not a valid segment of java code, or when an array
-   *     whose elements are not available is passed to a method
+   * @throws ParseException when expression is not a Java expression, or when an array whose
+   *     elements are not available is passed to a method
    */
   public static String fixArrays(String expression, String[] names, VarInfo[] varInfos)
       throws ParseException {
