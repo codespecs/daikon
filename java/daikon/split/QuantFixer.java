@@ -21,7 +21,7 @@ import jtb.syntaxtree.PrimarySuffix;
 import jtb.visitor.DepthFirstVisitor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-// TODO: Switch from JTB to javac-parse.
+// TODO: Switch from JTB to javac-parse, here and in the other fixers in this package.
 /**
  * QuantFixer is a visitor for a jtb syntax tree that replaces calls to the daikon.Quant methods
  * that return an array's size or one of its elements ({@code size} and the {@code getElement_}
@@ -34,11 +34,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * size(this_a_array)}. The replacement calls are unqualified; they resolve to the methods of
  * Splitter because a generated splitter class extends Splitter. QuantFixer leaves calls to other
  * daikon.Quant methods, such as {@code eltsEqual}, unchanged; {@link ArrayFixer} gives their array
- * arguments the "_array" suffix, so those methods receive the arrays' elements.
+ * arguments the "_array" suffix, so those methods receive the splitter's representation of the
+ * arrays. For some element types, that representation differs from the array's declared type: for
+ * example, a boolean array is represented as long[], and an Object array by its elements'
+ * hashcodes. Such a call might not compile, or might compare hashcodes instead of elements.
  *
  * <p>The entry point is {@link #fixQuant}. In its result, the array arguments of the replaced calls
- * are placeholders; after {@link ArrayFixer} runs, {@link Result#restoreArrayNames} replaces them
- * by compilable names such as {@code this_a_array}.
+ * are placeholders, which are fresh names such as {@code daikon_quant_array_0}; after {@link
+ * ArrayFixer} runs, {@link Result#restoreArrayNames} replaces them by compilable names such as
+ * {@code this_a_array}.
  *
  * <p>QuantFixer runs after the fixers that convert variable names to base names, such as {@link
  * PrefixFixer}, and before {@link ArrayFixer}, which would convert the array arguments to their
@@ -203,7 +207,7 @@ class QuantFixer extends DepthFirstVisitor {
    *     replaced
    * @throws ParseException if expression contains a call to daikon.Quant.size or to a
    *     daikon.Quant.getElement_ method and QuantFixer cannot replace the call, or if expression
-   *     mentions daikon.Quant and is not a Java expression
+   *     mentions daikon.Quant and cannot be parsed
    */
   public static Result fixQuant(String expression, String[] baseNames, VarInfo[] varInfos)
       throws ParseException {

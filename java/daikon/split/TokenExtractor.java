@@ -26,7 +26,7 @@ class TokenExtractor extends DepthFirstVisitor {
    * Extracts all the tokens from expression.
    *
    * @param expression a Java expression from which tokens should be extracted
-   * @throws ParseException when expression is not a Java expression
+   * @throws ParseException when expression cannot be parsed
    * @return all the tokens of expression
    */
   public static NodeToken[] extractTokens(String expression) throws ParseException {

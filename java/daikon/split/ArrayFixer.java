@@ -94,16 +94,15 @@ class ArrayFixer extends DepthFirstVisitor {
   }
 
   /**
-   * Fixes the arrays found in statement (see class description). names and varInfos must be in same
-   * order s.t. the ith element of varInfos is the VarInfo for the ith element of names.
+   * Fixes the arrays found in expression (see class description).
    *
    * @param expression a Java expression
-   * @param names is a List of Strings that are the names of all the variables in statement
-   * @param varInfos is a List of VarInfos for all the variables named in names
-   * @return condition with all variable referring to arrays suffixed with "_identity" or "_array"
-   *     as needed
-   * @throws ParseException when expression is not a Java expression, or when an array whose
-   *     elements are not available is passed to a method
+   * @param names the base names of the variables in varInfos, in the same order
+   * @param varInfos a program point's variables that a splitting condition can use
+   * @return expression, with each variable that refers to an array suffixed with "_identity" or
+   *     "_array" as needed
+   * @throws ParseException when expression cannot be parsed, or when an array whose elements are
+   *     not available is passed to a method
    */
   public static String fixArrays(String expression, String[] names, VarInfo[] varInfos)
       throws ParseException {

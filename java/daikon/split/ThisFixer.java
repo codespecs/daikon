@@ -50,6 +50,7 @@ class ThisFixer extends DepthFirstVisitor {
    * Modifies "this." or inserts "this_" in expression.
    *
    * @param expression a Java expression which should be modified
+   * @param varInfos the VarInfos for the program point
    * @return expression with instances of "this." changed to "this_"
    */
   public static String fixThisUsage(String expression, VarInfo[] varInfos) throws ParseException {

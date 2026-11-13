@@ -47,8 +47,8 @@ class OrigFixer extends DepthFirstVisitor {
    *
    * @param expression a Java expression in which "orig()" is being replaced
    * @param baseNames the base names of the variables that may appear in the expression
-   * @return condition with all instances of "orig()" replaced
-   * @throws ParseException if expression is not a Java expression
+   * @return expression, with all instances of "orig()" replaced
+   * @throws ParseException if expression cannot be parsed
    */
   public static String fixOrig(String expression, String[] baseNames) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
