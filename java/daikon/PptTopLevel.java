@@ -4276,8 +4276,10 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Creates the initial equality view for this ppt, in which all variables are in a single equality
-   * set.
+   * Creates the initial equality view for this ppt, which has not seen any samples. Each equality
+   * set contains all the variables that are comparable to one another, as if every sample so far
+   * had given them equal values (or each variable is in its own set, if {@link
+   * PptSliceEquality#dkconfig_set_per_var} is true).
    */
   public void create_equality_view() {
     PptSliceEquality new_equality_view = new PptSliceEquality(this);
