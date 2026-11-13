@@ -3024,9 +3024,6 @@ type.
 A @code{point} program point is one that is @emph{not} involved in a
 program point hierarchy.   This is normally used when the input is not
 from a programming language or when there is no dataflow hierarchy.
-Its @code{ppt-name} can have any form, even one given above for another
-type; for example, a @code{point} program point named
-@code{foo:::ENTER} is not an @code{enter} program point.
 A @code{point} program point is a leaf of the dataflow hierarchy:  no
 other program point can name it as a @code{parent}, unless Daikon is run
 with the @option{--nohierarchy} option.
