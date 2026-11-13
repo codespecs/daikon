@@ -16,9 +16,12 @@ export SHELLOPTS
 
 echo "HEAD=$(git rev-parse HEAD)"
 
-# Gradle requires Java 17.
+# Test that daikon-plumelib.jar builds.  Gradle requires Java 17.
+# Setting SKIP_BUILD_DAIKON_PLUMELIB skips this test.
 JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
-if [ "$JAVA_VER" -ge "17" ]; then
+if [ -n "${SKIP_BUILD_DAIKON_PLUMELIB+x}" ]; then
+  echo "Skipping the build of daikon-plumelib.jar because SKIP_BUILD_DAIKON_PLUMELIB is set."
+elif [ "$JAVA_VER" -ge "17" ]; then
   (cd java/lib && gradle shadowJar)
 fi
 

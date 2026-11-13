@@ -311,7 +311,7 @@ jobs:
           set-safe-directory: true
           fetch-depth: 0
       - name: test-misc.sh
-        run: make showvars && scripts/test-misc.sh
+        run: make showvars && SKIP_BUILD_DAIKON_PLUMELIB=1 scripts/test-misc.sh
 
   misc_ubuntu_jdk17:
     needs:
@@ -327,7 +327,7 @@ jobs:
           set-safe-directory: true
           fetch-depth: 0
       - name: test-misc.sh
-        run: make showvars && scripts/test-misc.sh
+        run: make showvars && SKIP_BUILD_DAIKON_PLUMELIB=1 scripts/test-misc.sh
 
   misc_ubuntu_jdk21:
     needs:
@@ -343,7 +343,7 @@ jobs:
           set-safe-directory: true
           fetch-depth: 0
       - name: test-misc.sh
-        run: make showvars && scripts/test-misc.sh
+        run: make showvars && SKIP_BUILD_DAIKON_PLUMELIB=1 scripts/test-misc.sh
 
   misc_ubuntu_jdk25:
     runs-on: ubuntu-latest
@@ -372,7 +372,7 @@ jobs:
           set-safe-directory: true
           fetch-depth: 0
       - name: test-misc.sh
-        run: make showvars && scripts/test-misc.sh
+        run: make showvars && SKIP_BUILD_DAIKON_PLUMELIB=1 scripts/test-misc.sh
 
   kvasir_ubuntu_jdk11:
     needs:
@@ -890,7 +890,7 @@ jobs:
           set-safe-directory: true
           fetch-depth: 0
       - name: test-misc.sh
-        run: make showvars && scripts/test-misc.sh
+        run: make showvars && SKIP_BUILD_DAIKON_PLUMELIB=1 scripts/test-misc.sh
 
   misc_rockylinux_jdk27:
     needs:
@@ -907,7 +907,7 @@ jobs:
           set-safe-directory: true
           fetch-depth: 0
       - name: test-misc.sh
-        run: make showvars && scripts/test-misc.sh
+        run: make showvars && SKIP_BUILD_DAIKON_PLUMELIB=1 scripts/test-misc.sh
 
   kvasir_rockylinux_jdk25:
     needs:

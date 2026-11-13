@@ -71,7 +71,10 @@ ifelse($2,canary_jdk,,[      - misc_$1_jdk[]canary_jdk
 ifelse($1,canary_os,,[      - misc_[]canary_os[]_jdk$2
 ])dnl
 ])dnl
-boilerplate($1, $2, test-misc.sh, make showvars && scripts/test-misc.sh)[]dnl
+ifelse([Only the canary misc job builds daikon-plumelib.jar, because Maven Central
+rejects requests with status 429 (Too Many Requests) when many jobs download
+the Gradle plugins at once.])dnl
+boilerplate($1, $2, test-misc.sh, make showvars && ifelse($1_jdk$2,canary_version,,[SKIP_BUILD_DAIKON_PLUMELIB=1 ])scripts/test-misc.sh)[]dnl
 ])dnl
 dnl
 define([kvasir_job], [dnl
