@@ -606,6 +606,37 @@ public class PptRelation implements Serializable {
   }
 
   /**
+   * Returns, for each child of {@code ppt}, the child's splitter that matches {@code ppt_split}.
+   * Returns null if {@code ppt} has no children or if some child has no matching splitter; in that
+   * case, the conditional ppts of {@code ppt_split} cannot be merged from the children.
+   *
+   * @param ppt a non-leaf ppt
+   * @param ppt_split one of the splitters of {@code ppt}
+   * @return the matching splitter at each child, or null if some child has none
+   */
+  private static @Nullable List<SplitChild> matching_split_children(
+      PptTopLevel ppt, PptSplitter ppt_split) {
+    if (ppt.children.isEmpty()) {
+      return null;
+    }
+    List<SplitChild> split_children = new ArrayList<>();
+    child_loop:
+    for (PptRelation rel : ppt.children) {
+      if (!rel.child.has_splitters()) {
+        return null;
+      }
+      for (PptSplitter csplit : rel.child.splitters) {
+        if (ppt_split.splitter == csplit.splitter) {
+          split_children.add(new SplitChild(rel, csplit));
+          continue child_loop;
+        }
+      }
+      return null;
+    }
+    return split_children;
+  }
+
+  /**
    * Initialize the hierarchical relationship between ppts. Specifically process each ppt, find its
    * parent(s) in the partial order, and fill this point into the children field in the parent. Note
    * that children contains only the immediate descendants of the ppt.
@@ -668,26 +699,6 @@ public class PptRelation implements Serializable {
         }
       }
 
-      // Connect any conditional ppt variables.  Only connect to the
-      // first splitter, since each splitter should yield the same
-      // results at the parent (since each splitter sees the same
-      // points)  This should only happen at the leaves (such as numbered
-      // exit points) since all other points should be built from
-      // their other children.  But since we need the relation
-      // from the child's point of view when printing, we create
-      // under all cases and then remove it from non-leaves children
-      // list.  This doesn't seem like the best solution.
-      if (ppt.has_splitters()) {
-        assert ppt.splitters != null; // guaranteed by call to has_splitters
-        PptSplitter ppt_split = ppt.splitters.get(0);
-        for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
-          PptRelation rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);
-          rels.add(rel);
-          if (!ppt.is_dataflow_leaf()) {
-            ppt.children.remove(rel);
-          }
-        }
-      }
       // Debug print the created relations
       for (PptRelation rel : rels) {
         debug.fine(
@@ -699,14 +710,59 @@ public class PptRelation implements Serializable {
       }
     }
 
+    // Remove each splitter of a non-leaf that cannot be merged from its children: the non-leaf has
+    // no children, or some child lacks a matching splitter.  Removing a splitter from a child can
+    // make its parent's splitter unmergeable, so repeat until nothing changes.  This is done before
+    // any conditional ppt is connected, so that no relation refers to a removed conditional ppt.
+    // Without the dataflow hierarchy, every ppt (and each of its conditional ppts) receives
+    // samples directly, so no splitter needs to be merged from the children.
+    if (Daikon.use_dataflow_hierarchy) {
+      boolean changed = true;
+      while (changed) {
+        changed = false;
+        for (PptTopLevel ppt : all_ppts.pptIterable()) {
+          if (ppt.is_dataflow_leaf() || !ppt.has_splitters()) {
+            continue;
+          }
+          for (Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext(); ) {
+            PptSplitter ppt_split = ii.next();
+            if (matching_split_children(ppt, ppt_split) == null) {
+              ii.remove();
+              changed = true;
+            }
+          }
+        }
+      }
+    }
+
+    // Connect each ppt to its conditional ppts.  Only connect to the
+    // first splitter, since each splitter should yield the same
+    // results at the parent (since each splitter sees the same
+    // points)  This should only happen at the leaves (such as numbered
+    // exit points) since all other points should be built from
+    // their other children.  But since we need the relation
+    // from the child's point of view when printing, we create
+    // under all cases and then remove it from non-leaves children
+    // list.  This doesn't seem like the best solution.
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
+      if (!ppt.has_splitters()) {
+        continue;
+      }
+      PptSplitter ppt_split = ppt.splitters.get(0);
+      for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
+        PptRelation rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);
+        if (!ppt.is_dataflow_leaf()) {
+          ppt.children.remove(rel);
+        }
+      }
+    }
+
     // Create relations between conditional ppts and their children.
     // The relationship between conditional ppts matches exactly
     // the relationship between each their parents.  For example,
     // presume ppt A has a child ppt B.  A has two conditional
     // ppts (AC1, AC2) and B has two conditional ppts (BC1, BC2)
     // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
-
-    // Loop over each ppt and process each non-leaf with splitters
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       if (ppt.is_dataflow_leaf()) {
         continue;
@@ -717,34 +773,11 @@ public class PptRelation implements Serializable {
 
       // System.out.printf("processing splitter %s%n", ppt.name());
 
-      // Loop over each splitter
-      // splitter_loop:
-      for (Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext(); ) {
-        PptSplitter ppt_split = ii.next();
-
-        // list of children that match this splitter
-        List<SplitChild> split_children = new ArrayList<>();
-
-        // Create a list of children for this splitter
-        child_loop:
-        for (PptRelation rel : ppt.children) {
-          if (!rel.child.has_splitters()) {
-            break;
-          }
-          for (PptSplitter csplit : rel.child.splitters) {
-            if (ppt_split.splitter == csplit.splitter) {
-              split_children.add(new SplitChild(rel, csplit));
-              continue child_loop;
-            }
-          }
-          break;
-        }
-
-        // If there are no children, or we didn't find a matching splitter
-        // at each child, can't merge this point.  Just remove it from the
-        // list of splitters.
-        if (ppt.children.isEmpty() || split_children.size() != ppt.children.size()) {
-          ii.remove();
+      for (PptSplitter ppt_split : ppt.splitters) {
+        List<SplitChild> split_children = matching_split_children(ppt, ppt_split);
+        if (split_children == null) {
+          // Only without the dataflow hierarchy, which does not merge conditional ppts.
+          assert !Daikon.use_dataflow_hierarchy : ppt;
           continue;
         }
 

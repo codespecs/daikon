@@ -1,6 +1,7 @@
 package daikon.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -9,11 +10,15 @@ import daikon.FileIO;
 import daikon.PptMap;
 import daikon.PptRelation;
 import daikon.PptTopLevel;
+import daikon.split.PptSplitter;
+import daikon.split.Splitter;
+import daikon.test.split.ConditionSplitter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
+import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Rule;
@@ -78,6 +83,21 @@ public class InitHierarchyTest {
   }
 
   /**
+   * Reads the given program point declarations and creates the combined exits, as Daikon does.
+   *
+   * @param decls ppt declarations, in the format of a decls file
+   * @return the program points
+   */
+  private PptMap readDecls(String decls) throws IOException {
+    File declsFile = tmpFolder.newFile();
+    String contents = "decl-version 2.0\nvar-comparability none\n\n" + decls;
+    Files.write(declsFile.toPath(), contents.getBytes(StandardCharsets.UTF_8));
+    PptMap ppts = FileIO.read_declaration_files(Collections.singletonList(declsFile));
+    Daikon.create_combined_exits(ppts);
+    return ppts;
+  }
+
+  /**
    * Reads the given program point declarations, creates the combined exits, and builds the
    * hierarchy, as Daikon does.
    *
@@ -85,13 +105,23 @@ public class InitHierarchyTest {
    * @return the program points
    */
   private PptMap initHierarchy(String decls) throws IOException {
-    File declsFile = tmpFolder.newFile();
-    String contents = "decl-version 2.0\nvar-comparability none\n\n" + decls;
-    Files.write(declsFile.toPath(), contents.getBytes(StandardCharsets.UTF_8));
-    PptMap ppts = FileIO.read_declaration_files(Collections.singletonList(declsFile));
-    Daikon.create_combined_exits(ppts);
+    PptMap ppts = readDecls(decls);
     PptRelation.init_hierarchy(ppts);
     return ppts;
+  }
+
+  /**
+   * Returns the splitters of the given program point.
+   *
+   * @param ppt a program point that has splitters
+   * @return the splitters of ppt
+   */
+  private static List<PptSplitter> splitters(PptTopLevel ppt) {
+    List<PptSplitter> result = ppt.splitters;
+    if (result == null) {
+      throw new AssertionError("no splitters at " + ppt.name());
+    }
+    return result;
   }
 
   /**
@@ -149,6 +179,59 @@ public class InitHierarchyTest {
         initHierarchy(
             pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "user", "P:::POINT"));
     assertEquals(Collections.emptyList(), get(ppts, "P:::POINT").children);
+  }
+
+  /**
+   * When a combined exit's first splitter is removed because its numbered exits lack it, the
+   * conditional ppts of the remaining splitter have the combined exit as their parent.
+   */
+  @Test
+  public void testFirstSplitterRemoved() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("Foo.bar():::ENTER", "enter")
+                + pptDecl("Foo.bar():::EXIT5", "subexit")
+                + pptDecl("Foo.bar():::EXIT7", "subexit"));
+    Splitter removed = new ConditionSplitter("x == 1");
+    Splitter kept = new ConditionSplitter("x == 2");
+    PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
+    exit.addConditions(new Splitter[] {removed, kept});
+    get(ppts, "Foo.bar():::EXIT5").addConditions(new Splitter[] {kept});
+    get(ppts, "Foo.bar():::EXIT7").addConditions(new Splitter[] {kept});
+    PptRelation.init_hierarchy(ppts);
+
+    List<PptSplitter> exitSplitters = splitters(exit);
+    assertEquals(1, exitSplitters.size());
+    PptSplitter split = exitSplitters.get(0);
+    assertSame(kept, split.splitter);
+    for (PptTopLevel cond : split.ppts) {
+      assertEquals(1, cond.parents.size());
+      assertSame(exit, cond.parents.get(0).parent);
+    }
+  }
+
+  /**
+   * Without the hierarchy, a non-leaf with no children keeps its splitters, because it receives
+   * samples directly.
+   */
+  @Test
+  public void testChildlessSplitterWithoutHierarchy() throws IOException {
+    Daikon.use_dataflow_hierarchy = false;
+    PptMap ppts = readDecls(pptDecl("Foo.bar():::ENTER", "enter"));
+    PptTopLevel enter = get(ppts, "Foo.bar():::ENTER");
+    enter.addConditions(new Splitter[] {new ConditionSplitter("x == 1")});
+    PptRelation.init_hierarchy(ppts);
+    assertEquals(1, splitters(enter).size());
+  }
+
+  /** With the hierarchy, a non-leaf with no children loses its splitters. */
+  @Test
+  public void testChildlessSplitterWithHierarchy() throws IOException {
+    PptMap ppts = readDecls(pptDecl("Foo.bar():::ENTER", "enter"));
+    PptTopLevel enter = get(ppts, "Foo.bar():::ENTER");
+    enter.addConditions(new Splitter[] {new ConditionSplitter("x == 1")});
+    PptRelation.init_hierarchy(ppts);
+    assertEquals(0, splitters(enter).size());
   }
 
   /** A user relation to a point is forbidden when user relations are enabled. */
