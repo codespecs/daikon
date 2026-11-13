@@ -778,7 +778,7 @@ public final class PrintInvariants {
 
       // If this point is not an exit point, print out any retained combined
       // exit point
-      if (enable_exit_swap && !ppt.ppt_name.isExitPoint()) {
+      if (enable_exit_swap && !ppt.is_exit()) {
         if (combined_exit != null) {
           print_invariants_maybe(combined_exit, pw, all_ppts);
         }
@@ -787,7 +787,7 @@ public final class PrintInvariants {
 
       // Just cache the combined exit point for now, print it after the
       // EXITnn points.
-      if (enable_exit_swap && ppt.ppt_name.isCombinedExitPoint()) {
+      if (enable_exit_swap && ppt.is_combined_exit()) {
         combined_exit = ppt;
         continue;
       }
@@ -797,9 +797,9 @@ public final class PrintInvariants {
       // point if it is an EXITnn point and the previous point was a combined
       // exit point and the next one is not an EXITnn point.  But don't skip
       // any conditional ppts attached to the skipped ppt.
-      if (enable_exit_swap && (i > 0) && ppt.ppt_name.isExitPoint()) {
-        if (ppts[i - 1].ppt_name.isCombinedExitPoint()) {
-          if (((i + 1) >= ppts.length) || !ppts[i + 1].ppt_name.isExitPoint()) {
+      if (enable_exit_swap && (i > 0) && ppt.is_exit()) {
+        if (ppts[i - 1].is_combined_exit()) {
+          if (((i + 1) >= ppts.length) || !ppts[i + 1].is_exit()) {
             //             if (Daikon.dkconfig_output_conditionals
             //                 && Daikon.output_format == OutputFormat.DAIKON) {
             //               for (PptConditional pcond : ppt.cond_iterable()) {

@@ -139,17 +139,32 @@ public class InitHierarchyTest {
     return result;
   }
 
-  /** A point that is named like an enter point is not the parent of the combined exit. */
+  /** A point that is named like an enter point is not the entry of a numbered exit. */
   @Test
-  public void testPointNamedEnter() throws IOException {
+  public void testPointNamedEnter() {
+    String decls = pptDecl("Foo.bar():::ENTER", "point") + pptDecl("Foo.bar():::EXIT5", "subexit");
+    Daikon.UserError e = assertThrows(Daikon.UserError.class, () -> initHierarchy(decls));
+    assertTrue(
+        String.valueOf(e.getMessage()),
+        String.valueOf(e.getMessage())
+            .startsWith("exit found with no corresponding entry: Foo.bar():::EXIT5"));
+  }
+
+  /**
+   * A point that is named like a combined exit is not replaced by a combined exit, and it is not
+   * the parent of the numbered exits.
+   */
+  @Test
+  public void testPointNamedCombinedExit() throws IOException {
     PptMap ppts =
         initHierarchy(
-            pptDecl("Foo.bar():::ENTER", "point") + pptDecl("Foo.bar():::EXIT5", "subexit"));
-    PptTopLevel enter = get(ppts, "Foo.bar():::ENTER");
-    assertTrue(enter.is_dataflow_leaf());
-    assertEquals(Collections.emptyList(), enter.children);
+            pptDecl("Foo.bar():::ENTER", "enter")
+                + pptDecl("Foo.bar():::EXIT", "point")
+                + pptDecl("Foo.bar():::EXIT5", "subexit"));
     PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
-    assertEquals(Collections.emptyList(), exit.parents);
+    assertTrue(exit.is_dataflow_leaf());
+    assertEquals(Collections.emptyList(), exit.children);
+    assertEquals(Collections.emptyList(), get(ppts, "Foo.bar():::EXIT5").parents);
   }
 
   /** A point cannot be declared as a parent. */

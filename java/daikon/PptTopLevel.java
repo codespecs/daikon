@@ -1184,9 +1184,9 @@ public class PptTopLevel extends Ppt {
     // apply these values to the combined exit
     if (!Daikon.use_dataflow_hierarchy) {
       // System.out.println ("ppt_name = " + ppt_name);
-      if (!(this instanceof PptConditional) && ppt_name.isNumberedExitPoint()) {
+      if (!(this instanceof PptConditional) && is_subexit()) {
         PptTopLevel parent = Daikon.all_ppts.get(ppt_name.makeExit());
-        if (parent != null) {
+        if ((parent != null) && parent.is_combined_exit()) {
           // System.out.println ("parent is " + parent.name());
           parent.get_missingOutOfBounds(this, vt);
           parent.add_bottom_up(vt, count);
@@ -2961,7 +2961,7 @@ public class PptTopLevel extends Ppt {
 
     // If this is a combined exit point with two individual exits, create
     // implications from the two exit points
-    if (ppt_name.isCombinedExitPoint()) {
+    if (is_combined_exit()) {
       // System.out.printf("Considering ppt %s [%d children]%n", name(),
       //                   children.size());
       List<PptTopLevel> exit_points = new ArrayList<>();

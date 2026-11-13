@@ -1578,12 +1578,11 @@ public final class FileIO {
     // Only process the leaves of the ppt tree.
     if (Daikon.use_dataflow_hierarchy) {
       // A combined exit point obtains its invariants from the numbered exit points (whether Daikon
-      // created it or the declarations contain it), so no sample may refer to one, whatever the
-      // program point's declared type.
-      if (ppt.ppt_name.isCombinedExitPoint()) {
+      // created it or the declarations contain it), so no sample may refer to one.
+      if (ppt.is_combined_exit()) {
         // not Daikon.UserError; caller has more info (e.g., filename)
         throw new RuntimeException(
-            "Bad program point name " + ppt.name + " is a combined exit point name");
+            "Bad program point " + ppt.name + ": a sample cannot refer to a combined exit point");
       }
       if (!ppt.is_dataflow_leaf()) {
         return;
@@ -2042,8 +2041,9 @@ public final class FileIO {
 
     VarInfo[] vis = ppt.var_infos;
     @Interned String fn_name = ppt.ppt_name.getNameWithoutPoint();
-    String ppt_name = ppt.name();
-    if (ppt_name.endsWith(enter_tag)) {
+    // The ppt's type, not its name, determines whether it is an entry or an exit:  a ppt that is
+    // declared as a POINT is neither, even if its name is foo:::ENTER or foo:::EXIT.
+    if (ppt.is_enter()) {
       Invocation invok = new Invocation(ppt, vals, mods);
       if (nonce == null) {
         call_stack.push(invok);
@@ -2053,7 +2053,7 @@ public final class FileIO {
       return false;
     }
 
-    if (ppt.ppt_name.isExitPoint() || ppt.ppt_name.isThrowsPoint()) {
+    if (ppt.is_exit() || (ppt.type == PptType.THROWS)) {
       Invocation invoc;
       // Set invoc
       {
