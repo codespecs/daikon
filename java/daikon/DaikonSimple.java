@@ -478,7 +478,9 @@ public class DaikonSimple {
       ValueTuple object_vt = null;
       ValueTuple class_vt = null;
 
-      if ((ppt_name.isEnterPoint() && !ppt_name.isConstructor()) || ppt_name.isExitPoint()) {
+      // The ppt's type, not its name, determines whether it is an entry or an exit:  a ppt that is
+      // declared as a POINT is neither, even if its name is foo:::ENTER or foo:::EXIT.
+      if ((ppt.is_enter() && !ppt_name.isConstructor()) || ppt.is_exit()) {
         object_ppt = all_ppts.get(ppt_name.makeObject());
         class_ppt = all_ppts.get(ppt_name.makeClassStatic());
       }
@@ -510,8 +512,15 @@ public class DaikonSimple {
         }
       }
 
+      // A general program point is a leaf of the dataflow hierarchy, so the sample applies to it
+      // alone, as in Daikon.
+      if (ppt.type == PptTopLevel.PptType.POINT) {
+        add(ppt, vt, -1);
+        return;
+      }
+
       // If this is an enter point, just remember it for later
-      if (ppt_name.isEnterPoint()) {
+      if (ppt.is_enter()) {
         assert nonce != null;
         assert call_map.get(nonce) == null;
         List<Call> value = new ArrayList<>();
@@ -533,7 +542,7 @@ public class DaikonSimple {
 
       // If this is an exit point, process the saved enter (and sometimes
       // object) point
-      if (ppt_name.isExitPoint()) {
+      if (ppt.is_exit()) {
         assert nonce != null;
         List<Call> value = call_map.remove(nonce);
 
@@ -561,13 +570,17 @@ public class DaikonSimple {
     private void add(PptTopLevel ppt, ValueTuple vt, int nonce) {
 
       // if this is a numbered exit, apply to the combined exit as well
-      if (ppt.ppt_name.isNumberedExitPoint()) {
+      if (ppt.is_subexit()) {
 
         // Daikon.create_combined_exits(all_ppts);
         PptTopLevel parent = all_ppts.get(ppt.ppt_name.makeExit());
         if (parent != null) {
-          parent.get_missingOutOfBounds(ppt, vt);
-          add(parent, vt, nonce);
+          // A ppt that is not a combined exit, such as a POINT named foo:::EXIT, is not the
+          // numbered exit's parent.
+          if (parent.is_combined_exit()) {
+            parent.get_missingOutOfBounds(ppt, vt);
+            add(parent, vt, nonce);
+          }
 
         } else {
           // make parent and apply

@@ -82,7 +82,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     for (PptTopLevel ppt : pptmap.pptIterable()) {
 
-      if (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint()) {
+      if (ppt.is_subexit()) {
         continue;
       }
 
@@ -895,7 +895,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     // Check postconditions.
     for (PptTopLevel ppt : matching_ppts) {
-      if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
+      if (ppt.is_combined_exit()) {
         List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
         appendInvariantChecks(
             postconditions, code, "daikon.tools.runtimechecker.Violation.Time.onExit");
@@ -918,7 +918,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   private void checkPreconditions(
       StringBuilder code, List<PptTopLevel> matching_ppts, PptMap pptmap) {
     for (PptTopLevel ppt : matching_ppts) {
-      if (ppt.ppt_name.isEnterPoint()) {
+      if (ppt.is_enter()) {
         List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
         appendInvariantChecks(
             preconditions, code, "daikon.tools.runtimechecker.Violation.Time.onEntry");
@@ -946,7 +946,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
-      if (ppt.ppt_name.isEnterPoint()) {
+      if (ppt.is_enter()) {
         List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
         List<InvProp> finalList;
         if (majorProperties) {
@@ -984,7 +984,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
-      if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
+      if (ppt.is_combined_exit()) {
         List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
         List<InvProp> finalList;
         if (majorProperties) {
@@ -1018,7 +1018,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
-      if (ppt.ppt_name.isEnterPoint()) {
+      if (ppt.is_enter()) {
         List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
         List<InvProp> finalList;
         if (majorProperties) {
@@ -1054,7 +1054,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + ") {");
 
     for (PptTopLevel ppt : matching_ppts) {
-      if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
+      if (ppt.is_combined_exit()) {
         List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
         List<InvProp> finalList;
         if (majorProperties) {
