@@ -24,10 +24,12 @@ import jtb.visitor.DepthFirstVisitor;
  *
  * <p>A splitter represents some references by their hashcode, which is 0 for null. A <em>hashcode
  * expression</em> is an expression that the splitter represents as a hashcode. It has one of 4
- * forms: a hashcode variable, an element of an array of hashcodes, a call {@code
- * getElement_Object(a, i)} on an array of hashcodes, or a conditional expression whose branches are
- * each a hashcode expression or a replaced "null". No other expression is a hashcode expression,
- * because a hashcode is a number, whose fields and methods cannot be used.
+ * forms: a hashcode variable; an element {@code a[i]} of an array {@code a} of hashcodes; a call
+ * {@code getElement_Object(a, i)} on an array {@code a} of hashcodes; or a conditional expression
+ * one of whose branches is a hashcode expression and the other of which is a hashcode expression or
+ * "null". In the second and third forms, {@code a} is the name of the array, possibly in
+ * parentheses. No other expression is a hashcode expression, because a hashcode is a number, whose
+ * fields and methods cannot be used.
  *
  * <p>A "null" is replaced only if it stands for a hashcode: that is, if it is compared, by "==" or
  * "!=", with a hashcode expression, or if it is a branch of a conditional expression ("?:") whose
@@ -51,9 +53,9 @@ class NullReplacer extends DepthFirstVisitor {
   //    column shifting being needed, applies only to specified line
 
   /**
-   * The names of the variables whose values or elements are hashcodes. Each is the compilable name
-   * of a hashcode variable, or the compilable name of a hashcode array followed by "[]", which
-   * stands for an element of that array.
+   * The names of the hashcode variables and of the elements of the hashcode arrays. Each is the
+   * compilable name of a hashcode variable, or the compilable name of a hashcode array followed by
+   * "[]", which stands for an element of that array.
    */
   private final Set<String> hashcodeNames = new HashSet<>();
 
@@ -209,15 +211,48 @@ class NullReplacer extends DepthFirstVisitor {
     if (last >= 5
         && tokens[0].tokenImage.equals("getElement_Object")
         && Visitors.isLParen(tokens[1])
-        && matchingIndex(tokens, 1) == last
-        && tokens[3].tokenImage.equals(",")
-        && hashcodeNames.contains(tokens[2].tokenImage + "[]")) {
-      return true;
+        && matchingIndex(tokens, 1) == last) {
+      int arrayEnd = operandEnd(tokens, 2);
+      return arrayEnd < last
+          && tokens[arrayEnd].tokenImage.equals(",")
+          && isHashcodeArray(tokens, 2, arrayEnd);
     }
-    return last >= 3
-        && Visitors.isLBracket(tokens[1])
-        && matchingIndex(tokens, 1) == last
-        && hashcodeNames.contains(tokens[0].tokenImage + "[]");
+    int arrayEnd = operandEnd(tokens, 0);
+    return arrayEnd > 0
+        && arrayEnd + 1 < last
+        && Visitors.isLBracket(tokens[arrayEnd])
+        && matchingIndex(tokens, arrayEnd) == last
+        && isHashcodeArray(tokens, 0, arrayEnd);
+  }
+
+  /**
+   * Returns the index just past the operand that starts at index start. The operand is a
+   * parenthesized expression if tokens[start] is "(", and is the single token tokens[start]
+   * otherwise.
+   *
+   * @param tokens the tokens of an expression
+   * @param start the index of the first token of an operand
+   * @return the index just past the operand, or 0 if tokens[start] is an unmatched "("
+   */
+  private static int operandEnd(NodeToken[] tokens, int start) {
+    if (Visitors.isLParen(tokens[start])) {
+      return matchingIndex(tokens, start) + 1;
+    }
+    return start + 1;
+  }
+
+  /**
+   * Returns true if the tokens from index start (inclusive) to index end (exclusive) are the name
+   * of a hashcode array, possibly in parentheses.
+   *
+   * @param tokens the tokens of an expression
+   * @param start the index of the first token of the range
+   * @param end the index just past the last token of the range
+   * @return true if the range is the name of a hashcode array, possibly in parentheses
+   */
+  private boolean isHashcodeArray(NodeToken[] tokens, int start, int end) {
+    NodeToken[] array = stripParens(Arrays.copyOfRange(tokens, start, end));
+    return array.length == 1 && hashcodeNames.contains(array[0].tokenImage + "[]");
   }
 
   /**
