@@ -217,7 +217,11 @@ public class InitHierarchyTest {
     List<PptSplitter> exitSplitters = splitters(exit);
     assertEquals(1, exitSplitters.size());
     PptSplitter split = exitSplitters.get(0);
-    assertSame(kept, split.splitter);
+    Splitter splitter = split.splitter;
+    if (splitter == null) {
+      throw new AssertionError("no splitter at " + exit.name());
+    }
+    assertSame(kept, splitter);
     for (PptTopLevel cond : split.ppts) {
       assertEquals(1, cond.parents.size());
       assertSame(exit, cond.parents.get(0).parent);
