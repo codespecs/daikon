@@ -578,10 +578,10 @@ public class PptRelation implements Serializable {
    * when no corresponding numbered exit point is declared or included. A leaf usually gets its
    * equality view from {@link Daikon#setupEquality}, before it receives any samples.
    *
-   * <p>The new equality view puts all variables in a single equality set, so each ppt that gets one
-   * must have no samples. The equality view is created even if {@link
-   * Daikon#use_equality_optimization} is false, because {@link PptTopLevel#mergeInvs} requires
-   * every childless ppt to have one.
+   * <p>The new equality view puts all comparable variables in the same equality set, as if no
+   * sample had distinguished them, so each ppt that gets one must have no samples. The equality
+   * view is created even if {@link Daikon#use_equality_optimization} is false, because {@link
+   * PptTopLevel#mergeInvs} requires every childless ppt to have one.
    *
    * @param all_ppts a map of program points
    */
@@ -637,6 +637,46 @@ public class PptRelation implements Serializable {
   }
 
   /**
+   * Throws a UserError if the given parent is a leaf of the dataflow hierarchy and Daikon uses the
+   * hierarchy. A leaf obtains its invariants from its samples (and its conditional ppts), never
+   * from its children.
+   *
+   * @param parent a ppt that is declared as a parent of {@code child}
+   * @param child a ppt; used for diagnostics
+   */
+  private static void check_parent_is_not_leaf(PptTopLevel parent, PptTopLevel child) {
+    if (Daikon.use_dataflow_hierarchy && parent.is_dataflow_leaf()) {
+      throw new Daikon.UserError(
+          String.format(
+              "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
+                  + " the dataflow hierarchy",
+              parent.name(), child.name(), parent.type.name().toLowerCase(Locale.ENGLISH)));
+    }
+  }
+
+  /**
+   * Throws a UserError if some ppt in the map is declared to have a parent that is a leaf of the
+   * dataflow hierarchy, as {@link #init_hierarchy} would. Calling this as soon as the declarations
+   * are read reports the error before any samples are processed. A declared parent that is not in
+   * the map is ignored.
+   *
+   * @param all_ppts a map of program points
+   */
+  public static void check_declared_parents(PptMap all_ppts) {
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
+      for (ParentRelation pr : ppt.parent_relations) {
+        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+          continue;
+        }
+        PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
+        if (parent != null) {
+          check_parent_is_not_leaf(parent, ppt);
+        }
+      }
+    }
+  }
+
+  /**
    * Initialize the hierarchical relationship between ppts. Specifically process each ppt, find its
    * parent(s) in the partial order, and fill this point into the children field in the parent. Note
    * that children contains only the immediate descendants of the ppt.
@@ -669,15 +709,7 @@ public class PptRelation implements Serializable {
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
           continue;
         }
-        // A leaf obtains its invariants from its samples (and its conditional ppts), never from
-        // its children.
-        if (Daikon.use_dataflow_hierarchy && parent.is_dataflow_leaf()) {
-          throw new Daikon.UserError(
-              String.format(
-                  "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
-                      + " the dataflow hierarchy",
-                  parent.name(), ppt.name(), parent.type.name().toLowerCase(Locale.ENGLISH)));
-        }
+        check_parent_is_not_leaf(parent, ppt);
         // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));
