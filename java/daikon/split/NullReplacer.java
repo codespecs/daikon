@@ -250,6 +250,7 @@ class NullReplacer extends DepthFirstVisitor {
    * @param end the index just past the last token of the range
    * @return true if the range is the name of a hashcode array, possibly in parentheses
    */
+  @SuppressWarnings("nullness:argument") // end <= tokens.length, so the copy is not padded
   private boolean isHashcodeArray(NodeToken[] tokens, int start, int end) {
     NodeToken[] array = stripParens(Arrays.copyOfRange(tokens, start, end));
     return array.length == 1 && hashcodeNames.contains(array[0].tokenImage + "[]");
