@@ -73,6 +73,8 @@ docker-images: ${DOCKER_IMAGES}
 .NOTPARALLEL: docker-images
 
 # The Dockerfiles copy no files into the image, so build with no context.
+# DOCKER_BUILDKIT=1 makes the build fail, rather than misparse a Dockerfile,
+# if BuildKit is not available; the Dockerfiles use here-documents.
 # --pull ensures that the image uses the latest base image.  Docker reuses
 # cached layers, so re-running is fast when nothing has changed.
 # The image must match the committed Dockerfile, which make might have just
@@ -82,7 +84,7 @@ docker-images: ${DOCKER_IMAGES}
 ${DOCKER_IMAGES}: docker-image-%: Dockerfile-%
 	git ls-files --error-unmatch -- $< > /dev/null 2>&1 || { echo "$< is not committed; commit it first" >&2; exit 1; }
 	git diff --quiet HEAD -- $< || { echo "$< differs from the committed version; commit it first" >&2; exit 1; }
-	docker -l warn build --pull --progress=plain -t ${DOCKER_IMAGE} - < $<
+	DOCKER_BUILDKIT=1 docker -l warn build --pull --progress=plain -t ${DOCKER_IMAGE} - < $<
 	docker -l warn push --quiet ${DOCKER_IMAGE}
 
 ## Delegation to other Makefiles (gross)

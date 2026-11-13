@@ -17,9 +17,12 @@ export SHELLOPTS
 echo "HEAD=$(git rev-parse HEAD)"
 
 # Gradle requires Java 17.
+# In a Docker image whose read-only cache (GRADLE_RO_DEP_CACHE) holds the
+# Gradle plugins, run Gradle offline, so that the job fails, rather than
+# downloading the plugins, if the image's cache is out of date.
 JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
 if [ "$JAVA_VER" -ge "17" ]; then
-  (cd java/lib && gradle shadowJar)
+  (cd java/lib && gradle ${GRADLE_RO_DEP_CACHE:+--offline} shadowJar)
 fi
 
 make compile daikon.jar
