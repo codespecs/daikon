@@ -251,14 +251,15 @@ class QuantFixer extends DepthFirstVisitor {
   }
 
   /**
-   * Replaces n, a call to daikon.Quant.size or to a daikon.Quant.getElement_ method, if the array
-   * argument is the base name of an array whose elements the splitter represents and whose element
-   * type is the one that the method expects.
+   * Replaces the call to daikon.Quant.size or to a daikon.Quant.getElement_ method that n starts
+   * with, if the call's array argument is the base name of an array whose elements the splitter
+   * represents and whose element type is the one that the method expects.
    *
-   * @param n a call to daikon.Quant.size or to a daikon.Quant.getElement_ method
-   * @param methodName the name of the method that n calls
-   * @param args the arguments of n
-   * @return null if n was replaced, or else the reason that n cannot be replaced
+   * @param n a primary expression that starts with a call to daikon.Quant.size or to a
+   *     daikon.Quant.getElement_ method
+   * @param methodName the name of the method that n starts by calling
+   * @param args the arguments of the call that n starts with
+   * @return null if the call was replaced, or else the reason that the call cannot be replaced
    */
   private @Nullable String tryReplaceQuantCall(
       PrimaryExpression n, String methodName, Arguments args) {
