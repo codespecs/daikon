@@ -388,12 +388,13 @@ public class DeclReader {
   }
 
   /**
-   * Splits a record into whitespace-separated tokens.
+   * Splits a record into whitespace-separated tokens. Like Daikon's parser of declarations, it
+   * treats a double quote as an ordinary character.
    *
    * @param record a record, possibly with leading and trailing whitespace
    * @return the tokens of the record; a single empty string if the record is blank
    */
-  private static String[] tokenize(String record) {
+  public static String[] tokenize(String record) {
     return tokenize(record, 0);
   }
 
