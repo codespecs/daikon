@@ -93,12 +93,21 @@ if ($algorithm eq "xm") {
 # in the current directory, which are read by both extract_vars.pl and
 # dtrace-add-cluster.pl so that both see the same nonces.
 if ($verbose) { print "\n# Fixing invocation nonces ...\n"; }
+# Each fixed copy has a distinct name, even if several input files have the
+# same basename.  The names of later files are derived from these names.
 my @fixed_trace_files = ();
+my %used_fixed_names = ();
 foreach my $trace_file (@trace_files) {
   my $gz = ($trace_file =~ /\.gz$/) ? ".gz" : "";
-  my $fixed = basename($trace_file);
-  $fixed =~ s/\.dtrace(\.gz)?$//;
-  $fixed .= "_runcluster_temp_nonces.dtrace$gz";
+  my $base = basename($trace_file);
+  $base =~ s/\.dtrace(\.gz)?$//;
+  # Compare names without ".gz", because later files' names omit it.
+  my $stem = "${base}_runcluster_temp_nonces";
+  for (my $i = 2; exists($used_fixed_names{$stem}); $i++) {
+    $stem = "${base}-${i}_runcluster_temp_nonces";
+  }
+  $used_fixed_names{$stem} = 1;
+  my $fixed = "$stem.dtrace$gz";
   system_or_die("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer " . shell_quote($trace_file) . " " . shell_quote($fixed), $verbose);
   push @fixed_trace_files, $fixed;
 }
