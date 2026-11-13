@@ -388,8 +388,8 @@ public class DeclReader {
   }
 
   /**
-   * Splits a record into whitespace-separated tokens. Like Daikon's parser of declarations, it
-   * treats a double quote as an ordinary character.
+   * Returns the whitespace-separated tokens of the given record. Like Daikon's parser of
+   * declarations, it treats a double quote as an ordinary character.
    *
    * @param record a record, possibly with leading and trailing whitespace
    * @return the tokens of the record; a single empty string if the record is blank

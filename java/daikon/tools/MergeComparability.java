@@ -243,7 +243,8 @@ public final class MergeComparability {
     Map.Entry<String, DeclReader> firstFile = declFiles.entrySet().iterator().next();
     List<String> expectedHeader = firstFile.getValue().header;
     for (Map.Entry<String, DeclReader> entry : declFiles.entrySet()) {
-      // Every file must use implicit comparability.
+      // Every file must use implicit comparability.  A file without a var-comparability record
+      // uses implicit comparability, so the var-comparability records need no consistency check.
       String varComparability = findRecord(entry.getValue().header, "var-comparability");
       if (varComparability != null && !varComparability.equals("var-comparability implicit")) {
         throw new Daikon.UserError(

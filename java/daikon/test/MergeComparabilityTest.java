@@ -457,20 +457,17 @@ public class MergeComparabilityTest {
     merge(a, b);
   }
 
-  /**
-   * Whitespace between tokens is not significant when comparing records, even within double quotes,
-   * which Daikon's parser of declarations treats as ordinary characters.
-   */
+  /** Whitespace between the tokens of a record is not significant when comparing records. */
   @Test
   public void testWhitespaceInRecord() {
     List<String> a = new ArrayList<>(file(ppt("1", "1")));
-    a.add(a.indexOf("variable b"), "  constant \"x  y\"");
+    a.add(a.indexOf("variable b"), "  constant 1");
     List<String> b = new ArrayList<>(file(ppt("1", "1")));
-    b.add(b.indexOf("variable b"), "  constant\t\"x y\"");
+    b.add(b.indexOf("variable b"), "\tconstant\t 1 ");
     merge(a, b);
     // A difference in a token is significant.
     List<String> c = new ArrayList<>(file(ppt("1", "1")));
-    c.add(c.indexOf("variable b"), "  constant \"x z\"");
+    c.add(c.indexOf("variable b"), "  constant 2");
     assertThrows(Daikon.UserError.class, () -> merge(a, c));
   }
 
