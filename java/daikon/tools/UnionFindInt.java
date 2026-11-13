@@ -1,16 +1,19 @@
 package daikon.tools;
 
 /** A union-find (disjoint-set) data structure over the integers 0..n-1. */
-final class UnionFind {
-  /** The parent of each element; an element is a root if it is its own parent. */
+final class UnionFindInt {
+  /**
+   * The parent of each element; an element is a root (that is, the representative of its set) if it
+   * is its own parent.
+   */
   private final int[] parent;
 
   /**
-   * Creates a new UnionFind in which each element is in its own set.
+   * Creates a new UnionFindInt in which each element is in its own set.
    *
    * @param n the number of elements
    */
-  UnionFind(int n) {
+  UnionFindInt(int n) {
     parent = new int[n];
     for (int i = 0; i < n; i++) {
       parent[i] = i;

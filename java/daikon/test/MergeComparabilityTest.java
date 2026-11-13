@@ -457,22 +457,18 @@ public class MergeComparabilityTest {
     merge(a, b);
   }
 
-  /** Whitespace within a string literal is significant when comparing records. */
+  /** Whitespace between the tokens of a record is not significant when comparing records. */
   @Test
-  public void testWhitespaceInStringLiteral() {
+  public void testWhitespaceInRecord() {
     List<String> a = new ArrayList<>(file(ppt("1", "1")));
-    a.add(a.indexOf("variable b"), "  constant \"x  y\"");
+    a.add(a.indexOf("variable b"), "  constant 1");
     List<String> b = new ArrayList<>(file(ppt("1", "1")));
-    b.add(b.indexOf("variable b"), "  constant \"x y\"");
-    assertThrows(Daikon.UserError.class, () -> merge(a, b));
-    // Whitespace outside a string literal is not significant, and an escaped quote does not end a
-    // string literal.
+    b.add(b.indexOf("variable b"), "\tconstant\t 1 ");
+    merge(a, b);
+    // A difference in a token is significant.
     List<String> c = new ArrayList<>(file(ppt("1", "1")));
-    c.add(c.indexOf("variable b"), "  constant\t\"x  y\"");
-    merge(a, c);
-    assertEquals(
-        Arrays.asList("constant", "\"a\\\" b\"", "c"),
-        MergeComparability.tokenizeRespectingQuotes(" constant \"a\\\" b\"  c "));
+    c.add(c.indexOf("variable b"), "  constant 2");
+    assertThrows(Daikon.UserError.class, () -> merge(a, c));
   }
 
   /** Program points with different ppt-level records cannot be merged. */
