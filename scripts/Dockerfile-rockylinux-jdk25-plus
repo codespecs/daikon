@@ -82,6 +82,29 @@ RUN wget -q https://services.gradle.org/distributions/gradle-9.8.0-bin.zip \
 && rm gradle-9.8.0-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
 
+# Download the Gradle plugins that java/lib/build.gradle uses, so that a CI job
+# that builds daikon-plumelib.jar does not download them from Maven Central,
+# which rejects requests with status 429 (Too Many Requests) when many CI
+# jobs start at once.  The cache is outside /root/.gradle because GitHub
+# Actions sets HOME to /github/home in a container job.
+# GRADLE_RO_DEP_CACHE names a read-only cache, in which Gradle never writes
+# and therefore needs no lock files.  When the plugins in java/lib/build.gradle
+# change, Gradle downloads whatever the cache lacks.
+COPY <<'EOF' /tmp/gradle-plugins/build.gradle
+plugins {
+  id("java")
+  id("com.gradleup.shadow").version("9.3.1")
+}
+EOF
+RUN touch /tmp/gradle-plugins/settings.gradle \
+&& GRADLE_USER_HOME=/tmp/gradle-user-home gradle -p /tmp/gradle-plugins --no-daemon -q buildEnvironment > /dev/null \
+&& mkdir -p /opt/gradle-ro-dep-cache \
+&& cp -r /tmp/gradle-user-home/caches/modules-2 /opt/gradle-ro-dep-cache/ \
+&& find /opt/gradle-ro-dep-cache \( -name '*.lock' -o -name gc.properties \) -delete \
+&& chmod -R og+rX /opt/gradle-ro-dep-cache \
+&& rm -rf /tmp/gradle-plugins /tmp/gradle-user-home
+ENV GRADLE_RO_DEP_CACHE=/opt/gradle-ro-dep-cache
+
 # Install shfmt.
 RUN dnf -q -y upgrade && dnf -q -y install \
   golang \

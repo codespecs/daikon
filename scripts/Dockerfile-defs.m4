@@ -24,3 +24,30 @@ m4_ifelse(PLUS, 1, [[# Create a Docker image that is ready to run the full Daiko
 # including building the manual and Javadoc.
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.]], [[# Create a Docker image that is ready to run the Daikon tests.]])]])m4_dnl
+m4_dnl java_lib_gradle_plugins expands to the "plugins" block of ../java/lib/build.gradle,
+m4_dnl or exits with an error if that file has no such block.
+m4_define([[java_lib_gradle_plugins]], [[m4_esyscmd([[sed -n '/^plugins {/,/^}/p' ../java/lib/build.gradle | grep .]])m4_ifelse(m4_sysval, 0, , [[m4_errprint([[error: no "plugins" block in ../java/lib/build.gradle
+]])m4_m4exit(1)]])]])m4_dnl
+m4_dnl gradle_dependency_cache expands to Dockerfile commands that download the Gradle
+m4_dnl plugins that ../java/lib/build.gradle uses into a read-only dependency cache.
+m4_dnl Gradle must already be installed.  It expands to nothing for a JDK older than 17,
+m4_dnl on which Gradle 9 does not run.
+m4_define([[gradle_dependency_cache]], [[m4_ifelse(m4_eval(JDKVER >= 17), 1, [[# Download the Gradle plugins that java/lib/build.gradle uses, so that a CI job
+# that builds daikon-plumelib.jar does not download them from Maven Central,
+# which rejects requests with status 429 (Too Many Requests) when many CI
+# jobs start at once.  The cache is outside /root/.gradle because GitHub
+# Actions sets HOME to /github/home in a container job.
+# GRADLE_RO_DEP_CACHE names a read-only cache, in which Gradle never writes
+# and therefore needs no lock files.  When the plugins in java/lib/build.gradle
+# change, Gradle downloads whatever the cache lacks.
+COPY <<'EOF' /tmp/gradle-plugins/build.gradle
+java_lib_gradle_plugins[[]]m4_dnl
+EOF
+RUN touch /tmp/gradle-plugins/settings.gradle \
+&& GRADLE_USER_HOME=/tmp/gradle-user-home gradle -p /tmp/gradle-plugins --no-daemon -q buildEnvironment > /dev/null \
+&& mkdir -p /opt/gradle-ro-dep-cache \
+&& cp -r /tmp/gradle-user-home/caches/modules-2 /opt/gradle-ro-dep-cache/ \
+&& find /opt/gradle-ro-dep-cache \( -name '*.lock' -o -name gc.properties \) -delete \
+&& chmod -R og+rX /opt/gradle-ro-dep-cache \
+&& rm -rf /tmp/gradle-plugins /tmp/gradle-user-home
+ENV GRADLE_RO_DEP_CACHE=/opt/gradle-ro-dep-cache]])]])m4_dnl

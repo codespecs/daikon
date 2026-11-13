@@ -41,7 +41,8 @@ DOCKERFILES := $(filter-out Dockerfile-rockylinux-jdk11% Dockerfile-rockylinux-j
 dockerfiles: ${DOCKERFILES}
 
 # The stem $* is, for example, "ubuntu-jdk21" or "ubuntu-jdk21-plus".
-${DOCKERFILES}: Dockerfile-%: Dockerfile-defs.m4 $(addsuffix .m4,$(addprefix Dockerfile-,${DOCKERFILE_OSES}))
+# Each "-plus" Dockerfile contains the "plugins" block of ../java/lib/build.gradle.
+${DOCKERFILES}: Dockerfile-%: Dockerfile-defs.m4 $(addsuffix .m4,$(addprefix Dockerfile-,${DOCKERFILE_OSES})) ../java/lib/build.gradle
 	m4 -P -DJDKVER=$(patsubst jdk%,%,$(word 2,$(subst -, ,$*))) \
 	  -DPLUS=$(if $(filter %-plus,$*),1,0) \
 	  Dockerfile-defs.m4 Dockerfile-$(word 1,$(subst -, ,$*)).m4 > $@.tmp \

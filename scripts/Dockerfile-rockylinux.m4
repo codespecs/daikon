@@ -85,6 +85,8 @@ RUN wget -q https://services.gradle.org/distributions/gradle-9.8.0-bin.zip \
 && rm gradle-9.8.0-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
 
+gradle_dependency_cache
+
 # Install shfmt.
 RUN dnf -q -y upgrade && dnf -q -y install \
   golang \

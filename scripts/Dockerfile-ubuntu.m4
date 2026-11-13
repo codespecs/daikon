@@ -118,6 +118,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && unzip -q -d /opt/gradle gradle-9.8.0-bin.zip \
 && rm gradle-9.8.0-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
+
+gradle_dependency_cache
 ]])m4_dnl
 
 # Azure runs jobs as a non-root user, who must be able to read files in /root
