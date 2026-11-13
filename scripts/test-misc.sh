@@ -17,12 +17,23 @@ export SHELLOPTS
 echo "HEAD=$(git rev-parse HEAD)"
 
 # Test that daikon-plumelib.jar builds.  Gradle requires Java 17.
-# Setting SKIP_BUILD_DAIKON_PLUMELIB skips this test.
+# When many CI jobs download the Gradle plugins at once, Maven Central rejects
+# some requests with status 429 (Too Many Requests), so retry after a pause.
+# A retry downloads only the files that the previous attempt did not.
 JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
-if [ -n "${SKIP_BUILD_DAIKON_PLUMELIB+x}" ]; then
-  echo "Skipping the build of daikon-plumelib.jar because SKIP_BUILD_DAIKON_PLUMELIB is set."
-elif [ "$JAVA_VER" -ge "17" ]; then
-  (cd java/lib && gradle shadowJar)
+if [ "$JAVA_VER" -ge "17" ]; then
+  max_attempts=3
+  for attempt in $(seq "$max_attempts"); do
+    if (cd java/lib && gradle shadowJar); then
+      break
+    elif [ "$attempt" -eq "$max_attempts" ]; then
+      echo "gradle shadowJar failed $max_attempts times."
+      exit 1
+    fi
+    delay=$((30 + RANDOM % 60))
+    echo "gradle shadowJar failed (attempt $attempt of $max_attempts); retrying in $delay seconds."
+    sleep "$delay"
+  done
 fi
 
 make compile daikon.jar
