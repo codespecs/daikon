@@ -37,9 +37,9 @@ class PrefixFixer extends DepthFirstVisitor {
   }
 
   /**
-   * Fixes prefixes located in statement (see class description).
+   * Fixes prefixes located in expression (see class description).
    *
-   * @param expression valid segment of java code from which prefix should be fixed
+   * @param expression a Java expression whose prefixes should be fixed
    * @param baseNames the base names of the variables that may appear in the expression
    */
   public static String fixPrefix(String expression, String[] baseNames) throws ParseException {
