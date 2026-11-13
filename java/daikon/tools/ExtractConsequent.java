@@ -8,7 +8,6 @@ import daikon.Daikon;
 import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
-import daikon.Ppt;
 import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.ProglangType;
@@ -29,10 +28,10 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -48,6 +47,12 @@ import org.plumelib.util.StringsPlume;
  * <em>NUM</em>) &rArr; consequent". The consequent is only true in certain clusters, but is not
  * generally true for all executions of the program point to which the Implication belongs. These
  * resulting implications are written to standard output in the format of a splitter info file.
+ *
+ * <p>Each PPT_NAME in the output is a complete program point name. It designates the program point
+ * of that name, and also every program point whose name is that name preceded by a qualifier (see
+ * {@link daikon.split.SplitterList#matches}). To make Daikon use each condition only at the program
+ * points that its PPT_NAME designates, disable indiscriminate splitting via {@code --config_option
+ * daikon.split.SplitterList.all_splitters=false}.
  */
 public class ExtractConsequent {
 
@@ -80,12 +85,15 @@ public class ExtractConsequent {
     }
   }
 
-  /* A HashMap whose keys are PPT names (Strings) and whose values are
-  HashMaps whose keys are predicate names (Strings) and whose values are
-   HashMaps whose keys are Strings (normalized java-format invariants)
-     and whose values are HashedConsequent objects. */
+  /**
+   * Maps a complete program point name to a map whose keys are cluster keys (see {@link
+   * #clusterKey}) and whose values are maps whose keys are Strings (normalized Java-format
+   * invariants) and whose values are HashedConsequent objects. Each program point has its own
+   * clustering, so conditions from different program points are never combined. The maps are
+   * sorted, for deterministic output.
+   */
   private static Map<String, Map<String, Map<String, HashedConsequent>>> pptname_to_conditions =
-      new HashMap<>();
+      new TreeMap<>();
 
   /** The usage message for this program. */
   private static String usage =
@@ -164,13 +172,8 @@ public class ExtractConsequent {
   }
 
   public static void extract_consequent(PptMap ppts) {
-    // Retrieve Ppt objects in sorted order.
-    // Use a custom comparator for a specific ordering
-    Comparator<PptTopLevel> comparator = new Ppt.NameComparator();
-    TreeSet<PptTopLevel> ppts_sorted = new TreeSet<>(comparator);
-    ppts_sorted.addAll(ppts.asCollection());
-
-    for (PptTopLevel ppt : ppts_sorted) {
+    pptname_to_conditions.clear();
+    for (PptTopLevel ppt : ppts.asCollection()) {
       extract_consequent_maybe(ppt, ppts);
     }
 
@@ -409,7 +412,7 @@ public class ExtractConsequent {
       }
     }
     if (!invs.isEmpty()) {
-      String pptname = cleanup_pptname(ppt.name());
+      String pptname = ppt.name();
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
 
@@ -547,13 +550,13 @@ public class ExtractConsequent {
   private static boolean store_invariant(
       String predicate, String index, HashedConsequent consequent, String pptname) {
     if (!pptname_to_conditions.containsKey(pptname)) {
-      pptname_to_conditions.put(pptname, new HashMap<>());
+      pptname_to_conditions.put(pptname, new TreeMap<>());
     }
 
     Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
         pptname_to_conditions.get(pptname);
     if (!cluster_to_conditions.containsKey(predicate)) {
-      cluster_to_conditions.put(predicate, new HashMap<>());
+      cluster_to_conditions.put(predicate, new TreeMap<>());
     }
 
     Map<String, HashedConsequent> conditions = cluster_to_conditions.get(predicate);
@@ -587,27 +590,6 @@ public class ExtractConsequent {
     }
 
     return false;
-  }
-
-  /**
-   * Remove non-word characters and everything after "(" (which includes everything after ":::")
-   * from the program point name, leaving "PackageName.ClassName.MethodName".
-   *
-   * @param pptname a program point name
-   * @return the argument, without non-word characters and without parens or ":::" suffix
-   */
-  private static String cleanup_pptname(String pptname) {
-    int index;
-    if ((index = pptname.indexOf('(')) > 0) {
-      pptname = pptname.substring(0, index);
-    }
-
-    if (pptname.endsWith(".")) {
-      pptname = pptname.substring(0, pptname.length() - 2);
-    }
-
-    Matcher m = non_word_pattern.matcher(pptname);
-    return m.replaceAll(".");
   }
 
   /**
@@ -668,7 +650,6 @@ public class ExtractConsequent {
   /** Matches ".class", as in "Foo.class", but not ".classCount" or ".class$0". */
   static Pattern dot_class_pattern;
 
-  static Pattern non_word_pattern;
   static Pattern gteq_pattern;
   static Pattern lteq_pattern;
   static Pattern neq_pattern;
@@ -679,7 +660,6 @@ public class ExtractConsequent {
 
   static {
     try {
-      non_word_pattern = Pattern.compile("\\W+");
       post_pattern = Pattern.compile("\\\\(?:post|new)\\s*\\(");
       result_pattern = Pattern.compile("\\\\result\\b");
       old_pattern = Pattern.compile("\\\\old\\s*\\(");

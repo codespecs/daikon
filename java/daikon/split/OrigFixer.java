@@ -45,10 +45,10 @@ class OrigFixer extends DepthFirstVisitor {
    * "orig_x + orig_y &gt; orig_z - 3", and "orig(java.lang.Math.abs(x))" would yield
    * "java.lang.Math.abs(orig_x)". See {@link #visit(Name)} for details.
    *
-   * @param expression a valid segment of java code in which "orig()" is being replaced
+   * @param expression a Java expression in which "orig()" is being replaced
    * @param baseNames the base names of the variables that may appear in the expression
-   * @return condition with all instances of "orig()" replaced
-   * @throws ParseException if expression is not valid java code
+   * @return expression, with all instances of "orig()" replaced
+   * @throws ParseException if expression cannot be parsed
    */
   public static String fixOrig(String expression, String[] baseNames) throws ParseException {
     Node root = Visitors.getJtbTree(expression);

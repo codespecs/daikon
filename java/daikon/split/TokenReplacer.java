@@ -50,8 +50,8 @@ class TokenReplacer extends DepthFirstVisitor {
    * Replaces all the instances of an element oldVars in expression with the corresponding element
    * of newVars. The ith element of oldVars will be replaced by the ith element of newVars.
    *
-   * @param expression a segment of valid java code in which instances of oldVars should be replaced
-   *     by the corresponding element of newVars
+   * @param expression a Java expression in which instances of oldVars should be replaced by the
+   *     corresponding element of newVars
    * @param oldVars the variable names, as Strings, that should be replaced by newVars
    * @param newVars the variable names, as Strings, that oldVars are replaced with
    * @return expression with all instances of an element of oldVars replaced by the corresponding

@@ -106,6 +106,7 @@ public class SplitterFactoryTestUpdater {
     generateSplitters("QueueAr.spinfo", "QueueAr.decls");
     generateSplitters("BigFloat.spinfo", "BigFloat.decls");
     generateSplitters("CharBuf.spinfo", "CharBuf.decls");
+    generateSplitters("QuantCalls.spinfo", "QuantCalls.decls");
     processFiles(updateGoals);
     writeTestClass();
   }
