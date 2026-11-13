@@ -48,7 +48,7 @@ class PrefixRemover extends DepthFirstVisitor {
   /**
    * Removes prefix from prefix locations in expression.
    *
-   * @param expression valid segment of java code from which prefix should be removed
+   * @param expression a Java expression from which prefix should be removed
    * @param prefix the prefix that should be removed. Prefix can not be a java reserved word.
    * @return expression with instances of prefix removed from prefix locations
    */

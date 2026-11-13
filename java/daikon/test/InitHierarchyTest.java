@@ -179,6 +179,20 @@ public class InitHierarchyTest {
         String.valueOf(e.getMessage()));
   }
 
+  /** A point that is declared as a parent is reported as soon as the declarations are read. */
+  @Test
+  public void testPointAsParentBeforeHierarchy() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "parent", "P:::POINT"));
+    Daikon.UserError e =
+        assertThrows(Daikon.UserError.class, () -> PptRelation.check_declared_parents(ppts));
+    assertEquals(
+        "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it a"
+            + " leaf of the dataflow hierarchy",
+        String.valueOf(e.getMessage()));
+  }
+
   /** A point can be declared as a parent when the hierarchy is not used. */
   @Test
   public void testPointAsParentWithoutHierarchy() throws IOException {

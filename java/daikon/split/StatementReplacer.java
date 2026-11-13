@@ -60,11 +60,11 @@ class StatementReplacer extends DepthFirstVisitor {
   static final int MAXREPLACEMENTS = 10;
 
   /**
-   * Makes the replacements in statement that are designated by this. See class description for
+   * Makes the replacements in expression that are designated by this. See class description for
    * details.
    *
-   * @param expression a segment of valid java code in which the replacements should be made
-   * @return statement with the correct replacements made
+   * @param expression a Java expression in which the replacements should be made
+   * @return expression, with the correct replacements made
    */
   public String makeReplacements(String expression) throws ParseException {
     // originalExpression and replacements detect loops.  Gross.
