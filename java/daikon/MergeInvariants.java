@@ -281,18 +281,20 @@ public final class MergeInvariants {
       // System.out.printf("Including ppt %s, %d children%n", ppt,
       //                   ppt.children.size());
 
-      // Splitters should not have any children to begin with
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
+        // Splitters should not have any children to begin with
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
             assert p.children.isEmpty() : p;
           }
         }
+        // The leaf obtains its invariants from its conditional ppts.
+        connect_conditionals(ppt);
       }
 
       // Loop over each of the input ppt maps, looking for the same ppt
-      List<PptTopLevel> merge_children = new ArrayList<>();
+      boolean found_child = false;
       for (int j = 0; j < pptmaps.size(); j++) {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
@@ -300,7 +302,7 @@ public final class MergeInvariants {
         if (child == null) {
           continue;
         }
-        merge_children.add(child);
+        found_child = true;
         if (child.equality_view == null) {
           System.out.println(
               "equality_view == null in child ppt: "
@@ -327,15 +329,7 @@ public final class MergeInvariants {
 
         // Remove implications, they don't merge correctly
         child.remove_implications();
-      }
 
-      // If no input map contains this leaf (for example, because ppt filtering removed it), it
-      // gets no invariants.
-      if (merge_children.isEmpty()) {
-        continue;
-      }
-
-      for (PptTopLevel child : merge_children) {
         // If the ppt has splitters, attach the child's splitters to the
         // splitters.  Don't attach the ppt itself, as its invariants can
         // be built from the invariants in the splitters.
@@ -347,7 +341,9 @@ public final class MergeInvariants {
         }
       }
 
-      if (ppt.has_splitters()) {
+      // Each conditional has a child, unless no input map contains this leaf (for example,
+      // because ppt filtering removed it).  In that case, the leaf gets no invariants.
+      if (found_child && ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
@@ -359,11 +355,7 @@ public final class MergeInvariants {
 
     // Every ppt with no children needs an equality view, which clean_for_merge removed.  This
     // includes a non-leaf with no children and a leaf that no input map contains.
-    for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
-      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
-        ppt.create_equality_view();
-      }
-    }
+    PptRelation.create_childless_equality_views(merge_ppts);
 
     // Check the resulting PptMap for consistency
     merge_ppts.repCheck();
@@ -403,9 +395,6 @@ public final class MergeInvariants {
     // Remove the merge PptRelation links so that when the file is written
     // out it only includes the new information
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-      if (!ppt.is_dataflow_leaf()) {
-        continue;
-      }
       ppt.children.removeIf(MergeInvariants::isMergeChildRel);
       for (PptConditional cond : ppt.cond_iterable()) {
         cond.children.removeIf(MergeInvariants::isMergeChildRel);
@@ -435,6 +424,33 @@ public final class MergeInvariants {
    */
   private static boolean isMergeChildRel(PptRelation rel) {
     return rel.getRelationType() == PptRelation.PptRelationType.MERGE_CHILD;
+  }
+
+  /**
+   * Ensures that the children of the given leaf include a relation to each of its conditional ppts
+   * (for its first splitter), as {@link PptRelation#init_hierarchy} creates. A ppt read from a .inv
+   * file can lack these relations among its children; for example, the .inv file might have been
+   * written by a version of Daikon that omitted them.
+   *
+   * @param ppt a leaf of the dataflow hierarchy that has splitters
+   */
+  private static void connect_conditionals(PptTopLevel ppt) {
+    assert ppt.splitters != null : "@AssumeAssertion(nullness): precondition: has splitters";
+    for (PptTopLevel cond : ppt.splitters.get(0).ppts) {
+      boolean connected = false;
+      for (PptRelation rel : cond.parents) {
+        if ((rel.parent == ppt)
+            && (rel.getRelationType() == PptRelation.PptRelationType.PPT_PPTCOND)) {
+          if (!ppt.children.contains(rel)) {
+            ppt.children.add(rel);
+          }
+          connected = true;
+        }
+      }
+      if (!connected) {
+        PptRelation.newPptPptConditional(ppt, cond);
+      }
+    }
   }
 
   /**

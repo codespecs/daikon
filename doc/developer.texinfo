@@ -2995,10 +2995,11 @@ Since in most languages a method or function may have multiple exit points,
 the @code{ppt-name} for a @code{subexit} @code{ppt-type} must be appended
 with a unique id.  Typically, this is the corresponding source line number.
 
-The @code{ppt-name}s for the @code{throws} and @code{global}
-@code{ppt-type}s end with @code{:::THROWS} and @code{:::GLOBAL},
-respectively.  Neither Daikon's front ends nor Kvasir currently produce
-these program points.
+The @code{ppt-name} for the @code{throws} @code{ppt-type} contains
+@code{:::THROWS}, optionally followed by a unique id as for a
+@code{subexit}.  The @code{ppt-name} for the @code{global} @code{ppt-type}
+ends with @code{:::GLOBAL}.  None of Daikon's front ends (including Kvasir)
+currently produces these program points.
 
 The following information about the program point (@code{ppt-info}) can be specified:
 @itemize
@@ -3023,6 +3024,9 @@ type.
 A @code{point} program point is one that is @emph{not} involved in a
 program point hierarchy.   This is normally used when the input is not
 from a programming language or when there is no dataflow hierarchy.
+A @code{point} program point is a leaf of the dataflow hierarchy:  no
+other program point can name it as a @code{parent}, unless Daikon is run
+with the @option{--nohierarchy} option.
 
 @item @code{flags <flags>}
 
