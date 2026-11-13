@@ -22,18 +22,7 @@ echo "HEAD=$(git rev-parse HEAD)"
 # A retry downloads only the files that the previous attempt did not.
 JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
 if [ "$JAVA_VER" -ge "17" ]; then
-  max_attempts=3
-  for attempt in $(seq "$max_attempts"); do
-    if (cd java/lib && gradle shadowJar); then
-      break
-    elif [ "$attempt" -eq "$max_attempts" ]; then
-      echo "gradle shadowJar failed $max_attempts times."
-      exit 1
-    fi
-    delay=$((30 + RANDOM % 60))
-    echo "gradle shadowJar failed (attempt $attempt of $max_attempts); retrying in $delay seconds."
-    sleep "$delay"
-  done
+  (cd java/lib && (gradle shadowJar || (sleep 1m && gradle shadowJar)))
 fi
 
 make compile daikon.jar
