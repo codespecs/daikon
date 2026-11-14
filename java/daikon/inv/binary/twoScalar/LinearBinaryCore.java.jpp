@@ -466,10 +466,15 @@ public final class CLASSNAME implements Serializable, Cloneable {
       + ",values_seen=" + values_seen;
   }
 
-  // Format one term of an equation.
-  // Variable "first" indicates whether this is the leading term
-  // Variable "varname" is the name of the variable; may be null
-  // for the constant term.
+  /**
+   * Returns one term of a linear equation, such as "3 * x" or " - (size(a[])-1)". The variable name
+   * is parenthesized if it is compound and the term subtracts it or multiplies it by a coefficient.
+   *
+   * @param coeff the term's coefficient
+   * @param varname a variable name, or null for the constant term
+   * @param first true if this is the leading term of the equation, which has no leading " + "
+   * @return the term, with its sign, or the empty string if {@code coeff} is 0
+   */
   public static String formatTerm(double coeff, @Nullable String varname, boolean first) {
     double ncoeff = coeff;
 
@@ -495,11 +500,59 @@ public final class CLASSNAME implements Serializable, Cloneable {
     if (varname == null) {
       return sign + coeff_string;
     }
-    if (ncoeff == 1 || ncoeff == -1) {
+    if (ncoeff == 1) {
       return sign + varname;
+    } else if (ncoeff == -1) {
+      return sign + parenthesizeIfCompound(varname);
     } else {
-      return sign + coeff_string + " * " + varname;
+      return sign + coeff_string + " * " + parenthesizeIfCompound(varname);
     }
+  }
+
+  /**
+   * Returns the given expression, parenthesized if it is compound: that is, if it contains an
+   * operator or whitespace outside parentheses, brackets, and literals. Neither "::" nor "->" is
+   * such an operator. For example, returns "this.x", "size(a[])", "a[i-1]", "::global", and
+   * "p->next" unchanged, and returns "(size(a[])-1)" for "size(a[])-1".
+   *
+   * @param expr a variable name, in any output format
+   * @return the expression, parenthesized if it is compound
+   */
+  public static String parenthesizeIfCompound(String expr) {
+    int depth = 0;
+    for (int i = 0; i < expr.length(); i++) {
+      char c = expr.charAt(i);
+      switch (c) {
+        case '(':
+        case '[':
+        case '{':
+          depth++;
+          break;
+        case ')':
+        case ']':
+        case '}':
+          depth--;
+          break;
+        case '"':
+        case '\'':
+          // Skip the literal.
+          for (i++; i < expr.length() && expr.charAt(i) != c; i++) {
+            if (expr.charAt(i) == '\\') {
+              i++;
+            }
+          }
+          break;
+        default:
+          if (c == '-' && i + 1 < expr.length() && expr.charAt(i + 1) == '>') {
+            // A C field access, as in "p->next".
+            i++;
+          } else if (depth == 0
+              && (Character.isWhitespace(c) || "+-*/%<>=!&|^?~".indexOf(c) != -1)) {
+            return "(" + expr + ")";
+          }
+      }
+    }
+    return expr;
   }
 
   @SideEffectFree
@@ -508,7 +561,13 @@ public final class CLASSNAME implements Serializable, Cloneable {
 
     // recall that a, b, c in the linear binary equation means ax + by + c = 0;
     if (u == 0 && v == 0 && w == 0) {
-      return wrapper.format_too_few_samples(format, "0 * " + vix + "+ 0 * " + viy + " + 0 == 0");
+      return wrapper.format_too_few_samples(
+          format,
+          "0 * "
+              + parenthesizeIfCompound(vix)
+              + " + 0 * "
+              + parenthesizeIfCompound(viy)
+              + " + 0 == 0");
     }
 
     if (format.isJavaFamily()) {

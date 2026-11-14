@@ -1,0 +1,70 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class misc_QuantCalls_m_63 extends Splitter {
+
+  public String condition() {
+    return "java.util.Arrays.equals(this.a, this.b)";
+  }
+
+  VarInfo this_a_array_varinfo; // this.a[..]
+  VarInfo this_b_array_varinfo; // this.b[..]
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public misc_QuantCalls_m_63() { }
+  public misc_QuantCalls_m_63(Ppt ppt) {
+    this_a_array_varinfo = ppt.find_var_by_name("this.a[..]");
+    this_b_array_varinfo = ppt.find_var_by_name("this.b[..]");
+  }
+
+  public Splitter instantiateSplitter(Ppt ppt) {
+    return new misc_QuantCalls_m_63(ppt);
+  }
+
+  public boolean valid() {
+    return (this_a_array_varinfo != null) && (this_b_array_varinfo != null);
+  }
+
+  public boolean test(ValueTuple vt) {
+    /* writeTestBody: 2 declarations */
+    long[] this_a_array = this_a_array_varinfo.getIntArrayValue(vt);
+    long[] this_b_array = this_b_array_varinfo.getIntArrayValue(vt);
+    return(java.util.Arrays.equals(this_a_array,this_b_array));
+  }
+
+  public String repr() {
+    return "misc_QuantCalls_m_63: "
+      + "this_a_array_varinfo = " + this_a_array_varinfo.repr() + " "
+      + "this_b_array_varinfo = " + this_b_array_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariantFactory(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo this_a_array_vi = ppt.find_var_by_name("this.a[..]");
+    VarInfo this_b_array_vi = ppt.find_var_by_name("this.b[..]");
+    if (this_a_array_vi != null && this_b_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_a_array_vi, this_b_array_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+
+  public int[] getIntArray(long[] longArray) {
+    int[] intArray = new int[longArray.length];
+    for (int i = 0; i < intArray.length; i++) {
+      intArray[i] = (int) longArray[i];
+    }
+    return intArray;
+  }
+
+}
