@@ -181,6 +181,13 @@ public abstract class SplitterList {
    * ending with ":::EXIT" also designates the method's numbered exit points, such as
    * "pkg.Foo.bar(int):::EXIT12".
    *
+   * <p>If the most recent "input-language" record that Daikon read is "C/C++" (see {@link
+   * FileIO#input_language}), then a complete name can omit any qualifier at the beginning of the
+   * program point name, not only a qualifier of the class name. That is, it designates every
+   * program point whose name is that name preceded by a qualifier that ends with a character in
+   * {@link #QUALIFIER_SEPARATORS}: "main():::ENTER" designates the global function
+   * "..main():::ENTER", and "f():::ENTER" designates the file-static function "file_c.f():::ENTER".
+   *
    * <p>Any other name, such as "Foo.bar", designates every program point whose name contains it.
    *
    * @param spinfoPptName a name on a PPT_NAME line of a {@code .spinfo} file
@@ -188,12 +195,19 @@ public abstract class SplitterList {
    * @return true if {@code spinfoPptName} designates the program point named {@code pptName}
    */
   public static boolean matches(String spinfoPptName, String pptName) {
-    if (isComplete(spinfoPptName)) {
-      return matchesComplete(spinfoPptName, pptName);
-    } else {
+    if (!isComplete(spinfoPptName)) {
       return pptName.contains(spinfoPptName);
+    } else if (C_INPUT_LANGUAGE.equals(FileIO.input_language)) {
+      return matchesCompleteC(spinfoPptName, pptName);
+    } else {
+      return matchesComplete(spinfoPptName, pptName);
     }
   }
+
+  /**
+   * The input language of C and C++ programs, which Kvasir writes on an "input-language" record.
+   */
+  private static final String C_INPUT_LANGUAGE = "C/C++";
 
   /**
    * Returns true if the complete program point name on a PPT_NAME line of a {@code .spinfo} file
@@ -230,30 +244,54 @@ public abstract class SplitterList {
   }
 
   /**
-   * The characters that can separate a qualifier from the rest of a class name: "." (as in
-   * "pkg.Foo"), "$" (as in the Java nested class "Outer$Inner"), ":" (as in the Perl package
-   * "Math::BigFloat"), and "/" (as in a directory path).
+   * Returns true if the complete program point name on a PPT_NAME line of a {@code .spinfo} file
+   * designates the given program point of a C or C++ program; see {@link #matches}.
+   *
+   * @param spinfoPptName a complete program point name on a PPT_NAME line of a {@code .spinfo} file
+   * @param pptName the name of a program point of a C or C++ program
+   * @return true if {@code spinfoPptName} designates the program point named {@code pptName}
+   */
+  private static boolean matchesCompleteC(String spinfoPptName, String pptName) {
+    if (endsWithQualified(pptName, spinfoPptName)) {
+      return true;
+    }
+    if (spinfoPptName.endsWith(FileIO.exit_tag)) {
+      // Remove the exit number, if any.
+      int end = pptName.length();
+      while (end > 0 && pptName.charAt(end - 1) >= '0' && pptName.charAt(end - 1) <= '9') {
+        end--;
+      }
+      return end < pptName.length() && endsWithQualified(pptName.substring(0, end), spinfoPptName);
+    }
+    return false;
+  }
+
+  /**
+   * The characters that can separate a qualifier from the rest of a name: "." (as in "pkg.Foo"),
+   * "$" (as in the Java nested class "Outer$Inner"), ":" (as in the Perl package "Math::BigFloat"),
+   * and "/" (as in a directory path).
    */
   private static final String QUALIFIER_SEPARATORS = ".$:/";
 
   /**
-   * Returns true if the class name is the given suffix, possibly preceded by a qualifier: that is,
-   * if the class name ends with the suffix, and the character before the suffix, if any, is a
-   * qualifier separator in {@link #QUALIFIER_SEPARATORS}.
+   * Returns true if the name is the given suffix, possibly preceded by a qualifier: that is, if the
+   * name ends with the suffix, and the character before the suffix, if any, is a qualifier
+   * separator in {@link #QUALIFIER_SEPARATORS}.
    *
-   * @param className a class name, such as "pkg.Outer$Inner"
-   * @param suffix a class name that might lack a qualifier, such as "Inner" or "pkg.Outer$Inner"
-   * @return true if {@code className} is {@code suffix}, possibly preceded by a qualifier
+   * @param name a name, such as the class name "pkg.Outer$Inner" or the program point name
+   *     "..main():::ENTER"
+   * @param suffix a name that might lack a qualifier, such as "Inner" or "main():::ENTER"
+   * @return true if {@code name} is {@code suffix}, possibly preceded by a qualifier
    */
-  private static boolean endsWithQualified(String className, String suffix) {
-    if (!className.endsWith(suffix)) {
+  private static boolean endsWithQualified(String name, String suffix) {
+    if (!name.endsWith(suffix)) {
       return false;
     }
-    int start = className.length() - suffix.length();
+    int start = name.length() - suffix.length();
     if (start == 0) {
       return true;
     }
-    char before = className.charAt(start - 1);
+    char before = name.charAt(start - 1);
     return QUALIFIER_SEPARATORS.indexOf(before) != -1;
   }
 

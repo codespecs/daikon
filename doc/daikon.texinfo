@@ -2418,10 +2418,19 @@ List.add(} will match only the @code{add} method.
 If @var{pptname} contains @samp{:::}, then it is a complete program
 point name, such as @samp{pkg.List.add(java.lang.Object):::EXIT12}.  It
 matches the program point of that name, and every program point whose
-name is that name preceded by a qualifier such as a package.  For
-example, @samp{List.add(java.lang.Object):::EXIT12} matches
+name is that name with a qualifier, such as a package, before the class
+name.  For example, @samp{List.add(java.lang.Object):::EXIT12} matches
 @samp{pkg.List.add(java.lang.Object):::EXIT12} but not
-@samp{pkg.MyList.add(java.lang.Object):::EXIT12}.  As a special case, a
+@samp{pkg.MyList.add(java.lang.Object):::EXIT12}.  The name can omit
+only a qualifier of the class name, not the class name itself or part of
+the method signature:  neither @samp{add(java.lang.Object):::EXIT12} nor
+@samp{Object):::EXIT12} matches
+@samp{pkg.List.add(java.lang.Object):::EXIT12}.  For a C or C++ program
+(whose declaration file, as Kvasir writes it, contains the record
+@samp{input-language C/C++}), the name can omit any qualifier at the
+beginning of the program point name:  @samp{main():::ENTER} matches the
+global function @samp{..main():::ENTER}, and @samp{f():::ENTER} matches
+the file-static function @samp{file_c.f():::ENTER}.  As a special case, a
 name that ends with @samp{:::EXIT} also matches the method's numbered
 exit points, such as @samp{:::EXIT12}.  By default, Daikon uses every
 loaded condition at
