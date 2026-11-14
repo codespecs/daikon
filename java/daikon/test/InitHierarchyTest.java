@@ -252,6 +252,27 @@ public class InitHierarchyTest {
     assertEquals(0, splitters(enter).size());
   }
 
+  /**
+   * With the hierarchy, a non-leaf whose only child is a childless non-leaf loses its splitters,
+   * even though it is processed before its child and the child has a matching splitter.
+   */
+  @Test
+  public void testChildlessSplitterCascades() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("Foo:::CLASS", "class")
+                + pptDecl("Foo:::OBJECT", "object", "parent", "Foo:::CLASS"));
+    Splitter splitter = new ConditionSplitter("x == 1");
+    PptTopLevel classPpt = get(ppts, "Foo:::CLASS");
+    PptTopLevel objectPpt = get(ppts, "Foo:::OBJECT");
+    classPpt.addConditions(new Splitter[] {splitter});
+    objectPpt.addConditions(new Splitter[] {splitter});
+    PptRelation.init_hierarchy(ppts);
+    assertEquals(0, splitters(classPpt).size());
+    assertEquals(0, splitters(objectPpt).size());
+    assertTrue(objectPpt.equality_view != null);
+  }
+
   /** A user relation to a point is forbidden when user relations are enabled. */
   @Test
   public void testPointAsEnabledUserParent() {
