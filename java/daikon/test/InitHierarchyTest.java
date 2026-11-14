@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Rule;
@@ -232,7 +233,7 @@ public class InitHierarchyTest {
     List<PptSplitter> exitSplitters = splitters(exit);
     assertEquals(1, exitSplitters.size());
     PptSplitter split = exitSplitters.get(0);
-    assertSame(kept, split.splitter);
+    assertSame(kept, Objects.requireNonNull(split.splitter));
     for (PptTopLevel cond : split.ppts) {
       assertEquals(1, cond.parents.size());
       assertSame(exit, cond.parents.get(0).parent);

@@ -24,6 +24,7 @@ import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.Identifier;
 import org.plumelib.util.StringsPlume;
 
@@ -82,7 +83,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     for (PptTopLevel ppt : pptmap.pptIterable()) {
 
-      if (ppt.is_subexit()) {
+      // Only entries, combined exits, objects, and classes have a property kind (see
+      // Property.Kind).  Others, such as numbered exits and general program points (POINT), are
+      // not checked.
+      if (!hasPropertyKind(ppt)) {
         continue;
       }
 
@@ -91,6 +95,53 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         xmlStringToIndex.put(toProperty(inv).xmlString(), Integer.toString(varNumCounter));
         varNumCounter++;
       }
+    }
+  }
+
+  /**
+   * Returns true if the given program point's invariants can be expressed as {@link Property}
+   * objects: that is, if the program point is an entry, a combined exit, an object, or a class.
+   *
+   * @param ppt a program point
+   * @return true if the ppt's type corresponds to a {@link Property.Kind}
+   */
+  private static boolean hasPropertyKind(PptTopLevel ppt) {
+    return ppt.is_enter() || ppt.is_combined_exit() || ppt.is_object() || ppt.is_class();
+  }
+
+  /**
+   * Returns the program point with the given name, if it exists and has the given type.
+   *
+   * @param pptname the name of a program point
+   * @param type the required type of the program point
+   * @return the program point with the given name and type, or null if there is none
+   */
+  private @Nullable PptTopLevel getPpt(String pptname, PptTopLevel.PptType type) {
+    PptTopLevel ppt = pptmap.get(pptname);
+    if (ppt == null || ppt.type != type) {
+      return null;
+    }
+    return ppt;
+  }
+
+  /**
+   * Returns the property tag for the given program point, such as "{@code <ENTER>}", based on its
+   * type rather than its name.
+   *
+   * @param ppt a program point for which {@link #hasPropertyKind} is true
+   * @return the property tag for the program point
+   */
+  private static String propertyTag(PptTopLevel ppt) {
+    if (ppt.is_enter()) {
+      return "<ENTER>";
+    } else if (ppt.is_combined_exit()) {
+      return "<EXIT>";
+    } else if (ppt.is_object()) {
+      return "<OBJECT>";
+    } else if (ppt.is_class()) {
+      return "<CLASS>";
+    } else {
+      throw new Error("No property kind for ppt " + ppt.name() + " of type " + ppt.type);
     }
   }
 
@@ -702,7 +753,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         "private void checkObjectInvariants_instrument"
             + "(daikon.tools.runtimechecker.Violation.Time time) {");
     String objectPptname = classname + ":::OBJECT";
-    PptTopLevel objectPpt = pptmap.get(objectPptname);
+    PptTopLevel objectPpt = getPpt(objectPptname, PptTopLevel.PptType.OBJECT);
     if (objectPpt != null) {
       List<Invariant> objectInvariants = filterInvariants(Ast.getInvariants(objectPpt, pptmap));
       appendInvariantChecks(objectInvariants, code, "time");
@@ -723,7 +774,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         "private static void checkClassInvariantsInstrument"
             + "(daikon.tools.runtimechecker.Violation.Time time) {");
     String classPptname = classname + ":::CLASS";
-    PptTopLevel classPpt = pptmap.get(classPptname);
+    PptTopLevel classPpt = getPpt(classPptname, PptTopLevel.PptType.CLASS);
     if (classPpt != null) {
       List<Invariant> classInvariants = filterInvariants(Ast.getInvariants(classPpt, pptmap));
       appendInvariantChecks(classInvariants, code, "time");
@@ -745,7 +796,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + (majorProperties ? "Major" : "Minor")
             + "ObjectInvariants(Object thiz) {");
     String objectPptname = classname + ":::OBJECT";
-    PptTopLevel objectPpt = pptmap.get(objectPptname);
+    PptTopLevel objectPpt = getPpt(objectPptname, PptTopLevel.PptType.OBJECT);
     if (objectPpt != null) {
       List<Invariant> objectInvariants = filterInvariants(Ast.getInvariants(objectPpt, pptmap));
       List<InvProp> finalList;
@@ -766,7 +817,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     code.append(
         "public static void check" + (majorProperties ? "Major" : "Minor") + "ClassInvariants() {");
     String classPptname = classname + ":::CLASS";
-    PptTopLevel classPpt = pptmap.get(classPptname);
+    PptTopLevel classPpt = getPpt(classPptname, PptTopLevel.PptType.CLASS);
     if (classPpt != null) {
       List<Invariant> classInvariants = filterInvariants(Ast.getInvariants(classPpt, pptmap));
       List<InvProp> finalList;
@@ -1098,7 +1149,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
 
     code.append("<INVINFO>");
-    code.append("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
+    code.append(propertyTag(inv.ppt.parent));
     code.append("<DAIKON>" + daikonrep + "</DAIKON>");
     code.append("<INV>" + StringsPlume.escapeJava(javarep) + "</INV>");
     code.append("<DAIKONCLASS>" + inv.getClass().toString() + "</DAIKONCLASS>");

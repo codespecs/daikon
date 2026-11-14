@@ -483,6 +483,14 @@ public class DaikonSimple {
       if ((ppt.is_enter() && !ppt_name.isConstructor()) || ppt.is_exit()) {
         object_ppt = all_ppts.get(ppt_name.makeObject());
         class_ppt = all_ppts.get(ppt_name.makeClassStatic());
+        // Likewise, a ppt named foo:::OBJECT or foo:::CLASS that is declared with some other type
+        // (such as POINT) is independent of the method and does not receive its samples.
+        if (object_ppt != null && !object_ppt.is_object()) {
+          object_ppt = null;
+        }
+        if (class_ppt != null && !class_ppt.is_class()) {
+          class_ppt = null;
+        }
       }
 
       // C programs do not have object ppts

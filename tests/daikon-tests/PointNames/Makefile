@@ -14,9 +14,10 @@ include ../../Makefile.common
 # their declared types, as Daikon does.
 txt-diff: inv-checker-diff txt-simple-diff
 
+# The common %.diff rule compares ${PROJECT_FILE}.txt-simple to its goal file every time.
 txt-simple-diff: ${PROJECT_FILE}.txt-simple.diff;
-${PROJECT_FILE}.txt-simple.diff: ${DECLS_FILES} ${DTRACE_FILES}
-	$(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.DaikonSimple \
+${PROJECT_FILE}.txt-simple: ${DECLS_FILES} ${DTRACE_FILES}
+	-rm -f $@-failed
+	($(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.DaikonSimple \
 	  --config_option daikon.Daikon.quiet=true \
-	  $(DECLS_FILES) $(DTRACE_FILES) > ${PROJECT_FILE}.txt-simple
-	diff -u ${PROJECT_FILE}.txt-simple.goal ${PROJECT_FILE}.txt-simple > $@
+	  $(DECLS_FILES) $(DTRACE_FILES) > $@) || (mv $@ $@-failed && false)
