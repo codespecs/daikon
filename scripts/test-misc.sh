@@ -24,12 +24,8 @@ if [ "$JAVA_VER" -ge "17" ]; then
       -Dorg.gradle.internal.http.socketTimeout=60000 \
       -Dorg.gradle.internal.http.connectionTimeout=60000)
   }
-  # When many CI jobs download the Gradle plugins at once, Maven Central
-  # rejects some requests with status 429 (Too Many Requests).  After a network
-  # failure (status 429 or 5xx, or a timeout), retry once.  The random pause
-  # keeps jobs that failed together from retrying together.  A retry downloads
-  # only the files that the previous attempt did not.  Any other failure is a
-  # real build error, which a retry would only repeat.
+  # After a network failure (status 429 or 5xx, or a timeout), retry once.
+  # The random pause keeps jobs that failed together from retrying together.
   gradle_log=$(mktemp)
   if ! gradle_shadowjar 2>&1 | tee "$gradle_log"; then
     if grep -q -E 'Received status code (429|5[0-9][0-9]) from server|timed out' "$gradle_log"; then
