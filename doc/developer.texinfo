@@ -2995,9 +2995,11 @@ Since in most languages a method or function may have multiple exit points,
 the @code{ppt-name} for a @code{subexit} @code{ppt-type} must be appended
 with a unique id.  Typically, this is the corresponding source line number.
 
-@c Note:
-@c There is a little code in FileIO.java to support additional ppt-names ending
-@c in THROWS and GLOBAL.  Neither Daikon or Kvasir currently use them.
+The @code{ppt-name} for the @code{throws} @code{ppt-type} contains
+@code{:::THROWS}, optionally followed by a unique id as for a
+@code{subexit}.  The @code{ppt-name} for the @code{global} @code{ppt-type}
+ends with @code{:::GLOBAL}.  None of Daikon's front ends (including Kvasir)
+currently produces these program points.
 
 The following information about the program point (@code{ppt-info}) can be specified:
 @itemize
@@ -3005,12 +3007,26 @@ The following information about the program point (@code{ppt-info}) can be speci
 
 Specifies the @var{type} of the program point.  Possible program point
 types are @code{point}, @code{class}, @code{object}, @code{enter},
-@code{exit}, @code{subexit}.  Except for @code{point} all of these
+@code{exit}, @code{subexit}, @code{throws}, and @code{global}.  Except for
+@code{point} all of these
 types are related to the program point hierarchy (see @ref{Dataflow hierarchy}).
+The @code{ppt-name} of a program point whose type is @code{class},
+@code{object}, @code{enter}, @code{throws}, or @code{global} must have the
+form given above for that type.
+The @code{ppt-name} of a program point whose type is @code{exit} or
+@code{subexit} must end with @code{:::EXIT} (a combined exit) or with
+@code{:::EXIT<id>} (a numbered exit).  Daikon gives the program point the
+type that its name indicates, so a numbered exit that is declared as an
+@code{exit} is a @code{subexit}, and vice versa.
+Daikon rejects a declaration whose @code{ppt-name} does not conform to its
+type.
 
 A @code{point} program point is one that is @emph{not} involved in a
 program point hierarchy.   This is normally used when the input is not
 from a programming language or when there is no dataflow hierarchy.
+A @code{point} program point is a leaf of the dataflow hierarchy:  no
+other program point can name it as a @code{parent}, unless Daikon is run
+with the @option{--nohierarchy} option.
 
 @item @code{flags <flags>}
 
@@ -3028,6 +3044,9 @@ point.  A parent program point
 is a point whose samples should include all of the samples at this
 program point.  For example, an object program point is a parent of
 each of the method program points in that object.
+The parent cannot be a leaf of the dataflow hierarchy, which is a program
+point whose type is @code{point} or @code{subexit}, unless Daikon is run
+with the @option{--nohierarchy} option.
 
 The @var{relation-type} is the type of parent-child relationship in
 the hierarchy. There are a few relationship types used internally
