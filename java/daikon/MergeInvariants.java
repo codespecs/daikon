@@ -260,44 +260,41 @@ public final class MergeInvariants {
       PptRelation.init_hierarchy(merge_ppts);
     }
 
-    // Remove all of the slices, equality sets, to start
+    // Remove all of the slices and equality sets, to start
     debugProgress.fine("Cleaning ppt map in preparation for merge");
     for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
       ppt.clean_for_merge();
     }
 
-    // Create a hierarchy between the merge exitNN points and the
-    // corresponding points in each of the specified maps.  This
-    // should only be created at the exitNN points (i.e., the leaves)
-    // so that the normal processing will create the invariants at
-    // upper points.
+    // Create a hierarchy between the merge leaves (such as exitNN points)
+    // and the corresponding points in each of the specified maps.  This
+    // should only be created at the leaves so that the normal processing
+    // will create the invariants at upper points.
     debugProgress.fine("Building hierarchy between leaves of the maps");
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
-      // Skip everything that is not a final exit point
-      if (!ppt.ppt_name.isExitPoint()) {
-        assert !ppt.children.isEmpty() : ppt;
-        continue;
-      }
-      if (ppt.ppt_name.isCombinedExitPoint()) {
-        assert !ppt.children.isEmpty() : ppt;
+      // Skip everything that is not a leaf
+      if (!ppt.is_dataflow_leaf()) {
         continue;
       }
 
       // System.out.printf("Including ppt %s, %d children%n", ppt,
       //                   ppt.children.size());
 
-      // Splitters should not have any children to begin with
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
+        // Splitters should not have any children to begin with
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
             assert p.children.isEmpty() : p;
           }
         }
+        // The leaf obtains its invariants from its conditional ppts.
+        connect_conditionals(ppt);
       }
 
       // Loop over each of the input ppt maps, looking for the same ppt
+      boolean found_child = false;
       for (int j = 0; j < pptmaps.size(); j++) {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
@@ -305,6 +302,7 @@ public final class MergeInvariants {
         if (child == null) {
           continue;
         }
+        found_child = true;
         if (child.equality_view == null) {
           System.out.println(
               "equality_view == null in child ppt: "
@@ -343,9 +341,9 @@ public final class MergeInvariants {
         }
       }
 
-      // Make sure at least one child was found
-      assert !ppt.children.isEmpty() : ppt;
-      if (ppt.has_splitters()) {
+      // Each conditional has a child, unless no input map contains this leaf (for example,
+      // because ppt filtering removed it).  In that case, the leaf gets no invariants.
+      if (found_child && ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
@@ -354,6 +352,10 @@ public final class MergeInvariants {
         }
       }
     }
+
+    // Every ppt with no children needs an equality view, which clean_for_merge removed.  This
+    // includes a non-leaf with no children and a leaf that no input map contains.
+    PptRelation.create_childless_equality_views(merge_ppts);
 
     // Check the resulting PptMap for consistency
     merge_ppts.repCheck();
@@ -390,18 +392,12 @@ public final class MergeInvariants {
     long duration = System.nanoTime() - startTime;
     debugProgress.fine("Time spent in implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
 
-    // Remove the PptRelation links so that when the file is written
+    // Remove the merge PptRelation links so that when the file is written
     // out it only includes the new information
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-      if (!ppt.ppt_name.isExitPoint()) {
-        continue;
-      }
-      if (ppt.ppt_name.isCombinedExitPoint()) {
-        continue;
-      }
-      ppt.children.clear();
+      ppt.children.removeIf(MergeInvariants::isMergeChildRel);
       for (PptConditional cond : ppt.cond_iterable()) {
-        cond.children.clear();
+        cond.children.removeIf(MergeInvariants::isMergeChildRel);
       }
     }
 
@@ -417,6 +413,43 @@ public final class MergeInvariants {
     } else {
       // Print the invariants
       PrintInvariants.print_invariants(merge_ppts);
+    }
+  }
+
+  /**
+   * Returns true if the relation was created by {@link PptRelation#newMergeChildRel}.
+   *
+   * @param rel a relation
+   * @return true if the relation is from a merge ppt to the corresponding ppt of an input map
+   */
+  private static boolean isMergeChildRel(PptRelation rel) {
+    return rel.getRelationType() == PptRelation.PptRelationType.MERGE_CHILD;
+  }
+
+  /**
+   * Ensures that the children of the given leaf include a relation to each of its conditional ppts
+   * (for its first splitter), as {@link PptRelation#init_hierarchy} creates. A ppt read from a .inv
+   * file can lack these relations among its children; for example, the .inv file might have been
+   * written by a version of Daikon that omitted them.
+   *
+   * @param ppt a leaf of the dataflow hierarchy that has splitters
+   */
+  private static void connect_conditionals(PptTopLevel ppt) {
+    assert ppt.splitters != null : "@AssumeAssertion(nullness): precondition: has splitters";
+    for (PptTopLevel cond : ppt.splitters.get(0).ppts) {
+      boolean connected = false;
+      for (PptRelation rel : cond.parents) {
+        if ((rel.parent == ppt)
+            && (rel.getRelationType() == PptRelation.PptRelationType.PPT_PPTCOND)) {
+          if (!ppt.children.contains(rel)) {
+            ppt.children.add(rel);
+          }
+          connected = true;
+        }
+      }
+      if (!connected) {
+        PptRelation.newPptPptConditional(ppt, cond);
+      }
     }
   }
 

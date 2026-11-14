@@ -2075,6 +2075,7 @@ public final class Daikon {
         System.out.print("Reading declaration files ");
       }
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
+      PptRelation.check_declared_parents(all_ppts);
       if (debugTrace.isLoggable(FINE)) {
         debugTrace.fine("Initializing partial order");
       }
@@ -2579,17 +2580,7 @@ public final class Daikon {
         p = ((PptConditional) ppt).parent;
       }
 
-      // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
-      // exit), we define them as everything except
-      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT
-      //  and :::CLASS program points.  This scheme ensures that arbitrarily
-      //  named program points such as :::POINT (used by convertcsv.pl)
-      //  will be treated as leaves.
-      if (p.ppt_name.isCombinedExitPoint()
-          || p.ppt_name.isEnterPoint()
-          || p.ppt_name.isThrowsPoint()
-          || p.ppt_name.isObjectInstanceSynthetic()
-          || p.ppt_name.isClassStaticSynthetic()) {
+      if (!p.is_dataflow_leaf()) {
         return;
       }
 
@@ -2598,9 +2589,7 @@ public final class Daikon {
       }
     }
 
-    // Create the initial equality sets
-    ppt.equality_view = new PptSliceEquality(ppt);
-    ppt.equality_view.instantiate_invariants();
+    ppt.create_equality_view();
   }
 
   private static List<SpinfoFile> spinfoFiles = new ArrayList<>();
