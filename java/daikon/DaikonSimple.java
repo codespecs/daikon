@@ -493,31 +493,21 @@ public class DaikonSimple {
         }
       }
 
-      // C programs do not have object ppts
-      // check whether the ppt is a static or instance method
-      // that decides whether the sample is copied over to the object and/or
-      // class ppt
+      // C programs do not have object ppts.
+      // Whether the ppt is a static or instance method decides whether the sample is copied over
+      // to the object ppt.  The class ppt (if any) always receives the sample, independently of
+      // whether the object ppt does.
       if (object_ppt != null) {
-
         // the check assumes that static fields are not stored first in the
         // object ppt
         if (ppt.find_var_by_name(object_ppt.var_infos[0].name()) != null) {
-          // object and class ppt should be created
           object_vt = copySample(object_ppt, ppt, vt, nonce);
-
-          if (class_ppt != null) {
-            class_vt = copySample(class_ppt, ppt, vt, nonce);
-          }
-
         } else {
-          // only class ppt should be created
-          if (class_ppt != null) {
-            class_vt = copySample(class_ppt, ppt, vt, nonce);
-          }
-
-          object_vt = null;
           object_ppt = null;
         }
+      }
+      if (class_ppt != null) {
+        class_vt = copySample(class_ppt, ppt, vt, nonce);
       }
 
       // A general program point is a leaf of the dataflow hierarchy, so the sample applies to it
