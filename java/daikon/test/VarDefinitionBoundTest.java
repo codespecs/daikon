@@ -5,15 +5,13 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import daikon.Daikon;
-import daikon.FileIO;
 import daikon.FileIO.VarDefinition;
 import daikon.ProglangType;
 import daikon.VarInfo.VarKind;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Rule;
@@ -128,21 +126,21 @@ public class VarDefinitionBoundTest {
    * @throws IOException if there is trouble writing the decls file
    */
   private String readDeclsError(String... varRecords) throws IOException {
-    File declsFile = tmpFolder.newFile("test.decls");
-    StringBuilder decls = new StringBuilder();
-    decls.append("decl-version 2.0\n");
-    decls.append("var-comparability none\n");
-    decls.append("\n");
-    decls.append("ppt foo:::ENTER\n");
-    decls.append("ppt-type enter\n");
-    decls.append("variable x\n");
+    List<String> decls =
+        new ArrayList<>(
+            Arrays.asList(
+                "decl-version 2.0",
+                "var-comparability none",
+                "",
+                "ppt foo:::ENTER",
+                "ppt-type enter",
+                "variable x"));
     for (String varRecord : varRecords) {
-      decls.append("  ").append(varRecord).append("\n");
+      decls.add("  " + varRecord);
     }
-    Files.write(declsFile.toPath(), decls.toString().getBytes(StandardCharsets.UTF_8));
-    List<File> files = Collections.singletonList(declsFile);
+    File declsFile = tmpFolder.newFile();
     Daikon.UserError e =
-        assertThrows(Daikon.UserError.class, () -> FileIO.read_declaration_files(files));
+        assertThrows(Daikon.UserError.class, () -> Common.readDecls(declsFile, decls));
     return String.valueOf(e.getMessage());
   }
 
