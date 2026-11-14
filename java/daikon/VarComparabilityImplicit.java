@@ -287,8 +287,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   /**
    * Merges two comparable sets in {@code groups}.
    *
-   * @param set1 a comparable set
-   * @param set2 a comparable set
+   * @param set1 the integer id, such as 3, of a comparable set
+   * @param set2 the integer id, such as 5, of another comparable set
    * @param groups a union-find structure over comparable sets, as used by {@link #findGroup}
    */
   private static void union(int set1, int set2, Map<Integer, Integer> groups) {
@@ -304,13 +304,13 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   /**
-   * Returns the representative of the comparable set that contains {@code base}. Compresses the
-   * path from {@code base} to its representative.
+   * Returns the id of the representative of the group that contains comparable set {@code base}.
+   * Compresses the path from {@code base} to its representative.
    *
-   * @param base a comparable set
-   * @param groups a union-find structure over comparable sets: maps a comparable set to another
-   *     comparable set in the same group; a representative has no entry
-   * @return the representative of the comparable set that contains {@code base}
+   * @param base the integer id, such as 3, of a comparable set
+   * @param groups a union-find structure over comparable sets: maps the id of a comparable set to
+   *     the id of another comparable set in the same group; a representative has no entry
+   * @return the id of the representative of the group that contains comparable set {@code base}
    */
   private static int findGroup(int base, Map<Integer, Integer> groups) {
     int root = base;

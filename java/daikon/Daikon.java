@@ -1816,12 +1816,11 @@ public final class Daikon {
     // parent of the other).  So, revisit the parents of each ppt whose comparability changes.
     Set<PptTopLevel> worklist = new LinkedHashSet<>();
     // In MergeInvariants, some children are in other PptMaps; do not visit them.
-    List<PptTopLevel> allPpts = new ArrayList<>();
+    Set<PptTopLevel> unvisited = new LinkedHashSet<>();
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
-      allPpts.add(ppt);
+      unvisited.add(ppt);
     }
-    Set<PptTopLevel> unvisited = new HashSet<>(allPpts);
-    for (PptTopLevel ppt : allPpts) {
+    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       addChildrenFirst(ppt, unvisited, worklist);
     }
     while (!worklist.isEmpty()) {
