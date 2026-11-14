@@ -95,20 +95,29 @@ if ($algorithm eq "xm") {
 if ($verbose) { print "\n# Fixing invocation nonces ...\n"; }
 # Each fixed copy has a distinct name, even if several input files have the
 # same basename.  The names of later files are derived from these names.
+#
+# DtraceNonceFixer processes one file at a time, so the nonces of different
+# files may collide; for example, each file's samples that lack a nonce get
+# nonces starting at 0.  Later steps identify a sample by its program point
+# and nonce, regardless of its file, so the nonces of each file are then
+# shifted to follow those of the previous files.
 my @fixed_trace_files = ();
 my %used_fixed_names = ();
+# The largest nonce in the fixed files so far, or -1 if there is none.
+my $max_nonce = -1;
 foreach my $trace_file (@trace_files) {
-  my $gz = ($trace_file =~ /\.gz$/) ? ".gz" : "";
   my $base = basename($trace_file);
   $base =~ s/\.dtrace(\.gz)?$//;
-  # Compare names without ".gz", because later files' names omit it.
   my $stem = "${base}_runcluster_temp_nonces";
   for (my $i = 2; exists($used_fixed_names{$stem}); $i++) {
     $stem = "${base}-${i}_runcluster_temp_nonces";
   }
   $used_fixed_names{$stem} = 1;
-  my $fixed = "$stem.dtrace$gz";
-  system_or_die("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer " . shell_quote($trace_file) . " " . shell_quote($fixed), $verbose);
+  my $unshifted = "${stem}_unshifted.dtrace";
+  my $fixed = "$stem.dtrace";
+  system_or_die("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer " . shell_quote($trace_file) . " " . shell_quote($unshifted), $verbose);
+  $max_nonce = &shift_nonces($unshifted, $fixed, $max_nonce + 1);
+  unlink($unshifted);
   push @fixed_trace_files, $fixed;
 }
 my $dtrace_files = join(' ', @fixed_trace_files);
@@ -236,7 +245,9 @@ while (my $ppt = <PPTS>) {
 }
 close PPTS;
 foreach my $ppt (@spinfo_ppts) {
-  print SPINFO "PPT_NAME $ppt\n$conditions\n";
+  # The name is escaped as in a dtrace file, but a PPT_NAME line is not.
+  my $name = unescape_decl($ppt);
+  print SPINFO "PPT_NAME $name\n$conditions\n";
 }
 close SPINFO;
 
@@ -296,6 +307,46 @@ sub shell_quote {
   $s =~ s/'/'\\''/g;
   return "'$s'";
 } #shell_quote
+
+# Copies dtrace file $infile, in which every sample has an invocation nonce
+# (as output by DtraceNonceFixer), to $outfile, adding $offset to every
+# nonce.  Returns the largest nonce in $outfile, or $offset - 1 if it has
+# no samples.
+# (No prototype, because it is called before its definition.)
+sub shift_nonces {
+  my ($infile, $outfile, $offset) = @_;
+  my $max = $offset - 1;
+  open(my $in, "<", $infile) || die "couldn't open $infile for input\n";
+  open(my $out, ">", $outfile) || die "couldn't open $outfile for output\n";
+  my $next_record = record_reader($in, $infile);
+  while (defined(my $record = $next_record->())) {
+    print $out $record->{comments};
+    my $kind = $record->{kind};
+    next if ($kind eq "");
+    my $text = $record->{text};
+    $text .= "\n" if ($text !~ /\n\z/);
+    if ($kind eq "data") {
+      # The first variable of a sample is its nonce.
+      if ($text =~ /\A([^\n]*\nthis_invocation_nonce\n)(-?\d+)\n/) {
+        my $nonce = $2 + $offset;
+        if ($nonce > 2147483647) {
+          die "Too many invocation nonces in the trace files; the largest is $nonce\n";
+        }
+        $max = $nonce if ($nonce > $max);
+        substr($text, length($1), length($2)) = $nonce;
+      } else {
+        my $line = $record->{line};
+        die "$infile line $line: no invocation nonce for a sample\n";
+      }
+    }
+    print $out $text;
+    # A one-line header needs no blank line after it.
+    print $out "\n" if ($kind ne "header");
+  }
+  close($in);
+  close($out) || die "couldn't write $outfile\n";
+  return $max;
+} #shift_nonces
 
 sub unlink_glob ( $ ) {
   my ($glob) = @_;

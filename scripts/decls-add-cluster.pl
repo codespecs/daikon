@@ -19,7 +19,18 @@ use English;
 use strict;
 $WARNING = 1;			# "-w" flag
 
+# Put the script directory on the @INC path.
 use File::Basename;
+use lib dirname (__FILE__);
+
+# The file `util_daikon.pm` appears in the same directory as this script.
+use util_daikon;
+
+# The declaration of the "cluster" variable.
+my $cluster_decl = "variable cluster\n"
+    . "  var-kind variable\n"
+    . "  dec-type int\n"
+    . "  rep-type int\n";
 
 # The output file names used so far, to keep inputs with the same basename
 # from overwriting one another's output.
@@ -41,65 +52,55 @@ foreach my $decls_file (@ARGV) {
     }
     open (OUT, ">$decls_cluster") || die "couldn't open $decls_cluster for output\n";
 
-    # Process the file one paragraph (a group of lines ended by a blank line) at a time.
-    my @paragraph = ();
-    while (my $line = <IN>) {
-	if ($line =~ /^\s*$/) {
-	    &output_paragraph(@paragraph);
-	    @paragraph = ();
-	} else {
-	    push @paragraph, $line;
-	}
+    # Process the file one record at a time.  The record reader separates
+    # comments and one-line headers (such as "var-comparability none") from
+    # the record that follows them, even if no blank line intervenes.
+    my $next_record = record_reader(\*IN, $decls_file);
+    while (defined(my $record = $next_record->())) {
+	&output_record($record);
     }
-    &output_paragraph(@paragraph);
     close IN;
     close OUT;
 }
 
-# Print the given paragraph, which is a list of lines, to OUT, adding the
-# "cluster" variable if the paragraph is a program point declaration.
-sub output_paragraph ( @ ) {
-    my @lines = @_;
-    if (scalar(@lines) == 0) {
+# Print the given record, as returned by a record reader, to OUT, adding the
+# "cluster" variable if the record is a program point declaration.
+sub output_record ( $ ) {
+    my ($record) = @_;
+    print OUT $record->{comments};
+    my $kind = $record->{kind};
+    if ($kind eq "") {
+	# Comments at the end of the file.
 	return;
     }
-    # The first line that is not a comment (as recognized by
-    # daikon.FileIO.isComment) determines the kind of the paragraph.
-    my $first = undef;
-    foreach my $line (@lines) {
-	if ($line !~ /^(\/\/|#)/) {
-	    $first = $line;
-	    last;
-	}
+    my $text = $record->{text};
+    if ($text !~ /\n\z/) {
+	$text .= "\n";
     }
-    if (!defined($first)) {
-	# The paragraph consists only of comments.
-	print OUT @lines;
-    } elsif ($first =~ /^ppt\s/) {
+    if ($kind eq "header") {
+	# A one-line header, such as "decl-version 2.0", which needs no blank line.
+	print OUT $text;
+	return;
+    } elsif ($kind eq "data") {
+	# A sample in a dtrace file.
+	return;
+    } elsif ($kind eq "ppt") {
 	# Insert the variable before the first variable declaration.
-	my $add = ($first !~ /:::(OBJECT|CLASS)\s*$/);
+	my @lines = split(/^/, $text);
+	my $add = ($lines[0] !~ /:::(OBJECT|CLASS)\s*$/);
 	foreach my $line (@lines) {
 	    if ($add && $line =~ /^\s*variable\s/) {
-		print OUT "variable cluster\n";
-		print OUT "  var-kind variable\n";
-		print OUT "  dec-type int\n";
-		print OUT "  rep-type int\n";
+		print OUT $cluster_decl;
 		$add = 0;
 	    }
 	    print OUT $line;
 	}
 	if ($add) {
-	    print OUT "variable cluster\n";
-	    print OUT "  var-kind variable\n";
-	    print OUT "  dec-type int\n";
-	    print OUT "  rep-type int\n";
+	    print OUT $cluster_decl;
 	}
-    } elsif ($first =~ /:::/) {
-	# A sample in a dtrace file.
-	return;
     } else {
-	# Other information, such as comments or the declaration format.
-	print OUT @lines;
+	# Other information, such as a ListImplementors record.
+	print OUT $text;
     }
     print OUT "\n";
 }

@@ -512,7 +512,10 @@ sub read_decls_file ( $ ) {
     # single cluster, so we can perform clustering on either the ENTER or
     # the EXIT, but not both. We choose the exit program point because it
     # has more variables in scope there (eg. the return variable, etc).
-    if ($pptname !~ /ENTER/) {
+    # OBJECT and CLASS program points are not clustered either:
+    # decls-add-cluster.pl does not add the "cluster" variable to their
+    # declarations, so dtrace-add-cluster.pl must drop their samples.
+    if ($pptname !~ /ENTER/ && $pptname !~ /:::(OBJECT|CLASS)$/) {
       my $pptfilename = &cleanup_pptname($pptname);
       $pptfilename = $pptfilename.".runcluster_temp";
       if ($algorithm eq 'km' || $algorithm eq 'hierarchical') {
