@@ -30,7 +30,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.IPair;
 import org.plumelib.util.OrderedPairIterator;
@@ -516,9 +515,11 @@ public final class Diff {
    * Extracts the PptTopLevel and Invariants out of a pptMap, and places them into an InvMap. Maps
    * PptTopLevel to a List of Invariants. The InvMap is a cleaner representation than the PptMap,
    * and it allows us to more easily manipulate the contents. The InvMap contains exactly the
-   * elements contained in the PptMap. Conditional program points are also added as keys. Filtering
-   * is done when creating the pair tree. The ppts in the InvMap must be sorted, but the invariants
-   * need not be sorted.
+   * elements contained in the PptMap, except for obvious invariants that PrintInvariants also omits:
+   * reflexive invariants such as "x == x", and invariants that are obvious from the declarations
+   * alone. Conditional program points are also added as keys. Other
+   * filtering is done when creating the pair tree. The ppts in the InvMap must be sorted, but the
+   * invariants need not be sorted.
    */
   public InvMap convertToInvMap(PptMap pptMap) {
     InvMap map = new InvMap();
@@ -533,20 +534,36 @@ public final class Diff {
         continue;
       }
 
-      // List<Invariant> invs = ppt.getInvariants();
-      List<Invariant> invs = CollectionsPlume.sorted(ppt.getInvariants(), PptTopLevel.icfp);
+      List<Invariant> invs = sortedNonObvious(ppt.getInvariants());
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
         for (PptConditional pptCond : ppt.cond_iterable()) {
-          List<Invariant> invsCond =
-              CollectionsPlume.sorted(pptCond.getInvariants(), PptTopLevel.icfp);
-          // List<Invariant> invsCond = pptCond.getInvariants();
+          List<Invariant> invsCond = sortedNonObvious(pptCond.getInvariants());
           map.put(pptCond, invsCond);
         }
       }
     }
     return map;
+  }
+
+  /**
+   * Returns the invariants that are neither reflexive nor statically obvious, sorted by {@link
+   * PptTopLevel#icfp}. A reflexive invariant, such as "x == x", is one in which a variable appears
+   * more than once; see {@link Invariant#isReflexive}.
+   *
+   * @param invs some invariants
+   * @return the invariants in {@code invs} that are neither reflexive nor statically obvious
+   */
+  private static List<Invariant> sortedNonObvious(List<Invariant> invs) {
+    List<Invariant> result = new ArrayList<>(invs.size());
+    for (Invariant inv : invs) {
+      if (!inv.isReflexive() && inv.isObviousStatically_SomeInEquality() == null) {
+        result.add(inv);
+      }
+    }
+    result.sort(PptTopLevel.icfp);
+    return result;
   }
 
   /**
