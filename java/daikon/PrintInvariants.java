@@ -742,6 +742,38 @@ public final class PrintInvariants {
   // exit point at all when there is only a single exit.  It is done here
   // instead so as not to disturb the program point hierarchy.
 
+  /**
+   * Returns true if the given ppt is a numbered exit point whose combined exit point is in the
+   * given map and has no other numbered exit point. Then, the numbered exit point has the same
+   * invariants as the combined exit point.
+   *
+   * @param ppt a program point
+   * @param all_ppts the program points that are printed
+   * @return true if ppt is the only numbered exit point of a combined exit point in all_ppts
+   */
+  private static boolean is_only_subexit(PptTopLevel ppt, PptMap all_ppts) {
+    if (!ppt.is_subexit()) {
+      return false;
+    }
+    for (PptRelation rel : ppt.parents) {
+      if (rel.getRelationType() != PptRelationType.EXIT_EXITNN) {
+        continue;
+      }
+      PptTopLevel combined_exit = rel.parent;
+      if (all_ppts.get(combined_exit.ppt_name) != combined_exit) {
+        return false;
+      }
+      int num_subexits = 0;
+      for (PptRelation child_rel : combined_exit.children) {
+        if (child_rel.getRelationType() == PptRelationType.EXIT_EXITNN) {
+          num_subexits++;
+        }
+      }
+      return num_subexits == 1;
+    }
+    return false;
+  }
+
   public static void print_invariants(PptMap all_ppts) {
 
     if (out_stream == null) {
@@ -778,7 +810,7 @@ public final class PrintInvariants {
 
       // If this point is not an exit point, print out any retained combined
       // exit point
-      if (enable_exit_swap && !ppt.ppt_name.isExitPoint()) {
+      if (enable_exit_swap && !ppt.is_exit()) {
         if (combined_exit != null) {
           print_invariants_maybe(combined_exit, pw, all_ppts);
         }
@@ -787,28 +819,24 @@ public final class PrintInvariants {
 
       // Just cache the combined exit point for now, print it after the
       // EXITnn points.
-      if (enable_exit_swap && ppt.ppt_name.isCombinedExitPoint()) {
+      if (enable_exit_swap && ppt.is_combined_exit()) {
         combined_exit = ppt;
         continue;
       }
 
       // If there is only one exit point, just show the combined one (since
       // the EXITnn point will be empty)  This is accomplished by skipping this
-      // point if it is an EXITnn point and the previous point was a combined
-      // exit point and the next one is not an EXITnn point.  But don't skip
-      // any conditional ppts attached to the skipped ppt.
-      if (enable_exit_swap && (i > 0) && ppt.ppt_name.isExitPoint()) {
-        if (ppts[i - 1].ppt_name.isCombinedExitPoint()) {
-          if (((i + 1) >= ppts.length) || !ppts[i + 1].ppt_name.isExitPoint()) {
-            //             if (Daikon.dkconfig_output_conditionals
-            //                 && Daikon.output_format == OutputFormat.DAIKON) {
-            //               for (PptConditional pcond : ppt.cond_iterable()) {
-            //                 print_invariants_maybe(pcond, pw, all_ppts);
-            //               }
-            //             }
-            continue;
-          }
-        }
+      // point if it is an EXITnn point whose combined exit point is printed and
+      // has no other EXITnn point.  But don't skip any conditional ppts attached
+      // to the skipped ppt.
+      if (enable_exit_swap && is_only_subexit(ppt, all_ppts)) {
+        //             if (Daikon.dkconfig_output_conditionals
+        //                 && Daikon.output_format == OutputFormat.DAIKON) {
+        //               for (PptConditional pcond : ppt.cond_iterable()) {
+        //                 print_invariants_maybe(pcond, pw, all_ppts);
+        //               }
+        //             }
+        continue;
       }
 
       if (false) {

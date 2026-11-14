@@ -1859,7 +1859,15 @@ public final class Daikon {
     }
   }
 
-  /** Create EXIT program points as needed for EXITnn program points. */
+  /**
+   * Create EXIT program points as needed for EXITnn program points. If a program point whose type
+   * is not EXIT already has the name of the combined exit, such as a POINT named foo:::EXIT, the
+   * combined exit is not created, and the numbered exits have no combined exit. In that case, {@link
+   * PptRelation#init_hierarchy} connects each numbered exit directly to its enter point and to its
+   * declared parents.
+   *
+   * @param ppts a map of program points, to which this adds the combined exits
+   */
   public static void create_combined_exits(PptMap ppts) {
 
     // We can't add the newly created exit Ppts directly to ppts while we
@@ -1874,6 +1882,10 @@ public final class Daikon {
 
       PptTopLevel exitnn_ppt = ppt;
       PptName exit_name = ppt.ppt_name.makeExit();
+      PptTopLevel declared = ppts.get(exit_name);
+      if ((declared != null) && !declared.is_combined_exit()) {
+        continue;
+      }
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
       if (debugInit.isLoggable(FINE)) {
@@ -1957,11 +1969,11 @@ public final class Daikon {
   }
 
   /**
-   * Add orig() variables to the given EXIT/EXITnn point. Does nothing if exit_ppt is not an
-   * EXIT/EXITnn.
+   * Add orig() variables to the given EXIT/EXITnn point. Does nothing if exit_ppt's type is not
+   * EXIT or SUBEXIT, whatever its name.
    */
   private static void create_orig_vars(PptTopLevel exit_ppt, PptMap ppts) {
-    if (!exit_ppt.ppt_name.isExitPoint()) {
+    if (!exit_ppt.is_exit()) {
       if (VarInfo.assertionsEnabled()) {
         for (VarInfo vi : exit_ppt.var_infos) {
           try {
@@ -1981,7 +1993,7 @@ public final class Daikon {
     }
 
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
-    if (entry_ppt == null) {
+    if ((entry_ppt == null) || !entry_ppt.is_enter()) {
       throw new Daikon.UserError("exit found with no corresponding entry: " + exit_ppt.name());
     }
 
@@ -2075,6 +2087,7 @@ public final class Daikon {
         System.out.print("Reading declaration files ");
       }
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
+      PptRelation.check_declared_parents(all_ppts);
       if (debugTrace.isLoggable(FINE)) {
         debugTrace.fine("Initializing partial order");
       }
@@ -2579,17 +2592,7 @@ public final class Daikon {
         p = ((PptConditional) ppt).parent;
       }
 
-      // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
-      // exit), we define them as everything except
-      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT
-      //  and :::CLASS program points.  This scheme ensures that arbitrarily
-      //  named program points such as :::POINT (used by convertcsv.pl)
-      //  will be treated as leaves.
-      if (p.ppt_name.isCombinedExitPoint()
-          || p.ppt_name.isEnterPoint()
-          || p.ppt_name.isThrowsPoint()
-          || p.ppt_name.isObjectInstanceSynthetic()
-          || p.ppt_name.isClassStaticSynthetic()) {
+      if (!p.is_dataflow_leaf()) {
         return;
       }
 
@@ -2598,9 +2601,7 @@ public final class Daikon {
       }
     }
 
-    // Create the initial equality sets
-    ppt.equality_view = new PptSliceEquality(ppt);
-    ppt.equality_view.instantiate_invariants();
+    ppt.create_equality_view();
   }
 
   private static List<SpinfoFile> spinfoFiles = new ArrayList<>();

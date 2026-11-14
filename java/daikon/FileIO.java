@@ -833,13 +833,7 @@ public final class FileIO {
     // false if at least one of them is not a program point normally
     // found in traces from programming languages.
     for (PptTopLevel ppt_top_level : all_ppts.ppt_all_iterable()) {
-      boolean is_program_point =
-          (ppt_top_level.ppt_name.isExitPoint()
-              || ppt_top_level.ppt_name.isEnterPoint()
-              || ppt_top_level.ppt_name.isThrowsPoint()
-              || ppt_top_level.ppt_name.isObjectInstanceSynthetic()
-              || ppt_top_level.ppt_name.isClassStaticSynthetic()
-              || ppt_top_level.ppt_name.isGlobalPoint());
+      boolean is_program_point = ppt_top_level.type != PptType.POINT;
 
       all_program_points = all_program_points && is_program_point;
       some_program_points = some_program_points || is_program_point;
@@ -1582,32 +1576,16 @@ public final class FileIO {
     }
 
     // Only process the leaves of the ppt tree.
-    // This test assumes that all leaves are numbered exit program points
-    // -- that is, points of the form foo:::EXIT22 for which isExitPoint()
-    // is true and isCombinedExitPoint() is false.  "Combined" exit points
-    // of the form foo:::EXIT are not processed -- they are assumed to be
-    // non-leaves.
     if (Daikon.use_dataflow_hierarchy) {
-
-      // Rather than defining leaves as :::EXIT54 (numbered exit)
-      // program points define them as everything except
-      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT, ::GLOBAL
-      //  and :::CLASS program points.  This scheme ensures that arbitrarily
-      //  named program points such as :::POINT (used by convertcsv.pl)
-      //  will be treated as leaves.
-
-      if (ppt.ppt_name.isEnterPoint()
-          || ppt.ppt_name.isThrowsPoint()
-          || ppt.ppt_name.isObjectInstanceSynthetic()
-          || ppt.ppt_name.isClassStaticSynthetic()
-          || ppt.ppt_name.isGlobalPoint()) {
-        return;
-      }
-
-      if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
+      // A combined exit point obtains its invariants from the numbered exit points (whether Daikon
+      // created it or the declarations contain it), so no sample may refer to one.
+      if (ppt.is_combined_exit()) {
         // not Daikon.UserError; caller has more info (e.g., filename)
         throw new RuntimeException(
-            "Bad program point name " + ppt.name + " is a combined exit point name");
+            "Bad program point " + ppt.name + ": a sample cannot refer to a combined exit point");
+      }
+      if (!ppt.is_dataflow_leaf()) {
+        return;
       }
     }
 
@@ -2063,8 +2041,9 @@ public final class FileIO {
 
     VarInfo[] vis = ppt.var_infos;
     @Interned String fn_name = ppt.ppt_name.getNameWithoutPoint();
-    String ppt_name = ppt.name();
-    if (ppt_name.endsWith(enter_tag)) {
+    // The ppt's type, not its name, determines whether it is an entry or an exit:  a ppt that is
+    // declared as a POINT is neither, even if its name is foo:::ENTER or foo:::EXIT.
+    if (ppt.is_enter()) {
       Invocation invok = new Invocation(ppt, vals, mods);
       if (nonce == null) {
         call_stack.push(invok);
@@ -2074,7 +2053,7 @@ public final class FileIO {
       return false;
     }
 
-    if (ppt.ppt_name.isExitPoint() || ppt.ppt_name.isThrowsPoint()) {
+    if (ppt.is_exit() || (ppt.type == PptType.THROWS)) {
       Invocation invoc;
       // Set invoc
       {
