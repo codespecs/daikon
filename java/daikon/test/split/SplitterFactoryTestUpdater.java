@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.plumelib.util.FilesPlume;
 
 /**
@@ -259,7 +260,12 @@ public class SplitterFactoryTestUpdater {
    */
   private static int sequenceNumber(String fileName) {
     Matcher m = sequenceNumberPattern.matcher(fileName);
-    return m.find() ? Integer.parseInt(m.group(1)) : -1;
+    if (!m.find()) {
+      return -1;
+    }
+    @SuppressWarnings("nullness:assignment") // group 1 is not optional, so find() set it
+    @NonNull String digits = m.group(1);
+    return Integer.parseInt(digits);
   }
 
   /**
@@ -277,8 +283,10 @@ public class SplitterFactoryTestUpdater {
     if (!m.find()) {
       throw new Error("No condition found in " + javaFileName);
     }
+    @SuppressWarnings("nullness:assignment") // group 1 is not optional, so find() set it
+    @NonNull String condition = m.group(1);
     // The source code escapes each quotation mark in the condition.
-    return className.replaceFirst("_[0-9]+$", "") + ": " + m.group(1).replace("\\\"", "\"");
+    return className.replaceFirst("_[0-9]+$", "") + ": " + condition.replace("\\\"", "\"");
   }
 
   private static void moveFile(String fromName, String toName) {
