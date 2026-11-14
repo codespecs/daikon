@@ -18,8 +18,6 @@ import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntNonEqual;
-import daikon.inv.filter.InvariantFilter;
-import daikon.inv.filter.InvariantFilters;
 import daikon.inv.filter.UnjustifiedFilter;
 import daikon.inv.unary.OneOf;
 import daikon.inv.unary.scalar.OneOfScalar;
@@ -34,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -468,10 +465,6 @@ public class ExtractConsequent {
           cluster_inv = consequent;
         }
 
-        if (!isWorthWriting(inv, maybe)) {
-          continue;
-        }
-
         if (contains_constant_non_012(inv)) {
           continue;
         }
@@ -497,6 +490,12 @@ public class ExtractConsequent {
           if (debug.isLoggable(FINE)) {
             debug.fine("Not legal Java over booleans: " + inv.format_using(OutputFormat.JAVA));
           }
+          continue;
+        }
+
+        // 3) Invariants that PrintInvariants would not print.  This check is last because it is the
+        // most costly.
+        if (!isWorthWriting(inv, maybe)) {
           continue;
         }
 
@@ -580,35 +579,36 @@ public class ExtractConsequent {
   /**
    * Returns true if the given condition, which is the predicate or the consequent of the given
    * implication, should be written as a splitting condition: that is, if the implication is
-   * justified and the condition passes the other filters that {@link Invariant#isWorthPrinting}
-   * applies.
+   * justified and the original of the condition is worth printing at its conditional program point.
    *
-   * <p>The condition's own justification is not used. The condition is a copy that Daikon moved
-   * from a conditional program point to its parent, so its justification is computed from the
-   * parent's samples rather than from the samples that satisfy the condition. For example, if
-   * "cluster == 1 &lt;==&gt; x &gt;= 1", then "x &gt;= 1" can seem unjustified, because the parent
-   * also has the samples in which x is negative. The implication's justification is computed from
-   * the original invariants at the conditional program points.
+   * <p>The condition is not judged directly. The condition is a copy that Daikon made of an
+   * invariant at a conditional program point, for use at that program point's parent, and the copy
+   * is judged in the parent's context. For example, the copy's justification is computed from the
+   * parent's samples rather than from the samples that satisfy the condition: if "cluster == 1
+   * &lt;==&gt; x &gt;= 1", then the copy of "x &gt;= 1" can seem unjustified, because the parent
+   * also has the samples in which x is less than 1.
+   *
+   * <p>The implication's justification is not checked if {@link UnjustifiedFilter} is disabled.
    *
    * @param condition the predicate or the consequent of {@code implication}
    * @param implication an implication
    * @return true if {@code condition} should be written as a splitting condition
    */
   static boolean isWorthWriting(Invariant condition, Implication implication) {
-    if (!implication.justified()) {
-      return false;
-    }
-    InvariantFilters filters = InvariantFilters.defaultFilters();
-    if (filters.shouldKeepVarFilters(condition) != null) {
-      return false;
-    }
-    for (Iterator<InvariantFilter> itor = filters.getPropertyFiltersIterator(); itor.hasNext(); ) {
-      InvariantFilter filter = itor.next();
-      if (!(filter instanceof UnjustifiedFilter) && filter.shouldDiscard(condition)) {
-        return false;
+    if (UnjustifiedFilter.dkconfig_enabled && !implication.justified()) {
+      if (debug.isLoggable(FINE)) {
+        debug.fine("Not writing " + condition.format() + ": unjustified " + implication.format());
       }
+      if (Invariant.logOn()) {
+        implication.log("Not writing %s: the implication is unjustified", condition.format());
+      }
+      return false;
     }
-    return true;
+    Invariant original =
+        (condition == implication.consequent())
+            ? implication.origConsequent()
+            : implication.origPredicate();
+    return original.isWorthPrinting();
   }
 
   private static boolean contains_constant_non_012(Invariant inv) {
