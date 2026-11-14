@@ -31,14 +31,23 @@ public class InitHierarchyTest {
   /** A temporary directory for decls files. */
   @Rule public TemporaryFolder tmpFolder = new TemporaryFolder();
 
+  // JUnit creates an instance of this class for each test, so these fields hold the values of the
+  // global settings from just before the test.
+
+  /** The value of {@link Daikon#use_dataflow_hierarchy} before the test. */
+  private final boolean savedUseDataflowHierarchy = Daikon.use_dataflow_hierarchy;
+
+  /** The value of {@link PptRelation#dkconfig_enable_object_user} before the test. */
+  private final boolean savedEnableObjectUser = PptRelation.dkconfig_enable_object_user;
+
   /** Creates an InitHierarchyTest. */
   public InitHierarchyTest() {}
 
   /** Restores the global settings that a test changes. */
   @After
   public void restoreSettings() {
-    Daikon.use_dataflow_hierarchy = true;
-    PptRelation.dkconfig_enable_object_user = false;
+    Daikon.use_dataflow_hierarchy = savedUseDataflowHierarchy;
+    PptRelation.dkconfig_enable_object_user = savedEnableObjectUser;
   }
 
   /**

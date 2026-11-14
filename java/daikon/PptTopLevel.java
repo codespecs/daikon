@@ -139,7 +139,7 @@ import typequals.prototype.qual.Prototype;
  * </ul>
  */
 public class PptTopLevel extends Ppt {
-  static final long serialVersionUID = 20071129L;
+  static final long serialVersionUID = 20261113L;
 
   /** If true, print diagnostic information to standard out. */
   private static final boolean debugStdout = false;
@@ -527,7 +527,10 @@ public class PptTopLevel extends Ppt {
    * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, is_dataflow_leaf, etc.
    * agree with one another. They also agree with the program point's name, except for a program
    * point that is declared as a {@link PptType#POINT}: it is a leaf of the dataflow hierarchy
-   * whatever its name, even if its name is foo:::ENTER.
+   * whatever its name, even if its name is foo:::ENTER. However, some code classifies a program
+   * point by its name rather than by these predicates. For example, Daikon rejects every sample for
+   * a program point named foo:::EXIT, whatever its type; and if foo:::EXIT22 is declared, Daikon
+   * replaces a program point named foo:::EXIT by the combined exit of foo:::EXIT22.
    *
    * @param ppt_name the name of the program point
    * @param type the declared type of the program point, or null if none was declared

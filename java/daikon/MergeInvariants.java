@@ -271,12 +271,17 @@ public final class MergeInvariants {
     // should only be created at the leaves so that the normal processing
     // will create the invariants at upper points.
     debugProgress.fine("Building hierarchy between leaves of the maps");
+    // The number of leaves in merge_ppts.
+    int num_leaves = 0;
+    // The names of the leaves that no input map contains.
+    List<String> missing_leaves = new ArrayList<>();
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
       // Skip everything that is not a leaf
       if (!ppt.is_dataflow_leaf()) {
         continue;
       }
+      num_leaves++;
 
       // System.out.printf("Including ppt %s, %d children%n", ppt,
       //                   ppt.children.size());
@@ -289,8 +294,10 @@ public final class MergeInvariants {
             assert p.children.isEmpty() : p;
           }
         }
-        // The leaf obtains its invariants from its conditional ppts.
-        connect_conditionals(ppt);
+        // The leaf obtains its invariants from its conditional ppts.  A ppt read from a .inv file
+        // can lack these relations among its children; for example, the .inv file might have been
+        // written by a version of Daikon that omitted them.
+        PptRelation.connect_conditionals(ppt);
       }
 
       // Loop over each of the input ppt maps, looking for the same ppt
@@ -343,7 +350,9 @@ public final class MergeInvariants {
 
       // Each conditional has a child, unless no input map contains this leaf (for example,
       // because ppt filtering removed it).  In that case, the leaf gets no invariants.
-      if (found_child && ppt.has_splitters()) {
+      if (!found_child) {
+        missing_leaves.add(ppt.name());
+      } else if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
@@ -351,6 +360,23 @@ public final class MergeInvariants {
           }
         }
       }
+    }
+
+    // A leaf is missing from every input map if ppt filtering removed it, but if every leaf is
+    // missing, the decls file probably does not match the .inv files.
+    if (!missing_leaves.isEmpty()) {
+      if (missing_leaves.size() == num_leaves) {
+        throw new Daikon.UserError(
+            String.format(
+                "No input .inv file contains any leaf program point of the decls file (for"
+                    + " example, none contains %s); does the decls file match the .inv files?",
+                missing_leaves.get(0)));
+      }
+      System.err.printf(
+          "Warning: no input .inv file contains %s, so %s no invariants: %s%n",
+          StringsPlume.nPlural(missing_leaves.size(), "leaf program point"),
+          (missing_leaves.size() == 1) ? "it gets" : "they get",
+          String.join(", ", missing_leaves));
     }
 
     // Every ppt with no children needs an equality view, which clean_for_merge removed.  This
@@ -424,33 +450,6 @@ public final class MergeInvariants {
    */
   private static boolean isMergeChildRel(PptRelation rel) {
     return rel.getRelationType() == PptRelation.PptRelationType.MERGE_CHILD;
-  }
-
-  /**
-   * Ensures that the children of the given leaf include a relation to each of its conditional ppts
-   * (for its first splitter), as {@link PptRelation#init_hierarchy} creates. A ppt read from a .inv
-   * file can lack these relations among its children; for example, the .inv file might have been
-   * written by a version of Daikon that omitted them.
-   *
-   * @param ppt a leaf of the dataflow hierarchy that has splitters
-   */
-  private static void connect_conditionals(PptTopLevel ppt) {
-    assert ppt.splitters != null : "@AssumeAssertion(nullness): precondition: has splitters";
-    for (PptTopLevel cond : ppt.splitters.get(0).ppts) {
-      boolean connected = false;
-      for (PptRelation rel : cond.parents) {
-        if ((rel.parent == ppt)
-            && (rel.getRelationType() == PptRelation.PptRelationType.PPT_PPTCOND)) {
-          if (!ppt.children.contains(rel)) {
-            ppt.children.add(rel);
-          }
-          connected = true;
-        }
-      }
-      if (!connected) {
-        PptRelation.newPptPptConditional(ppt, cond);
-      }
-    }
   }
 
   /**
