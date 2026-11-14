@@ -12,8 +12,11 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,27 +49,54 @@ public class SplitterFactoryTestUpdater {
 
   /**
    * The splitters that are expected not to compile, because their condition refers to a variable
-   * that is not in the decls file. SplitterFactoryTest checks that every other splitter compiles.
-   * Each element is a {@link #splitterKey splitter key}.
+   * that is not in the decls file or not at the program point. Maps a {@link #splitterKey splitter
+   * key} to the number of attempts to compile that splitter that fail. SplitterFactory retries a
+   * splitter that fails to compile at a later matching program point, so one splitter can yield
+   * several source files; the attempts that fail precede the one that succeeds, if any.
+   * SplitterFactoryTest checks that every other splitter compiles.
    */
-  private static final Set<String> nonCompilingSplitters =
-      new HashSet<>(
-          Arrays.asList(
-              "MapQuick1_StreetNumberSet_StreetNumberSet: dashLoc == -1",
-              "MapQuick1_StreetNumberSet_StreetNumberSet: items.hasMoreTokens()",
-              "MapQuick1_StreetNumberSet_StreetNumberSet: orig(dashLoc == -1)",
-              "MapQuick1_StreetNumberSet_StreetNumberSet: orig(items.hasMoreTokens())",
-              "MapQuick1_StreetNumberSet_checkRep: i<sets.length",
-              "MapQuick1_StreetNumberSet_checkRep: orig(i<sets.length)",
-              "MapQuick1_StreetNumberSet_contains: i<sets.length",
-              "MapQuick1_StreetNumberSet_contains: orig(i<sets.length)",
-              "MapQuick1_StreetNumberSet_contains: orig(sets[i].contains(sn))",
-              "MapQuick1_StreetNumberSet_contains: sets[i].contains(sn)",
-              "MapQuick1_StreetNumberSet_orderStatistic: i<sets.length",
-              "MapQuick1_StreetNumberSet_orderStatistic: orig(i<sets.length)",
-              "MapQuick1_StreetNumberSet_size: i<sets.length",
-              "MapQuick1_StreetNumberSet_size: orig(i<sets.length)",
-              "misc_Fib_main: i < STEPS"));
+  private static final Map<String, Integer> nonCompilingSplitters = new HashMap<>();
+
+  static {
+    nonCompilingSplitters.put("DataStructures_QueueAr_dequeue: orig(++front == theArray.length)", 1);
+    nonCompilingSplitters.put("DataStructures_QueueAr_dequeue: orig(isEmpty())", 1);
+    nonCompilingSplitters.put("DataStructures_QueueAr_enqueue: orig(++back == theArray.length)", 1);
+    nonCompilingSplitters.put("DataStructures_QueueAr_enqueue: orig(isFull())", 1);
+    nonCompilingSplitters.put("DataStructures_QueueAr_getFront: orig(isEmpty())", 1);
+    nonCompilingSplitters.put("DataStructures_QueueAr_isEmpty: orig(currentSize == 0)", 1);
+    nonCompilingSplitters.put("DataStructures_QueueAr_isFull: orig(currentSize == theArray.length)", 1);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_StreetNumberSet: dashLoc == -1", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_StreetNumberSet: items.hasMoreTokens()", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_StreetNumberSet: orig(dashLoc == -1)", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_StreetNumberSet: orig(items.hasMoreTokens())", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_checkRep: i<sets.length", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_checkRep: orig(i<sets.length)", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_contains: i<sets.length", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_contains: orig(i<sets.length)", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_contains: orig(sets[i].contains(sn))", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_contains: sets[i].contains(sn)", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_orderStatistic: i<sets.length", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_orderStatistic: orig(i<sets.length)", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_size: i<sets.length", 2);
+    nonCompilingSplitters.put("MapQuick1_StreetNumberSet_size: orig(i<sets.length)", 2);
+    nonCompilingSplitters.put("Math__BigFloat_bdiv_: orig($y._a) == 0 && orig($x._a) == 0 && orig($a) == 0", 1);
+    nonCompilingSplitters.put("Math__BigFloat_bdiv_: orig($y._p) == 0 && orig($x._p) == 0 && $x._p != 0", 1);
+    nonCompilingSplitters.put("Math__BigFloat_bdiv_: orig($y._p) == 0 && orig($x._p) == 0 && $x._p.is_defined", 1);
+    nonCompilingSplitters.put("Math__BigFloat_bdiv_: orig($p) != 0 && return._p == 0", 1);
+    nonCompilingSplitters.put("Math__BigFloat_bdiv_: orig($p) != 0 && orig($p) != orig($x._p) && $x._p == orig($x._p) && (orig($x.sign).equals(\"+\") || orig($x.sign).equals(\"-\")) && (orig($y.sign).equals(\"+\") || orig($y.sign).equals(\"-\"))", 1);
+    nonCompilingSplitters.put("Math__BigFloat_bdiv_: orig($p) != 0 && orig($p) != orig($x._p) && ((orig($y._m.value.deref).length == 1 && orig($y._e.value.deref).length == 1 && orig($y._e.value.deref)[0] == 0 && orig($y._m.value.deref)[0] == 1) || (orig($y._m.value.deref).length == 1 && orig($y._m.value.deref)[0] == 0) || (orig($x._m.value.deref).length == 1 && orig($x._m.value.deref)[0] == 0)) && (orig($x.sign).equals(\"+\") || orig($x.sign).equals(\"-\")) && (orig($y.sign).equals(\"+\") || orig($y.sign).equals(\"-\"))", 1);
+    nonCompilingSplitters.put("Math__BigFloat_bmul_: !orig($y._a.is_defined)", 1);
+    nonCompilingSplitters.put("Math__BigFloat_bmul_: (orig($x.sign).equals(\"+\") || orig($x.sign).equals(\"-\")) && (orig($y.sign).equals(\"+\") || orig($y.sign).equals(\"-\"))", 1);
+    nonCompilingSplitters.put("Math__BigFloat_bmul_: orig($y._p) == 0 && orig($x._p) == 0 && $x._p != 0", 1);
+    nonCompilingSplitters.put("Math__BigFloat_bmul_: orig($p) != 0 && return._p == 0 && (return.sign.equals(\"+\") || return.sign.equals(\"-\"))", 1);
+    nonCompilingSplitters.put("misc_Fib_main: i < STEPS", 2);
+  }
+
+  /**
+   * Matches the sequence number in the name of a splitter file, such as "misc_Fib_main_32.java".
+   * Group 1 is the sequence number.
+   */
+  private static final Pattern sequenceNumberPattern = Pattern.compile("_([0-9]+)\\.[a-z]+$");
 
   /**
    * Matches the condition in a splitter's source code. Group 1 is the condition, as a Java string
@@ -166,8 +196,10 @@ public class SplitterFactoryTestUpdater {
     if (fileNames == null) {
       throw new Error("tmpdir = " + tempDir + " which is not a directory");
     }
-    // Sort so that the generated test does not depend on the file system's directory order.
-    Arrays.sort(fileNames);
+    // Sort by sequence number, which is the order in which SplitterFactory wrote the files, so that
+    // the attempts to compile a splitter are processed in order, and so that the generated test
+    // does not depend on the file system's directory order.
+    Arrays.sort(fileNames, Comparator.comparingInt(SplitterFactoryTestUpdater::sequenceNumber));
     if (updateGoals) {
       // Remove all goal files, so that none remain for splitters that SplitterFactory does not
       // produce.
@@ -181,16 +213,23 @@ public class SplitterFactoryTestUpdater {
         }
       }
     }
-    // The elements of nonCompilingSplitters that have not yet matched a generated splitter.
-    Set<String> unmatched = new HashSet<>(nonCompilingSplitters);
+    // Maps each key of nonCompilingSplitters to the number of failing attempts that have not yet
+    // matched a generated splitter.
+    Map<String, Integer> unmatched = new HashMap<>(nonCompilingSplitters);
     for (int i = 0; i < fileNames.length; i++) {
       if (fileNames[i].endsWith(".java")) {
         String fileName = fileNames[i];
         String fromName = tempDir.getPath() + File.separator + fileName;
         String className = fileName.substring(0, fileName.length() - ".java".length());
         classNames.add(className);
-        if (!unmatched.remove(splitterKey(className, fromName))) {
+        String key = splitterKey(className, fromName);
+        Integer failures = unmatched.get(key);
+        if (failures == null) {
           compilingClassNames.add(className);
+        } else if (failures == 1) {
+          unmatched.remove(key);
+        } else {
+          unmatched.put(key, failures - 1);
         }
         if (updateGoals) {
           String toName = targetDir + fileName + ".goal";
@@ -207,14 +246,26 @@ public class SplitterFactoryTestUpdater {
       }
     }
     if (!unmatched.isEmpty()) {
-      throw new Error("No splitter matches these nonCompilingSplitters: " + unmatched);
+      throw new Error("Too few splitters match these nonCompilingSplitters: " + unmatched);
     }
+  }
+
+  /**
+   * Returns the sequence number of a generated splitter file, or -1 if the file name has none.
+   *
+   * @param fileName the name of a file that SplitterFactory generated, such as
+   *     "misc_Fib_main_32.java"
+   * @return the sequence number in the file name, such as 32
+   */
+  private static int sequenceNumber(String fileName) {
+    Matcher m = sequenceNumberPattern.matcher(fileName);
+    return m.find() ? Integer.parseInt(m.group(1)) : -1;
   }
 
   /**
    * Returns a key that identifies a splitter independently of the sequence number that
    * SplitterFactory gives it: its class name without the sequence number, then ": ", then its
-   * condition.
+   * condition, as in "misc_Fib_main: i < STEPS".
    *
    * @param className the splitter's class name
    * @param javaFileName the splitter's source file
@@ -226,7 +277,8 @@ public class SplitterFactoryTestUpdater {
     if (!m.find()) {
       throw new Error("No condition found in " + javaFileName);
     }
-    return className.replaceFirst("_[0-9]+$", "") + ": " + m.group(1);
+    // The source code escapes each quotation mark in the condition.
+    return className.replaceFirst("_[0-9]+$", "") + ": " + m.group(1).replace("\\\"", "\"");
   }
 
   private static void moveFile(String fromName, String toName) {

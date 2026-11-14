@@ -4,9 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import daikon.PptName;
 import daikon.split.Splitter;
-import daikon.split.SplitterFactory;
 import daikon.split.SplitterList;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +49,10 @@ public class SplitterListTest {
     assertTrue(SplitterList.matches("Foo.bar", "pkg.Foo.barBaz(int):::EXIT1"));
     assertTrue(SplitterList.matches("Math::BigFloat.bdiv_", "Math::BigFloat.bdiv_s():::EXIT36"));
     assertFalse(SplitterList.matches("Foo.baz", "pkg.Foo.bar(int):::ENTER"));
+    assertTrue(SplitterList.matches("pkg.Foo", "pkg.Foo:::OBJECT"));
+    assertTrue(SplitterList.matches("pkg.Foo", "pkg.Foo:::CLASS"));
+    assertTrue(SplitterList.matches("OBJECTs", "pkg.OBJECTs:::OBJECT"));
+    assertFalse(SplitterList.matches("OBJECTs", "pkg.Foo:::OBJECT"));
   }
 
   @Test
@@ -93,30 +95,6 @@ public class SplitterListTest {
     assertTrue(SplitterList.matches("pkg.Foo:::OBJECT", "pkg.Foo:::OBJECT"));
     assertFalse(SplitterList.matches("pkg.Foo:::OBJECT", "pkg.BigFoo:::OBJECT"));
     assertFalse(SplitterList.matches("aprogram.point:::POINT", "aprogram.point:::POINT2"));
-  }
-
-  @Test
-  public void testMatchPpt() {
-    // A name that is not complete skips entry points, and is compiled against an exit point.
-    assertFalse(SplitterFactory.matchPpt("Foo.bar", new PptName("pkg.Foo.bar(int):::ENTER")));
-    assertTrue(SplitterFactory.matchPpt("Foo.bar", new PptName("pkg.Foo.bar(int):::EXIT12")));
-    assertTrue(SplitterFactory.matchPpt("Foo.bar", new PptName("pkg.Foo.bar(int):::EXIT")));
-    assertFalse(SplitterFactory.matchPpt("Foo.baz", new PptName("pkg.Foo.bar(int):::EXIT12")));
-    // A name that is not complete can match a program point that is not a procedure's.
-    assertTrue(SplitterFactory.matchPpt("pkg.Foo", new PptName("pkg.Foo:::OBJECT")));
-    assertTrue(SplitterFactory.matchPpt("pkg.Foo", new PptName("pkg.Foo:::CLASS")));
-    assertTrue(SplitterFactory.matchPpt("OBJECTs", new PptName("pkg.OBJECTs:::OBJECT")));
-    assertFalse(SplitterFactory.matchPpt("OBJECTs", new PptName("pkg.Foo:::OBJECT")));
-    // A complete name matches as SplitterList.matches does, including at an entry point.
-    String enter = "pkg.Foo.bar(int):::ENTER";
-    assertTrue(SplitterFactory.matchPpt(enter, new PptName(enter)));
-    assertTrue(SplitterFactory.matchPpt("Foo.bar(int):::ENTER", new PptName(enter)));
-    assertFalse(SplitterFactory.matchPpt("Foo.bar(int):::EXIT", new PptName(enter)));
-    assertTrue(
-        SplitterFactory.matchPpt("Foo.bar(int):::EXIT", new PptName("pkg.Foo.bar(int):::EXIT12")));
-    assertFalse(
-        SplitterFactory.matchPpt(
-            "Foo.bar(int):::ENTER", new PptName("pkg.BigFoo.bar(int):::ENTER")));
   }
 
   /**
