@@ -26,12 +26,16 @@ default:
 
 # A goal mismatch does not make this target fail; it leaves a non-empty .diff file,
 # which `make -C .. results` reports and treats as a failure.
+# A failure in one subdirectory does not prevent running the others, but it makes
+# this target fail.
 # The regression tests seem to break if the "@" is omitted from this line.
 %:
-	@for dir in ${SUBDIRS}; \
+	@status=0; \
+	for dir in ${SUBDIRS}; \
 	  do echo "Entering diff-tests subdirectory: $$dir"; \
-	     ${MAKE} -C $$dir $* || exit 1; \
-	done
+	     ${MAKE} -C $$dir $* || status=1; \
+	done; \
+	exit $$status
 
 showvars:
 	echo "SUBDIRS = ${SUBDIRS}"
