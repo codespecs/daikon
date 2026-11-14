@@ -580,13 +580,19 @@ public class PptRelation implements Serializable {
    * equality view from {@link Daikon#setupEquality}, before it receives any samples.
    *
    * <p>The new equality view puts all comparable variables in the same equality set, as if no
-   * sample had distinguished them, so each ppt that gets one must have no samples. The equality
-   * view is created even if {@link Daikon#use_equality_optimization} is false, because {@link
-   * PptTopLevel#mergeInvs} requires every childless ppt to have one.
+   * sample had distinguished them, so each ppt that gets one must have no samples. {@link
+   * PptTopLevel#mergeInvs} requires every childless ppt to have an equality view.
+   *
+   * <p>This method requires {@link Daikon#use_equality_optimization} to be true. Otherwise, {@link
+   * Daikon#setupEquality} creates no equality view, so a leaf that has samples would have none and
+   * this method could not create a valid one. Only {@link DaikonSimple} sets {@link
+   * Daikon#use_equality_optimization} to false, and it neither calls this method nor merges
+   * invariants.
    *
    * @param all_ppts a map of program points
    */
   static void create_childless_equality_views(PptMap all_ppts) {
+    assert Daikon.use_equality_optimization;
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
         assert ppt.num_samples() == 0 : ppt;
