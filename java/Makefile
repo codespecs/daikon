@@ -88,6 +88,10 @@ endif
 CHECKERFRAMEWORK_JAR_DIR ?= ${DAIKONDIR}/java/lib/checker-framework
 CHECKERFRAMEWORK_JAR ?= ${CHECKERFRAMEWORK_JAR_DIR}/checker.jar
 CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
+# The qualifiers must match the checker:  a checker that defines a new qualifier fails if the
+# classpath has an older checker-qual.jar.  CHECKERFRAMEWORK_JAR_DIR contains checker-qual.jar when
+# it is a Checker Framework's checker/dist/ directory, but not when it is java/lib/checker-framework/.
+CHECKERFRAMEWORK_QUAL_JAR ?= $(firstword $(wildcard ${CHECKERFRAMEWORK_JAR_DIR}/checker-qual.jar) ${DAIKONDIR}/java/lib/checker-qual.jar)
 
 
 ### end of user customizations
@@ -126,7 +130,11 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 ## mechanism: it extracts lib/*.jar, then hamcrest*.jar, then junit-4*.jar, so the later
 ## extractions overwrite the earlier ones.  Last-wins-on-extract and first-wins-on-classpath give
 ## the same precedence -- JUnit 4, then hamcrest, then everything else.  Keep the two in step.
-DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/junit-4.13.2-Daikon.jar:${DAIKONDIR}/java/lib/hamcrest-core-1.3-Daikon.jar:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
+##
+## CHECKERFRAMEWORK_QUAL_JAR also precedes the wildcard, so that the qualifiers match the Checker
+## Framework that type-checks Daikon.  This is the one exception to keeping the two in step:
+## daikon.jar always contains java/lib/checker-qual.jar.
+DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/junit-4.13.2-Daikon.jar:${DAIKONDIR}/java/lib/hamcrest-core-1.3-Daikon.jar:${CHECKERFRAMEWORK_QUAL_JAR}:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
 
 ## Add tools.jar and rt.jar, if they exist
 ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
@@ -1419,6 +1427,7 @@ showvars:
 	@echo CHECKERFRAMEWORK_JAR_DIR = ${CHECKERFRAMEWORK_JAR_DIR}
 	@echo CHECKERFRAMEWORK_JAR = ${CHECKERFRAMEWORK_JAR}
 	@echo CHECKERFRAMEWORK_JAVAC = ${CHECKERFRAMEWORK_JAVAC}
+	@echo CHECKERFRAMEWORK_QUAL_JAR = ${CHECKERFRAMEWORK_QUAL_JAR}
 
 
 dump: showvars
