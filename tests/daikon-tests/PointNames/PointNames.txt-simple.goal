@@ -1,0 +1,45 @@
+====================================================
+Foo.bar():::ENTER
+8
+class daikon.inv.unary.scalar.OneOfScalar
+x one of { 1, 2, 3 }
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= x <= 63
+class daikon.inv.unary.scalar.NonZero
+x != 0
+class daikon.inv.unary.scalar.UpperBound
+x <= 3
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+x >= 0
+class daikon.inv.unary.scalar.LowerBound
+x >= 1
+====================================================
+Foo.bar():::EXIT
+8
+class daikon.inv.unary.scalar.OneOfScalar
+x one of { 100, 200, 300 }
+class daikon.inv.unary.scalar.NonZero
+x != 0
+class daikon.inv.unary.scalar.UpperBound
+x <= 300
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+x >= 0
+class daikon.inv.unary.scalar.LowerBound
+x >= 100
+class daikon.inv.unary.scalar.RangeInt$GreaterEqual64
+x >= 64
+====================================================
+Foo.bar():::EXIT5
+8
+class daikon.inv.unary.scalar.OneOfScalar
+x one of { 10, 20, 30 }
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= x <= 63
+class daikon.inv.unary.scalar.NonZero
+x != 0
+class daikon.inv.unary.scalar.UpperBound
+x <= 30
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+x >= 0
+class daikon.inv.unary.scalar.LowerBound
+x >= 10

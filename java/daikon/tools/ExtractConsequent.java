@@ -432,7 +432,7 @@ public class ExtractConsequent {
           continue;
         }
 
-        if (maybe.ppt.parent.ppt_name.isExitPoint()) {
+        if (maybe.ppt.parent.is_exit()) {
           for (int i = 0; i < maybe.ppt.var_infos.length; i++) {
             VarInfo vi = maybe.ppt.var_infos[i];
             if (vi.isDerivedParam()) {

@@ -324,12 +324,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     for (PptTopLevel ppt : matching_ppts) {
-      if (ppt.ppt_name.isEnterPoint()) {
+      if (ppt.is_enter()) {
         requires_invs = invariants_for(ppt, ppts);
-      } else if (ppt.ppt_name.isExitPoint()) {
-        if (!ppt.ppt_name.isCombinedExitPoint()) {
-          continue;
-        }
+      } else if (ppt.is_combined_exit()) {
         ensures_invs = invariants_for(ppt, ppts);
       }
     }

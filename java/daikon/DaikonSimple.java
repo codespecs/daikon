@@ -478,40 +478,47 @@ public class DaikonSimple {
       ValueTuple object_vt = null;
       ValueTuple class_vt = null;
 
-      if ((ppt_name.isEnterPoint() && !ppt_name.isConstructor()) || ppt_name.isExitPoint()) {
+      // The ppt's type, not its name, determines whether it is an entry or an exit:  a ppt that is
+      // declared as a POINT is neither, even if its name is foo:::ENTER or foo:::EXIT.
+      if ((ppt.is_enter() && !ppt_name.isConstructor()) || ppt.is_exit()) {
         object_ppt = all_ppts.get(ppt_name.makeObject());
         class_ppt = all_ppts.get(ppt_name.makeClassStatic());
-      }
-
-      // C programs do not have object ppts
-      // check whether the ppt is a static or instance method
-      // that decides whether the sample is copied over to the object and/or
-      // class ppt
-      if (object_ppt != null) {
-
-        // the check assumes that static fields are not stored first in the
-        // object ppt
-        if (ppt.find_var_by_name(object_ppt.var_infos[0].name()) != null) {
-          // object and class ppt should be created
-          object_vt = copySample(object_ppt, ppt, vt, nonce);
-
-          if (class_ppt != null) {
-            class_vt = copySample(class_ppt, ppt, vt, nonce);
-          }
-
-        } else {
-          // only class ppt should be created
-          if (class_ppt != null) {
-            class_vt = copySample(class_ppt, ppt, vt, nonce);
-          }
-
-          object_vt = null;
+        // Likewise, a ppt named foo:::OBJECT or foo:::CLASS that is declared with some other type
+        // (such as POINT) is independent of the method and does not receive its samples.
+        if (object_ppt != null && !object_ppt.is_object()) {
           object_ppt = null;
+        }
+        if (class_ppt != null && !class_ppt.is_class()) {
+          class_ppt = null;
         }
       }
 
+      // C programs do not have object ppts.
+      // Whether the ppt is a static or instance method decides whether the sample is copied over
+      // to the object ppt.  The class ppt (if any) always receives the sample, independently of
+      // whether the object ppt does.
+      if (object_ppt != null) {
+        // the check assumes that static fields are not stored first in the
+        // object ppt
+        if (ppt.find_var_by_name(object_ppt.var_infos[0].name()) != null) {
+          object_vt = copySample(object_ppt, ppt, vt, nonce);
+        } else {
+          object_ppt = null;
+        }
+      }
+      if (class_ppt != null) {
+        class_vt = copySample(class_ppt, ppt, vt, nonce);
+      }
+
+      // A general program point is a leaf of the dataflow hierarchy, so the sample applies to it
+      // alone, as in Daikon.
+      if (ppt.type == PptTopLevel.PptType.POINT) {
+        add(ppt, vt, -1);
+        return;
+      }
+
       // If this is an enter point, just remember it for later
-      if (ppt_name.isEnterPoint()) {
+      if (ppt.is_enter()) {
         assert nonce != null;
         assert call_map.get(nonce) == null;
         List<Call> value = new ArrayList<>();
@@ -533,7 +540,7 @@ public class DaikonSimple {
 
       // If this is an exit point, process the saved enter (and sometimes
       // object) point
-      if (ppt_name.isExitPoint()) {
+      if (ppt.is_exit()) {
         assert nonce != null;
         List<Call> value = call_map.remove(nonce);
 
@@ -561,13 +568,17 @@ public class DaikonSimple {
     private void add(PptTopLevel ppt, ValueTuple vt, int nonce) {
 
       // if this is a numbered exit, apply to the combined exit as well
-      if (ppt.ppt_name.isNumberedExitPoint()) {
+      if (ppt.is_subexit()) {
 
         // Daikon.create_combined_exits(all_ppts);
         PptTopLevel parent = all_ppts.get(ppt.ppt_name.makeExit());
         if (parent != null) {
-          parent.get_missingOutOfBounds(ppt, vt);
-          add(parent, vt, nonce);
+          // A ppt that is not a combined exit, such as a POINT named foo:::EXIT, is not the
+          // numbered exit's parent.
+          if (parent.is_combined_exit()) {
+            parent.get_missingOutOfBounds(ppt, vt);
+            add(parent, vt, nonce);
+          }
 
         } else {
           // make parent and apply

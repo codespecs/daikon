@@ -23,6 +23,7 @@ import org.junit.runners.Suite;
   daikon.test.diff.XorVisitorTester.class,
   daikon.test.DtraceDiffTester.class,
   daikon.test.DtraceNonceFixerTest.class,
+  daikon.test.InitHierarchyTest.class,
   daikon.test.InvariantFormatTester.class,
   daikon.test.inv.InvariantAddAndCheckTester.class,
   daikon.test.inv.InvariantTester.class,
