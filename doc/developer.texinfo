@@ -3332,6 +3332,9 @@ Optionally specifies a constant value for this variable.  If the variable has
 a compile-time constant value that is specified in the declaration, then
 the variable must be omitted from the data trace
 records.
+As in a variable name, blanks in the value must be represented as
+@code{\_} and backslashes as @code{\\}.  For example, a string constant
+whose value is @samp{x y} is written @code{constant "x\_y"}.
 
 @item @code{function-args <arg1> <arg2> ...}
 

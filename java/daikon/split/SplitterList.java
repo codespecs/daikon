@@ -248,7 +248,7 @@ public abstract class SplitterList {
    * @param spinfoPptName a name on a PPT_NAME line of a {@code .spinfo} file
    * @return true if {@code spinfoPptName} is a complete program point name
    */
-  private static boolean isComplete(String spinfoPptName) {
+  static boolean isComplete(String spinfoPptName) {
     return spinfoPptName.contains(FileIO.ppt_tag_separator);
   }
 

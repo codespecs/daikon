@@ -121,16 +121,21 @@ public class SplitterFactory {
             // Writes, compiles, and loads the splitter .java files.
             loadSplitters(splitterObjects[i], ppt, statementReplacer);
             List<Splitter> sp = new ArrayList<>();
+            // The splitters that were not loaded, which a later matching program point may retry.
+            List<SplitterObject> unsuccessful = new ArrayList<>();
             for (int k = 0; k < numsplitters; k++) {
               if (splitterObjects[i][k].splitterExists()) {
                 @SuppressWarnings("nullness") // dependent: because splitterExists() = true
                 @NonNull Splitter splitter = splitterObjects[i][k].getSplitter();
                 sp.add(splitter);
                 numGood++;
-              } else if (!PptSplitter.dkconfig_suppressSplitterErrors) {
-                // UNDONE: We should only output the load error if the
-                // compile was successful.
-                System.out.println(splitterObjects[i][k].getError());
+              } else {
+                unsuccessful.add(splitterObjects[i][k]);
+                if (!PptSplitter.dkconfig_suppressSplitterErrors) {
+                  // UNDONE: We should only output the load error if the
+                  // compile was successful.
+                  System.out.println(splitterObjects[i][k].getError());
+                }
               }
             }
             System.out.printf(
@@ -138,10 +143,20 @@ public class SplitterFactory {
             if (!sp.isEmpty()) {
               SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
             }
-            // delete this entry in the splitter array to prevent it from
-            // matching any other Ppts, since the documented behavior is that
-            // it only matches one.
-            splitterObjects[i] = new SplitterObject[0];
+            if (SplitterList.isComplete(ppt_name)) {
+              // A complete program point name can designate several program points, such as
+              // "Foo.bar(int):::ENTER" designating both "p1.Foo.bar(int):::ENTER" and
+              // "p2.Foo.bar(int):::ENTER".  SplitterList applies the loaded splitters to each of
+              // them.  A splitter that failed to compile or load (for example, because this
+              // program point lacks a variable that its condition uses) remains available, so
+              // that a later matching program point can retry it.
+              splitterObjects[i] = unsuccessful.toArray(new SplitterObject[0]);
+            } else {
+              // Delete this entry in the splitter array to prevent it from
+              // matching any other Ppts, since the documented behavior is that
+              // it only matches one.
+              splitterObjects[i] = new SplitterObject[0];
+            }
           }
         }
       }
@@ -295,8 +310,19 @@ public class SplitterFactory {
     return fileCompiler.compileFiles(fileNames);
   }
 
-  /** Returns true if a Ppt's name matches the given pattern. */
+  /**
+   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file designates the given
+   * program point. A complete program point name designates the program points described by {@link
+   * SplitterList#matches}.
+   *
+   * @param ppt_name a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param ppt a program point
+   * @return true if {@code ppt_name} designates {@code ppt}
+   */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
+    if (SplitterList.isComplete(ppt_name)) {
+      return SplitterList.matches(ppt_name, ppt.name);
+    }
     if (ppt.name.equals(ppt_name)) {
       return true;
     }
