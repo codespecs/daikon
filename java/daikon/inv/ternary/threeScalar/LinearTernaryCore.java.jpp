@@ -1051,7 +1051,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   // a, b, c and d are mutually prime, integers and a is positive.
   //
   // A visual explanation of the math can be found in:
-  // http://www.efm.leeds.ac.uk/CIVE/CIVE2599/cive2599-summary-overheads-full.pdf
+  // https://www.efm.leeds.ac.uk/CIVE/CIVE2599/cive2599-summary-overheads-full.pdf
   //
   // The standard form of a plane can be calculated using a vector
   // normal "n" <n1, n2, n3> to the plane and a vector from the origin
@@ -1085,7 +1085,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     Point p2 = points[2];
 
     // the following code is taken from the source page of
-    // http://jblanco_60.tripod.com/plane.html (the math behind the
+    // https://jblanco_60.tripod.com/plane.html (the math behind the
     // implementation is detailed above)
 
 #if defined(TYPELONG)

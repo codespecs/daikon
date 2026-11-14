@@ -1,12 +1,8 @@
 package daikon.diff;
 
-import daikon.FileIO;
 import daikon.Global;
 import daikon.PptTopLevel;
 import daikon.inv.Invariant;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
@@ -32,7 +26,7 @@ import org.plumelib.util.CollectionsPlume;
  */
 public class InvMap implements Serializable {
   /** If you add or remove fields, change this number to the current date. */
-  static final long serialVersionUID = 20090612L;
+  static final long serialVersionUID = 20261006L;
 
   /** A map from program points to the invariants true at the program point. */
   @SuppressWarnings("serial")
@@ -135,21 +129,5 @@ public class InvMap implements Serializable {
     int size2 = pptToInvs.size();
     assert size1 == size2;
     return size1;
-  }
-
-  /** Include FileIO.new_decl_format in the stream */
-  @RequiresNonNull("daikon.FileIO.new_decl_format")
-  private void writeObject(ObjectOutputStream oos) throws IOException {
-    oos.defaultWriteObject();
-    oos.writeObject(FileIO.new_decl_format);
-  }
-
-  /** Serialize pptmap and FileIO.new_decl_format */
-  @EnsuresNonNull("daikon.FileIO.new_decl_format")
-  private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-    ois.defaultReadObject();
-    FileIO.new_decl_format = (Boolean) ois.readObject();
-    // System.out.printf("Restoring new_decl_format to %b%n",
-    //                   FileIO.new_decl_format);
   }
 }

@@ -2,8 +2,10 @@ package daikon.test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import daikon.Daikon;
 import daikon.SplitDtrace;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -156,42 +158,36 @@ public class SplitDtraceTest {
   }
 
   /**
-   * Returns a declaration of a ppt with one variable, in the version 1 format.
-   *
-   * @param pptName the name of the ppt
-   * @return a declaration of a ppt with one variable
-   */
-  private static String declarationVersion1(String pptName) {
-    return String.join(System.lineSeparator(), "DECLARE", pptName, "x", "int", "int", "1", "");
-  }
-
-  /**
-   * Tests that SplitDtrace treats a sample of a version 1 file as a sample, even if the name of its
-   * ppt starts with "ppt ", like a version 2 declaration.
+   * Tests that SplitDtrace rejects a file in the obsolete version 1 format, rather than writing an
+   * output file without its declarations.
    *
    * @throws IOException if there is trouble reading or writing a file
    */
   @Test
-  public void testVersion1PptNameStartingWithPpt() throws IOException {
-    String enter = "ppt C.m(int):::ENTER";
-    String exit = "ppt C.m(int):::EXIT1";
-    StringJoiner dtrace = new StringJoiner(System.lineSeparator());
-    dtrace.add("decl-version 1.0");
-    dtrace.add("");
-    dtrace.add(declarationVersion1(enter));
-    dtrace.add(declarationVersion1(exit));
-    for (int nonce = 1; nonce <= 4; nonce++) {
-      dtrace.add(sample(enter, nonce));
-      dtrace.add(sample(exit, nonce));
+  public void testVersion1() throws IOException {
+    String enter = "C.m(int):::ENTER";
+    String declare =
+        String.join(System.lineSeparator(), "DECLARE", enter, "x", "int", "int", "1", "");
+    String version1 = "decl-version 1.0" + System.lineSeparator();
+    for (String header : new String[] {declare, version1}) {
+      Path dir = Files.createTempDirectory("SplitDtraceTest");
+      Path input = dir.resolve("test.dtrace");
+      Path output = dir.resolve("test.second-half.dtrace");
+      try {
+        Files.write(input, (header + System.lineSeparator() + sample(enter, 1)).getBytes(UTF_8));
+        Daikon.UserError e =
+            assertThrows(
+                Daikon.UserError.class,
+                () -> SplitDtrace.mainHelper(new String[] {input.toString()}));
+        String message = String.valueOf(e.getMessage());
+        assertTrue(message, message.contains("version 1 format"));
+        assertFalse(Files.exists(output));
+      } finally {
+        Files.deleteIfExists(input);
+        Files.deleteIfExists(output);
+        Files.delete(dir);
+      }
     }
-
-    String result = secondHalf(dtrace.toString());
-    String nl = System.lineSeparator();
-    assertTrue(result, result.contains("DECLARE" + nl + enter + nl));
-    assertTrue(result, result.contains("DECLARE" + nl + exit + nl));
-    assertFalse(result, result.contains("this_invocation_nonce" + nl + "2" + nl));
-    assertTrue(result, result.contains("this_invocation_nonce" + nl + "3" + nl));
-    assertTrue(result, result.contains("this_invocation_nonce" + nl + "4" + nl));
   }
 
   /**

@@ -57,7 +57,6 @@ public class DetailedStatisticsVisitorTester {
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
-    FileIO.new_decl_format = true;
   }
 
   @Before

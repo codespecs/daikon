@@ -78,7 +78,7 @@ if (scalar(@decls_files) == 0) {
 if ($algorithm eq "xm") {
   if (system("xmeans 2>&1 > /dev/null") != 0) {
     die "Could not run the 'xmeans' binary.\n"
-      . "Download it from http://www.cs.cmu.edu/~dpelleg/kmeans.html\n"
+      . "Download it from https://www.cs.cmu.edu/~dpelleg/kmeans.html\n"
       . "or choose a different clustering algorithm.\n";
   }
 }

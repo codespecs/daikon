@@ -8,11 +8,11 @@ public final class Math__BigFloat_bdiv__39 extends Splitter {
     return "orig($p) != 0 && orig($p) != orig($x._p) && ((orig($y._m.value.deref).length == 1 && orig($y._e.value.deref).length == 1 && orig($y._e.value.deref)[0] == 0 && orig($y._m.value.deref)[0] == 1) || (orig($y._m.value.deref).length == 1 && orig($y._m.value.deref)[0] == 0) || (orig($x._m.value.deref).length == 1 && orig($x._m.value.deref)[0] == 0)) && (orig($x.sign).equals(\"+\") || orig($x.sign).equals(\"-\")) && (orig($y.sign).equals(\"+\") || orig($y.sign).equals(\"-\"))";
   }
 
-  VarInfo orig_$x__m_value_deref_array_varinfo; // orig($x._m.value.deref[])
+  VarInfo orig_$x__m_value_deref_array_varinfo; // orig($x._m.value.deref[..])
   VarInfo orig_$x__p_varinfo; // orig($x._p)
   VarInfo orig_$x_sign_varinfo; // orig($x.sign)
-  VarInfo orig_$y__e_value_deref_array_varinfo; // orig($y._e.value.deref[])
-  VarInfo orig_$y__m_value_deref_array_varinfo; // orig($y._m.value.deref[])
+  VarInfo orig_$y__e_value_deref_array_varinfo; // orig($y._e.value.deref[..])
+  VarInfo orig_$y__m_value_deref_array_varinfo; // orig($y._m.value.deref[..])
   VarInfo orig_$y_sign_varinfo; // orig($y.sign)
   VarInfo orig_$p_varinfo; // orig($p)
 
@@ -21,11 +21,11 @@ public final class Math__BigFloat_bdiv__39 extends Splitter {
 
   public Math__BigFloat_bdiv__39() { }
   public Math__BigFloat_bdiv__39(Ppt ppt) {
-    orig_$x__m_value_deref_array_varinfo = ppt.find_var_by_name("orig($x._m.value.deref[])");
+    orig_$x__m_value_deref_array_varinfo = ppt.find_var_by_name("orig($x._m.value.deref[..])");
     orig_$x__p_varinfo = ppt.find_var_by_name("orig($x._p)");
     orig_$x_sign_varinfo = ppt.find_var_by_name("orig($x.sign)");
-    orig_$y__e_value_deref_array_varinfo = ppt.find_var_by_name("orig($y._e.value.deref[])");
-    orig_$y__m_value_deref_array_varinfo = ppt.find_var_by_name("orig($y._m.value.deref[])");
+    orig_$y__e_value_deref_array_varinfo = ppt.find_var_by_name("orig($y._e.value.deref[..])");
+    orig_$y__m_value_deref_array_varinfo = ppt.find_var_by_name("orig($y._m.value.deref[..])");
     orig_$y_sign_varinfo = ppt.find_var_by_name("orig($y.sign)");
     orig_$p_varinfo = ppt.find_var_by_name("orig($p)");
   }

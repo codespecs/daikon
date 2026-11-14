@@ -131,10 +131,6 @@ public class InvariantAddAndCheckTester {
     boolean oldIgnoreComparability = Daikon.ignore_comparability;
     Daikon.ignore_comparability = true;
 
-    // This test creates variables in the old decl format.
-    Boolean oldNewDeclFormat = FileIO.new_decl_format;
-    FileIO.new_decl_format = false;
-
     try {
       // run the actual test
       if (!execute()) {
@@ -142,11 +138,6 @@ public class InvariantAddAndCheckTester {
       }
     } finally {
       Daikon.ignore_comparability = oldIgnoreComparability;
-      if (oldNewDeclFormat == null) {
-        FileIO.resetNewDeclFormat();
-      } else {
-        FileIO.new_decl_format = oldNewDeclFormat;
-      }
     }
   }
 

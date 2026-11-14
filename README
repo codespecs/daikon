@@ -7,7 +7,7 @@ subdirectory for additional information, including installation instructions.
 You should start out with the file:
   doc/index.html
 The documentation also appears on the Daikon homepage:
-  http://plse.cs.washington.edu/daikon/
+  https://plse.cs.washington.edu/daikon/
 
 If you are working with source cloned from the source code repository
 https://github.com/codespecs/daikon, then please review the file

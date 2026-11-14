@@ -1,1115 +1,1416 @@
-VarComparability
-implicit
+decl-version 2.0
 
-DECLARE
-std.initialize()void:::ENTER
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
+var-comparability implicit
 
-DECLARE
-std.initialize()void:::EXIT1
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
+ppt std.initialize()void:::ENTER
+  ppt-type enter
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
 
-DECLARE
-std.ALIM()int:::ENTER
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
+ppt std.initialize()void:::EXIT1
+  ppt-type subexit
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
 
-DECLARE
-std.ALIM()int:::EXIT2
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-12[6]
-::Up_Separation
-int
-int
-12
-::Down_Separation
-int
-int
-12
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
-return
-int
-int
-12
+ppt std.ALIM()int:::ENTER
+  ppt-type enter
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
 
-DECLARE
-std.Inhibit_Biased_Climb()int:::ENTER
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
+ppt std.ALIM()int:::EXIT2
+  ppt-type subexit
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 12[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 12
 
-DECLARE
-std.Inhibit_Biased_Climb()int:::EXIT3
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-12[6]
-::Up_Separation
-int
-int
-12
-::Down_Separation
-int
-int
-12
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
-return
-int
-int
-12
+ppt std.Inhibit_Biased_Climb()int:::ENTER
+  ppt-type enter
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
 
-DECLARE
-std.Non_Crossing_Biased_Climb()boolean:::ENTER
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
+ppt std.Inhibit_Biased_Climb()int:::EXIT3
+  ppt-type subexit
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 12[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 12
 
-DECLARE
-std.Non_Crossing_Biased_Climb()boolean:::EXIT4
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
-return
-boolean
-int
-13
+ppt std.Non_Crossing_Biased_Climb()boolean:::ENTER
+  ppt-type enter
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
 
-DECLARE
-std.Non_Crossing_Biased_Descend()boolean:::ENTER
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
+ppt std.Non_Crossing_Biased_Climb()boolean:::EXIT4
+  ppt-type subexit
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable return
+    var-kind return
+    dec-type boolean
+    rep-type int
+    comparability 13
 
-DECLARE
-std.Non_Crossing_Biased_Descend()boolean:::EXIT5
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
-return
-boolean
-int
-13
+ppt std.Non_Crossing_Biased_Descend()boolean:::ENTER
+  ppt-type enter
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
 
-DECLARE
-std.Own_Below_Threat()boolean:::ENTER
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
+ppt std.Non_Crossing_Biased_Descend()boolean:::EXIT5
+  ppt-type subexit
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable return
+    var-kind return
+    dec-type boolean
+    rep-type int
+    comparability 13
 
-DECLARE
-std.Own_Below_Threat()boolean:::EXIT6
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
-return
-boolean
-int
-13
+ppt std.Own_Below_Threat()boolean:::ENTER
+  ppt-type enter
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
 
-DECLARE
-std.Own_Above_Threat()boolean:::ENTER
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
+ppt std.Own_Below_Threat()boolean:::EXIT6
+  ppt-type subexit
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable return
+    var-kind return
+    dec-type boolean
+    rep-type int
+    comparability 13
 
-DECLARE
-std.Own_Above_Threat()boolean:::EXIT7
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
-return
-boolean
-int
-13
+ppt std.Own_Above_Threat()boolean:::ENTER
+  ppt-type enter
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
 
-DECLARE
-std.alt_sep_test()int:::ENTER
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
+ppt std.Own_Above_Threat()boolean:::EXIT7
+  ppt-type subexit
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable return
+    var-kind return
+    dec-type boolean
+    rep-type int
+    comparability 13
 
-DECLARE
-std.alt_sep_test()int:::EXIT8
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
-return
-int
-int
-13
+ppt std.alt_sep_test()int:::ENTER
+  ppt-type enter
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
 
-DECLARE
-std.main(int;char **;)int:::ENTER
-argc
-int
-int
-14
-argv
-char *[]
-hashcode
-15
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
+ppt std.alt_sep_test()int:::EXIT8
+  ppt-type subexit
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 13
 
-DECLARE
-std.main(int;char **;)int:::EXIT9
-argc
-int
-int
-14
-argv
-char *[]
-hashcode
-15
-::Cur_Vertical_Sep
-int
-int
-1
-::High_Confidence
-boolean
-int
-2
-::Two_of_Three_Reports_Valid
-boolean
-int
-3
-::Own_Tracked_Alt
-int
-int
-4
-::Own_Tracked_Alt_Rate
-int
-int
-5
-::Other_Tracked_Alt
-int
-int
-4
-::Alt_Layer_Value
-int
-int
-6
-::Positive_RA_Alt_Thresh
-int[]
-hashcode
-7
-::Positive_RA_Alt_Thresh[]
-int[]
-int[]
-8[6]
-::Up_Separation
-int
-int
-8
-::Down_Separation
-int
-int
-8
-::Other_RAC
-int
-int
-9
-::Other_Capability
-int
-int
-10
-::Climb_Inhibit
-int
-int
-11
-return
-int
-int
-13
+ppt std.main(int;char\_**;)int:::ENTER
+  ppt-type enter
+  variable argc
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 14
+  variable argv
+    var-kind variable
+    dec-type char\_*[]
+    rep-type hashcode
+    comparability 15
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+
+ppt std.main(int;char\_**;)int:::EXIT9
+  ppt-type subexit
+  variable argc
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 14
+  variable argv
+    var-kind variable
+    dec-type char\_*[]
+    rep-type hashcode
+    comparability 15
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::High_Confidence
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 2
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    dec-type boolean
+    rep-type int
+    comparability 3
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 5
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 4
+  variable ::Alt_Layer_Value
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 6
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 7
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 8[6]
+  variable ::Up_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Down_Separation
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 8
+  variable ::Other_RAC
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 9
+  variable ::Other_Capability
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::Climb_Inhibit
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 11
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 13
 
 # Implicit Type to Explicit Type
 #   1 : Cur_Vertical_Sep

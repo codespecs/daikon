@@ -4,7 +4,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.logging.Level.INFO;
 import static org.junit.Assert.fail;
 
-import daikon.FileIO;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,7 +39,6 @@ public class VarInfoNameTest {
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
-    FileIO.new_decl_format = true;
   }
 
   @Test

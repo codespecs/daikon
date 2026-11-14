@@ -61,17 +61,6 @@ public class PptPercTest {
   }
 
   /**
-   * Returns a version 1 declaration of a program point with one variable.
-   *
-   * @param pptName the name of the program point
-   * @param varName the name of the variable
-   * @return a version 1 declaration
-   */
-  private static String declarationVersion1(String pptName, String varName) {
-    return String.join(System.lineSeparator(), "DECLARE", pptName, varName, "int", "int", "1", "");
-  }
-
-  /**
    * Returns a version 2 declaration of a program point with one variable.
    *
    * @param pptName the name of the program point
@@ -88,26 +77,6 @@ public class PptPercTest {
         "  rep-type int",
         "  comparability 1",
         "");
-  }
-
-  /**
-   * Tests that, in a version 1 file, a variable whose name looks like a version 2 declaration or a
-   * version 1 declaration is not taken for a program point.
-   *
-   * @throws IOException if there is trouble writing a file
-   */
-  @Test
-  public void testVersion1VariableNames() throws IOException {
-    StringJoiner decls = new StringJoiner(System.lineSeparator());
-    decls.add(declarationVersion1("B.m():::ENTER", "ppt zzz"));
-    decls.add(declarationVersion1("B.m():::EXIT1", "DECLARE"));
-    decls.add(declarationVersion1("C.m():::ENTER", "x"));
-    decls.add(declarationVersion1("C.m():::EXIT1", "x"));
-    // Of the 4 program points, 60% is 2, so processing stops after B.m():::EXIT1.  If "zzz" were
-    // a program point, then processing would stop after the 3rd of 5, and so after C.m().
-    assertEquals(
-        "B.m():::EXIT1",
-        maxPptName(Collections.singletonList(decls.toString()), Collections.emptyList(), 60));
   }
 
   /**
@@ -137,25 +106,20 @@ public class PptPercTest {
   }
 
   /**
-   * Tests that a file without a "decl-version" record is in the format of the file before it.
+   * Tests that a file without a "decl-version" record is in the version 2 format.
    *
    * @throws IOException if there is trouble writing a file
    */
   @Test
-  public void testVersion2InLaterFile() throws IOException {
-    StringJoiner decls1 = new StringJoiner(System.lineSeparator());
-    decls1.add("decl-version 2.0");
-    decls1.add("");
-    decls1.add(declarationVersion2("B.m():::ENTER"));
-    decls1.add(declarationVersion2("B.m():::EXIT1"));
-    StringJoiner decls2 = new StringJoiner(System.lineSeparator());
-    decls2.add(declarationVersion2("C.m():::ENTER"));
-    decls2.add(declarationVersion2("C.m():::EXIT1"));
-    // Of the 4 program points, 75% is 3, so processing stops after C.m():::EXIT1.  If the second
-    // file were in the version 1 format, then it would declare no program points, and processing
-    // would stop after the 1st of 2, and so after B.m():::EXIT1.
+  public void testNoDeclVersion() throws IOException {
+    StringJoiner decls = new StringJoiner(System.lineSeparator());
+    decls.add(declarationVersion2("B.m():::ENTER"));
+    decls.add(declarationVersion2("B.m():::EXIT1"));
+    decls.add(declarationVersion2("C.m():::ENTER"));
+    decls.add(declarationVersion2("C.m():::EXIT1"));
+    // Of the 4 program points, 75% is 3, so processing stops after C.m():::EXIT1.
     assertEquals(
         "C.m():::EXIT1",
-        maxPptName(List.of(decls1.toString(), decls2.toString()), Collections.emptyList(), 75));
+        maxPptName(Collections.singletonList(decls.toString()), Collections.emptyList(), 75));
   }
 }

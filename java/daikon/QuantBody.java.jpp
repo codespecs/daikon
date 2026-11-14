@@ -108,7 +108,7 @@ The correct way to build the system is to run 'make'.
 
 #if 0
   For an explanation of the indirection, see
-  http://stackoverflow.com/questions/8231966/why-do-i-need-double-layer-of-indirection-for-macros
+  https://stackoverflow.com/questions/8231966/why-do-i-need-double-layer-of-indirection-for-macros
 #endif
 #define COLLECT_TYPE COLLECT_TYPE2(_TYPE_NAME)
 #define COLLECT_TYPE2(TYPENAME) collect ## TYPENAME

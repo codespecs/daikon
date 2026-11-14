@@ -102,15 +102,13 @@ final class SplitterTestUtils {
   }
 
   /**
-   * Reads a decls file into a PptMap. The decls file may use a different format than previously
-   * read decls files, and its program points and variables are not filtered.
+   * Reads a decls file into a PptMap. Its program points and variables are not filtered.
    *
    * @param declsFile the name of the decls file
    * @param ppts the PptMap to which to add the program points of declsFile
    * @throws IOException if the decls file cannot be read
    */
   static void readDecls(String declsFile, PptMap ppts) throws IOException {
-    FileIO.resetNewDeclFormat();
     // Other tests may have set the patterns that filter the program points and variables.
     Pattern oldPptRegexp = Daikon.ppt_regexp;
     Pattern oldPptOmitRegexp = Daikon.ppt_omit_regexp;

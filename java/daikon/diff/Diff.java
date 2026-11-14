@@ -66,7 +66,7 @@ public final class Diff {
           "  file1 and file2 are serialized invariants produced by Daikon.",
           "  If file2 is not specified, file1 is compared with the empty set.",
           "  For a list of flags, see the Daikon manual, which appears in the ",
-          "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.");
+          "  Daikon distribution and also at https://plse.cs.washington.edu/daikon/.");
 
   /** The long command-line option that specifies the comparator to sort the first set of invs. */
   private static final String INV_SORT_COMPARATOR1_SWITCH = "invSortComparator1";
