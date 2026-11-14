@@ -1862,7 +1862,9 @@ public final class Daikon {
   /**
    * Create EXIT program points as needed for EXITnn program points. If a program point whose type
    * is not EXIT already has the name of the combined exit, such as a POINT named foo:::EXIT, the
-   * combined exit is not created, and the numbered exits have no combined exit.
+   * combined exit is not created, and the numbered exits have no combined exit. In that case, {@link
+   * PptRelation#init_hierarchy} connects each numbered exit directly to its enter point and to its
+   * declared parents.
    *
    * @param ppts a map of program points, to which this adds the combined exits
    */

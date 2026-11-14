@@ -693,11 +693,21 @@ public class PptRelation implements Serializable {
 
       assert ppt.parent_relations != null : "missing parent_relations in ppt " + ppt.name();
 
+      // The combined exit of a numbered exit, or null if there is none.  There is none if a ppt
+      // whose type is not EXIT has the combined exit's name; see Daikon.create_combined_exits.
+      PptTopLevel combined_exit = null;
+      if (ppt.is_subexit()) {
+        PptTopLevel exit = all_ppts.get(pname.makeExit());
+        if ((exit != null) && exit.is_combined_exit()) {
+          combined_exit = exit;
+        }
+      }
+
       // Process the front-end specified relations
       for (ParentRelation pr : ppt.parent_relations) {
-        // Skip all relations in subexits.  These relations will be handled
-        // in the combined exit point.
-        if (ppt.is_subexit()) {
+        // Skip all relations in a subexit that has a combined exit.  These relations will be
+        // handled in the combined exit point.
+        if (combined_exit != null) {
           continue;
         }
 
@@ -716,11 +726,17 @@ public class PptRelation implements Serializable {
       }
 
       // If an exitNN point, parent is combined exit point.  A ppt that is declared with type
-      // POINT is a leaf whatever its name, so it is never a parent.
+      // POINT is a leaf whatever its name, so it is never a parent.  If there is no combined exit,
+      // connect the enter point to the exitNN point directly, over orig variables, as it would be
+      // connected to the combined exit.
       if (ppt.is_subexit()) {
-        PptTopLevel parent = all_ppts.get(pname.makeExit());
-        if ((parent != null) && parent.is_combined_exit()) {
-          rels.add(newCombinedExitExitNNRel(parent, ppt));
+        if (combined_exit != null) {
+          rels.add(newCombinedExitExitNNRel(combined_exit, ppt));
+        } else {
+          PptTopLevel enter = all_ppts.get(pname.makeEnter());
+          if ((enter != null) && enter.is_enter()) {
+            rels.add(PptRelation.newEnterExitRel(enter, ppt));
+          }
         }
 
         // Connect combined exit points to enter points over orig variables
