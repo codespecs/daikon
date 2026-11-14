@@ -23,7 +23,7 @@ public final class misc_Fib_main_32 extends Splitter {
   }
 
   public boolean valid() {
-    return (misc_Fib_STEPS_varinfo != null);
+    return (misc_Fib_STEPS_varinfo != null && misc_Fib_STEPS_varinfo.rep_type.format().equals("int"));
   }
 
   public boolean test(ValueTuple vt) {

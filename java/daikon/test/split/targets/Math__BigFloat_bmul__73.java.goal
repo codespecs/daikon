@@ -25,7 +25,8 @@ public final class Math__BigFloat_bmul__73 extends Splitter {
   }
 
   public boolean valid() {
-    return (orig_$x_sign_varinfo != null) && (orig_$y_sign_varinfo != null);
+    return (orig_$x_sign_varinfo != null && orig_$x_sign_varinfo.rep_type.format().equals("java.lang.String"))
+        && (orig_$y_sign_varinfo != null && orig_$y_sign_varinfo.rep_type.format().equals("java.lang.String"));
   }
 
   public boolean test(ValueTuple vt) {

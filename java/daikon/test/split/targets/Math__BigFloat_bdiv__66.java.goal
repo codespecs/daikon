@@ -31,7 +31,11 @@ public final class Math__BigFloat_bdiv__66 extends Splitter {
   }
 
   public boolean valid() {
-    return ($x__p_varinfo != null) && (orig_$x__p_varinfo != null) && (orig_$x_sign_varinfo != null) && (orig_$y_sign_varinfo != null) && (orig_$p_varinfo != null);
+    return ($x__p_varinfo != null && $x__p_varinfo.rep_type.format().equals("int"))
+        && (orig_$x__p_varinfo != null && orig_$x__p_varinfo.rep_type.format().equals("int"))
+        && (orig_$x_sign_varinfo != null && orig_$x_sign_varinfo.rep_type.format().equals("java.lang.String"))
+        && (orig_$y_sign_varinfo != null && orig_$y_sign_varinfo.rep_type.format().equals("java.lang.String"))
+        && (orig_$p_varinfo != null && orig_$p_varinfo.rep_type.format().equals("int"));
   }
 
   public boolean test(ValueTuple vt) {

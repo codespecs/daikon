@@ -25,7 +25,8 @@ public final class DataStructures_QueueAr_enqueue_50 extends Splitter {
   }
 
   public boolean valid() {
-    return (this_theArray_array_varinfo != null) && (this_currentSize_varinfo != null);
+    return (this_theArray_array_varinfo != null && this_theArray_array_varinfo.rep_type.format().equals("int[]"))
+        && (this_currentSize_varinfo != null && this_currentSize_varinfo.rep_type.format().equals("int"));
   }
 
   public boolean test(ValueTuple vt) {

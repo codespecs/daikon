@@ -23,7 +23,7 @@ public final class DataStructures_QueueAr_isEmpty_34 extends Splitter {
   }
 
   public boolean valid() {
-    return (this_currentSize_varinfo != null);
+    return (this_currentSize_varinfo != null && this_currentSize_varinfo.rep_type.format().equals("int"));
   }
 
   public boolean test(ValueTuple vt) {

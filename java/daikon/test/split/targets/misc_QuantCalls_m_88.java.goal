@@ -25,7 +25,8 @@ public final class misc_QuantCalls_m_88 extends Splitter {
   }
 
   public boolean valid() {
-    return (this_a_array_varinfo != null) && (this_sh_array_varinfo != null);
+    return (this_a_array_varinfo != null && this_a_array_varinfo.rep_type.format().equals("int[]"))
+        && (this_sh_array_varinfo != null && this_sh_array_varinfo.rep_type.format().equals("int[]"));
   }
 
   public boolean test(ValueTuple vt) {

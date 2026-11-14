@@ -23,7 +23,7 @@ public final class DataStructures_QueueAr_getFront_42 extends Splitter {
   }
 
   public boolean valid() {
-    return (orig_this_currentSize_varinfo != null);
+    return (orig_this_currentSize_varinfo != null && orig_this_currentSize_varinfo.rep_type.format().equals("int"));
   }
 
   public boolean test(ValueTuple vt) {

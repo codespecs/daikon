@@ -23,7 +23,7 @@ public final class Math__BigFloat_bmul__72 extends Splitter {
   }
 
   public boolean valid() {
-    return (orig_$y__a_is_defined_varinfo != null);
+    return (orig_$y__a_is_defined_varinfo != null && orig_$y__a_is_defined_varinfo.rep_type.format().equals("int"));
   }
 
   public boolean test(ValueTuple vt) {

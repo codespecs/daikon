@@ -25,7 +25,8 @@ public final class DataStructures_QueueAr_enqueue_53 extends Splitter {
   }
 
   public boolean valid() {
-    return (orig_this_theArray_array_varinfo != null) && (orig_this_back_varinfo != null);
+    return (orig_this_theArray_array_varinfo != null && orig_this_theArray_array_varinfo.rep_type.format().equals("int[]"))
+        && (orig_this_back_varinfo != null && orig_this_back_varinfo.rep_type.format().equals("int"));
   }
 
   public boolean test(ValueTuple vt) {

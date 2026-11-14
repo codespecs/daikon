@@ -23,7 +23,7 @@ public final class misc_CharBuf_isEmpty_76 extends Splitter {
   }
 
   public boolean valid() {
-    return (this_buf_array_varinfo != null);
+    return (this_buf_array_varinfo != null && this_buf_array_varinfo.rep_type.format().equals("int[]"));
   }
 
   public boolean test(ValueTuple vt) {

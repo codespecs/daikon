@@ -168,13 +168,29 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     }
   }
 
-  /** Writes the body of the valid method to fileText. */
+  /**
+   * Writes the body of the valid method to fileText. A splitter is valid at a program point that
+   * has each of its variables, with the representation type that the test method reads. For
+   * example, a splitter that reads parameter {@code d} of type {@code int} is not valid at a
+   * program point whose variable {@code d} has type {@code double}.
+   */
   private void writeValidBody(
       @UnknownInitialization(SplitterJavaSource.class) SplitterJavaSource this) {
     if (vars.length > 0) {
-      fileText.append("    return (" + vars[0].getFieldName() + " != null)");
-      for (int i = 1; i < vars.length; i++) {
-        fileText.append(" && (" + vars[i].getFieldName() + " != null)");
+      fileText.append("    return ");
+      for (int i = 0; i < vars.length; i++) {
+        if (i > 0) {
+          fileText.append(lineSep + "        && ");
+        }
+        String fieldName = vars[i].getFieldName();
+        fileText.append(
+            "("
+                + fieldName
+                + " != null && "
+                + fieldName
+                + ".rep_type.format().equals(\""
+                + vars[i].getRepType()
+                + "\"))");
       }
       add(";");
     } else {
@@ -564,6 +580,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     /** The type of the variable. */
     private String type;
 
+    /** The representation type of the variable, such as "int" or "double[]". */
+    private String repType;
+
     private VariableManager(VarInfo varInfo, String condition) throws ParseException {
       // this.varInfo = varInfo;
       name = varInfo.name();
@@ -571,6 +590,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       fieldName = fieldName(varInfo);
       varName = varName(varInfo);
       type = makeIndexIfNeeded(getVarType(varInfo), compilableName, varInfo, condition);
+      repType = varInfo.rep_type.format();
     }
 
     /**
@@ -616,6 +636,15 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
      */
     private String getType() {
       return type;
+    }
+
+    /**
+     * Returns the representation type of the variable.
+     *
+     * @return the representation type of the variable, such as "int" or "double[]"
+     */
+    private String getRepType() {
+      return repType;
     }
   }
 

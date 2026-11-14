@@ -23,7 +23,7 @@ public final class Math__BigFloat_bdiv__60 extends Splitter {
   }
 
   public boolean valid() {
-    return ($x__p_varinfo != null);
+    return ($x__p_varinfo != null && $x__p_varinfo.rep_type.format().equals("int"));
   }
 
   public boolean test(ValueTuple vt) {
