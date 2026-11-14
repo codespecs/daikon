@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** A collection of useful helper methods that are common to many different individual tests. */
 public class Common {
@@ -98,9 +97,9 @@ public class Common {
    */
   public static PptMap readDecls(File declsFile, List<String> lines) throws IOException {
     Files.write(declsFile.toPath(), lines, StandardCharsets.UTF_8);
-    @Nullable Pattern oldPptRegexp = Daikon.ppt_regexp;
-    @Nullable Pattern oldPptOmitRegexp = Daikon.ppt_omit_regexp;
-    @Nullable String oldPptMaxName = Daikon.ppt_max_name;
+    Pattern oldPptRegexp = Daikon.ppt_regexp;
+    Pattern oldPptOmitRegexp = Daikon.ppt_omit_regexp;
+    String oldPptMaxName = Daikon.ppt_max_name;
     boolean oldRmStackDups = FileIO.dkconfig_rm_stack_dups;
     Daikon.ppt_regexp = null;
     Daikon.ppt_omit_regexp = null;
