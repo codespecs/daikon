@@ -10,6 +10,7 @@ import daikon.FileIO;
 import daikon.PptMap;
 import daikon.PptRelation;
 import daikon.PptTopLevel;
+import daikon.VarInfo;
 import daikon.split.PptSplitter;
 import daikon.split.Splitter;
 import daikon.test.split.ConditionSplitter;
@@ -19,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Rule;
@@ -32,14 +32,23 @@ public class InitHierarchyTest {
   /** A temporary directory for decls files. */
   @Rule public TemporaryFolder tmpFolder = new TemporaryFolder();
 
+  // JUnit creates an instance of this class for each test, so these fields hold the values of the
+  // global settings from just before the test.
+
+  /** The value of {@link Daikon#use_dataflow_hierarchy} before the test. */
+  private final boolean savedUseDataflowHierarchy = Daikon.use_dataflow_hierarchy;
+
+  /** The value of {@link PptRelation#dkconfig_enable_object_user} before the test. */
+  private final boolean savedEnableObjectUser = PptRelation.dkconfig_enable_object_user;
+
   /** Creates an InitHierarchyTest. */
   public InitHierarchyTest() {}
 
   /** Restores the global settings that a test changes. */
   @After
   public void restoreSettings() {
-    Daikon.use_dataflow_hierarchy = true;
-    PptRelation.dkconfig_enable_object_user = false;
+    Daikon.use_dataflow_hierarchy = savedUseDataflowHierarchy;
+    PptRelation.dkconfig_enable_object_user = savedEnableObjectUser;
   }
 
   /**
@@ -153,7 +162,7 @@ public class InitHierarchyTest {
 
   /**
    * A point that is named like a combined exit is not replaced by a combined exit, and it is not
-   * the parent of the numbered exits.
+   * the parent of the numbered exits. Instead, the enter point is the parent of the numbered exit.
    */
   @Test
   public void testPointNamedCombinedExit() throws IOException {
@@ -165,7 +174,40 @@ public class InitHierarchyTest {
     PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
     assertTrue(exit.is_dataflow_leaf());
     assertEquals(Collections.emptyList(), exit.children);
-    assertEquals(Collections.emptyList(), get(ppts, "Foo.bar():::EXIT5").parents);
+    List<PptRelation> parents = get(ppts, "Foo.bar():::EXIT5").parents;
+    assertEquals(1, parents.size());
+    assertSame(get(ppts, "Foo.bar():::ENTER"), parents.get(0).parent);
+    assertEquals(PptRelation.PptRelationType.ENTER_EXIT, parents.get(0).getRelationType());
+  }
+
+  /**
+   * A numbered exit that has no combined exit, because a point has the combined exit's name, is
+   * connected to its declared parents.
+   */
+  @Test
+  public void testDeclaredParentWithoutCombinedExit() throws IOException {
+    PptMap ppts =
+        initHierarchy(
+            pptDecl("Foo:::OBJECT", "object")
+                + pptDecl("Foo.bar():::ENTER", "enter", "parent", "Foo:::OBJECT")
+                + pptDecl("Foo.bar():::EXIT", "point")
+                + pptDecl("Foo.bar():::EXIT5", "subexit", "parent", "Foo:::OBJECT"));
+    PptTopLevel object = get(ppts, "Foo:::OBJECT");
+    PptTopLevel exit5 = get(ppts, "Foo.bar():::EXIT5");
+    VarInfo exit5_x = exit5.find_var_by_name("x");
+    if (exit5_x == null) {
+      throw new AssertionError("no variable x in " + exit5.name());
+    }
+    boolean found = false;
+    for (PptRelation rel : exit5.parents) {
+      if (rel.parent == object) {
+        assertEquals(PptRelation.PptRelationType.PARENT, rel.getRelationType());
+        assertSame(object.find_var_by_name("x"), rel.parentVar(exit5_x));
+        found = true;
+      }
+    }
+    assertTrue(found);
+    assertEquals(2, exit5.parents.size());
   }
 
   /** A point cannot be declared as a parent. */
@@ -233,7 +275,11 @@ public class InitHierarchyTest {
     List<PptSplitter> exitSplitters = splitters(exit);
     assertEquals(1, exitSplitters.size());
     PptSplitter split = exitSplitters.get(0);
-    assertSame(kept, Objects.requireNonNull(split.splitter));
+    Splitter splitter = split.splitter;
+    if (splitter == null) {
+      throw new AssertionError("no splitter at " + exit.name());
+    }
+    assertSame(kept, splitter);
     for (PptTopLevel cond : split.ppts) {
       assertEquals(1, cond.parents.size());
       assertSame(exit, cond.parents.get(0).parent);
@@ -262,6 +308,27 @@ public class InitHierarchyTest {
     enter.addConditions(new Splitter[] {new ConditionSplitter("x == 1")});
     PptRelation.init_hierarchy(ppts);
     assertEquals(0, splitters(enter).size());
+  }
+
+  /**
+   * With the hierarchy, a non-leaf whose only child is a childless non-leaf loses its splitters,
+   * even though it is processed before its child and the child has a matching splitter.
+   */
+  @Test
+  public void testChildlessSplitterCascades() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("Foo:::CLASS", "class")
+                + pptDecl("Foo:::OBJECT", "object", "parent", "Foo:::CLASS"));
+    Splitter splitter = new ConditionSplitter("x == 1");
+    PptTopLevel classPpt = get(ppts, "Foo:::CLASS");
+    PptTopLevel objectPpt = get(ppts, "Foo:::OBJECT");
+    classPpt.addConditions(new Splitter[] {splitter});
+    objectPpt.addConditions(new Splitter[] {splitter});
+    PptRelation.init_hierarchy(ppts);
+    assertEquals(0, splitters(classPpt).size());
+    assertEquals(0, splitters(objectPpt).size());
+    assertTrue(objectPpt.equality_view != null);
   }
 
   /** A user relation to a point is forbidden when user relations are enabled. */
