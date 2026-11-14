@@ -32,14 +32,23 @@ public class InitHierarchyTest {
   /** A temporary directory for decls files. */
   @Rule public TemporaryFolder tmpFolder = new TemporaryFolder();
 
+  // JUnit creates an instance of this class for each test, so these fields hold the values of the
+  // global settings from just before the test.
+
+  /** The value of {@link Daikon#use_dataflow_hierarchy} before the test. */
+  private final boolean savedUseDataflowHierarchy = Daikon.use_dataflow_hierarchy;
+
+  /** The value of {@link PptRelation#dkconfig_enable_object_user} before the test. */
+  private final boolean savedEnableObjectUser = PptRelation.dkconfig_enable_object_user;
+
   /** Creates an InitHierarchyTest. */
   public InitHierarchyTest() {}
 
   /** Restores the global settings that a test changes. */
   @After
   public void restoreSettings() {
-    Daikon.use_dataflow_hierarchy = true;
-    PptRelation.dkconfig_enable_object_user = false;
+    Daikon.use_dataflow_hierarchy = savedUseDataflowHierarchy;
+    PptRelation.dkconfig_enable_object_user = savedEnableObjectUser;
   }
 
   /**
@@ -299,6 +308,27 @@ public class InitHierarchyTest {
     enter.addConditions(new Splitter[] {new ConditionSplitter("x == 1")});
     PptRelation.init_hierarchy(ppts);
     assertEquals(0, splitters(enter).size());
+  }
+
+  /**
+   * With the hierarchy, a non-leaf whose only child is a childless non-leaf loses its splitters,
+   * even though it is processed before its child and the child has a matching splitter.
+   */
+  @Test
+  public void testChildlessSplitterCascades() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("Foo:::CLASS", "class")
+                + pptDecl("Foo:::OBJECT", "object", "parent", "Foo:::CLASS"));
+    Splitter splitter = new ConditionSplitter("x == 1");
+    PptTopLevel classPpt = get(ppts, "Foo:::CLASS");
+    PptTopLevel objectPpt = get(ppts, "Foo:::OBJECT");
+    classPpt.addConditions(new Splitter[] {splitter});
+    objectPpt.addConditions(new Splitter[] {splitter});
+    PptRelation.init_hierarchy(ppts);
+    assertEquals(0, splitters(classPpt).size());
+    assertEquals(0, splitters(objectPpt).size());
+    assertTrue(objectPpt.equality_view != null);
   }
 
   /** A user relation to a point is forbidden when user relations are enabled. */
