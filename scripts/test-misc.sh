@@ -17,12 +17,29 @@ export SHELLOPTS
 echo "HEAD=$(git rev-parse HEAD)"
 
 # Test that daikon-plumelib.jar builds.  Gradle requires Java 17.
-# When many CI jobs download the Gradle plugins at once, Maven Central rejects
-# some requests with status 429 (Too Many Requests), so retry after a pause.
-# A retry downloads only the files that the previous attempt did not.
 JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
 if [ "$JAVA_VER" -ge "17" ]; then
-  (cd java/lib && (gradle shadowJar || (sleep 1m && gradle shadowJar)))
+  gradle_shadowjar() {
+    (cd java/lib && gradle shadowJar --console=plain \
+      -Dorg.gradle.internal.http.socketTimeout=60000 \
+      -Dorg.gradle.internal.http.connectionTimeout=60000)
+  }
+  # When many CI jobs download the Gradle plugins at once, Maven Central
+  # rejects some requests with status 429 (Too Many Requests).  After a network
+  # failure (status 429 or 5xx, or a timeout), retry once.  The random pause
+  # keeps jobs that failed together from retrying together.  A retry downloads
+  # only the files that the previous attempt did not.  Any other failure is a
+  # real build error, which a retry would only repeat.
+  gradle_log=$(mktemp)
+  if ! gradle_shadowjar 2>&1 | tee "$gradle_log"; then
+    if grep -q -E 'Received status code (429|5[0-9][0-9]) from server|timed out' "$gradle_log"; then
+      sleep $((60 + RANDOM % 60))
+      gradle_shadowjar
+    else
+      exit 1
+    fi
+  fi
+  rm -f "$gradle_log"
 fi
 
 make compile daikon.jar
