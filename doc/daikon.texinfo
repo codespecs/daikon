@@ -6261,6 +6261,10 @@ produced by running Daikon or Diff
 with the @option{-o} flag.  If @var{file2} is not specified,
 @var{file1} is compared with the empty set of invariants.
 
+Diff ignores obvious invariants that Daikon does not print by default:
+invariants in which a variable appears more than once, such as
+@samp{x == x}, and invariants that are obvious from the declarations alone.
+
 This section describes the optional flags.
 
 @table @option
