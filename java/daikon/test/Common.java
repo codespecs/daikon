@@ -1,5 +1,6 @@
 package daikon.test;
 
+import daikon.Daikon;
 import daikon.FileIO;
 import daikon.PptMap;
 import daikon.PptTopLevel;
@@ -14,6 +15,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** A collection of useful helper methods that are common to many different individual tests. */
 public class Common {
@@ -84,20 +87,32 @@ public class Common {
   }
 
   /**
-   * Writes the given lines to a decls file, and returns the program points that Daikon reads from
-   * it.
+   * Writes the given lines to the given decls file, and returns the program points that Daikon
+   * reads from it. The program points are not filtered, even if another test has set the options
+   * that filter them.
    *
    * @param declsFile a file, which this method overwrites
    * @param lines the lines of the decls file, without line terminators
    * @return the program points read from the decls file
    * @throws IOException if there is trouble writing or reading the decls file
    */
-  public static PptMap readDecls(File declsFile, String... lines) throws IOException {
-    StringBuilder decls = new StringBuilder();
-    for (String line : lines) {
-      decls.append(line).append('\n');
+  public static PptMap readDecls(File declsFile, List<String> lines) throws IOException {
+    Files.write(declsFile.toPath(), lines, StandardCharsets.UTF_8);
+    @Nullable Pattern oldPptRegexp = Daikon.ppt_regexp;
+    @Nullable Pattern oldPptOmitRegexp = Daikon.ppt_omit_regexp;
+    @Nullable String oldPptMaxName = Daikon.ppt_max_name;
+    boolean oldRmStackDups = FileIO.dkconfig_rm_stack_dups;
+    Daikon.ppt_regexp = null;
+    Daikon.ppt_omit_regexp = null;
+    Daikon.ppt_max_name = null;
+    FileIO.dkconfig_rm_stack_dups = false;
+    try {
+      return FileIO.read_declaration_files(Collections.singletonList(declsFile));
+    } finally {
+      Daikon.ppt_regexp = oldPptRegexp;
+      Daikon.ppt_omit_regexp = oldPptOmitRegexp;
+      Daikon.ppt_max_name = oldPptMaxName;
+      FileIO.dkconfig_rm_stack_dups = oldRmStackDups;
     }
-    Files.write(declsFile.toPath(), decls.toString().getBytes(StandardCharsets.UTF_8));
-    return FileIO.read_declaration_files(Collections.singletonList(declsFile));
   }
 }

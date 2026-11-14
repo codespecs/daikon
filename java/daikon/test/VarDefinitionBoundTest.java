@@ -11,7 +11,7 @@ import daikon.VarInfo.VarKind;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Rule;
@@ -126,22 +126,21 @@ public class VarDefinitionBoundTest {
    * @throws IOException if there is trouble writing the decls file
    */
   private String readDeclsError(String... varRecords) throws IOException {
-    List<String> decls = new ArrayList<>();
-    Collections.addAll(
-        decls,
-        "decl-version 2.0",
-        "var-comparability none",
-        "",
-        "ppt foo:::ENTER",
-        "ppt-type enter",
-        "variable x");
+    List<String> decls =
+        new ArrayList<>(
+            Arrays.asList(
+                "decl-version 2.0",
+                "var-comparability none",
+                "",
+                "ppt foo:::ENTER",
+                "ppt-type enter",
+                "variable x"));
     for (String varRecord : varRecords) {
       decls.add("  " + varRecord);
     }
     File declsFile = tmpFolder.newFile();
-    String[] lines = decls.toArray(new String[0]);
     Daikon.UserError e =
-        assertThrows(Daikon.UserError.class, () -> Common.readDecls(declsFile, lines));
+        assertThrows(Daikon.UserError.class, () -> Common.readDecls(declsFile, decls));
     return String.valueOf(e.getMessage());
   }
 

@@ -2974,8 +2974,10 @@ ppt <ppt-name>
 The program point name is the rest of the line, and it can include any
 character.  In the declaration file, blanks should be replaced by
 @code{\_}, and backslashes must be escaped as @code{\\}.  Daikon also
-accepts unescaped blanks in a program point name, such as in
-@code{ppt Year.compute(int, int, int):::ENTER}.
+accepts unescaped blanks in the program point name of a @code{ppt}
+record, such as in @code{ppt Year.compute(int, int, int):::ENTER}.  In
+other records, such as @code{parent} records, blanks in a program point
+name must be replaced by @code{\_}.
 Program point names must be distinct.
 
 While Daikon does not infer program point relationships from @code{ppt-name}s,
