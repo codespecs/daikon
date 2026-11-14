@@ -6,9 +6,9 @@ package misc;
  * <p>DynComp computes comparability separately for each program point. Because the constructor
  * stores {@code ZERO_MAG} in {@code mag}, at the constructor's exit the index of {@code ZERO_MAG}
  * is comparable to {@code bitLength}, so Daikon derives {@code ZERO_MAG[this.bitLength]} there. At
- * the OBJECT program point they are not comparable, so that derived variable does not exist in
- * the parent. If Daikon required every derived variable to have a counterpart in the parent, it
- * would crash with "Can't find parent variable".
+ * the OBJECT program point they are not declared comparable, and derived variables are created
+ * from declared comparability, so that derived variable is absent there. If Daikon required every
+ * derived variable to have a parent counterpart, it would crash: "Can't find parent variable".
  */
 public class Issue554 {
 
