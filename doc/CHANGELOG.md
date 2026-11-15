@@ -64,8 +64,11 @@ strings; all of them are enabled by default:
    comparable to every other variable.
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
   complete program point name.  It matches the program point of that name, and
-  every program point whose name is that name preceded by a qualifier such as a
-  package.  A name ending with `:::EXIT` also matches the numbered exit points.
+  every program point whose name is that name preceded by a qualifier, such as
+  a package.  For a C or C++ program, the name can omit
+  any qualifier at the beginning of the program point name, such as the `..`
+  of the global function `..main():::ENTER`.  A name ending with `:::EXIT`
+  also matches the numbered exit points.
   Daikon loads a `PPT_NAME`'s conditions only if the name matches some program
   point, so a complete name that matches no program point contributes no
   conditions.  Otherwise, `PPT_NAME` affects where Daikon uses a condition only
