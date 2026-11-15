@@ -48,12 +48,11 @@ import org.plumelib.util.StringsPlume;
  * generally true for all executions of the program point to which the Implication belongs. These
  * resulting implications are written to standard output in the format of a splitter info file.
  *
- * <p>Each PPT_NAME in the output is a complete program point name. It designates the program point
- * of that name, and also every program point whose name is that name with a qualifier, such as a
- * package, before the class name (see {@link daikon.split.SplitterList#matches}). To make Daikon
- * use each condition only at the program points that its PPT_NAME designates, disable
- * indiscriminate splitting via {@code --config_option
- * daikon.split.SplitterList.all_splitters=false}.
+ * <p>Each PPT_NAME in the output is a complete program point name. It matches the program point of
+ * that name, and also every program point whose name is that name preceded by a qualifier, such as
+ * a package (see {@link daikon.split.SplitterList#matches}). To make Daikon use each condition only
+ * at the program points that its PPT_NAME matches, disable indiscriminate splitting via {@code
+ * --config_option daikon.split.SplitterList.all_splitters=false}.
  */
 public class ExtractConsequent {
 

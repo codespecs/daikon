@@ -36,8 +36,8 @@ Further documentation can be found in:
    comparable to every other variable.
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
   complete program point name.  It matches the program point of that name, and
-  every program point whose name is that name with a qualifier, such as a
-  package, before the class name.  For a C or C++ program, the name can omit
+  every program point whose name is that name preceded by a qualifier, such as
+  a package.  For a C or C++ program, the name can omit
   any qualifier at the beginning of the program point name, such as the `..`
   of the global function `..main():::ENTER`.  A name ending with `:::EXIT`
   also matches the numbered exit points.

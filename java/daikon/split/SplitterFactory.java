@@ -144,8 +144,8 @@ public class SplitterFactory {
               SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
             }
             if (SplitterList.isComplete(ppt_name)) {
-              // A complete program point name can designate several program points, such as
-              // "Foo.bar(int):::ENTER" designating both "p1.Foo.bar(int):::ENTER" and
+              // A complete program point name can match several program points, such as
+              // "Foo.bar(int):::ENTER" matching both "p1.Foo.bar(int):::ENTER" and
               // "p2.Foo.bar(int):::ENTER".  SplitterList applies the loaded splitters to each of
               // them.  A splitter that failed to compile or load (for example, because this
               // program point lacks a variable that its condition uses) remains available, so
@@ -311,13 +311,13 @@ public class SplitterFactory {
   }
 
   /**
-   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file designates the given
-   * program point. A complete program point name designates the program points described by {@link
+   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file matches the given program
+   * point. A complete program point name matches the program points described by {@link
    * SplitterList#matches}.
    *
    * @param ppt_name a name on a PPT_NAME line of a {@code .spinfo} file
    * @param ppt a program point
-   * @return true if {@code ppt_name} designates {@code ppt}
+   * @return true if {@code ppt_name} matches {@code ppt}
    */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
     if (SplitterList.isComplete(ppt_name)) {
