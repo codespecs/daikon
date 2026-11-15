@@ -139,7 +139,7 @@ import typequals.prototype.qual.Prototype;
  * </ul>
  */
 public class PptTopLevel extends Ppt {
-  static final long serialVersionUID = 20261113L;
+  static final long serialVersionUID = 20071129L;
 
   /** If true, print diagnostic information to standard out. */
   private static final boolean debugStdout = false;
@@ -189,7 +189,10 @@ public class PptTopLevel extends Ppt {
     ENTER,
     EXIT,
     SUBEXIT,
-    /** A program point whose name contains :::THROWS, such as foo:::THROWS or foo:::THROWS12. */
+    /**
+     * A program point whose name ends with :::THROWS, optionally followed by an id, such as
+     * foo:::THROWS or foo:::THROWS12.
+     */
     THROWS,
     /** A program point whose name ends with :::GLOBAL. */
     GLOBAL
