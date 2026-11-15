@@ -962,6 +962,14 @@ public final class FileIO {
    */
   public static int samples_processed = 0;
 
+  /**
+   * Total number of samples that {@link #process_sample} supplied to inference. This excludes
+   * samples that it ignored, such as an exit without a matching entry or (with the dataflow
+   * hierarchy) a sample at a ppt that is not a leaf. Not part of ParseState because it's global
+   * over all files processed by Daikon.
+   */
+  public static int samples_used = 0;
+
   /** The type of the record that was most recently read. */
   public enum RecordType {
     /** Got a sample. */
@@ -1613,6 +1621,7 @@ public final class FileIO {
       return;
     }
 
+    samples_used++;
     @SuppressWarnings({"UnusedVariable", "nullness:contracts.precondition"})
     Object dummy = ppt.add_bottom_up(vt, 1);
 

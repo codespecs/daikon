@@ -2446,9 +2446,9 @@ public final class Daikon {
 
     // System.out.println("samples processed: " + FileIO.samples_processed);
 
-    int unmatched_count = FileIO.call_stack.size() + FileIO.call_hashmap.size();
-    if ((use_dataflow_hierarchy && FileIO.samples_processed == unmatched_count)
-        || (FileIO.samples_processed == 0)) {
+    // Count the samples that inference used, not all samples minus unmatched entries:  an entry
+    // sample can be both unmatched and used (if its ppt is declared as a leaf, such as a POINT).
+    if (FileIO.samples_used == 0) {
       throw new Daikon.UserError(
           "No samples found for any of " + StringsPlume.nPlural(all_ppts.size(), "program point"));
     }
