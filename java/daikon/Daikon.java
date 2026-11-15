@@ -1808,18 +1808,24 @@ public final class Daikon {
   public static void createUpperPpts(PptMap all_ppts) {
 
     // Make each ppt's comparability at least as coarse as that of each of its children and of its
-    // conditional ppts.  Conditional ppts can have children too, so visit them as well.  Visit
-    // children before parents, so that usually each ppt is visited once.  But a ppt may need to be
-    // revisited:  a ppt and its conditional ppts depend on one another, and USER relations, if
-    // enabled (PptRelation.dkconfig_enable_object_user), can make the hierarchy cyclic (for
-    // example, if classes A and B each have a field of the other's type, then each OBJECT ppt is a
-    // parent of the other).  So, revisit the parents of each ppt whose comparability changes.
+    // conditional ppts.  Conditional ppts can have children too, so process them as well.  Process
+    // children before parents, so that usually each ppt is processed once.  But a ppt may need to
+    // be processed again:  a ppt and its conditional ppts depend on one another, and USER
+    // relations, if enabled (PptRelation.dkconfig_enable_object_user), can make the hierarchy
+    // cyclic (for example, if classes A and B each have a field of the other's type, then each
+    // OBJECT ppt is a parent of the other).  So, when a ppt's comparability changes, put its
+    // parents back on the worklist.
     Set<PptTopLevel> worklist = new LinkedHashSet<>();
-    // In MergeInvariants, some children are in other PptMaps; do not visit them.
+    // Track the unvisited ppts rather than the visited ones, so that the traversal stays within
+    // all_ppts:  in MergeInvariants, some children are in other PptMaps, and they must not be
+    // visited.
     Set<PptTopLevel> unvisited = new LinkedHashSet<>();
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       unvisited.add(ppt);
     }
+    // Every element of unvisited gets visited, but only those that have children go on the
+    // worklist.  For a ppt with no children, coarsenComparability would do nothing:  the ppt's
+    // conditional ppts have no children either, and they already have the ppt's comparability.
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       addChildrenFirst(ppt, unvisited, worklist);
     }

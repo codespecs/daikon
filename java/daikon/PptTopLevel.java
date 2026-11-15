@@ -4227,9 +4227,10 @@ public class PptTopLevel extends Ppt {
   /**
    * Coarsens the comparability of the variables at this program point and at its conditional
    * program points, so that two variables are comparable here if they are comparable in any child.
-   * Comparability is computed separately for each program point, so variables that are comparable
-   * (for example, always equal) in a child may be incomparable here; then the invariants merged
-   * from the children could not be represented here.
+   * Comparability is computed separately for each program point, so two variables that are
+   * comparable in a child can be incomparable here. Then an invariant over those variables in the
+   * child, such as one stating that they are always equal, could not be represented here when the
+   * invariants of the children are merged.
    *
    * <p>This must be called before this program point's invariants are created. Whenever it returns
    * true, it must be called again on each parent of this program point and of its conditional
