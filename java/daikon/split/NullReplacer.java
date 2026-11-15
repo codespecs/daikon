@@ -22,16 +22,21 @@ import jtb.visitor.DepthFirstVisitor;
  * NullReplacer is a JTB syntax tree visitor that replaces {@code null} with {@code 0}, when it
  * stands for a hashcode.
  *
- * <p>A splitter represents some references by their hashcode, which is 0 for null. A "null" is
- * replaced only if it stands for a hashcode: that is, if it is compared, by "==" or "!=", with an
- * expression that the splitter represents as a hashcode, or if it is a branch of a conditional
- * expression ("?:") whose other branch is such an expression. An expression that the splitter
- * represents as a hashcode is a hashcode variable, an element of an array of hashcodes, a call
- * {@code getElement_Object(a, i)} on an array of hashcodes, or a conditional expression whose
- * branches are each such an expression or a replaced "null". Every other "null" is left unchanged:
- * for example, one that is compared with a String, or one that is passed as an argument. For
- * example, in {@code this_next == null && this_name != null}, where {@code this_next} is a hashcode
- * and {@code this_name} is a String, the first "null" is replaced and the second "null" is not.
+ * <p>A splitter represents some references by their hashcode, which is 0 for null. A <em>hashcode
+ * expression</em> is an expression that the splitter represents as a hashcode. It has one of 4
+ * forms: a hashcode variable; an element {@code a[i]} of an array {@code a} of hashcodes; a call
+ * {@code getElement_Object(a, i)} on an array {@code a} of hashcodes; or a conditional expression
+ * one of whose branches is a hashcode expression and the other of which is a hashcode expression or
+ * "null". In the second and third forms, {@code a} is the name of the array, possibly in
+ * parentheses. No other expression is a hashcode expression, because a hashcode is a number, whose
+ * fields and methods cannot be used.
+ *
+ * <p>A "null" is replaced only if it stands for a hashcode: that is, if it is compared, by "==" or
+ * "!=", with a hashcode expression, or if it is a branch of a conditional expression ("?:") whose
+ * other branch is a hashcode expression. Every other "null" is left unchanged: for example, one
+ * that is compared with a String, or one that is passed as an argument. For example, in {@code
+ * this_next == null && this_name != null}, where {@code this_next} is a hashcode and {@code
+ * this_name} is a String, the first "null" is replaced and the second "null" is not.
  *
  * <p>NullReplacer runs after the other fixers, because it recognizes the names that they produce.
  */
@@ -48,18 +53,18 @@ class NullReplacer extends DepthFirstVisitor {
   //    column shifting being needed, applies only to specified line
 
   /**
-   * The expressions that the splitter represents as a hashcode. Each is the compilable name of a
-   * hashcode variable, or the compilable name of a hashcode array followed by "[]", which stands
-   * for an element of that array.
+   * The names of the hashcode variables and of the elements of the hashcode arrays. Each is the
+   * compilable name of a hashcode variable, or the compilable name of a hashcode array followed by
+   * "[]", which stands for an element of that array.
    */
-  private final Set<String> hashcodeExpressions = new HashSet<>();
+  private final Set<String> hashcodeNames = new HashSet<>();
 
   /** The null literals that are replaced, because they stand for a hashcode. */
   private final Set<NodeToken> hashcodeNulls = Collections.newSetFromMap(new IdentityHashMap<>());
 
   /**
-   * The conditional expressions that the splitter represents as a hashcode. Each maps the first
-   * token of the conditional expression to its last token.
+   * The conditional expressions that are hashcode expressions. Each maps the first token of the
+   * conditional expression to its last token.
    */
   private final IdentityHashMap<NodeToken, NodeToken> hashcodeConditionals =
       new IdentityHashMap<>();
@@ -74,9 +79,9 @@ class NullReplacer extends DepthFirstVisitor {
     for (VarInfo varInfo : varInfos) {
       String name = SplitterJavaSource.compilableName(varInfo);
       if (varInfo.file_rep_type == ProglangType.HASHCODE) {
-        hashcodeExpressions.add(name);
+        hashcodeNames.add(name);
       } else if (varInfo.file_rep_type == ProglangType.HASHCODE_ARRAY) {
-        hashcodeExpressions.add(name + "[]");
+        hashcodeNames.add(name + "[]");
       }
     }
   }
@@ -98,17 +103,17 @@ class NullReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Records the null literals that stand for a hashcode, and the conditional expressions that the
-   * splitter represents as a hashcode. It visits the subexpressions of an expression before the
-   * expression itself, so that it classifies each conditional expression before the expressions
-   * that contain it.
+   * Records the null literals that stand for a hashcode, and the conditional expressions that are
+   * hashcode expressions. It visits the subexpressions of an expression before the expression
+   * itself, so that it classifies each conditional expression before the expressions that contain
+   * it.
    */
   private class HashcodeNullFinder extends DepthFirstVisitor {
 
     /**
      * This method should not be directly used by user of this class; however it must be public to
-     * fulfill the visitor interface. Records the null literals in n that are compared with an
-     * expression that the splitter represents as a hashcode.
+     * fulfill the visitor interface. Records the null literals in n that are compared with a
+     * hashcode expression.
      */
     @Override
     public void visit(EqualityExpression n) {
@@ -132,9 +137,9 @@ class NullReplacer extends DepthFirstVisitor {
 
     /**
      * This method should not be directly used by user of this class; however it must be public to
-     * fulfill the visitor interface. If n is a conditional expression with a branch that the
-     * splitter represents as a hashcode, and the other branch is too or is null, then records n and
-     * its null branch.
+     * fulfill the visitor interface. If n is a conditional expression with a branch that is a
+     * hashcode expression, and the other branch is too or is null, then records n and its null
+     * branch.
      */
     @Override
     public void visit(ConditionalExpression n) {
@@ -187,20 +192,18 @@ class NullReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Returns true if the splitter represents the expression whose tokens are given as a hashcode:
-   * that is, if the expression is a hashcode variable, an element of a hashcode array such as
-   * {@code a[i]}, a call {@code getElement_Object(a, i)} on an array of hashcodes, or a conditional
-   * expression that HashcodeNullFinder has recorded. No other expression is a hashcode, because a
-   * hashcode is a number, whose fields and methods cannot be used.
+   * Returns true if the expression whose tokens are given is a hashcode expression (see the class
+   * description). A conditional expression is recognized only if HashcodeNullFinder has recorded
+   * it.
    *
    * @param tokens the tokens of an expression, without enclosing parentheses
-   * @return true if the splitter represents the expression as a hashcode
+   * @return true if the expression is a hashcode expression
    */
   @SuppressWarnings("interning:not.interned") // NodeTokens are compared by identity
   private boolean isHashcode(NodeToken[] tokens) {
     int last = tokens.length - 1;
     if (last == 0) {
-      return hashcodeExpressions.contains(tokens[0].tokenImage);
+      return hashcodeNames.contains(tokens[0].tokenImage);
     }
     if (last > 0 && hashcodeConditionals.get(tokens[0]) == tokens[last]) {
       return true;
@@ -208,15 +211,49 @@ class NullReplacer extends DepthFirstVisitor {
     if (last >= 5
         && tokens[0].tokenImage.equals("getElement_Object")
         && Visitors.isLParen(tokens[1])
-        && matchingIndex(tokens, 1) == last
-        && tokens[3].tokenImage.equals(",")
-        && hashcodeExpressions.contains(tokens[2].tokenImage + "[]")) {
-      return true;
+        && matchingIndex(tokens, 1) == last) {
+      int arrayEnd = operandEnd(tokens, 2);
+      return arrayEnd < last
+          && tokens[arrayEnd].tokenImage.equals(",")
+          && isHashcodeArray(tokens, 2, arrayEnd);
     }
-    return last >= 3
-        && Visitors.isLBracket(tokens[1])
-        && matchingIndex(tokens, 1) == last
-        && hashcodeExpressions.contains(tokens[0].tokenImage + "[]");
+    int arrayEnd = operandEnd(tokens, 0);
+    return arrayEnd > 0
+        && arrayEnd + 1 < last
+        && Visitors.isLBracket(tokens[arrayEnd])
+        && matchingIndex(tokens, arrayEnd) == last
+        && isHashcodeArray(tokens, 0, arrayEnd);
+  }
+
+  /**
+   * Returns the index just past the operand that starts at index start. The operand is a
+   * parenthesized expression if tokens[start] is "(", and is the single token tokens[start]
+   * otherwise.
+   *
+   * @param tokens the tokens of an expression
+   * @param start the index of the first token of an operand
+   * @return the index just past the operand, or 0 if tokens[start] is an unmatched "("
+   */
+  private static int operandEnd(NodeToken[] tokens, int start) {
+    if (Visitors.isLParen(tokens[start])) {
+      return matchingIndex(tokens, start) + 1;
+    }
+    return start + 1;
+  }
+
+  /**
+   * Returns true if the tokens from index start (inclusive) to index end (exclusive) are the name
+   * of a hashcode array, possibly in parentheses.
+   *
+   * @param tokens the tokens of an expression
+   * @param start the index of the first token of the range
+   * @param end the index just past the last token of the range
+   * @return true if the range is the name of a hashcode array, possibly in parentheses
+   */
+  @SuppressWarnings("nullness:argument") // end <= tokens.length, so the copy is not padded
+  private boolean isHashcodeArray(NodeToken[] tokens, int start, int end) {
+    NodeToken[] array = stripParens(Arrays.copyOfRange(tokens, start, end));
+    return array.length == 1 && hashcodeNames.contains(array[0].tokenImage + "[]");
   }
 
   /**
