@@ -744,8 +744,8 @@ public final class PrintInvariants {
 
   /**
    * Returns true if the given ppt is a numbered exit point whose combined exit point is in the
-   * given map and has no other numbered exit point. Then, the numbered exit point has the same
-   * invariants as the combined exit point.
+   * given map, passes the output filter, and has no other numbered exit point. Then, the numbered
+   * exit point has the same invariants as the combined exit point, which is printed instead.
    *
    * @param ppt a program point
    * @param all_ppts the program points that are printed
@@ -763,6 +763,10 @@ public final class PrintInvariants {
       if (all_ppts.get(combined_exit.ppt_name) != combined_exit) {
         return false;
       }
+      // If the combined exit point will not be printed, print the numbered exit point instead.
+      if (!matches_ppt_regexp(combined_exit)) {
+        return false;
+      }
       int num_subexits = 0;
       for (PptRelation child_rel : combined_exit.children) {
         if (child_rel.getRelationType() == PptRelationType.EXIT_EXITNN) {
@@ -772,6 +776,16 @@ public final class PrintInvariants {
       return num_subexits == 1;
     }
     return false;
+  }
+
+  /**
+   * Returns true if the given ppt passes the {@code --ppt-select-pattern} output filter.
+   *
+   * @param ppt a program point
+   * @return true if ppt's invariants may be printed, according to the ppt regular expression
+   */
+  private static boolean matches_ppt_regexp(PptTopLevel ppt) {
+    return (ppt_regexp == null) || ppt_regexp.matcher(ppt.name()).find();
   }
 
   public static void print_invariants(PptMap all_ppts) {
@@ -872,7 +886,7 @@ public final class PrintInvariants {
     debugPrint.fine("Considering printing ppt " + ppt.name() + ", samples = " + ppt.num_samples());
 
     // Skip this ppt if it doesn't match ppt regular expression
-    if ((ppt_regexp != null) && !ppt_regexp.matcher(ppt.name()).find()) {
+    if (!matches_ppt_regexp(ppt)) {
       return;
     }
 
