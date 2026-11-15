@@ -494,7 +494,8 @@ public final class Diff {
   }
 
   /**
-   * Reads an InvMap from a file that contains a serialized InvMap or PptMap.
+   * Reads an InvMap from a file that contains a serialized InvMap or PptMap. Either way, the result
+   * omits reflexive and statically obvious invariants, as {@link #convertToInvMap} does.
    *
    * @param file a file
    * @return an InvMap read from the file
@@ -504,7 +505,9 @@ public final class Diff {
   private InvMap readInvMap(File file) throws IOException, ClassNotFoundException {
     Object o = FilesPlume.readObject(file);
     if (o instanceof InvMap) {
-      return (InvMap) o;
+      // A serialized InvMap might have been written by an earlier version of this program or by
+      // other code, so it might contain invariants that convertToInvMap would omit.
+      return omitObvious((InvMap) o);
     } else {
       PptMap pptMap = FileIO.read_serialized_pptmap(file, false);
       return convertToInvMap(pptMap);
@@ -545,6 +548,21 @@ public final class Diff {
       }
     }
     return map;
+  }
+
+  /**
+   * Returns a copy of the given InvMap that omits reflexive and statically obvious invariants, the
+   * same ones that {@link #convertToInvMap} omits. The program points are unchanged.
+   *
+   * @param invMap an InvMap
+   * @return a copy of {@code invMap}, without reflexive and statically obvious invariants
+   */
+  public static InvMap omitObvious(InvMap invMap) {
+    InvMap result = new InvMap();
+    for (PptTopLevel ppt : invMap.pptIterable()) {
+      result.put(ppt, sortedNonObvious(invMap.get(ppt)));
+    }
+    return result;
   }
 
   /**

@@ -7,6 +7,7 @@ import daikon.*;
 import daikon.config.*;
 import daikon.diff.*;
 import daikon.inv.*;
+import daikon.inv.binary.twoScalar.IntLessEqual;
 import daikon.inv.unary.scalar.*;
 import daikon.split.*;
 import daikon.split.misc.*;
@@ -464,6 +465,43 @@ public class DiffTester {
     map.add(ppt);
 
     diffSome.diffPptMap(map, map);
+  }
+
+  // A PptMap and an equivalent unfiltered InvMap should yield the same invariants: both omit
+  // reflexive invariants such as "x <= x".
+  @Test
+  public void testOmitObviousInvMap()
+      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    Method mAddViews = PptTopLevel.class.getDeclaredMethod("addViews", new Class<?>[] {List.class});
+    mAddViews.setAccessible(true);
+
+    VarInfo[] vars = {newIntVarInfo("x")};
+    PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
+    PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
+    Invariant invx = LowerBound.get_proto().instantiate(slicex);
+    slicex.addInvariant(invx);
+    PptSlice slicexx = new PptSlice2(ppt, new VarInfo[] {vars[0], vars[0]});
+    Invariant invxx = IntLessEqual.get_proto().instantiate(slicexx);
+    slicexx.addInvariant(invxx);
+    List<PptSlice> v = new ArrayList<>();
+    v.add(slicex);
+    v.add(slicexx);
+    mAddViews.invoke(ppt, new Object[] {v});
+    PptMap pptMap = new PptMap();
+    pptMap.add(ppt);
+
+    // An InvMap that was not produced by convertToInvMap, and so contains the reflexive invariant.
+    InvMap unfiltered = new InvMap();
+    unfiltered.put(ppt, new ArrayList<Invariant>(ppt.getInvariants()));
+    assertEquals(2, unfiltered.get(ppt).size());
+
+    InvMap fromPptMap = diffSome.convertToInvMap(pptMap);
+    InvMap fromInvMap = Diff.omitObvious(unfiltered);
+    assertEquals(1, fromPptMap.get(ppt).size());
+    assertEquals(fromPptMap.toString(), fromInvMap.toString());
+    assertEquals(
+        printTree(diffSome.diffInvMap(fromPptMap, new InvMap())),
+        printTree(diffSome.diffInvMap(fromInvMap, new InvMap())));
   }
 
   // Runs diff on a PptMap containing a PptConditional, with
