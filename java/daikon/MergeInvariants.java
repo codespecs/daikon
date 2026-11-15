@@ -373,6 +373,15 @@ public final class MergeInvariants {
       }
     }
 
+    // If there are no leaves, no ppt gets any invariants.
+    if (numLeaves == 0) {
+      throw new Daikon.UserError(
+          "No leaf program point (a numbered exit point or a program point declared with"
+              + " ppt-type point) in "
+              + ((decl_file != null) ? "decls file " + decl_file : "the input .inv files")
+              + ", so no program point would get any invariants");
+    }
+
     // A leaf is missing from every input map if ppt filtering removed it, but if every leaf is
     // missing, the decls file probably does not match the .inv files.
     if (!missingLeaves.isEmpty()) {
