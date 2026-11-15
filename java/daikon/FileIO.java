@@ -1585,7 +1585,7 @@ public final class FileIO {
         throw new RuntimeException(
             "Bad program point name " + ppt.name + " is a combined exit point name");
       }
-      if (!ppt.is_dataflow_leaf()) {
+      if (!ppt.isDataflowLeaf()) {
         return;
       }
     }

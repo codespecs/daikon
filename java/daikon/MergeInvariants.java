@@ -272,16 +272,16 @@ public final class MergeInvariants {
     // will create the invariants at upper points.
     debugProgress.fine("Building hierarchy between leaves of the maps");
     // The number of leaves in merge_ppts.
-    int num_leaves = 0;
+    int numLeaves = 0;
     // The names of the leaves that no input map contains.
-    List<String> missing_leaves = new ArrayList<>();
+    List<String> missingLeaves = new ArrayList<>();
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
       // Skip everything that is not a leaf
-      if (!ppt.is_dataflow_leaf()) {
+      if (!ppt.isDataflowLeaf()) {
         continue;
       }
-      num_leaves++;
+      numLeaves++;
 
       // System.out.printf("Including ppt %s, %d children%n", ppt,
       //                   ppt.children.size());
@@ -297,11 +297,13 @@ public final class MergeInvariants {
         // The leaf obtains its invariants from its conditional ppts.  A ppt read from a .inv file
         // can lack these relations among its children; for example, the .inv file might have been
         // written by a version of Daikon that omitted them.
-        PptRelation.connect_conditionals(ppt);
+        PptRelation.connectConditionals(ppt);
       }
 
+      // True if some input map contains a ppt with the same name as this leaf, which becomes a
+      // child of the leaf (or of its conditional ppts, if the leaf has splitters).
+      boolean foundChild = false;
       // Loop over each of the input ppt maps, looking for the same ppt
-      boolean found_child = false;
       for (int j = 0; j < pptmaps.size(); j++) {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
@@ -309,7 +311,7 @@ public final class MergeInvariants {
         if (child == null) {
           continue;
         }
-        found_child = true;
+        foundChild = true;
         if (child.equality_view == null) {
           System.out.println(
               "equality_view == null in child ppt: "
@@ -350,8 +352,8 @@ public final class MergeInvariants {
 
       // Each conditional has a child, unless no input map contains this leaf (for example,
       // because ppt filtering removed it).  In that case, the leaf gets no invariants.
-      if (!found_child) {
-        missing_leaves.add(ppt.name());
+      if (!foundChild) {
+        missingLeaves.add(ppt.name());
       } else if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
@@ -364,24 +366,24 @@ public final class MergeInvariants {
 
     // A leaf is missing from every input map if ppt filtering removed it, but if every leaf is
     // missing, the decls file probably does not match the .inv files.
-    if (!missing_leaves.isEmpty()) {
-      if (missing_leaves.size() == num_leaves) {
+    if (!missingLeaves.isEmpty()) {
+      if (missingLeaves.size() == numLeaves) {
         throw new Daikon.UserError(
             String.format(
                 "No input .inv file contains any leaf program point of the decls file (for"
                     + " example, none contains %s); does the decls file match the .inv files?",
-                missing_leaves.get(0)));
+                missingLeaves.get(0)));
       }
       System.err.printf(
           "Warning: no input .inv file contains %s, so %s no invariants: %s%n",
-          StringsPlume.nPlural(missing_leaves.size(), "leaf program point"),
-          (missing_leaves.size() == 1) ? "it gets" : "they get",
-          String.join(", ", missing_leaves));
+          StringsPlume.nPlural(missingLeaves.size(), "leaf program point"),
+          (missingLeaves.size() == 1) ? "it gets" : "they get",
+          String.join(", ", missingLeaves));
     }
 
     // Every ppt with no children needs an equality view, which clean_for_merge removed.  This
     // includes a non-leaf with no children and a leaf that no input map contains.
-    PptRelation.create_childless_equality_views(merge_ppts);
+    PptRelation.createChildlessEqualityViews(merge_ppts);
 
     // Check the resulting PptMap for consistency
     merge_ppts.repCheck();

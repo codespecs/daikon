@@ -155,7 +155,7 @@ public class InitHierarchyTest {
         initHierarchy(
             pptDecl("Foo.bar():::ENTER", "point") + pptDecl("Foo.bar():::EXIT5", "subexit"));
     PptTopLevel enter = get(ppts, "Foo.bar():::ENTER");
-    assertTrue(enter.is_dataflow_leaf());
+    assertTrue(enter.isDataflowLeaf());
     assertEquals(Collections.emptyList(), enter.children);
     PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
     assertEquals(Collections.emptyList(), exit.parents);
@@ -180,7 +180,7 @@ public class InitHierarchyTest {
         readDecls(
             pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "parent", "P:::POINT"));
     Daikon.UserError e =
-        assertThrows(Daikon.UserError.class, () -> PptRelation.check_declared_parents(ppts));
+        assertThrows(Daikon.UserError.class, () -> PptRelation.checkDeclaredParents(ppts));
     assertEquals(
         "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it a"
             + " leaf of the dataflow hierarchy",

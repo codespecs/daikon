@@ -524,7 +524,7 @@ public class PptTopLevel extends Ppt {
    * <p>A program point that is declared with any other type keeps that type. Its name must conform
    * to the type, except for {@link PptType#POINT}, which permits any name.
    *
-   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, is_dataflow_leaf, etc.
+   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, isDataflowLeaf, etc.
    * agree with one another. They also agree with the program point's name, except for a program
    * point that is declared as a {@link PptType#POINT}: it is a leaf of the dataflow hierarchy
    * whatever its name, even if its name is foo:::ENTER. However, some code classifies a program
@@ -4284,10 +4284,10 @@ public class PptTopLevel extends Ppt {
    * had given them equal values (or each variable is in its own set, if {@link
    * PptSliceEquality#dkconfig_set_per_var} is true).
    */
-  public void create_equality_view() {
-    PptSliceEquality new_equality_view = new PptSliceEquality(this);
-    new_equality_view.instantiate_invariants();
-    equality_view = new_equality_view;
+  public void createEqualityView() {
+    PptSliceEquality newEqualityView = new PptSliceEquality(this);
+    newEqualityView.instantiate_invariants();
+    equality_view = newEqualityView;
   }
 
   /**
@@ -4837,7 +4837,7 @@ public class PptTopLevel extends Ppt {
    * @return true if this is a leaf of the dataflow hierarchy
    */
   @Pure
-  public boolean is_dataflow_leaf() {
+  public boolean isDataflowLeaf() {
     return (type == PptType.SUBEXIT) || (type == PptType.POINT);
   }
 
