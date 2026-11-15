@@ -30,7 +30,7 @@ include $(dir $(lastword $(MAKEFILE_LIST)))Makefile.jobs
 all diffs: txt-diff non-txt-diff dyncomp-tests results
 
 # These do not use DynComp
-non-txt-diff: diff-tests chicory-tests merge-invariants-tests parser-tests
+non-txt-diff: diff-tests chicory-tests merge-invariants-tests annotate-nullable-tests parser-tests
 
 
 quick: quick-txt-diff diff-tests results
@@ -59,6 +59,10 @@ merge-invariants-tests:
 	${MAKE} -C merge-invariants-tests
 .PHONY: merge-invariants-tests
 
+annotate-nullable-tests:
+	${MAKE} -C annotate-nullable-tests
+.PHONY: annotate-nullable-tests
+
 parser-tests:
 	${MAKE} -C parser-tests
 .PHONY: parser-tests
@@ -72,6 +76,7 @@ clean:
 	${MAKE} -C daikon-tests clean
 	${MAKE} -C diff-tests clean
 	${MAKE} -C merge-invariants-tests clean
+	${MAKE} -C annotate-nullable-tests clean
 	${MAKE} -C parser-tests clean
 	${MAKE} -C dyncomp-tests clean
 
@@ -79,7 +84,7 @@ very-clean: clean
 	${MAKE} -C kvasir-tests clean-all
 
 # output display; can be called from children (they will set BASE)
-BASE?=chicory-tests daikon-tests diff-tests merge-invariants-tests parser-tests dyncomp-tests
+BASE?=chicory-tests daikon-tests diff-tests merge-invariants-tests annotate-nullable-tests parser-tests dyncomp-tests
 # args to 'find' program, to find files containing results
 RESULTS_PATTERN :=    -name '*.txt-*.diff' \
                    -o -name '*.checker.diff' \

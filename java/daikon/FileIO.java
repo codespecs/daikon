@@ -211,6 +211,12 @@ public final class FileIO {
   // This implementation as a public static variable is a bit unclean.
   public static int omitted_declarations = 0;
 
+  /**
+   * The language on the most recent "input-language" record that Daikon read, such as "C/C++"
+   * (which Kvasir writes), or null if Daikon has read no such record.
+   */
+  public static @Nullable String input_language = null;
+
   // Logging Categories
 
   /**
@@ -956,6 +962,14 @@ public final class FileIO {
    */
   public static int samples_processed = 0;
 
+  /**
+   * Total number of samples that {@link #process_sample} supplied to inference. This excludes
+   * samples that it ignored, such as an exit without a matching entry or (with the dataflow
+   * hierarchy) a sample at a ppt that is not a leaf. Not part of ParseState because it's global
+   * over all files processed by Daikon.
+   */
+  public static int samples_used = 0;
+
   /** The type of the record that was most recently read. */
   public enum RecordType {
     /** Got a sample. */
@@ -1057,6 +1071,15 @@ public final class FileIO {
      */
     public Set<VarInfo> varsWithNonBooleanValues =
         Collections.newSetFromMap(new IdentityHashMap<>());
+
+    /**
+     * True if a ppt might have been declared, in this file or an earlier one, since {@link
+     * PptRelation#checkDeclaredParents} last checked {@link #all_ppts}. If so, that check runs
+     * before the next sample is processed, so that a leaf that is declared as a parent is reported
+     * before any of its samples is processed. Initially true, because an earlier file might have
+     * declared ppts.
+     */
+    public boolean parents_unchecked = true;
 
     /**
      * Start parsing the given file.
@@ -1285,6 +1308,12 @@ public final class FileIO {
           assert data_trace_state.vt != null
               : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
           // Nonce may be null
+          // A child may be declared before its parent, so check the declared parents only when a
+          // sample follows declarations, before processing that sample.
+          if (data_trace_state.parents_unchecked) {
+            PptRelation.checkDeclaredParents(data_trace_state.all_ppts);
+            data_trace_state.parents_unchecked = false;
+          }
           samples_processed++;
           // Add orig and derived variables; pass to inference (add_and_flow)
           try {
@@ -1390,8 +1419,9 @@ public final class FileIO {
 
       // Check for the input language
       if (is_keyword_record(line, "input-language")) {
-        String input_language = read_input_language(state, line);
-        state.payload = input_language;
+        String language = read_input_language(state, line);
+        input_language = language;
+        state.payload = language;
         state.rtype = RecordType.INPUT_LANGUAGE;
         return;
       }
@@ -1409,6 +1439,7 @@ public final class FileIO {
         if (state.ppt != null) {
           if (!state.all_ppts.containsName(state.ppt.name())) {
             state.all_ppts.add(state.ppt);
+            state.parents_unchecked = true;
             assert state.ppt != null : "@AssumeAssertion(nullness)";
             try {
               Daikon.init_ppt(state.ppt, state.all_ppts);
@@ -1606,6 +1637,7 @@ public final class FileIO {
       return;
     }
 
+    samples_used++;
     @SuppressWarnings({"UnusedVariable", "nullness:contracts.precondition"})
     Object dummy = ppt.add_bottom_up(vt, 1);
 
