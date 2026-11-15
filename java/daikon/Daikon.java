@@ -2075,7 +2075,6 @@ public final class Daikon {
         System.out.print("Reading declaration files ");
       }
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
-      PptRelation.checkDeclaredParents(all_ppts);
       if (debugTrace.isLoggable(FINE)) {
         debugTrace.fine("Initializing partial order");
       }
