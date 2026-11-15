@@ -1507,7 +1507,7 @@ this.front <= size(this.theArray[])-1
 (size(this.theArray[])-1 == 0) ==> (this.back == 0)
 this.back <= size(this.theArray[])-1
 this.currentSize + this.front - size(this.theArray[]) + 1 == 0
-this.currentSize + this.front - size(this.theArray[])-1 == 0
+this.currentSize + this.front - (size(this.theArray[])-1) == 0
 ===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER;condition="not(++back == theArray.length)"
 this.theArray != null
