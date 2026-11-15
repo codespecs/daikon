@@ -1059,6 +1059,15 @@ public final class FileIO {
         Collections.newSetFromMap(new IdentityHashMap<>());
 
     /**
+     * True if a ppt might have been declared, in this file or an earlier one, since {@link
+     * PptRelation#checkDeclaredParents} last checked {@link #all_ppts}. If so, that check runs
+     * before the next sample is processed, so that a leaf that is declared as a parent is reported
+     * before any of its samples is processed. Initially true, because an earlier file might have
+     * declared ppts.
+     */
+    public boolean parents_unchecked = true;
+
+    /**
      * Start parsing the given file.
      *
      * @param raw_filename the file name supplied by the user; may be "-" or "+"
@@ -1285,6 +1294,12 @@ public final class FileIO {
           assert data_trace_state.vt != null
               : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
           // Nonce may be null
+          // A child may be declared before its parent, so check the declared parents only when a
+          // sample follows declarations, before processing that sample.
+          if (data_trace_state.parents_unchecked) {
+            PptRelation.checkDeclaredParents(data_trace_state.all_ppts);
+            data_trace_state.parents_unchecked = false;
+          }
           samples_processed++;
           // Add orig and derived variables; pass to inference (add_and_flow)
           try {
@@ -1409,6 +1424,7 @@ public final class FileIO {
         if (state.ppt != null) {
           if (!state.all_ppts.containsName(state.ppt.name())) {
             state.all_ppts.add(state.ppt);
+            state.parents_unchecked = true;
             assert state.ppt != null : "@AssumeAssertion(nullness)";
             try {
               Daikon.init_ppt(state.ppt, state.all_ppts);

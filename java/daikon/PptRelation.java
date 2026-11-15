@@ -698,8 +698,10 @@ public class PptRelation implements Serializable {
   /**
    * Throws a UserError if some ppt in the map is declared to have a parent that is a leaf of the
    * dataflow hierarchy, as {@link #init_hierarchy} would. Calling this as soon as the declarations
-   * are read reports the error before any samples are processed. A declared parent that is not in
-   * the map is ignored.
+   * are read reports the error before any samples are processed. Daikon calls it after reading the
+   * declaration files, and {@link FileIO#read_data_trace_file(String, PptMap, FileIO.Processor,
+   * boolean, boolean)} calls it before processing a sample that follows declarations in a dtrace
+   * file. A declared parent that is not in the map is ignored, because it might be declared later.
    *
    * @param all_ppts a map of program points
    */
