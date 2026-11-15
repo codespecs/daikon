@@ -2995,7 +2995,7 @@ Since in most languages a method or function may have multiple exit points,
 the @code{ppt-name} for a @code{subexit} @code{ppt-type} must be appended
 with a unique id.  Typically, this is the corresponding source line number.
 
-The @code{ppt-name} for the @code{throws} @code{ppt-type} contains
+The @code{ppt-name} for the @code{throws} @code{ppt-type} ends with
 @code{:::THROWS}, optionally followed by a unique id as for a
 @code{subexit}.  The @code{ppt-name} for the @code{global} @code{ppt-type}
 ends with @code{:::GLOBAL}.  None of Daikon's front ends (including Kvasir)
@@ -3018,6 +3018,9 @@ The @code{ppt-name} of a program point whose type is @code{exit} or
 @code{:::EXIT<id>} (a numbered exit).  Daikon gives the program point the
 type that its name indicates, so a numbered exit that is declared as an
 @code{exit} is a @code{subexit}, and vice versa.
+If the @code{ppt-name} does not contain @code{:::}, Daikon appends
+@code{:::} and the type in upper case; for example, a program point named
+@code{foo} whose type is @code{enter} is named @code{foo:::ENTER}.
 Daikon rejects a declaration whose @code{ppt-name} does not conform to its
 type.
 
