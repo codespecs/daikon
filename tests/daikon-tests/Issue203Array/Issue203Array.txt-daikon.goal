@@ -1,0 +1,35 @@
+===========================================================================
+C:::OBJECT
+this.a[] == this.b[]
+this != null
+this.a != null
+this.a[] elements >= 1
+this.b != null
+this.i one of { 0, 1, 2 }
+this.a[this.i+1..] sorted by <
+this.a[0..this.i] sorted by <=
+this.a[0..this.i-1] sorted by <
+this.a[] elements <= this.l
+this.i < this.j
+(this.i & size(this.a[])) == 0
+(size(this.a[])-1 == 0) ==> (this.i == 0)
+this.i <= size(this.a[])-1
+this.i is a bitwise subset of size(this.a[])-1
+this.j != size(this.a[])-1
+this.k < this.l
+(this.k >> this.a[this.i] == 0)
+this.l > this.a[this.i]
+this.a[0..this.i] elements < this.l
+this.a[0..this.i] elements <= this.a[this.i]
+===========================================================================
+C.m():::ENTER
+===========================================================================
+C.m():::EXIT
+this.a == orig(this.a)
+this.a[] == orig(this.a[])
+this.a[] == orig(this.b[])
+this.b == orig(this.b)
+this.i == orig(this.i)
+this.j == orig(this.j)
+this.k == orig(this.k)
+this.l == orig(this.l)

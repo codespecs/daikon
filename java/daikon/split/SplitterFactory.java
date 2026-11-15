@@ -2,6 +2,7 @@ package daikon.split;
 
 import daikon.Global;
 import daikon.PptTopLevel;
+import daikon.VarInfo;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,16 +11,15 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import jtb.ParseException;
 import jtb.TokenMgrError;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
@@ -102,63 +102,71 @@ public class SplitterFactory {
   public static void load_splitters(PptTopLevel ppt, List<SpinfoFile> spfiles) {
     Global.debugSplit.fine("<<enter>> load_splitters");
 
+    // The variables of ppt, computed when first needed.
+    Set<String> variables = null;
     for (SpinfoFile spfile : spfiles) {
       SplitterObject[][] splitterObjects = spfile.getSplitterObjects();
       StatementReplacer statementReplacer = spfile.getReplacer();
       for (int i = 0; i < splitterObjects.length; i++) {
-        int numsplitters = splitterObjects[i].length;
-        if (numsplitters != 0) {
-          String ppt_name = splitterObjects[i][0].getPptName();
-          Global.debugSplit.fine(
-              "          load_splitters: "
-                  + ppt_name
-                  + ", "
-                  + ppt
-                  + "; match="
-                  + matchPpt(ppt_name, ppt));
-          if (matchPpt(ppt_name, ppt)) {
-            int numGood = 0;
-            // Writes, compiles, and loads the splitter .java files.
-            loadSplitters(splitterObjects[i], ppt, statementReplacer);
-            List<Splitter> sp = new ArrayList<>();
-            // The splitters that were not loaded, which a later matching program point may retry.
-            List<SplitterObject> unsuccessful = new ArrayList<>();
-            for (int k = 0; k < numsplitters; k++) {
-              if (splitterObjects[i][k].splitterExists()) {
-                @SuppressWarnings("nullness") // dependent: because splitterExists() = true
-                @NonNull Splitter splitter = splitterObjects[i][k].getSplitter();
-                sp.add(splitter);
-                numGood++;
-              } else {
-                unsuccessful.add(splitterObjects[i][k]);
-                if (!PptSplitter.dkconfig_suppressSplitterErrors) {
-                  // UNDONE: We should only output the load error if the
-                  // compile was successful.
-                  System.out.println(splitterObjects[i][k].getError());
-                }
-              }
-            }
-            System.out.printf(
-                "%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
-            if (!sp.isEmpty()) {
-              SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
-            }
-            if (SplitterList.isComplete(ppt_name)) {
-              // A complete program point name can designate several program points, such as
-              // "Foo.bar(int):::ENTER" designating both "p1.Foo.bar(int):::ENTER" and
-              // "p2.Foo.bar(int):::ENTER".  SplitterList applies the loaded splitters to each of
-              // them.  A splitter that failed to compile or load (for example, because this
-              // program point lacks a variable that its condition uses) remains available, so
-              // that a later matching program point can retry it.
-              splitterObjects[i] = unsuccessful.toArray(new SplitterObject[0]);
-            } else {
-              // Delete this entry in the splitter array to prevent it from
-              // matching any other Ppts, since the documented behavior is that
-              // it only matches one.
-              splitterObjects[i] = new SplitterObject[0];
+        if (splitterObjects[i].length == 0) {
+          continue;
+        }
+        String ppt_name = splitterObjects[i][0].getPptName();
+        boolean matches = SplitterList.matches(ppt_name, ppt.name);
+        Global.debugSplit.fine(
+            "          load_splitters: " + ppt_name + ", " + ppt + "; match=" + matches);
+        if (!matches) {
+          continue;
+        }
+        if (variables == null) {
+          variables = variables(ppt);
+        }
+        // The splitters to compile against ppt.  A splitter that failed at a program point that
+        // has all the variables of ppt is not retried, because ppt provides no variable that the
+        // earlier program point lacked.
+        List<SplitterObject> toLoad = new ArrayList<>();
+        for (SplitterObject splitterObject : splitterObjects[i]) {
+          if (!splitterObject.failedWithAll(variables)) {
+            toLoad.add(splitterObject);
+          }
+        }
+        if (toLoad.isEmpty()) {
+          continue;
+        }
+        // Writes, compiles, and loads the splitter .java files.
+        loadSplitters(toLoad.toArray(new SplitterObject[0]), ppt, statementReplacer);
+        List<Splitter> sp = new ArrayList<>();
+        for (SplitterObject splitterObject : toLoad) {
+          if (splitterObject.splitterExists()) {
+            @SuppressWarnings("nullness") // dependent: because splitterExists() = true
+            @NonNull Splitter splitter = splitterObject.getSplitter();
+            sp.add(splitter);
+          } else {
+            splitterObject.recordFailure(variables);
+            if (!PptSplitter.dkconfig_suppressSplitterErrors) {
+              // UNDONE: We should only output the load error if the
+              // compile was successful.
+              System.out.println(splitterObject.getError());
             }
           }
         }
+        System.out.printf(
+            "%s: %d of %d splitters successful%n", ppt_name, sp.size(), toLoad.size());
+        if (!sp.isEmpty()) {
+          SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
+        }
+        // Each splitter is loaded at only one program point:  remove the loaded splitters, so that
+        // they are not loaded again.  (SplitterList determines where a loaded splitter is used.)  A
+        // splitter that has not been loaded (for example, because this program point lacks a
+        // variable that its condition uses) remains available, so that a later matching program
+        // point can retry it.
+        List<SplitterObject> notLoaded = new ArrayList<>();
+        for (SplitterObject splitterObject : splitterObjects[i]) {
+          if (!splitterObject.splitterExists()) {
+            notLoaded.add(splitterObject);
+          }
+        }
+        splitterObjects[i] = notLoaded.toArray(new SplitterObject[0]);
       }
     }
     Global.debugSplit.fine("<<exit>>  load_splitters");
@@ -311,53 +319,25 @@ public class SplitterFactory {
   }
 
   /**
-   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file designates the given
-   * program point. A complete program point name designates the program points described by {@link
-   * SplitterList#matches}.
+   * Returns the variables of the given program point, each represented by its name, its types, and
+   * whether it is a parameter, such as "x int int param". These are the attributes of a variable
+   * that the Java source of a splitter depends on.
    *
-   * @param ppt_name a name on a PPT_NAME line of a {@code .spinfo} file
    * @param ppt a program point
-   * @return true if {@code ppt_name} designates {@code ppt}
+   * @return the variables of {@code ppt}
    */
-  private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
-    if (SplitterList.isComplete(ppt_name)) {
-      return SplitterList.matches(ppt_name, ppt.name);
+  static Set<String> variables(PptTopLevel ppt) {
+    Set<String> result = new HashSet<>();
+    for (VarInfo vi : ppt.var_infos) {
+      result.add(
+          vi.name()
+              + " "
+              + vi.type.format()
+              + " "
+              + vi.file_rep_type.format()
+              + (vi.isParam() ? " param" : ""));
     }
-    if (ppt.name.equals(ppt_name)) {
-      return true;
-    }
-    if (ppt_name.endsWith(":::EXIT")) {
-      String regex = Pattern.quote(ppt_name) + "[0-9]+";
-      if (matchPptRegex(regex, ppt)) {
-        return true;
-      }
-    }
-
-    // Look for corresponding EXIT ppt. This is because the exit ppt usually has
-    // more relevant variables in scope (eg. return, hashcodes) than the enter.
-    String regex;
-    int index = ppt_name.indexOf("OBJECT");
-    if (index == -1) {
-      // Didn't find "OBJECT" suffix; add ".*EXIT".
-      regex = Pattern.quote(ppt_name) + ".*EXIT";
-    } else {
-      // Found "OBJECT" suffix.
-      if (ppt_name.length() > 6) {
-        regex = Pattern.quote(ppt_name.substring(0, index - 1)) + ":::OBJECT";
-      } else {
-        regex = Pattern.quote(ppt_name);
-      }
-    }
-    return matchPptRegex(regex, ppt);
-  }
-
-  private static boolean matchPptRegex(@Regex String ppt_regex, PptTopLevel ppt) {
-    // System.out.println("matchPptRegex: " + ppt_regex);
-    Pattern pattern = Pattern.compile(ppt_regex);
-    String name = ppt.name;
-    Matcher matcher = pattern.matcher(name);
-    // System.out.println("  considering " + name);
-    return matcher.find();
+    return result;
   }
 
   /**
