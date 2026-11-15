@@ -2618,14 +2618,14 @@ this.capacityIncrement == orig(this.capacityIncrement)
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (orig(this.elementData[]) is a subset of this.elementData[0..this.elementCount-1])
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (orig(this.elementData[this.elementCount..]) is a subsequence of this.elementData[orig(this.capacityIncrement)..])
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (orig(this.elementData[this.elementCount..]) is a subsequence of this.elementData[this.capacityIncrement..])
+(size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.capacityIncrement - (size(this.elementData[])-1) + orig(size(this.elementData[])) - 1 == 0)
+(size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.capacityIncrement - (size(this.elementData[])-1) + orig(size(this.elementData[]))-1 == 0)
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.capacityIncrement - size(this.elementData[]) + orig(size(this.elementData[])) == 0)
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.capacityIncrement - size(this.elementData[]) + orig(size(this.elementData[]))-1 + 1 == 0)
-(size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.capacityIncrement - size(this.elementData[])-1 + orig(size(this.elementData[])) - 1 == 0)
-(size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.capacityIncrement - size(this.elementData[])-1 + orig(size(this.elementData[]))-1 == 0)
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.capacityIncrement <= size(this.elementData[]))
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.capacityIncrement >= 1)
+(size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.elementCount - this.capacityIncrement - (orig(size(this.elementData[]))-1) - 1 == 0)
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.elementCount - this.capacityIncrement - orig(size(this.elementData[])) == 0)
-(size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.elementCount - this.capacityIncrement - orig(size(this.elementData[]))-1 - 1 == 0)
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.elementCount == size(this.elementData[]))
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.elementCount >= this.capacityIncrement)
 (size(this.elementData[])-1 >= orig(size(this.elementData[])))  ==>  (this.elementData[0..orig(this.elementCount)-1] == orig(this.elementData[0..this.elementCount-1]))
@@ -2687,9 +2687,9 @@ orig(this.elementData[this.elementCount..]) is a subsequence of this.elementData
 orig(this.elementData[this.elementCount..]) is a subsequence of this.elementData[orig(this.elementCount)..]
 orig(this.elementData[this.elementCount..]) is a subsequence of this.elementData[orig(this.elementCount)+1..]
 this.elementCount - this.capacityIncrement - orig(size(this.elementData[])) == 0
-this.elementCount - this.capacityIncrement - orig(size(this.elementData[]))-1 - 1 == 0
-this.capacityIncrement - size(this.elementData[])-1 + orig(size(this.elementData[])) - 1 == 0
-this.capacityIncrement - size(this.elementData[])-1 + orig(size(this.elementData[]))-1 == 0
+this.elementCount - this.capacityIncrement - (orig(size(this.elementData[]))-1) - 1 == 0
+this.capacityIncrement - (size(this.elementData[])-1) + orig(size(this.elementData[])) - 1 == 0
+this.capacityIncrement - (size(this.elementData[])-1) + orig(size(this.elementData[]))-1 == 0
 ===========================================================================
 javautil.Vector13.setSize(int):::EXIT;condition="not(orig((newSize > elementCount)&&(newSize > elementData.length)))"
 this.elementData == orig(this.elementData)
