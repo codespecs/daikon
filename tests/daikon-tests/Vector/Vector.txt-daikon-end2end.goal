@@ -518,6 +518,17 @@ index <= size(this.elementData[])-1
 ===========================================================================
 javautil.Vector13.elementAt(int):::ENTER;condition="not(elementCount == 0)"
 ===========================================================================
+javautil.Vector13.elementAt(int):::ENTER;condition="not(index >= elementCount)"
+this.elementData != null
+this.elementData.getClass().getName() == java.lang.Object[].class
+this.capacityIncrement >= 0
+index >= 0
+this.elementData[this.elementCount..] elements == null
+this.elementCount > index
+this.elementCount <= size(this.elementData[])
+(size(this.elementData[])-1 == 0) ==> (index == 0)
+index <= size(this.elementData[])-1
+===========================================================================
 javautil.Vector13.elementAt(int):::EXIT
 this.elementData == orig(this.elementData)
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())
@@ -563,7 +574,6 @@ this.elementData != null
 this.elementData.getClass().getName() == java.lang.Object[].class
 this.capacityIncrement >= 0
 return.getClass().getName() is printable
-orig(index) >= 0
 this.elementData[this.elementCount..] elements == null
 this.elementData.getClass().getName() != return.getClass().getName()
 return.getClass().getName() in this.elementData[].getClass().getName()
@@ -721,6 +731,8 @@ javautil.Vector13.ensureCapacity(int):::ENTER
 minCapacity >= 0
 (size(this.elementData[]) == 0) ==> (this.elementCount == 0)
 this.elementCount <= size(this.elementData[])
+===========================================================================
+javautil.Vector13.ensureCapacity(int):::ENTER;condition="not(minCapacity > elementData.length)"
 ===========================================================================
 javautil.Vector13.ensureCapacity(int):::EXIT
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())
@@ -1627,8 +1639,23 @@ size(this.elementData[]) >= orig(size(this.elementData[]))
 size(this.elementData[])-1 >= orig(size(this.elementData[]))-1
 ===========================================================================
 javautil.Vector13.isEmpty():::ENTER
+(this.elementCount == 0)  ==>  (this.elementCount <= this.capacityIncrement)
+(this.elementCount == 0)  ==>  (this.elementCount is a pointer)
+(this.elementCount == 0)  ==>  (this.elementData[0..this.elementCount-1] == [])
+(this.elementCount == 0)  ==>  (this.elementData[] elements == null)
+(this.elementCount == 0)  ==>  (this.elementData[].getClass().getName() elements == null)
 (size(this.elementData[]) == 0) ==> (this.elementCount == 0)
 this.elementCount <= size(this.elementData[])
+===========================================================================
+javautil.Vector13.isEmpty():::ENTER;condition="elementCount == 0"
+this.elementData[] elements == null
+this.elementData[].getClass().getName() elements == null
+this.elementCount == 0
+this.elementData[0..this.elementCount-1] == []
+this.elementCount <= this.capacityIncrement
+===========================================================================
+javautil.Vector13.isEmpty():::ENTER;condition="not(elementCount == 0)"
+this.elementCount >= 1
 ===========================================================================
 javautil.Vector13.isEmpty():::EXIT
 this.elementData == orig(this.elementData)
@@ -2695,6 +2722,18 @@ this.elementCount > index
 this.elementCount <= size(this.elementData[])
 index < size(this.elementData[])-1
 ===========================================================================
+javautil.Vector13.removeElementAt(int):::ENTER;condition="not(index < 0)"
+this.elementData != null
+this.elementData.getClass().getName() == java.lang.Object[].class
+this.elementCount >= 1
+this.capacityIncrement >= 0
+index >= 0
+this.elementData[this.elementCount..] elements == null
+this.elementCount > index
+this.elementCount <= size(this.elementData[])
+(size(this.elementData[])-1 == 0) ==> (index == 0)
+index <= size(this.elementData[])-1
+===========================================================================
 javautil.Vector13.removeElementAt(int):::EXIT
 this.elementData == orig(this.elementData)
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())
@@ -2947,15 +2986,12 @@ this.elementData != null
 this.elementData.getClass().getName() == java.lang.Object[].class
 this.elementCount >= 0
 this.capacityIncrement >= 0
-orig(this.elementCount) >= 1
-orig(index) >= 0
 this.elementData[this.elementCount..] elements == null
 this.elementCount - orig(this.elementCount) + 1 == 0
 (this.elementCount == 0) ==> (orig(index) == 0)
 this.elementCount >= orig(index)
 (size(this.elementData[])-1 == 0) ==> (this.elementCount == 0)
 this.elementCount <= size(this.elementData[])-1
-orig(this.elementCount) > orig(index)
 orig(this.elementCount) <= size(this.elementData[])
 (size(this.elementData[])-1 == 0) ==> (orig(index) == 0)
 orig(index) <= size(this.elementData[])-1
@@ -3124,6 +3160,8 @@ javautil.Vector13.setSize(int):::ENTER
 newSize >= 0
 (size(this.elementData[]) == 0) ==> (this.elementCount == 0)
 this.elementCount <= size(this.elementData[])
+===========================================================================
+javautil.Vector13.setSize(int):::ENTER;condition="not((newSize > elementCount)&&(newSize > elementData.length))"
 ===========================================================================
 javautil.Vector13.setSize(int):::EXIT
 this.elementData.getClass().getName() == orig(this.elementData.getClass().getName())

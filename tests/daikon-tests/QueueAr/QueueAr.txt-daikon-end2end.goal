@@ -107,6 +107,31 @@ this.front != this.back
 this.front <= size(this.theArray[])-1
 this.back <= size(this.theArray[])-1
 ===========================================================================
+DataStructures.QueueAr.dequeue():::ENTER;condition="++front == theArray.length"
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.front >= 0
+this.back >= 0
+this.theArray[this.front..] elements != null
+this.theArray[this.back] != null
+this.currentSize != this.back
+this.currentSize <= size(this.theArray[])
+(size(this.theArray[])-1 == 0) ==> (this.front == 0)
+this.front <= size(this.theArray[])-1
+(size(this.theArray[])-1 == 0) ==> (this.back == 0)
+this.back <= size(this.theArray[])-1
+===========================================================================
+DataStructures.QueueAr.dequeue():::ENTER;condition="not(++front == theArray.length)"
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.front >= 0
+this.back >= 0
+this.theArray[this.front] != null
+this.theArray[this.back] != null
+this.currentSize <= size(this.theArray[])
+this.front <= size(this.theArray[])-1
+this.back <= size(this.theArray[])-1
+===========================================================================
 DataStructures.QueueAr.dequeue():::EXIT93
 (this.currentSize < size(this.theArray[])-1)  <==>  (orig(this.currentSize) <= size(this.theArray[])-1)
 (this.currentSize < size(this.theArray[])-1)  ==>  (this.front != orig(this.front))
@@ -822,11 +847,8 @@ this.theArray.getClass().getName() == java.lang.Object[].class
 this.back >= 0
 return != null
 return.getClass().getName() is printable
-orig(this.front) >= 0
 this.theArray[this.front+1..] == []
 this.theArray[orig(this.front)] == null
-orig(this.theArray[this.front..]) elements != null
-orig(this.theArray[this.back]) != null
 this.theArray.getClass().getName() != return.getClass().getName()
 (this.currentSize == 0) ==> (this.front == 0)
 (this.front == 0) ==> (this.currentSize == 0)
@@ -862,10 +884,7 @@ this.front >= 0
 this.back >= 0
 return != null
 return.getClass().getName() is printable
-orig(this.front) >= 0
 this.theArray[orig(this.front)] == null
-orig(this.theArray[this.front]) != null
-orig(this.theArray[this.back]) != null
 this.theArray.getClass().getName() != return.getClass().getName()
 this.currentSize - orig(this.currentSize) + 1 == 0
 this.currentSize <= size(this.theArray[])-1
@@ -1618,6 +1637,76 @@ this.currentSize <= size(this.theArray[])-1
 this.front < size(this.theArray[])-1
 this.back <= size(this.theArray[])-1
 ===========================================================================
+DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER;condition="++back == theArray.length"
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.front >= 0
+this.back >= 0
+x != null
+x.getClass().getName() is printable
+this.theArray[this.front..] contains no duplicates
+this.theArray[0..this.front-1] elements == null
+this.theArray[this.back+1..] elements == null
+this.theArray.getClass().getName() != x.getClass().getName()
+(this.currentSize == 0) ==> (this.front == 0)
+(this.currentSize == 0) ==> (this.back == 0)
+(size(this.theArray[])-1 == 0) ==> (this.currentSize == 0)
+(this.currentSize == 0) ==> (size(this.theArray[])-1 == 0)
+this.currentSize <= size(this.theArray[])-1
+(this.back == 0) ==> (this.front == 0)
+this.front <= this.back
+(size(this.theArray[])-1 == 0) ==> (this.front == 0)
+this.front <= size(this.theArray[])-1
+(size(this.theArray[])-1 == 0) ==> (this.back == 0)
+this.back <= size(this.theArray[])-1
+this.currentSize + this.front - size(this.theArray[]) + 1 == 0
+this.currentSize + this.front - size(this.theArray[])-1 == 0
+===========================================================================
+DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER;condition="not(++back == theArray.length)"
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.currentSize >= 0
+this.front >= 0
+this.back >= 0
+x != null
+x.getClass().getName() is printable
+this.theArray.getClass().getName() != x.getClass().getName()
+(this.currentSize == 0) ==> (this.front == 0)
+this.currentSize <= size(this.theArray[])-1
+this.front <= size(this.theArray[])-1
+this.back <= size(this.theArray[])-1
+===========================================================================
+DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER;condition="isFull()"
+this.currentSize == size(this.theArray[])-1
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.theArray[] contains no duplicates
+this.front >= 0
+this.back >= 0
+x != null
+x.getClass().getName() is printable
+this.theArray[this.currentSize+1..] == []
+this.theArray.getClass().getName() != x.getClass().getName()
+(this.currentSize == 0) ==> (this.front == 0)
+this.currentSize >= this.front
+(this.currentSize == 0) ==> (this.back == 0)
+this.currentSize >= this.back
+this.theArray[this.currentSize..] elements == this.theArray[this.currentSize]
+===========================================================================
+DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER;condition="not(isFull())"
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.currentSize >= 0
+this.front >= 0
+this.back >= 0
+x != null
+x.getClass().getName() is printable
+this.theArray.getClass().getName() != x.getClass().getName()
+(this.currentSize == 0) ==> (this.front == 0)
+this.currentSize < size(this.theArray[])-1
+this.front <= size(this.theArray[])-1
+this.back <= size(this.theArray[])-1
+===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT
 this.theArray == orig(this.theArray)
 this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
@@ -2349,17 +2438,12 @@ orig(this.theArray[post(this.currentSize)-1]) == orig(this.theArray[this.current
 this.theArray != null
 this.theArray.getClass().getName() == java.lang.Object[].class
 this.front >= 0
-orig(this.back) >= 0
-orig(x.getClass().getName()) is printable
 this.theArray[this.front..] contains no duplicates
 this.theArray[this.front..] elements != null
 this.theArray[0..this.front-1] elements == null
 this.theArray[this.back+1..] == []
 orig(this.theArray[post(this.back)..]) == [null]
 orig(this.theArray[post(this.back)..]) elements == null
-orig(this.theArray[this.front..]) contains no duplicates
-orig(this.theArray[this.back..]) contains no duplicates
-orig(this.theArray[this.back+1..]) elements == null
 this.theArray.getClass().getName() != orig(x.getClass().getName())
 orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 (this.front >> this.currentSize == 0)
@@ -2378,7 +2462,6 @@ this.front <= orig(this.back)
 this.back >= orig(this.currentSize)
 (this.back == 0) ==> (orig(this.back) == 0)
 this.back >= orig(this.back)
-(orig(this.currentSize) == 0) ==> (orig(this.back) == 0)
 this.theArray[this.back..] elements == orig(x)
 this.theArray[0..this.front-1] elements == orig(this.theArray[post(this.back)])
 orig(this.theArray[post(this.back)..]) elements == orig(this.theArray[post(this.back)])
@@ -2403,10 +2486,6 @@ this.theArray.getClass().getName() == java.lang.Object[].class
 this.currentSize >= 1
 this.front >= 0
 this.back >= 0
-orig(this.currentSize) >= 0
-orig(this.back) >= 0
-orig(x) != null
-orig(x.getClass().getName()) is printable
 this.theArray[this.front] != null
 orig(this.theArray[post(this.back)]) == null
 this.theArray.getClass().getName() != orig(x.getClass().getName())
@@ -2434,7 +2513,6 @@ this.currentSize == size(this.theArray[])
 this.currentSize == orig(size(this.theArray[]))
 this.front == orig(this.front)
 orig(this.currentSize) == size(this.theArray[])-1
-orig(this.currentSize) == orig(size(this.theArray[]))-1
 orig(x) == this.theArray[this.back]
 this.theArray[this.currentSize-1] == this.theArray[orig(this.currentSize)]
 this.theArray[this.back+1..] == orig(this.theArray[post(this.back)+1..])
@@ -2446,9 +2524,6 @@ this.theArray[] contains no duplicates
 this.theArray[] elements != null
 this.front >= 0
 this.back >= 0
-orig(this.theArray[]) contains no duplicates
-orig(this.back) >= 0
-orig(x.getClass().getName()) is printable
 this.theArray[this.currentSize..] == []
 orig(this.theArray[post(this.back)]) == null
 this.theArray.getClass().getName() != orig(x.getClass().getName())
@@ -2457,10 +2532,7 @@ orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 this.front <= orig(this.currentSize)
 (orig(this.currentSize) == 0) ==> (this.back == 0)
 this.back <= orig(this.currentSize)
-(orig(this.currentSize) == 0) ==> (orig(this.back) == 0)
-orig(this.currentSize) >= orig(this.back)
 this.theArray[orig(this.currentSize)..] elements == this.theArray[this.currentSize-1]
-orig(this.theArray[this.currentSize..]) elements == orig(this.theArray[this.currentSize])
 ===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT;condition="not(isFull())"
 this.theArray == orig(this.theArray)
@@ -2478,10 +2550,6 @@ this.theArray.getClass().getName() == java.lang.Object[].class
 this.currentSize >= 1
 this.front >= 0
 this.back >= 0
-orig(this.currentSize) >= 0
-orig(this.back) >= 0
-orig(x) != null
-orig(x.getClass().getName()) is printable
 this.theArray[this.front] != null
 orig(this.theArray[post(this.back)]) == null
 this.theArray.getClass().getName() != orig(x.getClass().getName())
@@ -2722,6 +2790,43 @@ this.front >= 0
 this.back >= 0
 (size(this.theArray[])-1 == 0) ==> (this.currentSize == 0)
 this.currentSize <= size(this.theArray[])-1
+(size(this.theArray[])-1 == 0) ==> (this.front == 0)
+this.front <= size(this.theArray[])-1
+(size(this.theArray[])-1 == 0) ==> (this.back == 0)
+this.back <= size(this.theArray[])-1
+===========================================================================
+DataStructures.QueueAr.getFront():::ENTER;condition="isEmpty()"
+this.theArray[this.currentSize] == this.theArray[this.front]
+this.theArray[this.currentSize] == this.theArray[this.back]
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.theArray[] elements == null
+this.theArray[].getClass().getName() elements == null
+this.currentSize == 0
+this.front >= 0
+this.back >= 0
+this.theArray[0..this.currentSize] == [null]
+this.theArray[0..this.currentSize-1] == []
+this.theArray[] elements == this.theArray[this.currentSize]
+this.currentSize <= this.front
+this.currentSize <= this.back
+this.currentSize <= size(this.theArray[])-1
+(this.back == 0) ==> (this.front == 0)
+(size(this.theArray[])-1 == 0) ==> (this.front == 0)
+this.front <= size(this.theArray[])-1
+(size(this.theArray[])-1 == 0) ==> (this.back == 0)
+(this.back == 0) ==> (size(this.theArray[])-1 == 0)
+this.back <= size(this.theArray[])-1
+===========================================================================
+DataStructures.QueueAr.getFront():::ENTER;condition="not(isEmpty())"
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.currentSize >= 1
+this.front >= 0
+this.back >= 0
+this.theArray[this.front] != null
+this.theArray[this.back] != null
+this.currentSize <= size(this.theArray[])
 (size(this.theArray[])-1 == 0) ==> (this.front == 0)
 this.front <= size(this.theArray[])-1
 (size(this.theArray[])-1 == 0) ==> (this.back == 0)
@@ -3298,6 +3403,45 @@ this.front <= size(this.theArray[])-1
 this.back <= size(this.theArray[])-1
 ===========================================================================
 DataStructures.QueueAr.isEmpty():::ENTER
+(this.currentSize == 0)  ==>  ((this.back == 0) ==> (size(this.theArray[])-1 == 0))
+(this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.front == 0))
+(this.currentSize == 0)  ==>  (this.currentSize <= size(this.theArray[])-1)
+(this.currentSize == 0)  ==>  (this.currentSize <= this.back)
+(this.currentSize == 0)  ==>  (this.currentSize <= this.front)
+(this.currentSize == 0)  ==>  (this.currentSize is a pointer)
+(this.currentSize == 0)  ==>  (this.theArray[0..this.currentSize-1] == [])
+(this.currentSize == 0)  ==>  (this.theArray[0..this.currentSize] == [null])
+(this.currentSize == 0)  ==>  (this.theArray[] elements == null)
+(this.currentSize == 0)  ==>  (this.theArray[] elements == this.theArray[this.back])
+(this.currentSize == 0)  ==>  (this.theArray[] elements == this.theArray[this.currentSize])
+(this.currentSize == 0)  ==>  (this.theArray[] elements == this.theArray[this.front])
+(this.currentSize == 0)  ==>  (this.theArray[].getClass().getName() elements == null)
+(this.currentSize == 0)  ==>  (this.theArray[this.currentSize..] elements == null)
+(this.currentSize == 0)  ==>  (this.theArray[this.currentSize..] elements == this.theArray[this.back])
+(this.currentSize == 0)  ==>  (this.theArray[this.currentSize..] elements == this.theArray[this.currentSize])
+(this.currentSize == 0)  ==>  (this.theArray[this.currentSize..] elements == this.theArray[this.front])
+(this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == this.theArray[this.back])
+(this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == this.theArray[this.front])
+===========================================================================
+DataStructures.QueueAr.isEmpty():::ENTER;condition="currentSize == 0"
+this.theArray[this.currentSize] == this.theArray[this.front]
+this.theArray[this.currentSize] == this.theArray[this.back]
+this.theArray[] elements == null
+this.theArray[].getClass().getName() elements == null
+this.currentSize == 0
+this.theArray[0..this.currentSize] == [null]
+this.theArray[0..this.currentSize-1] == []
+this.theArray[] elements == this.theArray[this.currentSize]
+this.currentSize <= this.front
+this.currentSize <= this.back
+this.currentSize <= size(this.theArray[])-1
+(this.back == 0) ==> (this.front == 0)
+(this.back == 0) ==> (size(this.theArray[])-1 == 0)
+===========================================================================
+DataStructures.QueueAr.isEmpty():::ENTER;condition="not(currentSize == 0)"
+this.currentSize >= 1
+this.theArray[this.front] != null
+this.theArray[this.back] != null
 ===========================================================================
 DataStructures.QueueAr.isEmpty():::EXIT
 this.theArray == orig(this.theArray)
@@ -3515,6 +3659,7 @@ this.front <= size(this.theArray[])-1
 this.back <= size(this.theArray[])-1
 ===========================================================================
 DataStructures.QueueAr.isFull():::ENTER
+(this.currentSize <= size(this.theArray[])-1)  ==>  ((size(this.theArray[])-1 == 0) ==> (this.currentSize == 0))
 (this.currentSize == 0)  ==>  ((this.back == 0) ==> (size(this.theArray[])-1 == 0))
 (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.front == 0))
 (this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
@@ -3543,6 +3688,11 @@ DataStructures.QueueAr.isFull():::ENTER
 (this.currentSize == 0)  ==>  (this.theArray[this.currentSize..] elements == this.theArray[this.front])
 (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == this.theArray[this.back])
 (this.currentSize == 0)  ==>  (this.theArray[this.currentSize] == this.theArray[this.front])
+(this.currentSize == size(this.theArray[]))  ==>  (this.theArray[0..this.currentSize-1] contains no duplicates)
+(this.currentSize == size(this.theArray[]))  ==>  (this.theArray[0..this.currentSize-1] elements != null)
+(this.currentSize == size(this.theArray[]))  ==>  (this.theArray[] contains no duplicates)
+(this.currentSize == size(this.theArray[]))  ==>  (this.theArray[] elements != null)
+(this.currentSize == size(this.theArray[]))  ==>  (this.theArray[this.currentSize..] == [])
 ===========================================================================
 DataStructures.QueueAr.isFull():::ENTER;condition="currentSize == 0"
 this.theArray[this.currentSize] == this.theArray[this.front]
@@ -3572,6 +3722,33 @@ DataStructures.QueueAr.isFull():::ENTER;condition="not(currentSize == 0)"
 this.currentSize >= 1
 this.theArray[this.front] != null
 this.theArray[this.back] != null
+===========================================================================
+DataStructures.QueueAr.isFull():::ENTER;condition="currentSize == theArray.length"
+this.currentSize == size(this.theArray[])
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.theArray[] contains no duplicates
+this.theArray[] elements != null
+this.front >= 0
+this.back >= 0
+this.theArray[this.currentSize..] == []
+(size(this.theArray[])-1 == 0) ==> (this.front == 0)
+this.front <= size(this.theArray[])-1
+(size(this.theArray[])-1 == 0) ==> (this.back == 0)
+this.back <= size(this.theArray[])-1
+===========================================================================
+DataStructures.QueueAr.isFull():::ENTER;condition="not(currentSize == theArray.length)"
+this.theArray != null
+this.theArray.getClass().getName() == java.lang.Object[].class
+this.currentSize >= 0
+this.front >= 0
+this.back >= 0
+(size(this.theArray[])-1 == 0) ==> (this.currentSize == 0)
+this.currentSize <= size(this.theArray[])-1
+(size(this.theArray[])-1 == 0) ==> (this.front == 0)
+this.front <= size(this.theArray[])-1
+(size(this.theArray[])-1 == 0) ==> (this.back == 0)
+this.back <= size(this.theArray[])-1
 ===========================================================================
 DataStructures.QueueAr.isFull():::EXIT
 this.theArray == orig(this.theArray)

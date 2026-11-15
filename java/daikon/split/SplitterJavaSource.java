@@ -168,13 +168,29 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     }
   }
 
-  /** Writes the body of the valid method to fileText. */
+  /**
+   * Writes the body of the valid method to fileText. A splitter is valid at a program point that
+   * has each of its variables, with the representation type that the test method reads. For
+   * example, a splitter that reads parameter {@code d} of type {@code int} is not valid at a
+   * program point whose variable {@code d} has type {@code double}.
+   */
   private void writeValidBody(
       @UnknownInitialization(SplitterJavaSource.class) SplitterJavaSource this) {
     if (vars.length > 0) {
-      fileText.append("    return (" + vars[0].getFieldName() + " != null)");
-      for (int i = 1; i < vars.length; i++) {
-        fileText.append(" && (" + vars[i].getFieldName() + " != null)");
+      fileText.append("    return ");
+      for (int i = 0; i < vars.length; i++) {
+        if (i > 0) {
+          fileText.append(lineSep + "        && ");
+        }
+        String fieldName = vars[i].getFieldName();
+        fileText.append(
+            "("
+                + fieldName
+                + " != null && "
+                + fieldName
+                + ".rep_type.format().equals(\""
+                + vars[i].getRepType()
+                + "\"))");
       }
       add(";");
     } else {
@@ -334,8 +350,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * "varName.publicField", is converted to the name of the longest such variable, with "_"
    * separating the parts. Other dotted names, such as "java.lang.Math.abs", are not changed.
    * Instances of "orig(variableName)" are replaced by instances of "orig_variableName". For example
-   * "orig(varName.publicField)" would yield "orig_varName_publicField". Instances of "null" that
-   * are compared with a hashcode are replaced by "0" (see {@link NullReplacer}).
+   * "orig(varName.publicField)" would yield "orig_varName_publicField". Calls to daikon.Quant
+   * methods that access arrays are replaced (see {@link QuantFixer}), and instances of "null" that
+   * stand for a hashcode are replaced by "0" (see {@link NullReplacer}).
    *
    * @param condition a string representation of a conditional statement
    * @return a version of the conditional with the variable names converted
@@ -353,7 +370,12 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = PrefixFixer.fixPrefix(condition, baseNames);
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
-    condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
+    // QuantFixer must run before ArrayFixer, which would add "_identity" to the array arguments.
+    // QuantFixer leaves placeholders for the array arguments, so that ArrayFixer does not mistake
+    // the compilable name of one array for the base name of another.
+    QuantFixer.Result quantFixed = QuantFixer.fixQuant(condition, baseNames, varInfos);
+    condition = ArrayFixer.fixArrays(quantFixed.expression, baseNames, varInfos);
+    condition = quantFixed.restoreArrayNames(condition);
     // NullReplacer must run last, because it recognizes the compilable names of variables.
     condition = NullReplacer.replaceNull(condition, varInfos);
     return condition;
@@ -558,6 +580,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     /** The type of the variable. */
     private String type;
 
+    /** The representation type of the variable, such as "int" or "double[]". */
+    private String repType;
+
     private VariableManager(VarInfo varInfo, String condition) throws ParseException {
       // this.varInfo = varInfo;
       name = varInfo.name();
@@ -565,6 +590,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       fieldName = fieldName(varInfo);
       varName = varName(varInfo);
       type = makeIndexIfNeeded(getVarType(varInfo), compilableName, varInfo, condition);
+      repType = varInfo.rep_type.format();
     }
 
     /**
@@ -610,6 +636,15 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
      */
     private String getType() {
       return type;
+    }
+
+    /**
+     * Returns the representation type of the variable.
+     *
+     * @return the representation type of the variable, such as "int" or "double[]"
+     */
+    private String getRepType() {
+      return repType;
     }
   }
 
