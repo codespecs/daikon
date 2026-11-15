@@ -1437,7 +1437,8 @@ public final class FileIO {
         return;
       }
       // interning bugfix: no need to intern
-      String ppt_name = unescape_decl(line);
+      // As in a ppt declaration, leading and trailing whitespace is not part of the ppt name.
+      String ppt_name = unescape_decl(line.trim());
       ppt_name = user_mod_ppt_name(ppt_name);
       if (!ppt_included(ppt_name)) {
         // System.out.printf("skipping ppt %s%n", line);
@@ -3057,19 +3058,24 @@ public final class FileIO {
    * If the line is the start of a ppt declaration, returns the declared ppt name, after applying
    * {@link #user_mod_ppt_name}. Otherwise returns null.
    *
+   * <p>The ppt name is the rest of the line after "ppt", without leading and trailing whitespace.
+   * It can contain blanks, which a front end might not escape, as in "ppt Year.compute(int, int,
+   * int):::ENTER". Chicory's DeclReader and the reading of a sample's ppt name also take the whole
+   * rest of the line.
+   *
    * @param line a line of a declaration file
-   * @return the ppt name declared by the line, or null if the line is not a ppt record
+   * @return the ppt name declared by the line, or null if the line is not a ppt record or names no
+   *     ppt
    */
   public static @Nullable String declared_ppt_name(String line) {
     if (!is_declaration_header(line)) {
       return null;
     }
-    Scanner scanner = new Scanner(line);
-    scanner.next(); // "ppt"
-    if (!scanner.hasNext()) {
+    String escaped_name = line.substring("ppt".length()).trim();
+    if (escaped_name.isEmpty()) {
       return null;
     }
-    return user_mod_ppt_name(unescape_decl(scanner.next()));
+    return user_mod_ppt_name(unescape_decl(escaped_name));
   }
 
   /**

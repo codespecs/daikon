@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -35,6 +38,12 @@ public class SplitterObject implements Comparable<SplitterObject> {
 
   /** class file containing compiled code for this splitter */
   private @MonotonicNonNull File classFile;
+
+  /**
+   * The variables of each program point at which this splitter failed to compile or load. Each
+   * element is the result of {@link SplitterFactory#variables} for one such program point.
+   */
+  private final List<Set<String>> failedVariables = new ArrayList<>();
 
   public boolean dummyDesired = false;
   public @Nullable String daikonFormat = null;
@@ -162,6 +171,36 @@ public class SplitterObject implements Comparable<SplitterObject> {
    */
   public @Nullable Splitter getSplitter() {
     return this.splitter;
+  }
+
+  /**
+   * Records that this splitter failed to compile or load at a program point.
+   *
+   * @param variables the variables of the program point, as computed by {@link
+   *     SplitterFactory#variables}
+   */
+  void recordFailure(Set<String> variables) {
+    failedVariables.add(variables);
+  }
+
+  /**
+   * Returns true if this splitter failed to compile or load at a program point that has all of the
+   * given variables. Such a splitter is not worth retrying at a program point that has only the
+   * given variables: the Java source of a splitter depends only on its condition and on the
+   * variables of the program point that it is compiled against, and the given variables include
+   * none that the failing program point lacked.
+   *
+   * @param variables the variables of a program point, as computed by {@link
+   *     SplitterFactory#variables}
+   * @return true if this splitter failed at a program point that has all of {@code variables}
+   */
+  boolean failedWithAll(Set<String> variables) {
+    for (Set<String> failed : failedVariables) {
+      if (failed.containsAll(variables)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /** Set the error message of this SplitterObject. This indicates the status of the Splitter. */
