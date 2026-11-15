@@ -50,6 +50,29 @@ public class Implication extends Joiner {
     return right;
   }
 
+  /**
+   * Returns the original predicate: the invariant at a conditional program point of which {@link
+   * #predicate} is a copy. Unlike the predicate, the original is judged (for example, for
+   * justification) in the context of its conditional program point.
+   *
+   * @return the original predicate
+   */
+  public Invariant origPredicate() {
+    return orig_left;
+  }
+
+  /**
+   * Returns the original consequent: the invariant at a conditional program point of which {@link
+   * #consequent} is a copy, or the consequent itself if it is a DummyInvariant from a splitter
+   * file. Unlike the consequent, the original is judged (for example, for justification) in the
+   * context of its conditional program point.
+   *
+   * @return the original consequent
+   */
+  public Invariant origConsequent() {
+    return orig_right;
+  }
+
   public boolean iff;
 
   protected Implication(

@@ -8,7 +8,6 @@ import daikon.Daikon;
 import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
-import daikon.Ppt;
 import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.ProglangType;
@@ -18,6 +17,7 @@ import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.filter.UnjustifiedFilter;
 import daikon.inv.unary.OneOf;
 import daikon.inv.unary.scalar.OneOfScalar;
 import gnu.getopt.*;
@@ -29,10 +29,10 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -48,6 +48,12 @@ import org.plumelib.util.StringsPlume;
  * <em>NUM</em>) &rArr; consequent". The consequent is only true in certain clusters, but is not
  * generally true for all executions of the program point to which the Implication belongs. These
  * resulting implications are written to standard output in the format of a splitter info file.
+ *
+ * <p>Each PPT_NAME in the output is a complete program point name. It designates the program point
+ * of that name, and also every program point whose name is that name preceded by a qualifier (see
+ * {@link daikon.split.SplitterList#matches}). To make Daikon use each condition only at the program
+ * points that its PPT_NAME designates, disable indiscriminate splitting via {@code --config_option
+ * daikon.split.SplitterList.all_splitters=false}.
  */
 public class ExtractConsequent {
 
@@ -80,12 +86,15 @@ public class ExtractConsequent {
     }
   }
 
-  /* A HashMap whose keys are PPT names (Strings) and whose values are
-  HashMaps whose keys are predicate names (Strings) and whose values are
-   HashMaps whose keys are Strings (normalized java-format invariants)
-     and whose values are HashedConsequent objects. */
+  /**
+   * Maps a complete program point name to a map whose keys are cluster keys (see {@link
+   * #clusterKey}) and whose values are maps whose keys are Strings (normalized Java-format
+   * invariants) and whose values are HashedConsequent objects. Each program point has its own
+   * clustering, so conditions from different program points are never combined. The maps are
+   * sorted, for deterministic output.
+   */
   private static Map<String, Map<String, Map<String, HashedConsequent>>> pptname_to_conditions =
-      new HashMap<>();
+      new TreeMap<>();
 
   /** The usage message for this program. */
   private static String usage =
@@ -164,13 +173,8 @@ public class ExtractConsequent {
   }
 
   public static void extract_consequent(PptMap ppts) {
-    // Retrieve Ppt objects in sorted order.
-    // Use a custom comparator for a specific ordering
-    Comparator<PptTopLevel> comparator = new Ppt.NameComparator();
-    TreeSet<PptTopLevel> ppts_sorted = new TreeSet<>(comparator);
-    ppts_sorted.addAll(ppts.asCollection());
-
-    for (PptTopLevel ppt : ppts_sorted) {
+    pptname_to_conditions.clear();
+    for (PptTopLevel ppt : ppts.asCollection()) {
       extract_consequent_maybe(ppt, ppts);
     }
 
@@ -198,14 +202,13 @@ public class ExtractConsequent {
           if (cond.fakeFor != null) {
             continue;
           }
-          // The key of a condition that is not fake is the condition in Java format.
-          String javaStr = condIndex;
-          String daikonStr = formatCondition(cond.inv, OutputFormat.DAIKON);
-          String escStr = formatCondition(cond.inv, OutputFormat.ESCJAVA);
-          String simplifyStr = formatCondition(cond.inv, OutputFormat.SIMPLIFY);
+          String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
+          String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
+          String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
           allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
           //           allConds.add(condIndex);
-          condsJava.add(javaStr);
+          // The key of a condition that is not fake is the condition in Java format.
+          condsJava.add(condIndex);
           condsDaikon.add(daikonStr);
           condsESC.add(escStr);
           condsSimplify.add(simplifyStr);
@@ -240,33 +243,6 @@ public class ExtractConsequent {
     }
 
     pw.flush();
-  }
-
-  /**
-   * Returns the invariant formatted as a splitting condition in the given format. A OneOfScalar
-   * invariant over a boolean variable whose file representation type is int, such as "b == 1", is
-   * written as "b == true" (see {@link #intBooleanValue}). In Java format, the result can refer to
-   * the return value and to pre-state values as "\result" and "\old(x)"; see {@link
-   * #toSpinfoCondition}.
-   *
-   * @param inv an invariant
-   * @param format the format in which to write the invariant
-   * @return the invariant formatted as a splitting condition
-   */
-  static String formatCondition(Invariant inv, OutputFormat format) {
-    Boolean value = (inv instanceof OneOfScalar) ? intBooleanValue((OneOfScalar) inv) : null;
-    String result;
-    if (value == null) {
-      result = inv.format_using(format);
-    } else {
-      VarInfo var = ((OneOfScalar) inv).var();
-      if (format == OutputFormat.SIMPLIFY) {
-        result = "(EQ " + var.simplifyFixedupName() + " " + (value ? "|@true|" : "|@false|") + ")";
-      } else {
-        result = var.name_using(format) + " == " + value;
-      }
-    }
-    return result;
   }
 
   /**
@@ -378,8 +354,8 @@ public class ExtractConsequent {
 
   /**
    * Returns true if the invariant is legal Java when its variables are booleans. Daikon represents
-   * a boolean as an int, so it might infer numeric invariants, such as "b != 0" or "b1 < b2", that
-   * are not legal Java over booleans.
+   * a boolean as an int, so it might infer numeric invariants, such as "b != 0" or "b == i" (where
+   * i is an int), that are not legal Java over booleans.
    *
    * @param inv an invariant
    * @return true if the invariant uses no boolean variable, or is legal Java over booleans
@@ -387,12 +363,8 @@ public class ExtractConsequent {
   static boolean isLegalForBooleans(Invariant inv) {
     VarInfo[] vis = inv.ppt.var_infos;
     // OneOfScalar is the only scalar invariant that formats a boolean specially, as "b == true".
-    // It decides whether its variable is a boolean from the file representation type, which can
-    // differ from the declared type that a splitter uses.  formatCondition writes "b == 1" as
-    // "b == true" when the declared type is boolean and the file representation type is int.
     if (inv instanceof OneOfScalar) {
-      OneOfScalar oneof = (OneOfScalar) inv;
-      return oneof.is_boolean() == isBoolean(vis[0]) || intBooleanValue(oneof) != null;
+      return ((OneOfScalar) inv).is_boolean() == isBoolean(vis[0]);
     }
     if (inv instanceof IntEqual || inv instanceof IntNonEqual) {
       // "b == i" is not legal Java if exactly one of the operands is a boolean.
@@ -415,29 +387,6 @@ public class ExtractConsequent {
    */
   private static boolean isBoolean(VarInfo vi) {
     return vi.type == ProglangType.BOOLEAN;
-  }
-
-  /**
-   * Returns the value of the variable of the given OneOfScalar invariant, if the variable is a
-   * boolean whose file representation type is int and the invariant is "b == 0" or "b == 1".
-   * OneOfScalar formats such an invariant as "b == 0" or "b == 1", which is not legal Java.
-   *
-   * @param oneof a OneOfScalar invariant
-   * @return false if the invariant is "b == 0", true if it is "b == 1", or null if the variable is
-   *     not a boolean whose file representation type is int or the invariant is neither
-   */
-  static @Nullable Boolean intBooleanValue(OneOfScalar oneof) {
-    if (oneof.is_boolean() || !isBoolean(oneof.var()) || oneof.num_elts() != 1) {
-      return null;
-    }
-    long value = ((Long) oneof.elt()).longValue();
-    if (value == 0) {
-      return false;
-    } else if (value == 1) {
-      return true;
-    } else {
-      return null;
-    }
   }
 
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
@@ -464,7 +413,7 @@ public class ExtractConsequent {
       }
     }
     if (!invs.isEmpty()) {
-      String pptname = cleanup_pptname(ppt.name());
+      String pptname = ppt.name();
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
 
@@ -519,10 +468,6 @@ public class ExtractConsequent {
           cluster_inv = consequent;
         }
 
-        if (!inv.isWorthPrinting()) {
-          continue;
-        }
-
         if (contains_constant_non_012(inv)) {
           continue;
         }
@@ -551,7 +496,13 @@ public class ExtractConsequent {
           continue;
         }
 
-        String inv_string = toSpinfoCondition(formatCondition(inv, OutputFormat.JAVA));
+        // 3) Invariants that PrintInvariants would not print.  This check is last because it is the
+        // most costly.
+        if (!isWorthWriting(inv, maybe)) {
+          continue;
+        }
+
+        String inv_string = toSpinfoCondition(inv.format_using(OutputFormat.JAVA));
         if (inv_string == null) {
           continue;
         }
@@ -602,13 +553,13 @@ public class ExtractConsequent {
   private static boolean store_invariant(
       String predicate, String index, HashedConsequent consequent, String pptname) {
     if (!pptname_to_conditions.containsKey(pptname)) {
-      pptname_to_conditions.put(pptname, new HashMap<>());
+      pptname_to_conditions.put(pptname, new TreeMap<>());
     }
 
     Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
         pptname_to_conditions.get(pptname);
     if (!cluster_to_conditions.containsKey(predicate)) {
-      cluster_to_conditions.put(predicate, new HashMap<>());
+      cluster_to_conditions.put(predicate, new TreeMap<>());
     }
 
     Map<String, HashedConsequent> conditions = cluster_to_conditions.get(predicate);
@@ -628,6 +579,41 @@ public class ExtractConsequent {
     }
   }
 
+  /**
+   * Returns true if the given condition, which is the predicate or the consequent of the given
+   * implication, should be written as a splitting condition: that is, if the implication is
+   * justified and the original of the condition is worth printing at its conditional program point.
+   *
+   * <p>The condition is not judged directly. The condition is a copy that Daikon made of an
+   * invariant at a conditional program point, for use at that program point's parent, and the copy
+   * is judged in the parent's context. For example, the copy's justification is computed from the
+   * parent's samples rather than from the samples that satisfy the condition: if "cluster == 1
+   * &lt;==&gt; x &gt;= 1", then the copy of "x &gt;= 1" can seem unjustified, because the parent
+   * also has the samples in which x is less than 1.
+   *
+   * <p>The implication's justification is not checked if {@link UnjustifiedFilter} is disabled.
+   *
+   * @param condition the predicate or the consequent of {@code implication}
+   * @param implication an implication
+   * @return true if {@code condition} should be written as a splitting condition
+   */
+  static boolean isWorthWriting(Invariant condition, Implication implication) {
+    if (UnjustifiedFilter.dkconfig_enabled && !implication.justified()) {
+      if (debug.isLoggable(FINE)) {
+        debug.fine("Not writing " + condition.format() + ": unjustified " + implication.format());
+      }
+      if (Invariant.logOn()) {
+        implication.log("Not writing %s: the implication is unjustified", condition.format());
+      }
+      return false;
+    }
+    Invariant original =
+        (condition == implication.consequent())
+            ? implication.origConsequent()
+            : implication.origPredicate();
+    return original.isWorthPrinting();
+  }
+
   private static boolean contains_constant_non_012(Invariant inv) {
     if (inv instanceof OneOfScalar) {
       OneOfScalar oneof = (OneOfScalar) inv;
@@ -642,27 +628,6 @@ public class ExtractConsequent {
     }
 
     return false;
-  }
-
-  /**
-   * Remove non-word characters and everything after "(" (which includes everything after ":::")
-   * from the program point name, leaving "PackageName.ClassName.MethodName".
-   *
-   * @param pptname a program point name
-   * @return the argument, without non-word characters and without parens or ":::" suffix
-   */
-  private static String cleanup_pptname(String pptname) {
-    int index;
-    if ((index = pptname.indexOf('(')) > 0) {
-      pptname = pptname.substring(0, index);
-    }
-
-    if (pptname.endsWith(".")) {
-      pptname = pptname.substring(0, pptname.length() - 2);
-    }
-
-    Matcher m = non_word_pattern.matcher(pptname);
-    return m.replaceAll(".");
   }
 
   /**
@@ -723,7 +688,6 @@ public class ExtractConsequent {
   /** Matches ".class", as in "Foo.class", but not ".classCount" or ".class$0". */
   static Pattern dot_class_pattern;
 
-  static Pattern non_word_pattern;
   static Pattern gteq_pattern;
   static Pattern lteq_pattern;
   static Pattern neq_pattern;
@@ -734,7 +698,6 @@ public class ExtractConsequent {
 
   static {
     try {
-      non_word_pattern = Pattern.compile("\\W+");
       post_pattern = Pattern.compile("\\\\(?:post|new)\\s*\\(");
       result_pattern = Pattern.compile("\\\\result\\b");
       old_pattern = Pattern.compile("\\\\old\\s*\\(");

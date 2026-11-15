@@ -43,14 +43,17 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,6 +73,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.FilesPlume;
+import org.plumelib.util.Intern;
 import org.plumelib.util.MapsP;
 import org.plumelib.util.StringsPlume;
 
@@ -461,6 +465,7 @@ public final class FileIO {
     // Build the var infos from the var definitions.
     List<VarInfo> vi_list = new ArrayList<>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
+      vd.useBooleanRepType();
       @SuppressWarnings("interning") // about to be used in a new program point
       @Interned VarInfo vi = new VarInfo(vd);
       vi_list.add(vi);
@@ -1050,6 +1055,14 @@ public final class FileIO {
 
     /** Miscellaneous text in the parsed item. */
     public @Nullable Object payload; // used when status=COMMENT
+
+    /**
+     * The variables that have had a boolean value other than 0 or 1 in this file. Daikon warns
+     * about each such variable only once per file. A variable is in a single program point, so
+     * "return" in two program points is two variables.
+     */
+    public Set<VarInfo> varsWithNonBooleanValues =
+        Collections.newSetFromMap(new IdentityHashMap<>());
 
     /**
      * Start parsing the given file.
@@ -1956,7 +1969,20 @@ public final class FileIO {
         // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
 
         try {
-          vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
+          @Interned Object value = vi.rep_type.parse_value(value_rep, reader, filename);
+          if (vi.file_rep_type.baseIsBoolean()) {
+            @Interned Object boolValue = booleanValue(value);
+            if (boolValue != value) {
+              if (FileIO.data_trace_state.varsWithNonBooleanValues.add(vi)) {
+                warnNonBooleanValue(
+                    vi.name() + " in " + ppt.name(),
+                    value_rep,
+                    "at line " + reader.getLineNumber() + " of " + filename);
+              }
+              value = boolValue;
+            }
+          }
+          vals[val_index] = value;
           if (vals[val_index] == null) {
             if (debug_missing && !vi.canBeMissing) {
               System.out.printf(
@@ -2306,6 +2332,53 @@ public final class FileIO {
   }
 
   /**
+   * Returns the given value of a boolean or boolean[] variable, with each boolean in it that is
+   * neither 0 nor 1 replaced by 1 (true), as C does.
+   *
+   * @param value a value of a boolean or boolean[] variable, such as a Long or a long[], or null
+   *     for a missing value
+   * @return the value, with each boolean in it that is neither 0 nor 1 replaced by 1
+   */
+  private static @Nullable @Interned Object booleanValue(@Nullable @Interned Object value) {
+    @Interned Object result = value;
+    if (value instanceof Long) {
+      long l = (Long) value;
+      if (l != 0 && l != 1) {
+        result = ProglangType.LongOne;
+      }
+    } else if (value instanceof long[]) {
+      long[] a = (long[]) value;
+      for (int i = 0; i < a.length; i++) {
+        if (a[i] != 0 && a[i] != 1) {
+          long[] copy = a.clone();
+          for (int j = i; j < copy.length; j++) {
+            if (copy[j] != 0) {
+              copy[j] = 1;
+            }
+          }
+          result = Intern.intern(copy);
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Prints a warning that the given boolean variable has a value other than 0 or 1.
+   *
+   * @param varname the name of a boolean variable
+   * @param value_rep the variable's value, as written in a file
+   * @param location where the value appears, such as "at line 31 of file foo.dtrace"
+   */
+  private static void warnNonBooleanValue(String varname, String value_rep, String location) {
+    System.out.printf(
+        "Warning: boolean variable %s has value %s %s; Daikon treats each boolean other than 0 and"
+            + " 1 as true (1)%n",
+        varname, value_rep, location);
+  }
+
+  /**
    * Returns true if the given variable is included, according to Daikon's {@code
    * --var-select-pattern} and {@code --var-omit-pattern} flags.
    */
@@ -2472,7 +2545,11 @@ public final class FileIO {
     @SuppressWarnings("serial")
     public @Nullable List<String> function_args = null;
 
-    /** The type of the variable as stored in the dtrace file (required) */
+    /**
+     * The type of the variable as stored in the dtrace file (required). After {@link
+     * #useBooleanRepType}, a variable that is declared as a boolean has rep type boolean, even if
+     * the declaration gives an integral rep type such as int.
+     */
     public ProglangType rep_type = null;
 
     /** Declared type of the variable as an arbitrary string (required) */
@@ -2719,6 +2796,47 @@ public final class FileIO {
       function_args = new ArrayList<String>();
       while (scanner.hasNext()) {
         function_args.add(unescape_decl(scanner.next()).intern());
+      }
+    }
+
+    /**
+     * If this variable is declared as a boolean (or boolean[]) and its rep type is an integer type
+     * whose values are written as numbers -- int, long, long long int, or short (or an array of one
+     * of them) -- sets its rep type to boolean (or boolean[]), so that Daikon treats the variable
+     * as a boolean. For example, a declaration might give the rep type int to a variable whose
+     * declared type is boolean. Other integral rep types, such as char, are left unchanged.
+     *
+     * <p>Such a variable loses its min-value and max-value bounds, which are not permitted for a
+     * boolean (see {@link #checkBound}), and its constant value, if any, gets the same treatment as
+     * a value in the data trace file: each boolean that is neither 0 nor 1 becomes 1.
+     */
+    public void useBooleanRepType() {
+      @Interned String base = rep_type.base();
+      if (!(base == ProglangType.BASE_INT
+          || base == ProglangType.BASE_LONG
+          || base == ProglangType.BASE_LONG_LONG
+          || base == ProglangType.BASE_SHORT)) {
+        return;
+      }
+      if (declared_type == ProglangType.BOOLEAN && rep_type.dimensions() == 0) {
+        rep_type = ProglangType.BOOLEAN;
+      } else if (declared_type == ProglangType.BOOLEAN_ARRAY && rep_type.dimensions() == 1) {
+        rep_type = ProglangType.BOOLEAN_ARRAY;
+      } else {
+        return;
+      }
+      min_value = null;
+      max_value = null;
+      if (static_constant_value != null) {
+        String value_rep =
+            (static_constant_value instanceof long[])
+                ? Arrays.toString((long[]) static_constant_value)
+                : static_constant_value.toString();
+        @Nullable @Interned Object value = booleanValue(static_constant_value);
+        if (value != static_constant_value) {
+          warnNonBooleanValue(name, value_rep, "in its declaration");
+          static_constant_value = value;
+        }
       }
     }
 

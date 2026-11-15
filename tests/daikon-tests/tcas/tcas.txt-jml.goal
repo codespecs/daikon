@@ -1,8 +1,7 @@
 ===========================================================================
 std.ALIM()int:::ENTER
     Variables: ::Cur_Vertical_Sep ::High_Confidence ::Two_of_Three_Reports_Valid ::Own_Tracked_Alt ::Own_Tracked_Alt_Rate ::Other_Tracked_Alt ::Alt_Layer_Value ::Positive_RA_Alt_Thresh ::Positive_RA_Alt_Thresh[] ::Up_Separation ::Down_Separation ::Other_RAC ::Other_Capability ::Climb_Inhibit size(::Positive_RA_Alt_Thresh[]) size(::Positive_RA_Alt_Thresh[])-1 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value-1] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1]
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -44,8 +43,7 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 \result == \old(daikon.Quant.getElement_int(::Positive_RA_Alt_Thresh, \new(::Alt_Layer_Value)))
 \result == daikon.Quant.getElement_int(::Positive_RA_Alt_Thresh, \old(::Alt_Layer_Value))
 \result == \old(daikon.Quant.getElement_int(::Positive_RA_Alt_Thresh, ::Alt_Layer_Value))
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -68,8 +66,7 @@ daikon.Quant.eltsLT(daikon.Quant.slice(::Positive_RA_Alt_Thresh, 0, ::Alt_Layer_
 ===========================================================================
 std.Inhibit_Biased_Climb()int:::ENTER
     Variables: ::Cur_Vertical_Sep ::High_Confidence ::Two_of_Three_Reports_Valid ::Own_Tracked_Alt ::Own_Tracked_Alt_Rate ::Other_Tracked_Alt ::Alt_Layer_Value ::Positive_RA_Alt_Thresh ::Positive_RA_Alt_Thresh[] ::Up_Separation ::Down_Separation ::Other_RAC ::Other_Capability ::Climb_Inhibit size(::Positive_RA_Alt_Thresh[]) size(::Positive_RA_Alt_Thresh[])-1 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value-1] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1]
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -107,8 +104,7 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 ::Other_RAC == \old(::Other_RAC)
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -132,8 +128,7 @@ daikon.Quant.eltsLT(daikon.Quant.slice(::Positive_RA_Alt_Thresh, 0, ::Alt_Layer_
 ===========================================================================
 std.Non_Crossing_Biased_Climb()boolean:::ENTER
     Variables: ::Cur_Vertical_Sep ::High_Confidence ::Two_of_Three_Reports_Valid ::Own_Tracked_Alt ::Own_Tracked_Alt_Rate ::Other_Tracked_Alt ::Alt_Layer_Value ::Positive_RA_Alt_Thresh ::Positive_RA_Alt_Thresh[] ::Up_Separation ::Down_Separation ::Other_RAC ::Other_Capability ::Climb_Inhibit size(::Positive_RA_Alt_Thresh[]) size(::Positive_RA_Alt_Thresh[])-1 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value-1] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1]
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -171,9 +166,7 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 ::Other_RAC == \old(::Other_RAC)
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
-(\result == 0)  ==>  (\result is a pointer)
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -181,7 +174,6 @@ daikon.Quant.eltwiseLT(::Positive_RA_Alt_Thresh)
 ::Other_RAC == 0 || ::Other_RAC == 1
 ::Other_Capability == 0 || ::Other_Capability == 1
 ::Climb_Inhibit == 0 || ::Climb_Inhibit == 1
-\result == 0 || \result == 1
 daikon.Quant.size(::Positive_RA_Alt_Thresh) == 4
 daikon.Quant.getElement_int(::Positive_RA_Alt_Thresh, ::Alt_Layer_Value) % 20 == 0
 warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {740} subset of ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..]
@@ -197,8 +189,7 @@ daikon.Quant.eltsLT(daikon.Quant.slice(::Positive_RA_Alt_Thresh, 0, ::Alt_Layer_
 ===========================================================================
 std.Non_Crossing_Biased_Descend()boolean:::ENTER
     Variables: ::Cur_Vertical_Sep ::High_Confidence ::Two_of_Three_Reports_Valid ::Own_Tracked_Alt ::Own_Tracked_Alt_Rate ::Other_Tracked_Alt ::Alt_Layer_Value ::Positive_RA_Alt_Thresh ::Positive_RA_Alt_Thresh[] ::Up_Separation ::Down_Separation ::Other_RAC ::Other_Capability ::Climb_Inhibit size(::Positive_RA_Alt_Thresh[]) size(::Positive_RA_Alt_Thresh[])-1 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value-1] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1]
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -234,9 +225,7 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 ::Other_RAC == \old(::Other_RAC)
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
-(\result == 0)  ==>  (\result is a pointer)
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -244,7 +233,6 @@ daikon.Quant.eltwiseLT(::Positive_RA_Alt_Thresh)
 ::Other_RAC == 0 || ::Other_RAC == 1
 ::Other_Capability == 0 || ::Other_Capability == 1
 ::Climb_Inhibit == 0 || ::Climb_Inhibit == 1
-\result == 0 || \result == 1
 daikon.Quant.size(::Positive_RA_Alt_Thresh) == 4
 daikon.Quant.getElement_int(::Positive_RA_Alt_Thresh, ::Alt_Layer_Value) % 20 == 0
 daikon.Quant.subsetOf(daikon.Quant.slice(::Positive_RA_Alt_Thresh, ::Alt_Layer_Value+1, daikon.Quant.size(::Positive_RA_Alt_Thresh)), new long[] { 500, 640, 740 })
@@ -258,8 +246,7 @@ daikon.Quant.eltsLT(daikon.Quant.slice(::Positive_RA_Alt_Thresh, 0, ::Alt_Layer_
 ===========================================================================
 std.Own_Above_Threat()boolean:::ENTER
     Variables: ::Cur_Vertical_Sep ::High_Confidence ::Two_of_Three_Reports_Valid ::Own_Tracked_Alt ::Own_Tracked_Alt_Rate ::Other_Tracked_Alt ::Alt_Layer_Value ::Positive_RA_Alt_Thresh ::Positive_RA_Alt_Thresh[] ::Up_Separation ::Down_Separation ::Other_RAC ::Other_Capability ::Climb_Inhibit size(::Positive_RA_Alt_Thresh[]) size(::Positive_RA_Alt_Thresh[])-1 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value-1] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1]
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -297,12 +284,10 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 ::Other_RAC == \old(::Other_RAC)
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
-(\result == 0)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
-(\result == 0)  ==>  (\result is a pointer)
-(\result == 1)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
-(\result == 1)  ==>  (::Up_Separation <= ::Down_Separation)
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+(\result == false)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
+(\result == true)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
+(\result == true)  ==>  (::Up_Separation <= ::Down_Separation)
+::High_Confidence == true
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -310,7 +295,6 @@ daikon.Quant.eltwiseLT(::Positive_RA_Alt_Thresh)
 ::Other_RAC == 0 || ::Other_RAC == 1
 ::Other_Capability == 0 || ::Other_Capability == 1
 ::Climb_Inhibit == 0 || ::Climb_Inhibit == 1
-\result == 0 || \result == 1
 daikon.Quant.size(::Positive_RA_Alt_Thresh) == 4
 daikon.Quant.getElement_int(::Positive_RA_Alt_Thresh, ::Alt_Layer_Value) % 20 == 0
 warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {740} subset of ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..]
@@ -326,8 +310,7 @@ daikon.Quant.eltsLT(daikon.Quant.slice(::Positive_RA_Alt_Thresh, 0, ::Alt_Layer_
 ===========================================================================
 std.Own_Below_Threat()boolean:::ENTER
     Variables: ::Cur_Vertical_Sep ::High_Confidence ::Two_of_Three_Reports_Valid ::Own_Tracked_Alt ::Own_Tracked_Alt_Rate ::Other_Tracked_Alt ::Alt_Layer_Value ::Positive_RA_Alt_Thresh ::Positive_RA_Alt_Thresh[] ::Up_Separation ::Down_Separation ::Other_RAC ::Other_Capability ::Climb_Inhibit size(::Positive_RA_Alt_Thresh[]) size(::Positive_RA_Alt_Thresh[])-1 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value-1] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1]
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+::High_Confidence == true
 ::Own_Tracked_Alt_Rate >= 2
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
@@ -366,12 +349,10 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 ::Other_RAC == \old(::Other_RAC)
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
-(\result == 0)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
-(\result == 0)  ==>  (\result is a pointer)
-(\result == 1)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
-(\result == 1)  ==>  (::Own_Tracked_Alt_Rate >= 2)
-::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
+(\result == false)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
+(\result == true)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
+(\result == true)  ==>  (::Own_Tracked_Alt_Rate >= 2)
+::High_Confidence == true
 ::Own_Tracked_Alt_Rate >= 2
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
@@ -380,7 +361,6 @@ daikon.Quant.eltwiseLT(::Positive_RA_Alt_Thresh)
 ::Other_RAC == 0 || ::Other_RAC == 1
 ::Other_Capability == 0 || ::Other_Capability == 1
 ::Climb_Inhibit == 0 || ::Climb_Inhibit == 1
-\result == 0 || \result == 1
 daikon.Quant.size(::Positive_RA_Alt_Thresh) == 4
 daikon.Quant.getElement_int(::Positive_RA_Alt_Thresh, ::Alt_Layer_Value) % 20 == 0
 warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {740} subset of ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..]
@@ -396,8 +376,6 @@ daikon.Quant.eltsLT(daikon.Quant.slice(::Positive_RA_Alt_Thresh, 0, ::Alt_Layer_
 ===========================================================================
 std.alt_sep_test()int:::ENTER
     Variables: ::Cur_Vertical_Sep ::High_Confidence ::Two_of_Three_Reports_Valid ::Own_Tracked_Alt ::Own_Tracked_Alt_Rate ::Other_Tracked_Alt ::Alt_Layer_Value ::Positive_RA_Alt_Thresh ::Positive_RA_Alt_Thresh[] ::Up_Separation ::Down_Separation ::Other_RAC ::Other_Capability ::Climb_Inhibit size(::Positive_RA_Alt_Thresh[]) size(::Positive_RA_Alt_Thresh[])-1 ::Positive_RA_Alt_Thresh[::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value-1] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value..] ::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value] ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1]
-::High_Confidence == 0 || ::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -435,8 +413,6 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 ::Other_RAC == \old(::Other_RAC)
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
-::High_Confidence == 0 || ::High_Confidence == 1
-::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
 ::Alt_Layer_Value >= 0
 ::Positive_RA_Alt_Thresh != null
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
@@ -463,8 +439,8 @@ std.initialize()void:::ENTER
 ::Own_Tracked_Alt == ::Other_Tracked_Alt
 ::Up_Separation == ::Down_Separation
 ::Cur_Vertical_Sep == 0
-::High_Confidence == 0
-::Two_of_Three_Reports_Valid == 0
+::High_Confidence == false
+::Two_of_Three_Reports_Valid == false
 ::Own_Tracked_Alt == 0
 ::Own_Tracked_Alt_Rate == 0
 ::Alt_Layer_Value == 0
@@ -493,8 +469,8 @@ assignable ::Positive_RA_Alt_Thresh[*], ::Positive_RA_Alt_Thresh[::Alt_Layer_Val
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
 ::Cur_Vertical_Sep == 0
-::High_Confidence == 0
-::Two_of_Three_Reports_Valid == 0
+::High_Confidence == false
+::Two_of_Three_Reports_Valid == false
 ::Own_Tracked_Alt == 0
 ::Own_Tracked_Alt_Rate == 0
 ::Alt_Layer_Value == 0
