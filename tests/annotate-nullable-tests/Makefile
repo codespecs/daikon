@@ -1,13 +1,17 @@
 # Tests of AnnotateNullable on stored traces.
 #
 # For each test name T in TESTS, Daikon reads T.decls and T.dtrace.gz, and
-# AnnotateNullable writes an annotation file T.txt-jaif from Daikon's output.
+# AnnotateNullable writes an annotation file T.txt-jaif, which also contains
+# AnnotateNullable's warnings, from Daikon's output.
 # Test T passes if T.txt-jaif is the same as T.txt-jaif.goal.
+#
+# Test "NoObjectPpt":  no class has an OBJECT program point, one class has
+# no CLASS program point either, and one function has no class.
 #
 # Test "PointChildren":  the CLASS and OBJECT program points each have a child
 # that is a point, not a method.
 
-TESTS = PointChildren
+TESTS = NoObjectPpt PointChildren
 
 # The directory containing this file.  Makefile.jdk is found relative to it,
 # not via DAIKONDIR, which can name a different Daikon tree.
@@ -48,7 +52,7 @@ diffs: $(addsuffix .txt-jaif.diff,${TESTS})
 .SECONDARY: $(addsuffix .txt-jaif,${TESTS})
 
 %.txt-jaif: %.inv.gz ${DAIKON}
-	${DAIKON_JAVA} daikon.AnnotateNullable $< > $@
+	${DAIKON_JAVA} daikon.AnnotateNullable $< > $@ 2>&1
 
 %.inv.gz: %.decls %.dtrace.gz ${DAIKON}
 	${DAIKON_JAVA} daikon.Daikon --no_text_output --no_show_progress \
