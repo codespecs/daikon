@@ -62,6 +62,7 @@ public class PptTopLevelTypeTest {
   }
 
   /** A program point declared as THROWS or GLOBAL must have a name of that type. */
+  @SuppressWarnings("nullness:argument") // JUnit's assertNull and assertNotNull permit null
   @Test
   public void testThrowsAndGlobalTypeError() {
     assertNull(PptTopLevel.type_error("Foo.bar():::THROWS", PptType.THROWS));
