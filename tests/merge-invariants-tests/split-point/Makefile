@@ -8,7 +8,8 @@
 # "template" gives it no decls file, so it builds the program points from the
 # .inv files.  Test "remerge" gives it no decls file and merges the output of
 # test "decls" (on two of the runs) with the third run, so it checks that
-# MergeInvariants's output can itself be merged.
+# MergeInvariants's output can itself be merged.  The output of the first merge
+# must retain the relations between the leaf and its conditional program points.
 
 TESTS = decls template remerge
 include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.common
@@ -33,6 +34,7 @@ decls-merge.inv.gz: ${DAIKON} SplitPoint.decls SplitPoint.spinfo ${RUNS:=.inv.gz
 template-merge.inv.gz: ${DAIKON} ${RUNS:=.inv.gz}
 	${DAIKON_JAVA} daikon.MergeInvariants -o $@ ${RUNS:=.inv.gz}
 
+# The output of a merge of Run1 and Run2, which is the first input of test "remerge".
 Run12-merge.inv.gz: ${DAIKON} SplitPoint.decls SplitPoint.spinfo Run1.inv.gz Run2.inv.gz
 	${DAIKON_JAVA} daikon.MergeInvariants -o $@ SplitPoint.decls SplitPoint.spinfo \
 	  Run1.inv.gz Run2.inv.gz

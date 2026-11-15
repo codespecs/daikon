@@ -3019,8 +3019,11 @@ The @code{ppt-name} of a program point whose type is @code{exit} or
 type that its name indicates, so a numbered exit that is declared as an
 @code{exit} is a @code{subexit}, and vice versa.
 If the @code{ppt-name} does not contain @code{:::}, Daikon appends
-@code{:::} and the type in upper case; for example, a program point named
-@code{foo} whose type is @code{enter} is named @code{foo:::ENTER}.
+@code{:::} and the type in upper case to the program point's internal name
+only.  For example, a program point declared as @code{foo} with type
+@code{enter} keeps the name @code{foo} (which trace records must use), and
+its internal name is @code{foo:::ENTER}.  To match trace records named
+@code{foo:::ENTER}, declare the program point as @code{foo:::ENTER}.
 Daikon rejects a declaration whose @code{ppt-name} does not conform to its
 type.
 
