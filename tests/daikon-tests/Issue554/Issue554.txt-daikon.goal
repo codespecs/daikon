@@ -16,7 +16,11 @@ this.mag[] one of { [], [1, 2], [3] }
 this.mag[] sorted by <
 this.bitLength one of { -1, 0 }
 size(this.mag[]) one of { 0, 1, 2 }
+this.bitLength <= size(misc.Issue554.ZERO_MAG[])
+this.bitLength >= size(misc.Issue554.ZERO_MAG[])-1
 this.bitLength <= size(this.mag[])
+size(misc.Issue554.ZERO_MAG[]) <= size(this.mag[])
+size(misc.Issue554.ZERO_MAG[])-1 <= size(this.mag[])-1
 (size(this.mag[]) & size(this.mag[])-1) == 0
 ===========================================================================
 misc.Issue554.Issue554(int[]):::ENTER
