@@ -122,4 +122,22 @@ public class PptPercTest {
         "C.m():::EXIT1",
         maxPptName(Collections.singletonList(decls.toString()), Collections.emptyList(), 75));
   }
+
+  /**
+   * Tests program point names that contain unescaped blanks.
+   *
+   * @throws IOException if there is trouble writing a file
+   */
+  @Test
+  public void testUnescapedBlanks() throws IOException {
+    StringJoiner decls = new StringJoiner(System.lineSeparator());
+    decls.add(declarationVersion2("B.m(int, int):::ENTER"));
+    decls.add(declarationVersion2("B.m(int, int):::EXIT1"));
+    decls.add(declarationVersion2("C.m(int, int):::ENTER"));
+    decls.add(declarationVersion2("C.m(int, int):::EXIT1"));
+    // Of the 4 program points, 50% is 2, so processing stops after B.m(int, int):::EXIT1.
+    assertEquals(
+        "B.m(int, int):::EXIT1",
+        maxPptName(Collections.singletonList(decls.toString()), Collections.emptyList(), 50));
+  }
 }
