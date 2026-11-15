@@ -38,9 +38,16 @@ Further documentation can be found in:
   complete program point name.  It matches the program point of that name, and
   every program point whose name is that name preceded by a qualifier such as a
   package.  A name ending with `:::EXIT` also matches the numbered exit points.
-  This affects where Daikon uses a condition only if indiscriminate splitting
-  (which uses every loaded condition at every program point) is disabled via
-  `--config_option daikon.split.SplitterList.all_splitters=false`.
+  Daikon loads a `PPT_NAME`'s conditions only if the name matches some program
+  point, so a complete name that matches no program point contributes no
+  conditions.  Otherwise, `PPT_NAME` affects where Daikon uses a condition only
+  if indiscriminate splitting (which uses every loaded condition at every
+  program point) is disabled via
+  `--config_option daikon.split.SplitterList.all_splitters=false`.  Daikon
+  compiles a condition against the first program point that its `PPT_NAME`
+  matches, even a procedure entry point.  If the condition fails to compile
+  there, Daikon retries it at each later matching program point that has a
+  variable that the earlier program point lacks.
 * `daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
    `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
    or `PERL5LIB`.
