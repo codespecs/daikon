@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -645,6 +646,46 @@ public class PptRelation implements Serializable {
   }
 
   /**
+   * Throws a UserError if the given parent is a leaf of the dataflow hierarchy and Daikon uses the
+   * hierarchy. A leaf obtains its invariants from its samples (and its conditional ppts), never
+   * from its children.
+   *
+   * @param parent a ppt that is declared as a parent of {@code child}
+   * @param child a ppt; used for diagnostics
+   */
+  private static void checkParentIsNotLeaf(PptTopLevel parent, PptTopLevel child) {
+    if (Daikon.use_dataflow_hierarchy && parent.isDataflowLeaf()) {
+      throw new Daikon.UserError(
+          String.format(
+              "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
+                  + " the dataflow hierarchy",
+              parent.name(), child.name(), parent.type.name().toLowerCase(Locale.ENGLISH)));
+    }
+  }
+
+  /**
+   * Throws a UserError if some ppt in the map is declared to have a parent that is a leaf of the
+   * dataflow hierarchy, as {@link #init_hierarchy} would. Calling this as soon as the declarations
+   * are read reports the error before any samples are processed. A declared parent that is not in
+   * the map is ignored.
+   *
+   * @param all_ppts a map of program points
+   */
+  public static void checkDeclaredParents(PptMap all_ppts) {
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
+      for (ParentRelation pr : ppt.parent_relations) {
+        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+          continue;
+        }
+        PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
+        if (parent != null) {
+          checkParentIsNotLeaf(parent, ppt);
+        }
+      }
+    }
+  }
+
+  /**
    * Initialize the hierarchical relationship between ppts. Specifically process each ppt, find its
    * parent(s) in the partial order, and fill this point into the children field in the parent. Note
    * that children contains only the immediate descendants of the ppt.
@@ -677,6 +718,7 @@ public class PptRelation implements Serializable {
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
           continue;
         }
+        checkParentIsNotLeaf(parent, ppt);
         // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));

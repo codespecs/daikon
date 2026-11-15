@@ -1,6 +1,7 @@
 package daikon.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import daikon.Daikon;
@@ -139,5 +140,57 @@ public class InitHierarchyTest {
     assertEquals(Collections.emptyList(), enter.children);
     PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
     assertEquals(Collections.emptyList(), exit.parents);
+  }
+
+  /** A point cannot be declared as a parent. */
+  @Test
+  public void testPointAsParent() {
+    String decls =
+        pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "parent", "P:::POINT");
+    Daikon.UserError e = assertThrows(Daikon.UserError.class, () -> initHierarchy(decls));
+    assertEquals(
+        "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it a"
+            + " leaf of the dataflow hierarchy",
+        String.valueOf(e.getMessage()));
+  }
+
+  /** A point that is declared as a parent is reported as soon as the declarations are read. */
+  @Test
+  public void testPointAsParentBeforeHierarchy() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "parent", "P:::POINT"));
+    Daikon.UserError e =
+        assertThrows(Daikon.UserError.class, () -> PptRelation.checkDeclaredParents(ppts));
+    assertEquals(
+        "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it a"
+            + " leaf of the dataflow hierarchy",
+        String.valueOf(e.getMessage()));
+  }
+
+  /** A point can be declared as a parent when the hierarchy is not used. */
+  @Test
+  public void testPointAsParentWithoutHierarchy() throws IOException {
+    Daikon.use_dataflow_hierarchy = false;
+    initHierarchy(
+        pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "parent", "P:::POINT"));
+  }
+
+  /** A user relation to a point is ignored by default, so it is permitted. */
+  @Test
+  public void testPointAsUserParent() throws IOException {
+    PptMap ppts =
+        initHierarchy(
+            pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "user", "P:::POINT"));
+    assertEquals(Collections.emptyList(), get(ppts, "P:::POINT").children);
+  }
+
+  /** A user relation to a point is forbidden when user relations are enabled. */
+  @Test
+  public void testPointAsEnabledUserParent() {
+    PptRelation.dkconfig_enable_object_user = true;
+    String decls =
+        pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "user", "P:::POINT");
+    assertThrows(Daikon.UserError.class, () -> initHierarchy(decls));
   }
 }
