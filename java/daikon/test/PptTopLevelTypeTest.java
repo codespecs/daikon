@@ -1,10 +1,14 @@
 package daikon.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import daikon.PptConditional;
 import daikon.PptTopLevel;
+import daikon.PptTopLevel.PptType;
 import daikon.VarInfo;
 import daikon.split.misc.ReturnTrueSplitter;
 import java.io.ByteArrayInputStream;
@@ -47,5 +51,25 @@ public class PptTopLevelTypeTest {
     PptTopLevel read = serializeAndDeserialize(conditional);
     assertTrue(read.is_combined_exit());
     assertFalse(read.is_subexit());
+  }
+
+  /** A program point's name indicates the THROWS and GLOBAL types. */
+  @Test
+  public void testThrowsAndGlobalTypeFromName() {
+    assertEquals(PptType.THROWS, new PptTopLevel("Foo.bar():::THROWS", new VarInfo[0]).type);
+    assertEquals(PptType.THROWS, new PptTopLevel("Foo.bar():::THROWS12", new VarInfo[0]).type);
+    assertEquals(PptType.GLOBAL, new PptTopLevel(":::GLOBAL", new VarInfo[0]).type);
+  }
+
+  /** A program point declared as THROWS or GLOBAL must have a name of that type. */
+  @Test
+  public void testThrowsAndGlobalTypeError() {
+    assertNull(PptTopLevel.type_error("Foo.bar():::THROWS", PptType.THROWS));
+    assertNull(PptTopLevel.type_error("Foo.bar():::THROWS12", PptType.THROWS));
+    assertNull(PptTopLevel.type_error("Foo.bar()", PptType.THROWS));
+    assertNull(PptTopLevel.type_error(":::GLOBAL", PptType.GLOBAL));
+    assertNotNull(PptTopLevel.type_error("Foo.bar():::ENTER", PptType.THROWS));
+    assertNotNull(PptTopLevel.type_error("Foo.bar():::THROWS", PptType.GLOBAL));
+    assertNotNull(PptTopLevel.type_error("Foo.bar():::GLOBAL", PptType.THROWS));
   }
 }
