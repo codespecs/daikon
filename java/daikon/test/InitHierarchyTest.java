@@ -9,6 +9,7 @@ import daikon.FileIO;
 import daikon.PptMap;
 import daikon.PptRelation;
 import daikon.PptTopLevel;
+import daikon.ValueTuple;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -166,6 +167,79 @@ public class InitHierarchyTest {
         "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it a"
             + " leaf of the dataflow hierarchy",
         String.valueOf(e.getMessage()));
+  }
+
+  /** A dtrace record that is a sample of P:::POINT, in which x is 1. */
+  private static final String SAMPLE_P = "P:::POINT\nx\n1\n1\n\n";
+
+  /** A FileIO.Processor that counts the samples, but does not otherwise process them. */
+  private static class CountingProcessor extends FileIO.Processor {
+    /** The number of samples that have been passed to {@link #process_sample}. */
+    int samples = 0;
+
+    /** Creates a CountingProcessor. */
+    CountingProcessor() {}
+
+    @Override
+    public void process_sample(
+        PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
+      samples++;
+    }
+  }
+
+  /**
+   * Reads the given dtrace file contents, which may include ppt declarations, as Daikon does.
+   *
+   * @param contents the records of a dtrace file, after its header
+   * @param processor the processor that is passed each record
+   * @return the program points
+   */
+  private PptMap readDtrace(String contents, FileIO.Processor processor) throws IOException {
+    File dtraceFile = tmpFolder.newFile("test.dtrace");
+    String allContents = "decl-version 2.0\nvar-comparability none\n\n" + contents;
+    Files.write(dtraceFile.toPath(), allContents.getBytes(StandardCharsets.UTF_8));
+    PptMap ppts = new PptMap();
+    FileIO.read_data_trace_file(dtraceFile.toString(), ppts, processor, false, true);
+    return ppts;
+  }
+
+  /**
+   * A point that a dtrace file declares as a parent is reported before any sample is processed,
+   * even if the child is declared before the parent.
+   */
+  @Test
+  public void testPointAsParentInDtrace() {
+    CountingProcessor processor = new CountingProcessor();
+    String contents =
+        pptDecl("Q:::POINT", "point", "parent", "P:::POINT")
+            + pptDecl("P:::POINT", "point")
+            + SAMPLE_P;
+    Daikon.UserError e =
+        assertThrows(Daikon.UserError.class, () -> readDtrace(contents, processor));
+    assertEquals(
+        "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it a"
+            + " leaf of the dataflow hierarchy",
+        String.valueOf(e.getMessage()));
+    assertEquals(0, processor.samples);
+  }
+
+  /**
+   * A dtrace file can declare a child before its parent, if the parent is not a leaf. The child's
+   * samples can precede the parent's declaration.
+   */
+  @Test
+  public void testParentDeclaredLaterInDtrace() throws IOException {
+    CountingProcessor processor = new CountingProcessor();
+    PptMap ppts =
+        readDtrace(
+            pptDecl("P:::POINT", "point", "parent", "C:::OBJECT")
+                + SAMPLE_P
+                + pptDecl("C:::OBJECT", "object")
+                + SAMPLE_P,
+            processor);
+    assertEquals(2, processor.samples);
+    PptRelation.init_hierarchy(ppts);
+    assertEquals(1, get(ppts, "C:::OBJECT").children.size());
   }
 
   /** A point can be declared as a parent when the hierarchy is not used. */

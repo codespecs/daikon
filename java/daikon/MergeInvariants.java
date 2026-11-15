@@ -385,15 +385,18 @@ public final class MergeInvariants {
     long duration = System.nanoTime() - startTime;
     debugProgress.fine("Time spent in implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
 
-    // Remove the PptRelation links so that when the file is written
-    // out it only includes the new information
+    // Remove the PptRelation links to the input maps so that when the file is written out it only
+    // includes the new information.  Keep the relations from a leaf to its conditional ppts:  the
+    // leaf obtains its invariants from them, and deserialization does not rebuild them, so the
+    // output can be merged again.
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
       if (!ppt.isDataflowLeaf()) {
         continue;
       }
-      ppt.children.clear();
+      ppt.children.removeIf(rel -> rel.relationship == PptRelation.PptRelationType.MERGE_CHILD);
       for (PptConditional cond : ppt.cond_iterable()) {
-        cond.children.clear();
+        cond.children.removeIf(
+            rel -> rel.relationship == PptRelation.PptRelationType.MERGE_CHILD);
       }
     }
 
