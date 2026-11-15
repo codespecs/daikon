@@ -239,8 +239,16 @@ public abstract class SplitterList {
     if (Objects.equals(spinfo.getPoint(), ppt.getPoint())) {
       return true;
     }
-    // A non-empty exit line means that the program point is a numbered exit point such as EXIT12.
-    return spinfo.isCombinedExitPoint() && !ppt.exitLine().isEmpty();
+    // A combined exit point such as EXIT designates each numbered exit point such as EXIT12, whose
+    // point is EXIT followed by one or more digits and nothing else.
+    if (!spinfo.isCombinedExitPoint()) {
+      return false;
+    }
+    String pptPoint = ppt.getPoint();
+    String exitLine = ppt.exitLine();
+    return pptPoint != null
+        && !exitLine.isEmpty()
+        && pptPoint.equals(FileIO.exit_suffix + exitLine);
   }
 
   /**

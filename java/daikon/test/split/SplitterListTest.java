@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import daikon.Daikon;
 import daikon.FileIO;
 import daikon.split.Splitter;
 import daikon.split.SplitterList;
@@ -112,6 +113,7 @@ public class SplitterListTest {
     assertTrue(SplitterList.matches(exit, exit1));
     assertTrue(SplitterList.matches(exit, "pkg.Foo.bar(int):::EXIT12"));
     assertFalse(SplitterList.matches(exit, "pkg.Foo.bar(int):::EXITx"));
+    assertFalse(SplitterList.matches(exit, "pkg.Foo.bar(int):::EXIT12other"));
     assertFalse(SplitterList.matches(exit, "pkg.Foo.bar(int):::ENTER"));
     assertFalse(SplitterList.matches(exit, "pkg.BigFoo.bar(int):::EXIT1"));
     assertTrue(SplitterList.matches("Foo.bar(int):::EXIT", "pkg.Foo.bar(int):::EXIT12"));
@@ -140,6 +142,19 @@ public class SplitterListTest {
     assertFalse(SplitterList.matches("main():::ENTER", "..mymain():::ENTER"));
     assertFalse(SplitterList.matches("main():::ENTER", "..main():::EXIT0"));
     assertFalse(SplitterList.matches("main():::EXIT0", "..main():::EXIT01"));
+  }
+
+  @Test
+  public void testCleanupResetsInputLanguage() {
+    // A C or C++ analysis sets the input language.
+    FileIO.input_language = "C/C++";
+    assertTrue(SplitterList.matches("bar(int):::ENTER", "pkg.Foo.bar(int):::ENTER"));
+    // A subsequent analysis in the same JVM, such as of a Chicory trace that has no
+    // "input-language" record, must not inherit it.  Daikon.mainHelper calls Daikon.cleanup.
+    Daikon.cleanup();
+    assertTrue(FileIO.input_language == null);
+    assertFalse(SplitterList.matches("bar(int):::ENTER", "pkg.Foo.bar(int):::ENTER"));
+    assertTrue(SplitterList.matches("Foo.bar(int):::ENTER", "pkg.Foo.bar(int):::ENTER"));
   }
 
   /**
