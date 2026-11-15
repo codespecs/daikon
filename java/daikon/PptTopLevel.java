@@ -139,7 +139,7 @@ import typequals.prototype.qual.Prototype;
  * </ul>
  */
 public class PptTopLevel extends Ppt {
-  static final long serialVersionUID = 20071129L;
+  static final long serialVersionUID = 20261113L;
 
   /** If true, print diagnostic information to standard out. */
   private static final boolean debugStdout = false;
@@ -188,7 +188,11 @@ public class PptTopLevel extends Ppt {
     OBJECT,
     ENTER,
     EXIT,
-    SUBEXIT
+    SUBEXIT,
+    /** A program point whose name contains :::THROWS, such as foo:::THROWS or foo:::THROWS12. */
+    THROWS,
+    /** A program point whose name ends with :::GLOBAL. */
+    GLOBAL
   }
 
   /** Type of this program point. */
@@ -487,6 +491,10 @@ public class PptTopLevel extends Ppt {
       return PptType.OBJECT;
     } else if (ppt_name.isClassStaticSynthetic()) {
       return PptType.CLASS;
+    } else if (ppt_name.isThrowsPoint()) {
+      return PptType.THROWS;
+    } else if (ppt_name.isGlobalPoint()) {
+      return PptType.GLOBAL;
     } else {
       return PptType.POINT;
     }
@@ -495,15 +503,17 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns the type that a program point with the given name and declared type should have.
    *
-   * <p>A program point that has no declared type (as in a version 1 decls file, or a version 2
-   * decls file that omits the ppt-type record) gets its type from its name:
+   * <p>A program point that has no declared type (as in a decls file that omits the ppt-type
+   * record) gets its type from its name:
    *
    * <ul>
    *   <li>foo:::ENTER is an {@link PptType#ENTER},
    *   <li>a combined exit point, foo:::EXIT, is an {@link PptType#EXIT},
    *   <li>a numbered exit point such as foo:::EXIT22 is a {@link PptType#SUBEXIT},
    *   <li>Foo:::OBJECT is an {@link PptType#OBJECT},
-   *   <li>Foo:::CLASS is a {@link PptType#CLASS}, and
+   *   <li>Foo:::CLASS is a {@link PptType#CLASS},
+   *   <li>foo:::THROWS is a {@link PptType#THROWS},
+   *   <li>:::GLOBAL is a {@link PptType#GLOBAL}, and
    *   <li>any other program point is a generic {@link PptType#POINT}.
    * </ul>
    *
