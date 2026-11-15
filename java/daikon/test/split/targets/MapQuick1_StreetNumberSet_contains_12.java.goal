@@ -5,7 +5,7 @@ import daikon.split.*;
 public final class MapQuick1_StreetNumberSet_contains_12 extends Splitter {
 
   public String condition() {
-    return "sets[i].contains(sn)";
+    return "false";
   }
 
 
@@ -27,7 +27,7 @@ public final class MapQuick1_StreetNumberSet_contains_12 extends Splitter {
 
   public boolean test(ValueTuple vt) {
     /* writeTestBody: 0 declarations */
-    return(sets[i].contains(sn));
+    return(false);
   }
 
   public String repr() {
