@@ -15,10 +15,13 @@ import daikon.split.Splitter;
 import daikon.split.SplitterFactory;
 import daikon.split.SplitterList;
 import daikon.split.SplitterObject;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -276,6 +279,64 @@ public class SplitterLoadTest {
       assertEquals("x > 0", loaded2.get(0).condition());
       assertTrue(loaded2.get(0).instantiateSplitter(p2).valid());
       assertEquals(0, spfile.getSplitterObjects()[0].length);
+    } finally {
+      Files.delete(spinfo);
+    }
+  }
+
+  /**
+   * A splitter for a name that is not a complete program point name is loaded at the first matching
+   * program point where it compiles, even an entry point. A splitter that fails to compile is
+   * retried only at a later matching program point that has a variable that the failing program
+   * point lacks.
+   */
+  @Test
+  public void testPartialPptNameRetry() throws IOException {
+    String declsFile = "PartialPptName.decls";
+    Path spinfo = Files.createTempFile("SplitterLoadTest", ".spinfo");
+    try {
+      Files.writeString(
+          spinfo,
+          String.join(
+              System.lineSeparator(), "PPT_NAME Foo.bar", "x > 0", "return > 0", "y > 0", ""));
+      SpinfoFile spfile = SplitterFactory.parse_spinfofile(spinfo.toFile());
+      SplitterObject[] splitters = spfile.getSplitterObjects()[0];
+      SplitterObject xSplitter = splitters[0];
+      SplitterObject returnSplitter = splitters[1];
+      SplitterObject ySplitter = splitters[2];
+
+      // The entry point has x, but neither return nor y.
+      PptTopLevel enter = readPpt(declsFile, "pkg.Foo.bar(int):::ENTER");
+      List<Splitter> loaded1 = SplitterTestUtils.loadSplitters(enter, spfile, true);
+      assertTrue(xSplitter.getError(), xSplitter.splitterExists());
+      assertEquals(1, loaded1.size());
+      assertEquals("x > 0", loaded1.get(0).condition());
+      assertEquals(List.of(returnSplitter, ySplitter), List.of(spfile.getSplitterObjects()[0]));
+
+      // The first exit point also has return, so the unsuccessful splitters are retried.
+      PptTopLevel exit1 = readPpt(declsFile, "pkg.Foo.bar(int):::EXIT1");
+      List<Splitter> loaded2 = SplitterTestUtils.loadSplitters(exit1, spfile, true);
+      assertTrue(returnSplitter.getError(), returnSplitter.splitterExists());
+      assertFalse(ySplitter.splitterExists());
+      assertEquals(1, loaded2.size());
+      assertEquals("return > 0", loaded2.get(0).condition());
+      assertEquals(List.of(ySplitter), List.of(spfile.getSplitterObjects()[0]));
+
+      // The second exit point has the same variables as the first, so the splitter that failed
+      // there is not compiled again.
+      PptTopLevel exit2 = readPpt(declsFile, "pkg.Foo.bar(int):::EXIT2");
+      PrintStream oldOut = System.out;
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      System.setOut(new PrintStream(out, true, StandardCharsets.UTF_8));
+      List<Splitter> loaded3;
+      try {
+        loaded3 = SplitterTestUtils.loadSplitters(exit2, spfile, true);
+      } finally {
+        System.setOut(oldOut);
+      }
+      assertEquals(List.of(), loaded3);
+      assertEquals("", out.toString(StandardCharsets.UTF_8));
+      assertEquals(List.of(ySplitter), List.of(spfile.getSplitterObjects()[0]));
     } finally {
       Files.delete(spinfo);
     }
