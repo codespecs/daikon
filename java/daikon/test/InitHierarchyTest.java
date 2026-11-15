@@ -172,7 +172,7 @@ public class InitHierarchyTest {
                 + pptDecl("Foo.bar():::EXIT", "point")
                 + pptDecl("Foo.bar():::EXIT5", "subexit"));
     PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
-    assertTrue(exit.is_dataflow_leaf());
+    assertTrue(exit.isDataflowLeaf());
     assertEquals(Collections.emptyList(), exit.children);
     List<PptRelation> parents = get(ppts, "Foo.bar():::EXIT5").parents;
     assertEquals(1, parents.size());
@@ -229,7 +229,7 @@ public class InitHierarchyTest {
         readDecls(
             pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "parent", "P:::POINT"));
     Daikon.UserError e =
-        assertThrows(Daikon.UserError.class, () -> PptRelation.check_declared_parents(ppts));
+        assertThrows(Daikon.UserError.class, () -> PptRelation.checkDeclaredParents(ppts));
     assertEquals(
         "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it a"
             + " leaf of the dataflow hierarchy",
@@ -251,6 +251,15 @@ public class InitHierarchyTest {
         initHierarchy(
             pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "user", "P:::POINT"));
     assertEquals(Collections.emptyList(), get(ppts, "P:::POINT").children);
+  }
+
+  /** A user relation to a point is forbidden when user relations are enabled. */
+  @Test
+  public void testPointAsEnabledUserParent() {
+    PptRelation.dkconfig_enable_object_user = true;
+    String decls =
+        pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "user", "P:::POINT");
+    assertThrows(Daikon.UserError.class, () -> initHierarchy(decls));
   }
 
   /**
@@ -329,14 +338,5 @@ public class InitHierarchyTest {
     assertEquals(0, splitters(classPpt).size());
     assertEquals(0, splitters(objectPpt).size());
     assertTrue(objectPpt.equality_view != null);
-  }
-
-  /** A user relation to a point is forbidden when user relations are enabled. */
-  @Test
-  public void testPointAsEnabledUserParent() {
-    PptRelation.dkconfig_enable_object_user = true;
-    String decls =
-        pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "user", "P:::POINT");
-    assertThrows(Daikon.UserError.class, () -> initHierarchy(decls));
   }
 }

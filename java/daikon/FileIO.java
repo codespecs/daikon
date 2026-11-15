@@ -1584,7 +1584,7 @@ public final class FileIO {
         throw new RuntimeException(
             "Bad program point " + ppt.name + ": a sample cannot refer to a combined exit point");
       }
-      if (!ppt.is_dataflow_leaf()) {
+      if (!ppt.isDataflowLeaf()) {
         return;
       }
     }

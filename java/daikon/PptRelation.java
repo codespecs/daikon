@@ -591,12 +591,12 @@ public class PptRelation implements Serializable {
    *
    * @param all_ppts a map of program points
    */
-  static void create_childless_equality_views(PptMap all_ppts) {
+  static void createChildlessEqualityViews(PptMap all_ppts) {
     assert Daikon.use_equality_optimization;
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
         assert ppt.num_samples() == 0 : ppt;
-        ppt.create_equality_view();
+        ppt.createEqualityView();
       }
     }
   }
@@ -613,34 +613,34 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns, for each child of {@code ppt}, the child's splitter that matches {@code ppt_split}.
+   * Returns, for each child of {@code ppt}, the child's splitter that matches {@code pptSplit}.
    * Returns null if {@code ppt} has no children or if some child has no matching splitter; in that
-   * case, the conditional ppts of {@code ppt_split} cannot be merged from the children.
+   * case, the conditional ppts of {@code pptSplit} cannot be merged from the children.
    *
    * @param ppt a non-leaf ppt
-   * @param ppt_split one of the splitters of {@code ppt}
+   * @param pptSplit one of the splitters of {@code ppt}
    * @return the matching splitter at each child, or null if some child has none
    */
-  private static @Nullable List<SplitChild> matching_split_children(
-      PptTopLevel ppt, PptSplitter ppt_split) {
+  private static @Nullable List<SplitChild> matchingSplitChildren(
+      PptTopLevel ppt, PptSplitter pptSplit) {
     if (ppt.children.isEmpty()) {
       return null;
     }
-    List<SplitChild> split_children = new ArrayList<>();
-    child_loop:
+    List<SplitChild> splitChildren = new ArrayList<>();
+    childLoop:
     for (PptRelation rel : ppt.children) {
       if (!rel.child.has_splitters()) {
         return null;
       }
       for (PptSplitter csplit : rel.child.splitters) {
-        if (ppt_split.splitter == csplit.splitter) {
-          split_children.add(new SplitChild(rel, csplit));
-          continue child_loop;
+        if (pptSplit.splitter == csplit.splitter) {
+          splitChildren.add(new SplitChild(rel, csplit));
+          continue childLoop;
         }
       }
       return null;
     }
-    return split_children;
+    return splitChildren;
   }
 
   /**
@@ -654,20 +654,20 @@ public class PptRelation implements Serializable {
    *
    * @param ppt a ppt that has splitters
    */
-  static void connect_conditionals(PptTopLevel ppt) {
+  static void connectConditionals(PptTopLevel ppt) {
     assert ppt.splitters != null : "@AssumeAssertion(nullness): precondition: has splitters";
     for (PptTopLevel cond : ppt.splitters.get(0).ppts) {
       PptRelation rel = null;
-      for (PptRelation cond_rel : cond.parents) {
-        if ((cond_rel.parent == ppt) && (cond_rel.relationship == PptRelationType.PPT_PPTCOND)) {
-          rel = cond_rel;
+      for (PptRelation condRel : cond.parents) {
+        if ((condRel.parent == ppt) && (condRel.relationship == PptRelationType.PPT_PPTCOND)) {
+          rel = condRel;
           break;
         }
       }
       if (rel == null) {
         rel = newPptPptConditional(ppt, cond);
       }
-      if (ppt.is_dataflow_leaf()) {
+      if (ppt.isDataflowLeaf()) {
         if (!ppt.children.contains(rel)) {
           ppt.children.add(rel);
         }
@@ -685,8 +685,8 @@ public class PptRelation implements Serializable {
    * @param parent a ppt that is declared as a parent of {@code child}
    * @param child a ppt; used for diagnostics
    */
-  private static void check_parent_is_not_leaf(PptTopLevel parent, PptTopLevel child) {
-    if (Daikon.use_dataflow_hierarchy && parent.is_dataflow_leaf()) {
+  private static void checkParentIsNotLeaf(PptTopLevel parent, PptTopLevel child) {
+    if (Daikon.use_dataflow_hierarchy && parent.isDataflowLeaf()) {
       throw new Daikon.UserError(
           String.format(
               "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
@@ -703,7 +703,7 @@ public class PptRelation implements Serializable {
    *
    * @param all_ppts a map of program points
    */
-  public static void check_declared_parents(PptMap all_ppts) {
+  public static void checkDeclaredParents(PptMap all_ppts) {
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       for (ParentRelation pr : ppt.parent_relations) {
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
@@ -711,7 +711,7 @@ public class PptRelation implements Serializable {
         }
         PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
         if (parent != null) {
-          check_parent_is_not_leaf(parent, ppt);
+          checkParentIsNotLeaf(parent, ppt);
         }
       }
     }
@@ -760,7 +760,7 @@ public class PptRelation implements Serializable {
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
           continue;
         }
-        check_parent_is_not_leaf(parent, ppt);
+        checkParentIsNotLeaf(parent, ppt);
         // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));
@@ -812,10 +812,10 @@ public class PptRelation implements Serializable {
       }
       while (!worklist.isEmpty()) {
         PptTopLevel ppt = worklist.remove();
-        if (ppt.is_dataflow_leaf() || !ppt.has_splitters()) {
+        if (ppt.isDataflowLeaf() || !ppt.has_splitters()) {
           continue;
         }
-        if (ppt.splitters.removeIf(ppt_split -> matching_split_children(ppt, ppt_split) == null)) {
+        if (ppt.splitters.removeIf(pptSplit -> matchingSplitChildren(ppt, pptSplit) == null)) {
           for (PptRelation rel : ppt.parents) {
             worklist.add(rel.parent);
           }
@@ -825,7 +825,7 @@ public class PptRelation implements Serializable {
 
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       if (ppt.has_splitters()) {
-        connect_conditionals(ppt);
+        connectConditionals(ppt);
       }
     }
 
@@ -836,7 +836,7 @@ public class PptRelation implements Serializable {
     // ppts (AC1, AC2) and B has two conditional ppts (BC1, BC2)
     // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.is_dataflow_leaf()) {
+      if (ppt.isDataflowLeaf()) {
         continue;
       }
       if (!ppt.has_splitters()) {
@@ -846,7 +846,7 @@ public class PptRelation implements Serializable {
       // System.out.printf("processing splitter %s%n", ppt.name());
 
       for (PptSplitter ppt_split : ppt.splitters) {
-        List<SplitChild> split_children = matching_split_children(ppt, ppt_split);
+        List<SplitChild> split_children = matchingSplitChildren(ppt, ppt_split);
         if (split_children == null) {
           // Only without the dataflow hierarchy, which does not merge conditional ppts.
           assert !Daikon.use_dataflow_hierarchy : ppt;
@@ -862,7 +862,7 @@ public class PptRelation implements Serializable {
       }
     }
 
-    create_childless_equality_views(all_ppts);
+    createChildlessEqualityViews(all_ppts);
 
     // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {

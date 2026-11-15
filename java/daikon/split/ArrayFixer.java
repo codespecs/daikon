@@ -37,8 +37,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  *
  * An array that is passed to a method is given the "_array" suffix, so the method receives the
  * elements of the array. For example, {@code Arrays.equals(this_a, (this_b))} would be changed to
- * {@code Arrays.equals(this_a_array, (this_b_array))}. (QuantFixer has already replaced the calls
- * to daikon.Quant.size and the daikon.Quant.getElement_ methods.)
+ * {@code Arrays.equals(this_a_array, (this_b_array))}. (QuantFixer has already replaced each call
+ * to daikon.Quant.size and the daikon.Quant.getElement_ methods, leaving a placeholder for its
+ * array argument that ArrayFixer does not change and that is later replaced by the array's
+ * compilable name.)
  */
 class ArrayFixer extends DepthFirstVisitor {
 
