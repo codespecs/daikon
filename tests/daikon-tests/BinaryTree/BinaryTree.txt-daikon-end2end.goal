@@ -30,21 +30,21 @@ this.root == orig(this.root)
 (this.root == null)  ==>  (this.root == orig(t))
 return.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
-DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
-this.root == orig(t)
-this.root == null
-return == null
-===========================================================================
-DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
-this.root != null
-===========================================================================
 DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT;condition="root == null"
-this.root == orig(this.root)
 this.root == orig(t)
 this.root == null
 return == null
 ===========================================================================
 DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT;condition="not(root == null)"
+this.root != null
+===========================================================================
+DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
+this.root == orig(this.root)
+this.root == orig(t)
+this.root == null
+return == null
+===========================================================================
+DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
 this.root == orig(this.root)
 this.root != null
 return.getClass().getName() == DataStructures.MyInteger.class
@@ -81,6 +81,7 @@ return.getClass().getName() == orig(x.getClass().getName())
 return.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+(t != null)  ==>  (this.root != null)
 (this.root == null)  ==>  (t == null)
 (this.root == null)  ==>  (this.root == t)
 x != null
@@ -104,18 +105,29 @@ this.root != null
 x != null
 x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER;condition="t == null"
+x != null
+x.getClass().getName() == DataStructures.MyInteger.class
+t == null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER;condition="not(t == null)"
+this.root != null
+x != null
+x.getClass().getName() == DataStructures.MyInteger.class
+t != null
+===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196
 return == orig(t)
 (this.root == null)  ==>  (this.root == return)
 return == null
 ===========================================================================
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196;condition="orig(root == null)"
-===========================================================================
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196;condition="not(orig(root == null))"
-===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196;condition="root == null"
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196;condition="not(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196;condition="orig(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196;condition="not(orig(root == null))"
 return == orig(t)
 return == null
 ===========================================================================
@@ -131,13 +143,31 @@ DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.B
 return == orig(t)
 return == null
 ===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196;condition="t == null"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196;condition="orig(t == null)"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196;condition="not(t != null)"
+this.root == orig(this.root)
+return == orig(t)
+return == null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196;condition="not(orig(t != null))"
+this.root == orig(this.root)
+return == orig(t)
+return == null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198
 this.root != null
 orig(t) != null
 ===========================================================================
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198;condition="not(orig(root == null))"
-===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198;condition="not(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198;condition="not(orig(root == null))"
 orig(t) != null
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198;condition="not(isEmpty())"
@@ -146,13 +176,31 @@ orig(t) != null
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198;condition="not(orig(isEmpty()))"
 orig(t) != null
 ===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198;condition="not(t == null)"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198;condition="not(orig(t == null))"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198;condition="t != null"
+this.root == orig(this.root)
+this.root != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+orig(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198;condition="orig(t != null)"
+this.root == orig(this.root)
+this.root != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+orig(t) != null
+===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200
 this.root != null
 orig(t) != null
 ===========================================================================
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200;condition="not(orig(root == null))"
-===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200;condition="not(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200;condition="not(orig(root == null))"
 orig(t) != null
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200;condition="not(isEmpty())"
@@ -161,14 +209,32 @@ orig(t) != null
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200;condition="not(orig(isEmpty()))"
 orig(t) != null
 ===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200;condition="not(t == null)"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200;condition="not(orig(t == null))"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200;condition="t != null"
+this.root == orig(this.root)
+this.root != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+orig(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200;condition="orig(t != null)"
+this.root == orig(this.root)
+this.root != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+orig(t) != null
+===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202
 return == orig(t)
 this.root != null
 return != null
 ===========================================================================
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202;condition="not(orig(root == null))"
-===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202;condition="not(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202;condition="not(orig(root == null))"
 return == orig(t)
 return != null
 ===========================================================================
@@ -180,21 +246,39 @@ DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.B
 return == orig(t)
 return != null
 ===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202;condition="not(t == null)"
+return == orig(t)
+return != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202;condition="not(orig(t == null))"
+return == orig(t)
+return != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202;condition="t != null"
+this.root == orig(this.root)
+return == orig(t)
+this.root != null
+return != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202;condition="orig(t != null)"
+this.root == orig(this.root)
+return == orig(t)
+this.root != null
+return != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
 this.root == orig(this.root)
+(orig(t) != null)  ==>  (this.root != null)
+(orig(t) == null)  ==>  (return == null)
+(orig(t) == null)  ==>  (return == orig(t))
 (this.root == null)  ==>  (orig(t) == null)
 (this.root == null)  ==>  (return == null)
 (this.root == null)  ==>  (return == orig(t))
 (this.root == null)  ==>  (this.root == return)
-===========================================================================
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
-this.root == return
-return == orig(this.root)
-return == orig(t)
-return == null
-===========================================================================
-DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
-this.root != null
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="root == null"
 this.root == return
@@ -203,8 +287,21 @@ return == orig(t)
 return == null
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(root == null)"
+this.root != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
+this.root == return
+return == orig(this.root)
+return == orig(t)
+return == null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
 this.root == orig(this.root)
 this.root != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="isEmpty()"
 this.root == return
@@ -230,6 +327,29 @@ this.root != null
 orig(x) != null
 orig(x.getClass().getName()) == DataStructures.MyInteger.class
 ===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="t == null"
+this.root == orig(this.root)
+return == orig(t)
+return == null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(t == null)"
+this.root == orig(this.root)
+this.root != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(t == null)"
+this.root == orig(this.root)
+return == orig(t)
+return == null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(orig(t == null))"
+this.root == orig(this.root)
+this.root != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+orig(t) != null
+===========================================================================
 DataStructures.BinarySearchTree.findMax():::ENTER
 ===========================================================================
 DataStructures.BinarySearchTree.findMax():::EXIT
@@ -253,22 +373,20 @@ DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::ENTER;condi
 this.root == t
 this.root != null
 ===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::ENTER;condition="t == null"
+this.root == t
+this.root == null
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::ENTER;condition="not(t == null)"
+this.root == t
+this.root != null
+===========================================================================
 DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT
 this.root == orig(this.root)
 this.root == orig(t)
 (this.root != null)  <==>  (return != null)
 (this.root == null)  <==>  (return == null)
 (this.root == null)  ==>  (this.root == return)
-===========================================================================
-DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
-this.root == return
-return == orig(this.root)
-return == orig(t)
-return == null
-===========================================================================
-DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
-this.root != null
-return != null
 ===========================================================================
 DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="root == null"
 this.root == return
@@ -277,6 +395,16 @@ return == orig(t)
 return == null
 ===========================================================================
 DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="not(root == null)"
+this.root != null
+return != null
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
+this.root == return
+return == orig(this.root)
+return == orig(t)
+return == null
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
 this.root == orig(this.root)
 this.root == orig(t)
 this.root != null
@@ -301,6 +429,30 @@ return == orig(t)
 return == null
 ===========================================================================
 DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="not(orig(isEmpty()))"
+this.root == orig(this.root)
+this.root == orig(t)
+this.root != null
+return != null
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="t == null"
+this.root == return
+return == orig(this.root)
+return == orig(t)
+return == null
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="not(t == null)"
+this.root == orig(this.root)
+this.root == orig(t)
+this.root != null
+return != null
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="orig(t == null)"
+this.root == return
+return == orig(this.root)
+return == orig(t)
+return == null
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT;condition="not(orig(t == null))"
 this.root == orig(this.root)
 this.root == orig(t)
 this.root != null
@@ -333,28 +485,40 @@ DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::ENTER;condi
 this.root != null
 t != null
 ===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::ENTER;condition="t == null"
+this.root == t
+this.root == null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::ENTER;condition="not(t == null)"
+this.root != null
+t != null
+===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167
 this.root == return
 return == orig(this.root)
 return == orig(t)
 return == null
 ===========================================================================
-DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167;condition="orig(root == null)"
-===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167;condition="root == null"
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167;condition="orig(root == null)"
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167;condition="isEmpty()"
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167;condition="orig(isEmpty())"
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167;condition="t == null"
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167;condition="orig(t == null)"
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169
 return == orig(t)
 this.root != null
 return != null
 ===========================================================================
-DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169;condition="not(orig(root == null))"
-===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169;condition="not(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169;condition="not(orig(root == null))"
 return == orig(t)
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169;condition="not(isEmpty())"
@@ -363,18 +527,28 @@ return == orig(t)
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169;condition="not(orig(isEmpty()))"
 return == orig(t)
 ===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169;condition="not(t == null)"
+return == orig(t)
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169;condition="not(orig(t == null))"
+return == orig(t)
+===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170
 this.root != null
 return != null
 orig(t) != null
 ===========================================================================
-DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170;condition="not(orig(root == null))"
-===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170;condition="not(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170;condition="not(orig(root == null))"
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170;condition="not(isEmpty())"
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170;condition="not(orig(isEmpty()))"
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170;condition="not(t == null)"
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170;condition="not(orig(t == null))"
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT
 this.root == orig(this.root)
@@ -385,17 +559,6 @@ this.root == orig(this.root)
 (this.root == null)  ==>  (return == orig(t))
 (this.root == null)  ==>  (this.root == return)
 ===========================================================================
-DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
-this.root == return
-return == orig(this.root)
-return == orig(t)
-return == null
-===========================================================================
-DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
-this.root != null
-return != null
-orig(t) != null
-===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="root == null"
 this.root == return
 return == orig(this.root)
@@ -403,9 +566,20 @@ return == orig(t)
 return == null
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="not(root == null)"
+this.root != null
+return != null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
+this.root == return
+return == orig(this.root)
+return == orig(t)
+return == null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
 this.root == orig(this.root)
 this.root != null
 return != null
+orig(t) != null
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="isEmpty()"
 this.root == return
@@ -425,6 +599,29 @@ return == orig(t)
 return == null
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="not(orig(isEmpty()))"
+this.root == orig(this.root)
+this.root != null
+return != null
+orig(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="t == null"
+this.root == return
+return == orig(this.root)
+return == orig(t)
+return == null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="not(t == null)"
+this.root == orig(this.root)
+this.root != null
+return != null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="orig(t == null)"
+this.root == return
+return == orig(this.root)
+return == orig(t)
+return == null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT;condition="not(orig(t == null))"
 this.root == orig(this.root)
 this.root != null
 return != null
@@ -461,29 +658,39 @@ this.root != null
 x != null
 x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER;condition="not(t == null)"
+x != null
+x.getClass().getName() == DataStructures.MyInteger.class
+===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
 this.root == orig(this.root)
+(orig(t) != null)  ==>  (return == orig(t))
+(orig(t) != null)  ==>  (this.root != null)
 (this.root == null)  ==>  (orig(t) == null)
 (this.root == null)  ==>  (this.root == orig(t))
 return != null
 ===========================================================================
-DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
-this.root == orig(t)
-this.root == null
-===========================================================================
-DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
-this.root != null
-===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="root == null"
-this.root == orig(this.root)
 this.root == orig(t)
 this.root == null
-return != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(root == null)"
+this.root != null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
+this.root == orig(this.root)
+this.root == orig(t)
+this.root == null
+return != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
 this.root == orig(this.root)
 this.root != null
 return != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="isEmpty()"
 this.root == orig(this.root)
@@ -511,7 +718,32 @@ return != null
 orig(x) != null
 orig(x.getClass().getName()) == DataStructures.MyInteger.class
 ===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(t == null)"
+this.root == orig(this.root)
+return != null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(t == null)"
+this.root == orig(this.root)
+return != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+orig(t) == null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(orig(t == null))"
+this.root == orig(this.root)
+return == orig(t)
+this.root != null
+return != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
 DataStructures.BinarySearchTree.isEmpty():::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.isEmpty():::ENTER;condition="root == null"
+this.root == null
+===========================================================================
+DataStructures.BinarySearchTree.isEmpty():::ENTER;condition="not(root == null)"
+this.root != null
 ===========================================================================
 DataStructures.BinarySearchTree.isEmpty():::EXIT
 this.root == orig(this.root)
@@ -526,22 +758,22 @@ DataStructures.BinarySearchTree.isEmpty():::EXIT;condition="not(return == true)"
 this.root != null
 return == false
 ===========================================================================
-DataStructures.BinarySearchTree.isEmpty():::EXIT;condition="orig(root == null)"
-this.root == orig(this.root)
-this.root == null
-return == true
-===========================================================================
-DataStructures.BinarySearchTree.isEmpty():::EXIT;condition="not(orig(root == null))"
-this.root == orig(this.root)
-this.root != null
-return == false
-===========================================================================
 DataStructures.BinarySearchTree.isEmpty():::EXIT;condition="root == null"
 this.root == orig(this.root)
 this.root == null
 return == true
 ===========================================================================
 DataStructures.BinarySearchTree.isEmpty():::EXIT;condition="not(root == null)"
+this.root == orig(this.root)
+this.root != null
+return == false
+===========================================================================
+DataStructures.BinarySearchTree.isEmpty():::EXIT;condition="orig(root == null)"
+this.root == orig(this.root)
+this.root == null
+return == true
+===========================================================================
+DataStructures.BinarySearchTree.isEmpty():::EXIT;condition="not(orig(root == null))"
 this.root == orig(this.root)
 this.root != null
 return == false
@@ -581,18 +813,28 @@ this.root != null
 x != null
 x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER;condition="t == null"
+x != null
+x.getClass().getName() == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER;condition="not(t == null)"
+this.root != null
+x != null
+x.getClass().getName() == DataStructures.MyInteger.class
+t != null
+===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144
 return == orig(t)
 (this.root == null)  ==>  (this.root == return)
 return == null
 ===========================================================================
-DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144;condition="orig(root == null)"
-===========================================================================
-DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144;condition="not(orig(root == null))"
-===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144;condition="root == null"
 ===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144;condition="not(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144;condition="orig(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144;condition="not(orig(root == null))"
 return == orig(t)
 return == null
 ===========================================================================
@@ -608,13 +850,18 @@ DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures
 return == orig(t)
 return == null
 ===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144;condition="t == null"
+return == orig(t)
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144;condition="orig(t == null)"
+===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156
 this.root != null
 orig(t) != null
 ===========================================================================
-DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156;condition="not(orig(root == null))"
-===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156;condition="not(root == null)"
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156;condition="not(orig(root == null))"
 orig(t) != null
 ===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156;condition="not(isEmpty())"
@@ -623,24 +870,25 @@ orig(t) != null
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156;condition="not(orig(isEmpty()))"
 orig(t) != null
 ===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156;condition="t == null"
+this.root != null
+orig(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156;condition="not(t == null)"
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156;condition="not(orig(t == null))"
+===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
 this.root == orig(this.root)
 (orig(t) != null)  ==>  (this.root != null)
 (orig(t) == null)  ==>  (return == null)
 (orig(t) == null)  ==>  (return == orig(t))
+(return != null)  ==>  (orig(t) != null)
+(return != null)  ==>  (this.root != null)
 (this.root == null)  ==>  (orig(t) == null)
 (this.root == null)  ==>  (return == null)
 (this.root == null)  ==>  (return == orig(t))
 (this.root == null)  ==>  (this.root == return)
-===========================================================================
-DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
-this.root == return
-return == orig(this.root)
-return == orig(t)
-return == null
-===========================================================================
-DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
-this.root != null
 ===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="root == null"
 this.root == return
@@ -649,8 +897,21 @@ return == orig(t)
 return == null
 ===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(root == null)"
+this.root != null
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(root == null)"
+this.root == return
+return == orig(this.root)
+return == orig(t)
+return == null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(orig(root == null))"
 this.root == orig(this.root)
 this.root != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="isEmpty()"
 this.root == return
@@ -675,3 +936,26 @@ this.root == orig(this.root)
 this.root != null
 orig(x) != null
 orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="t == null"
+this.root == orig(this.root)
+return == null
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(t == null)"
+this.root == orig(this.root)
+this.root != null
+return != null
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="orig(t == null)"
+this.root == orig(this.root)
+return == orig(t)
+return == null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT;condition="not(orig(t == null))"
+this.root == orig(this.root)
+this.root != null
+orig(x) != null
+orig(x.getClass().getName()) == DataStructures.MyInteger.class
+orig(t) != null
