@@ -153,21 +153,11 @@ public class AnnotateNullable {
             "nullness") // map: retrieve class name from class Ppt name, with string manipulation
         @NonNull List<PptTopLevel> static_methods =
             class_map.get(ppt.name().replace(":::CLASS", ""));
-        int child_cnt = 0;
-        // TODO: Once Checker Framework issue 565 has been fixed (https://tinyurl.com/cfissue/565),
-        // change the following two lines back to
-        // for (PptRelation child_rel : ppt.children) {
-        for (int i = 0; i < ppt.children.size(); i++) {
-          PptRelation child_rel = ppt.children.get(i);
-          PptTopLevel child = child_rel.child;
-          // Skip enter ppts and others; all the info is at the combined exit.
-          if (!child.is_combined_exit()) {
-            continue;
-          }
-          child_cnt++;
+        List<PptTopLevel> class_methods = combined_exit_children(ppt);
+        for (PptTopLevel child : class_methods) {
           assert static_methods.contains(child) : child;
         }
-        assert child_cnt == static_methods.size() : static_methods;
+        assert class_methods.size() == static_methods.size() : static_methods;
       }
     }
 
@@ -199,6 +189,24 @@ public class AnnotateNullable {
     }
     assert object_ppt.parents.size() == 1 : object_ppt;
     return object_ppt.parents.get(0).parent;
+  }
+
+  /**
+   * Returns the children of the given program point that are combined exits. AnnotateNullable
+   * obtains all the information about a method from the method's combined exit, so it ignores the
+   * other children, such as entries and points.
+   *
+   * @param ppt a program point
+   * @return the children of {@code ppt} that are combined exits
+   */
+  private static List<PptTopLevel> combined_exit_children(PptTopLevel ppt) {
+    List<PptTopLevel> result = new ArrayList<>();
+    for (PptRelation child_rel : ppt.children) {
+      if (child_rel.child.is_combined_exit()) {
+        result.add(child_rel.child);
+      }
+    }
+    return result;
   }
 
   // Process a class, including all its methods.
@@ -245,12 +253,7 @@ public class AnnotateNullable {
 
     // Process static methods
     if (class_ppt != null) {
-      for (PptRelation child_rel : class_ppt.children) {
-        PptTopLevel child = child_rel.child;
-        // Skip enter ppts and others; all the info is at the combined exit.
-        if (!child.is_combined_exit()) {
-          continue;
-        }
+      for (PptTopLevel child : combined_exit_children(class_ppt)) {
         // debug.log("processing static method %s, type %s", child, child.type);
         process_method(child);
       }
@@ -266,12 +269,7 @@ public class AnnotateNullable {
     }
 
     // Process member (non-static) methods
-    for (PptRelation child_rel : object_ppt.children) {
-      PptTopLevel child = child_rel.child;
-      // Skip enter ppts and others; all the info is at the combined exit.
-      if (!child.is_combined_exit()) {
-        continue;
-      }
+    for (PptTopLevel child : combined_exit_children(object_ppt)) {
       // debug.log("processing method %s, type %s", child, child.type);
       process_method(child);
     }
