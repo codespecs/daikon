@@ -1,0 +1,58 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class Math__BigFloat_bdiv__61 extends Splitter {
+
+  public String condition() {
+    return "orig($p) != 0 && orig($p) != orig($x._p) && ((orig($y._m.value.deref).length == 1 && orig($y._e.value.deref).length == 1 && orig($y._e.value.deref)[0] == 0 && orig($y._m.value.deref)[0] == 1) || (orig($y._m.value.deref).length == 1 && orig($y._m.value.deref)[0] == 0) || (orig($x._m.value.deref).length == 1 && orig($x._m.value.deref)[0] == 0)) && (orig($x.sign).equals(\"+\") || orig($x.sign).equals(\"-\")) && (orig($y.sign).equals(\"+\") || orig($y.sign).equals(\"-\"))";
+  }
+
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public Math__BigFloat_bdiv__61() { }
+  public Math__BigFloat_bdiv__61(Ppt ppt) {
+  }
+
+  public Splitter instantiateSplitter(Ppt ppt) {
+    return new Math__BigFloat_bdiv__61(ppt);
+  }
+
+  public boolean valid() {
+    /* no variables were found */
+    return false;
+  }
+
+  public boolean test(ValueTuple vt) {
+    /* writeTestBody: 0 declarations */
+    return(orig_$p!=0&&orig_$p!=orig_$x._p&&((orig_$y._m.value.deref.length==1&&orig_$y._e.value.deref.length==1&&orig_$y._e.value.deref[0]==0&&orig_$y._m.value.deref[0]==1)||(orig_$y._m.value.deref.length==1&&orig_$y._m.value.deref[0]==0)||(orig_$x._m.value.deref.length==1&&orig_$x._m.value.deref[0]==0))&&(orig_$x.sign.equals("+")||orig_$x.sign.equals("-"))&&(orig_$y.sign.equals("+")||orig_$y.sign.equals("-")));
+  }
+
+  public String repr() {
+    return "Math__BigFloat_bdiv__61: "
+      ;
+  }
+
+  public void makeDummyInvariantFactory(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+
+  public int[] getIntArray(long[] longArray) {
+    int[] intArray = new int[longArray.length];
+    for (int i = 0; i < intArray.length; i++) {
+      intArray[i] = (int) longArray[i];
+    }
+    return intArray;
+  }
+
+}

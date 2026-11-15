@@ -837,9 +837,8 @@ public class PptRelation implements Serializable {
           continue;
         }
 
-        // Build the PptRelations for each child.  The PptRelation from
-        // the conditional point is of the same type as the original
-        // relation from parent to child
+        // Build the PptRelations for each child.  The PptRelation from the conditional point is of
+        // the same type as the original relation from parent to child.
         for (SplitChild sc : split_children) {
           ppt_split.add_relation(sc.rel, sc.ppt_split);
         }
