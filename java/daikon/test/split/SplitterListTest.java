@@ -71,6 +71,10 @@ public class SplitterListTest {
     assertTrue(SplitterList.matches("Foo.bar", "pkg.Foo.barBaz(int):::EXIT1"));
     assertTrue(SplitterList.matches("Math::BigFloat.bdiv_", "Math::BigFloat.bdiv_s():::EXIT36"));
     assertFalse(SplitterList.matches("Foo.baz", "pkg.Foo.bar(int):::ENTER"));
+    assertTrue(SplitterList.matches("pkg.Foo", "pkg.Foo:::OBJECT"));
+    assertTrue(SplitterList.matches("pkg.Foo", "pkg.Foo:::CLASS"));
+    assertTrue(SplitterList.matches("OBJECTs", "pkg.OBJECTs:::OBJECT"));
+    assertFalse(SplitterList.matches("OBJECTs", "pkg.Foo:::OBJECT"));
   }
 
   @Test

@@ -17,6 +17,7 @@ import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.filter.UnjustifiedFilter;
 import daikon.inv.unary.OneOf;
 import daikon.inv.unary.scalar.OneOfScalar;
 import gnu.getopt.*;
@@ -467,10 +468,6 @@ public class ExtractConsequent {
           cluster_inv = consequent;
         }
 
-        if (!inv.isWorthPrinting()) {
-          continue;
-        }
-
         if (contains_constant_non_012(inv)) {
           continue;
         }
@@ -496,6 +493,12 @@ public class ExtractConsequent {
           if (debug.isLoggable(FINE)) {
             debug.fine("Not legal Java over booleans: " + inv.format_using(OutputFormat.JAVA));
           }
+          continue;
+        }
+
+        // 3) Invariants that PrintInvariants would not print.  This check is last because it is the
+        // most costly.
+        if (!isWorthWriting(inv, maybe)) {
           continue;
         }
 
@@ -574,6 +577,41 @@ public class ExtractConsequent {
       conditions.put(index, consequent);
       return true;
     }
+  }
+
+  /**
+   * Returns true if the given condition, which is the predicate or the consequent of the given
+   * implication, should be written as a splitting condition: that is, if the implication is
+   * justified and the original of the condition is worth printing at its conditional program point.
+   *
+   * <p>The condition is not judged directly. The condition is a copy that Daikon made of an
+   * invariant at a conditional program point, for use at that program point's parent, and the copy
+   * is judged in the parent's context. For example, the copy's justification is computed from the
+   * parent's samples rather than from the samples that satisfy the condition: if "cluster == 1
+   * &lt;==&gt; x &gt;= 1", then the copy of "x &gt;= 1" can seem unjustified, because the parent
+   * also has the samples in which x is less than 1.
+   *
+   * <p>The implication's justification is not checked if {@link UnjustifiedFilter} is disabled.
+   *
+   * @param condition the predicate or the consequent of {@code implication}
+   * @param implication an implication
+   * @return true if {@code condition} should be written as a splitting condition
+   */
+  static boolean isWorthWriting(Invariant condition, Implication implication) {
+    if (UnjustifiedFilter.dkconfig_enabled && !implication.justified()) {
+      if (debug.isLoggable(FINE)) {
+        debug.fine("Not writing " + condition.format() + ": unjustified " + implication.format());
+      }
+      if (Invariant.logOn()) {
+        implication.log("Not writing %s: the implication is unjustified", condition.format());
+      }
+      return false;
+    }
+    Invariant original =
+        (condition == implication.consequent())
+            ? implication.origConsequent()
+            : implication.origPredicate();
+    return original.isWorthPrinting();
   }
 
   private static boolean contains_constant_non_012(Invariant inv) {

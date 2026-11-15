@@ -31,6 +31,7 @@ import org.junit.runners.Suite;
   daikon.test.LinearTernaryCoreTest.class,
   daikon.test.MergeComparabilityTest.class,
   daikon.test.ModBitTrackerTest.class,
+  daikon.test.PptDeclarationTest.class,
   daikon.test.PptPercTest.class,
   daikon.test.PptTopLevelTypeTest.class,
   daikon.test.ProglangTypeTest.class,

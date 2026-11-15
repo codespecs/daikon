@@ -14,10 +14,12 @@ import daikon.PptTopLevel;
 import daikon.ProglangType;
 import daikon.VarInfo;
 import daikon.VarInfo.VarKind;
+import daikon.inv.Implication;
 import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntGreaterThan;
 import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.filter.UnjustifiedFilter;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.unary.scalar.OneOfFloat;
 import daikon.inv.unary.scalar.OneOfScalar;
@@ -324,5 +326,74 @@ public class ExtractConsequentTest {
     // An invariant over both the pre-state and the post-state value is its own key.
     Invariant unchanged = binaryInvariant(IntEqual.get_proto(), cluster, origCluster);
     assertEquals("cluster == orig(cluster)", ExtractConsequent.clusterKey(unchanged));
+  }
+
+  /**
+   * Returns an implication whose predicate and consequent are copies, at a parent program point, of
+   * invariants at a conditional program point, as PptSplitter creates it.
+   *
+   * @param predicate the predicate, a copy of {@code origPredicate}
+   * @param consequent the consequent, a copy of {@code origConsequent}
+   * @param origPredicate an invariant at a conditional program point
+   * @param origConsequent an invariant at a conditional program point
+   * @return the implication "predicate ==&gt; consequent"
+   */
+  private static Implication implication(
+      Invariant predicate,
+      Invariant consequent,
+      Invariant origPredicate,
+      Invariant origConsequent) {
+    PptTopLevel parent =
+        Common.makePptTopLevel(
+            "Foo.bar(int):::EXIT",
+            new VarInfo[] {predicate.ppt.var_infos[0], consequent.ppt.var_infos[0]});
+    Implication result =
+        Implication.makeImplication(
+            parent, predicate, consequent, false, origPredicate, origConsequent);
+    if (result == null) {
+      throw new AssertionError("Cannot make implication " + predicate + " ==> " + consequent);
+    }
+    return result;
+  }
+
+  @Test
+  public void testIsWorthWriting() {
+    VarInfo cluster = Common.newIntVarInfo("cluster");
+    VarInfo x = Common.newIntVarInfo("x");
+    // A OneOfScalar invariant is justified if and only if it has observed a value.
+    Invariant justifiedCluster = oneOf(cluster, 1);
+    Invariant justifiedX = oneOf(x, 1);
+    Invariant unjustifiedCluster = oneOf(cluster);
+    Invariant unjustifiedX = oneOf(x);
+
+    // The condition "x == 1" is judged by its original, which is justified, even if its copy is
+    // not.  This is so whether the condition is the consequent or the predicate.
+    assertTrue(
+        ExtractConsequent.isWorthWriting(
+            unjustifiedX,
+            implication(justifiedCluster, unjustifiedX, justifiedCluster, justifiedX)));
+    assertTrue(
+        ExtractConsequent.isWorthWriting(
+            unjustifiedX,
+            implication(unjustifiedX, justifiedCluster, justifiedX, justifiedCluster)));
+
+    // A condition whose original is unjustified is not written.
+    assertFalse(
+        ExtractConsequent.isWorthWriting(
+            justifiedX, implication(justifiedCluster, justifiedX, justifiedCluster, unjustifiedX)));
+
+    // A condition whose implication is unjustified is not written, even if the condition's
+    // original is justified, unless UnjustifiedFilter is disabled.
+    Implication unjustifiedImplication =
+        implication(justifiedCluster, justifiedX, unjustifiedCluster, justifiedX);
+    assertFalse(unjustifiedImplication.justified());
+    assertFalse(ExtractConsequent.isWorthWriting(justifiedX, unjustifiedImplication));
+    boolean saved = UnjustifiedFilter.dkconfig_enabled;
+    UnjustifiedFilter.dkconfig_enabled = false;
+    try {
+      assertTrue(ExtractConsequent.isWorthWriting(justifiedX, unjustifiedImplication));
+    } finally {
+      UnjustifiedFilter.dkconfig_enabled = saved;
+    }
   }
 }
