@@ -2075,7 +2075,7 @@ public final class Daikon {
         System.out.print("Reading declaration files ");
       }
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
-      PptRelation.check_declared_parents(all_ppts);
+      PptRelation.checkDeclaredParents(all_ppts);
       if (debugTrace.isLoggable(FINE)) {
         debugTrace.fine("Initializing partial order");
       }
@@ -2580,7 +2580,7 @@ public final class Daikon {
         p = ((PptConditional) ppt).parent;
       }
 
-      if (!p.is_dataflow_leaf()) {
+      if (!p.isDataflowLeaf()) {
         return;
       }
 
@@ -2589,7 +2589,7 @@ public final class Daikon {
       }
     }
 
-    ppt.create_equality_view();
+    ppt.createEqualityView();
   }
 
   private static List<SpinfoFile> spinfoFiles = new ArrayList<>();

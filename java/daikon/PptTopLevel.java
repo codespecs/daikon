@@ -139,7 +139,7 @@ import typequals.prototype.qual.Prototype;
  * </ul>
  */
 public class PptTopLevel extends Ppt {
-  static final long serialVersionUID = 20071129L;
+  static final long serialVersionUID = 20261113L;
 
   /** If true, print diagnostic information to standard out. */
   private static final boolean debugStdout = false;
@@ -524,10 +524,13 @@ public class PptTopLevel extends Ppt {
    * <p>A program point that is declared with any other type keeps that type. Its name must conform
    * to the type, except for {@link PptType#POINT}, which permits any name.
    *
-   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, is_dataflow_leaf, etc.
+   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, isDataflowLeaf, etc.
    * agree with one another. They also agree with the program point's name, except for a program
    * point that is declared as a {@link PptType#POINT}: it is a leaf of the dataflow hierarchy
-   * whatever its name, even if its name is foo:::ENTER.
+   * whatever its name, even if its name is foo:::ENTER. However, some code classifies a program
+   * point by its name rather than by these predicates. For example, Daikon rejects every sample for
+   * a program point named foo:::EXIT, whatever its type; and if foo:::EXIT22 is declared, Daikon
+   * replaces a program point named foo:::EXIT by the combined exit of foo:::EXIT22.
    *
    * @param ppt_name the name of the program point
    * @param type the declared type of the program point, or null if none was declared
@@ -4281,10 +4284,10 @@ public class PptTopLevel extends Ppt {
    * had given them equal values (or each variable is in its own set, if {@link
    * PptSliceEquality#dkconfig_set_per_var} is true).
    */
-  public void create_equality_view() {
-    PptSliceEquality new_equality_view = new PptSliceEquality(this);
-    new_equality_view.instantiate_invariants();
-    equality_view = new_equality_view;
+  public void createEqualityView() {
+    PptSliceEquality newEqualityView = new PptSliceEquality(this);
+    newEqualityView.instantiate_invariants();
+    equality_view = newEqualityView;
   }
 
   /**
@@ -4834,7 +4837,7 @@ public class PptTopLevel extends Ppt {
    * @return true if this is a leaf of the dataflow hierarchy
    */
   @Pure
-  public boolean is_dataflow_leaf() {
+  public boolean isDataflowLeaf() {
     return (type == PptType.SUBEXIT) || (type == PptType.POINT);
   }
 

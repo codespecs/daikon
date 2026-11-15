@@ -1,7 +1,6 @@
 package daikon.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -10,15 +9,11 @@ import daikon.FileIO;
 import daikon.PptMap;
 import daikon.PptRelation;
 import daikon.PptTopLevel;
-import daikon.split.PptSplitter;
-import daikon.split.Splitter;
-import daikon.test.split.ConditionSplitter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
-import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Rule;
@@ -31,14 +26,23 @@ public class InitHierarchyTest {
   /** A temporary directory for decls files. */
   @Rule public TemporaryFolder tmpFolder = new TemporaryFolder();
 
+  // JUnit creates an instance of this class for each test, so these fields hold the values of the
+  // global settings from just before the test.
+
+  /** The value of {@link Daikon#use_dataflow_hierarchy} before the test. */
+  private final boolean savedUseDataflowHierarchy = Daikon.use_dataflow_hierarchy;
+
+  /** The value of {@link PptRelation#dkconfig_enable_object_user} before the test. */
+  private final boolean savedEnableObjectUser = PptRelation.dkconfig_enable_object_user;
+
   /** Creates an InitHierarchyTest. */
   public InitHierarchyTest() {}
 
   /** Restores the global settings that a test changes. */
   @After
   public void restoreSettings() {
-    Daikon.use_dataflow_hierarchy = true;
-    PptRelation.dkconfig_enable_object_user = false;
+    Daikon.use_dataflow_hierarchy = savedUseDataflowHierarchy;
+    PptRelation.dkconfig_enable_object_user = savedEnableObjectUser;
   }
 
   /**
@@ -111,20 +115,6 @@ public class InitHierarchyTest {
   }
 
   /**
-   * Returns the splitters of the given program point.
-   *
-   * @param ppt a program point that has splitters
-   * @return the splitters of ppt
-   */
-  private static List<PptSplitter> splitters(PptTopLevel ppt) {
-    List<PptSplitter> result = ppt.splitters;
-    if (result == null) {
-      throw new AssertionError("no splitters at " + ppt.name());
-    }
-    return result;
-  }
-
-  /**
    * Returns the program point with the given name.
    *
    * @param ppts a map of program points
@@ -146,7 +136,7 @@ public class InitHierarchyTest {
         initHierarchy(
             pptDecl("Foo.bar():::ENTER", "point") + pptDecl("Foo.bar():::EXIT5", "subexit"));
     PptTopLevel enter = get(ppts, "Foo.bar():::ENTER");
-    assertTrue(enter.is_dataflow_leaf());
+    assertTrue(enter.isDataflowLeaf());
     assertEquals(Collections.emptyList(), enter.children);
     PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
     assertEquals(Collections.emptyList(), exit.parents);
@@ -171,7 +161,7 @@ public class InitHierarchyTest {
         readDecls(
             pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "parent", "P:::POINT"));
     Daikon.UserError e =
-        assertThrows(Daikon.UserError.class, () -> PptRelation.check_declared_parents(ppts));
+        assertThrows(Daikon.UserError.class, () -> PptRelation.checkDeclaredParents(ppts));
     assertEquals(
         "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it a"
             + " leaf of the dataflow hierarchy",
@@ -193,63 +183,6 @@ public class InitHierarchyTest {
         initHierarchy(
             pptDecl("P:::POINT", "point") + pptDecl("Q:::POINT", "point", "user", "P:::POINT"));
     assertEquals(Collections.emptyList(), get(ppts, "P:::POINT").children);
-  }
-
-  /**
-   * When a combined exit's first splitter is removed because its numbered exits lack it, the
-   * conditional ppts of the remaining splitter have the combined exit as their parent.
-   */
-  @Test
-  public void testFirstSplitterRemoved() throws IOException {
-    PptMap ppts =
-        readDecls(
-            pptDecl("Foo.bar():::ENTER", "enter")
-                + pptDecl("Foo.bar():::EXIT5", "subexit")
-                + pptDecl("Foo.bar():::EXIT7", "subexit"));
-    Splitter removed = new ConditionSplitter("x == 1");
-    Splitter kept = new ConditionSplitter("x == 2");
-    PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
-    exit.addConditions(new Splitter[] {removed, kept});
-    get(ppts, "Foo.bar():::EXIT5").addConditions(new Splitter[] {kept});
-    get(ppts, "Foo.bar():::EXIT7").addConditions(new Splitter[] {kept});
-    PptRelation.init_hierarchy(ppts);
-
-    List<PptSplitter> exitSplitters = splitters(exit);
-    assertEquals(1, exitSplitters.size());
-    PptSplitter split = exitSplitters.get(0);
-    Splitter splitter = split.splitter;
-    if (splitter == null) {
-      throw new AssertionError("no splitter at " + exit.name());
-    }
-    assertSame(kept, splitter);
-    for (PptTopLevel cond : split.ppts) {
-      assertEquals(1, cond.parents.size());
-      assertSame(exit, cond.parents.get(0).parent);
-    }
-  }
-
-  /**
-   * Without the hierarchy, a non-leaf with no children keeps its splitters, because it receives
-   * samples directly.
-   */
-  @Test
-  public void testChildlessSplitterWithoutHierarchy() throws IOException {
-    Daikon.use_dataflow_hierarchy = false;
-    PptMap ppts = readDecls(pptDecl("Foo.bar():::ENTER", "enter"));
-    PptTopLevel enter = get(ppts, "Foo.bar():::ENTER");
-    enter.addConditions(new Splitter[] {new ConditionSplitter("x == 1")});
-    PptRelation.init_hierarchy(ppts);
-    assertEquals(1, splitters(enter).size());
-  }
-
-  /** With the hierarchy, a non-leaf with no children loses its splitters. */
-  @Test
-  public void testChildlessSplitterWithHierarchy() throws IOException {
-    PptMap ppts = readDecls(pptDecl("Foo.bar():::ENTER", "enter"));
-    PptTopLevel enter = get(ppts, "Foo.bar():::ENTER");
-    enter.addConditions(new Splitter[] {new ConditionSplitter("x == 1")});
-    PptRelation.init_hierarchy(ppts);
-    assertEquals(0, splitters(enter).size());
   }
 
   /** A user relation to a point is forbidden when user relations are enabled. */
