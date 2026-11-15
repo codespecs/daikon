@@ -283,11 +283,13 @@ public abstract class SplitterList {
   /**
    * Returns true if the name is the given suffix, possibly preceded by a qualifier: that is, if the
    * name ends with the suffix, and the character before the suffix, if any, is a qualifier
-   * separator in {@link #QUALIFIER_SEPARATORS}.
+   * separator in {@link #QUALIFIER_SEPARATORS}. This method works on both class names and program
+   * point names.
    *
-   * @param name a name, such as the class name "pkg.Outer$Inner" or the program point name
+   * @param name a class name, such as "pkg.Outer$Inner", or a program point name, such as
    *     "..main():::ENTER"
-   * @param suffix a name that might lack a qualifier, such as "Inner" or "main():::ENTER"
+   * @param suffix a class name or program point name that might lack a qualifier, such as "Inner"
+   *     or "main():::ENTER"
    * @return true if {@code name} is {@code suffix}, possibly preceded by a qualifier
    */
   private static boolean endsWithQualified(String name, String suffix) {
