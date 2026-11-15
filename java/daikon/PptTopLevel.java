@@ -4241,7 +4241,7 @@ public class PptTopLevel extends Ppt {
   @SuppressWarnings("interning:not.interned") // test whether remap() made a new object
   boolean coarsenComparability() {
     // A union-find structure over the comparable sets at this program point.
-    Map<Integer, Integer> groups = new HashMap<>();
+    SparseUnionFind groups = new SparseUnionFind();
     for (PptRelation rel : children) {
       if (rel.getRelationType() == PptRelationType.PPT_PPTCOND) {
         // The conditional program points are handled below.

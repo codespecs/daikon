@@ -211,22 +211,22 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   /**
-   * If both comparabilities are implicit, records in {@code groups} the comparable sets that must
-   * be merged at a parent program point. Otherwise, does nothing. See {@link
-   * #mergeSets(VarComparabilityImplicit, VarComparabilityImplicit, Map, Map)}.
+   * If both comparabilities are {@link VarComparabilityImplicit} (that is, the declarations specify
+   * {@code var-comparability implicit}, the default), records in {@code groups} the comparable sets
+   * that must be merged at a parent program point. Otherwise, does nothing. See {@link
+   * #mergeSets(VarComparabilityImplicit, VarComparabilityImplicit, Map, SparseUnionFind)}.
    *
    * @param parent the comparability of a variable at a parent program point
    * @param child the comparability of the corresponding variable at a child program point
    * @param childToParentSet maps each comparable set at the child to a comparable set at the parent
    *     whose variables correspond to child variables in that set; updated by this method
-   * @param groups a union-find structure over the parent's comparable sets, as used by {@link
-   *     #findGroup}; updated by this method
+   * @param groups a union-find structure over the parent's comparable sets; updated by this method
    */
   static void mergeSets(
       VarComparability parent,
       VarComparability child,
       Map<Integer, Integer> childToParentSet,
-      Map<Integer, Integer> groups) {
+      SparseUnionFind groups) {
     if (parent instanceof VarComparabilityImplicit && child instanceof VarComparabilityImplicit) {
       mergeSets(
           (VarComparabilityImplicit) parent,
@@ -252,14 +252,13 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    * @param child the comparability of the corresponding variable at a child program point
    * @param childToParentSet maps each comparable set at the child to a comparable set at the parent
    *     whose variables correspond to child variables in that set; updated by this method
-   * @param groups a union-find structure over the parent's comparable sets, as used by {@link
-   *     #findGroup}; updated by this method
+   * @param groups a union-find structure over the parent's comparable sets; updated by this method
    */
   static void mergeSets(
       VarComparabilityImplicit parent,
       VarComparabilityImplicit child,
       Map<Integer, Integer> childToParentSet,
-      Map<Integer, Integer> groups) {
+      SparseUnionFind groups) {
     if (parent.dimensions != child.dimensions) {
       // The variables have different types, so their comparabilities cannot be related.
       return;
@@ -274,56 +273,17 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     if (parent.base < 0) {
       return;
     }
+    // The representative of each group is its smallest set id, so the results are deterministic,
+    // and a group that contains a negative set, whose variables are comparable to everything, is
+    // negative.
     if (child.base < 0) {
-      union(parent.base, child.base, groups);
+      groups.union(parent.base, child.base);
     } else {
       Integer parentSet = childToParentSet.putIfAbsent(child.base, parent.base);
       if (parentSet != null) {
-        union(parentSet, parent.base, groups);
+        groups.union(parentSet, parent.base);
       }
     }
-  }
-
-  /**
-   * Merges two comparable sets in {@code groups}.
-   *
-   * @param set1 the integer id, such as 3, of a comparable set
-   * @param set2 the integer id, such as 5, of another comparable set
-   * @param groups a union-find structure over comparable sets, as used by {@link #findGroup}
-   */
-  private static void union(int set1, int set2, Map<Integer, Integer> groups) {
-    int group1 = findGroup(set1, groups);
-    int group2 = findGroup(set2, groups);
-    // Use the smaller value as the representative, for deterministic results and so that a group
-    // that contains a negative set, whose variables are comparable to everything, is negative.
-    if (group1 < group2) {
-      groups.put(group2, group1);
-    } else if (group2 < group1) {
-      groups.put(group1, group2);
-    }
-  }
-
-  /**
-   * Returns the id of the representative of the group that contains comparable set {@code base}.
-   * Compresses the path from {@code base} to its representative.
-   *
-   * @param base the integer id, such as 3, of a comparable set
-   * @param groups a union-find structure over comparable sets: maps the id of a comparable set to
-   *     the id of another comparable set in the same group; a representative has no entry
-   * @return the id of the representative of the group that contains comparable set {@code base}
-   */
-  private static int findGroup(int base, Map<Integer, Integer> groups) {
-    int root = base;
-    Integer next;
-    while ((next = groups.get(root)) != null) {
-      root = next;
-    }
-    while (base != root) {
-      next = groups.put(base, root);
-      assert next != null : "@AssumeAssertion(nullness): base is not a representative";
-      base = next;
-    }
-    return root;
   }
 
   /**
@@ -334,10 +294,10 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    * @return a comparability like this one, with each comparable set replaced by its representative
    */
   @SuppressWarnings("interning:not.interned") // test whether remap() created a new object
-  VarComparabilityImplicit remap(Map<Integer, Integer> groups) {
+  VarComparabilityImplicit remap(SparseUnionFind groups) {
     // Also remap this program point's own negative sets:  groups may have merged a child's negative
     // set, which has the same meaning at every program point, with another negative set.
-    int newBase = findGroup(base, groups);
+    int newBase = groups.find(base);
     VarComparabilityImplicit @Nullable [] oldIndexTypes = indexTypes;
     VarComparabilityImplicit @Nullable [] newIndexTypes = oldIndexTypes;
     if (oldIndexTypes != null) {
