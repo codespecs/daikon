@@ -981,6 +981,8 @@ public final class Daikon {
     use_mem_monitor = false;
     userDefinedInvariants.clear();
     spinfoFiles.clear();
+    // The input language affects how SplitterList matches program point names.
+    FileIO.input_language = null;
 
     proto_invs.clear();
   }
