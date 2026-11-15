@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import daikon.Daikon;
+import daikon.FileIO;
 import daikon.split.Splitter;
 import daikon.split.SplitterList;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -23,12 +26,31 @@ public class SplitterListTest {
   /** The names that a test passed to {@link SplitterList#put}. */
   private final List<String> putNames = new ArrayList<>();
 
-  /** Removes the splitters that a test added, because Daikon uses every splitter by default. */
+  /**
+   * The value of {@link FileIO#input_language} before the test, which {@link #tearDown} restores.
+   */
+  private @Nullable String savedInputLanguage;
+
+  /**
+   * Clears {@link FileIO#input_language}, which another test (one that reads a Kvasir trace) might
+   * have set, because it affects {@link SplitterList#matches}.
+   */
+  @Before
+  public void setUp() {
+    savedInputLanguage = FileIO.input_language;
+    FileIO.input_language = null;
+  }
+
+  /**
+   * Removes the splitters that a test added, because Daikon uses every splitter by default, and
+   * restores {@link FileIO#input_language}.
+   */
   @After
   public void tearDown() {
     for (String name : putNames) {
       SplitterList.remove(name);
     }
+    FileIO.input_language = savedInputLanguage;
   }
 
   /**
@@ -75,6 +97,15 @@ public class SplitterListTest {
     assertTrue(SplitterList.matches("file_c.f():::ENTER", "dir/file_c.f():::ENTER"));
     assertTrue(
         SplitterList.matches("BigFloat.bdiv_s():::EXIT36", "Math::BigFloat.bdiv_s():::EXIT36"));
+    // A complete name cannot omit the class name or part of the method signature.
+    assertFalse(SplitterList.matches("bar(int):::ENTER", enter));
+    assertFalse(SplitterList.matches("int):::ENTER", enter));
+    assertFalse(SplitterList.matches("Object):::ENTER", "pkg.Foo.bar(java.lang.Object):::ENTER"));
+    assertFalse(
+        SplitterList.matches("lang.Object):::ENTER", "pkg.Foo.bar(java.lang.Object):::ENTER"));
+    assertTrue(SplitterList.matches("bar(int):::ENTER", "bar(int):::ENTER"));
+    assertTrue(SplitterList.matches("..main():::ENTER", "..main():::ENTER"));
+    assertFalse(SplitterList.matches("main():::ENTER", "..main():::ENTER"));
 
     String exit1 = "pkg.Foo.bar(int):::EXIT1";
     assertTrue(SplitterList.matches(exit1, exit1));
@@ -86,6 +117,7 @@ public class SplitterListTest {
     assertTrue(SplitterList.matches(exit, exit1));
     assertTrue(SplitterList.matches(exit, "pkg.Foo.bar(int):::EXIT12"));
     assertFalse(SplitterList.matches(exit, "pkg.Foo.bar(int):::EXITx"));
+    assertFalse(SplitterList.matches(exit, "pkg.Foo.bar(int):::EXIT12other"));
     assertFalse(SplitterList.matches(exit, "pkg.Foo.bar(int):::ENTER"));
     assertFalse(SplitterList.matches(exit, "pkg.BigFoo.bar(int):::EXIT1"));
     assertTrue(SplitterList.matches("Foo.bar(int):::EXIT", "pkg.Foo.bar(int):::EXIT12"));
@@ -95,6 +127,38 @@ public class SplitterListTest {
     assertTrue(SplitterList.matches("pkg.Foo:::OBJECT", "pkg.Foo:::OBJECT"));
     assertFalse(SplitterList.matches("pkg.Foo:::OBJECT", "pkg.BigFoo:::OBJECT"));
     assertFalse(SplitterList.matches("aprogram.point:::POINT", "aprogram.point:::POINT2"));
+  }
+
+  @Test
+  public void testMatchesCompleteNameC() {
+    FileIO.input_language = "C/C++";
+    // A complete name can omit any qualifier at the beginning of a C or C++ program point name.
+    assertTrue(SplitterList.matches("main():::ENTER", "..main():::ENTER"));
+    assertTrue(SplitterList.matches(".main():::ENTER", "..main():::ENTER"));
+    assertTrue(SplitterList.matches("..main():::ENTER", "..main():::ENTER"));
+    assertTrue(SplitterList.matches("f():::ENTER", "file_c.f():::ENTER"));
+    assertTrue(SplitterList.matches("f():::ENTER", "dir/file_c.f():::ENTER"));
+    assertTrue(
+        SplitterList.matches(
+            "compare(Shape*,\\_Shape*):::ENTER", "Shape.compare(Shape*,\\_Shape*):::ENTER"));
+    assertTrue(SplitterList.matches("main():::EXIT", "..main():::EXIT0"));
+    assertTrue(SplitterList.matches("main():::EXIT0", "..main():::EXIT0"));
+    assertFalse(SplitterList.matches("main():::ENTER", "..mymain():::ENTER"));
+    assertFalse(SplitterList.matches("main():::ENTER", "..main():::EXIT0"));
+    assertFalse(SplitterList.matches("main():::EXIT0", "..main():::EXIT01"));
+  }
+
+  @Test
+  public void testCleanupResetsInputLanguage() {
+    // A C or C++ analysis sets the input language.
+    FileIO.input_language = "C/C++";
+    assertTrue(SplitterList.matches("bar(int):::ENTER", "pkg.Foo.bar(int):::ENTER"));
+    // A subsequent analysis in the same JVM, such as of a Chicory trace that has no
+    // "input-language" record, must not inherit it.  Daikon.mainHelper calls Daikon.cleanup.
+    Daikon.cleanup();
+    assertTrue(FileIO.input_language == null);
+    assertFalse(SplitterList.matches("bar(int):::ENTER", "pkg.Foo.bar(int):::ENTER"));
+    assertTrue(SplitterList.matches("Foo.bar(int):::ENTER", "pkg.Foo.bar(int):::ENTER"));
   }
 
   /**
