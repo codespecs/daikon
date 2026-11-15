@@ -1660,7 +1660,7 @@ this.front <= size(this.theArray[])-1
 (size(this.theArray[])-1 == 0) ==> (this.back == 0)
 this.back <= size(this.theArray[])-1
 this.currentSize + this.front - size(this.theArray[]) + 1 == 0
-this.currentSize + this.front - size(this.theArray[])-1 == 0
+this.currentSize + this.front - (size(this.theArray[])-1) == 0
 ===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER;condition="not(++back == theArray.length)"
 this.theArray != null
@@ -1769,11 +1769,11 @@ orig(this.theArray[post(this.currentSize)-1]) == orig(this.theArray[this.current
 (this.back == size(this.theArray[])-1)  ==>  (orig(this.theArray[this.front..]) contains no duplicates)
 (this.back == size(this.theArray[])-1)  ==>  (this.back >= orig(this.back))
 (this.back == size(this.theArray[])-1)  ==>  (this.back >= orig(this.currentSize))
+(this.back == size(this.theArray[])-1)  ==>  (this.currentSize + this.front - (size(this.theArray[])-1) - 1 == 0)
 (this.back == size(this.theArray[])-1)  ==>  (this.currentSize + this.front - size(this.theArray[]) == 0)
-(this.back == size(this.theArray[])-1)  ==>  (this.currentSize + this.front - size(this.theArray[])-1 - 1 == 0)
 (this.back == size(this.theArray[])-1)  ==>  (this.currentSize + this.front - this.back - 1 == 0)
+(this.back == size(this.theArray[])-1)  ==>  (this.front + orig(this.currentSize) - (size(this.theArray[])-1) == 0)
 (this.back == size(this.theArray[])-1)  ==>  (this.front + orig(this.currentSize) - size(this.theArray[]) + 1 == 0)
-(this.back == size(this.theArray[])-1)  ==>  (this.front + orig(this.currentSize) - size(this.theArray[])-1 == 0)
 (this.back == size(this.theArray[])-1)  ==>  (this.front - this.back + orig(this.currentSize) == 0)
 (this.back == size(this.theArray[])-1)  ==>  (this.front <= orig(this.back))
 (this.back == size(this.theArray[])-1)  ==>  (this.front <= this.back)
