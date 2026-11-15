@@ -512,9 +512,11 @@ public final class CLASSNAME implements Serializable, Cloneable {
   /**
    * Returns the given expression, parenthesized if it is compound: that is, if it contains an
    * operator or whitespace outside parentheses, brackets, and literals. Neither {@code ::} nor
-   * {@code ->} is such an operator. For example, returns {@code this.x}, {@code size(a[])}, {@code
-   * a[i-1]}, {@code ::global}, and {@code p->next} unchanged, and returns {@code (size(a[])-1)} for
-   * {@code size(a[])-1}.
+   * {@code ->} is such an operator.
+   *
+   * <p>For example, this method returns {@code this.x}, {@code size(a[])}, {@code a[i-1]}, {@code
+   * ::global}, and {@code p->next} unchanged. For {@code size(a[])-1}, this method returns {@code
+   * (size(a[])-1)}.
    *
    * @param expr a variable name, in any output format
    * @return the expression, parenthesized if it is compound
