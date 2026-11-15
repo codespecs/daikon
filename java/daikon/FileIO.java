@@ -211,6 +211,12 @@ public final class FileIO {
   // This implementation as a public static variable is a bit unclean.
   public static int omitted_declarations = 0;
 
+  /**
+   * The language on the most recent "input-language" record that Daikon read, such as "C/C++"
+   * (which Kvasir writes), or null if Daikon has read no such record.
+   */
+  public static @Nullable String input_language = null;
+
   // Logging Categories
 
   /**
@@ -1396,8 +1402,9 @@ public final class FileIO {
 
       // Check for the input language
       if (is_keyword_record(line, "input-language")) {
-        String input_language = read_input_language(state, line);
-        state.payload = input_language;
+        String language = read_input_language(state, line);
+        input_language = language;
+        state.payload = language;
         state.rtype = RecordType.INPUT_LANGUAGE;
         return;
       }
