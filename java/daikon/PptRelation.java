@@ -6,9 +6,10 @@ import daikon.inv.Equality;
 import daikon.inv.Invariant;
 import daikon.split.PptSplitter;
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -612,6 +613,37 @@ public class PptRelation implements Serializable {
   }
 
   /**
+   * Returns, for each child of {@code ppt}, the child's splitter that matches {@code pptSplit}.
+   * Returns null if {@code ppt} has no children or if some child has no matching splitter; in that
+   * case, the conditional ppts of {@code pptSplit} cannot be merged from the children.
+   *
+   * @param ppt a non-leaf ppt
+   * @param pptSplit one of the splitters of {@code ppt}
+   * @return the matching splitter at each child, or null if some child has none
+   */
+  private static @Nullable List<SplitChild> matchingSplitChildren(
+      PptTopLevel ppt, PptSplitter pptSplit) {
+    if (ppt.children.isEmpty()) {
+      return null;
+    }
+    List<SplitChild> splitChildren = new ArrayList<>();
+    childLoop:
+    for (PptRelation rel : ppt.children) {
+      if (!rel.child.has_splitters()) {
+        return null;
+      }
+      for (PptSplitter csplit : rel.child.splitters) {
+        if (pptSplit.splitter == csplit.splitter) {
+          splitChildren.add(new SplitChild(rel, csplit));
+          continue childLoop;
+        }
+      }
+      return null;
+    }
+    return splitChildren;
+  }
+
+  /**
    * Connects the given ppt to each conditional ppt of its first splitter, unless they are already
    * connected. Only the first splitter is used, because each splitter sees the same samples, so
    * each yields the same invariants at the ppt.
@@ -751,6 +783,30 @@ public class PptRelation implements Serializable {
       }
     }
 
+    // Remove each splitter of a non-leaf that cannot be merged from its children: the non-leaf has
+    // no children, or some child lacks a matching splitter.  Removing a splitter from a child can
+    // make its parents' splitters unmergeable, so the parents are examined again.  This is done
+    // before any conditional ppt is connected, so that no relation refers to a removed conditional
+    // ppt.  Without the dataflow hierarchy, every ppt (and each of its conditional ppts) receives
+    // samples directly, so no splitter needs to be merged from the children.
+    if (Daikon.use_dataflow_hierarchy) {
+      Deque<PptTopLevel> worklist = new ArrayDeque<>();
+      for (PptTopLevel ppt : all_ppts.pptIterable()) {
+        worklist.add(ppt);
+      }
+      while (!worklist.isEmpty()) {
+        PptTopLevel ppt = worklist.remove();
+        if (ppt.isDataflowLeaf() || !ppt.has_splitters()) {
+          continue;
+        }
+        if (ppt.splitters.removeIf(pptSplit -> matchingSplitChildren(ppt, pptSplit) == null)) {
+          for (PptRelation rel : ppt.parents) {
+            worklist.add(rel.parent);
+          }
+        }
+      }
+    }
+
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       if (ppt.has_splitters()) {
         connectConditionals(ppt);
@@ -763,8 +819,6 @@ public class PptRelation implements Serializable {
     // presume ppt A has a child ppt B.  A has two conditional
     // ppts (AC1, AC2) and B has two conditional ppts (BC1, BC2)
     // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
-
-    // Loop over each ppt and process each non-leaf with splitters
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       if (ppt.isDataflowLeaf()) {
         continue;
@@ -775,33 +829,11 @@ public class PptRelation implements Serializable {
 
       // System.out.printf("processing splitter %s%n", ppt.name());
 
-      // Loop over each splitter
-      // splitter_loop:
-      for (Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext(); ) {
-        PptSplitter ppt_split = ii.next();
-
-        // list of children that match this splitter
-        List<SplitChild> split_children = new ArrayList<>();
-
-        // Create a list of children for this splitter
-        child_loop:
-        for (PptRelation rel : ppt.children) {
-          if (!rel.child.has_splitters()) {
-            break;
-          }
-          for (PptSplitter csplit : rel.child.splitters) {
-            if (ppt_split.splitter == csplit.splitter) {
-              split_children.add(new SplitChild(rel, csplit));
-              continue child_loop;
-            }
-          }
-          break;
-        }
-
-        // If we didn't find a matching splitter at each child, can't merge
-        // this point.  Just remove it from the list of splitters
-        if (split_children.size() != ppt.children.size()) {
-          ii.remove();
+      for (PptSplitter ppt_split : ppt.splitters) {
+        List<SplitChild> split_children = matchingSplitChildren(ppt, ppt_split);
+        if (split_children == null) {
+          // Only without the dataflow hierarchy, which does not merge conditional ppts.
+          assert !Daikon.use_dataflow_hierarchy : ppt;
           continue;
         }
 
