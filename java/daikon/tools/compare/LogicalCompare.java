@@ -824,7 +824,7 @@ public class LogicalCompare {
         @SuppressWarnings("nullness") // map: iterating over keyset
         @NonNull PptTopLevel app_ppt = app_ppts.get(name);
 
-        if (!app_ppt.ppt_name.isEnterPoint()) {
+        if (!app_ppt.is_enter()) {
           // an exit point, and we only want entries
           continue;
         }
