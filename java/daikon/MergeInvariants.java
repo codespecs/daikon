@@ -260,7 +260,7 @@ public final class MergeInvariants {
       PptRelation.init_hierarchy(merge_ppts);
     }
 
-    // Remove all of the slices, equality sets, to start
+    // Remove all of the slices and equality sets, to start
     debugProgress.fine("Cleaning ppt map in preparation for merge");
     for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
       ppt.clean_for_merge();
@@ -277,17 +277,8 @@ public final class MergeInvariants {
     List<String> missingLeaves = new ArrayList<>();
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
-      // Skip everything that is not a leaf.  A non-leaf obtains its invariants from its children.
-      // A non-leaf can lack children, as a CLASS ppt with no OBJECT ppt below it or a combined
-      // exit point without numbered exit points does.  Such a ppt has no samples and so no
-      // invariants.  As in PptRelation.createChildlessEqualityViews, give it an equality view
-      // (clean_for_merge removed the previous one), which mergeInvs requires of a childless ppt.
-      // init_hierarchy removed its splitters, which could not be merged from children.
+      // Skip everything that is not a leaf
       if (!ppt.isDataflowLeaf()) {
-        if (ppt.children.isEmpty()) {
-          assert !Daikon.use_dataflow_hierarchy || !ppt.has_splitters() : ppt;
-          ppt.createEqualityView();
-        }
         continue;
       }
       numLeaves++;
@@ -438,10 +429,8 @@ public final class MergeInvariants {
     long duration = System.nanoTime() - startTime;
     debugProgress.fine("Time spent in implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
 
-    // Remove the merge PptRelation links to the input maps so that when the file is written out it
-    // only includes the new information.  Keep the other relations, such as those from a leaf to its
-    // conditional ppts:  the leaf obtains its invariants from them, and deserialization does not
-    // rebuild them, so the output can be merged again.
+    // Remove the merge PptRelation links so that when the file is written
+    // out it only includes the new information
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
       ppt.children.removeIf(MergeInvariants::isMergeChildRel);
       for (PptConditional cond : ppt.cond_iterable()) {
