@@ -277,17 +277,9 @@ public final class MergeInvariants {
     List<String> missingLeaves = new ArrayList<>();
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
-      // Skip everything that is not a leaf.  A non-leaf obtains its invariants from its children.
-      // A non-leaf can lack children, as a CLASS ppt with no OBJECT ppt below it or a combined
-      // exit point without numbered exit points does.  Such a ppt has no samples and so no
-      // invariants.  As in PptRelation.createChildlessEqualityViews, give it an equality view
-      // (clean_for_merge removed the previous one), which mergeInvs requires of a childless ppt.
-      // init_hierarchy removed its splitters, which could not be merged from children.
+      // Skip everything that is not a leaf
       if (!ppt.isDataflowLeaf()) {
-        if (ppt.children.isEmpty()) {
-          assert !Daikon.use_dataflow_hierarchy || !ppt.has_splitters() : ppt;
-          ppt.createEqualityView();
-        }
+        assert !ppt.children.isEmpty() : ppt;
         continue;
       }
       numLeaves++;
