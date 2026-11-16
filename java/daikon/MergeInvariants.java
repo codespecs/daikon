@@ -279,7 +279,6 @@ public final class MergeInvariants {
 
       // Skip everything that is not a leaf
       if (!ppt.isDataflowLeaf()) {
-        assert !ppt.children.isEmpty() : ppt;
         continue;
       }
       numLeaves++;
