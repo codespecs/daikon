@@ -268,6 +268,41 @@ public class DtraceNonceFixerTest {
   }
 
   /**
+   * Tests that a one-line header record ends a paragraph even if no empty line follows it, as in
+   * Daikon, so that the sample that directly follows it gets a nonce.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testHeaderRecordWithoutEmptyLine() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "// a comment",
+            "decl-version 2.0",
+            "aprogram.point:::POINT",
+            "x",
+            "1",
+            "1",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "// a comment",
+            "decl-version 2.0",
+            "aprogram.point:::POINT",
+            "this_invocation_nonce",
+            "0",
+            "x",
+            "1",
+            "1",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
    * Tests that a compressed input file yields a compressed output file.
    *
    * @throws IOException if there is trouble reading or writing a file
