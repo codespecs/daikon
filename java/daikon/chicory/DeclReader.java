@@ -193,8 +193,9 @@ public class DeclReader {
     public String filename;
 
     /**
-     * The lines of the declaration that precede the first variable, starting with the "ppt" line;
-     * empty unless the declaration was read for rewriting (see {@link DeclReader#forRewriting}).
+     * The lines of the declaration that precede the first variable, starting with the "ppt" line
+     * (whose whitespace is normalized to "ppt " followed by the name); empty unless the declaration
+     * was read for rewriting (see {@link DeclReader#forRewriting}).
      */
     public List<String> declHeaderLines;
 
@@ -581,7 +582,9 @@ public class DeclReader {
     DeclPpt ppt = new DeclPpt(pptname, decl_file.getFileName(), forRewriting);
     ppts.put(pptname, ppt);
     if (forRewriting) {
-      ppt.declHeaderLines.add(firstLine);
+      // Normalize the whitespace, because Daikon recognizes a declaration only if its first line
+      // starts with "ppt ".
+      ppt.declHeaderLines.add("ppt " + tokens[1]);
     }
 
     // Read the records, such as ppt-type, that precede the first variable.
