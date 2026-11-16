@@ -260,7 +260,7 @@ public final class MergeInvariants {
       PptRelation.init_hierarchy(merge_ppts);
     }
 
-    // Remove all of the slices, equality sets, to start
+    // Remove all of the slices and equality sets, to start
     debugProgress.fine("Cleaning ppt map in preparation for merge");
     for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
       ppt.clean_for_merge();
