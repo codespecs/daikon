@@ -1932,15 +1932,7 @@ public final class Daikon {
     }
   }
 
-  /**
-   * Create EXIT program points as needed for EXITnn program points. If a program point whose type
-   * is not EXIT already has the name of the combined exit, such as a POINT named foo:::EXIT, the
-   * combined exit is not created, and the numbered exits have no combined exit. In that case, {@link
-   * PptRelation#init_hierarchy} connects each numbered exit directly to its enter point and to its
-   * declared parents.
-   *
-   * @param ppts a map of program points, to which this adds the combined exits
-   */
+  /** Create EXIT program points as needed for EXITnn program points. */
   public static void create_combined_exits(PptMap ppts) {
 
     // We can't add the newly created exit Ppts directly to ppts while we
@@ -1955,10 +1947,6 @@ public final class Daikon {
 
       PptTopLevel exitnn_ppt = ppt;
       PptName exit_name = ppt.ppt_name.makeExit();
-      PptTopLevel declared = ppts.get(exit_name);
-      if ((declared != null) && !declared.is_combined_exit()) {
-        continue;
-      }
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
       if (debugInit.isLoggable(FINE)) {

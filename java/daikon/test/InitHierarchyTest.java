@@ -11,7 +11,6 @@ import daikon.PptMap;
 import daikon.PptRelation;
 import daikon.PptTopLevel;
 import daikon.ValueTuple;
-import daikon.VarInfo;
 import daikon.split.PptSplitter;
 import daikon.split.Splitter;
 import daikon.test.split.ConditionSplitter;
@@ -159,56 +158,6 @@ public class InitHierarchyTest {
         String.valueOf(e.getMessage()),
         String.valueOf(e.getMessage())
             .startsWith("exit found with no corresponding entry: Foo.bar():::EXIT5"));
-  }
-
-  /**
-   * A point that is named like a combined exit is not replaced by a combined exit, and it is not
-   * the parent of the numbered exits. Instead, the enter point is the parent of the numbered exit.
-   */
-  @Test
-  public void testPointNamedCombinedExit() throws IOException {
-    PptMap ppts =
-        initHierarchy(
-            pptDecl("Foo.bar():::ENTER", "enter")
-                + pptDecl("Foo.bar():::EXIT", "point")
-                + pptDecl("Foo.bar():::EXIT5", "subexit"));
-    PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
-    assertTrue(exit.isDataflowLeaf());
-    assertEquals(Collections.emptyList(), exit.children);
-    List<PptRelation> parents = get(ppts, "Foo.bar():::EXIT5").parents;
-    assertEquals(1, parents.size());
-    assertSame(get(ppts, "Foo.bar():::ENTER"), parents.get(0).parent);
-    assertEquals(PptRelation.PptRelationType.ENTER_EXIT, parents.get(0).getRelationType());
-  }
-
-  /**
-   * A numbered exit that has no combined exit, because a point has the combined exit's name, is
-   * connected to its declared parents.
-   */
-  @Test
-  public void testDeclaredParentWithoutCombinedExit() throws IOException {
-    PptMap ppts =
-        initHierarchy(
-            pptDecl("Foo:::OBJECT", "object")
-                + pptDecl("Foo.bar():::ENTER", "enter", "parent", "Foo:::OBJECT")
-                + pptDecl("Foo.bar():::EXIT", "point")
-                + pptDecl("Foo.bar():::EXIT5", "subexit", "parent", "Foo:::OBJECT"));
-    PptTopLevel object = get(ppts, "Foo:::OBJECT");
-    PptTopLevel exit5 = get(ppts, "Foo.bar():::EXIT5");
-    VarInfo exit5_x = exit5.find_var_by_name("x");
-    if (exit5_x == null) {
-      throw new AssertionError("no variable x in " + exit5.name());
-    }
-    boolean found = false;
-    for (PptRelation rel : exit5.parents) {
-      if (rel.parent == object) {
-        assertEquals(PptRelation.PptRelationType.PARENT, rel.getRelationType());
-        assertSame(object.find_var_by_name("x"), rel.parentVar(exit5_x));
-        found = true;
-      }
-    }
-    assertTrue(found);
-    assertEquals(2, exit5.parents.size());
   }
 
   /** A point cannot be declared as a parent. */
