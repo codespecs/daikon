@@ -1610,12 +1610,11 @@ public final class FileIO {
     // Only process the leaves of the ppt tree.
     if (Daikon.use_dataflow_hierarchy) {
       // A combined exit point obtains its invariants from the numbered exit points (whether Daikon
-      // created it or the declarations contain it), so no sample may refer to one, whatever the
-      // program point's declared type.
-      if (ppt.ppt_name.isCombinedExitPoint()) {
+      // created it or the declarations contain it), so no sample may refer to one.
+      if (ppt.is_combined_exit()) {
         // not Daikon.UserError; caller has more info (e.g., filename)
         throw new RuntimeException(
-            "Bad program point name " + ppt.name + " is a combined exit point name");
+            "Bad program point " + ppt.name + ": a sample cannot refer to a combined exit point");
       }
       if (!ppt.isDataflowLeaf()) {
         return;
