@@ -199,11 +199,19 @@ public class InitHierarchyTest {
     if (exit5_x == null) {
       throw new AssertionError("no variable x in " + exit5.name());
     }
+    VarInfo object_x = object.find_var_by_name("x");
+    if (object_x == null) {
+      throw new AssertionError("no variable x in " + object.name());
+    }
     boolean found = false;
     for (PptRelation rel : exit5.parents) {
       if (rel.parent == object) {
         assertEquals(PptRelation.PptRelationType.PARENT, rel.getRelationType());
-        assertSame(object.find_var_by_name("x"), rel.parentVar(exit5_x));
+        VarInfo parent_x = rel.parentVar(exit5_x);
+        if (parent_x == null) {
+          throw new AssertionError("no parent variable for x in " + exit5.name());
+        }
+        assertSame(object_x, parent_x);
         found = true;
       }
     }
