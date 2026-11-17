@@ -2778,7 +2778,9 @@ declarations in the dtrace files, as written by Chicory.  The input files
 are not modified.  @command{runcluster.pl} creates temporary files, whose
 names contain @samp{cluster_temp}, in the current directory; therefore, it
 rejects an input file in the current directory whose name contains
-@samp{cluster_temp}, as well as a symbolic link to such a file.  The result is written to file
+@samp{cluster_temp}, as well as an input file whose path goes through such
+an entry (such as a symbolic link to the file or to a directory that
+contains it).  The result is written to file
 @file{cluster-@var{ALG}-@var{k}.spinfo} (or @file{cluster-xm.spinfo})
 in the current directory.
 

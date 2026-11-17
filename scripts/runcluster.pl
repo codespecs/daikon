@@ -76,24 +76,17 @@ if (scalar(@trace_files) == 0) {
 }
 # Temporary files are in the current directory, and their names contain
 # "cluster_temp".  An input file with such a name could be overwritten or
-# deleted, so reject it.  Check both the given path (a symbolic link with
-# such a name could be deleted) and the file that it resolves to.
+# deleted, so reject it.  Also reject an input whose path goes through such
+# an entry, such as a symbolic link with such a name (to the input file or
+# to a directory that contains it), because deleting the entry would make
+# the input unreachable.
 my $cwd = abs_path(".");
 foreach my $input_file (@trace_files, @decls_files) {
-  my @paths_to_check = ($input_file);
-  my $resolved = abs_path($input_file);
-  if (defined($resolved)) {
-    push @paths_to_check, $resolved;
-  }
-  foreach my $path (@paths_to_check) {
-    if (basename($path) =~ /cluster_temp/) {
-      my $dir = abs_path(dirname($path));
-      if (defined($dir) && defined($cwd) && $dir eq $cwd) {
-        die "Input file $input_file, or the file it links to, is in the current directory\n"
-          . "and has a name that contains \"cluster_temp\",\n"
-          . "so it might be overwritten or deleted as a temporary file.  Rename it or move it.\n";
-      }
-    }
+  my $entry = cleanup_entry_on_path($input_file, $cwd);
+  if (defined($entry)) {
+    die "Input file $input_file is reached via $cwd/$entry,\n"
+      . "which is in the current directory and has a name that contains \"cluster_temp\",\n"
+      . "so it might be overwritten or deleted as a temporary file.  Rename it or move it.\n";
   }
 }
 if ($algorithm eq "xm") {
@@ -322,6 +315,44 @@ if (! $keep_tempfiles ) {
 exit();
 
 ################# Subroutines ####################################
+
+# Resolves $path one component at a time, following symbolic links.  If
+# some entry that is visited (including the final file and any symbolic
+# link along the way) is directly in directory $cwd (an absolute path
+# without symbolic links) and has a name that contains "cluster_temp",
+# returns that name.  Otherwise returns undef.
+# (No prototype, because it is called before its definition.)
+sub cleanup_entry_on_path {
+  my ($path, $cwd) = @_;
+  return undef if (!defined($cwd));
+  # $dir is an absolute path without symbolic links.
+  my $dir = ($path =~ m{\A/}) ? "/" : $cwd;
+  my @components = grep { $_ ne "" } split(m{/}, $path);
+  my $links_followed = 0;
+  while (scalar(@components) > 0) {
+    my $component = shift @components;
+    next if ($component eq ".");
+    if ($component eq "..") {
+      $dir = dirname($dir);
+      next;
+    }
+    if ($dir eq $cwd && $component =~ /cluster_temp/) {
+      return $component;
+    }
+    my $entry = ($dir eq "/") ? "/$component" : "$dir/$component";
+    if (-l $entry) {
+      # Guard against a cycle of symbolic links.
+      return undef if (++$links_followed > 100);
+      my $target = readlink($entry);
+      return undef if (!defined($target));
+      unshift @components, grep { $_ ne "" } split(m{/}, $target);
+      $dir = "/" if ($target =~ m{\A/});
+    } else {
+      $dir = $entry;
+    }
+  }
+  return undef;
+} #cleanup_entry_on_path
 
 # Quote a string for use as a single word in a shell command.
 # (No prototype, because it is called before its definition.)
