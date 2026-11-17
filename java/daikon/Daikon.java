@@ -983,6 +983,9 @@ public final class Daikon {
     spinfoFiles.clear();
     // The input language affects how SplitterList matches program point names.
     FileIO.input_language = null;
+    // The sample counts are per run; the check for "No samples found" uses samples_used.
+    FileIO.samples_processed = 0;
+    FileIO.samples_used = 0;
 
     proto_invs.clear();
   }
