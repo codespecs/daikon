@@ -76,14 +76,23 @@ if (scalar(@trace_files) == 0) {
 }
 # Temporary files are in the current directory, and their names contain
 # "cluster_temp".  An input file with such a name could be overwritten or
-# deleted, so reject it.
+# deleted, so reject it.  Check both the given path (a symbolic link with
+# such a name could be deleted) and the file that it resolves to.
 my $cwd = abs_path(".");
 foreach my $input_file (@trace_files, @decls_files) {
-  if (basename($input_file) =~ /cluster_temp/) {
-    my $dir = abs_path(dirname($input_file));
-    if (defined($dir) && defined($cwd) && $dir eq $cwd) {
-      die "Input file $input_file is in the current directory and its name contains \"cluster_temp\",\n"
-        . "so it might be overwritten or deleted as a temporary file.  Rename it or move it.\n";
+  my @paths_to_check = ($input_file);
+  my $resolved = abs_path($input_file);
+  if (defined($resolved)) {
+    push @paths_to_check, $resolved;
+  }
+  foreach my $path (@paths_to_check) {
+    if (basename($path) =~ /cluster_temp/) {
+      my $dir = abs_path(dirname($path));
+      if (defined($dir) && defined($cwd) && $dir eq $cwd) {
+        die "Input file $input_file, or the file it links to, is in the current directory\n"
+          . "and has a name that contains \"cluster_temp\",\n"
+          . "so it might be overwritten or deleted as a temporary file.  Rename it or move it.\n";
+      }
     }
   }
 }
