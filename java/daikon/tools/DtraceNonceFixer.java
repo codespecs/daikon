@@ -445,16 +445,15 @@ public class DtraceNonceFixer {
 
     /**
      * Returns true if {@code line} starts a record, other than a sample, whose first line may
-     * contain ":::".
+     * contain ":::". Like Daikon, a keyword starts a record only if it is a whole word, so a sample
+     * whose program point name starts with a keyword (such as "input-language:::POINT") is a
+     * sample.
      *
      * @param line the first non-comment line of a paragraph
      * @return true if {@code line} starts a record that is not a sample
      */
     private static boolean isRecordHeader(String line) {
-      return line.startsWith("decl-version")
-          || line.startsWith("input-language")
-          || line.startsWith("ppt ")
-          || line.startsWith("var-comparability");
+      return FileIO.is_one_line_header_record(line) || FileIO.is_declaration_header(line);
     }
 
     /**

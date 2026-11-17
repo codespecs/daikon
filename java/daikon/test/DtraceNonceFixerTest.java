@@ -741,6 +741,31 @@ public class DtraceNonceFixerTest {
   }
 
   /**
+   * Tests that a sample whose program point name starts with a header keyword, but not as a whole
+   * word, is treated as a sample, as in Daikon.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testSampleNameStartsWithKeyword() throws IOException {
+    String input =
+        String.join("\n", "decl-version 2.0", "input-language:::POINT", "x", "1", "1", "", "");
+    String expected =
+        String.join(
+            "\n",
+            "decl-version 2.0",
+            "input-language:::POINT",
+            "this_invocation_nonce",
+            "0",
+            "x",
+            "1",
+            "1",
+            "",
+            "");
+    assertEquals(expected, fix(input));
+  }
+
+  /**
    * Tests that a nonce that exceeds the range of an int is reported as an error.
    *
    * @throws IOException if there is trouble reading or writing a file
