@@ -420,8 +420,8 @@ public class DtraceNonceFixer {
      * Creates a new Paragraph.
      *
      * @param lines the lines of the paragraph
-     * @param blankLineAfter true if the paragraph is followed by a blank line, false if it ends with
-     *     a one-line header record
+     * @param blankLineAfter true if the paragraph is followed by a blank line, false if it ends
+     *     with a one-line header record
      */
     Paragraph(List<String> lines, boolean blankLineAfter) {
       this.lines = lines;
@@ -546,9 +546,9 @@ public class DtraceNonceFixer {
      * line as a paragraph separator; a line that contains only whitespace is part of a paragraph.
      * Also like Daikon, a one-line header record (such as "decl-version 2.0"), possibly preceded by
      * comments, is a paragraph even if no empty line follows it. This method returns an empty
-     * paragraph if the dtrace file contains consecutive empty lines.
-     * Lines are not modified, so the output differs from the input only in the nonce header line,
-     * in the nonces, and in a final empty line (which the output always has).
+     * paragraph if the dtrace file contains consecutive empty lines. Lines are not modified, so the
+     * output differs from the input only in the nonce header line, in the nonces, and in a final
+     * empty line (which the output always has).
      *
      * @param br the reader for the dtrace file
      * @return the next paragraph, or null if the end of the file has been reached
