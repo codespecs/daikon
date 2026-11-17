@@ -10,6 +10,7 @@ $WARNING = 1;                    # -w flag
 
 # Put the script directory on the @INC path.
 use File::Basename;
+use Cwd qw(abs_path);
 use lib dirname (__FILE__);
 
 # The file `util_daikon.pm` appears in the same directory as this script.
@@ -72,6 +73,19 @@ while (scalar(@ARGV) > 0) {
 }
 if (scalar(@trace_files) == 0) {
   &dieusage("No trace files specified");
+}
+# Temporary files are in the current directory, and their names contain
+# "cluster_temp".  An input file with such a name could be overwritten or
+# deleted, so reject it.
+my $cwd = abs_path(".");
+foreach my $input_file (@trace_files, @decls_files) {
+  if (basename($input_file) =~ /cluster_temp/) {
+    my $dir = abs_path(dirname($input_file));
+    if (defined($dir) && defined($cwd) && $dir eq $cwd) {
+      die "Input file $input_file is in the current directory and its name contains \"cluster_temp\",\n"
+        . "so it might be overwritten or deleted as a temporary file.  Rename it or move it.\n";
+    }
+  }
 }
 if ($algorithm eq "xm") {
   if (system("xmeans 2>&1 > /dev/null") != 0) {

@@ -2775,7 +2775,10 @@ runcluster.pl [@var{options}] @var{dtrace_file ...} [@var{decls_files ...}]
 @noindent
 If no decls files are given, @command{runcluster.pl} uses the
 declarations in the dtrace files, as written by Chicory.  The input files
-are not modified.  The result is written to file
+are not modified.  @command{runcluster.pl} creates temporary files, whose
+names contain @samp{cluster_temp}, in the current directory; therefore, it
+rejects an input file in the current directory whose name contains
+@samp{cluster_temp}.  The result is written to file
 @file{cluster-@var{ALG}-@var{k}.spinfo} (or @file{cluster-xm.spinfo})
 in the current directory.
 
