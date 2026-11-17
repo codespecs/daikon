@@ -2390,6 +2390,10 @@ public final class Daikon {
     // Preprocessing
     setup_NISuppression();
 
+    // The number of samples that were used before this call, such as by an earlier call to
+    // mainHelper.  FileIO.samples_used is never reset.
+    int samples_used_before = FileIO.samples_used;
+
     // Processing (actually using dtrace files)
     try {
       fileio_progress.clear();
@@ -2451,7 +2455,7 @@ public final class Daikon {
 
     // Count the samples that inference used, not all samples minus unmatched entries:  an entry
     // sample can be both unmatched and used (if its ppt is declared as a leaf, such as a POINT).
-    if (FileIO.samples_used == 0) {
+    if (FileIO.samples_used == samples_used_before) {
       throw new Daikon.UserError(
           "No samples found for any of " + StringsPlume.nPlural(all_ppts.size(), "program point"));
     }
