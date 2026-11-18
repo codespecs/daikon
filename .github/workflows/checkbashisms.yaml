@@ -7,11 +7,6 @@ permissions:
 
 jobs:
   lint:
-    # A commit pushed to the head branch of an open pull request from this
-    # repository triggers both a `push` and a `pull_request` event.  Skip the
-    # `pull_request` run, which would duplicate the `push` run.  A pull request
-    # from a fork has no `push` run here.
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
