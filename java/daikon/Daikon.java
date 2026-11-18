@@ -983,6 +983,9 @@ public final class Daikon {
     spinfoFiles.clear();
     // The input language affects how SplitterList matches program point names.
     FileIO.input_language = null;
+    // Sample counts are per-invocation; e.g., the "No samples found" check uses samples_used.
+    FileIO.samples_processed = 0;
+    FileIO.samples_used = 0;
 
     proto_invs.clear();
   }
@@ -1935,9 +1938,9 @@ public final class Daikon {
   /**
    * Create EXIT program points as needed for EXITnn program points. If a program point whose type
    * is not EXIT already has the name of the combined exit, such as a POINT named foo:::EXIT, the
-   * combined exit is not created, and the numbered exits have no combined exit. In that case, {@link
-   * PptRelation#init_hierarchy} connects each numbered exit directly to its enter point and to its
-   * declared parents.
+   * combined exit is not created, and the numbered exits have no combined exit. In that case,
+   * {@link PptRelation#init_hierarchy} connects each numbered exit directly to its enter point and
+   * to its declared parents.
    *
    * @param ppts a map of program points, to which this adds the combined exits
    */
@@ -2402,6 +2405,10 @@ public final class Daikon {
     // Preprocessing
     setup_NISuppression();
 
+    // The number of samples that were used before this call, such as by an earlier call to
+    // mainHelper.  FileIO.samples_used is never reset.
+    int samples_used_before = FileIO.samples_used;
+
     // Processing (actually using dtrace files)
     try {
       fileio_progress.clear();
@@ -2463,7 +2470,7 @@ public final class Daikon {
 
     // Count the samples that inference used, not all samples minus unmatched entries:  an entry
     // sample can be both unmatched and used (if its ppt is declared as a leaf, such as a POINT).
-    if (FileIO.samples_used == 0) {
+    if (FileIO.samples_used == samples_used_before) {
       throw new Daikon.UserError(
           "No samples found for any of " + StringsPlume.nPlural(all_ppts.size(), "program point"));
     }
