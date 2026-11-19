@@ -1309,17 +1309,17 @@ public final class FileIO {
         read_data_trace_record(data_trace_state);
 
         if (data_trace_state.rtype == RecordType.SAMPLE) {
-          assert data_trace_state.ppt != null
-              : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
-          assert data_trace_state.vt != null
-              : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
-          // Nonce may be null
           // A child may be declared before its parent, so check the declared parents only when a
           // sample follows declarations, before processing that sample.
           if (data_trace_state.parents_unchecked) {
             PptRelation.checkDeclaredParents(data_trace_state.all_ppts);
             data_trace_state.parents_unchecked = false;
           }
+          assert data_trace_state.ppt != null
+              : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
+          assert data_trace_state.vt != null
+              : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
+          // Nonce may be null
           samples_processed++;
           // Add orig and derived variables; pass to inference (add_and_flow)
           try {
