@@ -986,6 +986,10 @@ public final class Daikon {
     // Sample counts are per-invocation; e.g., the "No samples found" check uses samples_used.
     FileIO.samples_processed = 0;
     FileIO.samples_used = 0;
+    // Unmatched procedure entries are per-invocation; they affect the unmatched-entry report and
+    // which zero-sample program points are pruned.
+    FileIO.call_stack.clear();
+    FileIO.call_hashmap.clear();
 
     proto_invs.clear();
   }
