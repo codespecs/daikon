@@ -1674,6 +1674,41 @@ public final class FileIO {
     return false;
   }
 
+  /**
+   * Returns a note that says which unmatched entries inference ignored, or the empty string if it
+   * ignored none of them. With the dataflow hierarchy, inference ignores a sample at a ppt that is
+   * not a leaf, such as an ENTER ppt. It uses a sample at a leaf, such as a ppt that is declared as
+   * a POINT but is named like an entry, even if the sample is an unmatched entry.
+   *
+   * @param unmatched_count the number of unmatched entries
+   * @return a note, starting with whitespace, about the unmatched entries that were ignored
+   */
+  private static String unmatchedEntriesIgnoredNote(int unmatched_count) {
+    if (!Daikon.use_dataflow_hierarchy) {
+      return "";
+    }
+    int ignored_count = 0;
+    for (Invocation invok : call_hashmap.values()) {
+      if (!invok.ppt.isDataflowLeaf()) {
+        ignored_count++;
+      }
+    }
+    for (Invocation invok : call_stack) {
+      if (!invok.ppt.isDataflowLeaf()) {
+        ignored_count++;
+      }
+    }
+    if (ignored_count == 0) {
+      return "";
+    } else if (ignored_count == unmatched_count) {
+      return "  Unmatched entries are ignored!";
+    } else {
+      return String.format(
+          "  %d of the unmatched entries %s ignored!",
+          ignored_count, (ignored_count == 1) ? "is" : "are");
+    }
+  }
+
   /** Print each call that does not have a matching exit. */
   public static void process_unmatched_procedure_entries() {
 
@@ -1684,14 +1719,13 @@ public final class FileIO {
     int unmatched_count = call_stack.size() + call_hashmap.size();
 
     if (!call_stack.isEmpty() || !call_hashmap.isEmpty()) {
+      String ignoredNote = unmatchedEntriesIgnoredNote(unmatched_count);
       System.out.println();
       System.out.print(
           "No return from procedure observed "
               + StringsPlume.nPlural(unmatched_count, "time")
-              + ".");
-      if (Daikon.use_dataflow_hierarchy) {
-        System.out.print("  Unmatched entries are ignored!");
-      }
+              + "."
+              + ignoredNote);
       System.out.println();
       if (!call_hashmap.isEmpty()) {
         // Put the invocations in sorted order for printing.
@@ -1720,10 +1754,7 @@ public final class FileIO {
           print_invocations_grouped(call_stack);
         }
       }
-      System.out.print("End of report for procedures not returned from.");
-      if (Daikon.use_dataflow_hierarchy) {
-        System.out.print("  Unmatched entries are ignored!");
-      }
+      System.out.print("End of report for procedures not returned from." + ignoredNote);
       System.out.println();
     }
   }
