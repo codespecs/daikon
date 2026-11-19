@@ -987,7 +987,8 @@ public final class Daikon {
     FileIO.samples_processed = 0;
     FileIO.samples_used = 0;
     // Unmatched procedure entries are per-invocation; they affect the unmatched-entry report and
-    // which zero-sample program points are pruned.
+    // which zero-sample program points are pruned.  Within one invocation they persist across
+    // trace files, so an entry and its exit may be in different files.
     FileIO.call_stack.clear();
     FileIO.call_hashmap.clear();
 
