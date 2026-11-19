@@ -380,7 +380,8 @@ public class InitHierarchyTest {
     Files.write(dtraceFile.toPath(), dtrace.getBytes(StandardCharsets.UTF_8));
     File invFile = new File(tmpFolder.getRoot(), "point.inv.gz");
     try {
-      // Before the fix, this threw a UserError: "No samples found for any of 1 program point".
+      // If Daikon treated this sample only as an entry, it would throw a UserError:
+      // "No samples found for any of 1 program point".
       Daikon.mainHelper(
           new String[] {
             "--no_text_output",
@@ -393,6 +394,38 @@ public class InitHierarchyTest {
       assertTrue(invFile.exists());
     } finally {
       // Also discards the unmatched entry that this test leaves on the call stack.
+      Daikon.cleanup();
+    }
+  }
+
+  /**
+   * Daikon infers invariants from a sample at a point that is named like an abrupt completion
+   * point, even though no entry precedes the sample.
+   */
+  @Test
+  public void testPointNamedThrowsSample() throws IOException {
+    File declsFile = tmpFolder.newFile("throws.decls");
+    String decls =
+        "decl-version 2.0\nvar-comparability none\n\n" + pptDecl("Foo.bar():::THROWS", "point");
+    Files.write(declsFile.toPath(), decls.getBytes(StandardCharsets.UTF_8));
+    File dtraceFile = tmpFolder.newFile("throws.dtrace");
+    String dtrace = "Foo.bar():::THROWS\nx\n1\n1\n\n";
+    Files.write(dtraceFile.toPath(), dtrace.getBytes(StandardCharsets.UTF_8));
+    File invFile = new File(tmpFolder.getRoot(), "throws.inv.gz");
+    try {
+      // If Daikon matched this sample with an entry, it would throw an Error:
+      // "Function exit without corresponding entry".
+      Daikon.mainHelper(
+          new String[] {
+            "--no_text_output",
+            "-o",
+            invFile.toString(),
+            declsFile.toString(),
+            dtraceFile.toString()
+          });
+      assertEquals(1, FileIO.samples_used);
+      assertTrue(invFile.exists());
+    } finally {
       Daikon.cleanup();
     }
   }
