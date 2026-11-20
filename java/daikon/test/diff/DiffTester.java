@@ -1,17 +1,22 @@
 package daikon.test.diff;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import daikon.*;
 import daikon.config.*;
 import daikon.diff.*;
 import daikon.inv.*;
+import daikon.inv.binary.twoScalar.IntLessEqual;
 import daikon.inv.unary.scalar.*;
 import daikon.split.*;
 import daikon.split.misc.*;
 import daikon.test.*;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,6 +26,7 @@ import junit.framework.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.plumelib.util.FilesPlume;
 
 @SuppressWarnings({"nullness", "UnusedVariable"}) // testing code
 public class DiffTester {
@@ -464,6 +470,82 @@ public class DiffTester {
     map.add(ppt);
 
     diffSome.diffPptMap(map, map);
+  }
+
+  // A PptMap and an equivalent unfiltered InvMap should yield the same invariants: both omit
+  // reflexive invariants such as "x <= x".  This holds both for in-memory maps and for serialized
+  // maps read by Diff.mainHelper.
+  @Test
+  public void testOmitObviousInvMap() throws Exception {
+    Method mAddViews = PptTopLevel.class.getDeclaredMethod("addViews", new Class<?>[] {List.class});
+    mAddViews.setAccessible(true);
+
+    VarInfo[] vars = {newIntVarInfo("x")};
+    PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
+    PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
+    Invariant invx = LowerBound.get_proto().instantiate(slicex);
+    slicex.addInvariant(invx);
+    PptSlice slicexx = new PptSlice2(ppt, new VarInfo[] {vars[0], vars[0]});
+    Invariant invxx = IntLessEqual.get_proto().instantiate(slicexx);
+    slicexx.addInvariant(invxx);
+    List<PptSlice> v = new ArrayList<>();
+    v.add(slicex);
+    v.add(slicexx);
+    mAddViews.invoke(ppt, new Object[] {v});
+    PptMap pptMap = new PptMap();
+    pptMap.add(ppt);
+
+    // An InvMap that was not produced by convertToInvMap, and so contains the reflexive invariant.
+    InvMap unfiltered = new InvMap();
+    unfiltered.put(ppt, new ArrayList<Invariant>(ppt.getInvariants()));
+    assertEquals(2, unfiltered.get(ppt).size());
+
+    InvMap fromPptMap = diffSome.convertToInvMap(pptMap);
+    InvMap fromInvMap = Diff.omitObvious(unfiltered);
+    assertEquals(1, fromPptMap.get(ppt).size());
+    assertEquals(fromPptMap.toString(), fromInvMap.toString());
+    assertEquals(
+        printTree(diffSome.diffInvMap(fromPptMap, new InvMap())),
+        printTree(diffSome.diffInvMap(fromInvMap, new InvMap())));
+
+    // Without filtering, the reflexive invariant would appear in the output.
+    assertTrue(printTree(diffSome.diffInvMap(unfiltered, new InvMap())).contains("x <= x"));
+
+    // Exercise the command-line entry point, which reads serialized files.
+    File pptMapFile = File.createTempFile("DiffTester-pptmap", ".inv.gz");
+    File invMapFile = File.createTempFile("DiffTester-invmap", ".inv.gz");
+    try {
+      FileIO.write_serialized_pptmap(pptMap, pptMapFile);
+      FilesPlume.writeObject(unfiltered, invMapFile);
+      String pptMapOutput = runDiffMainHelper("-a", pptMapFile.getPath());
+      String invMapOutput = runDiffMainHelper("-a", invMapFile.getPath());
+      assertTrue(invMapOutput, invMapOutput.contains("x >= "));
+      assertFalse(invMapOutput, invMapOutput.contains("x <= x"));
+      assertEquals(pptMapOutput, invMapOutput);
+    } finally {
+      pptMapFile.delete();
+      invMapFile.delete();
+    }
+  }
+
+  /**
+   * Runs {@link Diff#mainHelper} on the given arguments and returns what it printed to standard
+   * output.
+   *
+   * @param args the command-line arguments
+   * @return the standard output of {@code Diff.mainHelper(args)}
+   * @throws Exception if {@code Diff.mainHelper} throws an exception
+   */
+  private static String runDiffMainHelper(String... args) throws Exception {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream oldOut = System.out;
+    System.setOut(new PrintStream(baos, true, UTF_8));
+    try {
+      Diff.mainHelper(args);
+    } finally {
+      System.setOut(oldOut);
+    }
+    return new String(baos.toByteArray(), UTF_8);
   }
 
   // Runs diff on a PptMap containing a PptConditional, with
