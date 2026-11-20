@@ -527,8 +527,10 @@ public class PptTopLevel extends Ppt {
    * <p>A program point that is declared with any other type keeps that type. Its name must conform
    * to the type, except for {@link PptType#POINT}, which permits any name.
    *
-   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, etc. agree with one
-   * another and with the program point's name.
+   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, isDataflowLeaf, etc.
+   * agree with one another. They also agree with the program point's name, except for a program
+   * point that is declared as a {@link PptType#POINT}: it is a leaf of the dataflow hierarchy
+   * whatever its name, even if its name is foo:::ENTER.
    *
    * @param ppt_name the name of the program point
    * @param type the declared type of the program point, or null if none was declared
@@ -1185,9 +1187,9 @@ public class PptTopLevel extends Ppt {
     // apply these values to the combined exit
     if (!Daikon.use_dataflow_hierarchy) {
       // System.out.println ("ppt_name = " + ppt_name);
-      if (!(this instanceof PptConditional) && ppt_name.isNumberedExitPoint()) {
+      if (!(this instanceof PptConditional) && is_subexit()) {
         PptTopLevel parent = Daikon.all_ppts.get(ppt_name.makeExit());
-        if (parent != null) {
+        if ((parent != null) && parent.is_combined_exit()) {
           // System.out.println ("parent is " + parent.name());
           parent.get_missingOutOfBounds(this, vt);
           parent.add_bottom_up(vt, count);
@@ -2962,7 +2964,7 @@ public class PptTopLevel extends Ppt {
 
     // If this is a combined exit point with two individual exits, create
     // implications from the two exit points
-    if (ppt_name.isCombinedExitPoint()) {
+    if (is_combined_exit()) {
       // System.out.printf("Considering ppt %s [%d children]%n", name(),
       //                   children.size());
       List<PptTopLevel> exit_points = new ArrayList<>();
@@ -3214,7 +3216,7 @@ public class PptTopLevel extends Ppt {
 
         // If this is the :::OBJECT ppt, also restate all of them in
         // orig terms, since the conditions also held upon entry.
-        if (ppt.ppt_name.isObjectInstanceSynthetic()) {
+        if (ppt.is_object()) {
           proverStack.pushLemma(InvariantLemma.makeLemmaAddOrig(inv));
         }
       }
@@ -4358,6 +4360,18 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Creates the initial equality view for this ppt, which has not seen any samples. Each equality
+   * set contains all the variables that are comparable to one another, as if every sample so far
+   * had given them equal values (or each variable is in its own set, if {@link
+   * PptSliceEquality#dkconfig_set_per_var} is true).
+   */
+  public void createEqualityView() {
+    PptSliceEquality newEqualityView = new PptSliceEquality(this);
+    newEqualityView.instantiate_invariants();
+    equality_view = newEqualityView;
+  }
+
+  /**
    * Cleans up the ppt so that its invariants can be merged from other ppts. Not normally necessary
    * unless the merge is taking place over multiple ppts maps based on different data. This allows a
    * ppt to have its invariants recalculated.
@@ -4891,6 +4905,21 @@ public class PptTopLevel extends Ppt {
   @Pure
   public boolean is_subexit() {
     return type == PptType.SUBEXIT;
+  }
+
+  /**
+   * Returns true if this is a leaf of the dataflow hierarchy, which obtains its invariants directly
+   * from samples rather than by merging them from its children.
+   *
+   * <p>The leaves are the numbered exit points ({@link PptType#SUBEXIT}) and the general program
+   * points ({@link PptType#POINT}). This ensures that arbitrarily named program points such as
+   * :::POINT (used by convertcsv.pl) are leaves.
+   *
+   * @return true if this is a leaf of the dataflow hierarchy
+   */
+  @Pure
+  public boolean isDataflowLeaf() {
+    return (type == PptType.SUBEXIT) || (type == PptType.POINT);
   }
 
   /** Is this a ppt that represents an object? */
