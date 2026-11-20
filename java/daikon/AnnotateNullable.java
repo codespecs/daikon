@@ -1,6 +1,5 @@
 package daikon;
 
-import daikon.PptTopLevel.PptType;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import org.checkerframework.checker.interning.qual.Interned;
-import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
@@ -43,8 +41,23 @@ public class AnnotateNullable {
   // static SimpleLog verbose = new SimpleLog(/*enabled=*/ false);
   // static SimpleLog debug = new SimpleLog(/*enabled=*/ false);
 
-  /** Map from a class name to the list of static functions for that class. */
-  static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<>();
+  /** The program points of a class. */
+  public static final class ClassPpts {
+    /** The class's OBJECT program point, or null if the class has none. */
+    public @Nullable PptTopLevel object_ppt = null;
+
+    /** The class's CLASS program point, or null if the class has none. */
+    public @Nullable PptTopLevel class_ppt = null;
+
+    /** The combined exits of the class's static methods. */
+    public final List<PptTopLevel> static_methods = new ArrayList<>();
+  }
+
+  /**
+   * Map from the fully-qualified name of a class, such as "DataStructures.StackAr", to the class's
+   * program points.
+   */
+  static Map<String, ClassPpts> class_map = new LinkedHashMap<>();
 
   // The package for the previous class.  Used to reduce duplication in
   // output file.
@@ -105,120 +118,127 @@ public class AnnotateNullable {
       System.out.println();
     }
 
-    // Find all exit ppts that do not have a parent and determine what
-    // class they are associated with.  These are static methods for classes
-    // without any static variables (no class ppt is created if there are no
-    // static variables)
-
-    // First find all of the classes
+    // Group the program points by class.  The first loop maps the classes that have an OBJECT
+    // ppt, so that those classes are output in the order of their OBJECT ppts.
     for (PptTopLevel ppt : ppts.pptIterable()) {
       if (ppt.is_object()) {
-        String classname = ppt.name().replace(":::OBJECT", "");
-        assert !class_map.containsKey(classname) : classname;
-        List<PptTopLevel> static_methods = new ArrayList<>();
-        class_map.put(classname, static_methods);
+        ClassPpts class_ppts = class_ppts_for(ppt);
+        assert class_ppts.object_ppt == null : ppt;
+        class_ppts.object_ppt = ppt;
+      }
+    }
+    for (PptTopLevel ppt : ppts.pptIterable()) {
+      if (ppt.is_class()) {
+        ClassPpts class_ppts = class_ppts_for(ppt);
+        assert class_ppts.class_ppt == null : ppt;
+        class_ppts.class_ppt = ppt;
       }
     }
 
-    // Then, add combined exit points for static methods to their class.  A
-    // static method can be identified because it will not have the OBJECT
-    // point as a parent.
+    // Add the combined exit of each static method to its class.  A static method can be
+    // identified because its combined exit does not have an OBJECT ppt as a parent.  The combined
+    // exit need not have a CLASS ppt as a parent either, because Chicory creates a CLASS ppt only
+    // for a class that has static variables.
     for (PptTopLevel ppt : ppts.pptIterable()) {
       if (!ppt.is_combined_exit() || !is_static_method(ppt)) {
         continue;
       }
-
-      String name = ppt.name().replaceFirst("[(].*$", "");
-      int lastdot = name.lastIndexOf('.');
-      @SuppressWarnings("keyfor") // application invariant:  KeyFor and substring
-      // @KeyFor because class_map has entry per class, and this method is in some class
-      @KeyFor("class_map") String classname = name.substring(0, lastdot);
-      // System.out.printf("classname for ppt %s is '%s'%n", name, classname);
-      @NonNull List<PptTopLevel> static_methods = class_map.get(classname);
-      assert static_methods != null : classname;
-      static_methods.add(ppt);
+      if (ppt.ppt_name.getFullClassName() == null || ppt.ppt_name.getSignature() == null) {
+        System.err.printf(
+            "Warning: skipping %s, whose name does not have the form Class.method(args)%n", ppt);
+        continue;
+      }
+      class_ppts_for(ppt).static_methods.add(ppt);
     }
 
     // Debug print all of the static methods
     if (false) {
-      for (String classname : class_map.keySet()) {
-        System.out.printf("class %s static methods: %s%n", classname, class_map.get(classname));
+      for (Map.Entry<String, ClassPpts> entry : class_map.entrySet()) {
+        System.out.printf(
+            "class %s static methods: %s%n", entry.getKey(), entry.getValue().static_methods);
       }
     }
 
-    // Make sure that the static methods found by inference, match those
-    // found for any class ppts
-    for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (ppt.is_class()) {
-        @SuppressWarnings(
-            "nullness") // map: retrieve class name from class Ppt name, with string manipulation
-        @NonNull List<PptTopLevel> static_methods =
-            class_map.get(ppt.name().replace(":::CLASS", ""));
-        int child_cnt = 0;
-        // TODO: Once Checker Framework issue 565 has been fixed (https://tinyurl.com/cfissue/565),
-        // change the following two lines back to
-        // for (PptRelation child_rel : ppt.children) {
-        for (int i = 0; i < ppt.children.size(); i++) {
-          PptRelation child_rel = ppt.children.get(i);
-          PptTopLevel child = child_rel.child;
-          // Skip enter ppts, all of the info is at the exit.
-          if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
-            continue;
-          }
-          child_cnt++;
-          assert static_methods.contains(child) : child;
+    // Make sure that the static methods found by inference match those found for any class ppts
+    for (ClassPpts class_ppts : class_map.values()) {
+      PptTopLevel class_ppt = class_ppts.class_ppt;
+      if (class_ppt != null) {
+        List<PptTopLevel> class_methods = combined_exit_children(class_ppt);
+        for (PptTopLevel child : class_methods) {
+          assert class_ppts.static_methods.contains(child) : child;
         }
-        assert child_cnt == static_methods.size() : static_methods;
+        assert class_methods.size() == class_ppts.static_methods.size() : class_ppts.static_methods;
       }
     }
 
     // Process each class.
-    for (PptTopLevel ppt : ppts.pptIterable()) {
+    for (Map.Entry<String, ClassPpts> entry : class_map.entrySet()) {
+      String classname = entry.getKey();
 
-      // Skip synthetic program points
-      if (ppt.name().startsWith("$")) {
+      // Skip synthetic classes
+      if (classname.startsWith("$")) {
         continue;
       }
 
-      // Skip program points that are not OBJECT ppts
-      if (ppt.is_object()) {
-        process_class(ppt);
-      }
+      process_class(classname, entry.getValue());
     }
   }
 
   /**
-   * Returns the class program point corresponding to an object program point. Returns null if no
-   * corresponding class ppt exists.
+   * Returns the program points of the class whose name is in the name of the given program point.
+   * Adds an entry to {@link #class_map} if it has none for the class.
    *
-   * @param object_ppt an object program point
-   * @return the class program point corresponding to an object program point
+   * @param ppt a program point whose name contains a class name, as in
+   *     "DataStructures.StackAr:::OBJECT" or "DataStructures.StackAr.push(java.lang.Object):::EXIT"
+   * @return the program points of the class whose name is in the name of {@code ppt}
    */
-  private static @Nullable PptTopLevel class_for_object(PptTopLevel object_ppt) {
-    if (object_ppt.parents.isEmpty()) {
-      return null;
+  private static ClassPpts class_ppts_for(PptTopLevel ppt) {
+    String classname = ppt.ppt_name.getFullClassName();
+    if (classname == null) {
+      throw new IllegalArgumentException("No class name in " + ppt);
     }
-    assert object_ppt.parents.size() == 1 : object_ppt;
-    return object_ppt.parents.get(0).parent;
+    return class_map.computeIfAbsent(classname, k -> new ClassPpts());
   }
 
-  // Process a class, including all its methods.
-  // Takes the object program point as its argument.
-  public static void process_class(PptTopLevel object_ppt) {
+  /**
+   * Returns the children of the given program point that are combined exits. AnnotateNullable
+   * obtains all the information about a method from the method's combined exit, so it ignores the
+   * other children, such as entries and points.
+   *
+   * @param ppt a program point
+   * @return the children of {@code ppt} that are combined exits
+   */
+  private static List<PptTopLevel> combined_exit_children(PptTopLevel ppt) {
+    List<PptTopLevel> result = new ArrayList<>();
+    for (PptRelation child_rel : ppt.children) {
+      if (child_rel.child.is_combined_exit()) {
+        result.add(child_rel.child);
+      }
+    }
+    return result;
+  }
 
-    // Get the class program point (if any)
-    PptTopLevel class_ppt = class_for_object(object_ppt);
+  /**
+   * Print out the annotations for the given class, including all its fields and methods.
+   *
+   * @param classname the fully-qualified name of a class, such as "DataStructures.StackAr"
+   * @param class_ppts the program points of the class
+   */
+  public static void process_class(String classname, ClassPpts class_ppts) {
 
+    PptTopLevel object_ppt = class_ppts.object_ppt;
+    PptTopLevel class_ppt = class_ppts.class_ppt;
+
+    String object_samples = "-";
+    if (object_ppt != null) {
+      object_samples = String.format("%d", object_ppt.num_samples());
+    }
     String class_samples = "-";
     if (class_ppt != null) {
       class_samples = String.format("%d", class_ppt.num_samples());
     }
-    String ppt_package = object_ppt.ppt_name.getPackageName();
-    if (ppt_package == null) {
-      ppt_package = "";
-    } else {
-      ppt_package = ppt_package.intern();
-    }
+    int lastdot = classname.lastIndexOf('.');
+    String ppt_package = (lastdot == -1 ? "" : classname.substring(0, lastdot)).intern();
     if (stub_format) {
       if (ppt_package != last_package) {
         // This will print the empty string if we switch from a package to the
@@ -227,13 +247,12 @@ public class AnnotateNullable {
         last_package = ppt_package;
       }
       System.out.printf(
-          "class %s { // %d/%s obj/class samples%n",
-          object_ppt.ppt_name.getFullClassName(), object_ppt.num_samples(), class_samples);
+          "class %s { // %s/%s obj/class samples%n", classname, object_samples, class_samples);
     } else {
       System.out.printf("package %s:%n", ppt_package);
       System.out.printf(
-          "class %s : // %d/%s obj/class samples%n",
-          object_ppt.ppt_name.getShortClassName(), object_ppt.num_samples(), class_samples);
+          "class %s : // %s/%s obj/class samples%n",
+          classname.substring(lastdot + 1), object_samples, class_samples);
     }
 
     // Process static fields
@@ -242,39 +261,28 @@ public class AnnotateNullable {
     }
 
     // Process member (non-static) fields
-    process_obj_fields(object_ppt);
+    if (object_ppt != null) {
+      process_obj_fields(object_ppt);
+    }
 
     // Process static methods
     if (class_ppt != null) {
-      for (PptRelation child_rel : class_ppt.children) {
-        PptTopLevel child = child_rel.child;
-        // Skip enter ppts, all of the info is at the exit.
-        if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
-          continue;
-        }
+      for (PptTopLevel child : combined_exit_children(class_ppt)) {
         // debug.log("processing static method %s, type %s", child, child.type);
         process_method(child);
       }
     } else {
-      String classname = object_ppt.ppt_name.getFullClassName();
-      assert classname != null;
-      @SuppressWarnings("nullness") // map: class_map has entry per classname
-      @NonNull List<PptTopLevel> static_methods = class_map.get(classname);
-      assert static_methods != null : classname;
-      for (PptTopLevel child : static_methods) {
+      for (PptTopLevel child : class_ppts.static_methods) {
         process_method(child);
       }
     }
 
     // Process member (non-static) methods
-    for (PptRelation child_rel : object_ppt.children) {
-      PptTopLevel child = child_rel.child;
-      // Skip enter ppts, all of the info is at the exit.
-      if (child.type == PptType.ENTER) {
-        continue;
+    if (object_ppt != null) {
+      for (PptTopLevel child : combined_exit_children(object_ppt)) {
+        // debug.log("processing method %s, type %s", child, child.type);
+        process_method(child);
       }
-      // debug.log("processing method %s, type %s", child, child.type);
-      process_method(child);
     }
 
     if (stub_format) {
@@ -311,7 +319,7 @@ public class AnnotateNullable {
   /** Print out the annotations for the specified method. */
   public static void process_method(PptTopLevel ppt) {
 
-    assert ppt.type == PptType.EXIT : ppt;
+    assert ppt.is_combined_exit() : ppt;
 
     // Get all of the parameters to the method and the return value
     List<VarInfo> params = new ArrayList<>();
