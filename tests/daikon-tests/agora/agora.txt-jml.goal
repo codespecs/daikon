@@ -1,0 +1,53 @@
+===========================================================================
+agora.AgoraTest:::OBJECT
+    Variables: this
+this != null
+===========================================================================
+agora.AgoraTest.AgoraTest():::EXIT
+    Variables: this
+===========================================================================
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+    Variables: this lst lst[] lst[].getClass().getName() lst.getClass().getName() size(lst[]) size(lst[])-1
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(lst), new String[] {  })
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: lst.getClass().getName() is printable
+===========================================================================
+agora.AgoraTest.emptySequence(java.util.List):::EXIT
+    Variables: this lst lst[] lst[].getClass().getName() lst.getClass().getName() orig(this) orig(lst) orig(lst[]) orig(lst[].getClass().getName()) orig(lst.getClass().getName()) size(lst[]) size(lst[])-1 orig(size(lst[])) orig(size(lst[]))-1
+daikon.Quant.pairwiseEqual(lst, \old(lst))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(lst), new String[] {  })
+===========================================================================
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+    Variables: this s s.toString
+s.toString().equals("")
+===========================================================================
+agora.AgoraTest.emptyString(java.lang.String):::EXIT
+    Variables: this s s.toString orig(this) orig(s) orig(s.toString)
+s.toString().equals(\old(s.toString()))
+s.toString().equals("")
+===========================================================================
+agora.AgoraTest.main(java.lang.String[]):::ENTER
+    Variables: args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1
+args != null
+args.getClass().getName() == java.lang.String[].class.getName()
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  })
+===========================================================================
+agora.AgoraTest.main(java.lang.String[]):::EXIT
+    Variables: args args.getClass().getName() args[] args[].toString orig(args) orig(args.getClass().getName()) orig(args[]) orig(args[].toString) size(args[]) size(args[])-1 orig(size(args[])) orig(size(args[]))-1
+daikon.Quant.pairwiseEqual(args, \old(args))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  })
+===========================================================================
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+    Variables: this s s.toString
+s != null
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(s.toString).matches()
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: s.toString is printable
+===========================================================================
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT
+    Variables: this s s.toString orig(this) orig(s) orig(s.toString)
+s.toString().equals(\old(s.toString()))
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(s.toString).matches()
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: s.toString is printable

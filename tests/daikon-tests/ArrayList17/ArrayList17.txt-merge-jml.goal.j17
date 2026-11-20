@@ -1147,6 +1147,7 @@ public class ArrayList17<E> extends AbstractList17<E>
 {
     /*@ invariant javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName() == this.elementData.getClass().getName(); */
     /*@ invariant this.elementData != null; */
+    /*@ invariant All the elements of this.elementData[..].getClass().getName() have LENGTH=17; */
     /*@ invariant this.size >= 0; */
     /*@ invariant this.modCount >= 0; */
     /*@ invariant daikon.Quant.size(this.elementData)-1 != 0; */
