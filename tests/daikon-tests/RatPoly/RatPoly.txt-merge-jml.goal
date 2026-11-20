@@ -189,6 +189,7 @@ public class RatPoly {
     @ ensures daikon.Quant.pairwiseEqual(this.terms.wrapped, \old(this.terms.wrapped));
     @ ensures (daikon.Quant.size(this.terms.wrapped) == 0)  ==>  (\result != null);
     @ ensures (daikon.Quant.size(this.terms.wrapped) == 0)  ==>  (\result.toString().equals("0"));
+    @ ensures (daikon.Quant.size(this.terms.wrapped) == 0)  ==>  (daikon.inv.unary.string.IsNumeric.PATTERN.matcher(return.toString).matches());
     @ ensures (daikon.Quant.size(this.terms.wrapped) == 0)  ==>  (daikon.Quant.size(this.terms.wrapped) is a pointer);
     @ ensures \result != null;
     @*/

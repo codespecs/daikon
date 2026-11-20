@@ -14,6 +14,15 @@ this.elementData[] contains only nulls and has only one value, of length 10
 this.elementData[] elements == null
 this.elementData[].getClass().getName() == [null, null, null, null, null, null, null, null, null, null]
 this.elementData[].getClass().getName() elements == null
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 this.elementCount == 0
 size(this.elementData[]) == 10
 this.elementData[this.elementCount+1..] contains only nulls and has only one value, of length 9
@@ -29,6 +38,15 @@ this.elementCount == this.capacityIncrement
 orig(initialCapacity) == size(this.elementData[])
 this.elementData[] elements == null
 this.elementData[].getClass().getName() elements == null
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 this.elementCount == 0
 this.elementData[orig(initialCapacity)..] == []
 this.elementCount <= orig(initialCapacity)
@@ -42,6 +60,15 @@ this.capacityIncrement == orig(capacityIncrement)
 orig(initialCapacity) == size(this.elementData[])
 this.elementData[] elements == null
 this.elementData[].getClass().getName() elements == null
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 this.elementCount == 0
 this.elementData[orig(initialCapacity)..] == []
 this.elementCount <= this.capacityIncrement
@@ -98,6 +125,7 @@ this.elementData.getClass().getName() == orig(this.elementData.getClass().getNam
 this.elementData[] == orig(this.elementData[])
 this.elementCount == orig(this.elementCount)
 this.capacityIncrement == orig(this.capacityIncrement)
+(return == false)  ==>  (All the elements of this.elementData[].getClass().getName() have LENGTH=16)
 (return == true)  ==>  (orig(elem.getClass().getName()) in this.elementData[].getClass().getName())
 (return == true)  ==>  (this.elementCount >= 1)
 this.elementData.getClass().getName() != orig(elem.getClass().getName())
@@ -110,6 +138,7 @@ return == true
 orig(elem.getClass().getName()) in this.elementData[].getClass().getName()
 ===========================================================================
 javautil.Vector13.contains(java.lang.Object):::EXIT;condition="not(return == true)"
+All the elements of this.elementData[].getClass().getName() have LENGTH=16
 return == false
 ===========================================================================
 javautil.Vector13.copyInto(java.lang.Object[]):::ENTER
@@ -363,6 +392,15 @@ this.elementData[] == orig(this.elementData[])
 this.elementCount == orig(this.elementCount)
 this.capacityIncrement == orig(this.capacityIncrement)
 (this.elementCount == 0)  <==>  (return == true)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are Numeric)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are emails)
 (this.elementCount == 0)  ==>  (this.elementCount <= this.capacityIncrement)
 (this.elementCount == 0)  ==>  (this.elementCount is a pointer)
 (this.elementCount == 0)  ==>  (this.elementData[0..this.elementCount-1] == [])
@@ -374,6 +412,15 @@ this.elementCount <= size(this.elementData[])
 javautil.Vector13.isEmpty():::EXIT;condition="return == true"
 this.elementData[] elements == null
 this.elementData[].getClass().getName() elements == null
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 this.elementCount == 0
 return == true
 this.elementData[0..this.elementCount-1] == []
@@ -483,6 +530,15 @@ size(this.elementData[]) == orig(size(this.elementData[]))
 this.elementData[orig(this.elementCount)..] == orig(this.elementData[this.elementCount..])
 this.elementData[] elements == null
 this.elementData[].getClass().getName() elements == null
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 this.elementCount == 0
 this.elementData[0..this.elementCount-1] == []
 this.elementCount <= this.capacityIncrement

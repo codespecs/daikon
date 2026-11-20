@@ -23,6 +23,32 @@ Further documentation can be found in:
 
 ## Version 5.9.1 (???, 2026)
 
+Daikon supports the following new invariants, over strings and sequences of
+strings; all of them are enabled by default:
+
+* IsUrl
+* FixedLengthString
+* IsNumeric
+* IsEmail
+* IsDateYYYYMMDD
+* IsDateDDMMYYYY
+* IsDateMMDDYYYY
+* IsTimeOfDay
+* IsTimeOfDayWithSeconds
+* IsTimeOfDayAMPM
+* IsTimestampYYYYMMHHThhmmssmm
+* SequenceFixedLengthString
+* SequenceStringElementsAreUrl
+* SequenceStringElementsAreNumeric
+* SequenceStringElementsAreEmail
+* SequenceStringElementsAreDateYYYYMMDD
+* SequenceStringElementsAreDateDDMMYYYY
+* SequenceStringElementsAreDateMMDDYYYY
+* SequenceStringElementsAreTimeOfDay
+* SequenceStringElementsAreTimeOfDayWithSeconds
+* SequenceStringElementsAreTimeOfDayAMPM
+* SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm
+
 * Daikon and its tools now reject a malformed command-line option.
 * In a version 2.0 declaration file, Daikon reads the whole rest of a `ppt`
    record as the program point name, which can contain unescaped blanks.

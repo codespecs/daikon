@@ -9,6 +9,7 @@ this.currentSize >= 0
 this.array != null
 this.array != null
 this.array.getClass().getName() == DataStructures.Comparable[].class.getName()
+All the elements of this.array[].getClass().getName() have LENGTH=24
 daikon.Quant.size(this.array) == 101
 daikon.Quant.noDups(daikon.Quant.slice(this.array, 0, this.currentSize))
 this.currentSize <= daikon.Quant.size(this.array)-1

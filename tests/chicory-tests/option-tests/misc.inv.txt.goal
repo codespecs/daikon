@@ -28,6 +28,15 @@ DataStructures.StackAr.StackAr(int):::EXIT
 orig(capacity) == size(this.theArray[])
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.topOfStack == -1
 this.isEmpty() == true
 this.theArray[0..this.topOfStack] == []
@@ -43,6 +52,15 @@ this.isEmpty() == return
 this.isFull() == orig(this.isFull())
 return == orig(this.isEmpty())
 (this.topOfStack == -1)  <==>  (return == true)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (this.topOfStack == -1)  ==>  (this.theArray[0..this.topOfStack] == [])
 (this.topOfStack == -1)  ==>  (this.theArray[] elements == null)
 (this.topOfStack == -1)  ==>  (this.theArray[].getClass().getName() elements == null)
@@ -52,6 +70,15 @@ return == orig(this.isEmpty())
 DataStructures.StackAr.isEmpty():::EXIT;condition="return == true"
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.topOfStack == -1
 return == true
 this.theArray[0..this.topOfStack] == []
@@ -98,6 +125,15 @@ size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.topOfStack == -1
 this.isEmpty() == true
 this.theArray[0..this.topOfStack] == []
@@ -156,6 +192,15 @@ DataStructures.StackAr.top():::ENTER
 DataStructures.StackAr.top():::EXIT74
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.topOfStack == -1
 this.isEmpty() == true
 return == null
@@ -180,6 +225,15 @@ this.isEmpty() == orig(this.isEmpty())
 this.isFull() == orig(this.isFull())
 (this.topOfStack == -1)  <==>  (return == null)
 (this.topOfStack == -1)  <==>  (this.isEmpty() == true)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (this.topOfStack == -1)  ==>  (this.theArray[0..this.topOfStack] == [])
 (this.topOfStack == -1)  ==>  (this.theArray[] elements == null)
 (this.topOfStack == -1)  ==>  (this.theArray[] elements == return)
@@ -206,6 +260,15 @@ this.isEmpty() == orig(this.isEmpty())
 this.isFull() == orig(this.isFull())
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.topOfStack == -1
 this.isEmpty() == true
 return == null
@@ -247,6 +310,24 @@ this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1
 (return == null)  <==>  (orig(this.isEmpty()) == true)
 (return == null)  <==>  (orig(this.topOfStack) == -1)
 (return == null)  <==>  (this.topOfStack == orig(this.topOfStack))
+(return == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are Numeric)
+(return == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(return == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(return == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(return == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(return == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are dates. Format: DD/MM/YYYY)
+(return == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are dates. Format: MM/DD/YYYY)
+(return == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are dates. Format: YYYY-MM-DD)
+(return == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are emails)
+(return == null)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(return == null)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(return == null)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(return == null)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(return == null)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(return == null)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(return == null)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(return == null)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(return == null)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (return == null)  ==>  (orig(this.theArray[0..this.topOfStack]) == [])
 (return == null)  ==>  (orig(this.theArray[]) elements == null)
 (return == null)  ==>  (orig(this.theArray[]) elements == return)
@@ -336,6 +417,15 @@ orig(phase) != size(DataStructures.StackArTester.s.theArray[])-1
 DataStructures.StackArTester.doNew(int):::ENTER
 DataStructures.StackArTester.s.theArray[] elements == null
 DataStructures.StackArTester.s.theArray[].getClass().getName() elements == null
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are Numeric
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are emails
 DataStructures.StackArTester.s.topOfStack == -1
 DataStructures.StackArTester.s.isEmpty() == true
 size >= 0
@@ -351,6 +441,15 @@ DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
 orig(size) == size(DataStructures.StackArTester.s.theArray[])
 DataStructures.StackArTester.s.theArray[] elements == null
 DataStructures.StackArTester.s.theArray[].getClass().getName() elements == null
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are Numeric
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are emails
 DataStructures.StackArTester.s.topOfStack == -1
 DataStructures.StackArTester.s.isEmpty() == true
 DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] == []
@@ -359,6 +458,15 @@ DataStructures.StackArTester.s.topOfStack <= orig(size(DataStructures.StackArTes
 DataStructures.StackArTester.fill(int):::ENTER
 DataStructures.StackArTester.s.theArray[] elements == null
 DataStructures.StackArTester.s.theArray[].getClass().getName() elements == null
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are Numeric
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are emails
 DataStructures.StackArTester.s.topOfStack == -1
 DataStructures.StackArTester.s.isEmpty() == true
 DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] == []
@@ -374,6 +482,15 @@ DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
 orig(n) == size(DataStructures.StackArTester.s.theArray[])
 DataStructures.StackArTester.s.theArray[] elements == null
 DataStructures.StackArTester.s.theArray[].getClass().getName() elements == null
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are Numeric
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of DataStructures.StackArTester.s.theArray[].getClass().getName() are emails
 DataStructures.StackArTester.s.topOfStack == -1
 DataStructures.StackArTester.s.isEmpty() == true
 DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] == []

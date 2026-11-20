@@ -14,6 +14,15 @@ this.elementData[] contains only nulls and has only one value, of length 10
 this.elementData[] elements == null
 this.elementData[].getClass().getName() == [null, null, null, null, null, null, null, null, null, null]
 this.elementData[].getClass().getName() elements == null
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 this.size == 0
 this.modCount == 0
 size(this.elementData[]) == 10

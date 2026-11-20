@@ -1169,6 +1169,15 @@ public class ArrayList13 extends AbstractList13 implements List13, Cloneable,
     /*@ invariant this.elementData != null; */
     /*@ invariant this.elementData.getClass().getName() == java.lang.Object[].class.getName(); */
     /*@ invariant daikon.Quant.eltsEqual(this.elementData, null); */
+    /*@ invariant All the elements of this.elementData[..].getClass().getName() are Numeric; */
+    /*@ invariant All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM); */
+    /*@ invariant All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0; */
+    /*@ invariant All the elements of this.elementData[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0; */
+    /*@ invariant All the elements of this.elementData[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional); */
+    /*@ invariant All the elements of this.elementData[..].getClass().getName() are dates. Format: DD/MM/YYYY; */
+    /*@ invariant All the elements of this.elementData[..].getClass().getName() are dates. Format: MM/DD/YYYY; */
+    /*@ invariant All the elements of this.elementData[..].getClass().getName() are dates. Format: YYYY-MM-DD; */
+    /*@ invariant All the elements of this.elementData[..].getClass().getName() are emails; */
     /*@ invariant this.size == 0; */
     /*@ invariant this.modCount == 0; */
     /*@ invariant daikon.Quant.size(this.elementData) == 10; */
