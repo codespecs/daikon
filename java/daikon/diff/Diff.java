@@ -529,7 +529,7 @@ public final class Diff {
     ppts.addAll(pptMap.asCollection());
 
     for (PptTopLevel ppt : ppts) {
-      if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint()) {
+      if (ignoreNumberedExits && ppt.is_subexit()) {
         continue;
       }
 
@@ -610,9 +610,9 @@ public final class Diff {
     } else {
       if (ppt == null) {
         return false;
-      } else if (ppt.ppt_name.isEnterPoint()) {
+      } else if (ppt.is_enter()) {
         return true;
-      } else if (ppt.ppt_name.isCombinedExitPoint()) {
+      } else if (ppt.is_combined_exit()) {
         return true;
       } else {
         return false;
