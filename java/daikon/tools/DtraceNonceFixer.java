@@ -555,7 +555,7 @@ public class DtraceNonceFixer {
      */
     static @Nullable Paragraph read(BufferedReader br) throws IOException {
       List<String> result = new ArrayList<>();
-      // Whether every line in result is a comment.
+      // Whether every line in `result` is a comment.
       boolean onlyComments = true;
       String line;
       while ((line = br.readLine()) != null) {
