@@ -1309,17 +1309,17 @@ public final class FileIO {
         read_data_trace_record(data_trace_state);
 
         if (data_trace_state.rtype == RecordType.SAMPLE) {
-          assert data_trace_state.ppt != null
-              : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
-          assert data_trace_state.vt != null
-              : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
-          // Nonce may be null
           // A child may be declared before its parent, so check the declared parents only when a
           // sample follows declarations, before processing that sample.
           if (data_trace_state.parents_unchecked) {
             PptRelation.checkDeclaredParents(data_trace_state.all_ppts);
             data_trace_state.parents_unchecked = false;
           }
+          assert data_trace_state.ppt != null
+              : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
+          assert data_trace_state.vt != null
+              : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
+          // Nonce may be null
           samples_processed++;
           // Add orig and derived variables; pass to inference (add_and_flow)
           try {
@@ -1616,7 +1616,7 @@ public final class FileIO {
     // Only process the leaves of the ppt tree.
     if (Daikon.use_dataflow_hierarchy) {
       // A combined exit point obtains its invariants from the numbered exit points (whether Daikon
-      // created it or the declarations contain it), so no sample may refer to one, whatever the
+      // created it or the declarations contain it), so no sample can refer to one, whatever the
       // program point's declared type.
       if (ppt.ppt_name.isCombinedExitPoint()) {
         // not Daikon.UserError; caller has more info (e.g., filename)
@@ -1680,7 +1680,7 @@ public final class FileIO {
    * not a leaf, such as an ENTER ppt. It uses a sample at a leaf, such as a ppt that is declared as
    * a POINT but is named like an entry, even if the sample is an unmatched entry.
    *
-   * @param unmatched_count the number of unmatched entries
+   * @param unmatched_count a count of unmatched entries
    * @return a note, starting with whitespace, about the unmatched entries that were ignored
    */
   private static String unmatchedEntriesIgnoredNote(int unmatched_count) {
