@@ -2455,11 +2455,23 @@ public final class Daikon {
 
     // System.out.println("samples processed: " + FileIO.samples_processed);
 
+    if (FileIO.samples_processed == 0) {
+      throw new Daikon.UserError(
+          "No samples found for any of " + StringsPlume.nPlural(all_ppts.size(), "program point"));
+    }
     // Count the samples that inference used, not all samples minus unmatched entries:  an entry
     // sample can be both unmatched and used (if its ppt is declared as a leaf, such as a POINT).
     if (FileIO.samples_used == 0) {
       throw new Daikon.UserError(
-          "No samples found for any of " + StringsPlume.nPlural(all_ppts.size(), "program point"));
+          "Read "
+              + StringsPlume.nPlural(FileIO.samples_processed, "sample")
+              + ", but inference used none of them."
+              + lineSep
+              + "  Inference ignores each exit that has no matching entry (when"
+              + " daikon.FileIO.ignore_missing_enter is true)"
+              + lineSep
+              + "  and, with the dataflow hierarchy, each sample at a program point that is not a"
+              + " leaf, such as an ENTER program point.");
     }
 
     // ppt_stats (all_ppts);

@@ -1,6 +1,7 @@
 package daikon.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import daikon.Daikon;
@@ -45,7 +46,7 @@ public class InitHierarchyTest {
   }
 
   /**
-   * Returns a ppt declaration with one int variable, x.
+   * Returns the declaration of the given program point, with one int variable, x.
    *
    * @param name a name for the program point
    * @param type the ppt-type of the program point, such as "point"
@@ -56,8 +57,8 @@ public class InitHierarchyTest {
   }
 
   /**
-   * Returns a ppt declaration with one int variable, x, which is related to variable x of the
-   * parent.
+   * Returns the declaration of the given program point, with one int variable, x, which is related
+   * to variable x of the parent.
    *
    * @param name a name for the program point
    * @param type the ppt-type of the program point, such as "point"
@@ -139,5 +140,15 @@ public class InitHierarchyTest {
     assertEquals(Collections.emptyList(), enter.children);
     PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
     assertEquals(Collections.emptyList(), exit.parents);
+  }
+
+  /** A point, which is a leaf, cannot be declared as the parent of another program point. */
+  @Test
+  public void testPointWithChild() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("Foo:::POINT", "point")
+                + pptDecl("Foo:::POINT2", "point", "parent", "Foo:::POINT"));
+    assertThrows(Daikon.UserError.class, () -> PptRelation.init_hierarchy(ppts));
   }
 }
