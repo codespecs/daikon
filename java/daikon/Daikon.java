@@ -983,6 +983,14 @@ public final class Daikon {
     spinfoFiles.clear();
     // The input language affects how SplitterList matches program point names.
     FileIO.input_language = null;
+    // Sample counts are per-invocation; e.g., the "No samples found" check uses samples_used.
+    FileIO.samples_processed = 0;
+    FileIO.samples_used = 0;
+    // Unmatched procedure entries are per-invocation; they affect the unmatched-entry report and
+    // which zero-sample program points are pruned.  Within one invocation they persist across
+    // trace files, so an entry and its exit might be in different files.
+    FileIO.call_stack.clear();
+    FileIO.call_hashmap.clear();
 
     proto_invs.clear();
   }
@@ -2148,6 +2156,7 @@ public final class Daikon {
         System.out.print("Reading declaration files ");
       }
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
+      PptRelation.checkDeclaredParents(all_ppts);
       if (debugTrace.isLoggable(FINE)) {
         debugTrace.fine("Initializing partial order");
       }
@@ -2448,9 +2457,9 @@ public final class Daikon {
 
     // System.out.println("samples processed: " + FileIO.samples_processed);
 
-    int unmatched_count = FileIO.call_stack.size() + FileIO.call_hashmap.size();
-    if ((use_dataflow_hierarchy && FileIO.samples_processed == unmatched_count)
-        || (FileIO.samples_processed == 0)) {
+    // Count the samples that inference used, not all samples minus unmatched entries:  an entry
+    // sample can be both unmatched and used (if its ppt is declared as a leaf, such as a POINT).
+    if (FileIO.samples_used == 0) {
       throw new Daikon.UserError(
           "No samples found for any of " + StringsPlume.nPlural(all_ppts.size(), "program point"));
     }
@@ -2652,17 +2661,7 @@ public final class Daikon {
         p = ((PptConditional) ppt).parent;
       }
 
-      // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
-      // exit), we define them as everything except
-      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT
-      //  and :::CLASS program points.  This scheme ensures that arbitrarily
-      //  named program points such as :::POINT (used by convertcsv.pl)
-      //  will be treated as leaves.
-      if (p.ppt_name.isCombinedExitPoint()
-          || p.ppt_name.isEnterPoint()
-          || p.ppt_name.isThrowsPoint()
-          || p.ppt_name.isObjectInstanceSynthetic()
-          || p.ppt_name.isClassStaticSynthetic()) {
+      if (!p.isDataflowLeaf()) {
         return;
       }
 
@@ -2671,9 +2670,7 @@ public final class Daikon {
       }
     }
 
-    // Create the initial equality sets
-    ppt.equality_view = new PptSliceEquality(ppt);
-    ppt.equality_view.instantiate_invariants();
+    ppt.createEqualityView();
   }
 
   private static List<SpinfoFile> spinfoFiles = new ArrayList<>();
