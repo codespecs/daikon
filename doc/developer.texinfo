@@ -3030,6 +3030,9 @@ type.
 A @code{point} program point is one that is @emph{not} involved in a
 program point hierarchy.   This is normally used when the input is not
 from a programming language or when there is no dataflow hierarchy.
+A @code{point} program point is a leaf of the dataflow hierarchy:  no
+other program point can name it as a @code{parent}, unless Daikon is run
+with the @option{--nohierarchy} option.
 
 @item @code{flags <flags>}
 
@@ -3047,6 +3050,9 @@ point.  A parent program point
 is a point whose samples should include all of the samples at this
 program point.  For example, an object program point is a parent of
 each of the method program points in that object.
+The parent cannot be a leaf of the dataflow hierarchy, which is a program
+point whose type is @code{point} or @code{subexit}, unless Daikon is run
+with the @option{--nohierarchy} option.
 
 The @var{relation-type} is the type of parent-child relationship in
 the hierarchy. There are a few relationship types used internally

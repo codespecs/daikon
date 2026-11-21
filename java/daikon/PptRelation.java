@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -569,6 +570,36 @@ public class PptRelation implements Serializable {
     return rel;
   }
 
+  /**
+   * Creates an equality view and invariants for each ppt (including each conditional ppt) that has
+   * no children and does not already have an equality view. This happens for non-leaf ppts such as
+   * OBJECT, CLASS, or GLOBAL that do not end up with any children (due to the program source or
+   * because of ppt filtering). It also happens for a combined exit point that a decls file declares
+   * when no corresponding numbered exit point is declared or included. A leaf usually gets its
+   * equality view from {@link Daikon#setupEquality}, before it receives any samples.
+   *
+   * <p>The new equality view puts all comparable variables in the same equality set, as if no
+   * sample had distinguished them, so each ppt that gets one must have no samples. {@link
+   * PptTopLevel#mergeInvs} requires every childless ppt to have an equality view.
+   *
+   * <p>This method requires {@link Daikon#use_equality_optimization} to be true. Otherwise, {@link
+   * Daikon#setupEquality} creates no equality view, so a leaf that has samples would have none and
+   * this method could not create a valid one. Only {@link DaikonSimple} sets {@link
+   * Daikon#use_equality_optimization} to false, and it neither calls this method nor merges
+   * invariants.
+   *
+   * @param all_ppts a map of program points
+   */
+  static void createChildlessEqualityViews(PptMap all_ppts) {
+    assert Daikon.use_equality_optimization;
+    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
+      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
+        assert ppt.num_samples() == 0 : ppt;
+        ppt.createEqualityView();
+      }
+    }
+  }
+
   // used by init_hierarchy below
   private static class SplitChild {
     PptRelation rel;
@@ -577,6 +608,82 @@ public class PptRelation implements Serializable {
     SplitChild(PptRelation rel, PptSplitter ppt_split) {
       this.rel = rel;
       this.ppt_split = ppt_split;
+    }
+  }
+
+  /**
+   * Connects the given ppt to each conditional ppt of its first splitter, unless they are already
+   * connected. Only the first splitter is used, because each splitter sees the same samples, so
+   * each yields the same invariants at the ppt.
+   *
+   * <p>A leaf of the dataflow hierarchy obtains its invariants from these conditional ppts, so each
+   * relation is in the leaf's children. A non-leaf obtains its invariants from its other children,
+   * so each relation is only in the parents of the conditional ppt, which uses it when printing.
+   *
+   * @param ppt a ppt that has splitters
+   */
+  static void connectConditionals(PptTopLevel ppt) {
+    assert ppt.splitters != null : "@AssumeAssertion(nullness): precondition: has splitters";
+    for (PptTopLevel cond : ppt.splitters.get(0).ppts) {
+      PptRelation rel = null;
+      for (PptRelation condRel : cond.parents) {
+        if ((condRel.parent == ppt) && (condRel.relationship == PptRelationType.PPT_PPTCOND)) {
+          rel = condRel;
+          break;
+        }
+      }
+      if (rel == null) {
+        rel = newPptPptConditional(ppt, cond);
+      }
+      if (ppt.isDataflowLeaf()) {
+        if (!ppt.children.contains(rel)) {
+          ppt.children.add(rel);
+        }
+      } else {
+        ppt.children.remove(rel);
+      }
+    }
+  }
+
+  /**
+   * Throws a UserError if the given parent is a leaf of the dataflow hierarchy and Daikon uses the
+   * hierarchy. A leaf obtains its invariants from its samples (and its conditional ppts), never
+   * from its children.
+   *
+   * @param parent a ppt that is declared as a parent of {@code child}
+   * @param child a ppt; used for diagnostics
+   */
+  private static void checkParentIsNotLeaf(PptTopLevel parent, PptTopLevel child) {
+    if (Daikon.use_dataflow_hierarchy && parent.isDataflowLeaf()) {
+      throw new Daikon.UserError(
+          String.format(
+              "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
+                  + " the dataflow hierarchy",
+              parent.name(), child.name(), parent.type.name().toLowerCase(Locale.ENGLISH)));
+    }
+  }
+
+  /**
+   * Throws a UserError if some ppt in the map is declared to have a parent that is a leaf of the
+   * dataflow hierarchy, as {@link #init_hierarchy} would. Calling this as soon as the declarations
+   * are read reports the error before any samples are processed. Daikon calls it after reading the
+   * declaration files, and {@link FileIO#read_data_trace_file(String, PptMap, FileIO.Processor,
+   * boolean, boolean)} calls it before processing a sample that follows declarations in a dtrace
+   * file. A declared parent that is not in the map is ignored, because it might be declared later.
+   *
+   * @param all_ppts a map of program points
+   */
+  public static void checkDeclaredParents(PptMap all_ppts) {
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
+      for (ParentRelation pr : ppt.parent_relations) {
+        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+          continue;
+        }
+        PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
+        if (parent != null) {
+          checkParentIsNotLeaf(parent, ppt);
+        }
+      }
     }
   }
 
@@ -639,46 +746,28 @@ public class PptRelation implements Serializable {
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
           continue;
         }
+        checkParentIsNotLeaf(parent, ppt);
         // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));
       }
 
-      // if an exitNN point, parent is combined exit point
+      // If an exitNN point, parent is combined exit point.  A ppt that is declared with type
+      // POINT is a leaf whatever its name, so it is never a parent.
       if (ppt.is_subexit()) {
         PptTopLevel parent = all_ppts.get(pname.makeExit());
-        if (parent != null) {
+        if ((parent != null) && parent.is_combined_exit()) {
           rels.add(newCombinedExitExitNNRel(parent, ppt));
         }
 
         // Connect combined exit points to enter points over orig variables
       } else if (ppt.is_combined_exit()) {
         PptTopLevel enter = all_ppts.get(pname.makeEnter());
-        if (enter != null) {
+        if ((enter != null) && enter.is_enter()) {
           rels.add(PptRelation.newEnterExitRel(enter, ppt));
         }
       }
 
-      // Connect any conditional ppt variables.  Only connect to the
-      // first splitter, since each splitter should yield the same
-      // results at the parent (since each splitter sees the same
-      // points)  This should only happen at the leaves (numbered
-      // exit points) since all other points should be built from
-      // their other children.  But since we need the relation
-      // from the child's point of view when printing, we create
-      // under all cases and then remove it from non-leaves children
-      // list.  This doesn't seem like the best solution.
-      if (ppt.has_splitters()) {
-        assert ppt.splitters != null; // guaranteed by call to has_splitters
-        PptSplitter ppt_split = ppt.splitters.get(0);
-        for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
-          PptRelation rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);
-          rels.add(rel);
-          if (!ppt.is_subexit()) {
-            ppt.children.remove(rel);
-          }
-        }
-      }
       // Debug print the created relations
       for (PptRelation rel : rels) {
         debug.fine(
@@ -687,6 +776,12 @@ public class PptRelation implements Serializable {
                 + " with connections ["
                 + rel.parent_to_child_var_string()
                 + "]");
+      }
+    }
+
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
+      if (ppt.has_splitters()) {
+        connectConditionals(ppt);
       }
     }
 
@@ -707,7 +802,7 @@ public class PptRelation implements Serializable {
     while (removed_splitter) {
       removed_splitter = false;
       for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        if (ppt.is_subexit() || !ppt.has_splitters()) {
+        if (ppt.isDataflowLeaf() || !ppt.has_splitters()) {
           continue;
         }
         for (Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext(); ) {
@@ -722,7 +817,7 @@ public class PptRelation implements Serializable {
     // Build the PptRelations for each child.  The PptRelation from the conditional point is of
     // the same type as the original relation from parent to child.
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.is_subexit() || !ppt.has_splitters()) {
+      if (ppt.isDataflowLeaf() || !ppt.has_splitters()) {
         continue;
       }
       for (PptSplitter ppt_split : ppt.splitters) {
@@ -734,17 +829,7 @@ public class PptRelation implements Serializable {
       }
     }
 
-    // Loop over each ppt and create an equality view and invariants for
-    // any ppt without children that doesn't already have them.  This can
-    // happen when there are ppts such as OBJECT or CLASS that don't end up
-    // with any children (due to the program source or because of ppt filtering).
-    for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
-        assert ppt.is_object() || ppt.is_class() || ppt.is_enter() : ppt;
-        ppt.equality_view = new PptSliceEquality(ppt);
-        ppt.equality_view.instantiate_invariants();
-      }
-    }
+    createChildlessEqualityViews(all_ppts);
 
     // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {
