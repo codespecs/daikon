@@ -413,6 +413,7 @@ public class MergeComparabilityTest {
 
   /**
    * Header and ppt records whose tokens are separated by tabs or multiple spaces are recognized.
+   * The output separates "ppt" from the program point name by a single space.
    */
   @Test
   public void testWhitespaceInHeaderAndPpt() {
@@ -420,9 +421,7 @@ public class MergeComparabilityTest {
     a.set(a.indexOf("decl-version 2.0"), "decl-version\t2.0");
     a.set(a.indexOf("var-comparability implicit"), "var-comparability  implicit");
     a.set(a.indexOf("ppt C.m():::ENTER"), "ppt\tC.m():::ENTER");
-    List<String> expected = new ArrayList<>(expected(ppt("1", "1")));
-    expected.set(expected.indexOf("ppt C.m():::ENTER"), "ppt\tC.m():::ENTER");
-    assertEquals(expected, merge(a, file(ppt("4", "4"))));
+    assertEquals(expected(ppt("1", "1")), merge(a, file(ppt("4", "4"))));
   }
 
   /** A file without a var-comparability record uses implicit comparability. */
