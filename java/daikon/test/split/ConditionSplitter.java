@@ -8,7 +8,7 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** A splitter that only has a condition. It is its own instantiation. */
-class ConditionSplitter extends Splitter {
+public class ConditionSplitter extends Splitter {
   static final long serialVersionUID = 20261006L;
 
   /** The condition. */
@@ -22,7 +22,7 @@ class ConditionSplitter extends Splitter {
    *
    * @param condition the condition
    */
-  ConditionSplitter(String condition) {
+  public ConditionSplitter(String condition) {
     this(condition, true);
   }
 
