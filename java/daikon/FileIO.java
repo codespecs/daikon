@@ -1660,9 +1660,9 @@ public final class FileIO {
 
   /**
    * Returns the note that says how many of the unmatched entries inference ignored, or the empty
-   * string if it ignored none of them. With the dataflow hierarchy, inference ignores a sample at a ppt that is
-   * not a leaf, such as an ENTER ppt. It uses a sample at a leaf, such as a ppt that is declared as
-   * a POINT but is named like an entry, even if the sample is an unmatched entry.
+   * string if it ignored none of them. With the dataflow hierarchy, inference ignores a sample at a
+   * ppt that is not a leaf, such as an ENTER ppt. It uses a sample at a leaf, such as a ppt that is
+   * declared as a POINT but is named like an entry, even if the sample is an unmatched entry.
    *
    * @param unmatched_count a count of unmatched entries
    * @return the note, starting with whitespace, about how many of the unmatched entries were
