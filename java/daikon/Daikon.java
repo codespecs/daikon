@@ -987,7 +987,7 @@ public final class Daikon {
     FileIO.samples_processed = 0;
     FileIO.samples_used = 0;
     // Unmatched entries are per-invocation.  Within one invocation they persist across trace
-    // files, so an entry and its exit may be in different files.
+    // files, so an entry and its exit might be in different files.
     FileIO.call_hashmap.clear();
     FileIO.call_stack.clear();
 

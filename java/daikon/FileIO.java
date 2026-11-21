@@ -1600,7 +1600,7 @@ public final class FileIO {
     // Only process the leaves of the ppt tree.
     if (Daikon.use_dataflow_hierarchy) {
       // A combined exit point obtains its invariants from the numbered exit points (whether Daikon
-      // created it or the declarations contain it), so no sample may refer to one, whatever the
+      // created it or the declarations contain it), so no sample can refer to one, whatever the
       // program point's declared type.
       if (ppt.ppt_name.isCombinedExitPoint()) {
         // not Daikon.UserError; caller has more info (e.g., filename)
@@ -1664,7 +1664,7 @@ public final class FileIO {
    * not a leaf, such as an ENTER ppt. It uses a sample at a leaf, such as a ppt that is declared as
    * a POINT but is named like an entry, even if the sample is an unmatched entry.
    *
-   * @param unmatched_count the number of unmatched entries
+   * @param unmatched_count a count of unmatched entries
    * @return a note, starting with whitespace, about the unmatched entries that were ignored
    */
   private static String unmatchedEntriesIgnoredNote(int unmatched_count) {

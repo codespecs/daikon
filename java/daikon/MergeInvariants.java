@@ -446,7 +446,7 @@ public final class MergeInvariants {
 
     // Both ppt and child should have the same number of splitters
     if (ppt.splitters.size() != child.splitters.size()) {
-      throw new Error(
+      throw new Daikon.UserError(
           "Merge ppt "
               + ppt.name
               + " has "
