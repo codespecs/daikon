@@ -420,8 +420,8 @@ public class DtraceNonceFixer {
      * Creates a new Paragraph.
      *
      * @param lines the lines of the paragraph
-     * @param blankLineAfter true if the paragraph is followed by a blank line, false if it ends with
-     *     a one-line header record
+     * @param blankLineAfter true if the paragraph is followed by a blank line, false if it ends
+     *     with a one-line header record
      */
     Paragraph(List<String> lines, boolean blankLineAfter) {
       this.lines = lines;
@@ -445,16 +445,15 @@ public class DtraceNonceFixer {
 
     /**
      * Returns true if {@code line} starts a record, other than a sample, whose first line may
-     * contain ":::".
+     * contain ":::". Like Daikon, a keyword starts a record only if it is a whole word, so a sample
+     * whose program point name starts with a keyword (such as "input-language:::POINT") is a
+     * sample.
      *
      * @param line the first non-comment line of a paragraph
      * @return true if {@code line} starts a record that is not a sample
      */
     private static boolean isRecordHeader(String line) {
-      return line.startsWith("decl-version")
-          || line.startsWith("input-language")
-          || line.startsWith("ppt ")
-          || line.startsWith("var-comparability");
+      return FileIO.is_one_line_header_record(line) || FileIO.is_declaration_header(line);
     }
 
     /**
@@ -546,9 +545,9 @@ public class DtraceNonceFixer {
      * line as a paragraph separator; a line that contains only whitespace is part of a paragraph.
      * Also like Daikon, a one-line header record (such as "decl-version 2.0"), possibly preceded by
      * comments, is a paragraph even if no empty line follows it. This method returns an empty
-     * paragraph if the dtrace file contains consecutive empty lines.
-     * Lines are not modified, so the output differs from the input only in the nonce header line,
-     * in the nonces, and in a final empty line (which the output always has).
+     * paragraph if the dtrace file contains consecutive empty lines. Lines are not modified, so the
+     * output differs from the input only in the nonce header line, in the nonces, and in a final
+     * empty line (which the output always has).
      *
      * @param br the reader for the dtrace file
      * @return the next paragraph, or null if the end of the file has been reached
@@ -556,7 +555,7 @@ public class DtraceNonceFixer {
      */
     static @Nullable Paragraph read(BufferedReader br) throws IOException {
       List<String> result = new ArrayList<>();
-      // Whether every line in result is a comment.
+      // Whether every line in `result` is a comment.
       boolean onlyComments = true;
       String line;
       while ((line = br.readLine()) != null) {
