@@ -532,11 +532,11 @@ public class PptTopLevel extends Ppt {
    * point that is declared as a {@link PptType#POINT}: it is a leaf of the dataflow hierarchy
    * whatever its name, even if its name is foo:::ENTER. However, some code classifies a program
    * point by its name rather than by these predicates. For example, Daikon rejects every sample for
-   * a program point named foo:::EXIT, whatever its type; if foo:::EXIT22 is declared, Daikon
-   * replaces a program point named foo:::EXIT by the combined exit of foo:::EXIT22; and a program
-   * point named foo:::EXIT22 has orig variables, so each of its samples must match an entry,
-   * whatever its type. A program point that is declared as a {@link PptType#POINT} and is named
-   * foo:::THROWS has no orig variables, so its samples need not match an entry.
+   * a program point named foo:::EXIT, whatever its type; if foo:::EXIT22 is declared as a numbered
+   * exit, Daikon replaces a program point named foo:::EXIT by the combined exit of foo:::EXIT22; and
+   * a program point named foo:::EXIT22 has orig variables, so each of its samples must match an
+   * entry, whatever its type. A program point that is declared as a {@link PptType#POINT} and is
+   * named foo:::THROWS has no orig variables, so its samples need not match an entry.
    *
    * @param ppt_name the name of the program point
    * @param type the declared type of the program point, or null if none was declared
@@ -4920,6 +4920,10 @@ public class PptTopLevel extends Ppt {
    * <p>The leaves are the numbered exit points ({@link PptType#SUBEXIT}) and the general program
    * points ({@link PptType#POINT}). This ensures that arbitrarily named program points such as
    * :::POINT (used by convertcsv.pl) are leaves.
+   *
+   * <p>A leaf has no children other than its conditional ppts: when Daikon uses the dataflow
+   * hierarchy, {@link PptRelation#init_hierarchy} rejects a declaration that makes a leaf the
+   * parent of another ppt.
    *
    * @return true if this is a leaf of the dataflow hierarchy
    */
