@@ -44,6 +44,9 @@ public final class MergeInvariants {
   /** The file in which to produce output; if null, the results are printed. */
   public static @Nullable File output_inv_file;
 
+  /** The maximum number of missing leaf program points that the missing-leaf warning names. */
+  private static final int MAX_MISSING_LEAVES_NAMED = 10;
+
   /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
@@ -295,8 +298,7 @@ public final class MergeInvariants {
           }
         }
         // The leaf obtains its invariants from its conditional ppts.  A ppt read from a .inv file
-        // can lack these relations among its children; for example, the .inv file might have been
-        // written by a version of Daikon that omitted them.
+        // can lack these relations among its children, so create any that are missing.
         PptRelation.connectConditionals(ppt);
       }
 
@@ -373,21 +375,34 @@ public final class MergeInvariants {
               + ", so no program point would get any invariants");
     }
 
-    // A leaf is missing from every input map if ppt filtering removed it, but if every leaf is
-    // missing, the decls file probably does not match the .inv files.
+    // A leaf is missing from every input map if the decls file does not match the .inv files, or
+    // if the Daikon runs that wrote the .inv files omitted it (for example, because of ppt
+    // filtering or because it had no samples).  If every leaf is missing, no ppt gets any
+    // invariants.
     if (!missingLeaves.isEmpty()) {
       if (missingLeaves.size() == numLeaves) {
         throw new Daikon.UserError(
             String.format(
                 "No input .inv file contains any leaf program point of the decls file (for"
-                    + " example, none contains %s); does the decls file match the .inv files?",
+                    + " example, none contains %s), so no program point would get any"
+                    + " invariants.  Either the decls file does not match the .inv files, or the"
+                    + " Daikon runs that wrote the .inv files omitted every leaf program point"
+                    + " (for example, because of ppt filtering or because no leaf had any"
+                    + " samples).",
                 missingLeaves.get(0)));
+      }
+      String names =
+          String.join(
+              ", ",
+              missingLeaves.subList(0, Math.min(missingLeaves.size(), MAX_MISSING_LEAVES_NAMED)));
+      if (missingLeaves.size() > MAX_MISSING_LEAVES_NAMED) {
+        names += ", ...";
       }
       System.err.printf(
           "Warning: no input .inv file contains %s, so %s no invariants: %s%n",
           StringsPlume.nPlural(missingLeaves.size(), "leaf program point"),
           (missingLeaves.size() == 1) ? "it gets" : "they get",
-          String.join(", ", missingLeaves));
+          names);
     }
 
     // Every ppt with no children needs an equality view, which clean_for_merge removed.  This

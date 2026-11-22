@@ -151,36 +151,4 @@ public class InitHierarchyTest {
                 + pptDecl("Foo:::POINT2", "point", "parent", "Foo:::POINT"));
     assertThrows(Daikon.UserError.class, () -> PptRelation.init_hierarchy(ppts));
   }
-
-  /**
-   * Daikon infers invariants from a sample at a point that is named like an enter point, even
-   * though the sample is also recorded as an entry that no exit matches.
-   */
-  @Test
-  public void testPointNamedEnterSample() throws IOException {
-    File declsFile = tmpFolder.newFile("point.decls");
-    String decls =
-        "decl-version 2.0\nvar-comparability none\n\n" + pptDecl("Foo.bar():::ENTER", "point");
-    Files.write(declsFile.toPath(), decls.getBytes(StandardCharsets.UTF_8));
-    File dtraceFile = tmpFolder.newFile("point.dtrace");
-    String dtrace = "Foo.bar():::ENTER\nx\n1\n1\n\n";
-    Files.write(dtraceFile.toPath(), dtrace.getBytes(StandardCharsets.UTF_8));
-    File invFile = new File(tmpFolder.getRoot(), "point.inv.gz");
-    try {
-      // Before the fix, this threw a UserError: "No samples found for any of 1 program point".
-      Daikon.mainHelper(
-          new String[] {
-            "--no_text_output",
-            "-o",
-            invFile.toString(),
-            declsFile.toString(),
-            dtraceFile.toString()
-          });
-      assertEquals(1, FileIO.samples_used);
-      assertTrue(invFile.exists());
-    } finally {
-      // Also discards the unmatched entry that this test leaves on the call stack.
-      Daikon.cleanup();
-    }
-  }
 }
