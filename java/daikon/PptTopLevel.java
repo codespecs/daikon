@@ -4915,8 +4915,9 @@ public class PptTopLevel extends Ppt {
    * points ({@link PptType#POINT}). This ensures that arbitrarily named program points such as
    * :::POINT (used by convertcsv.pl) are leaves.
    *
-   * <p>A leaf has no children other than its conditional ppts: {@link PptRelation#init_hierarchy}
-   * rejects a declaration that makes a leaf the parent of another ppt.
+   * <p>A leaf has no children other than its conditional ppts: when Daikon uses the dataflow
+   * hierarchy, {@link PptRelation#init_hierarchy} rejects a declaration that makes a leaf the
+   * parent of another ppt.
    *
    * @return true if this is a leaf of the dataflow hierarchy
    */

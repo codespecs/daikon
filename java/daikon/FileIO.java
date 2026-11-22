@@ -1303,26 +1303,25 @@ public final class FileIO {
         read_data_trace_record(data_trace_state);
 
         if (data_trace_state.rtype == RecordType.SAMPLE) {
+          // A child may be declared before its parent, so check the declared parents only when a
+          // sample follows declarations, before processing that sample.
+          if (data_trace_state.parents_unchecked) {
+            PptRelation.checkDeclaredParents(data_trace_state.all_ppts);
+            data_trace_state.parents_unchecked = false;
+          }
           assert data_trace_state.ppt != null
               : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
           assert data_trace_state.vt != null
               : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
           // Nonce may be null
-          // A child may be declared before its parent, so check the declared parents only when a
-          // sample follows declarations, before processing that sample.
-          // Capture these in locals, because the call to checkDeclaredParents might (as far as the
-          // Nullness Checker knows) change the fields.
-          PptTopLevel samplePpt = data_trace_state.ppt;
-          ValueTuple sampleVt = data_trace_state.vt;
-          if (data_trace_state.parents_unchecked) {
-            PptRelation.checkDeclaredParents(data_trace_state.all_ppts);
-            data_trace_state.parents_unchecked = false;
-          }
           samples_processed++;
           // Add orig and derived variables; pass to inference (add_and_flow)
           try {
             processor.process_sample(
-                data_trace_state.all_ppts, samplePpt, sampleVt, data_trace_state.nonce);
+                data_trace_state.all_ppts,
+                data_trace_state.ppt,
+                data_trace_state.vt,
+                data_trace_state.nonce);
           } catch (Error e) {
             // e.printStackTrace();
             if (!dkconfig_continue_after_file_exception) {
