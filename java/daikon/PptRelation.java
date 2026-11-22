@@ -670,11 +670,16 @@ public class PptRelation implements Serializable {
    * declaration files, and {@link FileIO#read_data_trace_file(String, PptMap, FileIO.Processor,
    * boolean, boolean)} calls it before processing a sample that follows declarations in a dtrace
    * file. A declared parent that is not in the map is ignored, because it might be declared later.
+   * A ppt that was not read from a declaration (for example, one read from a serialized InvMap) has
+   * null {@link PptTopLevel#parent_relations} and is skipped.
    *
    * @param all_ppts a map of program points
    */
   public static void checkDeclaredParents(PptMap all_ppts) {
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
+      if (ppt.parent_relations == null) {
+        continue;
+      }
       for (ParentRelation pr : ppt.parent_relations) {
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
           continue;
