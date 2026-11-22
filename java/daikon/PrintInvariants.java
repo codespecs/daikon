@@ -738,9 +738,11 @@ public final class PrintInvariants {
   // it precedes them in the PptMap sort order.
   //
   // When there is only one EXITnn point, only the combined exit point is
-  // printed.  Probably a better solution would be to not create the combined
-  // exit point at all when there is only a single exit.  It is done here
-  // instead so as not to disturb the program point hierarchy.
+  // printed, unless the combined exit point does not match the ppt regular
+  // expression (--ppt-select-pattern).  Probably a better solution would be
+  // to not create the combined exit point at all when there is only a single
+  // exit.  It is done here instead so as not to disturb the program point
+  // hierarchy.
 
   /**
    * Returns true if the given ppt is a numbered exit point whose combined exit point is in the
@@ -776,16 +778,6 @@ public final class PrintInvariants {
       return num_subexits == 1;
     }
     return false;
-  }
-
-  /**
-   * Returns true if the given ppt passes the {@code --ppt-select-pattern} output filter.
-   *
-   * @param ppt a program point
-   * @return true if ppt's invariants may be printed, according to the ppt regular expression
-   */
-  public static boolean matches_ppt_regexp(PptTopLevel ppt) {
-    return (ppt_regexp == null) || ppt_regexp.matcher(ppt.name()).find();
   }
 
   public static void print_invariants(PptMap all_ppts) {
@@ -875,6 +867,18 @@ public final class PrintInvariants {
     }
 
     pw.flush();
+  }
+
+  /**
+   * Returns true if the given ppt matches the {@code --ppt-select-pattern} regular expression, or
+   * if no such regular expression was given. PrintInvariants prints only the program points that
+   * match it.
+   *
+   * @param ppt a program point
+   * @return true if the given ppt matches the {@code --ppt-select-pattern} regular expression
+   */
+  public static boolean matches_ppt_regexp(PptTopLevel ppt) {
+    return (ppt_regexp == null) || ppt_regexp.matcher(ppt.name()).find();
   }
 
   /**
