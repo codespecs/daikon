@@ -2129,8 +2129,7 @@ public final class FileIO {
     // variables, so it needs no matching entry.  By contrast, a POINT that is named like an exit
     // point (such as foo:::EXIT22) has orig variables (see Daikon.create_orig_vars), so it is
     // matched with its entry.
-    if (ppt.ppt_name.isExitPoint()
-        || (ppt.ppt_name.isThrowsPoint() && ppt.type != PptType.POINT)) {
+    if (ppt.ppt_name.isExitPoint() || (ppt.ppt_name.isThrowsPoint() && ppt.type != PptType.POINT)) {
       Invocation invoc;
       // Set invoc
       {

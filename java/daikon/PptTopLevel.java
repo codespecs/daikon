@@ -533,8 +533,8 @@ public class PptTopLevel extends Ppt {
    * whatever its name, even if its name is foo:::ENTER. However, some code classifies a program
    * point by its name rather than by these predicates. For example, Daikon rejects every sample for
    * a program point named foo:::EXIT, whatever its type; if foo:::EXIT22 is declared as a numbered
-   * exit, Daikon replaces a program point named foo:::EXIT by the combined exit of foo:::EXIT22; and
-   * a program point named foo:::EXIT22 has orig variables, so each of its samples must match an
+   * exit, Daikon replaces a program point named foo:::EXIT by the combined exit of foo:::EXIT22;
+   * and a program point named foo:::EXIT22 has orig variables, so each of its samples must match an
    * entry, whatever its type. A program point that is declared as a {@link PptType#POINT} and is
    * named foo:::THROWS has no orig variables, so its samples need not match an entry.
    *
