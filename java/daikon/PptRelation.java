@@ -709,6 +709,15 @@ public class PptRelation implements Serializable {
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
           continue;
         }
+        // A leaf obtains its invariants from its samples and from its conditional ppts.  Merging
+        // invariants from other children would discard those invariants.
+        if (parent.isDataflowLeaf()) {
+          throw new Daikon.UserError(
+              String.format(
+                  "ppt %s is declared as a parent of ppt %s, but it has type %s, which"
+                      + " cannot be a parent",
+                  parent.name(), ppt.name(), parent.type));
+        }
         // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));
