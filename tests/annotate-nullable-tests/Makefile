@@ -22,7 +22,7 @@ include ${THIS_MAKEFILE_DIR}../Makefile.jdk
 # java/ tree is compiled, otherwise daikon.jar.
 DAIKON := $(firstword $(wildcard ${DAIKONDIR}/java/daikon/Daikon.class ${DAIKONDIR}/daikon.jar))
 ifeq (${DAIKON},)
-  ifneq ($(filter-out clean update-goals,$(or ${MAKECMDGOALS},diffs)),)
+  ifneq ($(filter-out clean,$(or ${MAKECMDGOALS},diffs)),)
     $(error Daikon is not built.  Run "make -C ${DAIKONDIR} compile")
   endif
 endif
