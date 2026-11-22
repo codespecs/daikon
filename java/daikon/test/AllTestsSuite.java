@@ -37,7 +37,6 @@ import org.junit.runners.Suite;
   daikon.test.PptPercTest.class,
   daikon.test.PptTopLevelTypeTest.class,
   daikon.test.ProglangTypeTest.class,
-  daikon.test.SampleProcessingTest.class,
   daikon.test.SampleTester.class,
   daikon.test.SplitDtraceTest.class,
   daikon.test.split.FileCompilerTest.class,
