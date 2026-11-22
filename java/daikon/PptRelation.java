@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -684,43 +686,137 @@ public class PptRelation implements Serializable {
    *
    * @param parent a ppt that is declared as a parent of {@code child}
    * @param child a ppt; used for diagnostics
+   * @param state the state of the file being read, or null if no file is being read; used for
+   *     diagnostics
    */
-  private static void checkParentIsNotLeaf(PptTopLevel parent, PptTopLevel child) {
+  private static void checkParentIsNotLeaf(
+      PptTopLevel parent, PptTopLevel child, FileIO.@Nullable ParseState state) {
     if (Daikon.use_dataflow_hierarchy && parent.isDataflowLeaf()) {
-      throw new Daikon.UserError(
+      String msg =
           String.format(
               "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
                   + " the dataflow hierarchy",
-              parent.name(), child.name(), parent.type.name().toLowerCase(Locale.ENGLISH)));
+              parent.name(), child.name(), parent.type.name().toLowerCase(Locale.ENGLISH));
+      throw (state == null) ? new Daikon.UserError(msg) : new Daikon.UserError(msg, state);
     }
   }
 
   /**
-   * Throws a UserError if some ppt in the map is declared to have a parent that is a leaf of the
-   * dataflow hierarchy, as {@link #init_hierarchy} would. Calling this as soon as the declarations
-   * are read reports the error before any samples are processed. Daikon calls it after reading the
-   * declaration files, and {@link FileIO#read_data_trace_file(String, PptMap, FileIO.Processor,
-   * boolean, boolean)} calls it before processing a sample that follows declarations in a dtrace
-   * file. A declared parent that is not in the map is ignored, because it might be declared later.
-   * A declared parent that is a {@link PptTopLevel.PptType#POINT} named like a combined exit (such
-   * as foo:::EXIT) is also ignored, because {@link Daikon#create_combined_exits} replaces it by a
-   * combined exit if a numbered exit such as foo:::EXIT22 is declared (possibly later). {@link
-   * #init_hierarchy} checks such a parent after the replacement.
+   * Throws a UserError if some ppt in the given map is declared to have a parent that is a leaf of
+   * the dataflow hierarchy, as {@link #init_hierarchy} would.
    *
    * @param all_ppts a map of program points
+   * @see DeclaredParentChecker
    */
   public static void checkDeclaredParents(PptMap all_ppts) {
-    for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      for (ParentRelation pr : ppt.parent_relations) {
-        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+    new DeclaredParentChecker(all_ppts).check(null);
+  }
+
+  /**
+   * Checks, as program points are added to a map, that no ppt in the map is declared to have a
+   * parent that is a leaf of the dataflow hierarchy, as {@link #init_hierarchy} would. Checking as
+   * soon as the declarations are read reports the error before samples are processed.
+   *
+   * <p>Each call to {@link #check} examines only the ppts that were added since the previous call,
+   * so checking after each of many declarations does not rescan the whole map. A declared parent
+   * that is not in the map is checked when it is added. Like {@link #init_hierarchy}, the check
+   * ignores the relations of numbered exits such as {@code Foo.bar():::EXIT22}, because the
+   * hierarchy relates a numbered exit only to its combined exit, and it skips a ppt that was not
+   * read from a declaration (for example, one read from a serialized InvMap), which has null {@link
+   * PptTopLevel#parent_relations}. A declared parent that is a {@link PptTopLevel.PptType#POINT}
+   * named like a combined exit (such as foo:::EXIT) is also ignored, because {@link
+   * Daikon#create_combined_exits} replaces it by a combined exit if a numbered exit such as
+   * foo:::EXIT22 is declared (possibly later). {@link #init_hierarchy} checks such a parent after
+   * the replacement.
+   */
+  public static class DeclaredParentChecker {
+
+    /** The program points to check. */
+    private final PptMap all_ppts;
+
+    /**
+     * The ppts that have been added to {@link #all_ppts} since the last call to {@link #check}, or
+     * null if {@link #check} has never been called, in which case every ppt in the map is
+     * unchecked.
+     */
+    private @Nullable List<PptTopLevel> uncheckedPpts = null;
+
+    /**
+     * Maps the name of each declared parent that is not yet in {@link #all_ppts} to the checked
+     * ppts that declare it as a parent.
+     */
+    private final Map<String, List<PptTopLevel>> childrenOfMissingParents = new HashMap<>();
+
+    /**
+     * Creates a DeclaredParentChecker for the given map, all of whose ppts are unchecked.
+     *
+     * @param all_ppts a map of program points
+     */
+    public DeclaredParentChecker(PptMap all_ppts) {
+      this.all_ppts = all_ppts;
+    }
+
+    /**
+     * Returns true if the given declared parent might be replaced by a combined exit, so that it is
+     * not checked until {@link #init_hierarchy}.
+     *
+     * @param parent a ppt that is declared as a parent
+     * @return true if {@code parent} is a POINT named like a combined exit
+     */
+    private static boolean isReplaceableCombinedExit(PptTopLevel parent) {
+      return parent.type == PptTopLevel.PptType.POINT && parent.ppt_name.isCombinedExitPoint();
+    }
+
+    /**
+     * Records that the given ppt has been added to the map.
+     *
+     * @param ppt a ppt that has been added to the map
+     */
+    public void added(PptTopLevel ppt) {
+      if (uncheckedPpts != null) {
+        uncheckedPpts.add(ppt);
+      }
+    }
+
+    /**
+     * Throws a UserError if a ppt that has been added to the map since the last call is declared to
+     * have a leaf as a parent, or is a leaf that a ppt that has already been checked declares as a
+     * parent.
+     *
+     * @param state the state of the file being read, or null if no file is being read; used for
+     *     diagnostics
+     */
+    public void check(FileIO.@Nullable ParseState state) {
+      Collection<PptTopLevel> ppts =
+          (uncheckedPpts == null) ? all_ppts.asCollection() : uncheckedPpts;
+      for (PptTopLevel ppt : ppts) {
+        List<PptTopLevel> children = childrenOfMissingParents.remove(ppt.name());
+        if (children != null && !isReplaceableCombinedExit(ppt)) {
+          for (PptTopLevel child : children) {
+            checkParentIsNotLeaf(ppt, child, state);
+          }
+        }
+        if (ppt.parent_relations == null || ppt.is_subexit()) {
           continue;
         }
-        PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
-        if (parent != null
-            && !(parent.type == PptTopLevel.PptType.POINT
-                && parent.ppt_name.isCombinedExitPoint())) {
-          checkParentIsNotLeaf(parent, ppt);
+        for (ParentRelation pr : ppt.parent_relations) {
+          if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+            continue;
+          }
+          PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
+          if (parent == null) {
+            childrenOfMissingParents
+                .computeIfAbsent(pr.parent_ppt_name, k -> new ArrayList<>())
+                .add(ppt);
+          } else if (!isReplaceableCombinedExit(parent)) {
+            checkParentIsNotLeaf(parent, ppt, state);
+          }
         }
+      }
+      if (uncheckedPpts == null) {
+        uncheckedPpts = new ArrayList<>();
+      } else {
+        uncheckedPpts.clear();
       }
     }
   }
@@ -760,7 +856,7 @@ public class PptRelation implements Serializable {
         }
         // A leaf obtains its invariants from its samples and from its conditional ppts.  Merging
         // invariants from other children would discard those invariants.
-        checkParentIsNotLeaf(parent, ppt);
+        checkParentIsNotLeaf(parent, ppt, null);
         // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));

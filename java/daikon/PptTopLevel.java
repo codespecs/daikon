@@ -34,7 +34,6 @@ import daikon.derive.unary.UnaryDerivationFactory;
 import daikon.inv.DiscardCode;
 import daikon.inv.DiscardInfo;
 import daikon.inv.Equality;
-import daikon.inv.Implication;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
@@ -3178,56 +3177,6 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    // The below two paragraphs of code (whose end result is to
-    // compute "background") should be changed to use the VarInfo
-    // partial ordering to determine background invariants, instead of
-    // the (now deprecated) controlling_ppts relationship.
-
-    // Form the closure of the controllers; each element is a Ppt
-    Set<PptTopLevel> closure = new LinkedHashSet<>();
-    {
-      Set<PptTopLevel> working = new LinkedHashSet<>();
-      while (!working.isEmpty()) {
-        PptTopLevel ppt = working.iterator().next();
-        working.remove(ppt);
-        closure.add(ppt);
-      }
-    }
-
-    // Create the conjunction of the closures' invariants to form a
-    // background environment for the prover.  Ignore implications,
-    // since in the current scheme, implications came from controlled
-    // program points, and we don't necessarily want to lose the
-    // unconditional version of the invariant at the conditional ppt.
-    for (PptTopLevel ppt : closure) {
-      List<Invariant> invs_vec = ppt.invariants_vector();
-      Collections.sort(invs_vec, icfp);
-      for (Invariant inv : InvariantFilters.addEqualityInvariants(invs_vec)) {
-        if (inv instanceof Implication) {
-          continue;
-        }
-        if (!test.include(inv)) { // think: !inv.isWorthPrinting()
-          continue;
-        }
-        String fmt = inv.format_using(OutputFormat.SIMPLIFY);
-        if (format_simplify_problem(fmt)) {
-          // If format_simplify is not defined for this invariant, don't
-          // confuse Simplify with the error message
-          continue;
-        }
-        // We could also consider testing if the controlling invariant
-        // was removed by Simplify, but what would the point be?  Also,
-        // these "intermediate goals" might help out Simplify.
-        proverStack.pushLemma(new InvariantLemma(inv));
-
-        // If this is the :::OBJECT ppt, also restate all of them in
-        // orig terms, since the conditions also held upon entry.
-        if (ppt.ppt_name.isObjectInstanceSynthetic()) {
-          proverStack.pushLemma(InvariantLemma.makeLemmaAddOrig(inv));
-        }
-      }
-    }
-
     if (proverStack.checkForContradiction() == 'T') {
       if (LemmaStack.dkconfig_remove_contradictions) {
         System.err.println(
@@ -4922,8 +4871,9 @@ public class PptTopLevel extends Ppt {
    * :::POINT (used by convertcsv.pl) are leaves.
    *
    * <p>A leaf has no children other than its conditional ppts: when Daikon uses the dataflow
-   * hierarchy, {@link PptRelation#init_hierarchy} rejects a declaration that makes a leaf the
-   * parent of another ppt.
+   * hierarchy, it rejects a declaration that makes a leaf the parent of another ppt, normally as
+   * soon as it reads the declaration ({@link PptRelation.DeclaredParentChecker}) and otherwise when
+   * it builds the hierarchy ({@link PptRelation#init_hierarchy}).
    *
    * @return true if this is a leaf of the dataflow hierarchy
    */

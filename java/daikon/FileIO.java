@@ -931,19 +931,6 @@ public final class FileIO {
       FileIO.process_sample(all_ppts, ppt, vt, nonce);
     }
 
-    /**
-     * Returns true if the samples are used to build the dataflow hierarchy, so that {@link
-     * PptRelation#checkDeclaredParents} should be called before a sample that follows declarations
-     * is processed. This default implementation returns {@link Daikon#use_dataflow_hierarchy}. A
-     * processor that does not use the dataflow hierarchy should override this method to return
-     * false.
-     *
-     * @return true if the declared parents should be checked before processing samples
-     */
-    public boolean checks_declared_parents() {
-      return Daikon.use_dataflow_hierarchy;
-    }
-
     /** Process a program point declaration record. */
     public void process_decl(PptMap all_ppts, PptTopLevel ppt) {}
 
@@ -1091,14 +1078,8 @@ public final class FileIO {
     public Set<VarInfo> varsWithNonBooleanValues =
         Collections.newSetFromMap(new IdentityHashMap<>());
 
-    /**
-     * True if a ppt might have been declared, in this file or an earlier one, since {@link
-     * PptRelation#checkDeclaredParents} last checked {@link #all_ppts}. If so, that check runs
-     * before the next sample is processed, so that a leaf that is declared as a parent is reported
-     * before any of its samples is processed. Initially true, because an earlier file might have
-     * declared ppts.
-     */
-    public boolean parents_unchecked = true;
+    /** Checks that no ppt in {@link #all_ppts} is declared to have a leaf as a parent. */
+    public final PptRelation.DeclaredParentChecker parentChecker;
 
     /**
      * Start parsing the given file.
@@ -1127,6 +1108,7 @@ public final class FileIO {
       is_decl_file = decl_file_p;
       this.ppts_may_be_new = ppts_may_be_new;
       all_ppts = ppts;
+      parentChecker = new PptRelation.DeclaredParentChecker(ppts);
 
       boolean is_url = raw_filename.startsWith("file:") || raw_filename.startsWith("jar:");
 
@@ -1322,14 +1304,6 @@ public final class FileIO {
         read_data_trace_record(data_trace_state);
 
         if (data_trace_state.rtype == RecordType.SAMPLE) {
-          // A child may be declared before its parent, so check the declared parents only when a
-          // sample follows declarations, before processing that sample.
-          if (data_trace_state.parents_unchecked) {
-            if (processor.checks_declared_parents()) {
-              PptRelation.checkDeclaredParents(data_trace_state.all_ppts);
-            }
-            data_trace_state.parents_unchecked = false;
-          }
           assert data_trace_state.ppt != null
               : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
           assert data_trace_state.vt != null
@@ -1454,16 +1428,16 @@ public final class FileIO {
 
       // First look for declarations in the dtrace stream
       if (is_declaration_header(line)) {
-        state.ppt = read_ppt_decl(state, line);
+        PptTopLevel ppt = read_ppt_decl(state, line);
+        state.ppt = ppt;
         // ppt can be null if this declaration was skipped because of
         // --ppt-select-pattern or --ppt-omit-pattern.
-        if (state.ppt != null) {
-          if (!state.all_ppts.containsName(state.ppt.name())) {
-            state.all_ppts.add(state.ppt);
-            state.parents_unchecked = true;
-            assert state.ppt != null : "@AssumeAssertion(nullness)";
+        if (ppt != null) {
+          if (!state.all_ppts.containsName(ppt.name())) {
+            state.all_ppts.add(ppt);
+            state.parentChecker.added(ppt);
             try {
-              Daikon.init_ppt(state.ppt, state.all_ppts);
+              Daikon.init_ppt(ppt, state.all_ppts);
             } catch (Exception e) {
               decl_error(state, e);
             }
@@ -1612,13 +1586,18 @@ public final class FileIO {
 
   /**
    * Add orig() and derived variables to vt (by side effect), then supply it to the program point
-   * for flowing.
+   * for flowing. Throws a UserError if a declaration that was read since the previous sample makes
+   * a leaf of the dataflow hierarchy the parent of a ppt.
    *
    * @param vt trace data only; modified by side effect to add derived vars
    */
   @RequiresNonNull("FileIO.data_trace_state")
   public static void process_sample(
       PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
+
+    // Report a leaf that is declared as a parent before processing any of its samples.  A child
+    // can be declared before its parent, so the check waits until a sample follows declarations.
+    FileIO.data_trace_state.parentChecker.check(FileIO.data_trace_state);
 
     // Add orig variables.  This must be above the check below because
     // it saves away the orig values from enter points for later use

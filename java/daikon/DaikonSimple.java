@@ -381,12 +381,6 @@ public class DaikonSimple {
     // The first Call is the enter entry and the second is the object entry
     Map<Integer, List<Call>> call_map = new LinkedHashMap<>();
 
-    /** DaikonSimple does not build the dataflow hierarchy, so it accepts any declared parent. */
-    @Override
-    public boolean checks_declared_parents() {
-      return false;
-    }
-
     // Flag for whether there are out of order entries in the
     // dtrace file. For unterminated calls (enter but
     // not exit entry in the dtrace file), because DaikonSimple had
