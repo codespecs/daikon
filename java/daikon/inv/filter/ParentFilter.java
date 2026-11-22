@@ -63,7 +63,7 @@ public class ParentFilter extends InvariantFilter {
       }
 
       // If the combined exit point is not printed (because it does not match the
-      // --ppt-select-pattern output filter), treat it as absent, so that the numbered exit
+      // --ppt-select-pattern regular expression), treat it as absent, so that the numbered exit
       // point's invariants are printed.
       if (rel.getRelationType() == PptRelationType.EXIT_EXITNN
           && !PrintInvariants.matches_ppt_regexp(rel.parent)) {
