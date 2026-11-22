@@ -784,7 +784,7 @@ public final class PrintInvariants {
    * @param ppt a program point
    * @return true if ppt's invariants may be printed, according to the ppt regular expression
    */
-  private static boolean matches_ppt_regexp(PptTopLevel ppt) {
+  public static boolean matches_ppt_regexp(PptTopLevel ppt) {
     return (ppt_regexp == null) || ppt_regexp.matcher(ppt.name()).find();
   }
 
