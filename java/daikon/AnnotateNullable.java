@@ -1,5 +1,6 @@
 package daikon;
 
+import daikon.PptRelation.PptRelationType;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -201,19 +202,24 @@ public class AnnotateNullable {
   }
 
   /**
-   * Returns the children of the given program point that are combined exits. AnnotateNullable
-   * obtains all the information about a method from the method's combined exit, so it ignores the
-   * other children, such as entries and points. It also ignores combined exits whose names do not
-   * have the form Class.method(args); see {@link #has_method_name}.
+   * Returns the children of the given program point that are combined exits and that are related
+   * to it by a PARENT relation. AnnotateNullable obtains all the information about a method from
+   * the method's combined exit, so it ignores the other children, such as entries and points. It
+   * also ignores children related by a USER relation, which are methods of other classes, and
+   * combined exits whose names do not have the form Class.method(args); see {@link
+   * #has_method_name}.
    *
    * @param ppt a program point
-   * @return the children of {@code ppt} that are combined exits with a method name
+   * @return the children of {@code ppt} that are combined exits with a method name and are related
+   *     to {@code ppt} by a PARENT relation
    */
   private static List<PptTopLevel> combined_exit_children(PptTopLevel ppt) {
     List<PptTopLevel> result = new ArrayList<>();
     for (PptRelation child_rel : ppt.children) {
       PptTopLevel child = child_rel.child;
-      if (child.is_combined_exit() && has_method_name(child)) {
+      if (child_rel.getRelationType() == PptRelationType.PARENT
+          && child.is_combined_exit()
+          && has_method_name(child)) {
         result.add(child);
       }
     }

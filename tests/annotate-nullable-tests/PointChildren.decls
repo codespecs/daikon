@@ -3,7 +3,7 @@ var-comparability none
 
 # Class C has a static method sm and an instance method m.  The CLASS ppt and
 # the OBJECT ppt each also have a child that is a point, not a method:
-# C.check():::POINT and C.checkStatic():::POINT.  AnnotateNullable obtains
+# C.checkStatic():::POINT and C.check():::POINT.  AnnotateNullable obtains
 # the information about a method from its combined exit, so it ignores the
 # points.
 
