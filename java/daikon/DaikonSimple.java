@@ -451,6 +451,21 @@ public class DaikonSimple {
     }
 
     /**
+     * Returns the program point with the given name in the given map, if it has the given type.
+     *
+     * @param ppts a map of program points
+     * @param name the name of a program point
+     * @param type a program point type
+     * @return the program point with the given name, or null if there is none or its type is not
+     *     {@code type}
+     */
+    private static @Nullable PptTopLevel pptOfType(
+        PptMap ppts, PptName name, PptTopLevel.PptType type) {
+      PptTopLevel result = ppts.get(name);
+      return (result != null && result.type == type) ? result : null;
+    }
+
+    /**
      * Process the sample by checking it against each existing invariant at the program point and
      * removing the invariant from the list of possibles if any invariant is falsified.
      */
@@ -465,6 +480,13 @@ public class DaikonSimple {
 
       // Intern the sample
       vt = new ValueTuple(vt.vals, vt.mods);
+
+      // A general program point is a leaf of the dataflow hierarchy, so the sample applies to it
+      // alone, as in Daikon.
+      if (ppt.type == PptTopLevel.PptType.POINT) {
+        add(ppt, vt, -1);
+        return;
+      }
 
       // DaikonSimple must make the object program point manually because
       // the new Chicory produced dtrace files do not contain object ppts
@@ -481,16 +503,10 @@ public class DaikonSimple {
       // The ppt's type, not its name, determines whether it is an entry or an exit:  a ppt that is
       // declared as a POINT is neither, even if its name is foo:::ENTER or foo:::EXIT.
       if ((ppt.is_enter() && !ppt_name.isConstructor()) || ppt.is_exit()) {
-        object_ppt = all_ppts.get(ppt_name.makeObject());
-        class_ppt = all_ppts.get(ppt_name.makeClassStatic());
         // Likewise, a ppt named foo:::OBJECT or foo:::CLASS that is declared with some other type
         // (such as POINT) is independent of the method and does not receive its samples.
-        if (object_ppt != null && !object_ppt.is_object()) {
-          object_ppt = null;
-        }
-        if (class_ppt != null && !class_ppt.is_class()) {
-          class_ppt = null;
-        }
+        object_ppt = pptOfType(all_ppts, ppt_name.makeObject(), PptTopLevel.PptType.OBJECT);
+        class_ppt = pptOfType(all_ppts, ppt_name.makeClassStatic(), PptTopLevel.PptType.CLASS);
       }
 
       // C programs do not have object ppts.
@@ -508,13 +524,6 @@ public class DaikonSimple {
       }
       if (class_ppt != null) {
         class_vt = copySample(class_ppt, ppt, vt, nonce);
-      }
-
-      // A general program point is a leaf of the dataflow hierarchy, so the sample applies to it
-      // alone, as in Daikon.
-      if (ppt.type == PptTopLevel.PptType.POINT) {
-        add(ppt, vt, -1);
-        return;
       }
 
       // If this is an enter point, just remember it for later
