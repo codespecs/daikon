@@ -691,7 +691,11 @@ public class PptRelation implements Serializable {
    * ignores the relations of numbered exits such as {@code Foo.bar():::EXIT22}, because the
    * hierarchy relates a numbered exit only to its combined exit, and it skips a ppt that was not
    * read from a declaration (for example, one read from a serialized InvMap), which has null {@link
-   * PptTopLevel#parent_relations}.
+   * PptTopLevel#parent_relations}. A declared parent that is a {@link PptTopLevel.PptType#POINT}
+   * named like a combined exit (such as foo:::EXIT) is also ignored, because {@link
+   * Daikon#create_combined_exits} replaces it by a combined exit if a numbered exit such as
+   * foo:::EXIT22 is declared (possibly later). {@link #init_hierarchy} checks such a parent after
+   * the replacement.
    */
   public static class DeclaredParentChecker {
 
@@ -721,6 +725,17 @@ public class PptRelation implements Serializable {
     }
 
     /**
+     * Returns true if the given declared parent might be replaced by a combined exit, so that it is
+     * not checked until {@link #init_hierarchy}.
+     *
+     * @param parent a ppt that is declared as a parent
+     * @return true if {@code parent} is a POINT named like a combined exit
+     */
+    private static boolean isReplaceableCombinedExit(PptTopLevel parent) {
+      return parent.type == PptTopLevel.PptType.POINT && parent.ppt_name.isCombinedExitPoint();
+    }
+
+    /**
      * Records that the given ppt has been added to the map.
      *
      * @param ppt a ppt that has been added to the map
@@ -744,7 +759,7 @@ public class PptRelation implements Serializable {
           (uncheckedPpts == null) ? all_ppts.asCollection() : uncheckedPpts;
       for (PptTopLevel ppt : ppts) {
         List<PptTopLevel> children = childrenOfMissingParents.remove(ppt.name());
-        if (children != null) {
+        if (children != null && !isReplaceableCombinedExit(ppt)) {
           for (PptTopLevel child : children) {
             checkParentIsNotLeaf(ppt, child, state);
           }
@@ -761,7 +776,7 @@ public class PptRelation implements Serializable {
             childrenOfMissingParents
                 .computeIfAbsent(pr.parent_ppt_name, k -> new ArrayList<>())
                 .add(ppt);
-          } else {
+          } else if (!isReplaceableCombinedExit(parent)) {
             checkParentIsNotLeaf(parent, ppt, state);
           }
         }
