@@ -268,6 +268,41 @@ public class DtraceNonceFixerTest {
   }
 
   /**
+   * Tests that a one-line header record ends a paragraph even if no empty line follows it, as in
+   * Daikon, so that the sample that directly follows it gets a nonce.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testHeaderRecordWithoutEmptyLine() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "// a comment",
+            "decl-version 2.0",
+            "aprogram.point:::POINT",
+            "x",
+            "1",
+            "1",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "// a comment",
+            "decl-version 2.0",
+            "aprogram.point:::POINT",
+            "this_invocation_nonce",
+            "0",
+            "x",
+            "1",
+            "1",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
    * Tests that a compressed input file yields a compressed output file.
    *
    * @throws IOException if there is trouble reading or writing a file
@@ -703,6 +738,31 @@ public class DtraceNonceFixerTest {
   public void testRecordHeaderWithPptTagSeparator() throws IOException {
     String input = String.join("\n", "input-language Java:::POINT", "", "");
     assertEquals(input, fix(input));
+  }
+
+  /**
+   * Tests that a sample whose program point name starts with a header keyword, but not as a whole
+   * word, is treated as a sample, as in Daikon.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testSampleNameStartsWithKeyword() throws IOException {
+    String input =
+        String.join("\n", "decl-version 2.0", "input-language:::POINT", "x", "1", "1", "", "");
+    String expected =
+        String.join(
+            "\n",
+            "decl-version 2.0",
+            "input-language:::POINT",
+            "this_invocation_nonce",
+            "0",
+            "x",
+            "1",
+            "1",
+            "",
+            "");
+    assertEquals(expected, fix(input));
   }
 
   /**

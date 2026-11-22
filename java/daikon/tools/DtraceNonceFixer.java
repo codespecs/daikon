@@ -382,7 +382,10 @@ public class DtraceNonceFixer {
     }
   }
 
-  /** A paragraph of a dtrace file: its lines, up to but not including a blank line. */
+  /**
+   * A paragraph of a dtrace file: its lines, up to but not including a blank line, or up to and
+   * including a one-line header record.
+   */
   private static final class Paragraph {
     /** The lines of the paragraph. */
     final List<String> lines;
@@ -399,12 +402,30 @@ public class DtraceNonceFixer {
     final int nonce;
 
     /**
-     * Creates a new Paragraph.
+     * True if this paragraph was ended by a blank line (or the end of the file), false if it was
+     * ended by a one-line header record and so is printed without a following blank line.
+     */
+    final boolean blankLineAfter;
+
+    /**
+     * Creates a new Paragraph that is followed by a blank line.
      *
      * @param lines the lines of the paragraph
      */
     Paragraph(List<String> lines) {
+      this(lines, true);
+    }
+
+    /**
+     * Creates a new Paragraph.
+     *
+     * @param lines the lines of the paragraph
+     * @param blankLineAfter true if the paragraph is followed by a blank line, false if it ends
+     *     with a one-line header record
+     */
+    Paragraph(List<String> lines, boolean blankLineAfter) {
       this.lines = lines;
+      this.blankLineAfter = blankLineAfter;
       int i = 0;
       while (i < lines.size() && FileIO.isComment(lines.get(i))) {
         i++;
@@ -424,16 +445,15 @@ public class DtraceNonceFixer {
 
     /**
      * Returns true if {@code line} starts a record, other than a sample, whose first line may
-     * contain ":::".
+     * contain ":::". Like Daikon, a keyword starts a record only if it is a whole word, so a sample
+     * whose program point name starts with a keyword (such as "input-language:::POINT") is a
+     * sample.
      *
      * @param line the first non-comment line of a paragraph
      * @return true if {@code line} starts a record that is not a sample
      */
     private static boolean isRecordHeader(String line) {
-      return line.startsWith("decl-version")
-          || line.startsWith("input-language")
-          || line.startsWith("ppt ")
-          || line.startsWith("var-comparability");
+      return FileIO.is_one_line_header_record(line) || FileIO.is_declaration_header(line);
     }
 
     /**
@@ -486,7 +506,7 @@ public class DtraceNonceFixer {
     }
 
     /**
-     * Prints this paragraph followed by a blank line.
+     * Prints this paragraph, followed by a blank line if one followed it in the input.
      *
      * @param out where to print
      */
@@ -494,7 +514,9 @@ public class DtraceNonceFixer {
       for (String line : lines) {
         out.println(line);
       }
-      out.println();
+      if (blankLineAfter) {
+        out.println();
+      }
     }
 
     /**
@@ -521,9 +543,11 @@ public class DtraceNonceFixer {
     /**
      * Returns the next paragraph of the dtrace file. Like Daikon, this method treats only an empty
      * line as a paragraph separator; a line that contains only whitespace is part of a paragraph.
-     * This method returns an empty paragraph if the dtrace file contains consecutive empty lines.
-     * Lines are not modified, so the output differs from the input only in the nonce header line,
-     * in the nonces, and in a final empty line (which the output always has).
+     * Also like Daikon, a one-line header record (such as "decl-version 2.0"), possibly preceded by
+     * comments, is a paragraph even if no empty line follows it. This method returns an empty
+     * paragraph if the dtrace file contains consecutive empty lines. Lines are not modified, so the
+     * output differs from the input only in the nonce header line, in the nonces, and in a final
+     * empty line (which the output always has).
      *
      * @param br the reader for the dtrace file
      * @return the next paragraph, or null if the end of the file has been reached
@@ -531,12 +555,20 @@ public class DtraceNonceFixer {
      */
     static @Nullable Paragraph read(BufferedReader br) throws IOException {
       List<String> result = new ArrayList<>();
+      // Whether every line in `result` is a comment.
+      boolean onlyComments = true;
       String line;
       while ((line = br.readLine()) != null) {
         if (line.isEmpty()) {
           return new Paragraph(result);
         }
         result.add(line);
+        if (onlyComments && FileIO.is_one_line_header_record(line)) {
+          // Like Daikon, end the record at the end of the line, so that a record (such as a
+          // sample) that directly follows it is read as a separate paragraph.
+          return new Paragraph(result, false);
+        }
+        onlyComments = onlyComments && FileIO.isComment(line);
       }
       // End of file
       return result.isEmpty() ? null : new Paragraph(result);

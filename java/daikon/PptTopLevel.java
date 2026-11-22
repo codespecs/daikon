@@ -188,7 +188,14 @@ public class PptTopLevel extends Ppt {
     OBJECT,
     ENTER,
     EXIT,
-    SUBEXIT
+    SUBEXIT,
+    /**
+     * A program point whose name ends with :::THROWS, optionally followed by an id, such as
+     * foo:::THROWS or foo:::THROWS12.
+     */
+    THROWS,
+    /** A program point whose name ends with :::GLOBAL. */
+    GLOBAL
   }
 
   /** Type of this program point. */
@@ -487,6 +494,10 @@ public class PptTopLevel extends Ppt {
       return PptType.OBJECT;
     } else if (ppt_name.isClassStaticSynthetic()) {
       return PptType.CLASS;
+    } else if (ppt_name.isThrowsPoint()) {
+      return PptType.THROWS;
+    } else if (ppt_name.isGlobalPoint()) {
+      return PptType.GLOBAL;
     } else {
       return PptType.POINT;
     }
@@ -495,15 +506,17 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns the type that a program point with the given name and declared type should have.
    *
-   * <p>A program point that has no declared type (as in a version 1 decls file, or a version 2
-   * decls file that omits the ppt-type record) gets its type from its name:
+   * <p>A program point that has no declared type (as in a decls file that omits the ppt-type
+   * record) gets its type from its name:
    *
    * <ul>
    *   <li>foo:::ENTER is an {@link PptType#ENTER},
    *   <li>a combined exit point, foo:::EXIT, is an {@link PptType#EXIT},
    *   <li>a numbered exit point such as foo:::EXIT22 is a {@link PptType#SUBEXIT},
    *   <li>Foo:::OBJECT is an {@link PptType#OBJECT},
-   *   <li>Foo:::CLASS is a {@link PptType#CLASS}, and
+   *   <li>Foo:::CLASS is a {@link PptType#CLASS},
+   *   <li>foo:::THROWS is a {@link PptType#THROWS},
+   *   <li>:::GLOBAL is a {@link PptType#GLOBAL}, and
    *   <li>any other program point is a generic {@link PptType#POINT}.
    * </ul>
    *
@@ -514,8 +527,14 @@ public class PptTopLevel extends Ppt {
    * <p>A program point that is declared with any other type keeps that type. Its name must conform
    * to the type, except for {@link PptType#POINT}, which permits any name.
    *
-   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, etc. agree with one
-   * another and with the program point's name.
+   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, isDataflowLeaf, etc.
+   * agree with one another. They also agree with the program point's name, except for a program
+   * point that is declared as a {@link PptType#POINT}: it is a leaf of the dataflow hierarchy
+   * whatever its name, even if its name is foo:::ENTER. However, some code classifies a program
+   * point by its name rather than by these predicates. For example, Daikon rejects every sample for
+   * a program point named foo:::EXIT, whatever its type; and if foo:::EXIT22 is declared as a
+   * numbered exit, Daikon replaces a program point named foo:::EXIT by the combined exit of
+   * foo:::EXIT22.
    *
    * @param ppt_name the name of the program point
    * @param type the declared type of the program point, or null if none was declared
@@ -4345,6 +4364,18 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Creates the initial equality view for this ppt, which has not seen any samples. Each equality
+   * set contains all the variables that are comparable to one another, as if every sample so far
+   * had given them equal values (or each variable is in its own set, if {@link
+   * PptSliceEquality#dkconfig_set_per_var} is true).
+   */
+  public void createEqualityView() {
+    PptSliceEquality newEqualityView = new PptSliceEquality(this);
+    newEqualityView.instantiate_invariants();
+    equality_view = newEqualityView;
+  }
+
+  /**
    * Cleans up the ppt so that its invariants can be merged from other ppts. Not normally necessary
    * unless the merge is taking place over multiple ppts maps based on different data. This allows a
    * ppt to have its invariants recalculated.
@@ -4878,6 +4909,24 @@ public class PptTopLevel extends Ppt {
   @Pure
   public boolean is_subexit() {
     return type == PptType.SUBEXIT;
+  }
+
+  /**
+   * Returns true if this is a leaf of the dataflow hierarchy, which obtains its invariants directly
+   * from samples rather than by merging them from its children.
+   *
+   * <p>The leaves are the numbered exit points ({@link PptType#SUBEXIT}) and the general program
+   * points ({@link PptType#POINT}). This ensures that arbitrarily named program points such as
+   * :::POINT (used by convertcsv.pl) are leaves.
+   *
+   * <p>A leaf has no children other than its conditional ppts: {@link PptRelation#init_hierarchy}
+   * rejects a declaration that makes a leaf the parent of another ppt.
+   *
+   * @return true if this is a leaf of the dataflow hierarchy
+   */
+  @Pure
+  public boolean isDataflowLeaf() {
+    return (type == PptType.SUBEXIT) || (type == PptType.POINT);
   }
 
   /** Is this a ppt that represents an object? */
