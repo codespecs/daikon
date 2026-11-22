@@ -518,11 +518,11 @@ public final class Diff {
    * Extracts the PptTopLevel and Invariants out of a pptMap, and places them into an InvMap. Maps
    * PptTopLevel to a List of Invariants. The InvMap is a cleaner representation than the PptMap,
    * and it allows us to more easily manipulate the contents. The InvMap contains exactly the
-   * elements contained in the PptMap, except for obvious invariants that PrintInvariants also omits:
-   * reflexive invariants such as "x == x", and invariants that are obvious from the declarations
-   * alone. Conditional program points are also added as keys. Other
-   * filtering is done when creating the pair tree. The ppts in the InvMap must be sorted, but the
-   * invariants need not be sorted.
+   * elements contained in the PptMap, except for obvious invariants that PrintInvariants also
+   * omits: reflexive invariants such as "x == x", and invariants that are obvious from the
+   * declarations alone. Conditional program points are also added as keys. Other filtering is done
+   * when creating the pair tree. The ppts in the InvMap must be sorted, but the invariants need not
+   * be sorted.
    */
   public InvMap convertToInvMap(PptMap pptMap) {
     InvMap map = new InvMap();
