@@ -1,0 +1,162 @@
+====================================================
+C:::CLASS
+24
+class daikon.inv.unary.scalar.OneOfScalar
+C.s == 7
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= C.s <= 63
+class daikon.inv.unary.scalar.NonZero
+C.s != 0
+class daikon.inv.unary.scalar.UpperBound
+C.s <= 7
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+C.s >= 0
+class daikon.inv.unary.scalar.LowerBound
+C.s >= 7
+====================================================
+C.m(int):::ENTER
+12
+class daikon.inv.unary.scalar.OneOfScalar
+C.s == 7
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= C.s <= 63
+class daikon.inv.unary.scalar.NonZero
+C.s != 0
+class daikon.inv.unary.scalar.UpperBound
+C.s <= 7
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+C.s >= 0
+class daikon.inv.unary.scalar.LowerBound
+C.s >= 7
+class daikon.inv.unary.scalar.OneOfScalar
+x one of { 1, 2, 3 }
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= x <= 63
+class daikon.inv.unary.scalar.NonZero
+x != 0
+class daikon.inv.unary.scalar.UpperBound
+x <= 3
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+x >= 0
+class daikon.inv.unary.scalar.LowerBound
+x >= 1
+class daikon.inv.binary.twoScalar.IntNonEqual
+C.s != x
+class daikon.inv.binary.twoScalar.IntGreaterThan
+C.s > x
+class daikon.inv.binary.twoScalar.IntGreaterEqual
+C.s >= x
+====================================================
+C.m(int):::EXIT
+12
+class daikon.inv.unary.scalar.OneOfScalar
+C.s == 7
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= C.s <= 63
+class daikon.inv.unary.scalar.NonZero
+C.s != 0
+class daikon.inv.unary.scalar.UpperBound
+C.s <= 7
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+C.s >= 0
+class daikon.inv.unary.scalar.LowerBound
+C.s >= 7
+class daikon.inv.unary.scalar.OneOfScalar
+x one of { 1, 2, 3 }
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= x <= 63
+class daikon.inv.unary.scalar.NonZero
+x != 0
+class daikon.inv.unary.scalar.UpperBound
+x <= 3
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+x >= 0
+class daikon.inv.unary.scalar.LowerBound
+x >= 1
+class daikon.inv.unary.scalar.OneOfScalar
+return one of { 2, 3, 4 }
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= return <= 63
+class daikon.inv.unary.scalar.NonZero
+return != 0
+class daikon.inv.unary.scalar.UpperBound
+return <= 4
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+return >= 0
+class daikon.inv.unary.scalar.LowerBound
+return >= 2
+class daikon.inv.binary.twoScalar.IntNonEqual
+C.s != x
+class daikon.inv.binary.twoScalar.IntGreaterThan
+C.s > x
+class daikon.inv.binary.twoScalar.IntGreaterEqual
+C.s >= x
+class daikon.inv.binary.twoScalar.IntNonEqual
+C.s != return
+class daikon.inv.binary.twoScalar.IntGreaterThan
+C.s > return
+class daikon.inv.binary.twoScalar.IntGreaterEqual
+C.s >= return
+class daikon.inv.binary.twoScalar.IntNonEqual
+x != return
+class daikon.inv.binary.twoScalar.IntLessThan
+x < return
+class daikon.inv.binary.twoScalar.IntLessEqual
+x <= return
+====================================================
+C.m(int):::EXIT1
+12
+class daikon.inv.unary.scalar.OneOfScalar
+C.s == 7
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= C.s <= 63
+class daikon.inv.unary.scalar.NonZero
+C.s != 0
+class daikon.inv.unary.scalar.UpperBound
+C.s <= 7
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+C.s >= 0
+class daikon.inv.unary.scalar.LowerBound
+C.s >= 7
+class daikon.inv.unary.scalar.OneOfScalar
+x one of { 1, 2, 3 }
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= x <= 63
+class daikon.inv.unary.scalar.NonZero
+x != 0
+class daikon.inv.unary.scalar.UpperBound
+x <= 3
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+x >= 0
+class daikon.inv.unary.scalar.LowerBound
+x >= 1
+class daikon.inv.unary.scalar.OneOfScalar
+return one of { 2, 3, 4 }
+class daikon.inv.unary.scalar.RangeInt$Bound0_63
+0 <= return <= 63
+class daikon.inv.unary.scalar.NonZero
+return != 0
+class daikon.inv.unary.scalar.UpperBound
+return <= 4
+class daikon.inv.unary.scalar.RangeInt$GreaterEqualZero
+return >= 0
+class daikon.inv.unary.scalar.LowerBound
+return >= 2
+class daikon.inv.binary.twoScalar.IntNonEqual
+C.s != x
+class daikon.inv.binary.twoScalar.IntGreaterThan
+C.s > x
+class daikon.inv.binary.twoScalar.IntGreaterEqual
+C.s >= x
+class daikon.inv.binary.twoScalar.IntNonEqual
+C.s != return
+class daikon.inv.binary.twoScalar.IntGreaterThan
+C.s > return
+class daikon.inv.binary.twoScalar.IntGreaterEqual
+C.s >= return
+class daikon.inv.binary.twoScalar.IntNonEqual
+x != return
+class daikon.inv.binary.twoScalar.IntLessThan
+x < return
+class daikon.inv.binary.twoScalar.IntLessEqual
+x <= return
