@@ -248,6 +248,30 @@ public class InitHierarchyTest {
         String.valueOf(e.getMessage()));
   }
 
+  /**
+   * A point named like a combined exit can be declared as a parent if it is replaced by a combined
+   * exit, because a numbered exit is declared.
+   */
+  @Test
+  public void testReplaceableCombinedExitAsParent() throws IOException {
+    File declsFile = tmpFolder.newFile();
+    String contents =
+        "decl-version 2.0\nvar-comparability none\n\n"
+            + pptDecl("Foo.bar():::ENTER", "enter")
+            + pptDecl("Foo.bar():::EXIT", "point")
+            + pptDecl("Foo.bar():::EXIT5", "subexit")
+            + pptDecl("Q:::POINT", "point", "parent", "Foo.bar():::EXIT");
+    Files.write(declsFile.toPath(), contents.getBytes(StandardCharsets.UTF_8));
+    PptMap ppts = FileIO.read_declaration_files(Collections.singletonList(declsFile));
+    // As in Daikon, the declared parents are checked before the combined exits are created.
+    PptRelation.checkDeclaredParents(ppts);
+    Daikon.create_combined_exits(ppts);
+    PptRelation.init_hierarchy(ppts);
+    PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
+    assertTrue(exit.is_combined_exit());
+    assertEquals(exit, get(ppts, "Q:::POINT").parents.get(0).parent);
+  }
+
   /** A dtrace record that is a sample of P:::POINT, in which x is 1. */
   private static final String SAMPLE_P = "P:::POINT\nx\n1\n1\n\n";
 
