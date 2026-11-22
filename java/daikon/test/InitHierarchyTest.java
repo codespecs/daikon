@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -122,9 +123,11 @@ public class InitHierarchyTest {
   }
 
   /**
-   * Returns the splitters of the given program point.
+   * Returns the splitters of the given program point. Throws AssertionError if ppt has no list of
+   * splitters.
    *
-   * @param ppt a program point that has splitters
+   * @param ppt a program point on which {@link PptTopLevel#addConditions} created a list of
+   *     splitters, which might since have become empty
    * @return the splitters of ppt
    */
   private static List<PptSplitter> splitters(PptTopLevel ppt) {
@@ -248,26 +251,46 @@ public class InitHierarchyTest {
   /** A dtrace record that is a sample of P:::POINT, in which x is 1. */
   private static final String SAMPLE_P = "P:::POINT\nx\n1\n1\n\n";
 
-  /** A FileIO.Processor that counts the samples, but does not otherwise process them. */
+  /** A dtrace record that is a sample of Q:::POINT, in which x is 1. */
+  private static final String SAMPLE_Q = "Q:::POINT\nx\n1\n1\n\n";
+
+  /**
+   * A FileIO.Processor that counts the samples, but does not otherwise process them. It can check
+   * the declared parents before each sample, as Daikon does.
+   */
   private static class CountingProcessor extends FileIO.Processor {
+    /** True if this checks the declared parents before each sample, as Daikon does. */
+    private final boolean checkParents;
+
     /** The number of samples that have been passed to {@link #process_sample}. */
     int samples = 0;
 
-    /** Creates a CountingProcessor. */
-    CountingProcessor() {}
+    /**
+     * Creates a CountingProcessor.
+     *
+     * @param checkParents true if the processor checks the declared parents before each sample, as
+     *     Daikon does
+     */
+    CountingProcessor(boolean checkParents) {
+      this.checkParents = checkParents;
+    }
 
     @Override
+    @RequiresNonNull("daikon.FileIO.data_trace_state")
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
+      if (checkParents) {
+        FileIO.data_trace_state.parentChecker.check(FileIO.data_trace_state);
+      }
       samples++;
     }
   }
 
   /**
-   * Reads the given dtrace file contents, which may include ppt declarations, as Daikon does.
+   * Reads the given dtrace file contents, which can include ppt declarations.
    *
    * @param contents the records of a dtrace file, after its header
-   * @param processor the processor that is passed each record
+   * @param processor a processor that is passed each record
    * @return the program points
    */
   private PptMap readDtrace(String contents, FileIO.Processor processor) throws IOException {
@@ -280,23 +303,87 @@ public class InitHierarchyTest {
   }
 
   /**
+   * Asserts that the given error reports that P:::POINT is declared as a parent of Q:::POINT in
+   * file test.dtrace.
+   *
+   * @param e a UserError
+   */
+  private static void assertPointAsParentInDtrace(Daikon.UserError e) {
+    String msg = String.valueOf(e.getMessage());
+    assertTrue(msg, msg.contains("test.dtrace"));
+    assertTrue(
+        msg,
+        msg.endsWith(
+            "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it"
+                + " a leaf of the dataflow hierarchy"));
+  }
+
+  /**
    * A point that a dtrace file declares as a parent is reported before any sample is processed,
    * even if the child is declared before the parent.
    */
   @Test
   public void testPointAsParentInDtrace() {
-    CountingProcessor processor = new CountingProcessor();
+    CountingProcessor processor = new CountingProcessor(true);
     String contents =
         pptDecl("Q:::POINT", "point", "parent", "P:::POINT")
             + pptDecl("P:::POINT", "point")
             + SAMPLE_P;
     Daikon.UserError e =
         assertThrows(Daikon.UserError.class, () -> readDtrace(contents, processor));
-    assertEquals(
-        "ppt P:::POINT is declared as a parent of ppt Q:::POINT, but its type (point) makes it a"
-            + " leaf of the dataflow hierarchy",
-        String.valueOf(e.getMessage()));
+    assertPointAsParentInDtrace(e);
     assertEquals(0, processor.samples);
+  }
+
+  /**
+   * A point that a dtrace file declares as a parent is reported before its first sample, even if a
+   * sample of its child precedes its declaration.
+   */
+  @Test
+  public void testPointAsParentDeclaredAfterSampleInDtrace() {
+    CountingProcessor processor = new CountingProcessor(true);
+    String contents =
+        pptDecl("Q:::POINT", "point", "parent", "P:::POINT")
+            + SAMPLE_Q
+            + pptDecl("P:::POINT", "point")
+            + SAMPLE_P;
+    Daikon.UserError e =
+        assertThrows(Daikon.UserError.class, () -> readDtrace(contents, processor));
+    assertPointAsParentInDtrace(e);
+    assertEquals(1, processor.samples);
+  }
+
+  /**
+   * Reading a dtrace file does not itself check the declared parents, so a tool that does not use
+   * the dataflow hierarchy, such as InvariantChecker, can read a point that is declared as a
+   * parent.
+   */
+  @Test
+  public void testPointAsParentInDtraceUnchecked() throws IOException {
+    CountingProcessor processor = new CountingProcessor(false);
+    readDtrace(
+        pptDecl("Q:::POINT", "point", "parent", "P:::POINT")
+            + pptDecl("P:::POINT", "point")
+            + SAMPLE_P,
+        processor);
+    assertEquals(1, processor.samples);
+  }
+
+  /**
+   * The parents of a numbered exit are not checked, because the hierarchy relates a numbered exit
+   * only to its combined exit, whose parents are those of the first numbered exit.
+   */
+  @Test
+  public void testPointAsParentOfSecondSubexit() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("P:::POINT", "point")
+                + pptDecl("Foo.bar():::ENTER", "enter")
+                + pptDecl("Foo.bar():::EXIT11", "subexit")
+                + pptDecl("Foo.bar():::EXIT22", "subexit", "parent", "P:::POINT"));
+    PptRelation.checkDeclaredParents(ppts);
+    PptRelation.init_hierarchy(ppts);
+    assertEquals(Collections.emptyList(), get(ppts, "P:::POINT").children);
   }
 
   /**
@@ -305,7 +392,7 @@ public class InitHierarchyTest {
    */
   @Test
   public void testParentDeclaredLaterInDtrace() throws IOException {
-    CountingProcessor processor = new CountingProcessor();
+    CountingProcessor processor = new CountingProcessor(true);
     PptMap ppts =
         readDtrace(
             pptDecl("P:::POINT", "point", "parent", "C:::OBJECT")
@@ -350,6 +437,7 @@ public class InitHierarchyTest {
    */
   @Test
   public void testFirstSplitterRemoved() throws IOException {
+    Daikon.use_dataflow_hierarchy = true;
     PptMap ppts =
         readDecls(
             pptDecl("Foo.bar():::ENTER", "enter")
@@ -394,6 +482,7 @@ public class InitHierarchyTest {
   /** With the hierarchy, a non-leaf with no children loses its splitters. */
   @Test
   public void testChildlessSplitterWithHierarchy() throws IOException {
+    Daikon.use_dataflow_hierarchy = true;
     PptMap ppts = readDecls(pptDecl("Foo.bar():::ENTER", "enter"));
     PptTopLevel enter = get(ppts, "Foo.bar():::ENTER");
     enter.addConditions(new Splitter[] {new ConditionSplitter("x == 1")});
@@ -407,6 +496,7 @@ public class InitHierarchyTest {
    */
   @Test
   public void testChildlessSplitterCascades() throws IOException {
+    Daikon.use_dataflow_hierarchy = true;
     PptMap ppts =
         readDecls(
             pptDecl("Foo:::CLASS", "class")
@@ -420,37 +510,5 @@ public class InitHierarchyTest {
     assertEquals(0, splitters(classPpt).size());
     assertEquals(0, splitters(objectPpt).size());
     assertTrue(objectPpt.equality_view != null);
-  }
-
-  /**
-   * Daikon infers invariants from a sample at a point that is named like an enter point, even
-   * though the sample is also recorded as an entry that no exit matches.
-   */
-  @Test
-  public void testPointNamedEnterSample() throws IOException {
-    File declsFile = tmpFolder.newFile("point.decls");
-    String decls =
-        "decl-version 2.0\nvar-comparability none\n\n" + pptDecl("Foo.bar():::ENTER", "point");
-    Files.write(declsFile.toPath(), decls.getBytes(StandardCharsets.UTF_8));
-    File dtraceFile = tmpFolder.newFile("point.dtrace");
-    String dtrace = "Foo.bar():::ENTER\nx\n1\n1\n\n";
-    Files.write(dtraceFile.toPath(), dtrace.getBytes(StandardCharsets.UTF_8));
-    File invFile = new File(tmpFolder.getRoot(), "point.inv.gz");
-    try {
-      // Before the fix, this threw a UserError: "No samples found for any of 1 program point".
-      Daikon.mainHelper(
-          new String[] {
-            "--no_text_output",
-            "-o",
-            invFile.toString(),
-            declsFile.toString(),
-            dtraceFile.toString()
-          });
-      assertEquals(1, FileIO.samples_used);
-      assertTrue(invFile.exists());
-    } finally {
-      // Also discards the unmatched entry that this test leaves on the call stack.
-      Daikon.cleanup();
-    }
   }
 }

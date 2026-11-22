@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -572,12 +574,12 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Creates an equality view and invariants for each ppt (including each conditional ppt) that has
-   * no children and does not already have an equality view. This happens for non-leaf ppts such as
-   * OBJECT, CLASS, or GLOBAL that do not end up with any children (due to the program source or
-   * because of ppt filtering). It also happens for a combined exit point that a decls file declares
-   * when no corresponding numbered exit point is declared or included. A leaf usually gets its
-   * equality view from {@link Daikon#setupEquality}, before it receives any samples.
+   * Creates an equality view and invariants for each ppt that has no children and does not already
+   * have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL that do
+   * not end up with any children (due to the program source or because of ppt filtering). It also
+   * happens for a combined exit point that a decls file declares when no corresponding numbered
+   * exit point is declared or included. A leaf usually gets its equality view from {@link
+   * Daikon#setupEquality}, before it receives any samples.
    *
    * <p>The new equality view puts all comparable variables in the same equality set, as if no
    * sample had distinguished them, so each ppt that gets one must have no samples. {@link
@@ -619,7 +621,8 @@ public class PptRelation implements Serializable {
    *
    * @param ppt a non-leaf ppt
    * @param pptSplit one of the splitters of {@code ppt}
-   * @return the matching splitter at each child, or null if some child has none
+   * @return the matching splitter at each child, or null if {@code ppt} has no children or some
+   *     child has no matching splitter
    */
   private static @Nullable List<SplitChild> matchingSplitChildren(
       PptTopLevel ppt, PptSplitter pptSplit) {
@@ -684,37 +687,122 @@ public class PptRelation implements Serializable {
    *
    * @param parent a ppt that is declared as a parent of {@code child}
    * @param child a ppt; used for diagnostics
+   * @param state the state of the file being read, or null if no file is being read; used for
+   *     diagnostics
    */
-  private static void checkParentIsNotLeaf(PptTopLevel parent, PptTopLevel child) {
+  private static void checkParentIsNotLeaf(
+      PptTopLevel parent, PptTopLevel child, FileIO.@Nullable ParseState state) {
     if (Daikon.use_dataflow_hierarchy && parent.isDataflowLeaf()) {
-      throw new Daikon.UserError(
+      String msg =
           String.format(
               "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
                   + " the dataflow hierarchy",
-              parent.name(), child.name(), parent.type.name().toLowerCase(Locale.ENGLISH)));
+              parent.name(), child.name(), parent.type.name().toLowerCase(Locale.ENGLISH));
+      throw (state == null) ? new Daikon.UserError(msg) : new Daikon.UserError(msg, state);
     }
   }
 
   /**
-   * Throws a UserError if some ppt in the map is declared to have a parent that is a leaf of the
-   * dataflow hierarchy, as {@link #init_hierarchy} would. Calling this as soon as the declarations
-   * are read reports the error before any samples are processed. Daikon calls it after reading the
-   * declaration files, and {@link FileIO#read_data_trace_file(String, PptMap, FileIO.Processor,
-   * boolean, boolean)} calls it before processing a sample that follows declarations in a dtrace
-   * file. A declared parent that is not in the map is ignored, because it might be declared later.
+   * Throws a UserError if some ppt in the given map is declared to have a parent that is a leaf of
+   * the dataflow hierarchy, as {@link #init_hierarchy} would.
    *
    * @param all_ppts a map of program points
+   * @see DeclaredParentChecker
    */
   public static void checkDeclaredParents(PptMap all_ppts) {
-    for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      for (ParentRelation pr : ppt.parent_relations) {
-        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+    new DeclaredParentChecker(all_ppts).check(null);
+  }
+
+  /**
+   * Checks, as program points are added to a map, that no ppt in the map is declared to have a
+   * parent that is a leaf of the dataflow hierarchy, as {@link #init_hierarchy} would. Checking as
+   * soon as the declarations are read reports the error before samples are processed.
+   *
+   * <p>Each call to {@link #check} examines only the ppts that were added since the previous call,
+   * so checking after each of many declarations does not rescan the whole map. A declared parent
+   * that is not in the map is checked when it is added. Like {@link #init_hierarchy}, the check
+   * ignores the relations of numbered exits such as {@code Foo.bar():::EXIT22}, because the
+   * hierarchy relates a numbered exit only to its combined exit, and it skips a ppt that was not
+   * read from a declaration (for example, one read from a serialized InvMap), which has null {@link
+   * PptTopLevel#parent_relations}.
+   */
+  public static class DeclaredParentChecker {
+
+    /** The program points to check. */
+    private final PptMap all_ppts;
+
+    /**
+     * The ppts that have been added to {@link #all_ppts} since the last call to {@link #check}, or
+     * null if {@link #check} has never been called, in which case every ppt in the map is
+     * unchecked.
+     */
+    private @Nullable List<PptTopLevel> uncheckedPpts = null;
+
+    /**
+     * Maps the name of each declared parent that is not yet in {@link #all_ppts} to the checked
+     * ppts that declare it as a parent.
+     */
+    private final Map<String, List<PptTopLevel>> childrenOfMissingParents = new HashMap<>();
+
+    /**
+     * Creates a DeclaredParentChecker for the given map, all of whose ppts are unchecked.
+     *
+     * @param all_ppts a map of program points
+     */
+    public DeclaredParentChecker(PptMap all_ppts) {
+      this.all_ppts = all_ppts;
+    }
+
+    /**
+     * Records that the given ppt has been added to the map.
+     *
+     * @param ppt a ppt that has been added to the map
+     */
+    public void added(PptTopLevel ppt) {
+      if (uncheckedPpts != null) {
+        uncheckedPpts.add(ppt);
+      }
+    }
+
+    /**
+     * Throws a UserError if a ppt that has been added to the map since the last call is declared to
+     * have a leaf as a parent, or is a leaf that a ppt that has already been checked declares as a
+     * parent.
+     *
+     * @param state the state of the file being read, or null if no file is being read; used for
+     *     diagnostics
+     */
+    public void check(FileIO.@Nullable ParseState state) {
+      Collection<PptTopLevel> ppts =
+          (uncheckedPpts == null) ? all_ppts.asCollection() : uncheckedPpts;
+      for (PptTopLevel ppt : ppts) {
+        List<PptTopLevel> children = childrenOfMissingParents.remove(ppt.name());
+        if (children != null) {
+          for (PptTopLevel child : children) {
+            checkParentIsNotLeaf(ppt, child, state);
+          }
+        }
+        if (ppt.parent_relations == null || ppt.is_subexit()) {
           continue;
         }
-        PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
-        if (parent != null) {
-          checkParentIsNotLeaf(parent, ppt);
+        for (ParentRelation pr : ppt.parent_relations) {
+          if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+            continue;
+          }
+          PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
+          if (parent == null) {
+            childrenOfMissingParents
+                .computeIfAbsent(pr.parent_ppt_name, k -> new ArrayList<>())
+                .add(ppt);
+          } else {
+            checkParentIsNotLeaf(parent, ppt, state);
+          }
         }
+      }
+      if (uncheckedPpts == null) {
+        uncheckedPpts = new ArrayList<>();
+      } else {
+        uncheckedPpts.clear();
       }
     }
   }
@@ -764,7 +852,7 @@ public class PptRelation implements Serializable {
         }
         // A leaf obtains its invariants from its samples and from its conditional ppts.  Merging
         // invariants from other children would discard those invariants.
-        checkParentIsNotLeaf(parent, ppt);
+        checkParentIsNotLeaf(parent, ppt, null);
         // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));
@@ -807,8 +895,11 @@ public class PptRelation implements Serializable {
     // no children, or some child lacks a matching splitter.  Removing a splitter from a child can
     // make its parents' splitters unmergeable, so the parents are examined again.  This is done
     // before any conditional ppt is connected, so that no relation refers to a removed conditional
-    // ppt.  Without the dataflow hierarchy, every ppt (and each of its conditional ppts) receives
-    // samples directly, so no splitter needs to be merged from the children.
+    // ppt.  Without the dataflow hierarchy, no invariants are merged from the children, so every
+    // splitter is kept.  A ppt that receives samples passes each one to its conditional ppts (see
+    // PptTopLevel.add_bottom_up).  A ppt that receives no samples, such as an OBJECT ppt or a
+    // combined exit that Daikon creates after processing the samples, has conditional ppts that
+    // receive no samples either, just like the ppt itself.
     if (Daikon.use_dataflow_hierarchy) {
       Deque<PptTopLevel> worklist = new ArrayDeque<>();
       for (PptTopLevel ppt : all_ppts.pptIterable()) {
@@ -839,16 +930,13 @@ public class PptRelation implements Serializable {
     // presume ppt A has a child ppt B.  A has two conditional
     // ppts (AC1, AC2) and B has two conditional ppts (BC1, BC2)
     // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
+
+    // Build the PptRelations for each child.  The PptRelation from the conditional point is of
+    // the same type as the original relation from parent to child.
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.isDataflowLeaf()) {
+      if (ppt.isDataflowLeaf() || !ppt.has_splitters()) {
         continue;
       }
-      if (!ppt.has_splitters()) {
-        continue;
-      }
-
-      // System.out.printf("processing splitter %s%n", ppt.name());
-
       for (PptSplitter ppt_split : ppt.splitters) {
         List<SplitChild> split_children = matchingSplitChildren(ppt, ppt_split);
         if (split_children == null) {
@@ -856,9 +944,6 @@ public class PptRelation implements Serializable {
           assert !Daikon.use_dataflow_hierarchy : ppt;
           continue;
         }
-
-        // Build the PptRelations for each child.  The PptRelation from the conditional point is of
-        // the same type as the original relation from parent to child.
         for (SplitChild sc : split_children) {
           ppt_split.add_relation(sc.rel, sc.ppt_split);
         }
