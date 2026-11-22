@@ -467,7 +467,12 @@ public final class MergeInvariants {
   /**
    * Sets up the specified relation between each of the conditionals in ppt and the matching
    * conditionals in child. Each must have the same number of splitters setup in the same order. The
-   * splitter match can't be checked because splitters can't be read back in.
+   * splitters themselves can't be compared because splitters can't be read back in, but the name of
+   * each conditional ppt contains its condition, so corresponding conditional ppts must have the
+   * same name.
+   *
+   * @param ppt a ppt in the merged map
+   * @param child the ppt with the same name in one of the input maps
    */
   private static void setup_conditional_merge(PptTopLevel ppt, PptTopLevel child) {
 
@@ -493,7 +498,7 @@ public final class MergeInvariants {
 
     // Both ppt and child should have the same number of splitters
     if (ppt.splitters.size() != child.splitters.size()) {
-      throw new Error(
+      throw new Daikon.UserError(
           "Merge ppt "
               + ppt.name
               + " has "
@@ -513,6 +518,15 @@ public final class MergeInvariants {
       PptSplitter ppt_split = ppt.splitters.get(ii);
       PptSplitter child_split = child.splitters.get(ii);
       for (int jj = 0; jj < ppt_split.ppts.length; jj++) {
+        if (!ppt_split.ppts[jj].name().equals(child_split.ppts[jj].name())) {
+          throw new Daikon.UserError(
+              "Conditional ppt "
+                  + ppt_split.ppts[jj].name()
+                  + " corresponds to conditional ppt "
+                  + child_split.ppts[jj].name()
+                  + " in an input .inv file.  Each .inv file must be produced with the same"
+                  + " splitters, in the same order.");
+        }
         child_split.ppts[jj].remove_equality_invariants();
         child_split.ppts[jj].in_merge = false;
         PptRelation.newMergeChildRel(ppt_split.ppts[jj], child_split.ppts[jj]);
