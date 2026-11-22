@@ -4920,8 +4920,9 @@ public class PptTopLevel extends Ppt {
    * :::POINT (used by convertcsv.pl) are leaves.
    *
    * <p>A leaf has no children other than its conditional ppts: when Daikon uses the dataflow
-   * hierarchy, {@link PptRelation#init_hierarchy} rejects a declaration that makes a leaf the
-   * parent of another ppt.
+   * hierarchy, it rejects a declaration that makes a leaf the parent of another ppt, normally as
+   * soon as it reads the declaration ({@link PptRelation.DeclaredParentChecker}) and otherwise when
+   * it builds the hierarchy ({@link PptRelation#init_hierarchy}).
    *
    * @return true if this is a leaf of the dataflow hierarchy
    */
