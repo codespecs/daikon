@@ -47,7 +47,7 @@ public class InitHierarchyTest {
   }
 
   /**
-   * Returns a ppt declaration with one int variable, x.
+   * Returns the declaration of the given program point, with one int variable, x.
    *
    * @param name a name for the program point
    * @param type the ppt-type of the program point, such as "point"
@@ -58,8 +58,8 @@ public class InitHierarchyTest {
   }
 
   /**
-   * Returns a ppt declaration with one int variable, x, which is related to variable x of the
-   * parent.
+   * Returns the declaration of the given program point, with one int variable, x, which is related
+   * to variable x of the parent.
    *
    * @param name a name for the program point
    * @param type the ppt-type of the program point, such as "point"
