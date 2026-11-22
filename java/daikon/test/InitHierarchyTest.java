@@ -198,7 +198,7 @@ public class InitHierarchyTest {
     }
 
     @Override
-    @RequiresNonNull("FileIO.data_trace_state")
+    @RequiresNonNull("daikon.FileIO.data_trace_state")
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
       if (checkParents) {

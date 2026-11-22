@@ -1428,16 +1428,16 @@ public final class FileIO {
 
       // First look for declarations in the dtrace stream
       if (is_declaration_header(line)) {
-        state.ppt = read_ppt_decl(state, line);
+        PptTopLevel ppt = read_ppt_decl(state, line);
+        state.ppt = ppt;
         // ppt can be null if this declaration was skipped because of
         // --ppt-select-pattern or --ppt-omit-pattern.
-        if (state.ppt != null) {
-          if (!state.all_ppts.containsName(state.ppt.name())) {
-            state.all_ppts.add(state.ppt);
-            state.parentChecker.added(state.ppt);
-            assert state.ppt != null : "@AssumeAssertion(nullness)";
+        if (ppt != null) {
+          if (!state.all_ppts.containsName(ppt.name())) {
+            state.all_ppts.add(ppt);
+            state.parentChecker.added(ppt);
             try {
-              Daikon.init_ppt(state.ppt, state.all_ppts);
+              Daikon.init_ppt(ppt, state.all_ppts);
             } catch (Exception e) {
               decl_error(state, e);
             }
