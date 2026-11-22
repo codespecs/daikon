@@ -2,7 +2,9 @@ package daikon.inv.filter;
 
 import daikon.Debug;
 import daikon.PptRelation;
+import daikon.PptRelation.PptRelationType;
 import daikon.PptSlice;
+import daikon.PrintInvariants;
 import daikon.VarInfo;
 import daikon.inv.Invariant;
 import java.util.Arrays;
@@ -58,6 +60,14 @@ public class ParentFilter extends InvariantFilter {
 
       if (Debug.logDetail()) {
         inv.log("  considering parent %s [%s]", rel, rel.parent.name());
+      }
+
+      // If the combined exit point is not printed (because it does not match the
+      // --ppt-select-pattern regular expression), treat it as absent, so that the numbered exit
+      // point's invariants are printed.
+      if (rel.getRelationType() == PptRelationType.EXIT_EXITNN
+          && !PrintInvariants.matches_ppt_regexp(rel.parent)) {
+        continue;
       }
 
       // Look up each variable in the parent, skip this parent if any
