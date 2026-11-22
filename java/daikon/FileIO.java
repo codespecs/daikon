@@ -931,6 +931,19 @@ public final class FileIO {
       FileIO.process_sample(all_ppts, ppt, vt, nonce);
     }
 
+    /**
+     * Returns true if the samples are used to build the dataflow hierarchy, so that {@link
+     * PptRelation#checkDeclaredParents} should be called before a sample that follows declarations
+     * is processed. This default implementation returns {@link Daikon#use_dataflow_hierarchy}. A
+     * processor that does not use the dataflow hierarchy should override this method to return
+     * false.
+     *
+     * @return true if the declared parents should be checked before processing samples
+     */
+    public boolean checks_declared_parents() {
+      return Daikon.use_dataflow_hierarchy;
+    }
+
     /** Process a program point declaration record. */
     public void process_decl(PptMap all_ppts, PptTopLevel ppt) {}
 
@@ -1312,7 +1325,9 @@ public final class FileIO {
           // A child may be declared before its parent, so check the declared parents only when a
           // sample follows declarations, before processing that sample.
           if (data_trace_state.parents_unchecked) {
-            PptRelation.checkDeclaredParents(data_trace_state.all_ppts);
+            if (processor.checks_declared_parents()) {
+              PptRelation.checkDeclaredParents(data_trace_state.all_ppts);
+            }
             data_trace_state.parents_unchecked = false;
           }
           assert data_trace_state.ppt != null

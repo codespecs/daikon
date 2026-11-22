@@ -702,6 +702,10 @@ public class PptRelation implements Serializable {
    * declaration files, and {@link FileIO#read_data_trace_file(String, PptMap, FileIO.Processor,
    * boolean, boolean)} calls it before processing a sample that follows declarations in a dtrace
    * file. A declared parent that is not in the map is ignored, because it might be declared later.
+   * A declared parent that is a {@link PptTopLevel.PptType#POINT} named like a combined exit (such
+   * as foo:::EXIT) is also ignored, because {@link Daikon#create_combined_exits} replaces it by a
+   * combined exit if a numbered exit such as foo:::EXIT22 is declared (possibly later). {@link
+   * #init_hierarchy} checks such a parent after the replacement.
    *
    * @param all_ppts a map of program points
    */
@@ -712,7 +716,9 @@ public class PptRelation implements Serializable {
           continue;
         }
         PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
-        if (parent != null) {
+        if (parent != null
+            && !(parent.type == PptTopLevel.PptType.POINT
+                && parent.ppt_name.isCombinedExitPoint())) {
           checkParentIsNotLeaf(parent, ppt);
         }
       }
