@@ -31,11 +31,13 @@ exclude = { glob = [
   "**/*.svg",
   "**/*expected*",
   "**/COPYING",
+  "emacs/difffontify-tests/{old,new}/**/*",
   "gradlew",
   "gradlew.bat",
   "src/main/resources/specifications/jdk/**/*",
   "src/test/resources/end-to-end/**/*",
   "tests/kvasir-tests/povray/**/*",
+  "in_class/**/*",
 ] }
 
 [[repos]]
@@ -237,7 +239,11 @@ hooks = [
     "-P",
     "SCRIPTDIR",
   ], exclude = { glob = [
+    "classfile_check_version",
     "cronic-orig",
+    "scripts/browser_emacs",
+    "scripts/eps2png-mono-alpha.zsh",
+    "scripts/find-dtrace",
     "share/csail-athena-tickets.bash",
     "tests/kvasir-tests/**/*",
   ] } },
