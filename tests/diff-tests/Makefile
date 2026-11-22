@@ -18,9 +18,10 @@
 
 # 6. Check the directory and remaining files into the repository.
 
-# A test directory is one that contains a .decls file.  A test directory without a
-# Makefile makes the run fail rather than being skipped.
-SUBDIRS = $(patsubst %/,%,$(sort $(dir $(wildcard */*.decls))))
+# Every subdirectory is a test directory.  A subdirectory that is not a valid
+# test directory, such as one without a Makefile or a .decls file, makes the
+# run fail rather than being skipped.
+SUBDIRS = $(patsubst %/,%,$(sort $(wildcard */)))
 
 default:
 
