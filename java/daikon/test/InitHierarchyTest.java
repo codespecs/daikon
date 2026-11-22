@@ -248,6 +248,26 @@ public class InitHierarchyTest {
         String.valueOf(e.getMessage()));
   }
 
+  /**
+   * A point named like a combined exit is a leaf, so it cannot be declared as a parent, even if a
+   * numbered exit is declared: Daikon does not replace it by a combined exit.
+   */
+  @Test
+  public void testPointNamedCombinedExitAsParent() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("Foo.bar():::ENTER", "enter")
+                + pptDecl("Foo.bar():::EXIT", "point")
+                + pptDecl("Foo.bar():::EXIT5", "subexit")
+                + pptDecl("Q:::POINT", "point", "parent", "Foo.bar():::EXIT"));
+    Daikon.UserError e =
+        assertThrows(Daikon.UserError.class, () -> PptRelation.checkDeclaredParents(ppts));
+    assertEquals(
+        "ppt Foo.bar():::EXIT is declared as a parent of ppt Q:::POINT, but its type (point) makes"
+            + " it a leaf of the dataflow hierarchy",
+        String.valueOf(e.getMessage()));
+  }
+
   /** A dtrace record that is a sample of P:::POINT, in which x is 1. */
   private static final String SAMPLE_P = "P:::POINT\nx\n1\n1\n\n";
 
