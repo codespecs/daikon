@@ -496,7 +496,7 @@ public class DaikonSimple {
       // C programs do not have object ppts.
       // Whether the ppt is a static or instance method decides whether the sample is copied over
       // to the object ppt.  The class ppt (if any) always receives the sample, independently of
-      // whether the object ppt does.
+      // whether the object ppt exists or receives the sample.
       if (object_ppt != null) {
         // the check assumes that static fields are not stored first in the
         // object ppt
