@@ -3216,7 +3216,7 @@ public class PptTopLevel extends Ppt {
 
         // If this is the :::OBJECT ppt, also restate all of them in
         // orig terms, since the conditions also held upon entry.
-        if (ppt.is_object()) {
+        if (ppt.ppt_name.isObjectInstanceSynthetic()) {
           proverStack.pushLemma(InvariantLemma.makeLemmaAddOrig(inv));
         }
       }
