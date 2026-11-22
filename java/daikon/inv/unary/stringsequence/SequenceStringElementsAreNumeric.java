@@ -126,6 +126,10 @@ public class SequenceStringElementsAreNumeric extends SingleStringSequence {
       return CONFIDENCE_UNJUSTIFIED;
     }
 
+    if (allElementsAreNull) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    }
+
     return 1 - Math.pow(.1, ppt.num_samples());
   }
 
@@ -173,7 +177,7 @@ public class SequenceStringElementsAreNumeric extends SingleStringSequence {
     SequenceStringElementsAreNumeric result = first.clone();
     result.ppt = parent_ppt;
 
-    // Return result if both alwaysEmpty and allElementsAreNull are false
+    // Return result if allElementsAreNull is false
     if (!result.allElementsAreNull) {
       return result;
     }
@@ -185,7 +189,7 @@ public class SequenceStringElementsAreNumeric extends SingleStringSequence {
       if (!ssean.allElementsAreNull) {
         result.allElementsAreNull = false;
       }
-      // If both result.alwaysEmpty and result.allElementsAreNull are false, return result
+      // If result.allElementsAreNull is false, return result
       if (!result.allElementsAreNull) {
         break;
       }

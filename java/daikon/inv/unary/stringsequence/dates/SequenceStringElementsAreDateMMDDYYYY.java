@@ -126,6 +126,10 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
       return CONFIDENCE_UNJUSTIFIED;
     }
 
+    if (allElementsAreNull) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    }
+
     return 1 - Math.pow(.1, ppt.num_samples());
   }
 
@@ -174,7 +178,7 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
     SequenceStringElementsAreDateMMDDYYYY result = first.clone();
     result.ppt = parent_ppt;
 
-    // Return result if both alwaysEmpty and allElementsAreNull are false
+    // Return result if allElementsAreNull is false
     if (!result.allElementsAreNull) {
       return result;
     }
@@ -187,7 +191,7 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
       if (!ssead.allElementsAreNull) {
         result.allElementsAreNull = false;
       }
-      // If both result.alwaysEmpty and result.allElementsAreNull are false, return result
+      // If result.allElementsAreNull is false, return result
       if (!result.allElementsAreNull) {
         break;
       }
