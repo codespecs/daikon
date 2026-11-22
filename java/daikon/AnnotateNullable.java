@@ -143,7 +143,7 @@ public class AnnotateNullable {
       if (!ppt.is_combined_exit() || !is_static_method(ppt)) {
         continue;
       }
-      if (ppt.ppt_name.getFullClassName() == null || ppt.ppt_name.getSignature() == null) {
+      if (!has_method_name(ppt)) {
         System.err.printf(
             "Warning: skipping %s, whose name does not have the form Class.method(args)%n", ppt);
         continue;
@@ -203,19 +203,33 @@ public class AnnotateNullable {
   /**
    * Returns the children of the given program point that are combined exits. AnnotateNullable
    * obtains all the information about a method from the method's combined exit, so it ignores the
-   * other children, such as entries and points.
+   * other children, such as entries and points. It also ignores combined exits whose names do not
+   * have the form Class.method(args); see {@link #has_method_name}.
    *
    * @param ppt a program point
-   * @return the children of {@code ppt} that are combined exits
+   * @return the children of {@code ppt} that are combined exits with a method name
    */
   private static List<PptTopLevel> combined_exit_children(PptTopLevel ppt) {
     List<PptTopLevel> result = new ArrayList<>();
     for (PptRelation child_rel : ppt.children) {
-      if (child_rel.child.is_combined_exit()) {
-        result.add(child_rel.child);
+      PptTopLevel child = child_rel.child;
+      if (child.is_combined_exit() && has_method_name(child)) {
+        result.add(child);
       }
     }
     return result;
+  }
+
+  /**
+   * Returns true if the name of the given program point has the form Class.method(args), that is,
+   * if it has both a class name and a method signature. AnnotateNullable cannot produce annotations
+   * for a method program point without such a name.
+   *
+   * @param ppt a program point
+   * @return true if the name of {@code ppt} has both a class name and a method signature
+   */
+  private static boolean has_method_name(PptTopLevel ppt) {
+    return ppt.ppt_name.getFullClassName() != null && ppt.ppt_name.getSignature() != null;
   }
 
   /**
