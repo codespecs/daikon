@@ -202,14 +202,14 @@ public class InitHierarchyTest {
     if (exit5_x == null) {
       throw new AssertionError("no variable x in " + exit5.name());
     }
+    VarInfo object_x = object.find_var_by_name("x");
+    if (object_x == null) {
+      throw new AssertionError("no variable x in " + object.name());
+    }
     boolean found = false;
     for (PptRelation rel : exit5.parents) {
       if (rel.parent == object) {
         assertEquals(PptRelation.PptRelationType.PARENT, rel.getRelationType());
-        VarInfo object_x = object.find_var_by_name("x");
-        if (object_x == null) {
-          throw new AssertionError("no variable x in " + object.name());
-        }
         VarInfo parent_x = rel.parentVar(exit5_x);
         if (parent_x == null) {
           throw new AssertionError("no parent variable for x in " + exit5.name());
@@ -249,27 +249,23 @@ public class InitHierarchyTest {
   }
 
   /**
-   * A point named like a combined exit can be declared as a parent if it is replaced by a combined
-   * exit, because a numbered exit is declared.
+   * A point named like a combined exit is a leaf, so it cannot be declared as a parent, even if a
+   * numbered exit is declared: Daikon does not replace it by a combined exit.
    */
   @Test
-  public void testReplaceableCombinedExitAsParent() throws IOException {
-    File declsFile = tmpFolder.newFile();
-    String contents =
-        "decl-version 2.0\nvar-comparability none\n\n"
-            + pptDecl("Foo.bar():::ENTER", "enter")
-            + pptDecl("Foo.bar():::EXIT", "point")
-            + pptDecl("Foo.bar():::EXIT5", "subexit")
-            + pptDecl("Q:::POINT", "point", "parent", "Foo.bar():::EXIT");
-    Files.write(declsFile.toPath(), contents.getBytes(StandardCharsets.UTF_8));
-    PptMap ppts = FileIO.read_declaration_files(Collections.singletonList(declsFile));
-    // As in Daikon, the declared parents are checked before the combined exits are created.
-    PptRelation.checkDeclaredParents(ppts);
-    Daikon.create_combined_exits(ppts);
-    PptRelation.init_hierarchy(ppts);
-    PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
-    assertTrue(exit.is_combined_exit());
-    assertEquals(exit, get(ppts, "Q:::POINT").parents.get(0).parent);
+  public void testPointNamedCombinedExitAsParent() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("Foo.bar():::ENTER", "enter")
+                + pptDecl("Foo.bar():::EXIT", "point")
+                + pptDecl("Foo.bar():::EXIT5", "subexit")
+                + pptDecl("Q:::POINT", "point", "parent", "Foo.bar():::EXIT"));
+    Daikon.UserError e =
+        assertThrows(Daikon.UserError.class, () -> PptRelation.checkDeclaredParents(ppts));
+    assertEquals(
+        "ppt Foo.bar():::EXIT is declared as a parent of ppt Q:::POINT, but its type (point) makes"
+            + " it a leaf of the dataflow hierarchy",
+        String.valueOf(e.getMessage()));
   }
 
   /** A dtrace record that is a sample of P:::POINT, in which x is 1. */
