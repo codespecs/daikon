@@ -1,0 +1,8 @@
+=== daikon.diff.Diff
+=== daikon.diff.Diff -p --ignore_exitNN
+<Foo.bar():::ENTER, null>
+  <x one of { 1, 2, 3 } {1+}, null> (Una,JM)
+<Foo.bar():::EXIT, null>
+  <x one of { 100, 200, 300 } {1+}, null> (Una,JM)
+<Foo.bar():::EXIT5, null>
+  <x one of { 10, 20, 30 } {1+}, null> (Una,JM)
