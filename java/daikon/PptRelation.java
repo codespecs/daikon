@@ -571,10 +571,9 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Creates an equality view and invariants for each ppt (including each conditional ppt) that has
-   * no children and does not already have an equality view. This happens for non-leaf ppts such as
-   * OBJECT, CLASS, or GLOBAL that do not end up with any children (due to the program source or
-   * because of ppt filtering). It also happens for a combined exit point that a decls file declares
+   * Creates an equality view and invariants for each ppt that has no children and does not already
+   * have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL that do
+   * not end up with any children (due to the program source or because of ppt filtering). It also happens for a combined exit point that a decls file declares
    * when no corresponding numbered exit point is declared or included. A leaf usually gets its
    * equality view from {@link Daikon#setupEquality}, before it receives any samples.
    *
@@ -618,7 +617,8 @@ public class PptRelation implements Serializable {
    *
    * @param ppt a non-leaf ppt
    * @param pptSplit one of the splitters of {@code ppt}
-   * @return the matching splitter at each child, or null if some child has none
+   * @return the matching splitter at each child, or null if {@code ppt} has no children or some
+   *     child has no matching splitter
    */
   private static @Nullable List<SplitChild> matchingSplitChildren(
       PptTopLevel ppt, PptSplitter pptSplit) {
@@ -754,8 +754,11 @@ public class PptRelation implements Serializable {
     // no children, or some child lacks a matching splitter.  Removing a splitter from a child can
     // make its parents' splitters unmergeable, so the parents are examined again.  This is done
     // before any conditional ppt is connected, so that no relation refers to a removed conditional
-    // ppt.  Without the dataflow hierarchy, every ppt (and each of its conditional ppts) receives
-    // samples directly, so no splitter needs to be merged from the children.
+    // ppt.  Without the dataflow hierarchy, no invariants are merged from the children, so every
+    // splitter is kept.  A ppt that receives samples passes each one to its conditional ppts (see
+    // PptTopLevel.add_bottom_up).  A ppt that receives no samples, such as an OBJECT ppt or a
+    // combined exit that Daikon creates after processing the samples, has conditional ppts that
+    // receive no samples either, just like the ppt itself.
     if (Daikon.use_dataflow_hierarchy) {
       Deque<PptTopLevel> worklist = new ArrayDeque<>();
       for (PptTopLevel ppt : all_ppts.pptIterable()) {
@@ -786,16 +789,13 @@ public class PptRelation implements Serializable {
     // presume ppt A has a child ppt B.  A has two conditional
     // ppts (AC1, AC2) and B has two conditional ppts (BC1, BC2)
     // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
+
+    // Build the PptRelations for each child.  The PptRelation from the conditional point is of
+    // the same type as the original relation from parent to child.
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.isDataflowLeaf()) {
+      if (ppt.isDataflowLeaf() || !ppt.has_splitters()) {
         continue;
       }
-      if (!ppt.has_splitters()) {
-        continue;
-      }
-
-      // System.out.printf("processing splitter %s%n", ppt.name());
-
       for (PptSplitter ppt_split : ppt.splitters) {
         List<SplitChild> split_children = matchingSplitChildren(ppt, ppt_split);
         if (split_children == null) {
@@ -803,10 +803,6 @@ public class PptRelation implements Serializable {
           assert !Daikon.use_dataflow_hierarchy : ppt;
           continue;
         }
-
-        // Build the PptRelations for each child.  The PptRelation from
-        // the conditional point is of the same type as the original
-        // relation from parent to child
         for (SplitChild sc : split_children) {
           ppt_split.add_relation(sc.rel, sc.ppt_split);
         }
