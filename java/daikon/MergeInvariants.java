@@ -255,6 +255,7 @@ public final class MergeInvariants {
       List<File> decl_files = new ArrayList<>();
       decl_files.add(decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
+      PptRelation.checkDeclaredParents(merge_ppts);
       Daikon.create_combined_exits(merge_ppts);
       merge_ppts.trimToSize();
       PptRelation.init_hierarchy(merge_ppts);

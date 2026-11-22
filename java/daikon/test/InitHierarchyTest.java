@@ -200,6 +200,7 @@ public class InitHierarchyTest {
     File declsFile = tmpFolder.newFile();
     String contents =
         "decl-version 2.0\nvar-comparability none\n\n"
+            + pptDecl("Foo.bar():::ENTER", "enter")
             + pptDecl("Foo.bar():::EXIT", "point")
             + pptDecl("Foo.bar():::EXIT5", "subexit")
             + pptDecl("Q:::POINT", "point", "parent", "Foo.bar():::EXIT");
