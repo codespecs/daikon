@@ -20,7 +20,6 @@ PROGRAM := $(notdir $(shell pwd))
 DAIKON = ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.Daikon
 INV_DIFF = ${JAVA} -cp $(DAIKON_CLASSPATH) -Xmx7g daikon.diff.Diff
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
-DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 
 INV_FILES := $(PROGRAM)-1.inv.gz $(PROGRAM)-2.inv.gz
 # An output file must satisfy the pattern program%.txt, where the % is
