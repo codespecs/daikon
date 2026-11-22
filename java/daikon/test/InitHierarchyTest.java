@@ -122,9 +122,11 @@ public class InitHierarchyTest {
   }
 
   /**
-   * Returns the splitters of the given program point.
+   * Returns the splitters of the given program point. Throws AssertionError if ppt has no list of
+   * splitters.
    *
-   * @param ppt a program point that has splitters
+   * @param ppt a program point on which {@link PptTopLevel#addConditions} created a list of
+   *     splitters, which might since have become empty
    * @return the splitters of ppt
    */
   private static List<PptSplitter> splitters(PptTopLevel ppt) {
@@ -401,6 +403,7 @@ public class InitHierarchyTest {
    */
   @Test
   public void testFirstSplitterRemoved() throws IOException {
+    Daikon.use_dataflow_hierarchy = true;
     PptMap ppts =
         readDecls(
             pptDecl("Foo.bar():::ENTER", "enter")
@@ -445,6 +448,7 @@ public class InitHierarchyTest {
   /** With the hierarchy, a non-leaf with no children loses its splitters. */
   @Test
   public void testChildlessSplitterWithHierarchy() throws IOException {
+    Daikon.use_dataflow_hierarchy = true;
     PptMap ppts = readDecls(pptDecl("Foo.bar():::ENTER", "enter"));
     PptTopLevel enter = get(ppts, "Foo.bar():::ENTER");
     enter.addConditions(new Splitter[] {new ConditionSplitter("x == 1")});
@@ -458,6 +462,7 @@ public class InitHierarchyTest {
    */
   @Test
   public void testChildlessSplitterCascades() throws IOException {
+    Daikon.use_dataflow_hierarchy = true;
     PptMap ppts =
         readDecls(
             pptDecl("Foo:::CLASS", "class")
