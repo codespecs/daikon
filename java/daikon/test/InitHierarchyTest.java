@@ -390,6 +390,7 @@ public class InitHierarchyTest {
       assertEquals(1, FileIO.samples_used);
       assertTrue(invFile.exists());
     } finally {
+      // Also discards the unmatched entry that this test leaves on the call stack.
       Daikon.cleanup();
     }
   }
