@@ -573,9 +573,10 @@ public class PptRelation implements Serializable {
   /**
    * Creates an equality view and invariants for each ppt that has no children and does not already
    * have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL that do
-   * not end up with any children (due to the program source or because of ppt filtering). It also happens for a combined exit point that a decls file declares
-   * when no corresponding numbered exit point is declared or included. A leaf usually gets its
-   * equality view from {@link Daikon#setupEquality}, before it receives any samples.
+   * not end up with any children (due to the program source or because of ppt filtering). It also
+   * happens for a combined exit point that a decls file declares when no corresponding numbered
+   * exit point is declared or included. A leaf usually gets its equality view from {@link
+   * Daikon#setupEquality}, before it receives any samples.
    *
    * <p>The new equality view puts all comparable variables in the same equality set, as if no
    * sample had distinguished them, so each ppt that gets one must have no samples. {@link
