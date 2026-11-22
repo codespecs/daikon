@@ -53,9 +53,9 @@ public class InitHierarchyTest {
   }
 
   /**
-   * Returns a ppt declaration with one int variable, x.
+   * Returns the declaration of the given program point, with one int variable, x.
    *
-   * @param name the name of the program point
+   * @param name a name for the program point
    * @param type the ppt-type of the program point, such as "point"
    * @return the declaration, in the format of a decls file
    */
@@ -64,10 +64,10 @@ public class InitHierarchyTest {
   }
 
   /**
-   * Returns a ppt declaration with one int variable, x, which is related to variable x of the
-   * parent.
+   * Returns the declaration of the given program point, with one int variable, x, which is related
+   * to variable x of the parent.
    *
-   * @param name the name of the program point
+   * @param name a name for the program point
    * @param type the ppt-type of the program point, such as "point"
    * @param relType the type of the relation to the parent, such as "parent" or "user", or null for
    *     no parent
@@ -449,6 +449,7 @@ public class InitHierarchyTest {
       assertEquals(1, FileIO.samples_used);
       assertTrue(invFile.exists());
     } finally {
+      // Also discards the unmatched entry that this test leaves on the call stack.
       Daikon.cleanup();
     }
   }

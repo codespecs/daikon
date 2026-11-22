@@ -986,6 +986,11 @@ public final class Daikon {
     // Sample counts are per-invocation; e.g., the "No samples found" check uses samples_used.
     FileIO.samples_processed = 0;
     FileIO.samples_used = 0;
+    // Unmatched procedure entries are per-invocation; they affect the unmatched-entry report and
+    // which zero-sample program points are pruned.  Within one invocation they persist across
+    // trace files, so an entry and its exit might be in different files.
+    FileIO.call_stack.clear();
+    FileIO.call_hashmap.clear();
 
     proto_invs.clear();
   }
@@ -2468,11 +2473,23 @@ public final class Daikon {
 
     // System.out.println("samples processed: " + FileIO.samples_processed);
 
+    if (FileIO.samples_processed == 0) {
+      throw new Daikon.UserError(
+          "No samples found for any of " + StringsPlume.nPlural(all_ppts.size(), "program point"));
+    }
     // Count the samples that inference used, not all samples minus unmatched entries:  an entry
     // sample can be both unmatched and used (if its ppt is declared as a leaf, such as a POINT).
     if (FileIO.samples_used == samples_used_before) {
       throw new Daikon.UserError(
-          "No samples found for any of " + StringsPlume.nPlural(all_ppts.size(), "program point"));
+          "Read "
+              + StringsPlume.nPlural(FileIO.samples_processed, "sample")
+              + ", but inference used none of them."
+              + lineSep
+              + "  Inference ignores each exit that has no matching entry (when"
+              + " daikon.FileIO.ignore_missing_enter is true)"
+              + lineSep
+              + "  and, with the dataflow hierarchy, each sample at a program point that is not a"
+              + " leaf, such as an ENTER program point.");
     }
 
     // ppt_stats (all_ppts);
