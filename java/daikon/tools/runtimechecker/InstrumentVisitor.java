@@ -83,10 +83,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     for (PptTopLevel ppt : pptmap.pptIterable()) {
 
-      // Only entries, combined exits, objects, and classes have a property kind (see
-      // Property.Kind).  Others, such as numbered exits and general program points (POINT), are
-      // not checked.
-      if (!hasPropertyKind(ppt)) {
+      // Only entries, combined exits, objects, and classes have a property kind.  Others, such as
+      // numbered exits and general program points (POINT), are not checked.
+      if (propertyKind(ppt) == null) {
         continue;
       }
 
@@ -99,14 +98,25 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Returns true if the given program point's invariants can be expressed as {@link Property}
-   * objects: that is, if the program point is an entry, a combined exit, an object, or a class.
+   * Returns the kind of the properties that express the given program point's invariants, based on
+   * the program point's type rather than its name.
    *
    * @param ppt a program point
-   * @return true if the ppt's type corresponds to a {@link Property.Kind}
+   * @return the kind of the properties for the program point, or null if the program point is not
+   *     an entry, a combined exit, an object, or a class
    */
-  private static boolean hasPropertyKind(PptTopLevel ppt) {
-    return ppt.is_enter() || ppt.is_combined_exit() || ppt.is_object() || ppt.is_class();
+  private static Property.@Nullable Kind propertyKind(PptTopLevel ppt) {
+    if (ppt.is_enter()) {
+      return Property.Kind.enter;
+    } else if (ppt.is_combined_exit()) {
+      return Property.Kind.exit;
+    } else if (ppt.is_object()) {
+      return Property.Kind.objectInvariant;
+    } else if (ppt.is_class()) {
+      return Property.Kind.classInvariant;
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -122,27 +132,6 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       return null;
     }
     return ppt;
-  }
-
-  /**
-   * Returns the property tag for the given program point, such as "{@code <ENTER>}", based on its
-   * type rather than its name.
-   *
-   * @param ppt a program point for which {@link #hasPropertyKind} is true
-   * @return the property tag for the program point
-   */
-  private static String propertyTag(PptTopLevel ppt) {
-    if (ppt.is_enter()) {
-      return "<ENTER>";
-    } else if (ppt.is_combined_exit()) {
-      return "<EXIT>";
-    } else if (ppt.is_object()) {
-      return "<OBJECT>";
-    } else if (ppt.is_class()) {
-      return "<CLASS>";
-    } else {
-      throw new Error("No property kind for ppt " + ppt.name() + " of type " + ppt.type);
-    }
   }
 
   /** If makeAllFieldsPublic == true, then it makes this field declaration public. */
@@ -1148,8 +1137,14 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       daikonrep = new String(backslashedChars);
     }
 
+    Property.Kind kind = propertyKind(inv.ppt.parent);
+    if (kind == null) {
+      throw new Error(
+          "No property kind for ppt " + inv.ppt.parent.name() + " of type " + inv.ppt.parent.type);
+    }
+
     code.append("<INVINFO>");
-    code.append(propertyTag(inv.ppt.parent));
+    code.append(kind.xmlString());
     code.append("<DAIKON>" + daikonrep + "</DAIKON>");
     code.append("<INV>" + StringsPlume.escapeJava(javarep) + "</INV>");
     code.append("<DAIKONCLASS>" + inv.getClass().toString() + "</DAIKONCLASS>");
