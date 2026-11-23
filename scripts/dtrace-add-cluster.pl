@@ -41,8 +41,9 @@ sub usage() {
 # A per-ppt invocation order number runs from 1 (or is it 0?) to the total
 #   number of times that particular ppt was encountered.
 
-# PPTNAME -> ARRAY[CLUSTER_NUMBER]
-# The invocation nonce is the index into the array.
+# PPTNAME -> HASH[INVOCATION_NONCE -> CLUSTER_NUMBER]
+# A hash, not an array, because the nonces of all the trace files are
+# distinct, so the nonces of one program point can be large and sparse.
 my %pptname_to_cluster = ();
 
 # The highest cluster number.  This is needed when we are using xmeans so
@@ -180,7 +181,7 @@ sub insert_cluster_info ( $ ) {
   $pptstem =~ s/:::(ENTER|EXIT).*//;
   $pptstem = &cleanup_pptname($pptstem);
 
-  my $cluster_number = $pptname_to_cluster{$pptstem}[$invoc];
+  my $cluster_number = $pptname_to_cluster{$pptstem}{$invoc};
   if ((! defined($cluster_number)) || ($cluster_number == 0)) {
       chomp ($line);
       if (! ($line eq "")) {
@@ -229,22 +230,21 @@ sub copy_till_next(**) {
 
 ########################## read_cluster_info_xxx ##########
 # the return is an associative array. The keys are the program point stems
-# (i.e., without :::ENTER or :::EXIT). The value is an array for which the ith
-# index contains the cluster number of the ith invocation of the program point.
+# (i.e., without :::ENTER or :::EXIT). The value is a reference to a hash that
+# maps each invocation nonce of the program point to its cluster number.
 # Therefore if QueueAr.isEmpty()Z:::ENTER and QueueAr.isEmpty()Z:::EXIT44
 # invocation nonce 1000 belongs to cluster 3, then the returned associative
-# array should have a key "QueueAr.isEmpty()Z" whose value is an array. The
-# 1000th element of that array should be 3
+# array should have a key "QueueAr.isEmpty()Z" whose value maps 1000 to 3.
 ##########################################################
 
 sub read_cluster_info_seq ( @ ) {
 # @ARGV[1....] are the files with the cluster information.  The file
 # format is just a list of invocation nonces (one per line), grouped
 # by cluster. There is a blank line separating clusters.
-  my @temparray = ();		#holds the cluster information
   my $cluster = 0;
   my @filenames = @_;		# cluster files
   foreach my $filename (@filenames) {
+    my %nonce_to_cluster = ();	# the cluster information for this file
     open (FILE, $filename) || die "can't open $filename to read cluster info";
     $cluster = 1;
     my $blank_line = 0;
@@ -262,7 +262,7 @@ sub read_cluster_info_seq ( @ ) {
       } else {
 	$blank_line = 0;
 	chomp($line);
-	$temparray[$line] = $cluster;
+	$nonce_to_cluster{$line} = $cluster;
       }
     }
     $filename =~ s/\.ENTER.*//;
@@ -272,7 +272,7 @@ sub read_cluster_info_seq ( @ ) {
     $filename =~ s/\.runcluster_temp.*//;
 
     print "filename=$filename\n";
-    $pptname_to_cluster{$filename} = [@temparray];
+    $pptname_to_cluster{$filename} = \%nonce_to_cluster;
   }
   return %pptname_to_cluster;
 }
@@ -290,11 +290,11 @@ sub read_cluster_info_xm(@) {
 # sequence numbers of the data points it reads, not the invocation
 # numbers.
 
-  my @translation_array = ();	# holds the translation information
-  my @nonce_to_cluster = ();
   my $cluster = 0;
   my @filenames = @_;		# cluster files
   foreach my $filename (@filenames) {
+    my @translation_array = ();	# the translation information for this file
+    my %nonce_to_cluster = ();	# the cluster information for this file
     my $trans_filename = $filename;
     $trans_filename =~ s/\.cluster/.trans/;
     open (TRANS, "$trans_filename")
@@ -328,7 +328,7 @@ sub read_cluster_info_xm(@) {
 	$blank_line = 0;
 	chomp($line);
 	my $nonce = $translation_array[$line];
-	$nonce_to_cluster[$nonce] = $cluster;
+	$nonce_to_cluster{$nonce} = $cluster;
 	# print "$nonce -> $cluster\n";
 	if ($cluster > $maxcluster) {
 	  $maxcluster = $cluster;
@@ -343,7 +343,7 @@ sub read_cluster_info_xm(@) {
     $filename =~ s/\.samp$//;
     $filename =~ s/\.runcluster_temp.*//;
 
-    $pptname_to_cluster{$filename} = [@nonce_to_cluster];
+    $pptname_to_cluster{$filename} = \%nonce_to_cluster;
     if ($logging) {
       &log ("$filename  ==> $cluster clusters");
     }

@@ -159,6 +159,8 @@ foreach my $dtrace_file (@dtrace_files) {
       }
     }
   }
+  # Closing the file resets the line number, $., and reports a zcat failure.
+  close(DTRACE) || die("couldn't read dtrace file $dtrace_file\n");
 }
 
 # close all open filehandles
@@ -289,6 +291,8 @@ sub read_execution ( $ ) {
   my $varindex = 0;
   while (defined($varname) && $varname !~ /^$/) {
     chomp( $varname );
+    # Like Daikon, ignore whitespace around a variable name.
+    $varname =~ s/^\s+|\s+$//g;
     if ($varindex >= scalar(@tracevars)) {
       &die_trace_mismatch($pptname, "end of record", $varname);
     }
@@ -527,7 +531,8 @@ sub read_decls_file ( $ ) {
       }
     }
   }
-  close DECL;
+  # For a compressed file, closing the pipe reports a zcat failure.
+  close(DECL) || die("couldn't read decls file $decls_file\n");
 }				# read_decls_file
 
 # Record a declared variable, if it is to be clustered.

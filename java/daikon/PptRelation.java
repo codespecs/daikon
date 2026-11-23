@@ -727,8 +727,9 @@ public class PptRelation implements Serializable {
    * PptTopLevel#parent_relations}. A declared parent that is a {@link PptTopLevel.PptType#POINT}
    * named like a combined exit (such as foo:::EXIT) is also ignored, because {@link
    * Daikon#create_combined_exits} replaces it by a combined exit if a numbered exit such as
-   * foo:::EXIT22 is declared (possibly later). {@link #init_hierarchy} checks such a parent after
-   * the replacement.
+   * foo:::EXIT22 is declared (possibly later). For the same reason, the declared parents of such a
+   * POINT are ignored: the replacement has the parents of the numbered exit instead. {@link
+   * #init_hierarchy} checks such a ppt and its parents after the replacement.
    */
   public static class DeclaredParentChecker {
 
@@ -797,7 +798,7 @@ public class PptRelation implements Serializable {
             checkParentIsNotLeaf(ppt, child, state);
           }
         }
-        if (ppt.parent_relations == null || ppt.is_subexit()) {
+        if (ppt.parent_relations == null || ppt.is_subexit() || isReplaceableCombinedExit(ppt)) {
           continue;
         }
         for (ParentRelation pr : ppt.parent_relations) {
