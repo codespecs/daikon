@@ -720,20 +720,27 @@ public class PptRelation implements Serializable {
    *
    * <p>Each call to {@link #check} examines only the ppts that were added since the previous call,
    * so checking after each of many declarations does not rescan the whole map. A declared parent
-   * that is not in the map is checked when it is added. Like {@link #init_hierarchy}, the check
-   * ignores the relations of numbered exits such as {@code Foo.bar():::EXIT22}, because the
-   * hierarchy relates a numbered exit only to its combined exit, and it skips a ppt that was not
-   * read from a declaration (for example, one read from a serialized InvMap), which has null {@link
+   * that is not in the map is checked when it is added. The check skips a ppt that was not read
+   * from a declaration (for example, one read from a serialized InvMap), which has null {@link
    * PptTopLevel#parent_relations}. A {@link PptTopLevel.PptType#POINT} named like a combined exit
    * (such as foo:::EXIT) is also ignored, both as a declared parent and as a child, because {@link
    * Daikon#create_combined_exits} replaces it by a combined exit if a numbered exit such as
    * foo:::EXIT22 is declared (possibly later). The replacement is a parent of other ppts, and its
    * parents are those of the numbered exit, so the relations declared for the POINT are discarded.
    * {@link #init_hierarchy} checks such a ppt if it is not replaced.
+   *
+   * <p>The hierarchy relates a numbered exit such as {@code Foo.bar():::EXIT22} only to its
+   * combined exit, whose parents are those of the method's numbered exit that {@link
+   * Daikon#create_combined_exits} encounters first, namely the least one by {@link
+   * Ppt.NameComparator}. So, like {@link #init_hierarchy}, the check ignores the relations of every
+   * other numbered exit. If a numbered exit that sorts before a checked one is declared after a
+   * call to {@link #check}, the checked one's relations were checked although the combined exit
+   * will not use them. Front ends declare all of a method's program points together, so this does
+   * not happen in practice.
    */
   public static class DeclaredParentChecker {
 
-    /** The program points to check. */
+    /** The program points. Those in {@link #uncheckedPpts} have not yet been checked. */
     private final PptMap all_ppts;
 
     /**
@@ -748,6 +755,48 @@ public class PptRelation implements Serializable {
      * ppts that declare it as a parent.
      */
     private final Map<String, List<PptTopLevel>> childrenOfMissingParents = new HashMap<>();
+
+    /**
+     * Maps the name of each combined exit to the numbered exit whose relations it would inherit
+     * from {@link Daikon#create_combined_exits}, among the ppts that have been passed to {@link
+     * #check}.
+     */
+    private final Map<String, PptTopLevel> firstSubexits = new HashMap<>();
+
+    /** Compares ppts in the order in which {@link Daikon#create_combined_exits} visits them. */
+    private static final Ppt.NameComparator nameComparator = new Ppt.NameComparator();
+
+    /**
+     * Returns the name of the combined exit of the given numbered exit, or null if its name is not
+     * that of an exit point.
+     *
+     * @param subexit a numbered exit
+     * @return the name of the combined exit of {@code subexit}, or null
+     */
+    private static @Nullable String combinedExitName(PptTopLevel subexit) {
+      if (!subexit.ppt_name.isExitPoint()) {
+        return null;
+      }
+      return subexit.ppt_name.makeExit().getName();
+    }
+
+    /**
+     * Returns true if the declared relations of the given ppt are checked. They are checked unless
+     * the ppt has none or is a numbered exit whose relations its combined exit does not inherit.
+     *
+     * @param ppt a ppt that has been passed to {@link #check}
+     * @return true if the declared relations of {@code ppt} are checked
+     */
+    private boolean relationsAreChecked(PptTopLevel ppt) {
+      if (ppt.parent_relations == null) {
+        return false;
+      }
+      if (!ppt.is_subexit()) {
+        return true;
+      }
+      String exitName = combinedExitName(ppt);
+      return (exitName != null) && (firstSubexits.get(exitName) == ppt);
+    }
 
     /**
      * Creates a DeclaredParentChecker for the given map, all of whose ppts are unchecked.
@@ -791,14 +840,27 @@ public class PptRelation implements Serializable {
     public void check(FileIO.@Nullable ParseState state) {
       Collection<PptTopLevel> ppts =
           (uncheckedPpts == null) ? all_ppts.asCollection() : uncheckedPpts;
+      // Find the numbered exits whose relations the combined exits inherit before checking any
+      // relations, so that the result does not depend on the order of ppts.
+      for (PptTopLevel ppt : ppts) {
+        if (ppt.is_subexit()) {
+          String exitName = combinedExitName(ppt);
+          if (exitName != null) {
+            firstSubexits.merge(
+                exitName, ppt, (p1, p2) -> (nameComparator.compare(p1, p2) <= 0) ? p1 : p2);
+          }
+        }
+      }
       for (PptTopLevel ppt : ppts) {
         List<PptTopLevel> children = childrenOfMissingParents.remove(ppt.name());
         if (children != null && !isReplaceableCombinedExit(ppt)) {
           for (PptTopLevel child : children) {
-            checkParentIsNotLeaf(ppt, child, state);
+            if (relationsAreChecked(child)) {
+              checkParentIsNotLeaf(ppt, child, state);
+            }
           }
         }
-        if (ppt.parent_relations == null || ppt.is_subexit() || isReplaceableCombinedExit(ppt)) {
+        if (!relationsAreChecked(ppt) || isReplaceableCombinedExit(ppt)) {
           continue;
         }
         for (ParentRelation pr : ppt.parent_relations) {
