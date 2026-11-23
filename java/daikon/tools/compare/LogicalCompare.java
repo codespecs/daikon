@@ -824,13 +824,23 @@ public class LogicalCompare {
         @NonNull PptTopLevel app_ppt = app_ppts.get(name);
 
         if (!app_ppt.is_enter()) {
-          // Only entries are compared; each entry's combined exit is compared with it, below.
+          // Comparisons are per procedure and are driven by its entry.  The loop below passes
+          // the entry and the combined exit from both files to comparePpts.  Other program
+          // points (numbered exits, OBJECT, CLASS) are not compared on their own.
           continue;
         }
         if (app_ppt.num_samples() > 0) {
           PptTopLevel test_ppt = test_ppts.get(name);
           if (test_ppt == null || test_ppt.num_samples() == 0) {
-            System.out.println(name + " was used but not tested");
+            // The app run executed the procedure, but the test suite did not, so there are no
+            // test invariants to compare with.
+            System.out.println(
+                name
+                    + " was used but not tested (it has samples in "
+                    + app_filename
+                    + " but not in "
+                    + test_filename
+                    + ")");
           } else if (!test_ppt.is_enter()) {
             System.out.println(
                 name + " is an entry in " + app_filename + " but not in " + test_filename);
