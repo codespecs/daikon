@@ -215,6 +215,44 @@ public class InitHierarchyTest {
     assertEquals(exit, get(ppts, "Q:::POINT").parents.get(0).parent);
   }
 
+  /**
+   * A point named like a combined exit can declare a point as a parent if it is replaced by a
+   * combined exit, because a numbered exit is declared. The replacement does not have the declared
+   * parent.
+   */
+  @Test
+  public void testReplaceableCombinedExitWithPointParent() throws IOException {
+    File declsFile = tmpFolder.newFile();
+    String contents =
+        "decl-version 2.0\nvar-comparability none\n\n"
+            + pptDecl("P:::POINT", "point")
+            + pptDecl("Foo.bar():::ENTER", "enter")
+            + pptDecl("Foo.bar():::EXIT", "point", "parent", "P:::POINT")
+            + pptDecl("Foo.bar():::EXIT5", "subexit");
+    Files.write(declsFile.toPath(), contents.getBytes(StandardCharsets.UTF_8));
+    PptMap ppts = FileIO.read_declaration_files(Collections.singletonList(declsFile));
+    // As in Daikon, the declared parents are checked before the combined exits are created.
+    PptRelation.checkDeclaredParents(ppts);
+    Daikon.create_combined_exits(ppts);
+    PptRelation.init_hierarchy(ppts);
+    assertTrue(get(ppts, "Foo.bar():::EXIT").is_combined_exit());
+    assertEquals(Collections.emptyList(), get(ppts, "P:::POINT").children);
+  }
+
+  /**
+   * A point named like a combined exit that is not replaced by a combined exit cannot declare a
+   * point as a parent.
+   */
+  @Test
+  public void testUnreplacedCombinedExitWithPointParent() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("P:::POINT", "point")
+                + pptDecl("Foo.bar():::EXIT", "point", "parent", "P:::POINT"));
+    PptRelation.checkDeclaredParents(ppts);
+    assertThrows(Daikon.UserError.class, () -> PptRelation.init_hierarchy(ppts));
+  }
+
   /** A dtrace record that is a sample of P:::POINT, in which x is 1. */
   private static final String SAMPLE_P = "P:::POINT\nx\n1\n1\n\n";
 

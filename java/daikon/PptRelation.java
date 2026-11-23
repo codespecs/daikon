@@ -724,11 +724,12 @@ public class PptRelation implements Serializable {
    * ignores the relations of numbered exits such as {@code Foo.bar():::EXIT22}, because the
    * hierarchy relates a numbered exit only to its combined exit, and it skips a ppt that was not
    * read from a declaration (for example, one read from a serialized InvMap), which has null {@link
-   * PptTopLevel#parent_relations}. A declared parent that is a {@link PptTopLevel.PptType#POINT}
-   * named like a combined exit (such as foo:::EXIT) is also ignored, because {@link
+   * PptTopLevel#parent_relations}. A {@link PptTopLevel.PptType#POINT} named like a combined exit
+   * (such as foo:::EXIT) is also ignored, both as a declared parent and as a child, because {@link
    * Daikon#create_combined_exits} replaces it by a combined exit if a numbered exit such as
-   * foo:::EXIT22 is declared (possibly later). {@link #init_hierarchy} checks such a parent after
-   * the replacement.
+   * foo:::EXIT22 is declared (possibly later). The replacement is a parent of other ppts, and its
+   * parents are those of the numbered exit, so the relations declared for the POINT are discarded.
+   * {@link #init_hierarchy} checks such a ppt if it is not replaced.
    */
   public static class DeclaredParentChecker {
 
@@ -758,14 +759,14 @@ public class PptRelation implements Serializable {
     }
 
     /**
-     * Returns true if the given declared parent might be replaced by a combined exit, so that it is
-     * not checked until {@link #init_hierarchy}.
+     * Returns true if the given ppt might be replaced by a combined exit, so that neither it as a
+     * declared parent nor its declared parents are checked until {@link #init_hierarchy}.
      *
-     * @param parent a ppt that is declared as a parent
-     * @return true if {@code parent} is a POINT named like a combined exit
+     * @param ppt a ppt
+     * @return true if {@code ppt} is a POINT named like a combined exit
      */
-    private static boolean isReplaceableCombinedExit(PptTopLevel parent) {
-      return parent.type == PptTopLevel.PptType.POINT && parent.ppt_name.isCombinedExitPoint();
+    private static boolean isReplaceableCombinedExit(PptTopLevel ppt) {
+      return ppt.type == PptTopLevel.PptType.POINT && ppt.ppt_name.isCombinedExitPoint();
     }
 
     /**
@@ -797,7 +798,7 @@ public class PptRelation implements Serializable {
             checkParentIsNotLeaf(ppt, child, state);
           }
         }
-        if (ppt.parent_relations == null || ppt.is_subexit()) {
+        if (ppt.parent_relations == null || ppt.is_subexit() || isReplaceableCombinedExit(ppt)) {
           continue;
         }
         for (ParentRelation pr : ppt.parent_relations) {
