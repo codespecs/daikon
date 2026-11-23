@@ -128,7 +128,7 @@ foreach my $decls_file (@decls_files) {
 
 foreach my $dtrace_file (@dtrace_files) {
   if ($dtrace_file =~ /\.gz/) {
-    open (DTRACE, "zcat $dtrace_file |") || die("couldn't open dtrace file $dtrace_file with zcat\n");
+    open (DTRACE, "-|", "zcat", $dtrace_file) || die("couldn't open dtrace file $dtrace_file with zcat\n");
   } else {
     open (DTRACE, $dtrace_file) || die("couldn't open dtrace file $dtrace_file\n");
   }
@@ -280,8 +280,7 @@ sub read_execution ( $ ) {
     $pptname_to_nonces{$pptname}++;
     push @vararray, $pptname_to_nonces{$pptname};
   } else {
-    $value = <DTRACE>;
-    chomp($value);
+    $value = &read_record_line($pptname, "value of this_invocation_nonce");
     push @vararray, $value;
     $varname = <DTRACE>;
   }
@@ -300,8 +299,7 @@ sub read_execution ( $ ) {
       &die_trace_mismatch($pptname, "variable $tracevars[$varindex]", $varname);
     }
     $varindex++;
-    $value = <DTRACE>;
-    chomp ($value);
+    $value = &read_record_line($pptname, "value of $varname");
 
     # see if the variable is an Object variable
     my $object = 0;
@@ -328,7 +326,7 @@ sub read_execution ( $ ) {
     $value =~ s/null/0/;
     $value =~ s/missing/-11111/;
     $value =~ s/NaN/1e10/;
-    my $mod = <DTRACE>;		# "$mod" is unused
+    my $mod = &read_record_line($pptname, "modbit of $varname"); # unused
 
     # extract variables to be clustered.
     if ( exists $pptname_to_varnames{$pptname}{$varname}) {
@@ -342,6 +340,22 @@ sub read_execution ( $ ) {
                         defined($varname) ? "end of record" : "end of file");
   }
   return @vararray;
+}
+
+# Read and return the next line of the current record of the dtrace file,
+# without its line terminator.  Dies if the record or the file has ended.
+# Arguments are the program point name and a description of the expected line.
+sub read_record_line ( $$ ) {
+  my ($pptname, $expected) = @_;
+  my $line = <DTRACE>;
+  if (!defined($line)) {
+    &die_trace_mismatch($pptname, $expected, "end of file");
+  }
+  chomp($line);
+  if ($line =~ /^$/) {
+    &die_trace_mismatch($pptname, $expected, "end of record");
+  }
+  return $line;
 }
 
 # Die with a message saying that the dtrace file does not match the
@@ -500,7 +514,7 @@ sub get_random_numbers ( $$ ) {
 sub read_decls_file ( $ ) {
   my $decls_file = $_[0];
   if ($decls_file =~ /\.gz$/) {
-    open(DECL, "zcat $decls_file |") || &dieusage("cannot read decls file $decls_file with zcat");
+    open(DECL, "-|", "zcat", $decls_file) || &dieusage("cannot read decls file $decls_file with zcat");
   } else {
     open(DECL, $decls_file) || &dieusage("cannot read decls file $decls_file");
   }
