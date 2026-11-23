@@ -539,7 +539,8 @@ public class DiffTester {
   private static String runDiffMainHelper(String... args) throws Exception {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PrintStream oldOut = System.out;
-    System.setOut(new PrintStream(baos, true, UTF_8));
+    // PrintStream(OutputStream, boolean, Charset) was introduced in Java 10.
+    System.setOut(new PrintStream(baos, true, "UTF-8"));
     try {
       Diff.mainHelper(args);
     } finally {
