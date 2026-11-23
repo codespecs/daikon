@@ -721,8 +721,10 @@ public class PptRelation implements Serializable {
    * <p>Each call to {@link #check} examines only the ppts that were added since the previous call,
    * so checking after each of many declarations does not rescan the whole map. A declared parent
    * that is not in the map is checked when it is added. Like {@link #init_hierarchy}, the check
-   * ignores the relations of numbered exits such as {@code Foo.bar():::EXIT22}, because the
-   * hierarchy relates a numbered exit only to its combined exit, and it skips a ppt that was not
+   * ignores the relations of a numbered exit such as {@code Foo.bar():::EXIT22} that has (or will
+   * have) a combined exit, because the hierarchy relates such a numbered exit only to its combined
+   * exit. It checks the relations of a numbered exit whose combined exit's name belongs to a ppt
+   * of another type, in either declaration order. It skips a ppt that was not
    * read from a declaration (for example, one read from a serialized InvMap), which has null {@link
    * PptTopLevel#parent_relations}.
    */
@@ -743,6 +745,14 @@ public class PptRelation implements Serializable {
      * ppts that declare it as a parent.
      */
     private final Map<String, List<PptTopLevel>> childrenOfMissingParents = new HashMap<>();
+
+    /**
+     * Maps the name of each combined exit that is not yet in {@link #all_ppts} to the checked
+     * numbered exits whose declared parents have not been checked. If a ppt with that name is
+     * added and is not a combined exit, then no combined exit can be created, so init_hierarchy
+     * processes the numbered exits' declared parents, and they are checked then.
+     */
+    private final Map<String, List<PptTopLevel>> subexitsWithoutExit = new HashMap<>();
 
     /**
      * Creates a DeclaredParentChecker for the given map, all of whose ppts are unchecked.
@@ -782,27 +792,63 @@ public class PptRelation implements Serializable {
             checkParentIsNotLeaf(ppt, child, state);
           }
         }
-        if (ppt.parent_relations == null || ppt.is_subexit()) {
+        List<PptTopLevel> subexits = subexitsWithoutExit.remove(ppt.name());
+        if ((subexits != null) && !ppt.is_combined_exit()) {
+          // No combined exit can be created for these subexits, so init_hierarchy processes their
+          // declared parents.
+          for (PptTopLevel subexit : subexits) {
+            checkDeclaredParentsOf(subexit, state);
+          }
+        }
+        if (ppt.parent_relations == null) {
           continue;
         }
-        for (ParentRelation pr : ppt.parent_relations) {
-          if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+        if (ppt.is_subexit()) {
+          String exitName = ppt.ppt_name.makeExit().name();
+          PptTopLevel exit = all_ppts.get(exitName);
+          if (exit == null) {
+            // Daikon will create a combined exit unless a ppt with this name is declared later.
+            subexitsWithoutExit.computeIfAbsent(exitName, k -> new ArrayList<>()).add(ppt);
             continue;
           }
-          PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
-          if (parent == null) {
-            childrenOfMissingParents
-                .computeIfAbsent(pr.parent_ppt_name, k -> new ArrayList<>())
-                .add(ppt);
-          } else {
-            checkParentIsNotLeaf(parent, ppt, state);
+          if (exit.is_combined_exit()) {
+            // init_hierarchy handles the subexit's relations in its combined exit.
+            continue;
           }
         }
+        checkDeclaredParentsOf(ppt, state);
       }
       if (uncheckedPpts == null) {
         uncheckedPpts = new ArrayList<>();
       } else {
         uncheckedPpts.clear();
+      }
+    }
+
+    /**
+     * Throws a UserError if a declared parent of the given ppt is a leaf. A declared parent that is
+     * not yet in the map is recorded, to be checked when it is added.
+     *
+     * @param ppt a ppt whose declared parents init_hierarchy processes; its parent_relations must
+     *     be non-null
+     * @param state the state of the file being read, or null if no file is being read; used for
+     *     diagnostics
+     */
+    private void checkDeclaredParentsOf(PptTopLevel ppt, FileIO.@Nullable ParseState state) {
+      assert ppt.parent_relations != null
+          : "@AssumeAssertion(nullness): precondition: has parent_relations";
+      for (ParentRelation pr : ppt.parent_relations) {
+        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+          continue;
+        }
+        PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
+        if (parent == null) {
+          childrenOfMissingParents
+              .computeIfAbsent(pr.parent_ppt_name, k -> new ArrayList<>())
+              .add(ppt);
+        } else {
+          checkParentIsNotLeaf(parent, ppt, state);
+        }
       }
     }
   }

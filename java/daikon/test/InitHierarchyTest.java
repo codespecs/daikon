@@ -407,6 +407,54 @@ public class InitHierarchyTest {
   }
 
   /**
+   * Asserts that reading the given dtrace file contents reports, before any sample is processed,
+   * that P:::POINT is declared as a parent of Foo.bar():::EXIT5.
+   *
+   * @param contents the records of a dtrace file, after its header
+   */
+  private void assertPointAsParentOfSubexitInDtrace(String contents) {
+    CountingProcessor processor = new CountingProcessor(true);
+    Daikon.UserError e =
+        assertThrows(Daikon.UserError.class, () -> readDtrace(contents, processor));
+    String msg = String.valueOf(e.getMessage());
+    assertTrue(
+        msg,
+        msg.endsWith(
+            "ppt P:::POINT is declared as a parent of ppt Foo.bar():::EXIT5, but its type (point)"
+                + " makes it a leaf of the dataflow hierarchy"));
+    assertEquals(0, processor.samples);
+  }
+
+  /**
+   * The parents of a numbered exit are checked before any sample is processed if a point, declared
+   * before the numbered exit, has the combined exit's name, because then the hierarchy relates the
+   * numbered exit to its declared parents.
+   */
+  @Test
+  public void testPointAsParentOfSubexitAfterPointNamedCombinedExit() {
+    assertPointAsParentOfSubexitInDtrace(
+        pptDecl("P:::POINT", "point")
+            + pptDecl("Foo.bar():::ENTER", "enter")
+            + pptDecl("Foo.bar():::EXIT", "point")
+            + pptDecl("Foo.bar():::EXIT5", "subexit", "parent", "P:::POINT")
+            + SAMPLE_P);
+  }
+
+  /**
+   * The parents of a numbered exit are checked before any sample is processed if a point, declared
+   * after the numbered exit, has the combined exit's name.
+   */
+  @Test
+  public void testPointAsParentOfSubexitBeforePointNamedCombinedExit() {
+    assertPointAsParentOfSubexitInDtrace(
+        pptDecl("P:::POINT", "point")
+            + pptDecl("Foo.bar():::ENTER", "enter")
+            + pptDecl("Foo.bar():::EXIT5", "subexit", "parent", "P:::POINT")
+            + pptDecl("Foo.bar():::EXIT", "point")
+            + SAMPLE_P);
+  }
+
+  /**
    * A dtrace file can declare a child before its parent, if the parent is not a leaf. The child's
    * samples can precede the parent's declaration.
    */
