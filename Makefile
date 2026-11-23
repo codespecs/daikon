@@ -108,7 +108,7 @@ DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/test/dtracediff/Hanoi-truncated.dtrace.gz
 
 # the following is only used in the "make showvars" target
-WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|/.\#|.bak$$|uw/|pubs/' | ${SORT_DIRECTORY_ORDER})
+WWW_FILES := $(shell cd doc/www; find . -type f -print | grep -E -v '~$$|/.\#|.bak$$|uw/|pubs/' | ${SORT_DIRECTORY_ORDER})
 
 WWW_PARENT ?= /cse/web/research/plse
 WWW_DIR := ${WWW_PARENT}/daikon
