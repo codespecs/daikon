@@ -890,9 +890,11 @@ public class PptRelation implements Serializable {
       }
     }
 
-    // Remove each splitter of a non-leaf that cannot be merged from its children: the non-leaf has
-    // no children, or some child lacks a matching splitter.  Removing a splitter from a child can
-    // make its parents' splitters unmergeable, so the parents are examined again.  This is done
+    // For each non-leaf ppt, remove each of the ppt's splitters whose conditional ppts cannot be
+    // merged from the conditional ppts of the ppt's children: the ppt has no children, or some
+    // child of the ppt has no splitter that matches the splitter.  Removing a splitter from a child
+    // can make the splitters of the child's parents unmergeable, so those parents are examined
+    // again.  This is done
     // before any conditional ppt is connected, so that no relation refers to a removed conditional
     // ppt.  Without the dataflow hierarchy, no invariants are merged from the children, so every
     // splitter is kept.  A ppt that receives samples passes each one to its conditional ppts (see
