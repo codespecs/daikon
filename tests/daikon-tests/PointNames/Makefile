@@ -16,7 +16,7 @@ txt-diff: inv-checker-diff txt-simple-diff txt-invdiff-diff
 
 # The common %.diff rule compares ${PROJECT_FILE}.txt-simple to its goal file every time.
 txt-simple-diff: ${PROJECT_FILE}.txt-simple.diff;
-${PROJECT_FILE}.txt-simple: ${DECLS_FILES} ${DTRACE_FILES}
+${PROJECT_FILE}.txt-simple: ${DECLS_FILES} ${DTRACE_FILES} ${DAIKON_SIMPLE_CLASS}
 	-rm -f $@-failed
 	($(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.DaikonSimple \
 	  --config_option daikon.Daikon.quiet=true \

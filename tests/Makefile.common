@@ -215,6 +215,7 @@ DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DAIKON = $(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.Daikon
 PRINT_INVARIANTS_CLASS?=${DAIKONDIR}/java/daikon/PrintInvariants.class
 PRINT_INVARIANTS?=$(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.PrintInvariants
+DAIKON_SIMPLE_CLASS?=${DAIKONDIR}/java/daikon/DaikonSimple.class
 DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
 
@@ -256,6 +257,9 @@ goal_name = \
 
 
 $(PRINT_INVARIANTS_CLASS):
+	${MAKE} -C ${DAIKONDIR}/java
+
+$(DAIKON_SIMPLE_CLASS):
 	${MAKE} -C ${DAIKONDIR}/java
 
 $(CHICORY_EXEC):
