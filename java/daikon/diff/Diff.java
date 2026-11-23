@@ -537,12 +537,14 @@ public final class Diff {
         continue;
       }
 
-      List<Invariant> invs = sortedNonObvious(ppt.getInvariants());
+      List<Invariant> invs = nonObvious(ppt.getInvariants());
+      invs.sort(PptTopLevel.icfp);
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
         for (PptConditional pptCond : ppt.cond_iterable()) {
-          List<Invariant> invsCond = sortedNonObvious(pptCond.getInvariants());
+          List<Invariant> invsCond = nonObvious(pptCond.getInvariants());
+          invsCond.sort(PptTopLevel.icfp);
           map.put(pptCond, invsCond);
         }
       }
@@ -552,7 +554,8 @@ public final class Diff {
 
   /**
    * Returns a copy of the given InvMap that omits reflexive and statically obvious invariants, the
-   * same ones that {@link #convertToInvMap} omits. The program points are unchanged.
+   * same ones that {@link #convertToInvMap} omits. The program points and the order of the
+   * remaining invariants are unchanged.
    *
    * @param invMap an InvMap
    * @return a copy of {@code invMap}, without reflexive and statically obvious invariants
@@ -560,27 +563,26 @@ public final class Diff {
   public static InvMap omitObvious(InvMap invMap) {
     InvMap result = new InvMap();
     for (PptTopLevel ppt : invMap.pptIterable()) {
-      result.put(ppt, sortedNonObvious(invMap.get(ppt)));
+      result.put(ppt, nonObvious(invMap.get(ppt)));
     }
     return result;
   }
 
   /**
-   * Returns the invariants that are neither reflexive nor statically obvious, sorted by {@link
-   * PptTopLevel#icfp}. A reflexive invariant, such as "x == x", is one in which a variable appears
-   * more than once; see {@link Invariant#isReflexive}.
+   * Returns a new list of the invariants that are neither reflexive nor statically obvious, in the
+   * same order as in the given list. A reflexive invariant, such as "x == x", is one in which a
+   * variable appears more than once; see {@link Invariant#isReflexive}.
    *
    * @param invs some invariants
    * @return the invariants in {@code invs} that are neither reflexive nor statically obvious
    */
-  private static List<Invariant> sortedNonObvious(List<Invariant> invs) {
+  private static List<Invariant> nonObvious(List<Invariant> invs) {
     List<Invariant> result = new ArrayList<>(invs.size());
     for (Invariant inv : invs) {
       if (!inv.isReflexive() && inv.isObviousStatically_SomeInEquality() == null) {
         result.add(inv);
       }
     }
-    result.sort(PptTopLevel.icfp);
     return result;
   }
 
