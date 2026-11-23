@@ -263,7 +263,7 @@ public final class MergeInvariants {
       PptRelation.init_hierarchy(merge_ppts);
     }
 
-    // Remove all of the slices and equality sets, to start
+    // First, remove all of the slices and equality sets; the merge below recreates them.
     debugProgress.fine("Cleaning ppt map in preparation for merge");
     for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
       ppt.clean_for_merge();
@@ -291,7 +291,8 @@ public final class MergeInvariants {
 
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
-        // Splitters should not have any children to begin with
+        // No conditional ppt has any children yet; setup_conditional_merge, below, makes the input
+        // maps' conditional ppts their children.
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
             assert p.children.isEmpty() : p;
