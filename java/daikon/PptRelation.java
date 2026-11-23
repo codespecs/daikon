@@ -8,9 +8,12 @@ import daikon.split.PptSplitter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -645,6 +648,210 @@ public class PptRelation implements Serializable {
   }
 
   /**
+   * Throws a UserError if the given parent is a leaf of the dataflow hierarchy and Daikon uses the
+   * hierarchy. A leaf obtains its invariants from its samples (and its conditional ppts), never
+   * from its children.
+   *
+   * @param parent a ppt that is declared as a parent of {@code child}
+   * @param child a ppt; used for diagnostics
+   * @param state the state of the file being read, or null if no file is being read; used for
+   *     diagnostics
+   */
+  private static void checkParentIsNotLeaf(
+      PptTopLevel parent, PptTopLevel child, FileIO.@Nullable ParseState state) {
+    if (Daikon.use_dataflow_hierarchy && parent.isDataflowLeaf()) {
+      String msg =
+          String.format(
+              "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
+                  + " the dataflow hierarchy",
+              parent.name(), child.name(), parent.type.name().toLowerCase(Locale.ENGLISH));
+      throw (state == null) ? new Daikon.UserError(msg) : new Daikon.UserError(msg, state);
+    }
+  }
+
+  /**
+   * Throws a UserError if some ppt in the given map is declared to have a parent that is a leaf of
+   * the dataflow hierarchy, as {@link #init_hierarchy} would.
+   *
+   * @param all_ppts a map of program points
+   * @see DeclaredParentChecker
+   */
+  public static void checkDeclaredParents(PptMap all_ppts) {
+    new DeclaredParentChecker(all_ppts).check(null);
+  }
+
+  /**
+   * Checks, as program points are added to a map, that no ppt in the map is declared to have a
+   * parent that is a leaf of the dataflow hierarchy, as {@link #init_hierarchy} would. Checking as
+   * soon as the declarations are read reports the error before samples are processed.
+   *
+   * <p>Each call to {@link #check} examines only the ppts that were added since the previous call,
+   * so checking after each of many declarations does not rescan the whole map. A declared parent
+   * that is not in the map is checked when it is added. The check skips a ppt that was not read
+   * from a declaration (for example, one read from a serialized InvMap), which has null {@link
+   * PptTopLevel#parent_relations}. A declared parent that is a {@link PptTopLevel.PptType#POINT}
+   * named like a combined exit (such as foo:::EXIT) is also ignored, because {@link
+   * Daikon#create_combined_exits} replaces it by a combined exit if a numbered exit such as
+   * foo:::EXIT22 is declared (possibly later). {@link #init_hierarchy} checks such a parent after
+   * the replacement.
+   *
+   * <p>The hierarchy relates a numbered exit such as {@code Foo.bar():::EXIT22} only to its
+   * combined exit, whose parents are those of the method's numbered exit that {@link
+   * Daikon#create_combined_exits} encounters first, namely the least one by {@link
+   * Ppt.NameComparator}. So, like {@link #init_hierarchy}, the check ignores the relations of every
+   * other numbered exit. If a numbered exit that sorts before a checked one is declared after a
+   * call to {@link #check}, the checked one's relations were checked although the combined exit
+   * will not use them. Front ends declare all of a method's program points together, so this does
+   * not happen in practice.
+   */
+  public static class DeclaredParentChecker {
+
+    /** The program points. Those in {@link #uncheckedPpts} have not yet been checked. */
+    private final PptMap all_ppts;
+
+    /**
+     * The ppts that have been added to {@link #all_ppts} since the last call to {@link #check}, or
+     * null if {@link #check} has never been called, in which case every ppt in the map is
+     * unchecked.
+     */
+    private @Nullable List<PptTopLevel> uncheckedPpts = null;
+
+    /**
+     * Maps the name of each declared parent that is not yet in {@link #all_ppts} to the checked
+     * ppts that declare it as a parent.
+     */
+    private final Map<String, List<PptTopLevel>> childrenOfMissingParents = new HashMap<>();
+
+    /**
+     * Maps the name of each combined exit to the numbered exit whose relations it would inherit
+     * from {@link Daikon#create_combined_exits}, among the ppts that have been passed to {@link
+     * #check}.
+     */
+    private final Map<String, PptTopLevel> firstSubexits = new HashMap<>();
+
+    /** Compares ppts in the order in which {@link Daikon#create_combined_exits} visits them. */
+    private static final Ppt.NameComparator nameComparator = new Ppt.NameComparator();
+
+    /**
+     * Returns the name of the combined exit of the given numbered exit, or null if its name is not
+     * that of an exit point.
+     *
+     * @param subexit a numbered exit
+     * @return the name of the combined exit of {@code subexit}, or null
+     */
+    private static @Nullable String combinedExitName(PptTopLevel subexit) {
+      if (!subexit.ppt_name.isExitPoint()) {
+        return null;
+      }
+      return subexit.ppt_name.makeExit().getName();
+    }
+
+    /**
+     * Returns true if the declared relations of the given ppt are checked. They are checked unless
+     * the ppt has none or is a numbered exit whose relations its combined exit does not inherit.
+     *
+     * @param ppt a ppt that has been passed to {@link #check}
+     * @return true if the declared relations of {@code ppt} are checked
+     */
+    private boolean relationsAreChecked(PptTopLevel ppt) {
+      if (ppt.parent_relations == null) {
+        return false;
+      }
+      if (!ppt.is_subexit()) {
+        return true;
+      }
+      String exitName = combinedExitName(ppt);
+      return (exitName != null) && (firstSubexits.get(exitName) == ppt);
+    }
+
+    /**
+     * Creates a DeclaredParentChecker for the given map, all of whose ppts are unchecked.
+     *
+     * @param all_ppts a map of program points
+     */
+    public DeclaredParentChecker(PptMap all_ppts) {
+      this.all_ppts = all_ppts;
+    }
+
+    /**
+     * Returns true if the given declared parent might be replaced by a combined exit, so that it is
+     * not checked until {@link #init_hierarchy}.
+     *
+     * @param parent a ppt that is declared as a parent
+     * @return true if {@code parent} is a POINT named like a combined exit
+     */
+    private static boolean isReplaceableCombinedExit(PptTopLevel parent) {
+      return parent.type == PptTopLevel.PptType.POINT && parent.ppt_name.isCombinedExitPoint();
+    }
+
+    /**
+     * Records that the given ppt has been added to the map.
+     *
+     * @param ppt a ppt that has been added to the map
+     */
+    public void added(PptTopLevel ppt) {
+      if (uncheckedPpts != null) {
+        uncheckedPpts.add(ppt);
+      }
+    }
+
+    /**
+     * Throws a UserError if a ppt that has been added to the map since the last call is declared to
+     * have a leaf as a parent, or is a leaf that a ppt that has already been checked declares as a
+     * parent.
+     *
+     * @param state the state of the file being read, or null if no file is being read; used for
+     *     diagnostics
+     */
+    public void check(FileIO.@Nullable ParseState state) {
+      Collection<PptTopLevel> ppts =
+          (uncheckedPpts == null) ? all_ppts.asCollection() : uncheckedPpts;
+      // Find the numbered exits whose relations the combined exits inherit before checking any
+      // relations, so that the result does not depend on the order of ppts.
+      for (PptTopLevel ppt : ppts) {
+        if (ppt.is_subexit()) {
+          String exitName = combinedExitName(ppt);
+          if (exitName != null) {
+            firstSubexits.merge(
+                exitName, ppt, (p1, p2) -> (nameComparator.compare(p1, p2) <= 0) ? p1 : p2);
+          }
+        }
+      }
+      for (PptTopLevel ppt : ppts) {
+        List<PptTopLevel> children = childrenOfMissingParents.remove(ppt.name());
+        if (children != null && !isReplaceableCombinedExit(ppt)) {
+          for (PptTopLevel child : children) {
+            if (relationsAreChecked(child)) {
+              checkParentIsNotLeaf(ppt, child, state);
+            }
+          }
+        }
+        if (!relationsAreChecked(ppt)) {
+          continue;
+        }
+        for (ParentRelation pr : ppt.parent_relations) {
+          if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+            continue;
+          }
+          PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
+          if (parent == null) {
+            childrenOfMissingParents
+                .computeIfAbsent(pr.parent_ppt_name, k -> new ArrayList<>())
+                .add(ppt);
+          } else if (!isReplaceableCombinedExit(parent)) {
+            checkParentIsNotLeaf(parent, ppt, state);
+          }
+        }
+      }
+      if (uncheckedPpts == null) {
+        uncheckedPpts = new ArrayList<>();
+      } else {
+        uncheckedPpts.clear();
+      }
+    }
+  }
+
+  /**
    * Returns, for each child of the given ppt, the child's PptSplitter that uses the same splitter
    * as the given PptSplitter, or null if some child has no such PptSplitter.
    *
@@ -705,13 +912,7 @@ public class PptRelation implements Serializable {
         }
         // A leaf obtains its invariants from its samples and from its conditional ppts.  Merging
         // invariants from other children would discard those invariants.
-        if (parent.isDataflowLeaf()) {
-          throw new Daikon.UserError(
-              String.format(
-                  "ppt %s is declared as a parent of ppt %s, but it has type %s, which"
-                      + " cannot be a parent",
-                  parent.name(), ppt.name(), parent.type));
-        }
+        checkParentIsNotLeaf(parent, ppt, null);
         // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);
         rels.add(newParentRelation(pr, parent, ppt));

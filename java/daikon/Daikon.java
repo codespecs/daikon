@@ -986,10 +986,11 @@ public final class Daikon {
     // Sample counts are per-invocation; e.g., the "No samples found" check uses samples_used.
     FileIO.samples_processed = 0;
     FileIO.samples_used = 0;
-    // Unmatched entries are per-invocation.  Within one invocation they persist across trace
-    // files, so an entry and its exit might be in different files.
-    FileIO.call_hashmap.clear();
+    // Unmatched procedure entries are per-invocation; they affect the unmatched-entry report and
+    // which zero-sample program points are pruned.  Within one invocation they persist across
+    // trace files, so an entry and its exit might be in different files.
     FileIO.call_stack.clear();
+    FileIO.call_hashmap.clear();
 
     proto_invs.clear();
   }
@@ -2155,6 +2156,7 @@ public final class Daikon {
         System.out.print("Reading declaration files ");
       }
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
+      PptRelation.checkDeclaredParents(all_ppts);
       if (debugTrace.isLoggable(FINE)) {
         debugTrace.fine("Initializing partial order");
       }
