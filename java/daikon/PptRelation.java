@@ -724,14 +724,16 @@ public class PptRelation implements Serializable {
    * from a declaration (for example, one read from a serialized InvMap), which has null {@link
    * PptTopLevel#parent_relations}.
    *
-   * <p>The hierarchy relates a numbered exit such as {@code Foo.bar():::EXIT22} only to its
-   * combined exit, whose parents are those of the method's numbered exit that {@link
-   * Daikon#create_combined_exits} encounters first, namely the least one by {@link
-   * Ppt.NameComparator}. So, like {@link #init_hierarchy}, the check ignores the relations of every
-   * other numbered exit. If a numbered exit that sorts before a checked one is declared after a
-   * call to {@link #check}, the checked one's relations were checked although the combined exit
-   * will not use them. Front ends declare all of a method's program points together, so this does
-   * not happen in practice.
+   * <p>The hierarchy relates a numbered exit such as {@code Foo.bar():::EXIT22} that has (or will
+   * have) a combined exit only to its combined exit, whose parents are those of the method's
+   * numbered exit that {@link Daikon#create_combined_exits} encounters first, namely the least one
+   * by {@link Ppt.NameComparator}. So, like {@link #init_hierarchy}, the check ignores the
+   * relations of every other numbered exit. If a numbered exit that sorts before a checked one is
+   * declared after a call to {@link #check}, the checked one's relations were checked although the
+   * combined exit will not use them. Front ends declare all of a method's program points together,
+   * so this does not happen in practice. The check does examine the relations of every numbered
+   * exit whose combined exit's name belongs to a ppt of another type (which prevents the creation
+   * of the combined exit), in either declaration order.
    */
   public static class DeclaredParentChecker {
 
@@ -750,6 +752,14 @@ public class PptRelation implements Serializable {
      * ppts that declare it as a parent.
      */
     private final Map<String, List<PptTopLevel>> childrenOfMissingParents = new HashMap<>();
+
+    /**
+     * Maps the name of each combined exit that is not yet in {@link #all_ppts} to the checked
+     * numbered exits whose declared parents have not been checked. If a ppt with that name is added
+     * and is not a combined exit, then no combined exit can be created, so init_hierarchy processes
+     * the numbered exits' declared parents, and they are checked then.
+     */
+    private final Map<String, List<PptTopLevel>> subexitsWithoutExit = new HashMap<>();
 
     /**
      * Maps the name of each combined exit to the numbered exit whose relations it would inherit
@@ -776,8 +786,10 @@ public class PptRelation implements Serializable {
     }
 
     /**
-     * Returns true if the declared relations of the given ppt are checked. They are checked unless
-     * the ppt has none or is a numbered exit whose relations its combined exit does not inherit.
+     * Returns true if the declared relations of the given ppt are checked now. They are checked
+     * unless the ppt has none or is a numbered exit whose relations its combined exit does not
+     * inherit. A numbered exit has no combined exit, and its relations are checked, if a ppt that
+     * is not a combined exit has the combined exit's name.
      *
      * @param ppt a ppt that has been passed to {@link #check}
      * @return true if the declared relations of {@code ppt} are checked
@@ -790,7 +802,15 @@ public class PptRelation implements Serializable {
         return true;
       }
       String exitName = combinedExitName(ppt);
-      return (exitName != null) && (firstSubexits.get(exitName) == ppt);
+      if (exitName == null) {
+        return false;
+      }
+      PptTopLevel exit = all_ppts.get(exitName);
+      if ((exit != null) && !exit.is_combined_exit()) {
+        // No combined exit can be created, so init_hierarchy processes the relations.
+        return true;
+      }
+      return firstSubexits.get(exitName) == ppt;
     }
 
     /**
@@ -844,27 +864,58 @@ public class PptRelation implements Serializable {
             }
           }
         }
+        List<PptTopLevel> subexits = subexitsWithoutExit.remove(ppt.name());
+        if ((subexits != null) && !ppt.is_combined_exit()) {
+          // No combined exit can be created for these subexits, so init_hierarchy processes their
+          // declared parents.
+          for (PptTopLevel subexit : subexits) {
+            checkDeclaredParentsOf(subexit, state);
+          }
+        }
         if (!relationsAreChecked(ppt)) {
+          if ((ppt.parent_relations != null) && ppt.is_subexit()) {
+            String exitName = combinedExitName(ppt);
+            if ((exitName != null) && (all_ppts.get(exitName) == null)) {
+              // Daikon will create a combined exit, which does not inherit this numbered exit's
+              // relations, unless a ppt with this name is declared later.
+              subexitsWithoutExit.computeIfAbsent(exitName, k -> new ArrayList<>()).add(ppt);
+            }
+          }
           continue;
         }
-        for (ParentRelation pr : ppt.parent_relations) {
-          if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
-            continue;
-          }
-          PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
-          if (parent == null) {
-            childrenOfMissingParents
-                .computeIfAbsent(pr.parent_ppt_name, k -> new ArrayList<>())
-                .add(ppt);
-          } else {
-            checkParentIsNotLeaf(parent, ppt, state);
-          }
-        }
+        checkDeclaredParentsOf(ppt, state);
       }
       if (uncheckedPpts == null) {
         uncheckedPpts = new ArrayList<>();
       } else {
         uncheckedPpts.clear();
+      }
+    }
+
+    /**
+     * Throws a UserError if a declared parent of the given ppt is a leaf. A declared parent that is
+     * not yet in the map is recorded, to be checked when it is added.
+     *
+     * @param ppt a ppt whose declared parents init_hierarchy processes; its parent_relations must
+     *     be non-null
+     * @param state the state of the file being read, or null if no file is being read; used for
+     *     diagnostics
+     */
+    private void checkDeclaredParentsOf(PptTopLevel ppt, FileIO.@Nullable ParseState state) {
+      assert ppt.parent_relations != null
+          : "@AssumeAssertion(nullness): precondition: has parent_relations";
+      for (ParentRelation pr : ppt.parent_relations) {
+        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+          continue;
+        }
+        PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
+        if (parent == null) {
+          childrenOfMissingParents
+              .computeIfAbsent(pr.parent_ppt_name, k -> new ArrayList<>())
+              .add(ppt);
+        } else {
+          checkParentIsNotLeaf(parent, ppt, state);
+        }
       }
     }
   }
@@ -953,9 +1004,11 @@ public class PptRelation implements Serializable {
       }
     }
 
-    // Remove each splitter of a non-leaf that cannot be merged from its children: the non-leaf has
-    // no children, or some child lacks a matching splitter.  Removing a splitter from a child can
-    // make its parents' splitters unmergeable, so the parents are examined again.  This is done
+    // For each non-leaf ppt, remove each of the ppt's splitters whose conditional ppts cannot be
+    // merged from the conditional ppts of the ppt's children: the ppt has no children, or some
+    // child of the ppt has no splitter that matches the splitter.  Removing a splitter from a child
+    // can make the splitters of the child's parents unmergeable, so those parents are examined
+    // again.  This is done
     // before any conditional ppt is connected, so that no relation refers to a removed conditional
     // ppt.  Without the dataflow hierarchy, no invariants are merged from the children, so every
     // splitter is kept.  A ppt that receives samples passes each one to its conditional ppts (see

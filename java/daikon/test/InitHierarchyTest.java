@@ -265,6 +265,35 @@ public class InitHierarchyTest {
         String.valueOf(e.getMessage()));
   }
 
+  /**
+   * A point named like a combined exit cannot declare a point as a parent, even if a numbered exit
+   * is declared: Daikon does not replace it by a combined exit. The error is reported before the
+   * combined exits are created.
+   */
+  @Test
+  public void testPointNamedCombinedExitWithPointParent() throws IOException {
+    PptMap ppts =
+        readDeclsOnly(
+            pptDecl("P:::POINT", "point")
+                + pptDecl("Foo.bar():::ENTER", "enter")
+                + pptDecl("Foo.bar():::EXIT", "point", "parent", "P:::POINT")
+                + pptDecl("Foo.bar():::EXIT5", "subexit"));
+    assertThrows(Daikon.UserError.class, () -> PptRelation.checkDeclaredParents(ppts));
+  }
+
+  /**
+   * A point named like a combined exit, without a numbered exit, cannot declare a point as a
+   * parent.
+   */
+  @Test
+  public void testUnreplacedCombinedExitWithPointParent() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("P:::POINT", "point")
+                + pptDecl("Foo.bar():::EXIT", "point", "parent", "P:::POINT"));
+    assertThrows(Daikon.UserError.class, () -> PptRelation.checkDeclaredParents(ppts));
+  }
+
   /** A dtrace record that is a sample of P:::POINT, in which x is 1. */
   private static final String SAMPLE_P = "P:::POINT\nx\n1\n1\n\n";
 
@@ -401,6 +430,54 @@ public class InitHierarchyTest {
     PptRelation.checkDeclaredParents(ppts);
     PptRelation.init_hierarchy(ppts);
     assertEquals(Collections.emptyList(), get(ppts, "P:::POINT").children);
+  }
+
+  /**
+   * Asserts that reading the given dtrace file contents reports, before any sample is processed,
+   * that P:::POINT is declared as a parent of Foo.bar():::EXIT5.
+   *
+   * @param contents the records of a dtrace file, after its header
+   */
+  private void assertPointAsParentOfSubexitInDtrace(String contents) {
+    CountingProcessor processor = new CountingProcessor(true);
+    Daikon.UserError e =
+        assertThrows(Daikon.UserError.class, () -> readDtrace(contents, processor));
+    String msg = String.valueOf(e.getMessage());
+    assertTrue(
+        msg,
+        msg.endsWith(
+            "ppt P:::POINT is declared as a parent of ppt Foo.bar():::EXIT5, but its type (point)"
+                + " makes it a leaf of the dataflow hierarchy"));
+    assertEquals(0, processor.samples);
+  }
+
+  /**
+   * The parents of a numbered exit are checked before any sample is processed if a point, declared
+   * before the numbered exit, has the combined exit's name, because then the hierarchy relates the
+   * numbered exit to its declared parents.
+   */
+  @Test
+  public void testPointAsParentOfSubexitAfterPointNamedCombinedExit() {
+    assertPointAsParentOfSubexitInDtrace(
+        pptDecl("P:::POINT", "point")
+            + pptDecl("Foo.bar():::ENTER", "enter")
+            + pptDecl("Foo.bar():::EXIT", "point")
+            + pptDecl("Foo.bar():::EXIT5", "subexit", "parent", "P:::POINT")
+            + SAMPLE_P);
+  }
+
+  /**
+   * The parents of a numbered exit are checked before any sample is processed if a point, declared
+   * after the numbered exit, has the combined exit's name.
+   */
+  @Test
+  public void testPointAsParentOfSubexitBeforePointNamedCombinedExit() {
+    assertPointAsParentOfSubexitInDtrace(
+        pptDecl("P:::POINT", "point")
+            + pptDecl("Foo.bar():::ENTER", "enter")
+            + pptDecl("Foo.bar():::EXIT5", "subexit", "parent", "P:::POINT")
+            + pptDecl("Foo.bar():::EXIT", "point")
+            + SAMPLE_P);
   }
 
   /**
