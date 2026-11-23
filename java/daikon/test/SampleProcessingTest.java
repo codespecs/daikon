@@ -23,8 +23,8 @@ public class SampleProcessingTest {
   public SampleProcessingTest() {}
 
   /**
-   * Runs Daikon on one sample, in which x is 1, at a program point that is declared as a point,
-   * and asserts that Daikon used the sample and wrote an inv file.
+   * Runs Daikon on one sample, in which x is 1, at a program point that is declared as a point, and
+   * asserts that Daikon used the sample and wrote an inv file.
    *
    * @param pptName the name of the program point, such as "Foo.bar():::ENTER"
    * @param fileBase the base name of the decls, dtrace, and inv files, such as "point"
