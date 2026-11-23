@@ -502,6 +502,7 @@ tests/**/*.txt-daikon-end2end
 tests/**/*.txt-daikon-end2end.diff
 tests/**/*.txt-esc
 tests/**/*.txt-esc.diff
+tests/**/*.txt-invdiff
 tests/**/*.txt-jaif
 tests/**/*.txt-jaif.diff
 tests/**/*.txt-jml

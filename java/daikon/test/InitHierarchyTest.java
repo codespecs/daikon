@@ -100,10 +100,7 @@ public class InitHierarchyTest {
    * @return the program points
    */
   private PptMap readDecls(String decls) throws IOException {
-    File declsFile = tmpFolder.newFile();
-    String contents = "decl-version 2.0\nvar-comparability none\n\n" + decls;
-    Files.write(declsFile.toPath(), contents.getBytes(StandardCharsets.UTF_8));
-    PptMap ppts = FileIO.read_declaration_files(Collections.singletonList(declsFile));
+    PptMap ppts = readDeclsOnly(decls);
     Daikon.create_combined_exits(ppts);
     return ppts;
   }
@@ -211,6 +208,44 @@ public class InitHierarchyTest {
     PptTopLevel exit = get(ppts, "Foo.bar():::EXIT");
     assertTrue(exit.is_combined_exit());
     assertEquals(exit, get(ppts, "Q:::POINT").parents.get(0).parent);
+  }
+
+  /**
+   * A point named like a combined exit can declare a point as a parent if it is replaced by a
+   * combined exit, because a numbered exit is declared. The replacement does not have the declared
+   * parent.
+   */
+  @Test
+  public void testReplaceableCombinedExitWithPointParent() throws IOException {
+    File declsFile = tmpFolder.newFile();
+    String contents =
+        "decl-version 2.0\nvar-comparability none\n\n"
+            + pptDecl("P:::POINT", "point")
+            + pptDecl("Foo.bar():::ENTER", "enter")
+            + pptDecl("Foo.bar():::EXIT", "point", "parent", "P:::POINT")
+            + pptDecl("Foo.bar():::EXIT5", "subexit");
+    Files.write(declsFile.toPath(), contents.getBytes(StandardCharsets.UTF_8));
+    PptMap ppts = FileIO.read_declaration_files(Collections.singletonList(declsFile));
+    // As in Daikon, the declared parents are checked before the combined exits are created.
+    PptRelation.checkDeclaredParents(ppts);
+    Daikon.create_combined_exits(ppts);
+    PptRelation.init_hierarchy(ppts);
+    assertTrue(get(ppts, "Foo.bar():::EXIT").is_combined_exit());
+    assertEquals(Collections.emptyList(), get(ppts, "P:::POINT").children);
+  }
+
+  /**
+   * A point named like a combined exit that is not replaced by a combined exit cannot declare a
+   * point as a parent.
+   */
+  @Test
+  public void testUnreplacedCombinedExitWithPointParent() throws IOException {
+    PptMap ppts =
+        readDecls(
+            pptDecl("P:::POINT", "point")
+                + pptDecl("Foo.bar():::EXIT", "point", "parent", "P:::POINT"));
+    PptRelation.checkDeclaredParents(ppts);
+    assertThrows(Daikon.UserError.class, () -> PptRelation.init_hierarchy(ppts));
   }
 
   /** A dtrace record that is a sample of P:::POINT, in which x is 1. */
@@ -347,6 +382,71 @@ public class InitHierarchyTest {
                 + pptDecl("Foo.bar():::EXIT11", "subexit")
                 + pptDecl("Foo.bar():::EXIT22", "subexit", "parent", "P:::POINT"));
     PptRelation.checkDeclaredParents(ppts);
+    PptRelation.init_hierarchy(ppts);
+    assertEquals(Collections.emptyList(), get(ppts, "P:::POINT").children);
+  }
+
+  /**
+   * Reads the given program point declarations, but does not create the combined exits.
+   *
+   * @param decls ppt declarations, in the format of a decls file
+   * @return the program points
+   */
+  private PptMap readDeclsOnly(String decls) throws IOException {
+    File declsFile = tmpFolder.newFile();
+    String contents = "decl-version 2.0\nvar-comparability none\n\n" + decls;
+    Files.write(declsFile.toPath(), contents.getBytes(StandardCharsets.UTF_8));
+    return FileIO.read_declaration_files(Collections.singletonList(declsFile));
+  }
+
+  /**
+   * A point that the sole numbered exit declares as a parent is reported before the combined exit,
+   * which inherits the parent, is created.
+   */
+  @Test
+  public void testPointAsParentOfSoleSubexit() throws IOException {
+    PptMap ppts =
+        readDeclsOnly(
+            pptDecl("P:::POINT", "point")
+                + pptDecl("Foo.bar():::ENTER", "enter")
+                + pptDecl("Foo.bar():::EXIT11", "subexit", "parent", "P:::POINT"));
+    Daikon.UserError e =
+        assertThrows(Daikon.UserError.class, () -> PptRelation.checkDeclaredParents(ppts));
+    assertEquals(
+        "ppt P:::POINT is declared as a parent of ppt Foo.bar():::EXIT11, but its type (point)"
+            + " makes it a leaf of the dataflow hierarchy",
+        String.valueOf(e.getMessage()));
+  }
+
+  /**
+   * A point that the first numbered exit declares as a parent is reported before the combined exit,
+   * which inherits the parent, is created, even if the first numbered exit is declared last.
+   */
+  @Test
+  public void testPointAsParentOfFirstSubexit() throws IOException {
+    PptMap ppts =
+        readDeclsOnly(
+            pptDecl("Foo.bar():::EXIT22", "subexit")
+                + pptDecl("Foo.bar():::ENTER", "enter")
+                + pptDecl("Foo.bar():::EXIT11", "subexit", "parent", "P:::POINT")
+                + pptDecl("P:::POINT", "point"));
+    assertThrows(Daikon.UserError.class, () -> PptRelation.checkDeclaredParents(ppts));
+  }
+
+  /**
+   * The parents of a numbered exit other than the first are not checked, even if it is declared
+   * first.
+   */
+  @Test
+  public void testPointAsParentOfSecondSubexitDeclaredFirst() throws IOException {
+    PptMap ppts =
+        readDeclsOnly(
+            pptDecl("P:::POINT", "point")
+                + pptDecl("Foo.bar():::EXIT22", "subexit", "parent", "P:::POINT")
+                + pptDecl("Foo.bar():::ENTER", "enter")
+                + pptDecl("Foo.bar():::EXIT11", "subexit"));
+    PptRelation.checkDeclaredParents(ppts);
+    Daikon.create_combined_exits(ppts);
     PptRelation.init_hierarchy(ppts);
     assertEquals(Collections.emptyList(), get(ppts, "P:::POINT").children);
   }
