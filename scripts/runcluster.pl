@@ -230,14 +230,16 @@ if ($decls_new eq "") {
   die "No decls output by decls-add-cluster.pl";
 }
 
-# Since the number of clusters for xmeans varies, we have to find the max
-# number of clusters it found for all the program points, so we can create
-# a .spinfo file to split on all the clusters.
+# Find the highest cluster number over all the program points, so we can
+# create a .spinfo file to split on all the clusters.  The number of
+# clusters for xmeans varies.  For any algorithm, the cluster numbers of a
+# method's exit points are made distinct, so they can exceed $ncluster.
 
+open (MAX, "runcluster_temp.maxcluster") || die "file with max clusters not found\n";
+my $maxcluster = <MAX>;
+close MAX;
 if ($algorithm eq 'xm') {
-  open (MAX, "runcluster_temp.maxcluster") || die "file with max clusters (xmeans) not found\n";
-  $ncluster = <MAX>;
-  close MAX;
+  $ncluster = $maxcluster;
 }
 
 ###
@@ -249,7 +251,7 @@ if ($verbose) { print "\n# Writing spinfo file $spinfo_file ...\n"; }
 open (SPINFO, ">$spinfo_file") || die "couldn't write cluster spinfo file runcluster_temp.spinfo\n";
 
 my $conditions = "";
-for (my $i = 1; $i <= $ncluster; $i++) {
+for (my $i = 1; $i <= $maxcluster; $i++) {
   $conditions .= "cluster == $i\n";
 }
 # Split each program point that was clustered.
