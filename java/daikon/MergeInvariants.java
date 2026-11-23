@@ -264,7 +264,7 @@ public final class MergeInvariants {
       PptRelation.init_hierarchy(merge_ppts);
     }
 
-    // Remove all of the slices and equality sets, to start
+    // First, remove all of the slices and equality sets; the merge below recreates them.
     debugProgress.fine("Cleaning ppt map in preparation for merge");
     for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
       ppt.clean_for_merge();
@@ -292,7 +292,8 @@ public final class MergeInvariants {
 
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
-        // Splitters should not have any children to begin with
+        // No conditional ppt has any children yet; setup_conditional_merge, below, makes the input
+        // maps' conditional ppts their children.
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
             assert p.children.isEmpty() : p;
@@ -381,7 +382,8 @@ public final class MergeInvariants {
     // filtering or because it had no samples).  If every leaf is missing, no ppt gets any
     // invariants.
     if (!missingLeaves.isEmpty()) {
-      if (missingLeaves.size() == numLeaves) {
+      int numMissingLeaves = missingLeaves.size();
+      if (numMissingLeaves == numLeaves) {
         throw new Daikon.UserError(
             String.format(
                 "No input .inv file contains any leaf program point of the decls file (for"
@@ -392,17 +394,16 @@ public final class MergeInvariants {
                     + " samples).",
                 missingLeaves.get(0)));
       }
-      String names =
-          String.join(
-              ", ",
-              missingLeaves.subList(0, Math.min(missingLeaves.size(), MAX_MISSING_LEAVES_NAMED)));
-      if (missingLeaves.size() > MAX_MISSING_LEAVES_NAMED) {
-        names += ", ...";
+      String names;
+      if (numMissingLeaves > MAX_MISSING_LEAVES_NAMED) {
+        names = String.join(", ", missingLeaves.subList(0, MAX_MISSING_LEAVES_NAMED)) + ", ...";
+      } else {
+        names = String.join(", ", missingLeaves);
       }
       System.err.printf(
           "Warning: no input .inv file contains %s, so %s no invariants: %s%n",
-          StringsPlume.nPlural(missingLeaves.size(), "leaf program point"),
-          (missingLeaves.size() == 1) ? "it gets" : "they get",
+          StringsPlume.nPlural(numMissingLeaves, "leaf program point"),
+          (numMissingLeaves == 1) ? "it gets" : "they get",
           names);
     }
 
@@ -446,7 +447,7 @@ public final class MergeInvariants {
     debugProgress.fine("Time spent in implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
 
     // Remove the merge PptRelation links so that when the file is written
-    // out it only includes the new information
+    // out it only includes the new information.
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
       ppt.children.removeIf(MergeInvariants::isMergeChildRel);
       for (PptConditional cond : ppt.cond_iterable()) {
