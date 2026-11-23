@@ -362,8 +362,8 @@ public class InitHierarchyTest {
   }
 
   /**
-   * A point that the first numbered exit declares as a parent is reported before the combined
-   * exit, which inherits the parent, is created, even if the first numbered exit is declared last.
+   * A point that the first numbered exit declares as a parent is reported before the combined exit,
+   * which inherits the parent, is created, even if the first numbered exit is declared last.
    */
   @Test
   public void testPointAsParentOfFirstSubexit() throws IOException {
