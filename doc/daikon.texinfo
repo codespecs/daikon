@@ -6227,6 +6227,12 @@ java -cp $@{DAIKONDIR@}/daikon.jar daikon.MergeInvariants @i{[@var{flags}]...} @
 @noindent
 @var{file1} and @var{file2} are files containing serialized invariants
 produced by running Daikon.  At least two invariant files must be specified.
+Optionally, one @file{.decls} file can also be specified, along with any
+number of @file{.spinfo} files; then the merged program points and
+splitters are built from them rather than from the invariant files.
+If the invariant files contain conditional program points
+(@pxref{Conditional invariants}), each must have been produced
+with the same splitters, in the same order.
 
 @command{MergeInvariants} shares many flags with Daikon.
 These flags are only briefly summarized here.
