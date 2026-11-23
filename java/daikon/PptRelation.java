@@ -755,9 +755,9 @@ public class PptRelation implements Serializable {
 
     /**
      * Maps the name of each combined exit that is not yet in {@link #all_ppts} to the checked
-     * numbered exits whose declared parents have not been checked. If a ppt with that name is
-     * added and is not a combined exit, then no combined exit can be created, so init_hierarchy
-     * processes the numbered exits' declared parents, and they are checked then.
+     * numbered exits whose declared parents have not been checked. If a ppt with that name is added
+     * and is not a combined exit, then no combined exit can be created, so init_hierarchy processes
+     * the numbered exits' declared parents, and they are checked then.
      */
     private final Map<String, List<PptTopLevel>> subexitsWithoutExit = new HashMap<>();
 
