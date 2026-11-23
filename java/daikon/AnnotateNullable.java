@@ -202,12 +202,11 @@ public class AnnotateNullable {
   }
 
   /**
-   * Returns the children of the given program point that are combined exits and that are related
-   * to it by a PARENT relation. AnnotateNullable obtains all the information about a method from
-   * the method's combined exit, so it ignores the other children, such as entries and points. It
-   * also ignores children related by a USER relation, which are methods of other classes, and
-   * combined exits whose names do not have the form Class.method(args); see {@link
-   * #has_method_name}.
+   * Returns the children of the given program point that are combined exits and that are related to
+   * it by a PARENT relation. AnnotateNullable obtains all the information about a method from the
+   * method's combined exit, so it ignores the other children, such as entries and points. It also
+   * ignores children related by a USER relation, which are methods of other classes, and combined
+   * exits whose names do not have the form Class.method(args); see {@link #has_method_name}.
    *
    * @param ppt a program point
    * @return the children of {@code ppt} that are combined exits with a method name and are related
