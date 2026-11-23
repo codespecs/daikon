@@ -706,7 +706,7 @@ public class PptRelation implements Serializable {
    */
   public static class DeclaredParentChecker {
 
-    /** The program points to check. */
+    /** The program points. Those in {@link #uncheckedPpts} have not yet been checked. */
     private final PptMap all_ppts;
 
     /**
