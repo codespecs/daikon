@@ -99,7 +99,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
   /**
    * Returns the kind of the properties that express the given program point's invariants, based on
-   * the program point's type rather than its name.
+   * the program point's type.
    *
    * @param ppt a program point
    * @return the kind of the properties for the program point, or null if the program point is not
