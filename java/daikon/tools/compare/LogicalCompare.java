@@ -816,7 +816,6 @@ public class LogicalCompare {
       startProver();
 
       Collection<@KeyFor("app_ppts.nameToPpt") String> app_ppt_names = app_ppts.nameStringSet();
-      Collection<@KeyFor("test_ppts.nameToPpt") String> test_ppt_names = test_ppts.nameStringSet();
       // These are keys in both app_ppts and test_ppts.
       Set<String> common_names = new TreeSet<>();
 
@@ -824,18 +823,29 @@ public class LogicalCompare {
         @SuppressWarnings("nullness") // map: iterating over keyset
         @NonNull PptTopLevel app_ppt = app_ppts.get(name);
 
-        if (!app_ppt.ppt_name.isEnterPoint()) {
-          // an exit point, and we only want entries
+        if (!app_ppt.is_enter()) {
+          // Comparisons are per procedure and are driven by its entry.  The loop below passes
+          // the entry and the combined exit from both files to comparePpts.  Other program
+          // points (numbered exits, OBJECT, CLASS) are not compared on their own.
           continue;
         }
         if (app_ppt.num_samples() > 0) {
-          if (test_ppt_names.contains(name)
-              && castNonNull(test_ppts.get(name)).num_samples()
-                  > 0) { // correlated maps: test_ppts.get(name) is non-null because
-            // test_ppt_names.contains(name) is true
-            common_names.add(name);
+          PptTopLevel test_ppt = test_ppts.get(name);
+          if (test_ppt == null || test_ppt.num_samples() == 0) {
+            // The app run executed the procedure, but the test suite did not, so there are no
+            // test invariants to compare with.
+            System.out.println(
+                name
+                    + " was used but not tested (it has samples in "
+                    + app_filename
+                    + " but not in "
+                    + test_filename
+                    + ")");
+          } else if (!test_ppt.is_enter()) {
+            System.out.println(
+                name + " is an entry in " + app_filename + " but not in " + test_filename);
           } else {
-            System.out.println(name + " was used but not tested");
+            common_names.add(name);
           }
         }
       }
@@ -847,13 +857,16 @@ public class LogicalCompare {
         @NonNull PptTopLevel app_enter_ppt = app_ppts.get(name);
         @SuppressWarnings("nullness") // map: iterating over subset of keySet
         @NonNull PptTopLevel test_enter_ppt = test_ppts.get(name);
-        @SuppressWarnings("nullness") // map: exit should be in map if enter is
-        @NonNull PptTopLevel app_exit_ppt = app_ppts.get(app_enter_ppt.ppt_name.makeExit());
-        @SuppressWarnings("nullness") // map: exit should be in map if enter is
-        @NonNull PptTopLevel test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
-
-        assert app_exit_ppt != null;
-        assert test_exit_ppt != null;
+        PptTopLevel app_exit_ppt = app_ppts.get(app_enter_ppt.ppt_name.makeExit());
+        PptTopLevel test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
+        if (app_exit_ppt == null || !app_exit_ppt.is_combined_exit()) {
+          System.out.println(name + " has no combined exit in " + app_filename);
+          continue;
+        }
+        if (test_exit_ppt == null || !test_exit_ppt.is_combined_exit()) {
+          System.out.println(name + " has no combined exit in " + test_filename);
+          continue;
+        }
         comparePpts(
             app_enter_ppt, test_enter_ppt,
             app_exit_ppt, test_exit_ppt);
