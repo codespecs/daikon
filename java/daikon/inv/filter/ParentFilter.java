@@ -7,7 +7,10 @@ import daikon.PrintInvariants;
 import daikon.VarInfo;
 import daikon.inv.Invariant;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Filter for not printing invariants that have a matching invariant at their parent PPT. */
@@ -30,8 +33,29 @@ public class ParentFilter extends InvariantFilter {
 
   @Override
   boolean shouldDiscardInvariant(Invariant inv) {
+    return shouldDiscardInvariant(inv, Collections.newSetFromMap(new IdentityHashMap<>()));
+  }
+
+  /**
+   * Returns true if the given invariant should be discarded because a matching invariant appears
+   * at a printed parent (or at a printed ancestor reached through unprinted parents).
+   *
+   * <p>The program point hierarchy can contain cycles (via {@code USER} relations), so this
+   * method records each invariant that it examines. When it reaches an invariant a second time, it
+   * returns false for that invariant. Doing so does not change the result: the call that first
+   * reached the invariant has already examined, or will examine, all of its parents.
+   *
+   * @param inv an invariant
+   * @param visited the invariants that have already been examined; side-effected by this method
+   * @return true if {@code inv} should be discarded
+   */
+  private boolean shouldDiscardInvariant(Invariant inv, Set<Invariant> visited) {
 
     // System.out.printf("shouldDiscardInvariant(%s)%n", inv.format());
+
+    if (!visited.add(inv)) {
+      return false;
+    }
 
     if (Debug.logDetail()) {
       if (inv.ppt.parent.parents != null) {
@@ -69,7 +93,7 @@ public class ParentFilter extends InvariantFilter {
       // regular expressions do not select it), treat it as transparent:  discard the invariant only
       // if a printed ancestor implies it.
       if (!PrintInvariants.matches_ppt_regexp(rel.parent)) {
-        if (shouldDiscardInvariant(pinv)) {
+        if (shouldDiscardInvariant(pinv, visited)) {
           return true;
         }
         continue;
