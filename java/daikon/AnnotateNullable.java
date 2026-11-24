@@ -204,9 +204,11 @@ public class AnnotateNullable {
   /**
    * Returns the children of the given program point that are combined exits and that are related to
    * it by a PARENT relation. AnnotateNullable obtains all the information about a method from the
-   * method's combined exit, so it ignores the other children, such as entries and points. It also
-   * ignores children related by a USER relation, which are methods of other classes, and combined
-   * exits whose names do not have the form Class.method(args); see {@link #has_method_name}.
+   * method's combined exit, so it ignores the other children, such as ENTER ppts and POINT ppts
+   * like "C.check():::POINT". It also ignores children related by a USER relation, which are
+   * program points of other classes that use this class, such as a method of another class that
+   * takes a parameter of this class. It also ignores combined exits whose names do not have the
+   * form Class.method(args); see {@link #has_method_name}.
    *
    * @param ppt a program point
    * @return the children of {@code ppt} that are combined exits with a method name and are related
@@ -479,16 +481,18 @@ public class AnnotateNullable {
   }
 
   /**
-   * Returns true if the method of the specified ppt is static or not. The ppt must be an exit ppt.
-   * Exit ppts that do not have an object as a parent are inferred to be static. This does not work
-   * for enter ppts, because constructors do not have the object as a parent on entry.
+   * Returns true if the method of the specified ppt is static. The ppt must be an exit ppt. Exit
+   * ppts that do not have an object as a parent by a PARENT relation are inferred to be static. A
+   * USER relation to an OBJECT ppt does not count, because it relates a method to the class of one
+   * of the method's variables, not to the method's own class. This does not work for enter ppts,
+   * because constructors do not have the object as a parent on entry.
    */
   @Pure
   public static boolean is_static_method(PptTopLevel ppt) {
 
     assert ppt.is_exit() : ppt;
     for (PptRelation rel : ppt.parents) {
-      if (rel.parent.is_object()) {
+      if (rel.getRelationType() == PptRelationType.PARENT && rel.parent.is_object()) {
         return false;
       }
     }
