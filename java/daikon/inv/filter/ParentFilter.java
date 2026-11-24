@@ -65,9 +65,9 @@ public class ParentFilter extends InvariantFilter {
         continue;
       }
 
-      // If the parent is not printed (because it does not match the --ppt-select-pattern regular
-      // expression), treat it as transparent:  discard the invariant only if a printed ancestor
-      // implies it.
+      // If the parent is not printed (because the --ppt-select-pattern and --ppt-omit-pattern
+      // regular expressions do not select it), treat it as transparent:  discard the invariant only
+      // if a printed ancestor implies it.
       if (!PrintInvariants.matches_ppt_regexp(rel.parent)) {
         if (shouldDiscardInvariant(pinv)) {
           return true;
