@@ -34,6 +34,9 @@ Further documentation can be found in:
   any qualifier at the beginning of the program point name, such as the `..`
   of the global function `..main():::ENTER`.  A name ending with `:::EXIT`
   also matches the numbered exit points.
+  By default, Daikon uses every loaded condition at every program point.  To
+  use a condition only at program points that its `PPT_NAME` matches, pass
+  `--config_option daikon.split.SplitterList.all_splitters=false`.
 * `daikon.bashrc` no longer sets `JAVA_HOME`, `DAIKON_CLASSPATH`,
   `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`, or `PERL5LIB`.
 * Removed the Perl front end, dfepl.
@@ -46,7 +49,8 @@ Further documentation can be found in:
 
 Scripts:
 
-* `dtrace-diff.pl`: its .decls file argument is now optional.  It no longer
+* `dtrace-diff.pl`: its .decls file argument is now optional; it is needed
+  only if the .dtrace files lack program point declarations.  It no longer
   accepts the `--ignore_exitno` option, which had no effect.
 * Removed scripts that processed only version 1 files:  `auxinfo.pl`,
   `clean-decls.php`, `copy_comparable.pl`, `decls2comp-1.0.py`,
