@@ -955,13 +955,13 @@ public class PptRelation implements Serializable {
           continue;
         }
 
+        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+          continue;
+        }
         PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
         if (parent == null) {
           throw new RuntimeException(
               "parent ppt " + pr.parent_ppt_name + " not found for ppt " + ppt.name());
-        }
-        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
-          continue;
         }
         // A leaf obtains its invariants from its samples and from its conditional ppts.  Merging
         // invariants from other children would discard those invariants.
