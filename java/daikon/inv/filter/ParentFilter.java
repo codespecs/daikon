@@ -2,7 +2,6 @@ package daikon.inv.filter;
 
 import daikon.Debug;
 import daikon.PptRelation;
-import daikon.PptRelation.PptRelationType;
 import daikon.PptSlice;
 import daikon.PrintInvariants;
 import daikon.VarInfo;
@@ -66,11 +65,10 @@ public class ParentFilter extends InvariantFilter {
         continue;
       }
 
-      // If the combined exit point is not printed (because it does not match the
-      // --ppt-select-pattern regular expression), treat it as transparent:  discard the numbered
-      // exit point's invariant only if a parent of the combined exit point implies it.
-      if (rel.getRelationType() == PptRelationType.EXIT_EXITNN
-          && !PrintInvariants.matches_ppt_regexp(rel.parent)) {
+      // If the parent is not printed (because it does not match the --ppt-select-pattern regular
+      // expression), treat it as transparent:  discard the invariant only if a printed ancestor
+      // implies it.
+      if (!PrintInvariants.matches_ppt_regexp(rel.parent)) {
         if (shouldDiscardInvariant(pinv)) {
           return true;
         }
