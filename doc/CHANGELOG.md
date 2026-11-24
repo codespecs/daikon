@@ -23,19 +23,10 @@ Further documentation can be found in:
 
 ## Version 5.9.1 (???, 2026)
 
-* Daikon and its tools now reject a malformed command-line option.
-* In a version 2.0 declaration file, Daikon reads the whole rest of a `ppt`
-   record as the program point name, which can contain unescaped blanks.
-* All tools accept `-h` and `--help`, which print a usage message and exit
-   with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
 * New tool `daikon.tools.MergeComparability` merges the comparability
   information from multiple runs of DynComp.
-* Chicory's `--comparability-file` command-line option accepts any version
-   2.0 declaration file, such as one written by Chicory, rather than only one
-   written by DynComp.  A variable with no `comparability` record is
-   comparable to every other variable.
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
   complete program point name.  It matches the program point of that name, and
   every program point whose name is that name preceded by a qualifier, such as
@@ -43,38 +34,20 @@ Further documentation can be found in:
   any qualifier at the beginning of the program point name, such as the `..`
   of the global function `..main():::ENTER`.  A name ending with `:::EXIT`
   also matches the numbered exit points.
-  Daikon loads a `PPT_NAME`'s conditions only if the name matches some program
-  point, so a complete name that matches no program point contributes no
-  conditions.  Otherwise, `PPT_NAME` affects where Daikon uses a condition only
-  if indiscriminate splitting (which uses every loaded condition at every
-  program point) is disabled via
-  `--config_option daikon.split.SplitterList.all_splitters=false`.  Daikon
-  compiles a condition against the first program point that its `PPT_NAME`
-  matches, even a procedure entry point.  If the condition fails to compile
-  there, Daikon retries it at each later matching program point that has a
-  variable that the earlier program point lacks.
-* `daikon.bashrc` sets only `DAIKONDIR` and `PATH`.  It no longer sets
-   `JAVA_HOME`, `DAIKON_CLASSPATH`, `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`,
-   or `PERL5LIB`.
+* `daikon.bashrc` no longer sets `JAVA_HOME`, `DAIKON_CLASSPATH`,
+  `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`, or `PERL5LIB`.
 * Removed the Perl front end, dfepl.
-* Daikon and its tools no longer read `.decls` and `.dtrace` files in the
-  obsolete version 1 format (files that contain `decl-version 1.0`,
+* Daikon and its tools no longer read or write `.decls` and `.dtrace` files
+  in the obsolete version 1 format (files that contain `decl-version 1.0`,
   `VarComparability`, or `DECLARE` records).  Daikon also cannot read
   `.inv` files written by earlier versions of Daikon.
   * Removed configuration option `daikon.PrintInvariants.remove_post_vars`, which
     had an effect only for version 1 files.
-* DynComp escapes blanks in program point names in its `.decls-DynComp`
-   output, as the declaration file format requires.
 
 Scripts:
 
-* `convertcsv.pl` now writes version 2 files.
-* `convertcsv.pl -decl`, `dtrace-count.pl`, `dtrace-diff.pl`,
-  `dtrace-indent.pl`, and `sort-dtrace.pl` no longer accept version 1
-  declarations.
-* `dtrace-diff.pl` reads program point declarations from the .dtrace files,
-  so its .decls file argument is now optional.  It no longer accepts the
-  `--ignore_exitno` option, which had no effect.
+* `dtrace-diff.pl`: its .decls file argument is now optional.  It no longer
+  accepts the `--ignore_exitno` option, which had no effect.
 * Removed scripts that processed only version 1 files:  `auxinfo.pl`,
   `clean-decls.php`, `copy_comparable.pl`, `decls2comp-1.0.py`,
   `decls-lackwit-disjoint.pl`, `dfec-to-kvasir.py`, `dfec-to-kvasir-dtrace.py`,
