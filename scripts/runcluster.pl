@@ -124,6 +124,10 @@ my $max_nonce = -1;
 foreach my $trace_file (@trace_files) {
   my $base = basename($trace_file);
   $base =~ s/\.dtrace(\.gz)?$//;
+  # Later commands use the names unquoted, so each must be a single shell
+  # word that is not taken for an option or a glob pattern.
+  $base =~ s/[^\w.\-]/_/g;
+  $base =~ s/\A-/_/;
   my $stem = "${base}_runcluster_temp_nonces";
   for (my $i = 2; exists($used_fixed_names{$stem}); $i++) {
     $stem = "${base}-${i}_runcluster_temp_nonces";
