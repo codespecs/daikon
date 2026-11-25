@@ -44,10 +44,17 @@ sub usage() {
 # PPTNAME -> HASH[INVOCATION_NONCE -> CLUSTER_NUMBER]
 # A hash, not an array, because the nonces of all the trace files are
 # distinct, so the nonces of one program point can be large and sparse.
+# The key is a program point stem (without :::ENTER or :::EXIT...).  Several
+# cluster files can have the same stem, such as the files for
+# Foo.bar():::EXIT12 and Foo.bar():::EXIT15; their entries are merged by
+# add_cluster_info.
 my %pptname_to_cluster = ();
 
-# The highest cluster number.  This is needed when we are using xmeans so
-# that we can know how many clusters to split the dtrace file into.
+# PPTNAME -> NUM:  the highest cluster number used so far for the stem.
+my %pptname_to_maxcluster = ();
+
+# The highest cluster number, over all program points.  It tells
+# runcluster.pl how many clusters to split each program point into.
 my $maxcluster = 0;
 
 # The names of the program points that have at least one clustered sample.
@@ -140,11 +147,12 @@ foreach my $ppt (sort keys %clustered_ppts) {
 }
 close(PPTS);
 
-if ($algorithm eq 'xm') {
-  open (MAX, ">runcluster_temp.maxcluster") || die "couldn't open file to output max cluster";
-  print MAX "$maxcluster";
-  close(MAX);
-}
+# Cluster numbers can exceed the number of clusters requested of a
+# clustering tool (see add_cluster_info), so write the maximum for every
+# algorithm.
+open (MAX, ">runcluster_temp.maxcluster") || die "couldn't open file to output max cluster";
+print MAX "$maxcluster";
+close(MAX);
 
 exit();
 
@@ -272,7 +280,7 @@ sub read_cluster_info_seq ( @ ) {
     $filename =~ s/\.runcluster_temp.*//;
 
     print "filename=$filename\n";
-    $pptname_to_cluster{$filename} = \%nonce_to_cluster;
+    &add_cluster_info($filename, \%nonce_to_cluster);
   }
   return %pptname_to_cluster;
 }
@@ -330,9 +338,6 @@ sub read_cluster_info_xm(@) {
 	my $nonce = $translation_array[$line];
 	$nonce_to_cluster{$nonce} = $cluster;
 	# print "$nonce -> $cluster\n";
-	if ($cluster > $maxcluster) {
-	  $maxcluster = $cluster;
-	}
       } else {
 	next;
       }
@@ -343,14 +348,61 @@ sub read_cluster_info_xm(@) {
     $filename =~ s/\.samp$//;
     $filename =~ s/\.runcluster_temp.*//;
 
-    $pptname_to_cluster{$filename} = \%nonce_to_cluster;
+    my $nclusters = &add_cluster_info($filename, \%nonce_to_cluster);
     if ($logging) {
-      &log ("$filename  ==> $cluster clusters");
+      &log ("$filename  ==> $nclusters clusters");
     }
   }
   return %pptname_to_cluster;
 }
 
+
+# Merges the cluster information read from one cluster file into
+# %pptname_to_cluster.  The arguments are the program point stem and a
+# reference to a hash from invocation nonce to file-local cluster number.
+# Returns the number of clusters in the file.
+#
+# Every cluster file for a stem (for instance, one per numbered exit point)
+# numbers its clusters from 1, but its clusters are unrelated to those of
+# the stem's other files.  The ENTER program point receives the samples of
+# all of them, so the clusters must stay distinct:  a file's clusters are
+# renumbered to follow those of the stem's earlier files.
+#
+# Each invocation leaves through one exit point, so normally a nonce
+# appears in only one file for a stem.  If a nonce appears in more than one
+# (for instance, if both a combined :::EXIT and a numbered :::EXITnn point
+# were clustered), its first cluster number is kept, so that all the
+# records of the invocation have the same cluster number.
+sub add_cluster_info ( $$ ) {
+  my ($stem, $file_nonce_to_cluster) = @_;
+  if (! exists $pptname_to_cluster{$stem}) {
+    $pptname_to_cluster{$stem} = {};
+    $pptname_to_maxcluster{$stem} = 0;
+  }
+  my $stem_nonce_to_cluster = $pptname_to_cluster{$stem};
+  my $offset = $pptname_to_maxcluster{$stem};
+  my $file_maxcluster = 0;
+  my $nconflicts = 0;
+  foreach my $nonce (keys %{$file_nonce_to_cluster}) {
+    my $file_cluster = $file_nonce_to_cluster->{$nonce};
+    if ($file_cluster > $file_maxcluster) {
+      $file_maxcluster = $file_cluster;
+    }
+    if (exists $stem_nonce_to_cluster->{$nonce}) {
+      $nconflicts++;
+    } else {
+      $stem_nonce_to_cluster->{$nonce} = $file_cluster + $offset;
+    }
+  }
+  if ($nconflicts > 0) {
+    print STDERR "Warning: $nconflicts invocations of $stem appear in more than one cluster file; using the first cluster number for each\n";
+  }
+  $pptname_to_maxcluster{$stem} = $offset + $file_maxcluster;
+  if ($pptname_to_maxcluster{$stem} > $maxcluster) {
+    $maxcluster = $pptname_to_maxcluster{$stem};
+  }
+  return $file_maxcluster;
+}				# add_cluster_info
 
 sub log ( $ ) {
   print $loghandle "$_[0]\n";
