@@ -6,11 +6,12 @@ import daikon.inv.Equality;
 import daikon.inv.Invariant;
 import daikon.split.PptSplitter;
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -573,12 +574,12 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Creates an equality view and invariants for each ppt (including each conditional ppt) that has
-   * no children and does not already have an equality view. This happens for non-leaf ppts such as
-   * OBJECT, CLASS, or GLOBAL that do not end up with any children (due to the program source or
-   * because of ppt filtering). It also happens for a combined exit point that a decls file declares
-   * when no corresponding numbered exit point is declared or included. A leaf usually gets its
-   * equality view from {@link Daikon#setupEquality}, before it receives any samples.
+   * Creates an equality view and invariants for each ppt that has no children and does not already
+   * have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL that do
+   * not end up with any children (due to the program source or because of ppt filtering). It also
+   * happens for a combined exit point that a decls file declares when no corresponding numbered
+   * exit point is declared or included. A leaf usually gets its equality view from {@link
+   * Daikon#setupEquality}, before it receives any samples.
    *
    * <p>The new equality view puts all comparable variables in the same equality set, as if no
    * sample had distinguished them, so each ppt that gets one must have no samples. {@link
@@ -611,6 +612,38 @@ public class PptRelation implements Serializable {
       this.rel = rel;
       this.ppt_split = ppt_split;
     }
+  }
+
+  /**
+   * Returns, for each child of {@code ppt}, the child's splitter that matches {@code pptSplit}.
+   * Returns null if {@code ppt} has no children or if some child has no matching splitter; in that
+   * case, the conditional ppts of {@code pptSplit} cannot be merged from the children.
+   *
+   * @param ppt a non-leaf ppt
+   * @param pptSplit one of the splitters of {@code ppt}
+   * @return the matching splitter at each child, or null if {@code ppt} has no children or some
+   *     child has no matching splitter
+   */
+  private static @Nullable List<SplitChild> matchingSplitChildren(
+      PptTopLevel ppt, PptSplitter pptSplit) {
+    if (ppt.children.isEmpty()) {
+      return null;
+    }
+    List<SplitChild> splitChildren = new ArrayList<>();
+    childLoop:
+    for (PptRelation rel : ppt.children) {
+      if (!rel.child.has_splitters()) {
+        return null;
+      }
+      for (PptSplitter csplit : rel.child.splitters) {
+        if (pptSplit.splitter == csplit.splitter) {
+          splitChildren.add(new SplitChild(rel, csplit));
+          continue childLoop;
+        }
+      }
+      return null;
+    }
+    return splitChildren;
   }
 
   /**
@@ -689,11 +722,12 @@ public class PptRelation implements Serializable {
    * so checking after each of many declarations does not rescan the whole map. A declared parent
    * that is not in the map is checked when it is added. The check skips a ppt that was not read
    * from a declaration (for example, one read from a serialized InvMap), which has null {@link
-   * PptTopLevel#parent_relations}. A declared parent that is a {@link PptTopLevel.PptType#POINT}
-   * named like a combined exit (such as foo:::EXIT) is also ignored, because {@link
+   * PptTopLevel#parent_relations}. A {@link PptTopLevel.PptType#POINT} named like a combined exit
+   * (such as foo:::EXIT) is also ignored, both as a declared parent and as a child, because {@link
    * Daikon#create_combined_exits} replaces it by a combined exit if a numbered exit such as
-   * foo:::EXIT22 is declared (possibly later). {@link #init_hierarchy} checks such a parent after
-   * the replacement.
+   * foo:::EXIT22 is declared (possibly later). The replacement is a parent of other ppts, and its
+   * parents are those of the numbered exit, so the relations declared for the POINT are discarded.
+   * {@link #init_hierarchy} checks such a ppt if it is not replaced.
    *
    * <p>The hierarchy relates a numbered exit such as {@code Foo.bar():::EXIT22} only to its
    * combined exit, whose parents are those of the method's numbered exit that {@link
@@ -774,14 +808,14 @@ public class PptRelation implements Serializable {
     }
 
     /**
-     * Returns true if the given declared parent might be replaced by a combined exit, so that it is
-     * not checked until {@link #init_hierarchy}.
+     * Returns true if the given ppt might be replaced by a combined exit, so that neither it as a
+     * declared parent nor its declared parents are checked until {@link #init_hierarchy}.
      *
-     * @param parent a ppt that is declared as a parent
-     * @return true if {@code parent} is a POINT named like a combined exit
+     * @param ppt a ppt
+     * @return true if {@code ppt} is a POINT named like a combined exit
      */
-    private static boolean isReplaceableCombinedExit(PptTopLevel parent) {
-      return parent.type == PptTopLevel.PptType.POINT && parent.ppt_name.isCombinedExitPoint();
+    private static boolean isReplaceableCombinedExit(PptTopLevel ppt) {
+      return ppt.type == PptTopLevel.PptType.POINT && ppt.ppt_name.isCombinedExitPoint();
     }
 
     /**
@@ -826,7 +860,7 @@ public class PptRelation implements Serializable {
             }
           }
         }
-        if (!relationsAreChecked(ppt)) {
+        if (!relationsAreChecked(ppt) || isReplaceableCombinedExit(ppt)) {
           continue;
         }
         for (ParentRelation pr : ppt.parent_relations) {
@@ -849,32 +883,6 @@ public class PptRelation implements Serializable {
         uncheckedPpts.clear();
       }
     }
-  }
-
-  /**
-   * Returns, for each child of the given ppt, the child's PptSplitter that uses the same splitter
-   * as the given PptSplitter, or null if some child has no such PptSplitter.
-   *
-   * @param ppt a program point
-   * @param ppt_split one of the PptSplitters of {@code ppt}
-   * @return the children's PptSplitters that use the splitter of {@code ppt_split}, or null if some
-   *     child of {@code ppt} has none
-   */
-  private static @Nullable List<SplitChild> split_children(PptTopLevel ppt, PptSplitter ppt_split) {
-    List<SplitChild> result = new ArrayList<>(ppt.children.size());
-    child_loop:
-    for (PptRelation rel : ppt.children) {
-      if (rel.child.splitters != null) {
-        for (PptSplitter csplit : rel.child.splitters) {
-          if (ppt_split.splitter == csplit.splitter) {
-            result.add(new SplitChild(rel, csplit));
-            continue child_loop;
-          }
-        }
-      }
-      return null;
-    }
-    return result;
   }
 
   /**
@@ -945,6 +953,35 @@ public class PptRelation implements Serializable {
       }
     }
 
+    // For each non-leaf ppt, remove each of the ppt's splitters whose conditional ppts cannot be
+    // merged from the conditional ppts of the ppt's children: the ppt has no children, or some
+    // child of the ppt has no splitter that matches the splitter.  Removing a splitter from a child
+    // can make the splitters of the child's parents unmergeable, so those parents are examined
+    // again.  This is done
+    // before any conditional ppt is connected, so that no relation refers to a removed conditional
+    // ppt.  Without the dataflow hierarchy, no invariants are merged from the children, so every
+    // splitter is kept.  A ppt that receives samples passes each one to its conditional ppts (see
+    // PptTopLevel.add_bottom_up).  A ppt that receives no samples, such as an OBJECT ppt or a
+    // combined exit that Daikon creates after processing the samples, has conditional ppts that
+    // receive no samples either, just like the ppt itself.
+    if (Daikon.use_dataflow_hierarchy) {
+      Deque<PptTopLevel> worklist = new ArrayDeque<>();
+      for (PptTopLevel ppt : all_ppts.pptIterable()) {
+        worklist.add(ppt);
+      }
+      while (!worklist.isEmpty()) {
+        PptTopLevel ppt = worklist.remove();
+        if (ppt.isDataflowLeaf() || !ppt.has_splitters()) {
+          continue;
+        }
+        if (ppt.splitters.removeIf(pptSplit -> matchingSplitChildren(ppt, pptSplit) == null)) {
+          for (PptRelation rel : ppt.parents) {
+            worklist.add(rel.parent);
+          }
+        }
+      }
+    }
+
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       if (ppt.has_splitters()) {
         connectConditionals(ppt);
@@ -958,28 +995,6 @@ public class PptRelation implements Serializable {
     // ppts (AC1, AC2) and B has two conditional ppts (BC1, BC2)
     // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
 
-    // If some child lacks a splitter, the parent's conditional ppts cannot be merged from the
-    // children, so remove the splitter from the parent.  Removing a splitter from a ppt can make
-    // the ppt's parents lack a splitter of their child, so iterate until no splitter is removed.
-    // A single pass would depend on the order of the ppts:  a parent could keep a splitter whose
-    // conditional ppts are related to conditional ppts that a child later loses, which have no
-    // children and no invariants.
-    boolean removed_splitter = true;
-    while (removed_splitter) {
-      removed_splitter = false;
-      for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        if (ppt.isDataflowLeaf() || !ppt.has_splitters()) {
-          continue;
-        }
-        for (Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext(); ) {
-          if (split_children(ppt, ii.next()) == null) {
-            ii.remove();
-            removed_splitter = true;
-          }
-        }
-      }
-    }
-
     // Build the PptRelations for each child.  The PptRelation from the conditional point is of
     // the same type as the original relation from parent to child.
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
@@ -987,8 +1002,12 @@ public class PptRelation implements Serializable {
         continue;
       }
       for (PptSplitter ppt_split : ppt.splitters) {
-        List<SplitChild> split_children = split_children(ppt, ppt_split);
-        assert split_children != null : "@AssumeAssertion(nullness): removed above otherwise";
+        List<SplitChild> split_children = matchingSplitChildren(ppt, ppt_split);
+        if (split_children == null) {
+          // Only without the dataflow hierarchy, which does not merge conditional ppts.
+          assert !Daikon.use_dataflow_hierarchy : ppt;
+          continue;
+        }
         for (SplitChild sc : split_children) {
           ppt_split.add_relation(sc.rel, sc.ppt_split);
         }
