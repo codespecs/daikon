@@ -1,0 +1,39 @@
+decl-version 2.0
+var-comparability none
+
+ppt decl-version:::POINT
+ppt-type point
+variable x
+  var-kind variable
+  dec-type int
+  rep-type int
+
+ppt var-comparability:::POINT
+ppt-type point
+variable x
+  var-kind variable
+  dec-type int
+  rep-type int
+
+ppt input-language:::POINT
+ppt-type point
+variable x
+  var-kind variable
+  dec-type int
+  rep-type int
+
+decl-version:::POINT
+x
+1
+1
+
+var-comparability:::POINT
+x
+2
+1
+
+input-language:::POINT
+x
+4
+1
+
