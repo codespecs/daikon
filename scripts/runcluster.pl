@@ -150,16 +150,7 @@ if ($verbose) { print "\n# Extracting variables from dtrace file ...\n"; }
 # reads the declarations from the dtrace files, and passing the dtrace files
 # twice would read their samples twice.
 my $command = "$SCRIPTDIR/extract_vars.pl --algorithm $algorithm " . join(' ', @decls_files) . " $dtrace_files";
-if ($verbose) { print "$command\n"; }
-if (system($command) != 0) {
-  # extract_vars.pl's error message names a temporary file, not an input file.
-  my $copies = "";
-  for (my $i = 0; $i < scalar(@trace_files); $i++) {
-    $copies .= "  $fixed_trace_files[$i] is a copy of $trace_files[$i]\n";
-  }
-  die "Failed executing $command\n"
-    . "Its dtrace files are copies of the input files, with fixed invocation nonces:\n$copies";
-}
+system_or_die($command, $verbose);
 
 ###
 ### Perform clustering
@@ -234,16 +225,14 @@ if ($decls_new eq "") {
   die "No decls output by decls-add-cluster.pl";
 }
 
-# Find the highest cluster number over all the program points, so we can
-# create a .spinfo file to split on all the clusters.  The number of
-# clusters for xmeans varies.  For any algorithm, the cluster numbers of a
-# method's exit points are made distinct, so they can exceed $ncluster.
+# Since the number of clusters for xmeans varies, we have to find the max
+# number of clusters it found for all the program points, so we can create
+# a .spinfo file to split on all the clusters.
 
-open (MAX, "runcluster_temp.maxcluster") || die "file with max clusters not found\n";
-my $maxcluster = <MAX>;
-close MAX;
 if ($algorithm eq 'xm') {
-  $ncluster = $maxcluster;
+  open (MAX, "runcluster_temp.maxcluster") || die "file with max clusters (xmeans) not found\n";
+  $ncluster = <MAX>;
+  close MAX;
 }
 
 ###
@@ -255,7 +244,7 @@ if ($verbose) { print "\n# Writing spinfo file $spinfo_file ...\n"; }
 open (SPINFO, ">$spinfo_file") || die "couldn't write cluster spinfo file runcluster_temp.spinfo\n";
 
 my $conditions = "";
-for (my $i = 1; $i <= $maxcluster; $i++) {
+for (my $i = 1; $i <= $ncluster; $i++) {
   $conditions .= "cluster == $i\n";
 }
 # Split each program point that was clustered.
