@@ -539,8 +539,9 @@ public class DiffTester {
   private static String runDiffMainHelper(String... args) throws Exception {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PrintStream oldOut = System.out;
-    // PrintStream(OutputStream, boolean, Charset) was introduced in Java 10.
-    System.setOut(new PrintStream(baos, true, "UTF-8"));
+    @SuppressWarnings("JdkObsolete") // Charset overload needs Java 10+; Daikon supports 8
+    PrintStream newOut = new PrintStream(baos, true, "UTF-8");
+    System.setOut(newOut);
     try {
       Diff.mainHelper(args);
     } finally {
