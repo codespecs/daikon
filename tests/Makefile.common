@@ -216,6 +216,7 @@ DAIKON = $(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.Daikon
 PRINT_INVARIANTS_CLASS?=${DAIKONDIR}/java/daikon/PrintInvariants.class
 PRINT_INVARIANTS?=$(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.PrintInvariants
 DAIKON_SIMPLE_CLASS?=${DAIKONDIR}/java/daikon/DaikonSimple.class
+INV_DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
 
@@ -260,6 +261,9 @@ $(PRINT_INVARIANTS_CLASS):
 	${MAKE} -C ${DAIKONDIR}/java
 
 $(DAIKON_SIMPLE_CLASS):
+	${MAKE} -C ${DAIKONDIR}/java
+
+$(INV_DIFF_CLASS):
 	${MAKE} -C ${DAIKONDIR}/java
 
 $(CHICORY_EXEC):
@@ -802,6 +806,24 @@ txt-simple: ${PROJECT_FILE}.txt-simple
 	  --config_option daikon.Daikon.quiet=true \
 	  $(DECLS_FILES) $(DTRACE_FILES) > $@ 2>&1) || (mv $@ $@-failed && false)
 
+# txt-invdiff is not part of txt-diff by default.  A test's Makefile adds it:
+#   txt-diff: txt-invdiff-diff
+# By default, daikon.diff.Diff compares only entries and combined exits.  With
+# -p, it compares every program point, and --ignore_exitNN ignores numbered exits.
+PROJECT_HELP:=${PROJECT_HELP} ;\
+  echo "  make txt-invdiff    : runs daikon.diff.Diff on the inv file"
+txt-invdiff: ${PROJECT_FILE}.txt-invdiff
+%.txt-invdiff: ${INV_FILE} ${INV_DIFF_CLASS}
+	@echo
+	@echo "### create txt-invdiff (${PROJECT_FILE})"
+	@echo
+	-rm -f $@-failed
+	(echo "=== daikon.diff.Diff" > $@ \
+	  && $(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.diff.Diff $(INV_FILE) >> $@ 2>&1 \
+	  && echo "=== daikon.diff.Diff -p --ignore_exitNN" >> $@ \
+	  && $(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.diff.Diff -p --ignore_exitNN $(INV_FILE) >> $@ 2>&1) \
+	  || (mv $@ $@-failed && false)
+
 ifndef NO_CSHARP
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-csharpcontract   : creates csharp-style output from the inv file"
@@ -972,6 +994,7 @@ spinfo-static-diff: ${PROJECT_FILE}.spinfo-static.diff
 txt-simplify-diff: ${PROJECT_FILE}.txt-simplify.diff;
 txt-logicalcompare-diff: ${PROJECT_FILE}.txt-logicalcompare.diff;
 txt-simple-diff: ${PROJECT_FILE}.txt-simple.diff;
+txt-invdiff-diff: ${PROJECT_FILE}.txt-invdiff.diff;
 ifndef NO_CSHARP
 txt-csharpcontract-diff: ${PROJECT_FILE}.txt-csharpcontract.diff;
 endif
@@ -1087,6 +1110,9 @@ endif
 	if test -e ${PROJECT_FILE}.txt-simple ; then \
 	  cp -pf ${PROJECT_FILE}.txt-simple $(call goal_name,${PROJECT_FILE}.txt-simple); fi
 	rm -f ${PROJECT_FILE}.txt-simple.diff;
+	if test -e ${PROJECT_FILE}.txt-invdiff ; then \
+	  cp -pf ${PROJECT_FILE}.txt-invdiff $(call goal_name,${PROJECT_FILE}.txt-invdiff); fi
+	rm -f ${PROJECT_FILE}.txt-invdiff.diff;
 	if test -e ${PROJECT_FILE}.txt-csharpcontract ; then \
 	  cp -pf ${PROJECT_FILE}.txt-csharpcontract ${PROJECT_FILE}.txt-csharpcontract.goal; fi
 	rm -f ${PROJECT_FILE}.txt-csharpcontract.diff;
