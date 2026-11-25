@@ -40,6 +40,9 @@ fi
 
 make compile daikon.jar
 
+# Scripts
+make -C tests/script-tests/dtrace-diff
+
 # Code style & quality
 make -C java error-prone
 make -C java check-format || (make -C java reformat && git --no-pager diff && /bin/false)
