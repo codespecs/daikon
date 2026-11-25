@@ -71,7 +71,7 @@ public class ParentFilter extends InvariantFilter {
       // discard the numbered exit point's invariant only if a parent of the combined exit point
       // implies it.
       if (rel.getRelationType() == PptRelationType.EXIT_EXITNN
-          && !PrintInvariants.matches_ppt_regexp(rel.parent)) {
+          && !PrintInvariants.is_ppt_selected(rel.parent)) {
         if (shouldDiscardInvariant(pinv)) {
           return true;
         }

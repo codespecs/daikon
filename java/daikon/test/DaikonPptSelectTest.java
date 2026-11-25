@@ -7,7 +7,6 @@ import daikon.Daikon;
 import daikon.PrintInvariants;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -91,15 +90,15 @@ public class DaikonPptSelectTest {
    *
    * @param options command-line options for Daikon
    * @return the lines that Daikon prints to standard output
-   * @throws IOException if Daikon cannot read or write a file
+   * @throws Exception if Daikon cannot read or write a file
    */
-  private List<String> runDaikon(String... options) throws IOException {
+  private List<String> runDaikon(String... options) throws Exception {
     File declsFile = tmpFolder.newFile("test.decls");
     Files.write(declsFile.toPath(), DECLS.getBytes(StandardCharsets.UTF_8));
     File dtraceFile = tmpFolder.newFile("test.dtrace");
     Files.write(
         dtraceFile.toPath(), ("decl-version 2.0" + dtrace()).getBytes(StandardCharsets.UTF_8));
-    File invFile = new File(tmpFolder.getRoot(), "test.inv.gz");
+    File invFile = invFile();
 
     List<String> args = new ArrayList<>(Arrays.asList(options));
     args.addAll(
@@ -110,11 +109,57 @@ public class DaikonPptSelectTest {
             declsFile.toString(),
             dtraceFile.toString()));
 
+    return captureStdout(() -> Daikon.mainHelper(args.toArray(new String[0])));
+  }
+
+  /**
+   * Returns the invariant file that {@link #runDaikon} writes.
+   *
+   * @return the invariant file that {@link #runDaikon} writes
+   */
+  private File invFile() {
+    return new File(tmpFolder.getRoot(), "test.inv.gz");
+  }
+
+  /**
+   * Runs PrintInvariants on the invariant file that {@link #runDaikon} wrote, and returns the lines
+   * that it prints.
+   *
+   * @param options command-line options for PrintInvariants
+   * @return the lines that PrintInvariants prints to standard output
+   * @throws Exception if PrintInvariants cannot read the invariant file
+   */
+  private List<String> runPrintInvariants(String... options) throws Exception {
+    PrintInvariants.cleanup();
+    List<String> args = new ArrayList<>(Arrays.asList(options));
+    args.add(invFile().toString());
+    return captureStdout(() -> PrintInvariants.mainHelper(args.toArray(new String[0])));
+  }
+
+  /** A computation that can throw an exception. */
+  @FunctionalInterface
+  private interface ThrowingRunnable {
+    /**
+     * Runs the computation.
+     *
+     * @throws Exception if the computation throws an exception
+     */
+    void run() throws Exception;
+  }
+
+  /**
+   * Runs the given computation and returns the lines that it prints to standard output.
+   *
+   * @param computation a computation
+   * @return the lines that {@code computation} prints to standard output
+   * @throws Exception if {@code computation} throws an exception
+   */
+  private static List<String> captureStdout(ThrowingRunnable computation) throws Exception {
     PrintStream oldOut = System.out;
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     try (PrintStream newOut = new PrintStream(bytes, true, StandardCharsets.UTF_8)) {
       System.setOut(newOut);
-      Daikon.mainHelper(args.toArray(new String[0]));
+      computation.run();
     } finally {
       System.setOut(oldOut);
     }
@@ -123,7 +168,7 @@ public class DaikonPptSelectTest {
 
   /** Without a pattern, Daikon prints the combined exit point and not the numbered exit point. */
   @Test
-  public void testNoPattern() throws IOException {
+  public void testNoPattern() throws Exception {
     List<String> lines = runDaikon();
     assertTrue(lines.toString(), lines.contains("C.m(int):::EXIT"));
     assertFalse(lines.toString(), lines.contains("C.m(int):::EXIT5"));
@@ -134,7 +179,7 @@ public class DaikonPptSelectTest {
    * exit point, then Daikon prints the numbered exit point and not the combined exit point.
    */
   @Test
-  public void testSelectNumberedExit() throws IOException {
+  public void testSelectNumberedExit() throws Exception {
     List<String> lines = runDaikon("--ppt-select-pattern=ENTER|EXIT[0-9]");
     assertTrue(lines.toString(), lines.contains("C.m(int):::EXIT5"));
     assertTrue(lines.toString(), lines.contains("return > orig(x)"));
@@ -146,8 +191,22 @@ public class DaikonPptSelectTest {
    * exit point, then Daikon prints the numbered exit point and not the combined exit point.
    */
   @Test
-  public void testOmitCombinedExit() throws IOException {
+  public void testOmitCombinedExit() throws Exception {
     List<String> lines = runDaikon("--ppt-omit-pattern=:::EXIT$");
+    assertTrue(lines.toString(), lines.contains("C.m(int):::EXIT5"));
+    assertTrue(lines.toString(), lines.contains("return > orig(x)"));
+    assertFalse(lines.toString(), lines.contains("C.m(int):::EXIT"));
+  }
+
+  /**
+   * The invariant file contains the combined exit point even if Daikon's {@code --ppt-omit-pattern}
+   * omits it. PrintInvariants, given the same {@code --ppt-omit-pattern}, prints the same program
+   * points as Daikon.
+   */
+  @Test
+  public void testPrintInvariantsOmitCombinedExit() throws Exception {
+    runDaikon("--ppt-omit-pattern=:::EXIT$");
+    List<String> lines = runPrintInvariants("--ppt-omit-pattern=:::EXIT$");
     assertTrue(lines.toString(), lines.contains("C.m(int):::EXIT5"));
     assertTrue(lines.toString(), lines.contains("return > orig(x)"));
     assertFalse(lines.toString(), lines.contains("C.m(int):::EXIT"));
