@@ -12,11 +12,3 @@ include ../../Makefile.common
 
 # DaikonSimple must give the CLASS program point the samples, as Daikon does.
 txt-diff: txt-simple-diff
-
-# The common %.diff rule compares ${PROJECT_FILE}.txt-simple to its goal file every time.
-txt-simple-diff: ${PROJECT_FILE}.txt-simple.diff;
-${PROJECT_FILE}.txt-simple: ${DECLS_FILES} ${DTRACE_FILES} ${DAIKON_SIMPLE_CLASS}
-	-rm -f $@-failed
-	($(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.DaikonSimple \
-	  --config_option daikon.Daikon.quiet=true \
-	  $(DECLS_FILES) $(DTRACE_FILES) > $@) || (mv $@ $@-failed && false)

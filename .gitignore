@@ -512,6 +512,7 @@ tests/**/*.txt-merge-esc.diff
 tests/**/*.txt-merge-jml
 tests/**/*.txt-merge-jml.diff
 tests/**/*.txt-simple
+tests/**/*.txt-simple-failed
 tests/**/*.txt-simplify
 tests/**/*.txt-simplify.diff
 tests/**/*.txt-trace
