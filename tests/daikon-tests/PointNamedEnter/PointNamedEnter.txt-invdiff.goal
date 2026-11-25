@@ -1,0 +1,4 @@
+=== daikon.diff.Diff
+=== daikon.diff.Diff -p
+<PointNamedEnter.m():::ENTER, null>
+  <x one of { 1, 2, 3 } {1+}, null> (Una,JM)

@@ -197,9 +197,14 @@ ifeq (${JAVA24_OR_NEWER}, 0)
   JAVA_FILES_FOR_FORMAT :=  $(filter-out %24.java, ${JAVA_FILES_FOR_FORMAT})
 endif
 
+# A number sign.  Use ${HASH} inside a function call such as $(shell ...),
+# where GNU Make before 4.3 treats # as starting a comment and GNU Make 4.3
+# and later passes \# through unchanged, making grep warn "stray \ before #".
+HASH := \#
+
 # Don't exclude the whole ./daikon/test directory.
-TAG_FILES :=        $(shell find . -type f -follow \( -name '*daikon-java*' -o -name '*Test.java' -o -name '*Tester.java' -o -name 'Test*.java' -o -name 'GenericTestClass.java' -o -name 'TestQuant.java' -o -name 'DiffDummyInvariant.java' -o -name 'AllTestsSuite.java' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
-TAG_FILES_NO_JTB := $(shell find . -type f -follow \( -name '*daikon-java*' -o -name '*Test.java' -o -name '*Tester.java' -o -name 'Test*.java' -o -name 'GenericTestClass.java' -o -name 'TestQuant.java' -o -name 'DiffDummyInvariant.java' -o -name 'AllTestsSuite.java' \) -prune -o \( -path './jtb' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
+TAG_FILES :=        $(shell find . -type f -follow \( -name '*daikon-java*' -o -name '*Test.java' -o -name '*Tester.java' -o -name 'Test*.java' -o -name 'GenericTestClass.java' -o -name 'TestQuant.java' -o -name 'DiffDummyInvariant.java' -o -name 'AllTestsSuite.java' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.${HASH}' | ${SORT_DIRECTORY_ORDER})
+TAG_FILES_NO_JTB := $(shell find . -type f -follow \( -name '*daikon-java*' -o -name '*Test.java' -o -name '*Tester.java' -o -name 'Test*.java' -o -name 'GenericTestClass.java' -o -name 'TestQuant.java' -o -name 'DiffDummyInvariant.java' -o -name 'AllTestsSuite.java' \) -prune -o \( -path './jtb' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.${HASH}' | ${SORT_DIRECTORY_ORDER})
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES := \
@@ -953,7 +958,7 @@ INDEX_JAVA_FILES := ${DAIKON_JAVA_FILES}
 INTERNING_JAVA_FILES_SKIP_COUNTS := Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
 INTERNING_JAVA_FILES := ${DAIKON_JAVA_FILES}
-INTERNING_JAVA_FILES_COUNTS := $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
+INTERNING_JAVA_FILES_COUNTS := $(shell find . -type f -name '*.java' | grep -E -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
 NULLNESS_JAVA_FILES := ${DAIKON_JAVA_FILES}
 
 #  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)
@@ -1263,7 +1268,7 @@ JAVADOC_FLAGS := ${JAVADOC_FLAGS_COMMON} \
 
 # Daikon packages except for util (which is just a copy of plume), plume,
 # and dummy packages such as daikon.dcomp-dummy and daikon.dcomp-transfer.
-DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' | egrep -v 'dcomp-' \
+DAIKON_PACKAGES := $(shell ls -F daikon | grep / | grep -v 'util' | grep -v 'dcomp-' \
 				   | sed s./.. | sed s/^/daikon./ | tr '\n' ':')
 
 # Don't run Javadoc on files that require the Checker Framework.

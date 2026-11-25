@@ -47,8 +47,8 @@ instrument-files-revise:
 	    > ${INST_LIST_FILE}
 
 # 	cat ${ALL_LIST_FILE} \
-# 		| egrep    "^MapQuick" \
-# 		| egrep -v "^MapQuick/tigerdb" \
+# 		|  grep    "^MapQuick" \
+# 		|  grep -v "^MapQuick/tigerdb" \
 # 		|  grep -v "Test" | grep -v "PrivateQueries" \
 # 		|  grep -v "StreetClassification" \
 # 		|  grep -v "StreetSegReader" | grep -v "StreetSegIterator" \
