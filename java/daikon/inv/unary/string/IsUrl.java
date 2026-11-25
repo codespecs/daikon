@@ -20,7 +20,7 @@ public class IsUrl extends SingleString {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. True iff IsUrl invariants should be considered. */
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * Regex that matches a URL. Source: <a
@@ -51,14 +51,15 @@ public class IsUrl extends SingleString {
                   // IP address
                   + "?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))"
                   + "|"
-                  // Domain name
-                  + "(?:(?:[\\w\\x{00a1}-\\x{ffff}0-9]+-?)*[\\w\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[\\w\\x{00a1}-\\x{ffff}0-9]+-)*[\\w\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-zA-Z\\x{00a1}-\\x{ffff}]{2,}))"
+                  // Domain name.  The first label is written as runs separated by single hyphens,
+                  // without nested quantifiers, to avoid exponential backtracking.
+                  + "(?:[\\w\\x{00a1}-\\x{ffff}0-9]+(?:-[\\w\\x{00a1}-\\x{ffff}0-9]+)*)(?:\\.(?:[\\w\\x{00a1}-\\x{ffff}0-9]+-)*[\\w\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-zA-Z\\x{00a1}-\\x{ffff}]{2,}))"
                   // end of IP address OR domain name
                   + ")")
               // Optional port number
               + "(?::\\d{2,5})?"
-              // Optional part of the URL
-              + "(?:/[^\\s]*)?"
+              // Optional path, query, or fragment
+              + "(?:[/?#][^\\s]*)?"
               + "$");
 
   //
@@ -104,6 +105,9 @@ public class IsUrl extends SingleString {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsUrl this, OutputFormat format) {
+    if (format != OutputFormat.DAIKON) {
+      return format_unimplemented(format);
+    }
     return var().name() + " is Url";
   }
 

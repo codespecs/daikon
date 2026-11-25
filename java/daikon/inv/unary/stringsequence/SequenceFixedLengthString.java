@@ -6,12 +6,8 @@ import daikon.inv.*;
 import daikon.inv.ValueSet.ValueSetStringArray;
 import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateDDMMYYYY;
 import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateMMDDYYYY;
-import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateYYYYMMDD;
-import daikon.suppress.NISuppressee;
-import daikon.suppress.NISuppression;
-import daikon.suppress.NISuppressionSet;
-import daikon.suppress.NISuppressor;
 import java.util.List;
+import java.util.Objects;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -33,7 +29,7 @@ public class SequenceFixedLengthString extends SingleStringSequence {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. true iff SequenceFixedLengthString invariants should be considered. */
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /** Numerical variable specifying the length of the array string elements */
   @Unused(when = Prototype.class)
@@ -90,9 +86,35 @@ public class SequenceFixedLengthString extends SingleStringSequence {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied SequenceFixedLengthString this, OutputFormat format) {
+    if (format != OutputFormat.DAIKON) {
+      return format_unimplemented(format);
+    }
     return "All the elements of " + var().name() + " have LENGTH=" + elements_length;
   }
 
+  /**
+   * Returns the length of the first non-null element of the array, or null if there is none.
+   *
+   * @param a an array of strings
+   * @return the length of the first non-null element of {@code a}, or null if there is none
+   */
+  private static @Nullable Integer firstNonNullLength(@Interned String @Interned [] a) {
+    if (a == null) {
+      return null;
+    }
+    for (String elt : a) {
+      if (elt != null) {
+        return elt.length();
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Checks the sample without changing the state of this invariant. If no length has yet been
+   * established, the sample is checked for internal consistency: all of its non-null elements must
+   * have the same length.
+   */
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
 
@@ -100,38 +122,17 @@ public class SequenceFixedLengthString extends SingleStringSequence {
       return InvariantStatus.NO_CHANGE;
     }
 
-    // Initialize elements_length for the first time
-    if (elements_length == null) {
+    Integer expected_length = (elements_length != null) ? elements_length : firstNonNullLength(a);
+    if (expected_length == null) {
+      // All elements are null.
+      return InvariantStatus.NO_CHANGE;
+    }
 
-      // Set the length of the first array element that is not null as the value of elements_length
-      int firstNonNullElementIndex = 0;
-      while (firstNonNullElementIndex < a.length) {
-        if (a[firstNonNullElementIndex] != null) {
-          elements_length = a[firstNonNullElementIndex].length();
-          break;
-        }
-        firstNonNullElementIndex++;
-      }
-
-      if (elements_length != null) {
-        // Check that the all the remaining array elements have the same length
-        // We start counting from the index of the firstNonNullElement
-        for (int i = firstNonNullElementIndex; i < a.length; i++) {
-          // If the array element is not null and its length is different to elements_length, the
-          // invariant is falsified
-          if (a[i] != null && a[i].length() != elements_length) {
-            return InvariantStatus.FALSIFIED;
-          }
-        }
-      }
-
-    } else {
-      for (int i = 0; i < a.length; i++) {
-        // If the array element is not null and its length is different to elements_length, the
-        // invariant is falsified
-        if (a[i] != null && a[i].length() != elements_length) {
-          return InvariantStatus.FALSIFIED;
-        }
+    for (int i = 0; i < a.length; i++) {
+      // If the array element is not null and its length is different to expected_length, the
+      // invariant is falsified
+      if (a[i] != null && a[i].length() != expected_length) {
+        return InvariantStatus.FALSIFIED;
       }
     }
 
@@ -140,7 +141,15 @@ public class SequenceFixedLengthString extends SingleStringSequence {
 
   @Override
   public InvariantStatus add_modified(@Interned String @Interned [] a, int count) {
-    return check_modified(a, count);
+    InvariantStatus status = check_modified(a, count);
+    // Initialize elements_length the first time a non-null element is seen
+    if (status != InvariantStatus.FALSIFIED && elements_length == null) {
+      Integer len = firstNonNullLength(a);
+      if (len != null) {
+        elements_length = len;
+      }
+    }
+    return status;
   }
 
   @Override
@@ -176,39 +185,22 @@ public class SequenceFixedLengthString extends SingleStringSequence {
   @Override
   public boolean isSameFormula(Invariant other) {
     assert other instanceof SequenceFixedLengthString;
-    return true;
+    SequenceFixedLengthString o = (SequenceFixedLengthString) other;
+    // An unknown length (null) is the same formula only as another unknown length.
+    return Objects.equals(elements_length, o.elements_length);
   }
 
-  /** NI suppressions, initialized in get_ni_suppressions(). */
-  private static @Nullable NISuppressionSet suppressions = null;
+  // This invariant does not use NI suppression.  NI suppression would create the invariant when its
+  // suppressor is falsified, and the new invariant would see only the falsifying sample, not the
+  // earlier samples whose element lengths might differ.  Instead, isObviousDynamically() omits this
+  // invariant when a date invariant that implies it holds.
 
-  @Pure
-  @Override
-  public NISuppressionSet get_ni_suppressions() {
-    if (suppressions == null) {
-
-      NISuppressee suppressee = new NISuppressee(SequenceFixedLengthString.class, 1);
-
-      // suppressor definitions (used in suppressions below)
-      NISuppressor sequenceStringElementsAreDateMMDDYYYY =
-          new NISuppressor(0, SequenceStringElementsAreDateMMDDYYYY.class);
-      NISuppressor sequenceStringElementsAreDateDDMMYYYY =
-          new NISuppressor(0, SequenceStringElementsAreDateDDMMYYYY.class);
-      NISuppressor sequenceStringElementsAreDateYYYYMMDD =
-          new NISuppressor(0, SequenceStringElementsAreDateYYYYMMDD.class);
-
-      suppressions =
-          new NISuppressionSet(
-              new NISuppression[] {
-                new NISuppression(sequenceStringElementsAreDateMMDDYYYY, suppressee),
-                new NISuppression(sequenceStringElementsAreDateDDMMYYYY, suppressee),
-                new NISuppression(sequenceStringElementsAreDateYYYYMMDD, suppressee)
-              });
-    }
-    return suppressions;
-  }
-
-  /** SequenceFixedLengthString invariant will not be reported if EltOneOfString is not falsified */
+  /**
+   * SequenceFixedLengthString invariant will not be reported if EltOneOfString is not falsified, or
+   * if a fixed-length date invariant (SequenceStringElementsAreDateMMDDYYYY or
+   * SequenceStringElementsAreDateDDMMYYYY) holds. SequenceStringElementsAreDateYYYYMMDD does not
+   * imply this invariant, because it permits dates both with and without separators.
+   */
   @Pure
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
@@ -230,6 +222,13 @@ public class SequenceFixedLengthString extends SingleStringSequence {
             this,
             DiscardCode.obvious,
             "SequenceFixedLengthString is obvious if EltOneOfString is not discarded");
+      }
+      if (inv instanceof SequenceStringElementsAreDateMMDDYYYY
+          || inv instanceof SequenceStringElementsAreDateDDMMYYYY) {
+        return new DiscardInfo(
+            this,
+            DiscardCode.obvious,
+            "SequenceFixedLengthString is implied by " + inv.getClass().getSimpleName());
       }
     }
 

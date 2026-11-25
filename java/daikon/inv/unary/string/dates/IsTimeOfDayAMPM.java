@@ -25,7 +25,7 @@ public class IsTimeOfDayAMPM extends SingleString {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. True iff IsTimeOfDayAMPM invariants should be considered. */
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * Matches a time of day in 12-hour format, with optional leading 0 and with trailing AM or PM.
@@ -75,6 +75,9 @@ public class IsTimeOfDayAMPM extends SingleString {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsTimeOfDayAMPM this, OutputFormat format) {
+    if (format != OutputFormat.DAIKON) {
+      return format_unimplemented(format);
+    }
     return var().name()
         + " is time of day: HH:MM PM 12-hour format, optional leading 0, mandatory meridiems"
         + " (AM/PM)";

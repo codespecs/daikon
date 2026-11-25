@@ -7,6 +7,7 @@ import daikon.inv.unary.UnaryInvariant;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.Intern;
 import typequals.prototype.qual.Prototype;
 
@@ -95,5 +96,21 @@ public abstract class SingleStringSequence extends UnaryInvariant {
   /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
   public InvariantStatus add_unmodified(@Interned String @Interned [] value, int count) {
     return InvariantStatus.NO_CHANGE;
+  }
+
+  /**
+   * Returns true if the given array contains at least one non-null element.
+   *
+   * @param value an array of strings
+   * @return true if {@code value} contains at least one non-null element
+   */
+  @Pure
+  protected static boolean hasNonNullElement(@Interned String @Interned [] value) {
+    for (String elt : value) {
+      if (elt != null) {
+        return true;
+      }
+    }
+    return false;
   }
 }

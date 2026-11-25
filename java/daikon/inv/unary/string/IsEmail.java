@@ -22,7 +22,7 @@ public class IsEmail extends SingleString {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. True iff IsEmail invariants should be considered. */
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * Regular expression that matches email addresses. Source: <a
@@ -43,14 +43,16 @@ public class IsEmail extends SingleString {
               // domain
               + ("("
                   // domain names with alphanumeric characters and hyphens (separated by periods)
-                  + "?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]^[0-9]?"
+                  + "?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?"
                   // or
                   + "|"
                   // IP addresses enclosed in square brackets, allowing for IPv4 and IPv6 addresses
                   // with an optional port number.
                   + "[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\]"
                   + ")")
-              + "$");
+              + "$",
+          // Domain names are case-insensitive, and local parts commonly contain uppercase letters.
+          Pattern.CASE_INSENSITIVE);
 
   //
   // Required methods
@@ -95,6 +97,9 @@ public class IsEmail extends SingleString {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsEmail this, OutputFormat format) {
+    if (format != OutputFormat.DAIKON) {
+      return format_unimplemented(format);
+    }
     return var().name() + " is Email";
   }
 

@@ -25,7 +25,7 @@ public class IsDateMMDDYYYY extends SingleString {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. True iff IsDateMMDDYYYY invariants should be considered. */
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * This regex matches a date in MM/DD/YYYY format (Year min: 1900, Year max: 2050). For example:
@@ -82,6 +82,9 @@ public class IsDateMMDDYYYY extends SingleString {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsDateMMDDYYYY this, OutputFormat format) {
+    if (format != OutputFormat.DAIKON) {
+      return format_unimplemented(format);
+    }
     return var().name() + " is a Date. Format: MM/DD/YYYY";
   }
 

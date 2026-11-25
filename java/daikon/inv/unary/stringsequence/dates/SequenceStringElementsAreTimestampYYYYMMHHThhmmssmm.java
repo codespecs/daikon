@@ -32,7 +32,7 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
    * Boolean. True iff SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm invariants should be
    * considered.
    */
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * True if all the elements of the array are null. Without this property, the invariant would be
@@ -93,6 +93,9 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
   public String format_using(
       @GuardSatisfied SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm this,
       OutputFormat format) {
+    if (format != OutputFormat.DAIKON) {
+      return format_unimplemented(format);
+    }
     return "All the elements of "
         + var().name()
         + " are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)";
@@ -103,7 +106,6 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
     for (int i = 0; i < a.length; i++) {
       String arrayElement = a[i];
       if (arrayElement != null) {
-        allElementsAreNull = false;
         Matcher matcher = IsTimestampYYYYMMHHThhmmssmm.PATTERN.matcher(arrayElement);
         if (!matcher.matches()) {
           return InvariantStatus.FALSIFIED;
@@ -116,7 +118,11 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
 
   @Override
   public InvariantStatus add_modified(@Interned String @Interned [] a, int count) {
-    return check_modified(a, count);
+    InvariantStatus status = check_modified(a, count);
+    if (status != InvariantStatus.FALSIFIED && hasNonNullElement(a)) {
+      allElementsAreNull = false;
+    }
+    return status;
   }
 
   @Override

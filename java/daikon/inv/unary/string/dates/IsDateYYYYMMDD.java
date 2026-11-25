@@ -25,7 +25,7 @@ public class IsDateYYYYMMDD extends SingleString {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. True iff IsDateYYYYMMDD invariants should be considered. */
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * This regex matches a date in YYYY-MM-DD format (Year min: 1900, Year max: 2050). For example:
@@ -35,11 +35,11 @@ public class IsDateYYYYMMDD extends SingleString {
       Pattern.compile(
           ("^" + YYYY2050 + "/" + MONTH_NUMBER + "/" + DAY_OF_MONTH + "$")
               + "|"
-              + ("^" + YYYY2050 + "-" + MONTH_NUMBER + "/" + DAY_OF_MONTH + "$")
+              + ("^" + YYYY2050 + "-" + MONTH_NUMBER + "-" + DAY_OF_MONTH + "$")
               + "|"
               + ("^" + YYYY2050 + "[.]" + MONTH_NUMBER + "[.]" + DAY_OF_MONTH + "$")
               + "|"
-              // The ISO 8610 standard permits "-" separator or no separator.
+              // The ISO 8601 standard permits "-" separator or no separator.
               + ("^" + YYYY2050 + MONTH_NUMBER + DAY_OF_MONTH + "$"));
 
   //
@@ -85,6 +85,9 @@ public class IsDateYYYYMMDD extends SingleString {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsDateYYYYMMDD this, OutputFormat format) {
+    if (format != OutputFormat.DAIKON) {
+      return format_unimplemented(format);
+    }
     return var().name() + " is a Date. Format: YYYY-MM-DD";
   }
 

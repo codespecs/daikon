@@ -30,16 +30,18 @@ public class AgoraTest {
     a.emptyString(new String(""));
     a.emptyString(new String(""));
 
-    a.stringParameter1("22");
-    a.stringParameter1("122");
-    a.stringParameter1("-322");
-    a.stringParameter1("3.14159");
-    a.stringParameter1("1.618");
-    a.stringParameter1("-333333333");
-    a.stringParameter1("1234567890");
-    a.stringParameter1("22");
-    a.stringParameter1("22");
+    // Numeric values only.
+    a.stringParameter2("22");
+    a.stringParameter2("122");
+    a.stringParameter2("-322");
+    a.stringParameter2("3.14159");
+    a.stringParameter2("1.618");
+    a.stringParameter2("-333333333");
+    a.stringParameter2("1234567890");
+    a.stringParameter2("22");
+    a.stringParameter2("22");
 
+    // Numeric values, plus one non-numeric value.
     a.stringParameter1("22");
     a.stringParameter1("122");
     a.stringParameter1("-322");

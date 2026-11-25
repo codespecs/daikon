@@ -33,7 +33,7 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
    * Boolean. True iff SequenceStringElementsAreTimeOfDayWithSeconds invariants should be
    * considered.
    */
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * True if all the elements of the array are null. Without this property, the invariant would be
@@ -93,6 +93,9 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
   @Override
   public String format_using(
       @GuardSatisfied SequenceStringElementsAreTimeOfDayWithSeconds this, OutputFormat format) {
+    if (format != OutputFormat.DAIKON) {
+      return format_unimplemented(format);
+    }
     return "All the elements of "
         + var().name()
         + " are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0";
@@ -103,7 +106,6 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
     for (int i = 0; i < a.length; i++) {
       String arrayElement = a[i];
       if (arrayElement != null) {
-        allElementsAreNull = false;
         Matcher matcher = IsTimeOfDayWithSeconds.PATTERN.matcher(arrayElement);
         if (!matcher.matches()) {
           return InvariantStatus.FALSIFIED;
@@ -116,7 +118,11 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
 
   @Override
   public InvariantStatus add_modified(@Interned String @Interned [] a, int count) {
-    return check_modified(a, count);
+    InvariantStatus status = check_modified(a, count);
+    if (status != InvariantStatus.FALSIFIED && hasNonNullElement(a)) {
+      allElementsAreNull = false;
+    }
+    return status;
   }
 
   @Override

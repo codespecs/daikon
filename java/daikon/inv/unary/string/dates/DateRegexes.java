@@ -22,11 +22,11 @@ public class DateRegexes {
   /** A regex for a 2-digit month. The regex is unanchored and ungrouped */
   public static final @Regex String MONTH_NUMBER = "(?:0[1-9]|1[012])";
 
-  /** A regex for a 2-digit month. The regex is unanchored and ungrouped */
-  public static final @Regex String DAY_OF_MONTH = "(?:[0-2][0-9]|3[01])";
+  /** A regex for a 2-digit day of the month. The regex is unanchored and ungrouped */
+  public static final @Regex String DAY_OF_MONTH = "(?:0[1-9]|[12][0-9]|3[01])";
 
   /** A regex for a 2-digit hour in 24-hour format. The regex is unanchored and ungrouped. */
-  public static final @Regex String HH = "(?:[0-9]|1[0-9]|2[0-3])";
+  public static final @Regex String HH = "(?:[01][0-9]|2[0-3])";
 
   /**
    * A regex for a 1-digit or 2-digit hour in 24-hour format. The regex is unanchored and ungrouped.
@@ -36,7 +36,7 @@ public class DateRegexes {
   /**
    * A regex for a 1-digit or 2-digit hour in 12-hour format. The regex is unanchored and ungrouped.
    */
-  public static final @Regex String H12 = "(?:0?[0-9]|1[0-2])";
+  public static final @Regex String H12 = "(?:0?[1-9]|1[0-2])";
 
   /** A regex for a 2-digit minutes. The regex is unanchored and ungrouped. */
   public static final @Regex String MINUTES = "[0-5][0-9]";

@@ -40,7 +40,7 @@ public class IsNumeric extends SingleString {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. True iff IsNumeric invariants should be considered. */
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   //
   // Required methods
@@ -87,14 +87,17 @@ public class IsNumeric extends SingleString {
   public String format_using(@GuardSatisfied IsNumeric this, OutputFormat format) {
     switch (format) {
       case CSHARPCONTRACT:
-        throw new Error("not implemented");
+      case ESCJAVA:
+        // ESC/Java cannot reason about string contents.
+        return format_unimplemented(format);
       case DAIKON:
         return var().name() + " is Numeric";
       case DBCJAVA:
-      case ESCJAVA:
       case JAVA:
       case JML:
-        return "daikon.inv.unary.string.IsNumeric.PATTERN.matcher(" + var().name() + ").matches()";
+        return "daikon.inv.unary.string.IsNumeric.PATTERN.matcher("
+            + var().name_using(format)
+            + ").matches()";
       case SIMPLIFY:
         return "(isNumeric " + var().simplify_name() + ")";
       default:

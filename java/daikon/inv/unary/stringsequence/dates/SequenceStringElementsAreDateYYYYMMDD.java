@@ -29,7 +29,7 @@ public class SequenceStringElementsAreDateYYYYMMDD extends SingleStringSequence 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. True iff SequenceStringElementsAreDateYYYYMMDD invariants should be considered. */
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * True if all the elements of the array are null. Without this property, the invariant would be
@@ -89,6 +89,9 @@ public class SequenceStringElementsAreDateYYYYMMDD extends SingleStringSequence 
   @Override
   public String format_using(
       @GuardSatisfied SequenceStringElementsAreDateYYYYMMDD this, OutputFormat format) {
+    if (format != OutputFormat.DAIKON) {
+      return format_unimplemented(format);
+    }
     return "All the elements of " + var().name() + " are dates. Format: YYYY-MM-DD";
   }
 
@@ -97,7 +100,6 @@ public class SequenceStringElementsAreDateYYYYMMDD extends SingleStringSequence 
     for (int i = 0; i < a.length; i++) {
       String arrayElement = a[i];
       if (arrayElement != null) {
-        allElementsAreNull = false;
         Matcher matcher = IsDateYYYYMMDD.PATTERN.matcher(arrayElement);
         // The invariant is falsified if one of the elements of the array is NOT an email
         if (!matcher.matches()) {
@@ -111,7 +113,11 @@ public class SequenceStringElementsAreDateYYYYMMDD extends SingleStringSequence 
 
   @Override
   public InvariantStatus add_modified(@Interned String @Interned [] a, int count) {
-    return check_modified(a, count);
+    InvariantStatus status = check_modified(a, count);
+    if (status != InvariantStatus.FALSIFIED && hasNonNullElement(a)) {
+      allElementsAreNull = false;
+    }
+    return status;
   }
 
   @Override
