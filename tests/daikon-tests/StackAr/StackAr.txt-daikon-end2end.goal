@@ -447,6 +447,7 @@ this.theArray.getClass().getName().length() == orig(this.theArray.getClass().get
 size(this.theArray[]) == orig(size(this.theArray[]))
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
 (orig(this.topOfStack) < size(this.theArray[])-1)  ==>  ((size(this.theArray[])-1 >> this.theArray.getClass().getName().length() == 0))
+(orig(this.topOfStack) < size(this.theArray[])-1)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) have LENGTH=22)
 (orig(this.topOfStack) < size(this.theArray[])-1)  ==>  (orig(this.theArray[0..this.topOfStack]) elements == orig(this))
 (orig(this.topOfStack) < size(this.theArray[])-1)  ==>  (orig(this.theArray[0..this.topOfStack]) elements are equal)
 (orig(this.topOfStack) < size(this.theArray[])-1)  ==>  (size(this.theArray[]) % orig(this.topOfStack) == 0)
@@ -600,6 +601,7 @@ this.theArray.getClass().getName() == java.lang.Object[].class
 this.theArray[] elements == null
 this.theArray[].getClass().getName() elements == null
 this.topOfStack == -1
+All the elements of orig(this.theArray[].getClass().getName()) have LENGTH=22
 orig(this.topOfStack) >= -1
 this.theArray.getClass().getName().length() == 18
 size(this.theArray[]) >= 1

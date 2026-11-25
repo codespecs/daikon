@@ -33,9 +33,17 @@ args[] == []
 args[].toString == []
 ===========================================================================
 agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
-s != null
 s.toString is printable
 ===========================================================================
 agora.AgoraTest.stringParameter1(java.lang.String):::EXIT
 s.toString == orig(s.toString)
+s.toString is printable
+===========================================================================
+agora.AgoraTest.stringParameter2(java.lang.String):::ENTER
+s.toString is Numeric
+s.toString is printable
+===========================================================================
+agora.AgoraTest.stringParameter2(java.lang.String):::EXIT
+s.toString == orig(s.toString)
+s.toString is Numeric
 s.toString is printable

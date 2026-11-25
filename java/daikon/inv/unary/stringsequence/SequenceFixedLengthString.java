@@ -190,6 +190,16 @@ public class SequenceFixedLengthString extends SingleStringSequence {
     return Objects.equals(elements_length, o.elements_length);
   }
 
+  /**
+   * Returns true, because {@link #merge} combines invariants whose lengths differ only in that some
+   * are unknown (null).
+   */
+  @Pure
+  @Override
+  public boolean mergeFormulasOk(@Prototype SequenceFixedLengthString this) {
+    return true;
+  }
+
   // This invariant does not use NI suppression.  NI suppression would create the invariant when its
   // suppressor is falsified, and the new invariant would see only the falsifying sample, not the
   // earlier samples whose element lengths might differ.  Instead, isObviousDynamically() omits this

@@ -1,5 +1,5 @@
 // Declarations for agora.AgoraTest
-// Declarations written 2023-10-04T13:57:20.552938193 by daikon.DynComp
+// Declarations written 2026-11-24T21:25:52.206864647 by daikon.DynComp
 
 decl-version 2.0
 var-comparability implicit
@@ -58,7 +58,7 @@ variable args[..].toString
   flags synthetic to_string
   comparability 4[6]
 
-ppt agora.AgoraTest.main(java.lang.String[]):::EXIT53
+ppt agora.AgoraTest.main(java.lang.String[]):::EXIT55
 ppt-type subexit
 variable args
   var-kind variable
@@ -124,7 +124,7 @@ variable lst.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+ppt agora.AgoraTest.emptySequence(java.util.List):::EXIT57
 ppt-type subexit
 variable this
   var-kind variable
@@ -182,7 +182,7 @@ variable s.toString
   flags synthetic to_string
   comparability 3
 
-ppt agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+ppt agora.AgoraTest.emptyString(java.lang.String):::EXIT59
 ppt-type subexit
 variable this
   var-kind variable
@@ -226,7 +226,7 @@ variable s.toString
   flags synthetic to_string
   comparability 3
 
-ppt agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+ppt agora.AgoraTest.stringParameter1(java.lang.String):::EXIT61
 ppt-type subexit
 variable this
   var-kind variable
@@ -270,7 +270,7 @@ variable s.toString
   flags synthetic to_string
   comparability 3
 
-ppt agora.AgoraTest.stringParameter2(java.lang.String):::EXIT61
+ppt agora.AgoraTest.stringParameter2(java.lang.String):::EXIT63
 ppt-type subexit
 variable this
   var-kind variable
@@ -314,7 +314,7 @@ variable s.toString
   flags synthetic to_string
   comparability 3
 
-ppt agora.AgoraTest.stringParameter3(java.lang.String):::EXIT63
+ppt agora.AgoraTest.stringParameter3(java.lang.String):::EXIT65
 ppt-type subexit
 variable this
   var-kind variable

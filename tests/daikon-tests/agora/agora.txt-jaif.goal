@@ -15,10 +15,10 @@ class AgoraTest : // 79/- obj/class samples
   method emptyString(Ljava/lang/String;)V : // 10 samples
     return:
     parameter #0 :  // s
-  method stringParameter1(Ljava/lang/String;)V : // 19 samples
+  method stringParameter1(Ljava/lang/String;)V : // 10 samples
     return:
     parameter #0 :  // s
-  method stringParameter2(Ljava/lang/String;)V : // 0 samples
+  method stringParameter2(Ljava/lang/String;)V : // 9 samples
     return:
     parameter #0 :  // s
   method stringParameter3(Ljava/lang/String;)V : // 0 samples
