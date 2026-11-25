@@ -880,12 +880,59 @@ public final class PrintInvariants {
    *     --ppt-omit-pattern} regular expressions
    */
   public static boolean is_ppt_selected(PptTopLevel ppt) {
-    String name = ppt.name();
+    if (ppt_regexp == null
+        && ppt_omit_regexp == null
+        && Daikon.ppt_regexp == null
+        && Daikon.ppt_omit_regexp == null) {
+      return true;
+    }
+    if (ppt_regexp != selectedPptNamesPptRegexp
+        || ppt_omit_regexp != selectedPptNamesPptOmitRegexp
+        || Daikon.ppt_regexp != selectedPptNamesDaikonPptRegexp
+        || Daikon.ppt_omit_regexp != selectedPptNamesDaikonPptOmitRegexp) {
+      selectedPptNames.clear();
+      selectedPptNamesPptRegexp = ppt_regexp;
+      selectedPptNamesPptOmitRegexp = ppt_omit_regexp;
+      selectedPptNamesDaikonPptRegexp = Daikon.ppt_regexp;
+      selectedPptNamesDaikonPptOmitRegexp = Daikon.ppt_omit_regexp;
+    }
+    return selectedPptNames.computeIfAbsent(ppt.name(), PrintInvariants::is_ppt_name_selected);
+  }
+
+  /**
+   * Returns true if the given program point name is selected by the {@code --ppt-select-pattern}
+   * and {@code --ppt-omit-pattern} regular expressions. See {@link #is_ppt_selected}.
+   *
+   * @param name a program point name, such as {@code C.m(int):::EXIT}
+   * @return true if {@code name} is selected by the regular expressions
+   */
+  private static boolean is_ppt_name_selected(String name) {
     return ((ppt_regexp == null) || ppt_regexp.matcher(name).find())
         && ((ppt_omit_regexp == null) || !ppt_omit_regexp.matcher(name).find())
         && ((Daikon.ppt_regexp == null) || Daikon.ppt_regexp.matcher(name).find())
         && ((Daikon.ppt_omit_regexp == null) || !Daikon.ppt_omit_regexp.matcher(name).find());
   }
+
+  /**
+   * A cache for {@link #is_ppt_selected}, which {@code ParentFilter} calls once for every invariant
+   * that a parent program point implies. It maps a program point name to true if the regular
+   * expressions select the name. It is valid only while the regular expressions are the ones in
+   * {@link #selectedPptNamesPptRegexp}, {@link #selectedPptNamesPptOmitRegexp}, {@link
+   * #selectedPptNamesDaikonPptRegexp}, and {@link #selectedPptNamesDaikonPptOmitRegexp}.
+   */
+  private static final Map<String, Boolean> selectedPptNames = new HashMap<>();
+
+  /** The value of {@link #ppt_regexp} for which {@link #selectedPptNames} is valid. */
+  private static @Nullable Pattern selectedPptNamesPptRegexp = null;
+
+  /** The value of {@link #ppt_omit_regexp} for which {@link #selectedPptNames} is valid. */
+  private static @Nullable Pattern selectedPptNamesPptOmitRegexp = null;
+
+  /** The value of {@link Daikon#ppt_regexp} for which {@link #selectedPptNames} is valid. */
+  private static @Nullable Pattern selectedPptNamesDaikonPptRegexp = null;
+
+  /** The value of {@link Daikon#ppt_omit_regexp} for which {@link #selectedPptNames} is valid. */
+  private static @Nullable Pattern selectedPptNamesDaikonPptOmitRegexp = null;
 
   /**
    * Print invariants for a single program point and its conditionals. Does no output if no samples
