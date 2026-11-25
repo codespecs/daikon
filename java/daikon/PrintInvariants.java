@@ -576,6 +576,11 @@ public final class PrintInvariants {
 
     // Iterate over the PptTopLevels in ppts
     for (PptTopLevel ppt : ppts_sorted) {
+      // Skip this ppt if the ppt regular expressions do not select it, as print_invariants_maybe
+      // does.
+      if (!is_ppt_selected(ppt)) {
+        continue;
+      }
       StringBuilder toPrint = new StringBuilder();
       toPrint.append(print_reasons_from_ppt(ppt, ppts));
 
