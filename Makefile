@@ -107,8 +107,13 @@ DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/test/dtracediff/Hanoi.dtrace.gz \
 	daikon/test/dtracediff/Hanoi-truncated.dtrace.gz
 
+# A number sign.  Use ${HASH} inside a function call such as $(shell ...),
+# where GNU Make before 4.3 treats # as starting a comment and GNU Make 4.3
+# and later passes \# through unchanged, making grep warn "stray \ before #".
+HASH := \#
+
 # the following is only used in the "make showvars" target
-WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|/.\#|.bak$$|uw/|pubs/' | ${SORT_DIRECTORY_ORDER})
+WWW_FILES := $(shell cd doc/www; find . -type f -print | grep -E -v '~$$|/\.${HASH}|.bak$$|uw/|pubs/' | ${SORT_DIRECTORY_ORDER})
 
 WWW_PARENT ?= /cse/web/research/plse
 WWW_DIR := ${WWW_PARENT}/daikon
