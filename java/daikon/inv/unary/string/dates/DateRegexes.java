@@ -1,8 +1,9 @@
 package daikon.inv.unary.string.dates;
 
+import java.time.YearMonth;
 import org.checkerframework.checker.regex.qual.Regex;
 
-/** Regular expressions used by date invariants. */
+/** Regular expressions, and related helper methods, used by date invariants. */
 public class DateRegexes {
 
   /** Do not instantiate. */
@@ -61,4 +62,20 @@ public class DateRegexes {
    * ungrouped.
    */
   public static final @Regex String AMPM = " ?([AaPp][Mm])";
+
+  /**
+   * Returns true if the given year, month, and day form a date that exists in the calendar. For
+   * example, returns false for February 30, and for February 29 in a non-leap year. Each argument
+   * must consist of decimal digits; the month must be between 1 and 12 and the day between 1 and
+   * 31, as guaranteed by {@link #MONTH_NUMBER} and {@link #DAY_OF_MONTH}.
+   *
+   * @param year the year, as a string of digits
+   * @param month the month number, as a string of digits
+   * @param day the day of the month, as a string of digits
+   * @return true if the date exists in the calendar
+   */
+  public static boolean isCalendarDate(String year, String month, String day) {
+    return YearMonth.of(Integer.parseInt(year), Integer.parseInt(month))
+        .isValidDay(Integer.parseInt(day));
+  }
 }

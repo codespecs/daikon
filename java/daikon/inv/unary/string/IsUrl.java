@@ -29,8 +29,9 @@ public class IsUrl extends SingleString {
   public static Pattern PATTERN =
       Pattern.compile(
           "^"
-              // Protocol of the URL: 'http', 'https', or 'ftp', followed by '://'
-              + "(?:(?:https?|ftp)://)"
+              // Protocol of the URL: 'http', 'https', or 'ftp', followed by '://'.
+              // Scheme names are case-insensitive.
+              + "(?:(?i:https?|ftp)://)"
               // Optional username and password, for URLs containing "...username:password@..."
               + "(?:\\S+(?::\\S*)?@)?"
 
@@ -51,13 +52,15 @@ public class IsUrl extends SingleString {
                   // IP address
                   + "?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))"
                   + "|"
-                  // Domain name.  The first label is written as runs separated by single hyphens,
-                  // without nested quantifiers, to avoid exponential backtracking.
-                  + "(?:[\\w\\x{00a1}-\\x{ffff}0-9]+(?:-[\\w\\x{00a1}-\\x{ffff}0-9]+)*)(?:\\.(?:[\\w\\x{00a1}-\\x{ffff}0-9]+-)*[\\w\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-zA-Z\\x{00a1}-\\x{ffff}]{2,}))"
+                  // Domain name.  Each label is written as runs of non-hyphen characters
+                  // separated by one or more hyphens (as in "xn--"), so a label neither starts nor
+                  // ends with a hyphen.  Because the runs and the separators use disjoint
+                  // characters, there is no ambiguity and no exponential backtracking.
+                  + "(?:[\\w\\x{00a1}-\\x{ffff}]+(?:-+[\\w\\x{00a1}-\\x{ffff}]+)*)(?:\\.[\\w\\x{00a1}-\\x{ffff}]+(?:-+[\\w\\x{00a1}-\\x{ffff}]+)*)*(?:\\.(?:[a-zA-Z\\x{00a1}-\\x{ffff}]{2,}))"
                   // end of IP address OR domain name
                   + ")")
               // Optional port number
-              + "(?::\\d{2,5})?"
+              + "(?::\\d{1,5})?"
               // Optional path, query, or fragment
               + "(?:[/?#][^\\s]*)?"
               + "$");

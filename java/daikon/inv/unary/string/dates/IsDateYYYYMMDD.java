@@ -7,7 +7,6 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.unary.string.SingleString;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
@@ -91,11 +90,28 @@ public class IsDateYYYYMMDD extends SingleString {
     return var().name() + " is a Date. Format: YYYY-MM-DD";
   }
 
+  /**
+   * Returns true if the given string is a date in the format matched by {@link #PATTERN}, and the
+   * date exists in the calendar (for example, it is not February 30).
+   *
+   * @param v a string
+   * @return true if {@code v} is a valid date in this invariant's format
+   */
+  public static boolean isValid(String v) {
+    if (!PATTERN.matcher(v).matches()) {
+      return false;
+    }
+    // The value is either YYYYMMDD (8 characters) or YYYY?MM?DD (10 characters).
+    if (v.length() == 8) {
+      return isCalendarDate(v.substring(0, 4), v.substring(4, 6), v.substring(6, 8));
+    } else {
+      return isCalendarDate(v.substring(0, 4), v.substring(5, 7), v.substring(8, 10));
+    }
+  }
+
   @Override
   public InvariantStatus check_modified(String v, int count) {
-    Matcher matcher = PATTERN.matcher(v);
-
-    if (matcher.matches()) {
+    if (isValid(v)) {
       return InvariantStatus.NO_CHANGE;
     }
     return InvariantStatus.FALSIFIED;

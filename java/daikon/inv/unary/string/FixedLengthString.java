@@ -6,6 +6,7 @@ import daikon.inv.*;
 import daikon.inv.unary.string.dates.IsDateDDMMYYYY;
 import daikon.inv.unary.string.dates.IsDateMMDDYYYY;
 import java.util.List;
+import java.util.Objects;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -115,10 +116,17 @@ public class FixedLengthString extends SingleString {
     assert other instanceof FixedLengthString;
 
     FixedLengthString o = (FixedLengthString) other;
-    if (o.length != null && !o.length.equals(length)) {
-      return false;
-    }
+    // An unknown length (null) is the same formula only as another unknown length.
+    return Objects.equals(length, o.length);
+  }
 
+  /**
+   * Returns true, because {@link #merge} combines invariants whose lengths differ only in that some
+   * are unknown (null).
+   */
+  @Pure
+  @Override
+  public boolean mergeFormulasOk(@Prototype FixedLengthString this) {
     return true;
   }
 

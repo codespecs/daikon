@@ -9,7 +9,6 @@ import daikon.inv.ValueSet.ValueSetStringArray;
 import daikon.inv.unary.string.dates.IsDateYYYYMMDD;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
 import java.util.List;
-import java.util.regex.Matcher;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -100,9 +99,8 @@ public class SequenceStringElementsAreDateYYYYMMDD extends SingleStringSequence 
     for (int i = 0; i < a.length; i++) {
       String arrayElement = a[i];
       if (arrayElement != null) {
-        Matcher matcher = IsDateYYYYMMDD.PATTERN.matcher(arrayElement);
-        // The invariant is falsified if one of the elements of the array is NOT an email
-        if (!matcher.matches()) {
+        // The invariant is falsified if one of the elements of the array is NOT a date
+        if (!IsDateYYYYMMDD.isValid(arrayElement)) {
           return InvariantStatus.FALSIFIED;
         }
       }
