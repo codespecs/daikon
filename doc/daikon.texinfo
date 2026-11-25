@@ -6181,6 +6181,12 @@ for debugging.
 @item --ppt-select-pattern
 Only outputs program points that match the specified regular expression
 
+@item --ppt-omit-pattern
+Does not output program points that match the specified regular expression.
+To print the same program points that Daikon printed when it created the
+invariant file, supply the same @option{--ppt-select-pattern} and
+@option{--ppt-omit-pattern} arguments that Daikon was given.
+
 @item --config @var{filename}
 Load the configuration settings specified in the given file.
 @xref{Configuration options}, for details.

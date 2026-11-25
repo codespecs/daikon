@@ -991,6 +991,9 @@ public final class Daikon {
     // trace files, so an entry and its exit might be in different files.
     FileIO.call_stack.clear();
     FileIO.call_hashmap.clear();
+    // The count of omitted declarations is reported at the end of each invocation.
+    FileIO.omitted_declarations = 0;
+    FileIO.ppt_to_value_reps.clear();
 
     proto_invs.clear();
   }
