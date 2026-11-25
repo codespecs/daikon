@@ -37,13 +37,13 @@ public class ParentFilter extends InvariantFilter {
   }
 
   /**
-   * Returns true if the given invariant should be discarded because a matching invariant appears
-   * at a printed parent (or at a printed ancestor reached through unprinted parents).
+   * Returns true if the given invariant should be discarded because a matching invariant appears at
+   * a printed parent (or at a printed ancestor reached through unprinted parents).
    *
-   * <p>The program point hierarchy can contain cycles (via {@code USER} relations), so this
-   * method records each invariant that it examines. When it reaches an invariant a second time, it
-   * returns false for that invariant. Doing so does not change the result: the call that first
-   * reached the invariant has already examined, or will examine, all of its parents.
+   * <p>The program point hierarchy can contain cycles (via {@code USER} relations), so this method
+   * records each invariant that it examines. When it reaches an invariant a second time, it returns
+   * false for that invariant. Doing so does not change the result: the call that first reached the
+   * invariant has already examined, or will examine, all of its parents.
    *
    * @param inv an invariant
    * @param visited the invariants that have already been examined; side-effected by this method
