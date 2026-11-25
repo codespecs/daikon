@@ -31,7 +31,7 @@ Further documentation can be found in:
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
 * `daikon.diff.Diff` ignores obvious invariants that Daikon does not print by
-   default:  invariants in which a variable appears more than once, such as
+   default:  reflexive invariants such as
    `x == x`, and invariants that are obvious from the declarations alone.
 * New tool `daikon.tools.MergeComparability` merges the comparability
   information from multiple runs of DynComp.
