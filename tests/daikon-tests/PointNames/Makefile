@@ -14,14 +14,6 @@ include ../../Makefile.common
 # program points by their declared types, as Daikon does.
 txt-diff: inv-checker-diff txt-simple-diff txt-invdiff-diff
 
-# The common %.diff rule compares ${PROJECT_FILE}.txt-simple to its goal file every time.
-txt-simple-diff: ${PROJECT_FILE}.txt-simple.diff;
-${PROJECT_FILE}.txt-simple: ${DECLS_FILES} ${DTRACE_FILES} ${DAIKON_SIMPLE_CLASS}
-	-rm -f $@-failed
-	($(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.DaikonSimple \
-	  --config_option daikon.Daikon.quiet=true \
-	  $(DECLS_FILES) $(DTRACE_FILES) > $@) || (mv $@ $@-failed && false)
-
 # By default, daikon.diff.Diff compares only entries and combined exits, and
 # none of these program points is either.  With -p, it compares every program
 # point, and --ignore_exitNN ignores only numbered exits, which these program
