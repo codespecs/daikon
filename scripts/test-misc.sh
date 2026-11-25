@@ -42,6 +42,7 @@ make compile daikon.jar
 
 # Scripts
 make -C scripts kmeans
+make -C tests/script-tests/dtrace-diff
 make -C tests/script-tests/runcluster
 
 # Code style & quality

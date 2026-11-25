@@ -738,9 +738,11 @@ public final class PrintInvariants {
   // it precedes them in the PptMap sort order.
   //
   // When there is only one EXITnn point, only the combined exit point is
-  // printed.  Probably a better solution would be to not create the combined
-  // exit point at all when there is only a single exit.  It is done here
-  // instead so as not to disturb the program point hierarchy.
+  // printed, unless the combined exit point does not match the ppt regular
+  // expression (--ppt-select-pattern).  Probably a better solution would be
+  // to not create the combined exit point at all when there is only a single
+  // exit.  It is done here instead so as not to disturb the program point
+  // hierarchy.
 
   public static void print_invariants(PptMap all_ppts) {
 
@@ -796,9 +798,11 @@ public final class PrintInvariants {
       // the EXITnn point will be empty)  This is accomplished by skipping this
       // point if it is an EXITnn point and the previous point was a combined
       // exit point and the next one is not an EXITnn point.  But don't skip
-      // any conditional ppts attached to the skipped ppt.
+      // any conditional ppts attached to the skipped ppt.  And don't skip
+      // this point if the combined exit point does not match the ppt regular
+      // expression, because then the combined exit point is not printed.
       if (enable_exit_swap && (i > 0) && ppt.ppt_name.isExitPoint()) {
-        if (ppts[i - 1].ppt_name.isCombinedExitPoint()) {
+        if (ppts[i - 1].ppt_name.isCombinedExitPoint() && matches_ppt_regexp(ppts[i - 1])) {
           if (((i + 1) >= ppts.length) || !ppts[i + 1].ppt_name.isExitPoint()) {
             //             if (Daikon.dkconfig_output_conditionals
             //                 && Daikon.output_format == OutputFormat.DAIKON) {
@@ -836,6 +840,18 @@ public final class PrintInvariants {
   }
 
   /**
+   * Returns true if the given ppt matches the {@code --ppt-select-pattern} regular expression, or
+   * if no such regular expression was given. PrintInvariants prints only the program points that
+   * match it.
+   *
+   * @param ppt a program point
+   * @return true if the given ppt matches the {@code --ppt-select-pattern} regular expression
+   */
+  public static boolean matches_ppt_regexp(PptTopLevel ppt) {
+    return (ppt_regexp == null) || ppt_regexp.matcher(ppt.name()).find();
+  }
+
+  /**
    * Print invariants for a single program point and its conditionals. Does no output if no samples
    * or no views.
    */
@@ -844,7 +860,7 @@ public final class PrintInvariants {
     debugPrint.fine("Considering printing ppt " + ppt.name() + ", samples = " + ppt.num_samples());
 
     // Skip this ppt if it doesn't match ppt regular expression
-    if ((ppt_regexp != null) && !ppt_regexp.matcher(ppt.name()).find()) {
+    if (!matches_ppt_regexp(ppt)) {
       return;
     }
 
