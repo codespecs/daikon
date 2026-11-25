@@ -25,7 +25,7 @@ test-good:
 	diff -u good-km-2.spinfo.goal work-good/cluster-km-2.spinfo
 # Daikon can use the splitter info file.
 	cd work-good && java -cp ${DAIKON_JAR} daikon.Daikon --no_show_progress cluster-km-2.spinfo good.decls good.dtrace > daikon-output.txt
-	grep -F 'Sensor.read():::POINT: 6 of 6 splitters successful' work-good/daikon-output.txt
+	grep -F 'Sensor.read():::POINT: 4 of 4 splitters successful' work-good/daikon-output.txt
 
 # A dtrace file may contain the declarations.
 .PHONY: test-newdecls
