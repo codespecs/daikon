@@ -7,7 +7,6 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.unary.string.SingleString;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
@@ -99,11 +98,24 @@ public class IsTimestampYYYYMMHHThhmmssmm extends SingleString {
         + " is Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Milliseconds are optional)";
   }
 
+  /**
+   * Returns true if the given string is a timestamp in the format matched by {@link #PATTERN}, and
+   * its date exists in the calendar (for example, it is not February 30).
+   *
+   * @param v a string
+   * @return true if {@code v} is a valid timestamp in this invariant's format
+   */
+  public static boolean isValid(String v) {
+    if (!PATTERN.matcher(v).matches()) {
+      return false;
+    }
+    // The value starts with YYYY-MM-DD.
+    return isCalendarDate(v.substring(0, 4), v.substring(5, 7), v.substring(8, 10));
+  }
+
   @Override
   public InvariantStatus check_modified(String v, int count) {
-    Matcher matcher = PATTERN.matcher(v);
-
-    if (matcher.matches()) {
+    if (isValid(v)) {
       return InvariantStatus.NO_CHANGE;
     }
     return InvariantStatus.FALSIFIED;

@@ -9,7 +9,6 @@ import daikon.inv.ValueSet.ValueSetStringArray;
 import daikon.inv.unary.string.dates.IsTimestampYYYYMMHHThhmmssmm;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
 import java.util.List;
-import java.util.regex.Matcher;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -106,8 +105,7 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
     for (int i = 0; i < a.length; i++) {
       String arrayElement = a[i];
       if (arrayElement != null) {
-        Matcher matcher = IsTimestampYYYYMMHHThhmmssmm.PATTERN.matcher(arrayElement);
-        if (!matcher.matches()) {
+        if (!IsTimestampYYYYMMHHThhmmssmm.isValid(arrayElement)) {
           return InvariantStatus.FALSIFIED;
         }
       }
