@@ -41,9 +41,11 @@ public class ParentFilter extends InvariantFilter {
    * a printed parent (or at a printed ancestor reached through unprinted parents).
    *
    * <p>The program point hierarchy can contain cycles (via {@code USER} relations), so this method
-   * records each invariant that it examines. When it reaches an invariant a second time, it returns
-   * false for that invariant. Doing so does not change the result: the call that first reached the
-   * invariant has already examined, or will examine, all of its parents.
+   * records each invariant that it examines. A matching invariant that has already been examined is
+   * ignored, whether or not its program point is printed. Doing so does not lose any discards: the
+   * call that first reached the invariant has already examined, or will examine, all of its
+   * parents. It also prevents a cycle from leading back to the invariant being filtered and
+   * treating that invariant as justification for discarding itself.
    *
    * @param inv an invariant
    * @param visited the invariants that have already been examined; side-effected by this method
@@ -86,6 +88,13 @@ public class ParentFilter extends InvariantFilter {
 
       Invariant pinv = findParentInvariant(inv, rel);
       if (pinv == null) {
+        continue;
+      }
+
+      // An invariant that has already been examined cannot justify discarding this one.  In
+      // particular, a cycle (via USER relations) can lead back to the invariant being filtered;
+      // that invariant does not imply itself.
+      if (visited.contains(pinv)) {
         continue;
       }
 
