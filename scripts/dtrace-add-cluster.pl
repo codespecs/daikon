@@ -7,7 +7,10 @@
 #    In particular, each file contains information relating invocations at a
 #    particular program point to their cluster number, as produced by a
 #    clustering tool.
-#  * data trace files (possibly compressed with gzip).
+#  * data trace files (possibly compressed with gzip).  Every sample must
+#    have a consistent invocation nonce; daikon.tools.DtraceNonceFixer
+#    produces such a file.  These must be the same data trace files that
+#    were given to extract_vars.pl.
 # New (uncompressed) data trace files are written with filenames
 # BASENAME_runcluster_temp.dtrace.
 
@@ -34,22 +37,22 @@ sub usage() {
     ;
 }				# usage
 
-my $SCRIPTDIR = dirname (__FILE__);
-
 # An invocation nonce is globally unique.
 # A per-ppt invocation order number runs from 1 (or is it 0?) to the total
 #   number of times that particular ppt was encountered.
 
-# PPTNAME -> ARRAY[CLUSTER_NUMBER]
-# The invocation nonce is the index into the array.
+# PPTNAME -> HASH[INVOCATION_NONCE -> CLUSTER_NUMBER]
+# A hash, not an array, because the nonces of all the trace files are
+# distinct, so the nonces of one program point can be large and sparse.
 my %pptname_to_cluster = ();
-
-# Used to keep track of an invocation nonce for ppts that don't have them.
-my %pptname_to_nonces = ();
 
 # The highest cluster number.  This is needed when we are using xmeans so
 # that we can know how many clusters to split the dtrace file into.
 my $maxcluster = 0;
+
+# The names of the program points that have at least one clustered sample.
+# They are written to file runcluster_temp.clustered_ppts, one per line.
+my %clustered_ppts = ();
 
 my $algorithm = "xm";
 my $logging = 0;
@@ -102,16 +105,6 @@ if ($algorithm eq 'hierarchical' || $algorithm eq 'km') {
 
 foreach my $dtrace_file (@dtrace_files) {
 
-  # need to run the DtraceNonceDoctor in order in order for
-  # xmeans and possibly other clustering methods to work
-  system_or_die ("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer $dtrace_file");
-  if (-e ("$dtrace_file" . "_all_fixed")) {
-    system_or_die ("mv $dtrace_file" . "_all_fixed $dtrace_file");
-  }
-  if (-e "dtrace_file" . "_all_fixed.gz") {
-    system_or_die ("mv $dtrace_file" . "_all_fixed.gz $dtrace_file");
-  }
-
 
  if ($dtrace_file =~ /\.gz$/) {
     open (DTRACE_IN, "zcat $dtrace_file |") || &dieusage("couldn't open dtrace file $dtrace_file with zcat");
@@ -129,7 +122,10 @@ foreach my $dtrace_file (@dtrace_files) {
   while (<DTRACE_IN>) {
     my $line = $_;
 #    print ("$line");
-    if ($line =~ /:::/) {
+    if ($line =~ /^ppt /) {
+      # A program point declaration; the decls file provides the declarations.
+      &skip_till_next(*DTRACE_IN);
+    } elsif ($line =~ /:::/) {
       my $pptname = $line;
       chomp ($pptname);
       &insert_cluster_info($pptname);
@@ -137,6 +133,12 @@ foreach my $dtrace_file (@dtrace_files) {
   }
 }
 
+
+open (PPTS, ">runcluster_temp.clustered_ppts") || die "couldn't open file to output clustered ppts";
+foreach my $ppt (sort keys %clustered_ppts) {
+  print PPTS "$ppt\n";
+}
+close(PPTS);
 
 if ($algorithm eq 'xm') {
   open (MAX, ">runcluster_temp.maxcluster") || die "couldn't open file to output max cluster";
@@ -162,15 +164,11 @@ sub insert_cluster_info ( $ ) {
   my $line = <DTRACE_IN>;
 #  print "$line\n";
   if ($line !~ /this.invocation.nonce/) {
-    die "No nonces present, and this program adds them incorrectly.";
-    $pptname_to_nonces{$pptname}++;
-    $invoc = $pptname_to_nonces{$pptname};
-  } else {
-    $invoc = <DTRACE_IN>;
-    chomp($invoc);
-    $line = <DTRACE_IN>;
-
+    die "No invocation nonce for a sample at $pptname; run daikon.tools.DtraceNonceFixer first";
   }
+  $invoc = <DTRACE_IN>;
+  chomp($invoc);
+  $line = <DTRACE_IN>;
 
   # Find out if this program point was clustered.  If it was, retrieve the
   # cluster information.  Otherwise skip it.
@@ -183,13 +181,14 @@ sub insert_cluster_info ( $ ) {
   $pptstem =~ s/:::(ENTER|EXIT).*//;
   $pptstem = &cleanup_pptname($pptstem);
 
-  my $cluster_number = $pptname_to_cluster{$pptstem}[$invoc];
+  my $cluster_number = $pptname_to_cluster{$pptstem}{$invoc};
   if ((! defined($cluster_number)) || ($cluster_number == 0)) {
       chomp ($line);
       if (! ($line eq "")) {
 	  &skip_till_next(*DTRACE_IN);
       }
   } else {
+    $clustered_ppts{$pptname} = 1;
     my $output = "$pptname\nthis_invocation_nonce\n$invoc\n";
     $output = $output."cluster\n$cluster_number\n1\n";
     print DTRACE_OUT $output;
@@ -207,10 +206,11 @@ sub insert_cluster_info ( $ ) {
 # read an opened file till you reach a blank line, then return
 sub skip_till_next(*) {
      local *FHANDLE = $_[0];
-    my $line;
-    do {
-	$line = <FHANDLE>;
-    } until ($line =~ /^\s*$/);
+    while (my $line = <FHANDLE>) {
+	if ($line =~ /^\s*$/) {
+	    return;
+	}
+    }
     return;
 }				# skip_till_next
 
@@ -230,22 +230,21 @@ sub copy_till_next(**) {
 
 ########################## read_cluster_info_xxx ##########
 # the return is an associative array. The keys are the program point stems
-# (i.e., without :::ENTER or :::EXIT). The value is an array for which the ith
-# index contains the cluster number of the ith invocation of the program point.
+# (i.e., without :::ENTER or :::EXIT). The value is a reference to a hash that
+# maps each invocation nonce of the program point to its cluster number.
 # Therefore if QueueAr.isEmpty()Z:::ENTER and QueueAr.isEmpty()Z:::EXIT44
 # invocation nonce 1000 belongs to cluster 3, then the returned associative
-# array should have a key "QueueAr.isEmpty()Z" whose value is an array. The
-# 1000th element of that array should be 3
+# array should have a key "QueueAr.isEmpty()Z" whose value maps 1000 to 3.
 ##########################################################
 
 sub read_cluster_info_seq ( @ ) {
 # @ARGV[1....] are the files with the cluster information.  The file
 # format is just a list of invocation nonces (one per line), grouped
 # by cluster. There is a blank line separating clusters.
-  my @temparray = ();		#holds the cluster information
   my $cluster = 0;
   my @filenames = @_;		# cluster files
   foreach my $filename (@filenames) {
+    my %nonce_to_cluster = ();	# the cluster information for this file
     open (FILE, $filename) || die "can't open $filename to read cluster info";
     $cluster = 1;
     my $blank_line = 0;
@@ -263,17 +262,17 @@ sub read_cluster_info_seq ( @ ) {
       } else {
 	$blank_line = 0;
 	chomp($line);
-	$temparray[$line] = $cluster;
+	$nonce_to_cluster{$line} = $cluster;
       }
     }
     $filename =~ s/\.ENTER.*//;
     $filename =~ s/\.EXIT.*//;
-    $filename =~ s/.cluster//;
-    $filename =~ s/.samp//;
-    $filename =~ s/.runcluster_temp.*//;
+    $filename =~ s/\.cluster$//;
+    $filename =~ s/\.samp$//;
+    $filename =~ s/\.runcluster_temp.*//;
 
     print "filename=$filename\n";
-    $pptname_to_cluster{$filename} = [@temparray];
+    $pptname_to_cluster{$filename} = \%nonce_to_cluster;
   }
   return %pptname_to_cluster;
 }
@@ -291,11 +290,11 @@ sub read_cluster_info_xm(@) {
 # sequence numbers of the data points it reads, not the invocation
 # numbers.
 
-  my @translation_array = ();	# holds the translation information
-  my @nonce_to_cluster = ();
   my $cluster = 0;
   my @filenames = @_;		# cluster files
   foreach my $filename (@filenames) {
+    my @translation_array = ();	# the translation information for this file
+    my %nonce_to_cluster = ();	# the cluster information for this file
     my $trans_filename = $filename;
     $trans_filename =~ s/\.cluster/.trans/;
     open (TRANS, "$trans_filename")
@@ -329,7 +328,7 @@ sub read_cluster_info_xm(@) {
 	$blank_line = 0;
 	chomp($line);
 	my $nonce = $translation_array[$line];
-	$nonce_to_cluster[$nonce] = $cluster;
+	$nonce_to_cluster{$nonce} = $cluster;
 	# print "$nonce -> $cluster\n";
 	if ($cluster > $maxcluster) {
 	  $maxcluster = $cluster;
@@ -340,11 +339,11 @@ sub read_cluster_info_xm(@) {
     }
     $filename =~ s/\.ENTER.*//;
     $filename =~ s/\.EXIT.*//;
-    $filename =~ s/.cluster//;
-    $filename =~ s/.samp//;
-    $filename =~ s/.runcluster_temp.*//;
+    $filename =~ s/\.cluster$//;
+    $filename =~ s/\.samp$//;
+    $filename =~ s/\.runcluster_temp.*//;
 
-    $pptname_to_cluster{$filename} = [@nonce_to_cluster];
+    $pptname_to_cluster{$filename} = \%nonce_to_cluster;
     if ($logging) {
       &log ("$filename  ==> $cluster clusters");
     }
