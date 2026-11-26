@@ -1,0 +1,20 @@
+package org.checkerframework.checker.nullness.qual:
+annotation @Nullable:
+annotation @NonNull:
+
+Warning: skipping f(java.lang.String):::EXIT, whose name does not have the form Class.method(args)
+package :
+class D : // -/6 obj/class samples
+  field s :  // java.lang.String
+  method sm(Ljava/lang/String;)Ljava/lang/String; : // 3 samples
+    return: 
+    parameter #0 : @Nullable // t
+
+
+package :
+class E : // -/- obj/class samples
+  method sm(Ljava/lang/String;)Ljava/lang/String; : // 3 samples
+    return: @Nullable
+    parameter #0 :  // t
+
+
