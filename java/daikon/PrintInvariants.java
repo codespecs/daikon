@@ -576,6 +576,11 @@ public final class PrintInvariants {
 
     // Iterate over the PptTopLevels in ppts
     for (PptTopLevel ppt : ppts_sorted) {
+      // Skip this ppt if the ppt regular expressions do not select it, as print_invariants_maybe
+      // does.
+      if (!is_ppt_selected(ppt)) {
+        continue;
+      }
       StringBuilder toPrint = new StringBuilder();
       toPrint.append(print_reasons_from_ppt(ppt, ppts));
 
@@ -934,15 +939,16 @@ public final class PrintInvariants {
     if (!dkconfig_print_implementer_entry_ppts && ppt.is_enter()) {
       if (ppt.parent_relations != null) {
         for (ParentRelation parent : ppt.parent_relations) {
-          if (parent != null) {
+          if (parent != null && parent.rel_type == PptRelationType.PARENT) {
+            // Only PARENT relations are checked here.  A disabled USER relation may name a
+            // parent that is not in all_ppts.
             // TODO:  This assertion is necessary because the KeyFor
             // Checker does not track @KeyFor except for Java Maps; it
             // should support KeyFor for PptMap which is not a subtype of
             // Map.  Alternately, PptMap could be made a subtype of Map.
             assert all_ppts.get(parent.parent_ppt_name) != null
                 : "@AssumeAssertion(nullness)"; // parent.parent_ppt_name is a key in all_ppts
-            if (parent.rel_type == PptRelationType.PARENT
-                && all_ppts.get(parent.parent_ppt_name).is_enter()) {
+            if (all_ppts.get(parent.parent_ppt_name).is_enter()) {
               return;
             }
           }
