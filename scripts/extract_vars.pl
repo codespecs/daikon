@@ -135,8 +135,7 @@ foreach my $dtrace_file (@dtrace_files) {
   $current_dtrace_file = $dtrace_file;
 
   # print "opened $dtrace_file\n";
-  while (<DTRACE>) {
-    my $line = $_;
+  while (defined(my $line = &read_dtrace_line())) {
     if ($line =~ /^ppt\s/) {
       # A declaration in the dtrace file, not an execution.
       &skip_till_next(*DTRACE);
@@ -275,14 +274,14 @@ sub read_execution ( $ ) {
 
   my ($varname, $value);
 
-  $varname = <DTRACE>;
-  if ($varname !~ /this.invocation.nonce/) {
+  $varname = &read_dtrace_line();
+  if (!defined($varname) || $varname !~ /this.invocation.nonce/) {
     $pptname_to_nonces{$pptname}++;
     push @vararray, $pptname_to_nonces{$pptname};
   } else {
     $value = &read_record_line($pptname, "value of this_invocation_nonce");
     push @vararray, $value;
-    $varname = <DTRACE>;
+    $varname = &read_dtrace_line();
   }
 
   # get the values of the variables at this ppt that we want to cluster
@@ -333,7 +332,7 @@ sub read_execution ( $ ) {
       push @vararray, $value;
     }
 
-    $varname = <DTRACE>;
+    $varname = &read_dtrace_line();
   }
   if ($varindex < scalar(@tracevars)) {
     &die_trace_mismatch($pptname, "variable $tracevars[$varindex]",
@@ -342,12 +341,23 @@ sub read_execution ( $ ) {
   return @vararray;
 }
 
+# Read and return the next line of the dtrace file, or undef at the end of
+# the file.  Like Daikon, accept CRLF line terminators:  a returned line ends
+# with "\n" alone.
+sub read_dtrace_line () {
+  my $line = <DTRACE>;
+  if (defined($line)) {
+    $line =~ s/\r\n\z/\n/;
+  }
+  return $line;
+}
+
 # Read and return the next line of the current record of the dtrace file,
 # without its line terminator.  Dies if the record or the file has ended.
 # Arguments are the program point name and a description of the expected line.
 sub read_record_line ( $$ ) {
   my ($pptname, $expected) = @_;
-  my $line = <DTRACE>;
+  my $line = &read_dtrace_line();
   if (!defined($line)) {
     &die_trace_mismatch($pptname, $expected, "end of file");
   }
@@ -536,6 +546,9 @@ sub read_decls_file ( $ ) {
     if ($pptname !~ /:::ENTER$/ && $pptname !~ /:::(OBJECT|CLASS)$/) {
       my $pptfilename = &cleanup_pptname($pptname);
       $pptfilename = $pptfilename.".runcluster_temp";
+      # The last declaration of a program point is used.  Discard the output
+      # for any earlier declaration, which the last one might not replace.
+      &discard_output($pptname, $pptfilename);
       if ($algorithm eq 'km' || $algorithm eq 'hierarchical') {
         &open_file_for_output_seq($pptname, $pptfilename);
       } elsif ($algorithm eq 'xm') {
@@ -548,6 +561,22 @@ sub read_decls_file ( $ ) {
   # For a compressed file, closing the pipe reports a zcat failure.
   close(DECL) || die("couldn't read decls file $decls_file\n");
 }				# read_decls_file
+
+# Close and remove the output files, if any, for the given program point.
+# Arguments are the program point name and its output file name.
+sub discard_output ( $$ ) {
+  my ($pptname, $pptfilename) = @_;
+  if (exists $pptname_to_fhandles{$pptname}) {
+    close($pptname_to_fhandles{$pptname});
+    delete $pptname_to_fhandles{$pptname};
+    unlink($pptfilename);
+  }
+  if (exists $pptname_to_nonce_translation{$pptname}) {
+    close($pptname_to_nonce_translation{$pptname});
+    delete $pptname_to_nonce_translation{$pptname};
+    unlink("$pptfilename.trans");
+  }
+}				# discard_output
 
 # Record a declared variable, if it is to be clustered.
 # Returns 1 if the variable is to be clustered, otherwise 0.
@@ -578,7 +607,10 @@ sub read_decl_ppt ( $ ) {
   my $rep_type = "";		# the rep-type of $varname
   my $is_constant = 0;		# whether $varname has a constant value
   # A ppt may be declared more than once, such as in several decls files.
+  # The last declaration is used.
   $pptname_to_tracevars{$pptname} = [];
+  delete $pptname_to_varnames{$pptname};
+  delete $pptname_to_objectvars{$pptname};
   # Record $varname, which has been completely read.
   my $finish_var = sub {
     # A constant does not appear in the dtrace file.

@@ -269,7 +269,7 @@ sub read_cluster_info_seq ( @ ) {
     $filename =~ s/\.EXIT.*//;
     $filename =~ s/\.cluster$//;
     $filename =~ s/\.samp$//;
-    $filename =~ s/\.runcluster_temp.*//;
+    $filename =~ s/\.runcluster_temp$//;
 
     print "filename=$filename\n";
     $pptname_to_cluster{$filename} = \%nonce_to_cluster;
@@ -341,7 +341,7 @@ sub read_cluster_info_xm(@) {
     $filename =~ s/\.EXIT.*//;
     $filename =~ s/\.cluster$//;
     $filename =~ s/\.samp$//;
-    $filename =~ s/\.runcluster_temp.*//;
+    $filename =~ s/\.runcluster_temp$//;
 
     $pptname_to_cluster{$filename} = \%nonce_to_cluster;
     if ($logging) {
