@@ -42,12 +42,22 @@ public class IsEmail extends SingleString {
               // domain
               + ("("
                   // domain names with alphanumeric characters and hyphens (separated by periods)
-                  + "?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?"
+                  + "?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
                   // or
                   + "|"
-                  // IP addresses enclosed in square brackets, allowing for IPv4 and IPv6 addresses
-                  // with an optional port number.
-                  + "[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\]"
+                  // address literal enclosed in square brackets (RFC 5321 section 4.1.3)
+                  + ("\\[(?:"
+                      // IPv4 address
+                      + "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+                      // or
+                      + "|"
+                      // IPv6 address, tagged with "IPv6:"
+                      + ("IPv6:" + IsUrl.IPV6)
+                      // or
+                      + "|"
+                      // general address literal: a tag other than "IPv6", a colon, and content
+                      + "(?!IPv6:)[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+"
+                      + ")\\]")
                   + ")")
               + "$",
           // Domain names are case-insensitive, and local parts commonly contain uppercase letters.

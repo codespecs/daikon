@@ -43,8 +43,11 @@ public class IsUrl extends SingleString {
     return "(?:(?:" + H16 + ":){0," + n + "}" + H16 + ")?";
   }
 
-  /** Regex for an IPv6 address ({@code IPv6address} in RFC 3986), not including brackets. */
-  private static final String IPV6 =
+  /**
+   * Regex for an IPv6 address ({@code IPv6address} in RFC 3986), not including brackets. Also used
+   * by {@link IsEmail}.
+   */
+  static final String IPV6 =
       "(?:"
           + ("(?:" + H16 + ":){6}" + LS32)
           + ("|::(?:" + H16 + ":){5}" + LS32)
@@ -67,26 +70,29 @@ public class IsUrl extends SingleString {
               // Protocol of the URL: 'http', 'https', or 'ftp', followed by '://'.
               // Scheme names are case-insensitive.
               + "(?:(?i:https?|ftp)://)"
-              // Optional username and password, for URLs containing "...username:password@..."
-              + "(?:\\S+(?::\\S*)?@)?"
-
-              // Reserved IP address ranges: fordid matching via negative lookahead.
-              // 10.x.x.x
-              + "(?:(?!10(?:\\.\\d{1,3}){3})"
-              // Loopback address
-              + "(?!127(?:\\.\\d{1,3}){3})"
-              // Link-local address
-              + "(?!169\\.254(?:\\.\\d{1,3}){2})"
-              // Private network
-              + "(?!192\\.168(?:\\.\\d{1,3}){2})"
-              // Private network (2)
-              + "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})"
+              // Optional user information, for URLs containing "...username:password@...".
+              // Only the characters that RFC 3986 permits in userinfo (unreserved, sub-delims,
+              // ":", and percent escapes), so that it cannot consume a "/" that ends the authority.
+              + "(?:(?:[\\w.~!$&'()*+,;=:-]|%[0-9a-fA-F]{2})+@)?"
 
               // IPv6 address in brackets, OR IPv4 address, OR domain name
               + ("(?:"
                   // IPv6 address, enclosed in brackets
                   + ("\\[" + IPV6 + "\\]")
                   + "|"
+                  // Reserved IPv4 address ranges: forbid matching via negative lookahead.
+                  // These apply only to the IPv4 alternative, not to a domain name such as
+                  // "192.168.1.2.example.com".
+                  // 10.x.x.x
+                  + "(?!10(?:\\.\\d{1,3}){3})"
+                  // Loopback address
+                  + "(?!127(?:\\.\\d{1,3}){3})"
+                  // Link-local address
+                  + "(?!169\\.254(?:\\.\\d{1,3}){2})"
+                  // Private network
+                  + "(?!192\\.168(?:\\.\\d{1,3}){2})"
+                  // Private network (2)
+                  + "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})"
                   // IPv4 address
                   + "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))"
                   + "|"
@@ -97,8 +103,6 @@ public class IsUrl extends SingleString {
                   + "(?:[\\w\\x{00a1}-\\x{ffff}]+(?:-+[\\w\\x{00a1}-\\x{ffff}]+)*)(?:\\.[\\w\\x{00a1}-\\x{ffff}]+(?:-+[\\w\\x{00a1}-\\x{ffff}]+)*)*(?:\\.(?:[a-zA-Z\\x{00a1}-\\x{ffff}]{2,}))"
                   // end of IPv6 address OR IPv4 address OR domain name
                   + ")")
-              // end of the group that starts with the negative lookaheads
-              + ")"
               // Optional port number
               + "(?::\\d{1,5})?"
               // Optional path, query, or fragment

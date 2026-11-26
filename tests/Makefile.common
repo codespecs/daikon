@@ -1094,11 +1094,11 @@ endif
 update-merge-goal update-merge-goals:
 ifndef NO_MERGE
 ifdef ESC_ON
-	cp -pf ${PROJECT_FILE}.txt-merge-esc ${PROJECT_FILE}.txt-merge-esc.goal
+	cp -pf ${PROJECT_FILE}.txt-merge-esc $(call goal_name,${PROJECT_FILE}.txt-merge-esc)
 	rm -f ${PROJECT_FILE}.txt-merge-esc.diff
 endif
 ifndef NO_JML
-	cp -pf ${PROJECT_FILE}.txt-merge-jml ${PROJECT_FILE}.txt-merge-jml.goal
+	cp -pf ${PROJECT_FILE}.txt-merge-jml $(call goal_name,${PROJECT_FILE}.txt-merge-jml)
 	rm -f ${PROJECT_FILE}.txt-merge-jml.diff
 endif
 endif
