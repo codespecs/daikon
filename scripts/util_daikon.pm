@@ -119,7 +119,10 @@ sub die_version_1 ( ;$ ) {
 # result is one of:
 #   "ppt"                a program point declaration
 #   "header"             decl-version, var-comparability, or input-language,
-#                        each of which is a single line
+#                        each of which is a single line.  The keyword must be
+#                        a whole word, so a sample whose program point name
+#                        starts with a keyword (such as "input-language:::X")
+#                        is data.
 #   "list-implementors"  ListImplementors, which extends to a blank line
 #   "data"               anything else, which is a data trace record
 # The tests are the same as in FileIO.read_data_trace_record in Daikon.
@@ -129,7 +132,7 @@ sub die_version_1 ( ;$ ) {
 # uses a single regular expression.
 sub record_kind ( $;$ ) {
   my ($line, $filename) = @_;
-  if ($line !~ /\A(?:(ppt )|(decl-version|var-comparability|input-language)|(ListImplementors\r?\n?\z)|((?:DECLARE|VarComparability)\r?\n?\z))/) {
+  if ($line !~ /\A(?:(ppt )|((?:decl-version|var-comparability|input-language)(?=\s|\z))|(ListImplementors\r?\n?\z)|((?:DECLARE|VarComparability)\r?\n?\z))/) {
     return "data";
   }
   return "ppt" if defined($1);

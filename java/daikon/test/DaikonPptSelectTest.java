@@ -199,6 +199,18 @@ public class DaikonPptSelectTest {
   }
 
   /**
+   * If Daikon's {@code --ppt-omit-pattern} matches the combined exit point, then Daikon's {@code
+   * --disc_reason} output omits the combined exit point, as Daikon's list of invariants does.
+   */
+  @Test
+  public void testDiscReasonOmitCombinedExit() throws Exception {
+    List<String> lines = runDaikon("--ppt-omit-pattern=:::EXIT$", "--disc_reason=all");
+    assertTrue(lines.toString(), lines.contains("DISCARDED INVARIANTS:"));
+    assertTrue(lines.toString(), lines.contains("C.m(int):::EXIT5"));
+    assertFalse(lines.toString(), lines.contains("C.m(int):::EXIT"));
+  }
+
+  /**
    * The invariant file contains the combined exit point even if Daikon's {@code --ppt-omit-pattern}
    * omits it. PrintInvariants, given the same {@code --ppt-omit-pattern}, prints the same program
    * points as Daikon.
