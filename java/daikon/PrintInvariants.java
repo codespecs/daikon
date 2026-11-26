@@ -771,6 +771,42 @@ public final class PrintInvariants {
   // exit.  It is done here instead so as not to disturb the program point
   // hierarchy.
 
+  /**
+   * Returns true if the given ppt is a numbered exit point whose combined exit point is in the
+   * given map, passes the output filter, and has no other numbered exit point. Then, the numbered
+   * exit point has the same invariants as the combined exit point, which is printed instead.
+   *
+   * @param ppt a program point
+   * @param all_ppts the program points that are printed
+   * @return true if ppt is the only numbered exit point of a combined exit point in all_ppts
+   */
+  private static boolean is_only_subexit(PptTopLevel ppt, PptMap all_ppts) {
+    if (!ppt.is_subexit()) {
+      return false;
+    }
+    for (PptRelation rel : ppt.parents) {
+      if (rel.getRelationType() != PptRelationType.EXIT_EXITNN) {
+        continue;
+      }
+      PptTopLevel combined_exit = rel.parent;
+      if (all_ppts.get(combined_exit.ppt_name) != combined_exit) {
+        return false;
+      }
+      // If the combined exit point will not be printed, print the numbered exit point instead.
+      if (!is_ppt_selected(combined_exit)) {
+        return false;
+      }
+      int num_subexits = 0;
+      for (PptRelation child_rel : combined_exit.children) {
+        if (child_rel.getRelationType() == PptRelationType.EXIT_EXITNN) {
+          num_subexits++;
+        }
+      }
+      return num_subexits == 1;
+    }
+    return false;
+  }
+
   public static void print_invariants(PptMap all_ppts) {
 
     if (out_stream == null) {
@@ -807,7 +843,7 @@ public final class PrintInvariants {
 
       // If this point is not an exit point, print out any retained combined
       // exit point
-      if (enable_exit_swap && !ppt.ppt_name.isExitPoint()) {
+      if (enable_exit_swap && !ppt.is_exit()) {
         if (combined_exit != null) {
           print_invariants_maybe(combined_exit, pw, all_ppts);
         }
@@ -816,30 +852,24 @@ public final class PrintInvariants {
 
       // Just cache the combined exit point for now, print it after the
       // EXITnn points.
-      if (enable_exit_swap && ppt.ppt_name.isCombinedExitPoint()) {
+      if (enable_exit_swap && ppt.is_combined_exit()) {
         combined_exit = ppt;
         continue;
       }
 
       // If there is only one exit point, just show the combined one (since
       // the EXITnn point will be empty)  This is accomplished by skipping this
-      // point if it is an EXITnn point and the previous point was a combined
-      // exit point and the next one is not an EXITnn point.  But don't skip
-      // any conditional ppts attached to the skipped ppt.  And don't skip
-      // this point if the ppt regular expressions do not select the combined
-      // exit point, because then the combined exit point is not printed.
-      if (enable_exit_swap && (i > 0) && ppt.ppt_name.isExitPoint()) {
-        if (ppts[i - 1].ppt_name.isCombinedExitPoint() && is_ppt_selected(ppts[i - 1])) {
-          if (((i + 1) >= ppts.length) || !ppts[i + 1].ppt_name.isExitPoint()) {
-            //             if (Daikon.dkconfig_output_conditionals
-            //                 && Daikon.output_format == OutputFormat.DAIKON) {
-            //               for (PptConditional pcond : ppt.cond_iterable()) {
-            //                 print_invariants_maybe(pcond, pw, all_ppts);
-            //               }
-            //             }
-            continue;
-          }
-        }
+      // point if it is an EXITnn point whose combined exit point is printed and
+      // has no other EXITnn point.  But don't skip any conditional ppts attached
+      // to the skipped ppt.
+      if (enable_exit_swap && is_only_subexit(ppt, all_ppts)) {
+        //             if (Daikon.dkconfig_output_conditionals
+        //                 && Daikon.output_format == OutputFormat.DAIKON) {
+        //               for (PptConditional pcond : ppt.cond_iterable()) {
+        //                 print_invariants_maybe(pcond, pw, all_ppts);
+        //               }
+        //             }
+        continue;
       }
 
       if (false) {
@@ -904,15 +934,16 @@ public final class PrintInvariants {
     if (!dkconfig_print_implementer_entry_ppts && ppt.is_enter()) {
       if (ppt.parent_relations != null) {
         for (ParentRelation parent : ppt.parent_relations) {
-          if (parent != null) {
+          if (parent != null && parent.rel_type == PptRelationType.PARENT) {
+            // Only PARENT relations are checked here.  A disabled USER relation may name a
+            // parent that is not in all_ppts.
             // TODO:  This assertion is necessary because the KeyFor
             // Checker does not track @KeyFor except for Java Maps; it
             // should support KeyFor for PptMap which is not a subtype of
             // Map.  Alternately, PptMap could be made a subtype of Map.
             assert all_ppts.get(parent.parent_ppt_name) != null
                 : "@AssumeAssertion(nullness)"; // parent.parent_ppt_name is a key in all_ppts
-            if (parent.rel_type == PptRelationType.PARENT
-                && all_ppts.get(parent.parent_ppt_name).is_enter()) {
+            if (all_ppts.get(parent.parent_ppt_name).is_enter()) {
               return;
             }
           }
