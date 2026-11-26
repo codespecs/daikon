@@ -196,6 +196,9 @@ public final class PrintInvariants {
   /** Regular expression that ppts must match to be printed. */
   private static @Nullable Pattern ppt_regexp;
 
+  /** Regular expression that ppts must not match to be printed. */
+  private static @Nullable Pattern ppt_omit_regexp;
+
   /**
    * Switch for whether to print discarded Invariants or not, default is false. True iff {@code
    * --disc_reason} switch was supplied on the command line.
@@ -276,6 +279,10 @@ public final class PrintInvariants {
           "      Suppress display of logically redundant invariants.",
           "  --" + Daikon.output_num_samples_SWITCH,
           "      Output number of values and samples for invariants and ppts; for debugging.",
+          "  --" + Daikon.ppt_regexp_SWITCH + " regexp",
+          "      Print only the program points whose names match the regular expression.",
+          "  --" + Daikon.ppt_omit_regexp_SWITCH + " regexp",
+          "      Do not print the program points whose names match the regular expression.",
           "  --" + Daikon.config_option_SWITCH + " config_var=val",
           "      Sets the specified configuration variable.  ",
           "  --" + Daikon.debugAll_SWITCH,
@@ -330,6 +337,7 @@ public final class PrintInvariants {
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(Daikon.ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.wrap_xml_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -364,6 +372,24 @@ public final class PrintInvariants {
             regexp_string =
                 RegexUtil.asRegex(regexp_string); // @SuppressWarnings("regex") // flow-sensitivity
             ppt_regexp = Pattern.compile(regexp_string);
+          } else if (Daikon.ppt_omit_regexp_SWITCH.equals(option_name)) {
+            if (ppt_omit_regexp != null) {
+              throw new Error(
+                  "multiple --"
+                      + Daikon.ppt_omit_regexp_SWITCH
+                      + " regular expressions supplied on command line");
+            }
+            String regexp_string = Daikon.getOptarg(g);
+            if (!RegexUtil.isRegex(regexp_string)) {
+              throw new Daikon.UserError(
+                  "Bad regexp "
+                      + regexp_string
+                      + " for "
+                      + Daikon.ppt_omit_regexp_SWITCH
+                      + ": "
+                      + RegexUtil.regexError(regexp_string));
+            }
+            ppt_omit_regexp = Pattern.compile(regexp_string);
           } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
             try {
               PrintInvariants.discReasonSetup(Daikon.getOptarg(g));
@@ -496,6 +522,7 @@ public final class PrintInvariants {
 
     // Reset statics.  These must match the settings where they are declared.
     ppt_regexp = null;
+    ppt_omit_regexp = null;
     print_discarded_invariants = false;
     discClass = null;
     discVars = null;
@@ -738,8 +765,8 @@ public final class PrintInvariants {
   // it precedes them in the PptMap sort order.
   //
   // When there is only one EXITnn point, only the combined exit point is
-  // printed, unless the combined exit point does not match the ppt regular
-  // expression (--ppt-select-pattern).  Probably a better solution would be
+  // printed, unless the ppt regular expressions (--ppt-select-pattern and
+  // --ppt-omit-pattern) do not select the combined exit point.  Probably a better solution would be
   // to not create the combined exit point at all when there is only a single
   // exit.  It is done here instead so as not to disturb the program point
   // hierarchy.
@@ -799,10 +826,10 @@ public final class PrintInvariants {
       // point if it is an EXITnn point and the previous point was a combined
       // exit point and the next one is not an EXITnn point.  But don't skip
       // any conditional ppts attached to the skipped ppt.  And don't skip
-      // this point if the combined exit point does not match the ppt regular
-      // expression, because then the combined exit point is not printed.
+      // this point if the ppt regular expressions do not select the combined
+      // exit point, because then the combined exit point is not printed.
       if (enable_exit_swap && (i > 0) && ppt.ppt_name.isExitPoint()) {
-        if (ppts[i - 1].ppt_name.isCombinedExitPoint() && matches_ppt_regexp(ppts[i - 1])) {
+        if (ppts[i - 1].ppt_name.isCombinedExitPoint() && is_ppt_selected(ppts[i - 1])) {
           if (((i + 1) >= ppts.length) || !ppts[i + 1].ppt_name.isExitPoint()) {
             //             if (Daikon.dkconfig_output_conditionals
             //                 && Daikon.output_format == OutputFormat.DAIKON) {
@@ -840,15 +867,24 @@ public final class PrintInvariants {
   }
 
   /**
-   * Returns true if the given ppt matches the {@code --ppt-select-pattern} regular expression, or
-   * if no such regular expression was given. PrintInvariants prints only the program points that
-   * match it.
+   * Returns true if the given ppt is selected by the {@code --ppt-select-pattern} and {@code
+   * --ppt-omit-pattern} regular expressions: that is, if it matches the {@code
+   * --ppt-select-pattern} of PrintInvariants and of Daikon (each, if given) and does not match the
+   * {@code --ppt-omit-pattern} of PrintInvariants or of Daikon (each, if given). PrintInvariants
+   * prints only the selected program points. Daikon reads only the declarations of the selected
+   * program points, but it creates a combined exit point, which is not declared, even if the
+   * combined exit point is not selected.
    *
    * @param ppt a program point
-   * @return true if the given ppt matches the {@code --ppt-select-pattern} regular expression
+   * @return true if the given ppt is selected by the {@code --ppt-select-pattern} and {@code
+   *     --ppt-omit-pattern} regular expressions
    */
-  public static boolean matches_ppt_regexp(PptTopLevel ppt) {
-    return (ppt_regexp == null) || ppt_regexp.matcher(ppt.name()).find();
+  public static boolean is_ppt_selected(PptTopLevel ppt) {
+    String name = ppt.name();
+    return ((ppt_regexp == null) || ppt_regexp.matcher(name).find())
+        && ((ppt_omit_regexp == null) || !ppt_omit_regexp.matcher(name).find())
+        && ((Daikon.ppt_regexp == null) || Daikon.ppt_regexp.matcher(name).find())
+        && ((Daikon.ppt_omit_regexp == null) || !Daikon.ppt_omit_regexp.matcher(name).find());
   }
 
   /**
@@ -859,8 +895,8 @@ public final class PrintInvariants {
 
     debugPrint.fine("Considering printing ppt " + ppt.name() + ", samples = " + ppt.num_samples());
 
-    // Skip this ppt if it doesn't match ppt regular expression
-    if (!matches_ppt_regexp(ppt)) {
+    // Skip this ppt if the ppt regular expressions do not select it
+    if (!is_ppt_selected(ppt)) {
       return;
     }
 

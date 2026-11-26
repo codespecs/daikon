@@ -1013,6 +1013,9 @@ public final class Daikon {
     // trace files, so an entry and its exit might be in different files.
     FileIO.call_stack.clear();
     FileIO.call_hashmap.clear();
+    // The count of omitted declarations is reported at the end of each invocation.
+    FileIO.omitted_declarations = 0;
+    FileIO.ppt_to_value_reps.clear();
 
     proto_invs.clear();
   }
@@ -2086,11 +2089,11 @@ public final class Daikon {
   }
 
   /**
-   * Add orig() variables to the given EXIT/EXITnn point. Does nothing if exit_ppt is not an
-   * EXIT/EXITnn.
+   * Add orig() variables to the given EXIT/EXITnn point. Does nothing if exit_ppt's type is not
+   * EXIT or SUBEXIT, whatever its name.
    */
   private static void create_orig_vars(PptTopLevel exit_ppt, PptMap ppts) {
-    if (!exit_ppt.ppt_name.isExitPoint()) {
+    if (!exit_ppt.is_exit()) {
       if (VarInfo.assertionsEnabled()) {
         for (VarInfo vi : exit_ppt.var_infos) {
           try {
@@ -2110,7 +2113,7 @@ public final class Daikon {
     }
 
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
-    if (entry_ppt == null) {
+    if ((entry_ppt == null) || !entry_ppt.is_enter()) {
       throw new Daikon.UserError("exit found with no corresponding entry: " + exit_ppt.name());
     }
 
