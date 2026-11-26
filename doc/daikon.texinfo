@@ -6181,6 +6181,12 @@ for debugging.
 @item --ppt-select-pattern
 Only outputs program points that match the specified regular expression
 
+@item --ppt-omit-pattern
+Does not output program points that match the specified regular expression.
+To print the same program points that Daikon printed when it created the
+invariant file, supply the same @option{--ppt-select-pattern} and
+@option{--ppt-omit-pattern} arguments that Daikon was given.
+
 @item --config @var{filename}
 Load the configuration settings specified in the given file.
 @xref{Configuration options}, for details.
@@ -6286,6 +6292,10 @@ java -cp $@{DAIKONDIR@}/daikon.jar daikon.diff.Diff @i{[@var{flags}]...} @var{fi
 produced by running Daikon or Diff
 with the @option{-o} flag.  If @var{file2} is not specified,
 @var{file1} is compared with the empty set of invariants.
+
+Diff ignores obvious invariants that Daikon does not print by default:
+reflexive invariants such as
+@samp{x == x}, and invariants that are obvious from the declarations alone.
 
 This section describes the optional flags.
 
