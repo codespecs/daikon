@@ -59,8 +59,9 @@ foreach my $decls_file (@ARGV) {
     while (defined(my $record = $next_record->())) {
 	&output_record($record);
     }
-    close IN;
-    close OUT;
+    # For a compressed file, closing the pipe reports a zcat failure.
+    close(IN) || die "couldn't read $decls_file\n";
+    close(OUT) || die "couldn't write $decls_cluster\n";
 }
 
 # Print the given record, as returned by a record reader, to OUT, adding the

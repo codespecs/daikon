@@ -134,7 +134,8 @@ foreach my $dtrace_file (@dtrace_files) {
       &skip_till_next(*DTRACE_IN);
     } elsif ($line =~ /:::/) {
       my $pptname = $line;
-      chomp ($pptname);
+      # Trim surrounding whitespace, as extract_vars.pl does.
+      $pptname =~ s/^\s+|\s+$//g;
       &insert_cluster_info($pptname);
     }
   }
@@ -382,6 +383,9 @@ sub add_cluster_info ( $$ ) {
   my $stem_nonce_to_cluster = $pptname_to_cluster{$stem};
   my $offset = $pptname_to_maxcluster{$stem};
   my $file_maxcluster = 0;
+  # The highest cluster number actually assigned to a nonce of this file.
+  # A cluster whose nonces were all assigned by earlier files does not count.
+  my $stem_maxcluster = $offset;
   my $nconflicts = 0;
   foreach my $nonce (keys %{$file_nonce_to_cluster}) {
     my $file_cluster = $file_nonce_to_cluster->{$nonce};
@@ -391,13 +395,17 @@ sub add_cluster_info ( $$ ) {
     if (exists $stem_nonce_to_cluster->{$nonce}) {
       $nconflicts++;
     } else {
-      $stem_nonce_to_cluster->{$nonce} = $file_cluster + $offset;
+      my $stem_cluster = $file_cluster + $offset;
+      $stem_nonce_to_cluster->{$nonce} = $stem_cluster;
+      if ($stem_cluster > $stem_maxcluster) {
+        $stem_maxcluster = $stem_cluster;
+      }
     }
   }
   if ($nconflicts > 0) {
     print STDERR "Warning: $nconflicts invocations of $stem appear in more than one cluster file; using the first cluster number for each\n";
   }
-  $pptname_to_maxcluster{$stem} = $offset + $file_maxcluster;
+  $pptname_to_maxcluster{$stem} = $stem_maxcluster;
   if ($pptname_to_maxcluster{$stem} > $maxcluster) {
     $maxcluster = $pptname_to_maxcluster{$stem};
   }
