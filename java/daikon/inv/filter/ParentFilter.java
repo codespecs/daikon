@@ -2,13 +2,15 @@ package daikon.inv.filter;
 
 import daikon.Debug;
 import daikon.PptRelation;
-import daikon.PptRelation.PptRelationType;
 import daikon.PptSlice;
 import daikon.PrintInvariants;
 import daikon.VarInfo;
 import daikon.inv.Invariant;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** Filter for not printing invariants that have a matching invariant at their parent PPT. */
@@ -31,8 +33,31 @@ public class ParentFilter extends InvariantFilter {
 
   @Override
   boolean shouldDiscardInvariant(Invariant inv) {
+    return shouldDiscardInvariant(inv, Collections.newSetFromMap(new IdentityHashMap<>()));
+  }
+
+  /**
+   * Returns true if the given invariant should be discarded because a matching invariant appears at
+   * a printed parent (or at a printed ancestor reached through unprinted parents).
+   *
+   * <p>The program point hierarchy can contain cycles (via {@code USER} relations), so this method
+   * records each invariant that it examines. A matching invariant that has already been examined is
+   * ignored, whether or not its program point is printed. Doing so does not lose any discards: the
+   * call that first reached the invariant has already examined, or will examine, all of its
+   * parents. It also prevents a cycle from leading back to the invariant being filtered and
+   * treating that invariant as justification for discarding itself.
+   *
+   * @param inv an invariant
+   * @param visited the invariants that have already been examined; side-effected by this method
+   * @return true if {@code inv} should be discarded
+   */
+  private boolean shouldDiscardInvariant(Invariant inv, Set<Invariant> visited) {
 
     // System.out.printf("shouldDiscardInvariant(%s)%n", inv.format());
+
+    if (!visited.add(inv)) {
+      return false;
+    }
 
     if (Debug.logDetail()) {
       if (inv.ppt.parent.parents != null) {
@@ -66,13 +91,18 @@ public class ParentFilter extends InvariantFilter {
         continue;
       }
 
-      // If the combined exit point is not printed (because the --ppt-select-pattern and
-      // --ppt-omit-pattern regular expressions do not select it), treat it as transparent:
-      // discard the numbered exit point's invariant only if a parent of the combined exit point
-      // implies it.
-      if (rel.getRelationType() == PptRelationType.EXIT_EXITNN
-          && !PrintInvariants.is_ppt_selected(rel.parent)) {
-        if (shouldDiscardInvariant(pinv)) {
+      // An invariant that has already been examined cannot justify discarding this one.  In
+      // particular, a cycle (via USER relations) can lead back to the invariant being filtered;
+      // that invariant does not imply itself.
+      if (visited.contains(pinv)) {
+        continue;
+      }
+
+      // If the parent is not printed (because the --ppt-select-pattern and --ppt-omit-pattern
+      // regular expressions do not select it), treat it as transparent:  discard the invariant only
+      // if a printed ancestor implies it.
+      if (!PrintInvariants.is_ppt_selected(rel.parent)) {
+        if (shouldDiscardInvariant(pinv, visited)) {
           return true;
         }
         continue;

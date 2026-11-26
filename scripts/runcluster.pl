@@ -10,6 +10,7 @@ $WARNING = 1;                    # -w flag
 
 # Put the script directory on the @INC path.
 use File::Basename;
+use Cwd qw(abs_path);
 use lib dirname (__FILE__);
 
 # The file `util_daikon.pm` appears in the same directory as this script.
@@ -17,8 +18,9 @@ use util_daikon;
 
 sub usage() {
   print STDERR
-    "Usage: runcluster.pl [OPTIONS] DTRACE_FILES DECLS_FILES",
+    "Usage: runcluster.pl [OPTIONS] DTRACE_FILES [DECLS_FILES]",
     "\n",
+    "If no DECLS_FILES are given, the declarations in DTRACE_FILES are used.\n",
     "Options:\n",
     " -a, --algorithm ALG\n",
     "       ALG specifies an implementation of a clustering algorithm.\n",
@@ -72,8 +74,20 @@ while (scalar(@ARGV) > 0) {
 if (scalar(@trace_files) == 0) {
   &dieusage("No trace files specified");
 }
-if (scalar(@decls_files) == 0) {
-  &dieusage("No decls files specified");
+# Temporary files are in the current directory, and their names contain
+# "cluster_temp".  An input file with such a name could be overwritten or
+# deleted, so reject it.  Also reject an input whose path goes through such
+# an entry, such as a symbolic link with such a name (to the input file or
+# to a directory that contains it), because deleting the entry would make
+# the input unreachable.
+my $cwd = abs_path(".");
+foreach my $input_file (@trace_files, @decls_files) {
+  my $entry = cleanup_entry_on_path($input_file, $cwd);
+  if (defined($entry)) {
+    die "Input file $input_file is reached via $cwd/$entry,\n"
+      . "which is in the current directory and has a name that contains \"cluster_temp\",\n"
+      . "so it might be overwritten or deleted as a temporary file.  Rename it or move it.\n";
+  }
 }
 if ($algorithm eq "xm") {
   if (system("xmeans 2>&1 > /dev/null") != 0) {
@@ -83,9 +97,6 @@ if ($algorithm eq "xm") {
   }
 }
 
-my $dtrace_files = join(' ', @trace_files);
-my $decls_files = join(' ', @decls_files);
-
 ###########################################################################
 ### Processing
 ###
@@ -93,9 +104,52 @@ my $decls_files = join(' ', @decls_files);
 #remove files from a previous run that might have aborted...
 &remove_temporary_files();
 
+# Make the invocation nonces consistent, and give every sample a nonce.
+# The input files are left unchanged; the fixed copies are temporary files
+# in the current directory, which are read by both extract_vars.pl and
+# dtrace-add-cluster.pl so that both see the same nonces.
+if ($verbose) { print "\n# Fixing invocation nonces ...\n"; }
+# Each fixed copy has a distinct name, even if several input files have the
+# same basename.  The names of later files are derived from these names.
+#
+# DtraceNonceFixer processes one file at a time, so the nonces of different
+# files may collide; for example, each file's samples that lack a nonce get
+# nonces starting at 0.  Later steps identify a sample by its program point
+# and nonce, regardless of its file, so the nonces of each file are then
+# shifted to follow those of the previous files.
+my @fixed_trace_files = ();
+my %used_fixed_names = ();
+# The largest nonce in the fixed files so far, or -1 if there is none.
+my $max_nonce = -1;
+foreach my $trace_file (@trace_files) {
+  my $base = basename($trace_file);
+  $base =~ s/\.dtrace(\.gz)?$//;
+  # Later commands use the names unquoted, so each must be a single shell
+  # word that is not taken for an option or a glob pattern.
+  $base =~ s/[^\w.\-]/_/g;
+  $base =~ s/\A-/_/;
+  my $stem = "${base}_runcluster_temp_nonces";
+  for (my $i = 2; exists($used_fixed_names{$stem}); $i++) {
+    $stem = "${base}-${i}_runcluster_temp_nonces";
+  }
+  $used_fixed_names{$stem} = 1;
+  my $unshifted = "${stem}_unshifted.dtrace";
+  my $fixed = "$stem.dtrace";
+  system_or_die("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer " . shell_quote($trace_file) . " " . shell_quote($unshifted), $verbose);
+  $max_nonce = &shift_nonces($unshifted, $fixed, $max_nonce + 1);
+  unlink($unshifted);
+  push @fixed_trace_files, $fixed;
+}
+my $dtrace_files = join(' ', @fixed_trace_files);
+# If no decls files were given, the declarations are in the dtrace files.
+my $decls_files = (scalar(@decls_files) == 0) ? $dtrace_files : join(' ', @decls_files);
+
 #extract the variables from the dtrace file
 if ($verbose) { print "\n# Extracting variables from dtrace file ...\n"; }
-my $command = "$SCRIPTDIR/extract_vars.pl --algorithm $algorithm $decls_files $dtrace_files";
+# Pass only the user-supplied decls files:  if there are none, extract_vars.pl
+# reads the declarations from the dtrace files, and passing the dtrace files
+# twice would read their samples twice.
+my $command = "$SCRIPTDIR/extract_vars.pl --algorithm $algorithm " . join(' ', @decls_files) . " $dtrace_files";
 system_or_die($command, $verbose);
 
 ###
@@ -189,11 +243,23 @@ my $spinfo_file = "runcluster_temp.spinfo";
 if ($verbose) { print "\n# Writing spinfo file $spinfo_file ...\n"; }
 open (SPINFO, ">$spinfo_file") || die "couldn't write cluster spinfo file runcluster_temp.spinfo\n";
 
-my $spinfostring = "PPT_NAME OBJECT\n";
+my $conditions = "";
 for (my $i = 1; $i <= $ncluster; $i++) {
-  $spinfostring  = $spinfostring."cluster == $i\n";
+  $conditions .= "cluster == $i\n";
 }
-print SPINFO $spinfostring;
+# Split each program point that was clustered.
+my @spinfo_ppts = ();
+open (PPTS, "runcluster_temp.clustered_ppts") || die "file with clustered ppts not found\n";
+while (my $ppt = <PPTS>) {
+  chomp($ppt);
+  push @spinfo_ppts, $ppt;
+}
+close PPTS;
+foreach my $ppt (@spinfo_ppts) {
+  # The name is escaped as in a dtrace file, but a PPT_NAME line is not.
+  my $name = unescape_decl($ppt);
+  print SPINFO "PPT_NAME $name\n$conditions\n";
+}
 close SPINFO;
 
 ###
@@ -203,7 +269,7 @@ close SPINFO;
 if ($verbose) { print "\n# Running daikon with cluster spinfo file ...\n"; }
 
 my @new_dtraces = ();
-foreach my $dtrace_file (@trace_files) {
+foreach my $dtrace_file (@fixed_trace_files) {
   $dtrace_file =~ /(.*)\.dtrace/;
   push @new_dtraces , "$1_runcluster_temp.dtrace";
 }
@@ -233,7 +299,7 @@ if ($algorithm eq 'xm') {
 } else {
   $outfile = "cluster-$algorithm-$ncluster.spinfo";
 }
-$command = "java daikon.tools.ExtractConsequent $invfile > $outfile";
+$command = "java -cp $SCRIPTDIR/../daikon.jar daikon.tools.ExtractConsequent $invfile > $outfile";
 system_or_die($command, $verbose);
 
 #remove all temporary files
@@ -244,6 +310,92 @@ if (! $keep_tempfiles ) {
 exit();
 
 ################# Subroutines ####################################
+
+# Resolves $path one component at a time, following symbolic links.  If
+# some entry that is visited (including the final file and any symbolic
+# link along the way) is directly in directory $cwd (an absolute path
+# without symbolic links) and has a name that contains "cluster_temp",
+# returns that name.  Otherwise returns undef.
+# (No prototype, because it is called before its definition.)
+sub cleanup_entry_on_path {
+  my ($path, $cwd) = @_;
+  return undef if (!defined($cwd));
+  # $dir is an absolute path without symbolic links.
+  my $dir = ($path =~ m{\A/}) ? "/" : $cwd;
+  my @components = grep { $_ ne "" } split(m{/}, $path);
+  my $links_followed = 0;
+  while (scalar(@components) > 0) {
+    my $component = shift @components;
+    next if ($component eq ".");
+    if ($component eq "..") {
+      $dir = dirname($dir);
+      next;
+    }
+    if ($dir eq $cwd && $component =~ /cluster_temp/) {
+      return $component;
+    }
+    my $entry = ($dir eq "/") ? "/$component" : "$dir/$component";
+    if (-l $entry) {
+      # Guard against a cycle of symbolic links.
+      return undef if (++$links_followed > 100);
+      my $target = readlink($entry);
+      return undef if (!defined($target));
+      unshift @components, grep { $_ ne "" } split(m{/}, $target);
+      $dir = "/" if ($target =~ m{\A/});
+    } else {
+      $dir = $entry;
+    }
+  }
+  return undef;
+} #cleanup_entry_on_path
+
+# Quote a string for use as a single word in a shell command.
+# (No prototype, because it is called before its definition.)
+sub shell_quote {
+  my ($s) = @_;
+  $s =~ s/'/'\\''/g;
+  return "'$s'";
+} #shell_quote
+
+# Copies dtrace file $infile, in which every sample has an invocation nonce
+# (as output by DtraceNonceFixer), to $outfile, adding $offset to every
+# nonce.  Returns the largest nonce in $outfile, or $offset - 1 if it has
+# no samples.
+# (No prototype, because it is called before its definition.)
+sub shift_nonces {
+  my ($infile, $outfile, $offset) = @_;
+  my $max = $offset - 1;
+  open(my $in, "<", $infile) || die "couldn't open $infile for input\n";
+  open(my $out, ">", $outfile) || die "couldn't open $outfile for output\n";
+  my $next_record = record_reader($in, $infile);
+  while (defined(my $record = $next_record->())) {
+    print $out $record->{comments};
+    my $kind = $record->{kind};
+    next if ($kind eq "");
+    my $text = $record->{text};
+    $text .= "\n" if ($text !~ /\n\z/);
+    if ($kind eq "data") {
+      # The first variable of a sample is its nonce.
+      if ($text =~ /\A([^\n]*\nthis_invocation_nonce\n)(-?\d+)\n/) {
+        my $nonce = $2 + $offset;
+        if ($nonce > 2147483647) {
+          die "Too many invocation nonces in the trace files; the largest is $nonce\n";
+        }
+        $max = $nonce if ($nonce > $max);
+        substr($text, length($1), length($2)) = $nonce;
+      } else {
+        my $line = $record->{line};
+        die "$infile line $line: no invocation nonce for a sample\n";
+      }
+    }
+    print $out $text;
+    # A one-line header needs no blank line after it.
+    print $out "\n" if ($kind ne "header");
+  }
+  close($in);
+  close($out) || die "couldn't write $outfile\n";
+  return $max;
+} #shift_nonces
 
 sub unlink_glob ( $ ) {
   my ($glob) = @_;
