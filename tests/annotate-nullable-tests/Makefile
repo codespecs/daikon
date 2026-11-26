@@ -1,13 +1,21 @@
 # Tests of AnnotateNullable on stored traces.
 #
 # For each test name T in TESTS, Daikon reads T.decls and T.dtrace.gz, and
-# AnnotateNullable writes an annotation file T.txt-jaif from Daikon's output.
+# AnnotateNullable writes an annotation file T.txt-jaif, which also contains
+# AnnotateNullable's warnings, from Daikon's output.
 # Test T passes if T.txt-jaif is the same as T.txt-jaif.goal.
+#
+# Test "NoObjectPpt":  no class has an OBJECT program point, one class has
+# no CLASS program point either, and one function has no class.
 #
 # Test "PointChildren":  the CLASS and OBJECT program points each have a child
 # that is a point, not a method.
+#
+# Test "UserRelation":  a static method of one class takes a parameter of
+# another class, so the method has a USER relation to the other class's
+# OBJECT program point.
 
-TESTS = PointChildren
+TESTS = NoObjectPpt PointChildren UserRelation
 
 # The directory containing this file.  Makefile.jdk is found relative to it,
 # not via DAIKONDIR, which can name a different Daikon tree.
@@ -48,12 +56,17 @@ diffs: $(addsuffix .txt-jaif.diff,${TESTS})
 .SECONDARY: $(addsuffix .txt-jaif,${TESTS})
 
 %.txt-jaif: %.inv.gz ${DAIKON}
-	${DAIKON_JAVA} daikon.AnnotateNullable $< > $@
+	${DAIKON_JAVA} daikon.AnnotateNullable $< > $@ 2>&1
+
+# Extra command-line options for Daikon.  Daikon creates USER relations only
+# if daikon.PptRelation.enable_object_user is set.
+DAIKON_OPTIONS :=
+UserRelation.inv.gz: DAIKON_OPTIONS = --config_option daikon.PptRelation.enable_object_user=true
 
 %.inv.gz: %.decls %.dtrace.gz ${DAIKON}
 	${DAIKON_JAVA} daikon.Daikon --no_text_output --no_show_progress \
 	  --config ${DAIKONDIR}/java/daikon/annotate_nullable.config \
-	  --config_option daikon.Debug.show_stack_trace=true \
+	  --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS} \
 	  -o $@ $*.decls $*.dtrace.gz
 
 update-goals: $(addsuffix .txt-jaif,${TESTS})
