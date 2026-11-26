@@ -3032,6 +3032,9 @@ obtains its invariants from its own samples, never from other program
 points, so it cannot be a parent (see the @code{parent} field below).
 This type is normally used when the input is not from a programming
 language or when there is no dataflow hierarchy.
+A @code{point} program point whose @code{ppt-name} has the form given
+above for an @code{enter} program point, such as @code{foo:::ENTER}, is
+not an @code{enter} program point.
 
 @item @code{flags <flags>}
 
