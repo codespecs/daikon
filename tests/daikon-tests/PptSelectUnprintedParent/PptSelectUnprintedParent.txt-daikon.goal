@@ -1,0 +1,33 @@
+===========================================================================
+C.m(int):::EXIT
+this.f == orig(this.f)
+this.f == 10
+return one of { 2, 3, 4 }
+orig(x) one of { 1, 2, 3 }
+this.f > return
+this.f > orig(x)
+return > orig(x)
+===========================================================================
+C.n(int):::EXIT7
+return == 0
+orig(x) == 4
+===========================================================================
+C.n(int):::EXIT9
+return == orig(x)
+return one of { 5, 6 }
+===========================================================================
+C.n(int):::EXIT
+this.f == orig(this.f)
+(return == 0)  <==>  (orig(x) == 4)
+(return == 0)  <==>  (return < orig(x))
+(return == 0)  ==>  (return is a pointer)
+(return one of { 5, 6 })  <==>  (orig(x) one of { 5, 6 })
+(return one of { 5, 6 })  <==>  (return == orig(x))
+this.f == 10
+return one of { 0, 5, 6 }
+orig(x) one of { 4, 5, 6 }
+this.f > return
+this.f > orig(x)
+return % orig(x) == 0
+return <= orig(x)
+return is a bitwise subset of orig(x)
