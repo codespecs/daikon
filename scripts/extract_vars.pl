@@ -132,7 +132,8 @@ foreach my $dtrace_file (@dtrace_files) {
       &skip_till_next(*DTRACE);
     } elsif ($line =~ /:::/) {
       my $pptname = $line;
-      chomp ($pptname);
+      # Trim surrounding whitespace, as read_decls_file does for declarations.
+      $pptname =~ s/^\s+|\s+$//g;
 
       if ($pptname =~ /:::ENTER/ || !(exists $pptname_to_fhandles{$pptname})) {
 	&skip_till_next(*DTRACE);
@@ -506,8 +507,10 @@ sub read_decls_file ( $ ) {
 # Returns 1 if the variable is to be clustered, otherwise 0.
 sub add_decl_var ( $$$ ) {
   my ($pptname, $varname, $rep_type) = @_;
-  # Omit .class, arrays, and strings.
-  if ($varname =~ /\.class/ || $varname =~ /\[/ || $varname =~ /\.toString/
+  # Omit .class, arrays, and strings.  An array's contents are named "a[..]"
+  # (or "a[]") and have an array rep-type.  An indexed element that is a
+  # scalar or an object, such as "this[0]" with rep-type hashcode, is kept.
+  if ($varname =~ /\.class/ || $varname =~ /\[(\.\.)?\]/ || $varname =~ /\.toString/
       || $rep_type =~ /\[\]/ || $rep_type =~ /String/) {
     return 0;
   }
