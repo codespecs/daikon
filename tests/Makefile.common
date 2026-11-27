@@ -215,6 +215,7 @@ DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DAIKON = $(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.Daikon
 PRINT_INVARIANTS_CLASS?=${DAIKONDIR}/java/daikon/PrintInvariants.class
 PRINT_INVARIANTS?=$(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.PrintInvariants
+DAIKON_SIMPLE_CLASS?=${DAIKONDIR}/java/daikon/DaikonSimple.class
 DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
 
@@ -256,6 +257,9 @@ goal_name = \
 
 
 $(PRINT_INVARIANTS_CLASS):
+	${MAKE} -C ${DAIKONDIR}/java
+
+$(DAIKON_SIMPLE_CLASS):
 	${MAKE} -C ${DAIKONDIR}/java
 
 $(CHICORY_EXEC):
@@ -784,6 +788,20 @@ txt-logicalcompare: ${PROJECT_FILE}.txt-logicalcompare
 	-rm -f $@-failed
 	($(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.tools.compare.LogicalCompare $< $< > $@ 2>&1) || (mv $@ $@-failed && false)
 
+# txt-simple is not part of txt-diff by default.  A test's Makefile adds it:
+#   txt-diff: txt-simple-diff
+PROJECT_HELP:=${PROJECT_HELP} ;\
+  echo "  make txt-simple     : runs DaikonSimple on the trace files"
+txt-simple: ${PROJECT_FILE}.txt-simple
+%.txt-simple: ${DECLS_FILES} ${DTRACE_FILES} ${DAIKON_SIMPLE_CLASS}
+	@echo
+	@echo "### create txt-simple (${PROJECT_FILE})"
+	@echo
+	-rm -f $@-failed
+	($(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.DaikonSimple \
+	  --config_option daikon.Daikon.quiet=true \
+	  $(DECLS_FILES) $(DTRACE_FILES) > $@ 2>&1) || (mv $@ $@-failed && false)
+
 ifndef NO_CSHARP
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-csharpcontract   : creates csharp-style output from the inv file"
@@ -953,6 +971,7 @@ endif
 spinfo-static-diff: ${PROJECT_FILE}.spinfo-static.diff
 txt-simplify-diff: ${PROJECT_FILE}.txt-simplify.diff;
 txt-logicalcompare-diff: ${PROJECT_FILE}.txt-logicalcompare.diff;
+txt-simple-diff: ${PROJECT_FILE}.txt-simple.diff;
 ifndef NO_CSHARP
 txt-csharpcontract-diff: ${PROJECT_FILE}.txt-csharpcontract.diff;
 endif
@@ -1065,6 +1084,9 @@ endif
 	if test -e ${PROJECT_FILE}.txt-logicalcompare ; then \
 	  cp -pf ${PROJECT_FILE}.txt-logicalcompare ${PROJECT_FILE}.txt-logicalcompare.goal; fi
 	rm -f ${PROJECT_FILE}.txt-logicalcompare.diff;
+	if test -e ${PROJECT_FILE}.txt-simple ; then \
+	  cp -pf ${PROJECT_FILE}.txt-simple $(call goal_name,${PROJECT_FILE}.txt-simple); fi
+	rm -f ${PROJECT_FILE}.txt-simple.diff;
 	if test -e ${PROJECT_FILE}.txt-csharpcontract ; then \
 	  cp -pf ${PROJECT_FILE}.txt-csharpcontract ${PROJECT_FILE}.txt-csharpcontract.goal; fi
 	rm -f ${PROJECT_FILE}.txt-csharpcontract.diff;

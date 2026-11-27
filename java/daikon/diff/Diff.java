@@ -30,7 +30,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.IPair;
 import org.plumelib.util.OrderedPairIterator;
@@ -495,7 +494,8 @@ public final class Diff {
   }
 
   /**
-   * Reads an InvMap from a file that contains a serialized InvMap or PptMap.
+   * Reads an InvMap from a file that contains a serialized InvMap or PptMap. Either way, the result
+   * omits reflexive and statically obvious invariants, as {@link #convertToInvMap} does.
    *
    * @param file a file
    * @return an InvMap read from the file
@@ -505,7 +505,9 @@ public final class Diff {
   private InvMap readInvMap(File file) throws IOException, ClassNotFoundException {
     Object o = FilesPlume.readObject(file);
     if (o instanceof InvMap) {
-      return (InvMap) o;
+      // A serialized InvMap might have been written by an earlier version of this program or by
+      // other code, so it might contain invariants that convertToInvMap would omit.
+      return omitObvious((InvMap) o);
     } else {
       PptMap pptMap = FileIO.read_serialized_pptmap(file, false);
       return convertToInvMap(pptMap);
@@ -516,9 +518,11 @@ public final class Diff {
    * Extracts the PptTopLevel and Invariants out of a pptMap, and places them into an InvMap. Maps
    * PptTopLevel to a List of Invariants. The InvMap is a cleaner representation than the PptMap,
    * and it allows us to more easily manipulate the contents. The InvMap contains exactly the
-   * elements contained in the PptMap. Conditional program points are also added as keys. Filtering
-   * is done when creating the pair tree. The ppts in the InvMap must be sorted, but the invariants
-   * need not be sorted.
+   * elements contained in the PptMap, except for obvious invariants that PrintInvariants also
+   * omits: reflexive invariants such as "x == x", and invariants that are obvious from the
+   * declarations alone. Conditional program points are also added as keys. Other filtering is done
+   * when creating the pair tree. The ppts in the InvMap must be sorted, but the invariants need not
+   * be sorted.
    */
   public InvMap convertToInvMap(PptMap pptMap) {
     InvMap map = new InvMap();
@@ -533,20 +537,53 @@ public final class Diff {
         continue;
       }
 
-      // List<Invariant> invs = ppt.getInvariants();
-      List<Invariant> invs = CollectionsPlume.sorted(ppt.getInvariants(), PptTopLevel.icfp);
+      List<Invariant> invs = nonObvious(ppt.getInvariants());
+      invs.sort(PptTopLevel.icfp);
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
         for (PptConditional pptCond : ppt.cond_iterable()) {
-          List<Invariant> invsCond =
-              CollectionsPlume.sorted(pptCond.getInvariants(), PptTopLevel.icfp);
-          // List<Invariant> invsCond = pptCond.getInvariants();
+          List<Invariant> invsCond = nonObvious(pptCond.getInvariants());
+          invsCond.sort(PptTopLevel.icfp);
           map.put(pptCond, invsCond);
         }
       }
     }
     return map;
+  }
+
+  /**
+   * Returns a copy of the given InvMap that omits reflexive and statically obvious invariants, the
+   * same ones that {@link #convertToInvMap} omits. The program points and the order of the
+   * remaining invariants are unchanged.
+   *
+   * @param invMap an InvMap
+   * @return a copy of {@code invMap}, without reflexive and statically obvious invariants
+   */
+  public static InvMap omitObvious(InvMap invMap) {
+    InvMap result = new InvMap();
+    for (PptTopLevel ppt : invMap.pptIterable()) {
+      result.put(ppt, nonObvious(invMap.get(ppt)));
+    }
+    return result;
+  }
+
+  /**
+   * Returns a new list of the invariants that are neither reflexive nor statically obvious, in the
+   * same order as in the given list. A reflexive invariant, such as "x == x", is one in which a
+   * variable appears more than once; see {@link Invariant#isReflexive}.
+   *
+   * @param invs some invariants
+   * @return the invariants in {@code invs} that are neither reflexive nor statically obvious
+   */
+  private static List<Invariant> nonObvious(List<Invariant> invs) {
+    List<Invariant> result = new ArrayList<>(invs.size());
+    for (Invariant inv : invs) {
+      if (!inv.isReflexive() && inv.isObviousStatically_SomeInEquality() == null) {
+        result.add(inv);
+      }
+    }
+    return result;
   }
 
   /**
