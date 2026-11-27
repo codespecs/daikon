@@ -500,8 +500,6 @@ public class DaikonSimple {
       ValueTuple object_vt = null;
       ValueTuple class_vt = null;
 
-      // The ppt's type, not its name, determines whether it is an entry or an exit:  a ppt that is
-      // declared as a POINT is neither, even if its name is foo:::ENTER or foo:::EXIT.
       if ((ppt.is_enter() && !ppt_name.isConstructor()) || ppt.is_exit()) {
         // Likewise, a ppt named foo:::OBJECT or foo:::CLASS that is declared with some other type
         // (such as POINT) is independent of the method and does not receive its samples.
@@ -547,8 +545,7 @@ public class DaikonSimple {
         return;
       }
 
-      // If this is an exit point, process the saved enter (and sometimes
-      // object) point
+      // If this is an exit point, process the saved enter (and sometimes object) point.
       if (ppt.is_exit()) {
         assert nonce != null;
         List<Call> value = call_map.remove(nonce);
