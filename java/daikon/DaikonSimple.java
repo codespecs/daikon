@@ -676,18 +676,17 @@ public class DaikonSimple {
             }
           }
         }
-
-        // update num_samples and num_values of a slice manually
-        // because DaikonSimple does not call any of PptTopLevel's
-        // add methods
-        for (int j = 0; j < vt.vals.length; j++) {
-          if (!vt.isMissing(j)) {
-            ValueSet vs = ppt.value_sets[j];
-            vs.add(vt.vals[j]);
-          }
-        }
-        ppt.mbtracker.add(vt, 1);
       }
+
+      // Update the program point's value sets and modbit tracker manually, once per sample,
+      // because DaikonSimple does not call any of PptTopLevel's add methods.
+      for (int j = 0; j < vt.vals.length; j++) {
+        if (!vt.isMissing(j)) {
+          ValueSet vs = ppt.value_sets[j];
+          vs.add(vt.vals[j]);
+        }
+      }
+      ppt.mbtracker.add(vt, 1);
     }
   }
 }
