@@ -127,7 +127,7 @@ foreach my $dtrace_file (@dtrace_files) {
       &skip_till_next(*DTRACE_IN);
     } elsif ($line =~ /:::/) {
       my $pptname = $line;
-      chomp ($pptname);
+      $pptname =~ s/\r?\n\z//;
       &insert_cluster_info($pptname);
     }
   }
@@ -167,7 +167,7 @@ sub insert_cluster_info ( $ ) {
     die "No invocation nonce for a sample at $pptname; run daikon.tools.DtraceNonceFixer first";
   }
   $invoc = <DTRACE_IN>;
-  chomp($invoc);
+  $invoc =~ s/\r?\n\z//;
   $line = <DTRACE_IN>;
 
   # Find out if this program point was clustered.  If it was, retrieve the
@@ -183,7 +183,7 @@ sub insert_cluster_info ( $ ) {
 
   my $cluster_number = $pptname_to_cluster{$pptstem}{$invoc};
   if ((! defined($cluster_number)) || ($cluster_number == 0)) {
-      chomp ($line);
+      $line =~ s/\r?\n\z//;
       if (! ($line eq "")) {
 	  &skip_till_next(*DTRACE_IN);
       }
@@ -269,10 +269,11 @@ sub read_cluster_info_seq ( @ ) {
     $filename =~ s/\.EXIT.*//;
     $filename =~ s/\.cluster$//;
     $filename =~ s/\.samp$//;
-    $filename =~ s/\.runcluster_temp.*//;
+    $filename =~ s/\.runcluster_temp$//;
 
     print "filename=$filename\n";
-    $pptname_to_cluster{$filename} = \%nonce_to_cluster;
+    # Each exit of a method has its own cluster file; merge them.
+    @{$pptname_to_cluster{$filename}}{keys %nonce_to_cluster} = values %nonce_to_cluster;
   }
   return %pptname_to_cluster;
 }
@@ -341,9 +342,10 @@ sub read_cluster_info_xm(@) {
     $filename =~ s/\.EXIT.*//;
     $filename =~ s/\.cluster$//;
     $filename =~ s/\.samp$//;
-    $filename =~ s/\.runcluster_temp.*//;
+    $filename =~ s/\.runcluster_temp$//;
 
-    $pptname_to_cluster{$filename} = \%nonce_to_cluster;
+    # Each exit of a method has its own cluster file; merge them.
+    @{$pptname_to_cluster{$filename}}{keys %nonce_to_cluster} = values %nonce_to_cluster;
     if ($logging) {
       &log ("$filename  ==> $cluster clusters");
     }

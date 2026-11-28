@@ -76,6 +76,15 @@ my %pptname_to_nonces = ();
 # keep track of the variable names to be clustered.
 my %pptname_to_varnames = ();
 
+# PPTNAME -> ARRAY[VARNAME]
+# The names of the variables that appear in each record for the ppt in the
+# dtrace file, in order.  Used to detect a dtrace file that does not match
+# its declarations.
+my %pptname_to_tracevars = ();
+
+# The dtrace file being read, for error messages.
+my $current_dtrace_file;
+
 # This option is used to select the actual clustering algorithm
 # implementation we are planning to use. It determines the format with
 # which the extracted variables will be written to a file to be read
@@ -123,10 +132,10 @@ foreach my $dtrace_file (@dtrace_files) {
   } else {
     open (DTRACE, $dtrace_file) || die("couldn't open dtrace file $dtrace_file\n");
   }
+  $current_dtrace_file = $dtrace_file;
 
   # print "opened $dtrace_file\n";
-  while (<DTRACE>) {
-    my $line = $_;
+  while (defined(my $line = &read_dtrace_line())) {
     if ($line =~ /^ppt\s/) {
       # A declaration in the dtrace file, not an execution.
       &skip_till_next(*DTRACE);
@@ -149,7 +158,7 @@ foreach my $dtrace_file (@dtrace_files) {
       }
     }
   }
-  # For a compressed file, closing the pipe reports a zcat failure.
+  # Closing the file resets the line number, $., and reports a zcat failure.
   close(DTRACE) || die("couldn't read dtrace file $dtrace_file\n");
 }
 
@@ -265,22 +274,31 @@ sub read_execution ( $ ) {
 
   my ($varname, $value);
 
-  $varname = <DTRACE>;
-  if ($varname !~ /this.invocation.nonce/) {
+  $varname = &read_dtrace_line();
+  if (!defined($varname) || $varname !~ /this.invocation.nonce/) {
     $pptname_to_nonces{$pptname}++;
     push @vararray, $pptname_to_nonces{$pptname};
   } else {
-    $value = <DTRACE>;
-    chomp($value);
+    $value = &read_record_line($pptname, "value of this_invocation_nonce");
     push @vararray, $value;
-    $varname = <DTRACE>;
+    $varname = &read_dtrace_line();
   }
 
   # get the values of the variables at this ppt that we want to cluster
-  while ($varname !~ /^$/) {
+  my @tracevars = @{$pptname_to_tracevars{$pptname}};
+  my $varindex = 0;
+  while (defined($varname) && $varname !~ /^$/) {
     chomp( $varname );
-    $value = <DTRACE>;
-    chomp ($value);
+    # Like Daikon, ignore whitespace around a variable name.
+    $varname =~ s/^\s+|\s+$//g;
+    if ($varindex >= scalar(@tracevars)) {
+      &die_trace_mismatch($pptname, "end of record", $varname);
+    }
+    if ($varname ne $tracevars[$varindex]) {
+      &die_trace_mismatch($pptname, "variable $tracevars[$varindex]", $varname);
+    }
+    $varindex++;
+    $value = &read_record_line($pptname, "value of $varname");
 
     # see if the variable is an Object variable
     my $object = 0;
@@ -307,16 +325,55 @@ sub read_execution ( $ ) {
     $value =~ s/null/0/;
     $value =~ s/missing/-11111/;
     $value =~ s/NaN/1e10/;
-    my $mod = <DTRACE>;		# "$mod" is unused
+    my $mod = &read_record_line($pptname, "modbit of $varname"); # unused
 
     # extract variables to be clustered.
     if ( exists $pptname_to_varnames{$pptname}{$varname}) {
       push @vararray, $value;
     }
 
-    $varname = <DTRACE>;
+    $varname = &read_dtrace_line();
+  }
+  if ($varindex < scalar(@tracevars)) {
+    &die_trace_mismatch($pptname, "variable $tracevars[$varindex]",
+                        defined($varname) ? "end of record" : "end of file");
   }
   return @vararray;
+}
+
+# Read and return the next line of the dtrace file, or undef at the end of
+# the file.  Like Daikon, accept CRLF line terminators:  a returned line ends
+# with "\n" alone.
+sub read_dtrace_line () {
+  my $line = <DTRACE>;
+  if (defined($line)) {
+    $line =~ s/\r\n\z/\n/;
+  }
+  return $line;
+}
+
+# Read and return the next line of the current record of the dtrace file,
+# without its line terminator.  Dies if the record or the file has ended.
+# Arguments are the program point name and a description of the expected line.
+sub read_record_line ( $$ ) {
+  my ($pptname, $expected) = @_;
+  my $line = &read_dtrace_line();
+  if (!defined($line)) {
+    &die_trace_mismatch($pptname, $expected, "end of file");
+  }
+  chomp($line);
+  if ($line =~ /^$/) {
+    &die_trace_mismatch($pptname, $expected, "end of record");
+  }
+  return $line;
+}
+
+# Die with a message saying that the dtrace file does not match the
+# declarations.  Arguments are the program point name, a description of what
+# was expected, and what was found.
+sub die_trace_mismatch ( $$$ ) {
+  my ($pptname, $expected, $found) = @_;
+  die("$current_dtrace_file line $.: expected $expected, got $found for program point $pptname\n");
 }
 
 sub open_file_for_output_seq ( $$ ) {
@@ -489,6 +546,9 @@ sub read_decls_file ( $ ) {
     if ($pptname !~ /:::ENTER$/ && $pptname !~ /:::(OBJECT|CLASS)$/) {
       my $pptfilename = &cleanup_pptname($pptname);
       $pptfilename = $pptfilename.".runcluster_temp";
+      # The last declaration of a program point is used.  Discard the output
+      # for any earlier declaration, which the last one might not replace.
+      &discard_output($pptname, $pptfilename);
       if ($algorithm eq 'km' || $algorithm eq 'hierarchical') {
         &open_file_for_output_seq($pptname, $pptfilename);
       } elsif ($algorithm eq 'xm') {
@@ -501,6 +561,22 @@ sub read_decls_file ( $ ) {
   # For a compressed file, closing the pipe reports a zcat failure.
   close(DECL) || die("couldn't read decls file $decls_file\n");
 }				# read_decls_file
+
+# Close and remove the output files, if any, for the given program point.
+# Arguments are the program point name and its output file name.
+sub discard_output ( $$ ) {
+  my ($pptname, $pptfilename) = @_;
+  if (exists $pptname_to_fhandles{$pptname}) {
+    close($pptname_to_fhandles{$pptname});
+    delete $pptname_to_fhandles{$pptname};
+    unlink($pptfilename);
+  }
+  if (exists $pptname_to_nonce_translation{$pptname}) {
+    close($pptname_to_nonce_translation{$pptname});
+    delete $pptname_to_nonce_translation{$pptname};
+    unlink("$pptfilename.trans");
+  }
+}				# discard_output
 
 # Record a declared variable, if it is to be clustered.
 # Returns 1 if the variable is to be clustered, otherwise 0.
@@ -530,10 +606,16 @@ sub read_decl_ppt ( $ ) {
   my $varname;			# the variable currently being read
   my $rep_type = "";		# the rep-type of $varname
   my $is_constant = 0;		# whether $varname has a constant value
+  # A ppt may be declared more than once, such as in several decls files.
+  # The last declaration is used.
+  $pptname_to_tracevars{$pptname} = [];
+  delete $pptname_to_varnames{$pptname};
+  delete $pptname_to_objectvars{$pptname};
   # Record $varname, which has been completely read.
   my $finish_var = sub {
     # A constant does not appear in the dtrace file.
     if (defined($varname) && !$is_constant) {
+      push @{$pptname_to_tracevars{$pptname}}, $varname;
       $nvars += &add_decl_var($pptname, $varname, $rep_type);
     }
   };

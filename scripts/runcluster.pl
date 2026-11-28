@@ -150,7 +150,16 @@ if ($verbose) { print "\n# Extracting variables from dtrace file ...\n"; }
 # reads the declarations from the dtrace files, and passing the dtrace files
 # twice would read their samples twice.
 my $command = "$SCRIPTDIR/extract_vars.pl --algorithm $algorithm " . join(' ', @decls_files) . " $dtrace_files";
-system_or_die($command, $verbose);
+if ($verbose) { print "$command\n"; }
+if (system($command) != 0) {
+  # extract_vars.pl's error message names a temporary file, not an input file.
+  my $copies = "";
+  for (my $i = 0; $i < scalar(@trace_files); $i++) {
+    $copies .= "  $fixed_trace_files[$i] is a copy of $trace_files[$i]\n";
+  }
+  die "Failed executing $command\n"
+    . "Its dtrace files are copies of the input files, with fixed invocation nonces:\n$copies";
+}
 
 ###
 ### Perform clustering
