@@ -19,10 +19,10 @@ class StreetNumberSet : // 41796/- obj/class samples
     parameter #0 :  // n
   method equals(LMapQuick1/StreetNumberSet;)Z : // 364 samples
     return:
-    parameter #0 : @Nullable  // other
+    parameter #0 : @Nullable // other
   method equals(Ljava/lang/Object;)Z : // 89 samples
     return:
-    parameter #0 : @Nullable  // o
+    parameter #0 : @Nullable // o
   method hashCode()I : // 2 samples
     return:
   method intersects(LMapQuick1/StreetNumberSet;)Z : // 135 samples

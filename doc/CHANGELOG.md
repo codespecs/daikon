@@ -44,6 +44,30 @@ Daikon:
   had an effect only for version 1 files.
 * `--ppt-select-pattern` and `--ppt-omit-pattern` apply consistently to the
   invariants that Daikon prints, including combined exit points.
+* Daikon supports the following new invariants, over strings and sequences of
+  strings; all of them are enabled by default:
+  * IsUrl
+  * FixedLengthString
+  * IsNumeric
+  * IsEmail
+  * IsDateYYYYMMDD
+  * IsDateDDMMYYYY
+  * IsDateMMDDYYYY
+  * IsTimeOfDay
+  * IsTimeOfDayWithSeconds
+  * IsTimeOfDayAMPM
+  * IsTimestampYYYYMMHHThhmmssmm
+  * SequenceFixedLengthString
+  * SequenceStringElementsAreUrl
+  * SequenceStringElementsAreNumeric
+  * SequenceStringElementsAreEmail
+  * SequenceStringElementsAreDateYYYYMMDD
+  * SequenceStringElementsAreDateDDMMYYYY
+  * SequenceStringElementsAreDateMMDDYYYY
+  * SequenceStringElementsAreTimeOfDay
+  * SequenceStringElementsAreTimeOfDayWithSeconds
+  * SequenceStringElementsAreTimeOfDayAMPM
+  * SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm
 
 Scripts:
 

@@ -1,0 +1,43 @@
+===========================================================================
+agora.AgoraTest:::OBJECT
+(EQ (hash |this|) (hashcode 1001))
+===========================================================================
+agora.AgoraTest.AgoraTest():::EXIT
+===========================================================================
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+(AND (EQ (arrayLength |lst|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |lst|) 1))) (NEQ (select (select elems |lst|) |i|)  null))))
+(EQ (arrayLength |lst|) 0)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: lst.getClass().getName() is printable
+===========================================================================
+agora.AgoraTest.emptySequence(java.util.List):::EXIT
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |lst|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |__orig__lst|) 1)) (EQ |i| |j|)) (EQ (select (select elems |lst|) |i|) (select (select elems |__orig__lst|) |j|))))
+(AND (EQ (arrayLength |lst|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |lst|) 1))) (NEQ (select (select elems |lst|) |i|)  null))))
+(EQ (arrayLength |lst|) 0)
+===========================================================================
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+(EQ (select |toString| |s|) |_string_|)
+===========================================================================
+agora.AgoraTest.emptyString(java.lang.String):::EXIT
+(EQ (select |toString| |s|) (select |toString| |__orig__s|))
+(EQ (select |toString| |s|) |_string_|)
+===========================================================================
+agora.AgoraTest.main(java.lang.String[]):::ENTER
+(EQ (hash |args|) (hashcode 1002))
+(EQ (typeof |args|) |T_java.lang.String[]|)
+(AND (EQ (arrayLength |args|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |args|) 1))) (NEQ (select (select elems |args|) |i|)  null))))
+(EQ (arrayLength |args|) 0)
+===========================================================================
+agora.AgoraTest.main(java.lang.String[]):::EXIT
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |args|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |__orig__args|) 1)) (EQ |i| |j|)) (EQ (select (select elems |args|) |i|) (select (select elems |__orig__args|) |j|))))
+(AND (EQ (arrayLength |args|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |args|) 1))) (NEQ (select (select elems |args|) |i|)  null))))
+(EQ (arrayLength |args|) 0)
+===========================================================================
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+(NEQ (hash |s|) null)
+(isNumeric (select |toString| |s|))
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: s.toString is printable
+===========================================================================
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT
+(EQ (select |toString| |s|) (select |toString| |__orig__s|))
+(isNumeric (select |toString| |s|))
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: s.toString is printable
