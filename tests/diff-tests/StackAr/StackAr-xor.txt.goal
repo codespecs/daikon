@@ -18,6 +18,7 @@
 <DataStructures.StackAr.makeEmpty()V:::ENTER, null>
   <(this.topOfStack == 0) ==> (size(this.theArray[..])-1 == 0) {1+}, null> (Bin,JM)
   <this.theArray[0..this.topOfStack] elements are equal {1+}, null> (Una,JM)
+  <All the elements of this.theArray[..].getClass().getName() have LENGTH=22 {0.9999+}, null> (Una,JM)
 <DataStructures.StackAr.makeEmpty()V:::EXIT, null>
   <size(this.theArray[..]) == orig(size(this.theArray[..])) {1+}, null> (Bin,JM)
   <this.theArray == orig(this.theArray) {1+}, null> (Bin,JM)
