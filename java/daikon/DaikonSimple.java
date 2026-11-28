@@ -451,6 +451,21 @@ public class DaikonSimple {
     }
 
     /**
+     * Returns the program point with the given name in the given map, if it has the given type.
+     *
+     * @param ppts a map of program points
+     * @param name the name of a program point
+     * @param type a program point type
+     * @return the program point with the given name, or null if there is none or its type is not
+     *     {@code type}
+     */
+    private static @Nullable PptTopLevel pptOfType(
+        PptMap ppts, PptName name, PptTopLevel.PptType type) {
+      PptTopLevel result = ppts.get(name);
+      return (result != null && result.type == type) ? result : null;
+    }
+
+    /**
      * Process the sample by checking it against each existing invariant at the program point and
      * removing the invariant from the list of possibles if any invariant is falsified.
      */
@@ -466,6 +481,13 @@ public class DaikonSimple {
       // Intern the sample
       vt = new ValueTuple(vt.vals, vt.mods);
 
+      // A general program point is a leaf of the dataflow hierarchy, so the sample applies to it
+      // alone, as in Daikon.
+      if (ppt.type == PptTopLevel.PptType.POINT) {
+        add(ppt, vt, -1);
+        return;
+      }
+
       // DaikonSimple must make the object program point manually because
       // the new Chicory produced dtrace files do not contain object ppts
       // in the dtrace part of the file (the program point is declared).
@@ -478,9 +500,11 @@ public class DaikonSimple {
       ValueTuple object_vt = null;
       ValueTuple class_vt = null;
 
-      if ((ppt_name.isEnterPoint() && !ppt_name.isConstructor()) || ppt_name.isExitPoint()) {
-        object_ppt = all_ppts.get(ppt_name.makeObject());
-        class_ppt = all_ppts.get(ppt_name.makeClassStatic());
+      if ((ppt.is_enter() && !ppt_name.isConstructor()) || ppt.is_exit()) {
+        // Likewise, a ppt named foo:::OBJECT or foo:::CLASS that is declared with some other type
+        // (such as POINT) is independent of the method and does not receive its samples.
+        object_ppt = pptOfType(all_ppts, ppt_name.makeObject(), PptTopLevel.PptType.OBJECT);
+        class_ppt = pptOfType(all_ppts, ppt_name.makeClassStatic(), PptTopLevel.PptType.CLASS);
       }
 
       // C programs do not have object ppts.
@@ -501,7 +525,7 @@ public class DaikonSimple {
       }
 
       // If this is an enter point, just remember it for later
-      if (ppt_name.isEnterPoint()) {
+      if (ppt.is_enter()) {
         assert nonce != null;
         assert call_map.get(nonce) == null;
         List<Call> value = new ArrayList<>();
@@ -521,9 +545,8 @@ public class DaikonSimple {
         return;
       }
 
-      // If this is an exit point, process the saved enter (and sometimes
-      // object) point
-      if (ppt_name.isExitPoint()) {
+      // If this is an exit point, process the saved enter (and sometimes object) point.
+      if (ppt.is_exit()) {
         assert nonce != null;
         List<Call> value = call_map.remove(nonce);
 
@@ -551,13 +574,17 @@ public class DaikonSimple {
     private void add(PptTopLevel ppt, ValueTuple vt, int nonce) {
 
       // if this is a numbered exit, apply to the combined exit as well
-      if (ppt.ppt_name.isNumberedExitPoint()) {
+      if (ppt.is_subexit()) {
 
         // Daikon.create_combined_exits(all_ppts);
         PptTopLevel parent = all_ppts.get(ppt.ppt_name.makeExit());
         if (parent != null) {
-          parent.get_missingOutOfBounds(ppt, vt);
-          add(parent, vt, nonce);
+          // A ppt that is not a combined exit, such as a POINT named foo:::EXIT, is not the
+          // numbered exit's parent.
+          if (parent.is_combined_exit()) {
+            parent.get_missingOutOfBounds(ppt, vt);
+            add(parent, vt, nonce);
+          }
 
         } else {
           // make parent and apply
@@ -649,18 +676,17 @@ public class DaikonSimple {
             }
           }
         }
-
-        // update num_samples and num_values of a slice manually
-        // because DaikonSimple does not call any of PptTopLevel's
-        // add methods
-        for (int j = 0; j < vt.vals.length; j++) {
-          if (!vt.isMissing(j)) {
-            ValueSet vs = ppt.value_sets[j];
-            vs.add(vt.vals[j]);
-          }
-        }
-        ppt.mbtracker.add(vt, 1);
       }
+
+      // Update the program point's value sets and modbit tracker manually, once per sample,
+      // because DaikonSimple does not call any of PptTopLevel's add methods.
+      for (int j = 0; j < vt.vals.length; j++) {
+        if (!vt.isMissing(j)) {
+          ValueSet vs = ppt.value_sets[j];
+          vs.add(vt.vals[j]);
+        }
+      }
+      ppt.mbtracker.add(vt, 1);
     }
   }
 }

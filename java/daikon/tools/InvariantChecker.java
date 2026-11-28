@@ -395,7 +395,7 @@ public class InvariantChecker {
       vt = new ValueTuple(vt.vals, vt.mods);
 
       // If this is an enter point, just remember it for later
-      if (ppt.ppt_name.isEnterPoint()) {
+      if (ppt.is_enter()) {
         assert nonce != null : "@AssumeAssertion(nullness): nonce exists for enter & exit points";
         if (dir_file != null) {
           // Yoav: I had to do a hack to handle the case that several dtrace files are concatenated
@@ -412,7 +412,7 @@ public class InvariantChecker {
       }
 
       // If this is an exit point, process the saved enter point
-      if (ppt.ppt_name.isExitPoint()) {
+      if (ppt.is_exit()) {
         assert nonce != null : "@AssumeAssertion(nullness): nonce exists for enter & exit points";
         EnterCall ec = call_map.get(nonce);
         if (ec != null) {
@@ -446,9 +446,9 @@ public class InvariantChecker {
       }
 
       // if this is a numbered exit, apply to the combined exit as well
-      if (!(ppt instanceof PptConditional) && ppt.ppt_name.isNumberedExitPoint()) {
+      if (!(ppt instanceof PptConditional) && ppt.is_subexit()) {
         PptTopLevel parent = all_ppts.get(ppt.ppt_name.makeExit());
-        if (parent != null) {
+        if ((parent != null) && parent.is_combined_exit()) {
           parent.get_missingOutOfBounds(ppt, vt);
           add(parent, vt, all_ppts);
         }
