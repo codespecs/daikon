@@ -21,7 +21,7 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <https://plse.cs.washington.edu/daikon/download/api/> .
 
-## Version 5.9.1 (November 28, 2026)
+## Version 5.9.2 (November 28, 2026)
 
 This release can be built with Java 11 but subsequent releases will require Java 21.
 
