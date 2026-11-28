@@ -21,41 +21,68 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <https://plse.cs.washington.edu/daikon/download/api/> .
 
-## Version 5.9.1 (???, 2026)
+## Version 5.9.2 (November 28, 2026)
 
-Daikon supports the following new invariants, over strings and sequences of
-strings; all of them are enabled by default:
+This release can be built with Java 11 but subsequent releases will require Java 21.
 
-* IsUrl
-* FixedLengthString
-* IsNumeric
-* IsEmail
-* IsDateYYYYMMDD
-* IsDateDDMMYYYY
-* IsDateMMDDYYYY
-* IsTimeOfDay
-* IsTimeOfDayWithSeconds
-* IsTimeOfDayAMPM
-* IsTimestampYYYYMMHHThhmmssmm
-* SequenceFixedLengthString
-* SequenceStringElementsAreUrl
-* SequenceStringElementsAreNumeric
-* SequenceStringElementsAreEmail
-* SequenceStringElementsAreDateYYYYMMDD
-* SequenceStringElementsAreDateDDMMYYYY
-* SequenceStringElementsAreDateMMDDYYYY
-* SequenceStringElementsAreTimeOfDay
-* SequenceStringElementsAreTimeOfDayWithSeconds
-* SequenceStringElementsAreTimeOfDayAMPM
-* SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm
+Daikon:
 
-* `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
-   no effect.
-* `daikon.diff.Diff` ignores obvious invariants that Daikon does not print by
-   default:  reflexive invariants such as
-   `x == x`, and invariants that are obvious from the declarations alone.
-* New tool `daikon.tools.MergeComparability` merges the comparability
-  information from multiple runs of DynComp.
+* Daikon respects the `not_ordered`, `no_dups`, and `no_size` variable flags.
+* A `min-value` or `max-value` bound may be any value of the variable's
+  rep-type, not only an `int`.
+* New program point types `throws` and `global`.
+* Daikon classifies a program point by its declared type, not by its name.
+* Daikon infers invariants at every leaf program point, such as `:::POINT`,
+  not only at numbered exits.
+* Two variables are comparable at a program point if they are comparable at
+  any of its children.
+* Daikon and its tools no longer read or write `.decls` and `.dtrace` files
+  in the obsolete version 1 format (files that contain `decl-version 1.0`,
+  `VarComparability`, or `DECLARE` records).  Daikon also cannot read
+  `.inv` files written by earlier versions of Daikon.
+* Removed configuration option `daikon.PrintInvariants.remove_post_vars`, which
+  had an effect only for version 1 files.
+* `--ppt-select-pattern` and `--ppt-omit-pattern` apply consistently to the
+  invariants that Daikon prints, including combined exit points.
+* Daikon supports the following new invariants, over strings and sequences of
+  strings; all of them are enabled by default:
+  * IsUrl
+  * FixedLengthString
+  * IsNumeric
+  * IsEmail
+  * IsDateYYYYMMDD
+  * IsDateDDMMYYYY
+  * IsDateMMDDYYYY
+  * IsTimeOfDay
+  * IsTimeOfDayWithSeconds
+  * IsTimeOfDayAMPM
+  * IsTimestampYYYYMMHHThhmmssmm
+  * SequenceFixedLengthString
+  * SequenceStringElementsAreUrl
+  * SequenceStringElementsAreNumeric
+  * SequenceStringElementsAreEmail
+  * SequenceStringElementsAreDateYYYYMMDD
+  * SequenceStringElementsAreDateDDMMYYYY
+  * SequenceStringElementsAreDateMMDDYYYY
+  * SequenceStringElementsAreTimeOfDay
+  * SequenceStringElementsAreTimeOfDayWithSeconds
+  * SequenceStringElementsAreTimeOfDayAMPM
+  * SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm
+
+Scripts:
+
+* `dtrace-diff.pl`: its .decls file argument is now optional; it is needed
+  only if the .dtrace files lack program point declarations.  It no longer
+  accepts the `--ignore_exitno` option, which had no effect.
+* `runcluster.pl` works again.
+* Removed scripts that processed only version 1 files:  `auxinfo.pl`,
+  `clean-decls.php`, `copy_comparable.pl`, `decls2comp-1.0.py`,
+  `decls-lackwit-disjoint.pl`, `dfec-to-kvasir.py`, `dfec-to-kvasir-dtrace.py`,
+  `dtrace-rm-decls.php`, `find_comparable.pl`, `find_globals.pl`,
+  `generate-dec-types.py`, `lwpp.pl`, `lwpp-init.pl`, and `set_decl_type.pl`.
+
+Splitting:
+
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
   complete program point name.  It matches the program point of that name, and
   every program point whose name is that name preceded by a qualifier, such as
@@ -66,38 +93,54 @@ strings; all of them are enabled by default:
   By default, Daikon uses every loaded condition at every program point.  To
   use a condition only at program points that its `PPT_NAME` matches, pass
   `--config_option daikon.split.SplitterList.all_splitters=false`.
+* A splitting condition that cannot be translated or compiled no longer
+  prevents Daikon from loading the other splitters.
+* If several splitters valid at a program point have the same condition,
+  Daikon uses only the first.
+
+Tools:
+
+* `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
+   no effect.
+* New tool `daikon.tools.MergeComparability` merges the comparability
+  information from multiple runs of DynComp.
 * `daikon.bashrc` no longer sets `JAVA_HOME`, `DAIKON_CLASSPATH`,
   `DAIKONSCRIPTS`, `PLUME_SCRIPTS`, `PERLLIB`, or `PERL5LIB`.
 * Removed the Perl front end, dfepl.
-* Daikon and its tools no longer read or write `.decls` and `.dtrace` files
-  in the obsolete version 1 format (files that contain `decl-version 1.0`,
-  `VarComparability`, or `DECLARE` records).  Daikon also cannot read
-  `.inv` files written by earlier versions of Daikon.
-  * Removed configuration option `daikon.PrintInvariants.remove_post_vars`, which
-    had an effect only for version 1 files.
-
-Scripts:
-
-* `dtrace-diff.pl`: its .decls file argument is now optional; it is needed
-  only if the .dtrace files lack program point declarations.  It no longer
-  accepts the `--ignore_exitno` option, which had no effect.
-* Removed scripts that processed only version 1 files:  `auxinfo.pl`,
-  `clean-decls.php`, `copy_comparable.pl`, `decls2comp-1.0.py`,
-  `decls-lackwit-disjoint.pl`, `dfec-to-kvasir.py`, `dfec-to-kvasir-dtrace.py`,
-  `dtrace-rm-decls.php`, `find_comparable.pl`, `find_globals.pl`,
-  `generate-dec-types.py`, `lwpp.pl`, `lwpp-init.pl`, and `set_decl_type.pl`.
-
-Fjalar/Kvasir:
-
-* New command-line option `--dyncomp-unhandled-ops=warn` makes DynComp
-  print a warning and continue, rather than stop, when it encounters a VEX IR
-  operation that it does not handle.
+* `ExtractConsequent` writes splitting conditions that Daikon can use.
+* `MergeInvariants` can merge its own output.
+* `DtraceNonceFixer` takes an optional output file argument.
+* `TraceSelect` honors `-SEED`.
+* `PrintInvariants` accepts `--ppt-omit-pattern`.
 
 Chicory and DynComp:
 
 * New command-line option `--no-method-calls` makes Chicory and DynComp never
   call methods of the target program's objects, such as calling `toArray()` on
   a list.
+* DynComp computes comparability more accurately for inherited fields and
+  methods.
+* Instrumenting the JDK is no longer supported on JDK 8.
+
+Fjalar/Kvasir:
+
+* New command-line option `--dyncomp-unhandled-ops=warn` makes DynComp
+  print a warning and continue, rather than stop, when it encounters a VEX IR
+  operation that it does not handle.
+* Kvasir reads more return values correctly.
+* Kvasir reads formal parameters correctly in more optimized code and in
+  code compiled by `rustc`.
+* Kvasir supports more types, such as `_Float16`, `__bf16`, and
+  `long double`.
+* DynComp computes comparability more accurately.
+* Fjalar handles non-local exits, tail calls, and threads that exit.
+* Fjalar no longer hangs on optimized code that uses location views.
+
+Bug fixes:
+
+* Fixed Fjalar issue 149.
+* Fixed Daikon issues 3, 7, 83, 203, 365, 537, 554, and 678.
+
 
 ## Version 5.9.0 (September 1, 2026)
 
